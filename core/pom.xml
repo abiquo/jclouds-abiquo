@@ -83,24 +83,12 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <systemProperties>
-                        <property>
-                            <name>test.abiquo.identity</name>
-                            <value>${test.abiquo.identity}</value>
-                        </property>
-                        <property>
-                            <name>test.abiquo.credential</name>
-                            <value>${test.abiquo.credential}</value>
-                        </property>
-                        <property>
-                            <name>test.abiquo.endpoint</name>
-                            <value>${test.abiquo.endpoint}</value>
-                        </property>
-                        <property>
-                            <name>test.abiquo.apiversion</name>
-                            <value>${test.abiquo.apiversion}</value>
-                        </property>
-                    </systemProperties>
+                    <systemPropertyVariables>
+                        <test.abiquo.identity>${test.abiquo.identity}</test.abiquo.identity>
+                        <test.abiquo.credential>${test.abiquo.credential}</test.abiquo.credential>
+                        <test.abiquo.endpoint>${test.abiquo.endpoint}</test.abiquo.endpoint>
+                        <test.abiquo.apiversion>${test.abiquo.apiversion}</test.abiquo.apiversion>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
@@ -115,24 +103,12 @@
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
                         <configuration>
-                            <systemProperties>
-                                <property>
-                                    <name>test.abiquo.identity</name>
-                                    <value>${test.abiquo.identity}</value>
-                                </property>
-                                <property>
-                                    <name>test.abiquo.credential</name>
-                                    <value>${test.abiquo.credential}</value>
-                                </property>
-                                <property>
-                                    <name>test.abiquo.endpoint</name>
-                                    <value>${test.abiquo.endpoint}</value>
-                                </property>
-                                <property>
-                                    <name>test.abiquo.apiversion</name>
-                                    <value>${test.abiquo.apiversion}</value>
-                                </property>
-                            </systemProperties>
+                            <systemPropertyVariables>
+                                <test.abiquo.identity>${test.abiquo.identity}</test.abiquo.identity>
+                                <test.abiquo.credential>${test.abiquo.credential}</test.abiquo.credential>
+                                <test.abiquo.endpoint>${test.abiquo.endpoint}</test.abiquo.endpoint>
+                                <test.abiquo.apiversion>${test.abiquo.apiversion}</test.abiquo.apiversion>
+                            </systemPropertyVariables>
                         </configuration>
                         <executions>
                             <execution>
