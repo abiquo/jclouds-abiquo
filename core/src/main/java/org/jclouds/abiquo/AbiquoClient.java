@@ -23,29 +23,21 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.infrastructure.DatacentersDto;
+
 /**
  * Provides synchronous access to Abiquo.
- * <p/>
  * 
  * @see AbiquoAsyncClient
- * @see <a href="TODO: insert URL of Abiquo documentation" />
  * @author Ignasi Barrera
  */
-@Timeout(duration = 4, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient {
-   /*
-    * Note all these delegate to methods in AbiquoAsyncClient with a specified or inherited timeout.
-    *   The singatures should match those of AbiquoAsyncClient, except the returnvals should not be 
-    *   wrapped in a Future 
-    */
-   
-   String list();
-   
-   /**
-    * @return null, if not found
-    */
-   String get(long id);
-   
-   void delete(long id);
-
+@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
+public interface AbiquoClient
+{
+    /**
+     * List all datacenters.
+     * 
+     * @return The list of Datacenters.
+     */
+    DatacentersDto getDatacenters();
 }

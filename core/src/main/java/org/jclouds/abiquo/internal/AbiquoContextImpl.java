@@ -58,6 +58,6 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
             identity, apiVersion, null);
     }
 
-    // TODO: Expose Abiquo service
+    // TODO: Expose Abiquo high-level service
 
 }

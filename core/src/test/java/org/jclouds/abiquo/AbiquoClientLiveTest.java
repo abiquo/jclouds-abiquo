@@ -28,12 +28,14 @@ import org.jclouds.rest.RestContext;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.infrastructure.DatacentersDto;
+
 /**
  * Tests behavior of {@code AbiquoClient}
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "live", testName = "abiquo.AbiquoClientLiveTest")
+@Test(groups = "live")
 public class AbiquoClientLiveTest
 {
 
@@ -59,7 +61,7 @@ public class AbiquoClientLiveTest
             checkNotNull(System.getProperty("test.abiquo.apiversion"), "test.abiquo.apiversion");
     }
 
-    @BeforeGroups(groups = {"live"})
+    @BeforeGroups(groups = "live")
     public void setupClient()
     {
         setupCredentials();
@@ -69,20 +71,10 @@ public class AbiquoClientLiveTest
     }
 
     @Test
-    public void testList() throws Exception
+    public void testGetDatacenters() throws Exception
     {
-        String response = context.getApi().list();
+        DatacentersDto response = context.getApi().getDatacenters();
         assertNotNull(response);
     }
 
-    @Test
-    public void testGet() throws Exception
-    {
-        String response = context.getApi().get(1l);
-        assertNotNull(response);
-    }
-
-    /*
-     * TODO: add tests for Abiquo interface methods
-     */
 }

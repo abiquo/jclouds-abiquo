@@ -17,20 +17,39 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.xml;
 
-import org.jclouds.abiquo.internal.AbiquoContextImpl;
-import org.jclouds.rest.RestContext;
+import java.io.IOException;
+import java.lang.reflect.Type;
+
+import org.jclouds.abiquo.xml.internal.JAXBParser;
 
 import com.google.inject.ImplementedBy;
 
 /**
- * Abiquo {@link RestContext} implementation to expose high level Abiquo functionalities.
+ * Parses XML documents.
  * 
  * @author Ignasi Barrera
  */
-@ImplementedBy(AbiquoContextImpl.class)
-public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClient>
+@ImplementedBy(JAXBParser.class)
+public interface XMLParser
 {
-    // TODO: Expose Abiquo high-level service
+    /**
+     * Serialize the object into xml. If the object is a generic type, use
+     * {@link #toXML(Object, Type)}
+     */
+    public String toXML(Object src) throws IOException;
+
+    /**
+     * Serialize the generic object into xml. If the object is not a generic, use
+     * {@link #toXML(Object, Type)}
+     */
+    public <T> String toXML(Object src, Class<T> type) throws IOException;
+
+    /**
+     * Deserialize the generic object from xml. If the object is not a generic type, use
+     * {@link #fromXML(Object, Class)}
+     */
+    public <T> T fromXML(String xml, Class<T> type) throws IOException;
+
 }

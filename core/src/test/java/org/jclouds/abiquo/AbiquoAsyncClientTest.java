@@ -26,20 +26,15 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
+import org.jclouds.abiquo.functions.ParseDatacenters;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.filters.BasicAuthentication;
-import org.jclouds.http.functions.ReleasePayloadAndReturn;
-import org.jclouds.http.functions.ReturnStringIf2xx;
 import org.jclouds.rest.RestClientTest;
 import org.jclouds.rest.RestContextSpec;
-import org.jclouds.rest.functions.ReturnEmptySetOnNotFoundOr404;
-import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
-import org.jclouds.rest.functions.ReturnVoidOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.Iterables;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 
@@ -48,69 +43,24 @@ import com.google.inject.TypeLiteral;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit", testName = "abiquo.AbiquoAsyncClientTest")
+@Test(groups = "unit")
 public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
 {
 
-    public void testList() throws SecurityException, NoSuchMethodException, IOException
+    public void testGetDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AbiquoAsyncClient.class.getMethod("list");
+        Method method = AbiquoAsyncClient.class.getMethod("getDatacenters");
         GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method);
 
-        assertRequestLineEquals(request, "GET http://localhost/api/items HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: text/plain\n");
+        assertRequestLineEquals(request, "GET http://localhost/api/admin/datacenters HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        // now make sure request filters apply by replaying
-        Iterables.getOnlyElement(request.getFilters()).filter(request);
-        Iterables.getOnlyElement(request.getFilters()).filter(request);
-
-        assertRequestLineEquals(request, "GET http://localhost/api/items HTTP/1.1");
-        // for example, using basic authentication, we should get "only one" header
-        assertNonPayloadHeadersEqual(request,
-            "Accept: text/plain\nAuthorization: Basic aWRlbnRpdHk6Y3JlZGVudGlhbA==\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ReturnStringIf2xx.class);
+        assertResponseParserClassEquals(method, request, ParseDatacenters.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnEmptySetOnNotFoundOr404.class);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
-
-    }
-
-    public void testGet() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method = AbiquoAsyncClient.class.getMethod("get", long.class);
-        GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method, 1);
-
-        assertRequestLineEquals(request, "GET http://localhost/api/items/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: text/plain\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ReturnStringIf2xx.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
-
-        checkFilters(request);
-
-    }
-
-    public void testDelete() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method = AbiquoAsyncClient.class.getMethod("delete", long.class);
-        GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method, 1);
-
-        assertRequestLineEquals(request, "DELETE http://localhost/api/items/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnVoidOnNotFoundOr404.class);
-
-        checkFilters(request);
-
     }
 
     @Override

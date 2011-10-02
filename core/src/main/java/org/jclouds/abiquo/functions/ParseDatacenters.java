@@ -22,40 +22,23 @@ package org.jclouds.abiquo.functions;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.http.HttpResponse;
-import org.jclouds.http.functions.ReturnStringIf2xx;
+import org.jclouds.abiquo.xml.XMLParser;
 
-import com.google.common.base.Function;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.google.inject.TypeLiteral;
 
 /**
- * Parse XML error documents and extract the error message.
+ * Parses a datacenter sobject.
  * 
  * @author Ignasi Barrera
  */
 @Singleton
-public class ParseErrorFromXMLOrReturnBody implements Function<HttpResponse, String>
+public class ParseDatacenters extends ParseXML<DatacentersDto>
 {
-    private final ReturnStringIf2xx returnStringIf200;
-
     @Inject
-    ParseErrorFromXMLOrReturnBody(ReturnStringIf2xx returnStringIf200)
+    public ParseDatacenters(XMLParser xml, TypeLiteral<DatacentersDto> type)
     {
-        this.returnStringIf200 = returnStringIf200;
-    }
-
-    @Override
-    public String apply(HttpResponse response)
-    {
-        String content = returnStringIf200.apply(response);
-        if (content == null)
-            return null;
-        return parse(content);
-    }
-
-    public String parse(String in)
-    {
-        // TODO: Parse the XML and extract the error message
-        return in;
+        super(xml, type);
     }
 
 }

@@ -20,19 +20,16 @@
 package org.jclouds.abiquo;
 
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.functions.ParseDatacenters;
 import org.jclouds.http.filters.BasicAuthentication;
-import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.functions.ReturnEmptySetOnNotFoundOr404;
-import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
-import org.jclouds.rest.functions.ReturnVoidOnNotFoundOr404;
+import org.jclouds.rest.annotations.ResponseParser;
 
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -43,37 +40,17 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  */
 @RequestFilters(BasicAuthentication.class)
+@Consumes(MediaType.APPLICATION_XML)
 public interface AbiquoAsyncClient
 {
     public static final String API_VERSION = "2.0-SNAPSHOT";
 
-    /*
-     * TODO: define interface methods for Abiquo
-     */
-
     /**
-     * @see AbiquoClient#list()
+     * @see AbiquoClient#getDatacenters()
      */
     @GET
-    @Path("/items")
-    @Consumes(MediaType.TEXT_PLAIN)
-    @ExceptionParser(ReturnEmptySetOnNotFoundOr404.class)
-    ListenableFuture<String> list();
+    @Path("/admin/datacenters")
+    @ResponseParser(ParseDatacenters.class)
+    ListenableFuture<DatacentersDto> getDatacenters();
 
-    /**
-     * @see AbiquoClient#get(long)
-     */
-    @GET
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    @Consumes(MediaType.TEXT_PLAIN)
-    @Path("/items/{itemId}")
-    ListenableFuture<String> get(@PathParam("itemId") long id);
-
-    /**
-     * @see AbiquoClient#delete
-     */
-    @DELETE
-    @Path("/items/{itemId}")
-    @ExceptionParser(ReturnVoidOnNotFoundOr404.class)
-    ListenableFuture<Void> delete(@PathParam("itemId") long id);
 }

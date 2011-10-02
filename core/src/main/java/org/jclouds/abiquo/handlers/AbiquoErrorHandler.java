@@ -38,7 +38,6 @@ public class AbiquoErrorHandler implements HttpErrorHandler
     public void handleError(HttpCommand command, HttpResponse response)
     {
         // TODO Auto-generated method stub
-
     }
 
 }
