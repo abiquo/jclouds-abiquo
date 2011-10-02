@@ -25,11 +25,11 @@ import static org.testng.Assert.assertNull;
 
 import java.util.Properties;
 
-import org.jclouds.abiquo.predicates.DatacenterPredicates;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 
 /**
  * Tests behavior of {@code AbiquoClient}
@@ -40,8 +40,6 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 public class AbiquoClientLiveTest
 {
     protected AbiquoContext context;
-
-    protected AbiquoService abiquoService;
 
     protected String provider = "abiquo";
 
@@ -70,31 +68,23 @@ public class AbiquoClientLiveTest
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
         context = new AbiquoContextFactory().createContext(identity, credential, props);
-        abiquoService = context.getAbiquoService();
     }
 
     public void testListDatacenters() throws Exception
     {
-        Iterable<DatacenterDto> datacenters = abiquoService.listDatacenters();
-        assertNotNull(datacenters);
-    }
-
-    public void testListDatacentersByName() throws Exception
-    {
-        Iterable<DatacenterDto> datacenters =
-            abiquoService.listDatacenters(DatacenterPredicates.containsName("Datacenter"));
+        DatacentersDto datacenters = context.getApi().listDatacenters();
         assertNotNull(datacenters);
     }
 
     public void testGetDatacenter() throws Exception
     {
-        DatacenterDto datacenter = abiquoService.getDatacenter(2);
+        DatacenterDto datacenter = context.getApi().getDatacenter(2);
         assertNotNull(datacenter);
     }
 
     public void testGetUnexistingDatacenter() throws Exception
     {
-        DatacenterDto datacenter = abiquoService.getDatacenter(100);
+        DatacenterDto datacenter = context.getApi().getDatacenter(100);
         assertNull(datacenter);
     }
 

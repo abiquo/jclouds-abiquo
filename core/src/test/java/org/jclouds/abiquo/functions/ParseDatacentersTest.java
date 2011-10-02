@@ -40,7 +40,7 @@ public class ParseDatacentersTest extends ParseXMLTest<DatacentersDto>
 {
 
     @Override
-    public ParseDatacenters getParser()
+    protected ParseDatacenters getParser()
     {
         return new ParseDatacenters(new JAXBParser(), TypeLiteral.get(DatacentersDto.class));
     }
