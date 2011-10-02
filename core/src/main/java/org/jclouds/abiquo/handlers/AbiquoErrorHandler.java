@@ -19,11 +19,20 @@
 
 package org.jclouds.abiquo.handlers;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jclouds.abiquo.functions.ParseErrors;
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
+import org.jclouds.http.HttpResponseException;
+import org.jclouds.rest.AuthorizationException;
+import org.jclouds.rest.ResourceNotFoundException;
+
+import com.abiquo.model.transport.error.ErrorDto;
+import com.abiquo.model.transport.error.ErrorsDto;
+import com.google.common.io.Closeables;
 
 /**
  * Parse Abiquo API errors and set the appropiate exteption.
@@ -33,11 +42,62 @@ import org.jclouds.http.HttpResponse;
 @Singleton
 public class AbiquoErrorHandler implements HttpErrorHandler
 {
+    /** The error parser. */
+    private ParseErrors errorParser;
+
+    @Inject
+    AbiquoErrorHandler(ParseErrors errorParser)
+    {
+        super();
+        this.errorParser = errorParser;
+    }
 
     @Override
     public void handleError(HttpCommand command, HttpResponse response)
     {
-        // TODO Auto-generated method stub
+        ErrorsDto errors = errorParser.apply(response);
+        String message = getMessage(errors);
+        Exception exception = new HttpResponseException(command, response, message);
+
+        try
+        {
+            message =
+                message != null ? message : String.format("%s -> %s", command.getCurrentRequest()
+                    .getRequestLine(), response.getStatusLine());
+
+            switch (response.getStatusCode())
+            {
+                case 401:
+                case 403:
+                    exception = new AuthorizationException(message, exception);
+                    break;
+                case 404:
+                    if (!command.getCurrentRequest().getMethod().equals("DELETE"))
+                    {
+                        exception = new ResourceNotFoundException(message, exception);
+                    }
+                    break;
+            }
+        }
+        finally
+        {
+            if (response.getPayload() != null)
+            {
+                Closeables.closeQuietly(response.getPayload().getInput());
+            }
+            command.setException(exception);
+        }
+    }
+
+    private String getMessage(ErrorsDto errors)
+    {
+        StringBuilder builder = new StringBuilder();
+        for (ErrorDto error : errors.getCollection())
+        {
+            builder.append(error.getMessage());
+            builder.append("\n");
+        }
+        return builder.toString();
     }
 
 }

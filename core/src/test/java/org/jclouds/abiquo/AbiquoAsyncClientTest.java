@@ -26,11 +26,13 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
+import org.jclouds.abiquo.functions.ParseDatacenter;
 import org.jclouds.abiquo.functions.ParseDatacenters;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.RestClientTest;
 import org.jclouds.rest.RestContextSpec;
+import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
@@ -59,6 +61,22 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
         assertResponseParserClassEquals(method, request, ParseDatacenters.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetDatacenter() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = AbiquoAsyncClient.class.getMethod("getDatacenter", Integer.class);
+        GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/admin/datacenters/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseDatacenter.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
         checkFilters(request);
     }

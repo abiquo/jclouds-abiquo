@@ -17,39 +17,28 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.functions;
 
-import org.jclouds.abiquo.internal.BaseAbiquoService;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.jclouds.abiquo.xml.XMLParser;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.google.common.base.Predicate;
-import com.google.inject.ImplementedBy;
+import com.google.inject.TypeLiteral;
 
 /**
- * Provides high level Abiquo operations.
+ * Parses a datacenter sobject.
  * 
  * @author Ignasi Barrera
  */
-@ImplementedBy(BaseAbiquoService.class)
-public interface AbiquoService
+@Singleton
+public class ParseDatacenter extends ParseXML<DatacenterDto>
 {
-    /**
-     * Get the Abiquo context.
-     */
-    AbiquoContext getContext();
+    @Inject
+    public ParseDatacenter(XMLParser xml, TypeLiteral<DatacenterDto> type)
+    {
+        super(xml, type);
+    }
 
-    /**
-     * Get the list of all datacenters.
-     */
-    Iterable<DatacenterDto> listDatacenters();
-
-    /**
-     * Get the list of datacenters matching the given filtger.
-     */
-    Iterable<DatacenterDto> listDatacenters(Predicate<DatacenterDto> filter);
-
-    /**
-     * Get the datacenter with the given id, or return <code>null</code> if not found.
-     */
-    DatacenterDto getDatacenter(Integer datacenterId);
 }

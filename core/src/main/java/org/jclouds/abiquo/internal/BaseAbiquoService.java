@@ -74,4 +74,10 @@ public class BaseAbiquoService implements AbiquoService
         return listDatacenters.execute(filter);
     }
 
+    @Override
+    public DatacenterDto getDatacenter(Integer datacenterId)
+    {
+        return abiquoContext.getApi().getDatacenter(datacenterId);
+    }
+
 }

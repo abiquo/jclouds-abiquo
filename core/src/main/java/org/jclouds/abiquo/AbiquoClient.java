@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 
 /**
@@ -40,4 +41,12 @@ public interface AbiquoClient
      * @return The list of Datacenters.
      */
     DatacentersDto listDatacenters();
+
+    /**
+     * Gte the given datacenter.
+     * 
+     * @param datacenterId The id of the datacenter.
+     * @return The datacenter or <code>null</code> if it does not exist.
+     */
+    DatacenterDto getDatacenter(Integer datacenterId);
 }

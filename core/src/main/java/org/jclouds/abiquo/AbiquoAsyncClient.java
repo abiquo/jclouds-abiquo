@@ -22,13 +22,18 @@ package org.jclouds.abiquo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.functions.ParseDatacenter;
 import org.jclouds.abiquo.functions.ParseDatacenters;
 import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -53,4 +58,12 @@ public interface AbiquoAsyncClient
     @ResponseParser(ParseDatacenters.class)
     ListenableFuture<DatacentersDto> listDatacenters();
 
+    /**
+     * @see AbiquoClient#getDatacenter
+     */
+    @GET
+    @Path("/admin/datacenters/{datacenter}")
+    @ResponseParser(ParseDatacenter.class)
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<DatacenterDto> getDatacenter(@PathParam("datacenter") Integer datacenterId);
 }

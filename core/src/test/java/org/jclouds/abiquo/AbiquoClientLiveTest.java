@@ -21,6 +21,7 @@ package org.jclouds.abiquo;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 
 import java.util.Properties;
 
@@ -72,19 +73,29 @@ public class AbiquoClientLiveTest
         abiquoService = context.getAbiquoService();
     }
 
-    @Test
     public void testListDatacenters() throws Exception
     {
         Iterable<DatacenterDto> datacenters = abiquoService.listDatacenters();
         assertNotNull(datacenters);
     }
 
-    @Test
     public void testListDatacentersByName() throws Exception
     {
         Iterable<DatacenterDto> datacenters =
             abiquoService.listDatacenters(DatacenterPredicates.containsName("Datacenter"));
         assertNotNull(datacenters);
+    }
+
+    public void testGetDatacenter() throws Exception
+    {
+        DatacenterDto datacenter = abiquoService.getDatacenter(2);
+        assertNotNull(datacenter);
+    }
+
+    public void testGetUnexistingDatacenter() throws Exception
+    {
+        DatacenterDto datacenter = abiquoService.getDatacenter(100);
+        assertNull(datacenter);
     }
 
 }
