@@ -28,6 +28,7 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoService;
 import org.jclouds.domain.Credentials;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.location.Provider;
@@ -48,16 +49,23 @@ import com.google.inject.TypeLiteral;
 public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsyncClient> implements
     AbiquoContext
 {
+    private final AbiquoService abiquoService;
+
     @Inject
     protected AbiquoContextImpl(Closer closer, Map<String, Credentials> credentialStore,
         Utils utils, Injector injector, TypeLiteral<AbiquoClient> syncApi,
         TypeLiteral<AbiquoAsyncClient> asyncApi, @Provider URI endpoint, @Provider String provider,
-        @Identity String identity, @ApiVersion String apiVersion)
+        @Identity String identity, @ApiVersion String apiVersion, AbiquoService abiquoService)
     {
         super(closer, credentialStore, utils, injector, syncApi, asyncApi, endpoint, provider,
             identity, apiVersion, null);
+        this.abiquoService = abiquoService;
     }
 
-    // TODO: Expose Abiquo high-level service
+    @Override
+    public AbiquoService getAbiquoService()
+    {
+        return abiquoService;
+    }
 
 }

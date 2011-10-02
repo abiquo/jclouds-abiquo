@@ -19,25 +19,32 @@
 
 package org.jclouds.abiquo;
 
-import java.util.concurrent.TimeUnit;
+import org.jclouds.abiquo.internal.BaseAbiquoService;
 
-import org.jclouds.concurrent.Timeout;
-
-import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.google.common.base.Predicate;
+import com.google.inject.ImplementedBy;
 
 /**
- * Provides synchronous access to Abiquo.
+ * Provides high level Abiquo operations.
  * 
- * @see AbiquoAsyncClient
  * @author Ignasi Barrera
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient
+@ImplementedBy(BaseAbiquoService.class)
+public interface AbiquoService
 {
     /**
-     * List all datacenters.
-     * 
-     * @return The list of Datacenters.
+     * Get the Abiquo context.
      */
-    DatacentersDto listDatacenters();
+    AbiquoContext getContext();
+
+    /**
+     * Get the list of all datacenters.
+     */
+    Iterable<DatacenterDto> listDatacenters();
+
+    /**
+     * Get the list of datacenters matching the given filtger.
+     */
+    Iterable<DatacenterDto> listDatacenters(Predicate<DatacenterDto> filter);
 }

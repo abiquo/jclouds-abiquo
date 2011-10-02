@@ -32,5 +32,5 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AbiquoContextImpl.class)
 public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClient>
 {
-    // TODO: Expose Abiquo high-level service
+    AbiquoService getAbiquoService();
 }

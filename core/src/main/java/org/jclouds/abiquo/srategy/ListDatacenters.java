@@ -17,27 +17,20 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.srategy;
 
-import java.util.concurrent.TimeUnit;
+import org.jclouds.abiquo.srategy.internal.ListDatacentersImpl;
 
-import org.jclouds.concurrent.Timeout;
-
-import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.google.inject.ImplementedBy;
 
 /**
- * Provides synchronous access to Abiquo.
+ * List datacenters.
  * 
- * @see AbiquoAsyncClient
  * @author Ignasi Barrera
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient
+@ImplementedBy(ListDatacentersImpl.class)
+public interface ListDatacenters extends ListEntities<DatacenterDto>
 {
-    /**
-     * List all datacenters.
-     * 
-     * @return The list of Datacenters.
-     */
-    DatacentersDto listDatacenters();
+
 }

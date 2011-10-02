@@ -24,11 +24,11 @@ import static org.testng.Assert.assertNotNull;
 
 import java.util.Properties;
 
-import org.jclouds.rest.RestContext;
+import org.jclouds.abiquo.predicates.DatacenterPredicates;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
  * Tests behavior of {@code AbiquoClient}
@@ -38,8 +38,9 @@ import com.abiquo.server.core.infrastructure.DatacentersDto;
 @Test(groups = "live")
 public class AbiquoClientLiveTest
 {
+    protected AbiquoContext context;
 
-    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected AbiquoService abiquoService;
 
     protected String provider = "abiquo";
 
@@ -68,13 +69,22 @@ public class AbiquoClientLiveTest
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
         context = new AbiquoContextFactory().createContext(identity, credential, props);
+        abiquoService = context.getAbiquoService();
     }
 
     @Test
-    public void testGetDatacenters() throws Exception
+    public void testListDatacenters() throws Exception
     {
-        DatacentersDto response = context.getApi().getDatacenters();
-        assertNotNull(response);
+        Iterable<DatacenterDto> datacenters = abiquoService.listDatacenters();
+        assertNotNull(datacenters);
+    }
+
+    @Test
+    public void testListDatacentersByName() throws Exception
+    {
+        Iterable<DatacenterDto> datacenters =
+            abiquoService.listDatacenters(DatacenterPredicates.containsName("Datacenter"));
+        assertNotNull(datacenters);
     }
 
 }

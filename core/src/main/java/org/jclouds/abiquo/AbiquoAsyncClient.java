@@ -46,11 +46,11 @@ public interface AbiquoAsyncClient
     public static final String API_VERSION = "2.0-SNAPSHOT";
 
     /**
-     * @see AbiquoClient#getDatacenters()
+     * @see AbiquoClient#listDatacenters()
      */
     @GET
     @Path("/admin/datacenters")
     @ResponseParser(ParseDatacenters.class)
-    ListenableFuture<DatacentersDto> getDatacenters();
+    ListenableFuture<DatacentersDto> listDatacenters();
 
 }

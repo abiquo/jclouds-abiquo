@@ -17,27 +17,18 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.srategy;
 
-import java.util.concurrent.TimeUnit;
-
-import org.jclouds.concurrent.Timeout;
-
-import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.google.common.base.Predicate;
 
 /**
- * Provides synchronous access to Abiquo.
+ * List all entities of the given type.
  * 
- * @see AbiquoAsyncClient
  * @author Ignasi Barrera
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient
+public interface ListEntities<T>
 {
-    /**
-     * List all datacenters.
-     * 
-     * @return The list of Datacenters.
-     */
-    DatacentersDto listDatacenters();
+    Iterable<T> execute();
+
+    Iterable<T> execute(Predicate<T> selector);
 }

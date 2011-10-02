@@ -47,9 +47,9 @@ import com.google.inject.TypeLiteral;
 public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
 {
 
-    public void testGetDatacenters() throws SecurityException, NoSuchMethodException, IOException
+    public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AbiquoAsyncClient.class.getMethod("getDatacenters");
+        Method method = AbiquoAsyncClient.class.getMethod("listDatacenters");
         GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/datacenters HTTP/1.1");

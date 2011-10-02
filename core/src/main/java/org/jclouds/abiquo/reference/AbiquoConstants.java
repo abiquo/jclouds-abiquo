@@ -17,27 +17,15 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
-
-import java.util.concurrent.TimeUnit;
-
-import org.jclouds.concurrent.Timeout;
-
-import com.abiquo.server.core.infrastructure.DatacentersDto;
+package org.jclouds.abiquo.reference;
 
 /**
- * Provides synchronous access to Abiquo.
+ * Configuration constants and properties used in Abiquo connections.
  * 
- * @see AbiquoAsyncClient
  * @author Ignasi Barrera
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient
+public interface AbiquoConstants
 {
-    /**
-     * List all datacenters.
-     * 
-     * @return The list of Datacenters.
-     */
-    DatacentersDto listDatacenters();
+    /** The Abiquo logger. */
+    public static final String ABIQUO_LOGGER = "jclouds.abiquo";
 }
