@@ -40,7 +40,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListDatacentersImpl strategy;
 
-    // TODO: Uncomment and use ti build the test scenario when the POST datacenter is implemented
+    // TODO: Uncomment and use it build the test scenario when the POST datacenter is implemented
     // private AbiquoClient abiquoClient;
 
     @BeforeTest(groups = "live", dependsOnMethods = "setupClient")

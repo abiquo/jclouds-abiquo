@@ -44,7 +44,7 @@ import com.google.inject.Module;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class BaseAbiquoStrategyLiveTest
+public abstract class BaseAbiquoStrategyLiveTest
 {
     protected Injector injector;
 
@@ -79,6 +79,8 @@ public class BaseAbiquoStrategyLiveTest
     public void teardownClient() throws IOException
     {
         if (injector != null)
+        {
             injector.getInstance(Closer.class).close();
+        }
     }
 }
