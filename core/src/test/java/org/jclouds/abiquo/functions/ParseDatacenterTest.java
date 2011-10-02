@@ -19,16 +19,14 @@
 
 package org.jclouds.abiquo.functions;
 
-import static org.jclouds.abiquo.functions.ParseDatacenterTest.datacenterPayload;
-import static org.jclouds.abiquo.functions.ParseDatacenterTest.verifyDatacenter;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import org.jclouds.abiquo.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -37,13 +35,13 @@ import com.google.inject.TypeLiteral;
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class ParseDatacentersTest extends ParseXMLTest<DatacentersDto>
+public class ParseDatacenterTest extends ParseXMLTest<DatacenterDto>
 {
 
     @Override
-    protected ParseDatacenters getParser()
+    protected ParseDatacenter getParser()
     {
-        return new ParseDatacenters(new JAXBParser(), TypeLiteral.get(DatacentersDto.class));
+        return new ParseDatacenter(new JAXBParser(), TypeLiteral.get(DatacenterDto.class));
     }
 
     @Override
@@ -51,21 +49,42 @@ public class ParseDatacentersTest extends ParseXMLTest<DatacentersDto>
     {
         StringBuilder builder = new StringBuilder();
         builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-        builder.append("<datacenters>");
         builder.append(datacenterPayload());
-        builder.append("</datacenters>");
         return builder.toString();
     }
 
     @Override
-    protected void verifyObject(DatacentersDto object)
+    protected void verifyObject(DatacenterDto object)
     {
-        assertNotNull(object);
-        assertNotNull(object.getCollection());
-        assertEquals(object.getCollection().size(), 1);
+        verifyDatacenter(object);
+    }
 
-        DatacenterDto datacenter = object.getCollection().get(0);
-        verifyDatacenter(datacenter);
+    static void verifyDatacenter(DatacenterDto datacenter)
+    {
+        assertEquals(datacenter.getName(), "Datacenter");
+        assertEquals(datacenter.getLocation(), "Honolulu");
+
+        assertNotNull(datacenter.getLinks());
+        assertEquals(datacenter.getLinks().size(), 1);
+
+        RESTLink link = datacenter.getLinks().get(0);
+        assertEquals(link.getHref(),
+            "http://localhost:80/api/admin/datacenters/2/action/enterprises");
+        assertEquals(link.getRel(), "action/enterprises");
+    }
+
+    static String datacenterPayload()
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append("<datacenter>");
+        builder
+            .append("<link href=\"http://localhost:80/api/admin/datacenters/2/action/enterprises\""
+                + " rel=\"action/enterprises\"/>");
+        builder.append("<name>id</name>");
+        builder.append("<name>Datacenter</name>");
+        builder.append("<location>Honolulu</location>");
+        builder.append("</datacenter>");
+        return builder.toString();
     }
 
 }
