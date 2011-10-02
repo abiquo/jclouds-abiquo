@@ -2,8 +2,7 @@ JClouds Abiquo Provider
 =======================
 
 This is the JClouds Abiquo provider. The project is still under
-development and it is not suitable to be used within JClouds.
-Currently it only provides access to the Abiquo REST API.
+development and it only provides access to the Abiquo REST API.
 
 
 Note on patches/pull requests
