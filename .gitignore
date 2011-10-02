@@ -1,0 +1,10 @@
+# use glob syntax.
+syntax: glob
+target
+.settings
+.classpath
+.project
+test-output
+jclouds-abiquo.iml
+jclouds-abiquo.ipr
+jclouds-abiquo.iws
