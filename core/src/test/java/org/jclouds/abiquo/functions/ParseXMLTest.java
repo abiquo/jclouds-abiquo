@@ -41,6 +41,7 @@ import org.testng.annotations.Test;
 @Test(groups = "unit")
 public abstract class ParseXMLTest<T> extends BaseHandlerTest
 {
+    @Test
     public void testObjectFromResponse() throws Exception
     {
         ParseXML<T> function = getParser();
@@ -64,19 +65,19 @@ public abstract class ParseXMLTest<T> extends BaseHandlerTest
     /**
      * Get the parser to test.
      */
-    public abstract ParseXML<T> getParser();
+    protected abstract ParseXML<T> getParser();
 
     /**
      * Get the payload to be used in the test.
      */
-    public abstract String getPayload();
+    protected abstract String getPayload();
 
     /**
      * Verify the object returned by the parser.
      * 
      * @param object The object returned by the parser.
      */
-    public abstract void verifyObject(T object);
+    protected abstract void verifyObject(T object);
 
     protected InputStream getPayloadInput()
     {

@@ -46,7 +46,7 @@ public class ParseDatacentersTest extends ParseXMLTest<DatacentersDto>
     }
 
     @Override
-    public String getPayload()
+    protected String getPayload()
     {
         StringBuilder builder = new StringBuilder();
         builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
@@ -64,7 +64,7 @@ public class ParseDatacentersTest extends ParseXMLTest<DatacentersDto>
     }
 
     @Override
-    public void verifyObject(DatacentersDto object)
+    protected void verifyObject(DatacentersDto object)
     {
         assertNotNull(object);
         assertNotNull(object.getCollection());
