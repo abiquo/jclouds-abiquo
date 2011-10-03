@@ -4,6 +4,9 @@ JClouds Abiquo Provider
 This is the JClouds Abiquo provider. The project is still under
 development and it only provides access to the Abiquo REST API.
 
+Please, refer to the [Abiquo API Reference](http://community.abiquo.com/display/ABI18/API+Reference) for
+further details.
+
 
 Note on patches/pull requests
 -----------------------------
