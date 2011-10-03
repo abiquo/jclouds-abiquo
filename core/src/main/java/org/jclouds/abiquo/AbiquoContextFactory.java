@@ -40,6 +40,8 @@ import com.google.inject.Module;
  */
 public class AbiquoContextFactory
 {
+    /** The Abiquo provider name */
+    public static String PROVIDER_NAME = "abiquo";
 
     /** The delegating {@link RestContextFactory}. */
     private final RestContextFactory contextFactory;
@@ -58,12 +60,12 @@ public class AbiquoContextFactory
     /**
      * Finds definitions in the specified properties.
      */
-    public AbiquoContextFactory(Properties properties)
+    public AbiquoContextFactory(final Properties properties)
     {
         this(new RestContextFactory(properties));
     }
 
-    public AbiquoContextFactory(RestContextFactory contextFactory)
+    public AbiquoContextFactory(final RestContextFactory contextFactory)
     {
         this.contextFactory = contextFactory;
     }
@@ -71,31 +73,33 @@ public class AbiquoContextFactory
     /**
      * @see #createContext(String, String, String)
      */
-    public AbiquoContext createContext(String identity, String credential)
+    public AbiquoContext createContext(final String identity, final String credential)
     {
-        return createContext("abiquo", identity, credential);
+        return createContext(PROVIDER_NAME, identity, credential);
     }
 
     /**
      * @see #createContext(String, String, Properties)
      */
-    public AbiquoContext createContext(String identity, String credential, Properties overrides)
+    public AbiquoContext createContext(final String identity, final String credential,
+        final Properties overrides)
     {
-        return createContext("abiquo", identity, credential, overrides);
+        return createContext(PROVIDER_NAME, identity, credential, overrides);
     }
 
     /**
      * @see #createContext(String, Properties)
      */
-    public AbiquoContext createContext(Properties overrides)
+    public AbiquoContext createContext(final Properties overrides)
     {
-        return createContext("abiquo", overrides);
+        return createContext(PROVIDER_NAME, overrides);
     }
 
     /**
      * @see RestContextFactory#createContextBuilder(String, String, String)
      */
-    public AbiquoContext createContext(String provider, String identity, String credential)
+    public AbiquoContext createContext(final String provider, final String identity,
+        final String credential)
     {
         RestContextBuilder< ? , ? > builder =
             RestContextBuilder.class.cast(contextFactory.createContextBuilder(provider, identity,
@@ -106,8 +110,8 @@ public class AbiquoContextFactory
     /**
      * @see RestContextFactory#createContextBuilder(String, String, String)
      */
-    public AbiquoContext createContext(String provider, String identity, String credential,
-        Properties overrides)
+    public AbiquoContext createContext(final String provider, final String identity,
+        final String credential, final Properties overrides)
     {
         RestContextBuilder< ? , ? > builder =
             RestContextBuilder.class.cast(contextFactory.createContextBuilder(provider, identity,
@@ -118,7 +122,7 @@ public class AbiquoContextFactory
     /**
      * @see RestContextFactory#createContextBuilder(String, Properties)
      */
-    public AbiquoContext createContext(String provider, Properties overrides)
+    public AbiquoContext createContext(final String provider, final Properties overrides)
     {
         RestContextBuilder< ? , ? > builder =
             RestContextBuilder.class.cast(contextFactory.createContextBuilder(provider, overrides));
@@ -128,16 +132,17 @@ public class AbiquoContextFactory
     /**
      * @see #createContext(String, Iterable, Properties)
      */
-    public AbiquoContext createContext(Iterable< ? extends Module> modules, Properties overrides)
+    public AbiquoContext createContext(final Iterable< ? extends Module> modules,
+        final Properties overrides)
     {
-        return createContext("chef", modules, overrides);
+        return createContext(PROVIDER_NAME, modules, overrides);
     }
 
     /**
      * @see RestContextFactory#createContextBuilder(String, Iterable, Properties)
      */
-    public AbiquoContext createContext(String provider, Iterable< ? extends Module> modules,
-        Properties overrides)
+    public AbiquoContext createContext(final String provider,
+        final Iterable< ? extends Module> modules, final Properties overrides)
     {
         RestContextBuilder< ? , ? > builder =
             RestContextBuilder.class.cast(contextFactory.createContextBuilder(provider, modules,
@@ -148,17 +153,17 @@ public class AbiquoContextFactory
     /**
      * @see #createContext(String,String,String,Iterable)
      */
-    public AbiquoContext createContext(@Nullable String identity, @Nullable String credential,
-        Iterable< ? extends Module> modules)
+    public AbiquoContext createContext(@Nullable final String identity,
+        @Nullable final String credential, final Iterable< ? extends Module> modules)
     {
-        return createContext("chef", identity, credential, modules);
+        return createContext(PROVIDER_NAME, identity, credential, modules);
     }
 
     /**
      * @see RestContextFactory#createContextBuilder(String,String String, Iterable)
      */
-    public AbiquoContext createContext(String provider, @Nullable String identity,
-        @Nullable String credential, Iterable< ? extends Module> modules)
+    public AbiquoContext createContext(final String provider, @Nullable final String identity,
+        @Nullable final String credential, final Iterable< ? extends Module> modules)
     {
         RestContextBuilder< ? , ? > builder =
             RestContextBuilder.class.cast(contextFactory.createContextBuilder(provider, identity,
@@ -169,17 +174,19 @@ public class AbiquoContextFactory
     /**
      * @see #createContext(String,String, String, Iterable, Properties)
      */
-    public AbiquoContext createContext(@Nullable String identity, @Nullable String credential,
-        Iterable< ? extends Module> modules, Properties overrides)
+    public AbiquoContext createContext(@Nullable final String identity,
+        @Nullable final String credential, final Iterable< ? extends Module> modules,
+        final Properties overrides)
     {
-        return createContext("chef", identity, credential, modules, overrides);
+        return createContext(PROVIDER_NAME, identity, credential, modules, overrides);
     }
 
     /**
      * @see RestContextFactory#createContextBuilder(String,String,String, Iterable, Properties)
      */
-    public AbiquoContext createContext(String provider, @Nullable String identity,
-        @Nullable String credential, Iterable< ? extends Module> modules, Properties overrides)
+    public AbiquoContext createContext(final String provider, @Nullable final String identity,
+        @Nullable final String credential, final Iterable< ? extends Module> modules,
+        final Properties overrides)
     {
         RestContextBuilder< ? , ? > builder =
             RestContextBuilder.class.cast(contextFactory.createContextBuilder(provider, identity,
@@ -190,7 +197,7 @@ public class AbiquoContextFactory
     /**
      * @see RestContextFactory#createContextBuilder(ContextSpec)
      */
-    public <S, A> AbiquoContext createContext(RestContextSpec<S, A> contextSpec)
+    public <S, A> AbiquoContext createContext(final RestContextSpec<S, A> contextSpec)
     {
         RestContextBuilder< ? , ? > builder =
             RestContextBuilder.class.cast(createContextBuilder(contextSpec));
@@ -201,8 +208,8 @@ public class AbiquoContextFactory
     /**
      * @see RestContextFactory#createContextBuilder(ContextSpec, Properties)
      */
-    public <S, A> AbiquoContext createContext(RestContextSpec<S, A> contextSpec,
-        Properties overrides)
+    public <S, A> AbiquoContext createContext(final RestContextSpec<S, A> contextSpec,
+        final Properties overrides)
     {
         RestContextBuilder< ? , ? > builder =
             RestContextBuilder.class.cast(createContextBuilder(contextSpec, overrides));
@@ -210,7 +217,7 @@ public class AbiquoContextFactory
     }
 
     public static <S, A> AbiquoContext buildContextUnwrappingExceptions(
-        RestContextBuilder<S, A> builder)
+        final RestContextBuilder<S, A> builder)
     {
         try
         {

@@ -134,7 +134,7 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
         String apiVersion =
             checkNotNull(System.getProperty("test.abiquo.apiversion"), "test.abiquo.apiversion");
 
-        return new RestContextSpec<AbiquoClient, AbiquoAsyncClient>("abiquo",
+        return new RestContextSpec<AbiquoClient, AbiquoAsyncClient>(AbiquoContextFactory.PROVIDER_NAME,
             endpoint,
             apiVersion,
             null,

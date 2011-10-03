@@ -46,14 +46,14 @@ public class AbiquoErrorHandler implements HttpErrorHandler
     private ParseErrors errorParser;
 
     @Inject
-    AbiquoErrorHandler(ParseErrors errorParser)
+    AbiquoErrorHandler(final ParseErrors errorParser)
     {
         super();
         this.errorParser = errorParser;
     }
 
     @Override
-    public void handleError(HttpCommand command, HttpResponse response)
+    public void handleError(final HttpCommand command, final HttpResponse response)
     {
         ErrorsDto errors = errorParser.apply(response);
         String message = getMessage(errors);
@@ -89,15 +89,15 @@ public class AbiquoErrorHandler implements HttpErrorHandler
         }
     }
 
-    private String getMessage(ErrorsDto errors)
+    private String getMessage(final ErrorsDto errors)
     {
-        StringBuilder builder = new StringBuilder();
+        StringBuffer buffer = new StringBuffer();
         for (ErrorDto error : errors.getCollection())
         {
-            builder.append(error.getMessage());
-            builder.append("\n");
+            buffer.append(error.getMessage());
+            buffer.append("\n");
         }
-        return builder.toString();
+        return buffer.toString();
     }
 
 }

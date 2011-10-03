@@ -27,6 +27,7 @@ import java.util.Set;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
 import org.jclouds.rest.RestContextFactory;
@@ -67,10 +68,11 @@ public abstract class BaseAbiquoStrategyLiveTest
 
         injector =
             new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
-                "abiquo", identity, credential, modules, props).buildInjector();
+                AbiquoContextFactory.PROVIDER_NAME, identity, credential, modules, props)
+                .buildInjector();
     }
 
-    protected void addTestModulesTo(Set<Module> modules)
+    protected void addTestModulesTo(final Set<Module> modules)
     {
 
     }

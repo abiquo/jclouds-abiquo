@@ -54,14 +54,14 @@ public class ParseXML<T> implements Function<HttpResponse, T>
     protected final TypeLiteral<T> type;
 
     @Inject
-    public ParseXML(XMLParser xml, TypeLiteral<T> type)
+    public ParseXML(final XMLParser xml, final TypeLiteral<T> type)
     {
         this.xml = xml;
         this.type = type;
     }
 
     @Override
-    public T apply(HttpResponse from)
+    public T apply(final HttpResponse from)
     {
         InputStream xml = from.getPayload().getInput();
         try
@@ -70,7 +70,7 @@ public class ParseXML<T> implements Function<HttpResponse, T>
         }
         catch (Exception e)
         {
-            StringBuilder message = new StringBuilder();
+            StringBuffer message = new StringBuffer();
             message.append("Error parsing input");
             logger.error(e, message.toString());
             throw new HttpResponseException(message.toString() + "\n" + from, null, from, e);
@@ -82,12 +82,12 @@ public class ParseXML<T> implements Function<HttpResponse, T>
     }
 
     @SuppressWarnings("unchecked")
-    public T apply(InputStream stream) throws IOException
+    public T apply(final InputStream stream) throws IOException
     {
         return (T) apply(stream, type.getRawType());
     }
 
-    public <V> V apply(InputStream stream, Class<V> type) throws IOException
+    public <V> V apply(final InputStream stream, final Class<V> type) throws IOException
     {
         try
         {
@@ -96,7 +96,9 @@ public class ParseXML<T> implements Function<HttpResponse, T>
         finally
         {
             if (stream != null)
+            {
                 stream.close();
+            }
         }
     }
 

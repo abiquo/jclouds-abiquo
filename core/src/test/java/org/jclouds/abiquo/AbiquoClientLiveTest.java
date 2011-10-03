@@ -43,7 +43,7 @@ public class AbiquoClientLiveTest
 {
     protected AbiquoContext context;
 
-    protected String provider = "abiquo";
+    protected String provider = AbiquoContextFactory.PROVIDER_NAME;
 
     protected String identity;
 
