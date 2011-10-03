@@ -20,11 +20,13 @@
 package org.jclouds.abiquo;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
 import java.util.Properties;
 
+import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
@@ -74,6 +76,14 @@ public class AbiquoClientLiveTest
     {
         DatacentersDto datacenters = context.getApi().listDatacenters();
         assertNotNull(datacenters);
+        assertFalse(datacenters.getCollection().isEmpty());
+    }
+
+    public void testCreateDatacenter() throws Exception
+    {
+        DatacenterDto datacenter = context.getApi().createDatacenter(Datacenter.object());
+        assertNotNull(datacenter);
+        assertNotNull(datacenter.getId());
     }
 
     public void testGetDatacenter() throws Exception

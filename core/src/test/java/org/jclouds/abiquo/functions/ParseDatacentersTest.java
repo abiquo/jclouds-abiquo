@@ -19,11 +19,12 @@
 
 package org.jclouds.abiquo.functions;
 
-import static org.jclouds.abiquo.functions.ParseDatacenterTest.datacenterPayload;
 import static org.jclouds.abiquo.functions.ParseDatacenterTest.verifyDatacenter;
+import static org.jclouds.abiquo.utils.DomainUtils.withHeader;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
+import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
 import org.jclouds.abiquo.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
@@ -49,16 +50,15 @@ public class ParseDatacentersTest extends ParseXMLTest<DatacentersDto>
     @Override
     protected String getPayload()
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-        builder.append("<datacenters>");
-        builder.append(datacenterPayload());
-        builder.append("</datacenters>");
-        return builder.toString();
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<datacenters>");
+        buffer.append(Datacenter.payload());
+        buffer.append("</datacenters>");
+        return withHeader(buffer.toString());
     }
 
     @Override
-    protected void verifyObject(DatacentersDto object)
+    protected void verifyObject(final DatacentersDto object)
     {
         assertNotNull(object);
         assertNotNull(object.getCollection());

@@ -44,6 +44,11 @@ public interface AbiquoService
     Iterable<DatacenterDto> listDatacenters();
 
     /**
+     * Creates a new datacenter.
+     */
+    DatacenterDto createDatacenter(DatacenterDto datacenter);
+
+    /**
      * Get the list of datacenters matching the given filtger.
      */
     Iterable<DatacenterDto> listDatacenters(Predicate<DatacenterDto> filter);

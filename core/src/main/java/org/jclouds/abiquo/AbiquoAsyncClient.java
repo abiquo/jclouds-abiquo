@@ -21,13 +21,16 @@ package org.jclouds.abiquo;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.BindToXMLPayload;
 import org.jclouds.abiquo.functions.ParseDatacenter;
 import org.jclouds.abiquo.functions.ParseDatacenters;
 import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
@@ -39,8 +42,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * Provides asynchronous access to Abiquo via their REST API.
- * <p/>
  * 
+ * @see http://community.abiquo.com/display/ABI18/API+Reference
  * @see AbiquoClient
  * @author Ignasi Barrera
  */
@@ -59,6 +62,15 @@ public interface AbiquoAsyncClient
     ListenableFuture<DatacentersDto> listDatacenters();
 
     /**
+     * @see AbiquoClient#createDatacenter(DatacenterDto)
+     */
+    @POST
+    @Path("/admin/datacenters")
+    @ResponseParser(ParseDatacenter.class)
+    ListenableFuture<DatacenterDto> createDatacenter(
+        @BinderParam(BindToXMLPayload.class) DatacenterDto datacenter);
+
+    /**
      * @see AbiquoClient#getDatacenter
      */
     @GET
@@ -66,4 +78,5 @@ public interface AbiquoAsyncClient
     @ResponseParser(ParseDatacenter.class)
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<DatacenterDto> getDatacenter(@PathParam("datacenter") Integer datacenterId);
+
 }

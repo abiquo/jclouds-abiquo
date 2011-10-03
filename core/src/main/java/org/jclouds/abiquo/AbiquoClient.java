@@ -29,6 +29,7 @@ import com.abiquo.server.core.infrastructure.DatacentersDto;
 /**
  * Provides synchronous access to Abiquo.
  * 
+ * @see http://community.abiquo.com/display/ABI18/API+Reference
  * @see AbiquoAsyncClient
  * @author Ignasi Barrera
  */
@@ -41,6 +42,14 @@ public interface AbiquoClient
      * @return The list of Datacenters.
      */
     DatacentersDto listDatacenters();
+
+    /**
+     * Create a new datacenter.
+     * 
+     * @param datacenter The datacenter to be created.
+     * @return The created datacenter.
+     */
+    DatacenterDto createDatacenter(DatacenterDto datacenter);
 
     /**
      * Gte the given datacenter.

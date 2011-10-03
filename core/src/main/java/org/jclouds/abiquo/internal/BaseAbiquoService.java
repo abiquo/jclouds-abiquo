@@ -50,7 +50,8 @@ public class BaseAbiquoService implements AbiquoService
     private final ListDatacenters listDatacenters;
 
     @Inject
-    protected BaseAbiquoService(AbiquoContext abiquoContext, ListDatacenters listDatacenters)
+    protected BaseAbiquoService(final AbiquoContext abiquoContext,
+        final ListDatacenters listDatacenters)
     {
         this.abiquoContext = checkNotNull(abiquoContext, "abiquoContext");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
@@ -69,13 +70,19 @@ public class BaseAbiquoService implements AbiquoService
     }
 
     @Override
-    public Iterable<DatacenterDto> listDatacenters(Predicate<DatacenterDto> filter)
+    public DatacenterDto createDatacenter(final DatacenterDto datacenter)
+    {
+        return abiquoContext.getApi().createDatacenter(datacenter);
+    }
+
+    @Override
+    public Iterable<DatacenterDto> listDatacenters(final Predicate<DatacenterDto> filter)
     {
         return listDatacenters.execute(filter);
     }
 
     @Override
-    public DatacenterDto getDatacenter(Integer datacenterId)
+    public DatacenterDto getDatacenter(final Integer datacenterId)
     {
         return abiquoContext.getApi().getDatacenter(datacenterId);
     }

@@ -19,13 +19,13 @@
 
 package org.jclouds.abiquo.functions;
 
+import static org.jclouds.abiquo.utils.DomainUtils.withHeader;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 
+import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
 import org.jclouds.abiquo.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
-import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.inject.TypeLiteral;
 
@@ -47,44 +47,19 @@ public class ParseDatacenterTest extends ParseXMLTest<DatacenterDto>
     @Override
     protected String getPayload()
     {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>");
-        builder.append(datacenterPayload());
-        return builder.toString();
+        return withHeader(Datacenter.payload());
     }
 
     @Override
-    protected void verifyObject(DatacenterDto object)
+    protected void verifyObject(final DatacenterDto object)
     {
         verifyDatacenter(object);
     }
 
-    static void verifyDatacenter(DatacenterDto datacenter)
+    static void verifyDatacenter(final DatacenterDto datacenter)
     {
         assertEquals(datacenter.getName(), "Datacenter");
         assertEquals(datacenter.getLocation(), "Honolulu");
-
-        assertNotNull(datacenter.getLinks());
-        assertEquals(datacenter.getLinks().size(), 1);
-
-        RESTLink link = datacenter.getLinks().get(0);
-        assertEquals(link.getHref(),
-            "http://localhost:80/api/admin/datacenters/2/action/enterprises");
-        assertEquals(link.getRel(), "action/enterprises");
-    }
-
-    static String datacenterPayload()
-    {
-        StringBuilder builder = new StringBuilder();
-        builder.append("<datacenter>");
-        builder
-            .append("<link href=\"http://localhost:80/api/admin/datacenters/2/action/enterprises\""
-                + " rel=\"action/enterprises\"/>");
-        builder.append("<name>id</name>");
-        builder.append("<name>Datacenter</name>");
-        builder.append("<location>Honolulu</location>");
-        builder.append("</datacenter>");
-        return builder.toString();
     }
 
 }

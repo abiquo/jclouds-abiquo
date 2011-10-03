@@ -20,6 +20,7 @@
 package org.jclouds.abiquo;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.utils.DomainUtils.withHeader;
 import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
@@ -28,6 +29,7 @@ import java.lang.reflect.Method;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.abiquo.functions.ParseDatacenter;
 import org.jclouds.abiquo.functions.ParseDatacenters;
+import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.RestClientTest;
@@ -37,6 +39,7 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 
@@ -65,6 +68,23 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
         checkFilters(request);
     }
 
+    public void testCreateDatacenter() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = AbiquoAsyncClient.class.getMethod("createDatacenter", DatacenterDto.class);
+        GeneratedHttpRequest<AbiquoAsyncClient> request =
+            processor.createRequest(method, Datacenter.object());
+
+        assertRequestLineEquals(request, "POST http://localhost/api/admin/datacenters HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(Datacenter.payload()), "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseDatacenter.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testGetDatacenter() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = AbiquoAsyncClient.class.getMethod("getDatacenter", Integer.class);
@@ -82,7 +102,7 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
     }
 
     @Override
-    protected void checkFilters(HttpRequest request)
+    protected void checkFilters(final HttpRequest request)
     {
         assertEquals(request.getFilters().size(), 1);
         assertEquals(request.getFilters().get(0).getClass(), BasicAuthentication.class);
