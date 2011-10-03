@@ -49,6 +49,13 @@ public class DomainUtils
             return datacenter;
         }
 
+        public static DatacenterDto objectWithId()
+        {
+            DatacenterDto datacenter = object();
+            datacenter.setId(1);
+            return datacenter;
+        }
+
         public static String payload()
         {
             StringBuffer buffer = new StringBuffer();
@@ -59,5 +66,15 @@ public class DomainUtils
             return buffer.toString();
         }
 
+        public static String payloadWithId()
+        {
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("<datacenter>");
+            buffer.append("<id>1</id>");
+            buffer.append("<location>Honolulu</location>");
+            buffer.append("<name>DC</name>");
+            buffer.append("</datacenter>");
+            return buffer.toString();
+        }
     }
 }

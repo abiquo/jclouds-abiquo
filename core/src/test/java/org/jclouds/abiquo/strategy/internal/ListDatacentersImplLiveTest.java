@@ -70,7 +70,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     @Override
     protected void teardownEntities()
     {
-        // TODO: Delete datacenter is not yet implemented in Abiquo API
+        client.deleteDatacenter(datacenter.getId());
     }
 
     @Test

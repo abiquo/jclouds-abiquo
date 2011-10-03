@@ -20,6 +20,7 @@
 package org.jclouds.abiquo;
 
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -51,7 +52,7 @@ public class AbiquoClientLiveTest extends BaseAbiquoClientLiveTest
     @Override
     protected void teardownEntities() throws Exception
     {
-        // TODO: Delete datacenter is not yet implemented in Abiquo API
+        deleteDatacenter();
     }
 
     public void testListDatacenters() throws Exception
@@ -73,6 +74,14 @@ public class AbiquoClientLiveTest extends BaseAbiquoClientLiveTest
         assertNull(dc);
     }
 
+    public void testUpdateDatacenter() throws Exception
+    {
+        datacenter.setLocation("Anotherone");
+        DatacenterDto updated = client.updateDatacenter(datacenter.getId(), datacenter);
+        assertNotNull(updated);
+        assertEquals(updated.getLocation(), "Anotherone");
+    }
+
     private DatacenterDto createDatacenter() throws Exception
     {
         Random generator = new Random(System.currentTimeMillis());
@@ -82,6 +91,11 @@ public class AbiquoClientLiveTest extends BaseAbiquoClientLiveTest
         assertNotNull(created);
         assertNotNull(created.getId());
         return created;
+    }
+
+    private void deleteDatacenter() throws Exception
+    {
+        client.deleteDatacenter(datacenter.getId());
     }
 
 }

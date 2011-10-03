@@ -27,6 +27,7 @@ import javax.inject.Named;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoService;
+import org.jclouds.abiquo.domain.Datacenter;
 import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.srategy.ListDatacenters;
 import org.jclouds.logging.Logger;
@@ -70,9 +71,12 @@ public class BaseAbiquoService implements AbiquoService
     }
 
     @Override
-    public DatacenterDto createDatacenter(final DatacenterDto datacenter)
+    public DatacenterDto createDatacenter(final String name, final String location)
     {
-        return abiquoContext.getApi().createDatacenter(datacenter);
+        DatacenterDto dto = new DatacenterDto();
+        dto.setName(name);
+        dto.setLocation(location);
+        return abiquoContext.getApi().createDatacenter(dto);
     }
 
     @Override
@@ -85,6 +89,12 @@ public class BaseAbiquoService implements AbiquoService
     public DatacenterDto getDatacenter(final Integer datacenterId)
     {
         return abiquoContext.getApi().getDatacenter(datacenterId);
+    }
+
+    @Override
+    public void deleteDatacenter(final Datacenter d)
+    {
+        abiquoContext.getApi().deleteDatacenter(d.getId());
     }
 
 }

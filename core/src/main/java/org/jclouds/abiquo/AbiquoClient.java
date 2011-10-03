@@ -59,4 +59,19 @@ public interface AbiquoClient
      */
     DatacenterDto getDatacenter(Integer datacenterId);
 
+    /**
+     * Updates an existing datacenter.
+     * 
+     * @param datacenterId The id of the datacenter to update.
+     * @param datacenter The new attributes for the datacenter.
+     * @return The updated datacenter.
+     */
+    DatacenterDto updateDatacenter(Integer datacenterId, DatacenterDto datacenter);
+
+    /**
+     * Deletes an existing datacenter.
+     * 
+     * @param datacenterId The id of the datacenter to delete.
+     */
+    void deleteDatacenter(Integer datacenterId);
 }

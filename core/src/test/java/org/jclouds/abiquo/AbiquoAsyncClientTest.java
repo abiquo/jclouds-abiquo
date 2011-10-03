@@ -32,6 +32,7 @@ import org.jclouds.abiquo.functions.ParseDatacenters;
 import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.filters.BasicAuthentication;
+import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.RestClientTest;
 import org.jclouds.rest.RestContextSpec;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -97,6 +98,43 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
         assertResponseParserClassEquals(method, request, ParseDatacenter.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateDatacenter() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            AbiquoAsyncClient.class.getMethod("updateDatacenter", Integer.class,
+                DatacenterDto.class);
+
+        GeneratedHttpRequest<AbiquoAsyncClient> request =
+            processor.createRequest(method, 1, Datacenter.objectWithId());
+
+        assertRequestLineEquals(request, "PUT http://localhost/api/admin/datacenters/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(Datacenter.payloadWithId()), "application/xml",
+            false);
+
+        assertResponseParserClassEquals(method, request, ParseDatacenter.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteDatacenter() throws SecurityException, NoSuchMethodException
+    {
+        Method method = AbiquoAsyncClient.class.getMethod("deleteDatacenter", Integer.class);
+        GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request, "DELETE http://localhost/api/admin/datacenters/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }
