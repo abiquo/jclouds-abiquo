@@ -72,10 +72,7 @@ public class AbiquoErrorHandler implements HttpErrorHandler
                     exception = new AuthorizationException(message, exception);
                     break;
                 case 404:
-                    if (!command.getCurrentRequest().getMethod().equals("DELETE"))
-                    {
-                        exception = new ResourceNotFoundException(message, exception);
-                    }
+                    exception = new ResourceNotFoundException(message, exception);
                     break;
             }
         }

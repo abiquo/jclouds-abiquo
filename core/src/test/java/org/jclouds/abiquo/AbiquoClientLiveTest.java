@@ -19,15 +19,14 @@
 
 package org.jclouds.abiquo;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import java.util.Properties;
+import java.util.Random;
 
 import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
-import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -39,63 +38,50 @@ import com.abiquo.server.core.infrastructure.DatacentersDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class AbiquoClientLiveTest
+public class AbiquoClientLiveTest extends BaseAbiquoClientLiveTest
 {
-    protected AbiquoContext context;
+    private DatacenterDto datacenter;
 
-    protected String provider = AbiquoContextFactory.PROVIDER_NAME;
-
-    protected String identity;
-
-    protected String credential;
-
-    protected String endpoint;
-
-    protected String apiVersion;
-
-    protected void setupCredentials()
+    @Override
+    protected void setupEntities() throws Exception
     {
-        identity = checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
-        credential =
-            checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
-        endpoint = checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
-        apiVersion =
-            checkNotNull(System.getProperty("test.abiquo.apiversion"), "test.abiquo.apiversion");
+        datacenter = createDatacenter();
     }
 
-    @BeforeGroups(groups = "live")
-    public void setupClient()
+    @Override
+    protected void teardownEntities() throws Exception
     {
-        setupCredentials();
-        Properties props = new Properties();
-        props.setProperty("abiquo.endpoint", endpoint);
-        context = new AbiquoContextFactory().createContext(identity, credential, props);
+        // TODO: Delete datacenter is not yet implemented in Abiquo API
     }
 
     public void testListDatacenters() throws Exception
     {
-        DatacentersDto datacenters = context.getApi().listDatacenters();
+        DatacentersDto datacenters = client.listDatacenters();
         assertNotNull(datacenters);
         assertFalse(datacenters.getCollection().isEmpty());
     }
 
-    public void testCreateDatacenter() throws Exception
-    {
-        DatacenterDto datacenter = context.getApi().createDatacenter(Datacenter.object());
-        assertNotNull(datacenter);
-        assertNotNull(datacenter.getId());
-    }
-
     public void testGetDatacenter() throws Exception
     {
-        DatacenterDto datacenter = context.getApi().getDatacenter(2);
-        assertNotNull(datacenter);
+        DatacenterDto dc = client.getDatacenter(datacenter.getId());
+        assertNotNull(dc);
     }
 
     public void testGetUnexistingDatacenter() throws Exception
     {
-        DatacenterDto datacenter = context.getApi().getDatacenter(100);
-        assertNull(datacenter);
+        DatacenterDto dc = client.getDatacenter(datacenter.getId() + 100);
+        assertNull(dc);
+    }
+
+    private DatacenterDto createDatacenter() throws Exception
+    {
+        Random generator = new Random(System.currentTimeMillis());
+        DatacenterDto datacenter = Datacenter.object();
+        datacenter.setName(PREFIX + datacenter.getName() + generator.nextInt(100));
+        DatacenterDto created = client.createDatacenter(datacenter);
+        assertNotNull(created);
+        assertNotNull(created.getId());
+        return created;
     }
 
 }

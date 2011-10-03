@@ -58,7 +58,7 @@ public class ParseDatacenterTest extends ParseXMLTest<DatacenterDto>
 
     static void verifyDatacenter(final DatacenterDto datacenter)
     {
-        assertEquals(datacenter.getName(), "Datacenter");
+        assertEquals(datacenter.getName(), "DC");
         assertEquals(datacenter.getLocation(), "Honolulu");
     }
 

@@ -70,9 +70,24 @@ public abstract class BaseAbiquoStrategyLiveTest
             new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
                 AbiquoContextFactory.PROVIDER_NAME, identity, credential, modules, props)
                 .buildInjector();
+
+        setupStrategy();
+        setupEntities();
     }
 
+    protected abstract void setupStrategy();
+
     protected void addTestModulesTo(final Set<Module> modules)
+    {
+
+    }
+
+    protected void setupEntities()
+    {
+
+    }
+
+    protected void teardownEntities()
     {
 
     }
@@ -80,6 +95,7 @@ public abstract class BaseAbiquoStrategyLiveTest
     @AfterTest(groups = "live")
     public void teardownClient() throws IOException
     {
+        teardownEntities();
         if (injector != null)
         {
             injector.getInstance(Closer.class).close();

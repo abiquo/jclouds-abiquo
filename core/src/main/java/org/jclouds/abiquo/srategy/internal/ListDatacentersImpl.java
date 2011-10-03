@@ -61,8 +61,8 @@ public class ListDatacentersImpl implements ListDatacenters
     protected Long maxTime;
 
     @Inject
-    ListDatacentersImpl(@Named(Constants.PROPERTY_USER_THREADS) ExecutorService userExecutor,
-        AbiquoClient client, AbiquoAsyncClient asyncClient)
+    ListDatacentersImpl(@Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
+        final AbiquoClient client, final AbiquoAsyncClient asyncClient)
     {
         this.userExecutor = userExecutor;
         this.abiquoClient = client;
@@ -76,7 +76,7 @@ public class ListDatacentersImpl implements ListDatacenters
     }
 
     @Override
-    public Iterable<DatacenterDto> execute(Predicate<DatacenterDto> selector)
+    public Iterable<DatacenterDto> execute(final Predicate<DatacenterDto> selector)
     {
         return filter(execute(), selector);
     }

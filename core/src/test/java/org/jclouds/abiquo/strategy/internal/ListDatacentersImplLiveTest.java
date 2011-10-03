@@ -20,11 +20,17 @@
 package org.jclouds.abiquo.strategy.internal;
 
 import static com.google.common.collect.Iterables.size;
+import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
+import java.util.Random;
+
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.predicates.DatacenterPredicates;
 import org.jclouds.abiquo.srategy.internal.ListDatacentersImpl;
+import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
@@ -40,14 +46,31 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListDatacentersImpl strategy;
 
-    // TODO: Uncomment and use it build the test scenario when the POST datacenter is implemented
-    // private AbiquoClient abiquoClient;
+    private AbiquoClient client;
+
+    private DatacenterDto datacenter;
 
     @BeforeTest(groups = "live", dependsOnMethods = "setupClient")
-    void setupStrategy()
+    @Override
+    protected void setupStrategy()
     {
         this.strategy = injector.getInstance(ListDatacentersImpl.class);
-        // this.abiquoClient = injector.getInstance(AbiquoClient.class);
+        this.client = injector.getInstance(AbiquoClient.class);
+    }
+
+    @Override
+    protected void setupEntities()
+    {
+        Random generator = new Random(System.currentTimeMillis());
+        DatacenterDto datacenter = Datacenter.object();
+        datacenter.setName(PREFIX + datacenter.getName() + generator.nextInt(100));
+        this.datacenter = client.createDatacenter(datacenter);
+    }
+
+    @Override
+    protected void teardownEntities()
+    {
+        // TODO: Delete datacenter is not yet implemented in Abiquo API
     }
 
     @Test
@@ -55,16 +78,25 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     {
         Iterable<DatacenterDto> datacenters = strategy.execute();
         assertNotNull(datacenters);
-        assertEquals(size(datacenters), 1);
+        assertTrue(size(datacenters) > 0);
     }
 
     @Test
-    public void testExecutePredicate()
+    public void testExecutePredicateWithoutResults()
     {
         Iterable<DatacenterDto> datacenters =
             strategy.execute(DatacenterPredicates.containsName("blabla"));
         assertNotNull(datacenters);
         assertEquals(size(datacenters), 0);
+    }
+
+    @Test
+    public void testExecutePredicateWithResults()
+    {
+        Iterable<DatacenterDto> datacenters =
+            strategy.execute(DatacenterPredicates.containsName(datacenter.getName()));
+        assertNotNull(datacenters);
+        assertEquals(size(datacenters), 1);
     }
 
 }

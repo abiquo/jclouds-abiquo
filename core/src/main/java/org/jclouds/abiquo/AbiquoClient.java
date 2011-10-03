@@ -58,4 +58,5 @@ public interface AbiquoClient
      * @return The datacenter or <code>null</code> if it does not exist.
      */
     DatacenterDto getDatacenter(Integer datacenterId);
+
 }

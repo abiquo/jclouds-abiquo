@@ -44,7 +44,7 @@ public class DomainUtils
         public static DatacenterDto object()
         {
             DatacenterDto datacenter = new DatacenterDto();
-            datacenter.setName("Datacenter");
+            datacenter.setName("DC");
             datacenter.setLocation("Honolulu");
             return datacenter;
         }
@@ -54,7 +54,7 @@ public class DomainUtils
             StringBuffer buffer = new StringBuffer();
             buffer.append("<datacenter>");
             buffer.append("<location>Honolulu</location>");
-            buffer.append("<name>Datacenter</name>");
+            buffer.append("<name>DC</name>");
             buffer.append("</datacenter>");
             return buffer.toString();
         }
