@@ -29,6 +29,7 @@ import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoService;
+import org.jclouds.abiquo.domain.factory.DomainFactory;
 import org.jclouds.domain.Credentials;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.location.Provider;
@@ -51,21 +52,32 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
 {
     private final AbiquoService abiquoService;
 
+    private final DomainFactory domainFactory;
+
     @Inject
-    protected AbiquoContextImpl(Closer closer, Map<String, Credentials> credentialStore,
-        Utils utils, Injector injector, TypeLiteral<AbiquoClient> syncApi,
-        TypeLiteral<AbiquoAsyncClient> asyncApi, @Provider URI endpoint, @Provider String provider,
-        @Identity String identity, @ApiVersion String apiVersion, AbiquoService abiquoService)
+    protected AbiquoContextImpl(final Closer closer,
+        final Map<String, Credentials> credentialStore, final Utils utils, final Injector injector,
+        final TypeLiteral<AbiquoClient> syncApi, final TypeLiteral<AbiquoAsyncClient> asyncApi,
+        @Provider final URI endpoint, @Provider final String provider,
+        @Identity final String identity, @ApiVersion final String apiVersion,
+        final AbiquoService abiquoService, final DomainFactory domainFactory)
     {
         super(closer, credentialStore, utils, injector, syncApi, asyncApi, endpoint, provider,
             identity, apiVersion, null);
         this.abiquoService = abiquoService;
+        this.domainFactory = domainFactory;
     }
 
     @Override
     public AbiquoService getAbiquoService()
     {
         return abiquoService;
+    }
+
+    @Override
+    public DomainFactory getDomainFactory()
+    {
+        return domainFactory;
     }
 
 }

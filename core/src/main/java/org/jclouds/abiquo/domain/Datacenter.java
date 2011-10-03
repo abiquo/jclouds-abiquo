@@ -17,23 +17,26 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.domain;
 
-import org.jclouds.abiquo.domain.factory.DomainFactory;
-import org.jclouds.abiquo.internal.AbiquoContextImpl;
-import org.jclouds.rest.RestContext;
+import org.jclouds.abiquo.AbiquoContext;
 
-import com.google.inject.ImplementedBy;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
- * Abiquo {@link RestContext} implementation to expose high level Abiquo functionalities.
+ * Adds high level functionallity to {@link DatacenterDto}.
  * 
  * @author Ignasi Barrera
  */
-@ImplementedBy(AbiquoContextImpl.class)
-public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClient>
+public class Datacenter extends DatacenterDto
 {
-    AbiquoService getAbiquoService();
+    private static final long serialVersionUID = 1L;
 
-    DomainFactory getDomainFactory();
+    private AbiquoContext context;
+
+    public Datacenter(final AbiquoContext context)
+    {
+        this.context = context;
+    }
+
 }

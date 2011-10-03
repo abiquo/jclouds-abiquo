@@ -45,8 +45,6 @@ public abstract class BaseAbiquoClientLiveTest
 
     protected String endpoint;
 
-    protected String apiVersion;
-
     protected abstract void setupEntities() throws Exception;
 
     protected abstract void teardownEntities() throws Exception;
@@ -58,8 +56,6 @@ public abstract class BaseAbiquoClientLiveTest
         credential =
             checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
         endpoint = checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
-        apiVersion =
-            checkNotNull(System.getProperty("test.abiquo.apiversion"), "test.abiquo.apiversion");
 
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
