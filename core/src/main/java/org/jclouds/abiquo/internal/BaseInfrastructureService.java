@@ -72,7 +72,6 @@ public class BaseInfrastructureService implements InfrastructureService
         DatacenterDto dto = new DatacenterDto();
         dto.setName(name);
         dto.setLocation(location);
-
         dto = abiquoContext.getApi().getInfrastructureClient().createDatacenter(dto);
 
         return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
@@ -90,7 +89,6 @@ public class BaseInfrastructureService implements InfrastructureService
     {
         DatacenterDto dto =
             abiquoContext.getApi().getInfrastructureClient().getDatacenter(datacenterId);
-
         return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
     }
 
@@ -104,9 +102,7 @@ public class BaseInfrastructureService implements InfrastructureService
     public Datacenter updateDatacenter(final Datacenter dc)
     {
         DatacenterDto dto = getClientTransformer(DatacenterDto.class, Datacenter.class).toDto(dc);
-
         dto = abiquoContext.getApi().getInfrastructureClient().updateDatacenter(dto.getId(), dc);
-
         return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
     }
 }
