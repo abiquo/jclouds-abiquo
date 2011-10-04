@@ -17,16 +17,20 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions;
+package org.jclouds.abiquo.functions.infrastructure;
 
-import static org.jclouds.abiquo.utils.DomainUtils.withHeader;
+import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
+import static org.jclouds.abiquo.functions.infrastructure.ParseDatacenterTest.verifyDatacenter;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
-import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
+import org.jclouds.abiquo.domain.Infrastructure;
+import org.jclouds.abiquo.functions.ParseXMLTest;
 import org.jclouds.abiquo.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -35,31 +39,34 @@ import com.google.inject.TypeLiteral;
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class ParseDatacenterTest extends ParseXMLTest<DatacenterDto>
+public class ParseDatacentersTest extends ParseXMLTest<DatacentersDto>
 {
 
     @Override
-    protected ParseDatacenter getParser()
+    protected ParseDatacenters getParser()
     {
-        return new ParseDatacenter(new JAXBParser(), TypeLiteral.get(DatacenterDto.class));
+        return new ParseDatacenters(new JAXBParser(), TypeLiteral.get(DatacentersDto.class));
     }
 
     @Override
     protected String getPayload()
     {
-        return withHeader(Datacenter.payload());
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<datacenters>");
+        buffer.append(Infrastructure.datacenterPostPayload());
+        buffer.append("</datacenters>");
+        return withHeader(buffer.toString());
     }
 
     @Override
-    protected void verifyObject(final DatacenterDto object)
+    protected void verifyObject(final DatacentersDto object)
     {
-        verifyDatacenter(object);
-    }
+        assertNotNull(object);
+        assertNotNull(object.getCollection());
+        assertEquals(object.getCollection().size(), 1);
 
-    static void verifyDatacenter(final DatacenterDto datacenter)
-    {
-        assertEquals(datacenter.getName(), "DC");
-        assertEquals(datacenter.getLocation(), "Honolulu");
+        DatacenterDto datacenter = object.getCollection().get(0);
+        verifyDatacenter(datacenter);
     }
 
 }

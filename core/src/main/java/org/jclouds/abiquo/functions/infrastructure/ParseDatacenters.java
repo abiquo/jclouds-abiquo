@@ -17,14 +17,15 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions;
+package org.jclouds.abiquo.functions.infrastructure;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jclouds.abiquo.functions.ParseXMLWithJAXB;
 import org.jclouds.abiquo.xml.XMLParser;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -33,10 +34,10 @@ import com.google.inject.TypeLiteral;
  * @author Ignasi Barrera
  */
 @Singleton
-public class ParseDatacenter extends ParseXMLWithJAXB<DatacenterDto>
+public class ParseDatacenters extends ParseXMLWithJAXB<DatacentersDto>
 {
     @Inject
-    public ParseDatacenter(XMLParser xml, TypeLiteral<DatacenterDto> type)
+    public ParseDatacenters(XMLParser xml, TypeLiteral<DatacentersDto> type)
     {
         super(xml, type);
     }

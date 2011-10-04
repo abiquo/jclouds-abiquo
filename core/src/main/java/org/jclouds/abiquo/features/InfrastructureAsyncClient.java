@@ -29,8 +29,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.BindToXMLPayload;
-import org.jclouds.abiquo.functions.ParseDatacenter;
-import org.jclouds.abiquo.functions.ParseDatacenters;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;

@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.features;
 
-import static org.jclouds.abiquo.utils.DomainUtils.withHeader;
+import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import org.jclouds.abiquo.functions.ParseDatacenter;
-import org.jclouds.abiquo.functions.ParseDatacenters;
-import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
+import org.jclouds.abiquo.domain.Infrastructure;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
@@ -67,11 +67,12 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("createDatacenter", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Datacenter.object());
+            processor.createRequest(method, Infrastructure.datacenterPost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/admin/datacenters HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Datacenter.payload()), "application/xml", false);
+        assertPayloadEquals(request, withHeader(Infrastructure.datacenterPostPayload()),
+            "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseDatacenter.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -103,12 +104,12 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("updateDatacenter", Integer.class,
                 DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1, Datacenter.objectWithId());
+            processor.createRequest(method, 1, Infrastructure.datacenterPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Datacenter.payloadWithId()), "application/xml",
-            false);
+        assertPayloadEquals(request, withHeader(Infrastructure.datacenterPutPayload()),
+            "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseDatacenter.class);
         assertSaxResponseParserClassEquals(method, null);

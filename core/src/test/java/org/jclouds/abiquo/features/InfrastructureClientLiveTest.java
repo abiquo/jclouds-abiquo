@@ -27,7 +27,7 @@ import static org.testng.Assert.assertNull;
 
 import java.util.Random;
 
-import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
+import org.jclouds.abiquo.domain.Infrastructure;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -86,7 +86,7 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
     private DatacenterDto createDatacenter() throws Exception
     {
         Random generator = new Random(System.currentTimeMillis());
-        DatacenterDto datacenter = Datacenter.object();
+        DatacenterDto datacenter = Infrastructure.datacenterPost();
         datacenter.setName(PREFIX + datacenter.getName() + generator.nextInt(100));
         DatacenterDto created = infrastructureClient.createDatacenter(datacenter);
         assertNotNull(created);
