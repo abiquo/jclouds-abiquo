@@ -36,10 +36,18 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
 {
     private static final long serialVersionUID = 1L;
 
+    public static ClientTransformer<DatacenterDto, Datacenter> transformer = getClientTransformer(
+        DatacenterDto.class, Datacenter.class);
+
     private AbiquoContext context;
 
-    private ClientTransformer<DatacenterDto, Datacenter> ct =
-        getClientTransformer(DatacenterDto.class, Datacenter.class);;
+    /**
+     * Package protected. Needed to allow {@link ClientTransformer} operations.
+     */
+    Datacenter()
+    {
+
+    }
 
     public Datacenter(final AbiquoContext context)
     {
@@ -57,45 +65,33 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
         setLocation(location);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.jclouds.abiquo.domain.DomainWrapper#delete()
-     */
     @Override
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteDatacenter(this.getId());
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.jclouds.abiquo.domain.DomainWrapper#save()
-     */
     @Override
     public void save()
     {
         // Create datacenter
         DatacenterDto dto =
-            context.getApi().getInfrastructureClient().createDatacenter(ct.toDto(this));
+            context.getApi().getInfrastructureClient().createDatacenter(transformer.toDto(this));
 
         // Update this class with incoming information
-        ct.updateResource(dto, this);
+        transformer.updateResource(dto, this);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.jclouds.abiquo.domain.DomainWrapper#update()
-     */
     @Override
     public void update()
     {
         // Update datacenter
         DatacenterDto dto =
-            context.getApi().getInfrastructureClient().updateDatacenter(this.getId(),
-                ct.toDto(this));
+            context.getApi().getInfrastructureClient()
+                .updateDatacenter(this.getId(), transformer.toDto(this));
 
         // Update this class with incoming information
-        ct.updateResource(dto, this);
+        transformer.updateResource(dto, this);
     }
 
     public static Builder builder(final AbiquoContext context)
@@ -146,8 +142,8 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
 
         public static Builder fromDatacenter(final Datacenter in)
         {
-            return Datacenter.builder(in.context).id(in.getId()).name(in.getName()).location(
-                in.getLocation());
+            return Datacenter.builder(in.context).id(in.getId()).name(in.getName())
+                .location(in.getLocation());
         }
     }
 }

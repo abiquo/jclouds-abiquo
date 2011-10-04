@@ -23,19 +23,17 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.io.IOException;
 import java.util.Properties;
-import java.util.Set;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.lifecycle.Closer;
-import org.jclouds.logging.log4j.config.Log4JLoggingModule;
 import org.jclouds.rest.RestContextFactory;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
@@ -62,25 +60,16 @@ public abstract class BaseAbiquoStrategyLiveTest
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
 
-        Set<Module> modules = Sets.newHashSet();
-        modules.add(new Log4JLoggingModule());
-        addTestModulesTo(modules);
-
         injector =
             new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
-                AbiquoContextFactory.PROVIDER_NAME, identity, credential, modules, props)
-                .buildInjector();
+                AbiquoContextFactory.PROVIDER_NAME, identity, credential,
+                ImmutableSet.<Module> of(), props).buildInjector();
 
         setupStrategy();
         setupEntities();
     }
 
     protected abstract void setupStrategy();
-
-    protected void addTestModulesTo(final Set<Module> modules)
-    {
-
-    }
 
     protected void setupEntities()
     {

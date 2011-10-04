@@ -22,7 +22,6 @@ package org.jclouds.abiquo.features;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.internal.BaseInfrastructureService;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.base.Predicate;
 import com.google.inject.ImplementedBy;
 
@@ -48,7 +47,7 @@ public interface InfrastructureService
     /**
      * Get the list of datacenters matching the given filter.
      */
-    Iterable<Datacenter> listDatacenters(Predicate<DatacenterDto> filter);
+    Iterable<Datacenter> listDatacenters(Predicate<Datacenter> filter);
 
     /**
      * Get the datacenter with the given id, or return <code>null</code> if not found.

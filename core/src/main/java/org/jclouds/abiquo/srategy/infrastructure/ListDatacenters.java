@@ -19,10 +19,10 @@
 
 package org.jclouds.abiquo.srategy.infrastructure;
 
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.srategy.ListEntities;
 import org.jclouds.abiquo.srategy.infrastructure.internal.ListDatacentersImpl;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.inject.ImplementedBy;
 
 /**
@@ -31,7 +31,7 @@ import com.google.inject.ImplementedBy;
  * @author Ignasi Barrera
  */
 @ImplementedBy(ListDatacentersImpl.class)
-public interface ListDatacenters extends ListEntities<DatacenterDto>
+public interface ListDatacenters extends ListEntities<Datacenter>
 {
 
 }

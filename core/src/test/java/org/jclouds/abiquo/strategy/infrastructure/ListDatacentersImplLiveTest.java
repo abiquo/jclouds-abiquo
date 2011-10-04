@@ -29,6 +29,7 @@ import java.util.Random;
 
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.Infrastructure;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.abiquo.srategy.infrastructure.internal.ListDatacentersImpl;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
@@ -77,7 +78,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     @Test
     public void testExecute()
     {
-        Iterable<DatacenterDto> datacenters = strategy.execute();
+        Iterable<Datacenter> datacenters = strategy.execute();
         assertNotNull(datacenters);
         assertTrue(size(datacenters) > 0);
     }
@@ -85,7 +86,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     @Test
     public void testExecutePredicateWithoutResults()
     {
-        Iterable<DatacenterDto> datacenters =
+        Iterable<Datacenter> datacenters =
             strategy.execute(DatacenterPredicates.containsName("blabla"));
         assertNotNull(datacenters);
         assertEquals(size(datacenters), 0);
@@ -94,7 +95,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     @Test
     public void testExecutePredicateWithResults()
     {
-        Iterable<DatacenterDto> datacenters =
+        Iterable<Datacenter> datacenters =
             strategy.execute(DatacenterPredicates.containsName(datacenter.getName()));
         assertNotNull(datacenters);
         assertEquals(size(datacenters), 1);

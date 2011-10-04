@@ -20,7 +20,6 @@
 package org.jclouds.abiquo.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.abiquo.domain.factory.TransformerFactory.getClientTransformer;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -62,8 +61,7 @@ public class BaseInfrastructureService implements InfrastructureService
     @Override
     public Iterable<Datacenter> listDatacenters()
     {
-        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResourceIterable(
-            listDatacenters.execute());
+        return listDatacenters.execute();
     }
 
     @Override
@@ -74,14 +72,13 @@ public class BaseInfrastructureService implements InfrastructureService
         dto.setLocation(location);
         dto = abiquoContext.getApi().getInfrastructureClient().createDatacenter(dto);
 
-        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
+        return Datacenter.transformer.createResource(dto);
     }
 
     @Override
-    public Iterable<Datacenter> listDatacenters(final Predicate<DatacenterDto> filter)
+    public Iterable<Datacenter> listDatacenters(final Predicate<Datacenter> filter)
     {
-        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResourceIterable(
-            listDatacenters.execute(filter));
+        return listDatacenters.execute(filter);
     }
 
     @Override
@@ -89,7 +86,7 @@ public class BaseInfrastructureService implements InfrastructureService
     {
         DatacenterDto dto =
             abiquoContext.getApi().getInfrastructureClient().getDatacenter(datacenterId);
-        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
+        return Datacenter.transformer.createResource(dto);
     }
 
     @Override
@@ -101,8 +98,8 @@ public class BaseInfrastructureService implements InfrastructureService
     @Override
     public Datacenter updateDatacenter(final Datacenter dc)
     {
-        DatacenterDto dto = getClientTransformer(DatacenterDto.class, Datacenter.class).toDto(dc);
-        dto = abiquoContext.getApi().getInfrastructureClient().updateDatacenter(dto.getId(), dc);
-        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
+        DatacenterDto dto = Datacenter.transformer.toDto(dc);
+        dto = abiquoContext.getApi().getInfrastructureClient().updateDatacenter(dto.getId(), dto);
+        return Datacenter.transformer.createResource(dto);
     }
 }

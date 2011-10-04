@@ -23,6 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.base.Predicate;
 
@@ -33,19 +35,19 @@ import com.google.common.base.Predicate;
  */
 public class DatacenterPredicates
 {
-    public static Predicate<DatacenterDto> containsName(final String name)
+    public static Predicate<Datacenter> containsName(final String name)
     {
         return containsNames(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<DatacenterDto> containsNames(final String... names)
+    public static Predicate<Datacenter> containsNames(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
-        return new Predicate<DatacenterDto>()
+        return new Predicate<Datacenter>()
         {
             @Override
-            public boolean apply(final DatacenterDto datacenter)
+            public boolean apply(final Datacenter datacenter)
             {
                 return Arrays.asList(names).contains(datacenter.getName());
             }

@@ -21,6 +21,7 @@ package org.jclouds.abiquo.srategy.infrastructure.internal;
 
 import static com.google.common.collect.Iterables.filter;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import javax.annotation.Resource;
@@ -30,6 +31,7 @@ import javax.inject.Singleton;
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.srategy.infrastructure.ListDatacenters;
 import org.jclouds.logging.Logger;
@@ -70,13 +72,16 @@ public class ListDatacentersImpl implements ListDatacenters
     }
 
     @Override
-    public Iterable<DatacenterDto> execute()
+    public Iterable<Datacenter> execute()
     {
-        return abiquoClient.getInfrastructureClient().listDatacenters().getCollection();
+        List<DatacenterDto> dtos =
+            abiquoClient.getInfrastructureClient().listDatacenters().getCollection();
+
+        return Datacenter.transformer.createResourceIterable(dtos);
     }
 
     @Override
-    public Iterable<DatacenterDto> execute(final Predicate<DatacenterDto> selector)
+    public Iterable<Datacenter> execute(final Predicate<Datacenter> selector)
     {
         return filter(execute(), selector);
     }
