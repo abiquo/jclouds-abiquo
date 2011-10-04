@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.handlers;
 
+import java.util.Iterator;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -35,7 +37,7 @@ import com.abiquo.model.transport.error.ErrorsDto;
 import com.google.common.io.Closeables;
 
 /**
- * Parse Abiquo API errors and set the appropiate exteption.
+ * Parse Abiquo API errors and set the appropriate exception.
  * 
  * @author Ignasi Barrera
  */
@@ -61,10 +63,6 @@ public class AbiquoErrorHandler implements HttpErrorHandler
 
         try
         {
-            message =
-                message != null ? message : String.format("%s -> %s", command.getCurrentRequest()
-                    .getRequestLine(), response.getStatusLine());
-
             switch (response.getStatusCode())
             {
                 case 401:
@@ -89,10 +87,14 @@ public class AbiquoErrorHandler implements HttpErrorHandler
     private String getMessage(final ErrorsDto errors)
     {
         StringBuffer buffer = new StringBuffer();
-        for (ErrorDto error : errors.getCollection())
+        for (Iterator<ErrorDto> it = errors.getCollection().iterator(); it.hasNext();)
         {
+            ErrorDto error = it.next();
             buffer.append(error.getMessage());
-            buffer.append("\n");
+            if (it.hasNext())
+            {
+                buffer.append("\n");
+            }
         }
         return buffer.toString();
     }
