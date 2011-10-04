@@ -20,7 +20,7 @@
 package org.jclouds.abiquo.domain;
 
 /**
- * Wrapper interface. Should be implemented by any resource in domain.
+ * DomainWrapper interface. Should be implemented by any resource in domain.
  * 
  * @author Francesc Montserrat
  */

@@ -19,14 +19,16 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static org.jclouds.abiquo.domain.factory.TransformerFactory.getClientTransformer;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.domain.factory.TransformerFactory;
+import org.jclouds.abiquo.domain.factory.ClientTransformer;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
- * Adds high level functionallity to {@link DatacenterDto}.
+ * Adds high level functionality to {@link DatacenterDto}.
  * 
  * @author Ignasi Barrera
  */
@@ -36,12 +38,18 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
 
     private AbiquoContext context;
 
+    private ClientTransformer<DatacenterDto, Datacenter> ct =
+        getClientTransformer(DatacenterDto.class, Datacenter.class);;
+
     public Datacenter(final AbiquoContext context)
     {
         this.context = context;
     }
 
-    public Datacenter(final AbiquoContext context, final String name, final String location)
+    /**
+     * Builder private constructor.
+     */
+    private Datacenter(final AbiquoContext context, final String name, final String location)
     {
         super();
         this.context = context;
@@ -49,33 +57,45 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
         setLocation(location);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.jclouds.abiquo.domain.DomainWrapper#delete()
+     */
     @Override
     public void delete()
     {
-        context.getInfrastructureService().deleteDatacenter(this.getId());
+        context.getApi().getInfrastructureClient().deleteDatacenter(this.getId());
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.jclouds.abiquo.domain.DomainWrapper#save()
+     */
     @Override
     public void save()
     {
         // Create datacenter
         DatacenterDto dto =
-            context.getInfrastructureService().createDatacenter(this.getName(), this.getLocation());
+            context.getApi().getInfrastructureClient().createDatacenter(ct.toDto(this));
 
         // Update this class with incoming information
-        TransformerFactory.getClientTransformer(DatacenterDto.class, Datacenter.class)
-            .updateResource(dto, this);
+        ct.updateResource(dto, this);
     }
 
+    /*
+     * (non-Javadoc)
+     * @see org.jclouds.abiquo.domain.DomainWrapper#update()
+     */
     @Override
     public void update()
     {
         // Update datacenter
-        DatacenterDto dto = context.getInfrastructureService().updateDatacenter(this);
+        DatacenterDto dto =
+            context.getApi().getInfrastructureClient().updateDatacenter(this.getId(),
+                ct.toDto(this));
 
         // Update this class with incoming information
-        TransformerFactory.getClientTransformer(DatacenterDto.class, Datacenter.class)
-            .updateResource(dto, this);
+        ct.updateResource(dto, this);
     }
 
     public static Builder builder(final AbiquoContext context)
@@ -126,8 +146,8 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
 
         public static Builder fromDatacenter(final Datacenter in)
         {
-            return Datacenter.builder(in.context).id(in.getId()).name(in.getName())
-                .location(in.getLocation());
+            return Datacenter.builder(in.context).id(in.getId()).name(in.getName()).location(
+                in.getLocation());
         }
     }
 }
