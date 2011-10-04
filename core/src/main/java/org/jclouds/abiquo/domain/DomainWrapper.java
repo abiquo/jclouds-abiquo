@@ -82,7 +82,11 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         try
         {
             Constructor<W> cons =
-                wrapperClass.getConstructor(AbiquoContext.class, target.getClass());
+                wrapperClass.getDeclaredConstructor(AbiquoContext.class, target.getClass());
+            if (!cons.isAccessible())
+            {
+                cons.setAccessible(true);
+            }
             return cons.newInstance(context, target);
         }
         catch (Exception ex)

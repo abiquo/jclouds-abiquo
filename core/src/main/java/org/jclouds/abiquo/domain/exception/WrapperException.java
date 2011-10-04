@@ -48,7 +48,7 @@ public class WrapperException extends RuntimeException
     public String getMessage()
     {
         String msg =
-            "Could not bind wrap [" + target + "] to class" + wrapperClass.getName() + ": ";
+            "Could not wrap object [" + target + "] in class " + wrapperClass.getName() + ": ";
         return msg + super.getMessage();
     }
 
