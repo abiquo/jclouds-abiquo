@@ -43,7 +43,7 @@ public interface InfrastructureService
     /**
      * Creates a new datacenter.
      */
-    DatacenterDto createDatacenter(final String name, final String location);
+    Datacenter createDatacenter(final String name, final String location);
 
     /**
      * Get the list of datacenters matching the given filter.

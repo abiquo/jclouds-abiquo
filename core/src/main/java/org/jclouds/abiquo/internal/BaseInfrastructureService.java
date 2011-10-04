@@ -28,7 +28,6 @@ import javax.inject.Named;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.Datacenter;
-import org.jclouds.abiquo.domain.factory.TransformationException;
 import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.srategy.ListDatacenters;
@@ -63,16 +62,8 @@ public class BaseInfrastructureService implements InfrastructureService
     @Override
     public Iterable<Datacenter> listDatacenters()
     {
-        try
-        {
-            return getClientTransformer(DatacenterDto.class, Datacenter.class)
-                .createResourceIterable(listDatacenters.execute());
-        }
-        catch (Exception e)
-        {
-            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
-                .toString());
-        }
+        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResourceIterable(
+            listDatacenters.execute());
     }
 
     @Override
@@ -81,32 +72,17 @@ public class BaseInfrastructureService implements InfrastructureService
         DatacenterDto dto = new DatacenterDto();
         dto.setName(name);
         dto.setLocation(location);
+
         dto = abiquoContext.getApi().getInfrastructureClient().createDatacenter(dto);
 
-        try
-        {
-            return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
-        }
-        catch (Exception e)
-        {
-            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
-                .toString());
-        }
+        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
     }
 
     @Override
     public Iterable<Datacenter> listDatacenters(final Predicate<DatacenterDto> filter)
     {
-        try
-        {
-            return getClientTransformer(DatacenterDto.class, Datacenter.class)
-                .createResourceIterable(listDatacenters.execute(filter));
-        }
-        catch (Exception e)
-        {
-            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
-                .toString());
-        }
+        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResourceIterable(
+            listDatacenters.execute(filter));
     }
 
     @Override
@@ -115,15 +91,7 @@ public class BaseInfrastructureService implements InfrastructureService
         DatacenterDto dto =
             abiquoContext.getApi().getInfrastructureClient().getDatacenter(datacenterId);
 
-        try
-        {
-            return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
-        }
-        catch (Exception e)
-        {
-            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
-                .toString());
-        }
+        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
     }
 
     @Override
@@ -135,20 +103,10 @@ public class BaseInfrastructureService implements InfrastructureService
     @Override
     public Datacenter updateDatacenter(final Datacenter dc)
     {
-        try
-        {
-            DatacenterDto dto =
-                getClientTransformer(DatacenterDto.class, Datacenter.class).toDto(dc);
+        DatacenterDto dto = getClientTransformer(DatacenterDto.class, Datacenter.class).toDto(dc);
 
-            dto =
-                abiquoContext.getApi().getInfrastructureClient().updateDatacenter(dto.getId(), dc);
+        dto = abiquoContext.getApi().getInfrastructureClient().updateDatacenter(dto.getId(), dc);
 
-            return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
-        }
-        catch (Exception e)
-        {
-            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
-                .toString());
-        }
+        return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
     }
 }

@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.factory.TransformerFactory;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 
@@ -48,12 +49,23 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
     @Override
     public void save()
     {
-        context.getInfrastructureService().createDatacenter(this.getName(), this.getLocation());
+        // Create datacenter
+        DatacenterDto dto =
+            context.getInfrastructureService().createDatacenter(this.getName(), this.getLocation());
+
+        // Update this class with incoming information
+        TransformerFactory.getClientTransformer(DatacenterDto.class, Datacenter.class)
+            .updateResource(dto, this);
     }
 
     @Override
     public void update()
     {
-        context.getInfrastructureService().updateDatacenter(this);
+        // Update datacenter
+        DatacenterDto dto = context.getInfrastructureService().updateDatacenter(this);
+
+        // Update this class with incoming information
+        TransformerFactory.getClientTransformer(DatacenterDto.class, Datacenter.class)
+            .updateResource(dto, this);
     }
 }

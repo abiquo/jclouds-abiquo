@@ -21,6 +21,8 @@ package org.jclouds.abiquo.domain.factory;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.jclouds.abiquo.domain.factory.exception.TransformationException;
+
 import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.model.util.ModelTransformer;
 
@@ -65,11 +67,18 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
      * @return Client resource.
      * @throws Exception Throws Exception if there is an error during transformation.
      */
-    public TClient createResource(final TDto dto) throws Exception
+    public TClient createResource(final TDto dto)
     {
-        TClient out = persistenceFromTransport(clientClass, dto);
-        out.setLinks(dto.getLinks());
-        return out;
+        try
+        {
+            TClient out = persistenceFromTransport(clientClass, dto);
+            out.setLinks(dto.getLinks());
+            return out;
+        }
+        catch (Exception e)
+        {
+            throw new TransformationException(dto.getClass().toString(), clientClass.toString());
+        }
     }
 
     /**
@@ -79,7 +88,7 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
      * @return Client resource iterable.
      * @throws Exception Throws Exception if there is an error during transformation.
      */
-    public Iterable<TClient> createResourceIterable(final Iterable<TDto> iterable) throws Exception
+    public Iterable<TClient> createResourceIterable(final Iterable<TDto> iterable)
     {
         Collection<TClient> listc = new ArrayList<TClient>();
 
@@ -97,11 +106,19 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
      * @return Abiquo model dto resource.
      * @throws Exception Throws Exception if there is an error during transformation.
      */
-    public TDto toDto(final TClient resource) throws Exception
+    public TDto toDto(final TClient resource)
     {
-        TDto dto = transportFromPersistence(modelClass, resource);
-        dto.setLinks(resource.getLinks());
-        return dto;
+        try
+        {
+
+            TDto dto = transportFromPersistence(modelClass, resource);
+            dto.setLinks(resource.getLinks());
+            return dto;
+        }
+        catch (Exception e)
+        {
+            throw new TransformationException(resource.getClass().toString(), modelClass.toString());
+        }
     }
 
     /**
@@ -111,7 +128,7 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
      * @return Abiquo model dto resource iterable.
      * @throws Exception Throws Exception if there is an error during transformation.
      */
-    public Iterable<TDto> toDtoList(final Iterable<TClient> iterable) throws Exception
+    public Iterable<TDto> toDtoList(final Iterable<TClient> iterable)
     {
         Collection<TDto> listd = new ArrayList<TDto>();
 
@@ -129,9 +146,17 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
      * @param target Client resource object to update with source's info.
      * @throws Exception Throws Exception if there is an error during transformation.
      */
-    public void updateResource(final TDto source, final TDto target) throws Exception
+    public void updateResource(final TDto source, final TDto target)
     {
-        transform(source.getClass(), modelClass, source, target);
-        target.setLinks(source.getLinks());
+        try
+        {
+            transform(source.getClass(), modelClass, source, target);
+            target.setLinks(source.getLinks());
+        }
+        catch (Exception e)
+        {
+            throw new TransformationException(source.getClass().toString(), target.getClass()
+                .toString(), "Error while updating");
+        }
     }
 }

@@ -1,4 +1,4 @@
-package org.jclouds.abiquo.domain.factory;
+package org.jclouds.abiquo.domain.factory.exception;
 
 
 /**
