@@ -87,7 +87,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithoutResults()
     {
         Iterable<Datacenter> datacenters =
-            strategy.execute(DatacenterPredicates.containsName("blabla"));
+            strategy.execute(DatacenterPredicates.datacenterName("blabla"));
         assertNotNull(datacenters);
         assertEquals(size(datacenters), 0);
     }
@@ -96,7 +96,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithResults()
     {
         Iterable<Datacenter> datacenters =
-            strategy.execute(DatacenterPredicates.containsName(datacenter.getName()));
+            strategy.execute(DatacenterPredicates.datacenterName(datacenter.getName()));
         assertNotNull(datacenters);
         assertEquals(size(datacenters), 1);
     }

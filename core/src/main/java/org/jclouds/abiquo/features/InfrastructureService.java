@@ -40,32 +40,13 @@ public interface InfrastructureService
     Iterable<Datacenter> listDatacenters();
 
     /**
-     * Creates a new datacenter.
-     */
-    Datacenter createDatacenter(final String name, final String location);
-
-    /**
      * Get the list of datacenters matching the given filter.
      */
     Iterable<Datacenter> listDatacenters(Predicate<Datacenter> filter);
 
     /**
-     * Get the datacenter with the given id, or return <code>null</code> if not found.
+     * Get the first datacenter that matches the given filter or <code>null</code> if none is found.
      */
-    Datacenter getDatacenter(Integer datacenterId);
+    Datacenter findDatacenter(final Predicate<Datacenter> filter);
 
-    /**
-     * Delete the given datacenter .
-     * 
-     * @param datacenterId The id of the datacenter to delete.
-     */
-    void deleteDatacenter(final Integer datacenterId);
-
-    /**
-     * Update the given datacenter with the new values.
-     * 
-     * @param dc New values for the Datacenter.
-     * @return Datacenter with the new values;
-     */
-    Datacenter updateDatacenter(Datacenter dc);
 }

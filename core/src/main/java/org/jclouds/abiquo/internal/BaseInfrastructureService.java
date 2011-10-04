@@ -25,15 +25,14 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.srategy.infrastructure.ListDatacenters;
 import org.jclouds.logging.Logger;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 /**
  * Provides high level Abiquo operations.
@@ -46,15 +45,11 @@ public class BaseInfrastructureService implements InfrastructureService
     @Named(AbiquoConstants.ABIQUO_LOGGER)
     protected Logger logger = Logger.NULL;
 
-    private final AbiquoContext abiquoContext;
-
     private final ListDatacenters listDatacenters;
 
     @Inject
-    protected BaseInfrastructureService(final AbiquoContext abiquoContext,
-        final ListDatacenters listDatacenters)
+    protected BaseInfrastructureService(final ListDatacenters listDatacenters)
     {
-        this.abiquoContext = checkNotNull(abiquoContext, "abiquoContext");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
     }
 
@@ -65,41 +60,14 @@ public class BaseInfrastructureService implements InfrastructureService
     }
 
     @Override
-    public Datacenter createDatacenter(final String name, final String location)
-    {
-        DatacenterDto dto = new DatacenterDto();
-        dto.setName(name);
-        dto.setLocation(location);
-        dto = abiquoContext.getApi().getInfrastructureClient().createDatacenter(dto);
-
-        return Datacenter.transformer.createResource(dto);
-    }
-
-    @Override
     public Iterable<Datacenter> listDatacenters(final Predicate<Datacenter> filter)
     {
         return listDatacenters.execute(filter);
     }
 
     @Override
-    public Datacenter getDatacenter(final Integer datacenterId)
+    public Datacenter findDatacenter(final Predicate<Datacenter> filter)
     {
-        DatacenterDto dto =
-            abiquoContext.getApi().getInfrastructureClient().getDatacenter(datacenterId);
-        return Datacenter.transformer.createResource(dto);
-    }
-
-    @Override
-    public void deleteDatacenter(final Integer datacenterId)
-    {
-        abiquoContext.getApi().getInfrastructureClient().deleteDatacenter(datacenterId);
-    }
-
-    @Override
-    public Datacenter updateDatacenter(final Datacenter dc)
-    {
-        DatacenterDto dto = Datacenter.transformer.toDto(dc);
-        dto = abiquoContext.getApi().getInfrastructureClient().updateDatacenter(dto.getId(), dto);
-        return Datacenter.transformer.createResource(dto);
+        return Iterables.getFirst(listDatacenters(), null);
     }
 }

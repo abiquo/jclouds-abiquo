@@ -35,12 +35,12 @@ import com.google.common.base.Predicate;
  */
 public class DatacenterPredicates
 {
-    public static Predicate<Datacenter> containsName(final String name)
+    public static Predicate<Datacenter> datacenterName(final String name)
     {
-        return containsNames(checkNotNull(name, "name must be defined"));
+        return datacenterNames(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<Datacenter> containsNames(final String... names)
+    public static Predicate<Datacenter> datacenterNames(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
