@@ -54,17 +54,6 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
         this.context = context;
     }
 
-    /**
-     * Builder private constructor.
-     */
-    private Datacenter(final AbiquoContext context, final String name, final String location)
-    {
-        super();
-        this.context = context;
-        setName(name);
-        setLocation(location);
-    }
-
     @Override
     public void delete()
     {
@@ -135,7 +124,9 @@ public class Datacenter extends DatacenterDto implements DomainWrapper
 
         public Datacenter build()
         {
-            Datacenter datacenter = new Datacenter(context, name, location);
+            Datacenter datacenter = new Datacenter(context);
+            datacenter.setName(name);
+            datacenter.setLocation(location);
             datacenter.setId(id);
             return datacenter;
         }
