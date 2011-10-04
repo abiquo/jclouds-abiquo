@@ -29,6 +29,7 @@ import com.google.inject.ImplementedBy;
  * Provides high level Abiquo operations.
  * 
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 @ImplementedBy(BaseInfrastructureService.class)
 public interface InfrastructureService

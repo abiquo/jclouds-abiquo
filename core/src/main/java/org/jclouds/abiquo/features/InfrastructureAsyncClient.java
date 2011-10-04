@@ -48,6 +48,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @see http://community.abiquo.com/display/ABI18/API+Reference
  * @see InfrastructureClient
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 @RequestFilters(BasicAuthentication.class)
 @Consumes(MediaType.APPLICATION_XML)

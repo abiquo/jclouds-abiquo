@@ -33,6 +33,17 @@
             <url>http://repo.community.abiquo.com/repo</url>
         </repository>
     </repositories>
+    
+    <distributionManagement>
+        <repository>
+            <id>abiquo-repo</id>
+            <url>http://repo.community.abiquo.com/libs-releases-local</url>
+        </repository>
+        <snapshotRepository>
+            <id>abiquo-repo</id>
+            <url>http://repo.community.abiquo.com/libs-snapshots-local</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>

@@ -19,25 +19,91 @@
 
 package org.jclouds.abiquo.domain;
 
+import static com.google.common.collect.Iterables.transform;
+
+import java.lang.reflect.Constructor;
+
+import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.exception.WrapperException;
+
+import com.abiquo.model.transport.SingleResourceTransportDto;
+import com.google.common.base.Function;
+
 /**
- * DomainWrapper interface. Should be implemented by any resource in domain.
+ * This class is used to decorate transport objects with high level functionality.
  * 
  * @author Francesc Montserrat
+ * @author Ignasi Barrera
  */
-public interface DomainWrapper
+public abstract class DomainWrapper<T extends SingleResourceTransportDto>
 {
+    /** The rest context. */
+    protected AbiquoContext context;
+
+    /** The wrapped object. */
+    protected T target;
+
+    protected DomainWrapper(AbiquoContext context, T target)
+    {
+        super();
+        this.context = context;
+        this.target = target;
+    }
+
+    /**
+     * Returns the wrapped object.
+     */
+    public T unwrap()
+    {
+        return target;
+    }
+
     /**
      * Default save operation in domain.
      */
-    public void save();
+    public abstract void save();
 
     /**
      * Default update operation in domain.
      */
-    public void update();
+    public abstract void update();
 
     /**
      * Default delete operation in domain.
      */
-    public void delete();
+    public abstract void delete();
+
+    /**
+     * Wraps an object in the given wrapper class.
+     */
+    public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> W wrap(
+        AbiquoContext context, Class<W> wrapperClass, T target)
+    {
+        try
+        {
+            Constructor<W> cons =
+                wrapperClass.getConstructor(AbiquoContext.class, target.getClass());
+            return cons.newInstance(context, target);
+        }
+        catch (Exception ex)
+        {
+            throw new WrapperException(wrapperClass, target, ex);
+        }
+    }
+
+    /**
+     * Wrap a collection of objects to the given wrapper class.
+     */
+    public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> Iterable<W> wrap(
+        final AbiquoContext context, final Class<W> wrapperClass, Iterable<T> targets)
+    {
+        return transform(targets, new Function<T, W>()
+        {
+            @Override
+            public W apply(T input)
+            {
+                return wrap(context, wrapperClass, input);
+            }
+        });
+    }
 }

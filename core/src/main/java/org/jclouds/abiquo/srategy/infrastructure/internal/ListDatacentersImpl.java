@@ -20,21 +20,18 @@
 package org.jclouds.abiquo.srategy.infrastructure.internal;
 
 import static com.google.common.collect.Iterables.filter;
+import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 
-import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.srategy.infrastructure.ListDatacenters;
-import org.jclouds.logging.Logger;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.base.Predicate;
@@ -44,19 +41,14 @@ import com.google.inject.Inject;
  * List datacenters.
  * 
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 @Singleton
 public class ListDatacentersImpl implements ListDatacenters
 {
-    protected final AbiquoClient abiquoClient;
-
-    protected final AbiquoAsyncClient abiquoAsyncClient;
+    protected final AbiquoContext context;
 
     protected final ExecutorService userExecutor;
-
-    @Resource
-    @Named(AbiquoConstants.ABIQUO_LOGGER)
-    protected Logger logger = Logger.NULL;
 
     @Inject(optional = true)
     @Named(Constants.PROPERTY_REQUEST_TIMEOUT)
@@ -64,20 +56,19 @@ public class ListDatacentersImpl implements ListDatacenters
 
     @Inject
     ListDatacentersImpl(@Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
-        final AbiquoClient client, final AbiquoAsyncClient asyncClient)
+        AbiquoContext context)
     {
         this.userExecutor = userExecutor;
-        this.abiquoClient = client;
-        this.abiquoAsyncClient = asyncClient;
+        this.context = context;
     }
 
     @Override
     public Iterable<Datacenter> execute()
     {
         List<DatacenterDto> dtos =
-            abiquoClient.getInfrastructureClient().listDatacenters().getCollection();
+            context.getApi().getInfrastructureClient().listDatacenters().getCollection();
 
-        return Datacenter.transformer.createResourceIterable(dtos);
+        return wrap(context, Datacenter.class, dtos);
     }
 
     @Override

@@ -21,15 +21,11 @@ package org.jclouds.abiquo.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
-import javax.inject.Named;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.InfrastructureService;
-import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.srategy.infrastructure.ListDatacenters;
-import org.jclouds.logging.Logger;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -38,13 +34,10 @@ import com.google.common.collect.Iterables;
  * Provides high level Abiquo operations.
  * 
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 public class BaseInfrastructureService implements InfrastructureService
 {
-    @Resource
-    @Named(AbiquoConstants.ABIQUO_LOGGER)
-    protected Logger logger = Logger.NULL;
-
     private final ListDatacenters listDatacenters;
 
     @Inject
