@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.strategy.internal;
+package org.jclouds.abiquo.strategy;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

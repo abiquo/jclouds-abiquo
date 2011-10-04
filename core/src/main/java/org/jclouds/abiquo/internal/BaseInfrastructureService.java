@@ -27,10 +27,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.domain.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.abiquo.reference.AbiquoConstants;
-import org.jclouds.abiquo.srategy.ListDatacenters;
+import org.jclouds.abiquo.srategy.infrastructure.ListDatacenters;
 import org.jclouds.logging.Logger;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;

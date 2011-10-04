@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.srategy.internal;
+package org.jclouds.abiquo.srategy.infrastructure.internal;
 
 import static com.google.common.collect.Iterables.filter;
 
@@ -31,7 +31,7 @@ import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.reference.AbiquoConstants;
-import org.jclouds.abiquo.srategy.ListDatacenters;
+import org.jclouds.abiquo.srategy.infrastructure.ListDatacenters;
 import org.jclouds.logging.Logger;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;

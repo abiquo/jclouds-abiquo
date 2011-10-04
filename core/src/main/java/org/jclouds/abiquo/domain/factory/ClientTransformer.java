@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.domain.factory;
 
 import java.util.ArrayList;
@@ -38,14 +39,14 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
     extends ModelTransformer
 {
     /**
-     * .class of the client resource.
+     * Class of the client resource.
      */
-    Class<TClient> clientClass;
+    private Class<TClient> clientClass;
 
     /**
-     * .class of the model dto resource.
+     * Class of the model dto resource.
      */
-    Class<TDto> modelClass;
+    private Class<TDto> modelClass;
 
     /**
      * ClientTransformer constructor for a generic client resource - model dto pair.
@@ -75,9 +76,9 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
             out.setLinks(dto.getLinks());
             return out;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            throw new TransformationException(dto.getClass().toString(), clientClass.toString());
+            throw new TransformationException(dto.getClass(), clientClass, ex);
         }
     }
 
@@ -115,9 +116,9 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
             dto.setLinks(resource.getLinks());
             return dto;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            throw new TransformationException(resource.getClass().toString(), modelClass.toString());
+            throw new TransformationException(resource.getClass(), modelClass, ex);
         }
     }
 
@@ -153,10 +154,12 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
             transform(source.getClass(), modelClass, source, target);
             target.setLinks(source.getLinks());
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            throw new TransformationException(source.getClass().toString(), target.getClass()
-                .toString(), "Error while updating");
+            throw new TransformationException(source.getClass(),
+                target.getClass(),
+                "Error while updating",
+                ex);
         }
     }
 }

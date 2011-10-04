@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.strategy.internal;
+package org.jclouds.abiquo.strategy.infrastructure;
 
 import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
@@ -29,8 +29,9 @@ import java.util.Random;
 
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.Infrastructure;
-import org.jclouds.abiquo.predicates.DatacenterPredicates;
-import org.jclouds.abiquo.srategy.internal.ListDatacentersImpl;
+import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
+import org.jclouds.abiquo.srategy.infrastructure.internal.ListDatacentersImpl;
+import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 

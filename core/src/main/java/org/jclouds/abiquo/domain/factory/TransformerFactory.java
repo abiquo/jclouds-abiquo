@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.domain.factory;
 
 import com.abiquo.model.transport.SingleResourceTransportDto;
@@ -24,15 +25,11 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
  * TransformerFactory staticly creates a ClientTransformer to transform Abiquo model dto resources
  * into client resources and the other way around for the specified types.
  * 
- * @author fmontserrat
+ * @author Francesc Montserrat
  * @param <T> Dto
  */
 public final class TransformerFactory<T extends SingleResourceTransportDto>
 {
-
-    /**
-     * This class is not instantiable.
-     */
     private TransformerFactory()
     {
         super();

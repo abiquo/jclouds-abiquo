@@ -26,7 +26,7 @@ import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
-import org.jclouds.abiquo.domain.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.testng.annotations.BeforeGroups;
 import org.testng.annotations.Test;
 

@@ -17,20 +17,38 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.srategy;
+package org.jclouds.abiquo.predicates.infrastructure;
 
-import org.jclouds.abiquo.srategy.internal.ListDatacentersImpl;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Arrays;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.google.inject.ImplementedBy;
+import com.google.common.base.Predicate;
 
 /**
- * List datacenters.
+ * Container for {@link DatacenterDto} filters.
  * 
  * @author Ignasi Barrera
  */
-@ImplementedBy(ListDatacentersImpl.class)
-public interface ListDatacenters extends ListEntities<DatacenterDto>
+public class DatacenterPredicates
 {
+    public static Predicate<DatacenterDto> containsName(final String name)
+    {
+        return containsNames(checkNotNull(name, "name must be defined"));
+    }
 
+    public static Predicate<DatacenterDto> containsNames(final String... names)
+    {
+        checkNotNull(names, "names must be defined");
+
+        return new Predicate<DatacenterDto>()
+        {
+            @Override
+            public boolean apply(final DatacenterDto datacenter)
+            {
+                return Arrays.asList(names).contains(datacenter.getName());
+            }
+        };
+    }
 }

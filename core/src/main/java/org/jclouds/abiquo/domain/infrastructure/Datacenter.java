@@ -17,9 +17,10 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain;
+package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.factory.TransformerFactory;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;

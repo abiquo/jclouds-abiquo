@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.features;
 
-import org.jclouds.abiquo.domain.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.internal.BaseInfrastructureService;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
