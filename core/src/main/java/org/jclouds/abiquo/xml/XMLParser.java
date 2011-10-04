@@ -20,7 +20,6 @@
 package org.jclouds.abiquo.xml;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 
 import org.jclouds.abiquo.xml.internal.JAXBParser;
 

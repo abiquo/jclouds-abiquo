@@ -25,7 +25,6 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
-import org.jclouds.rest.RestContext;
 import org.jclouds.rest.RestContextBuilder;
 import org.jclouds.rest.RestContextFactory;
 import org.jclouds.rest.RestContextSpec;

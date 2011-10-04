@@ -31,8 +31,8 @@ import com.abiquo.model.util.ModelTransformer;
  * way around.
  * 
  * @author Francesc Montserrat
- * @param <TDto> Abiquo model resource (MUST extend SingleResourceTransportDto)
- * @param <TClient> Client resource (MUST extend TDto)
+ * @param <TDto> Abiquo model resource (MUST extend SingleResourceTransportDto).
+ * @param <TClient> Client resource (MUST extend TDto).
  */
 public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient extends TDto>
     extends ModelTransformer
@@ -48,7 +48,7 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
     Class<TDto> modelClass;
 
     /**
-     * ClientTransformer constructor for a generic client resource - model dto pair
+     * ClientTransformer constructor for a generic client resource - model dto pair.
      * 
      * @param modelClass .class of the model dto resource.
      * @param clientClass .class of the APIClient resource.
@@ -61,7 +61,7 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
     }
 
     /**
-     * Creates a client resource from an Abiquo model dto resource
+     * Creates a client resource from an Abiquo model dto resource.
      * 
      * @param dto Abiquo model dto resource.
      * @return Client resource.
@@ -82,7 +82,7 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
     }
 
     /**
-     * Creates a client resource Iterable from an Abiquo model dto resource Iterable
+     * Creates a client resource Iterable from an Abiquo model dto resource Iterable.
      * 
      * @param iterable Abiquo model dto resource iterable.
      * @return Client resource iterable.
@@ -100,7 +100,7 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
     }
 
     /**
-     * Creates an Abiquo model dto resource from a client resource
+     * Creates an Abiquo model dto resource from a client resource.
      * 
      * @param resource Client resource.
      * @return Abiquo model dto resource.
@@ -122,7 +122,7 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
     }
 
     /**
-     * Creates an Abiquo model dto resource iterable from a client resource iterable
+     * Creates an Abiquo model dto resource Iterable from a client resource Iterable.
      * 
      * @param iterable Client resource iterable.
      * @return Abiquo model dto resource iterable.
@@ -140,7 +140,7 @@ public class ClientTransformer<TDto extends SingleResourceTransportDto, TClient 
     }
 
     /**
-     * Updates an existing client resource with an existing Abiquo model dto resource's data
+     * Updates an existing client resource with an existing Abiquo model dto resource's data.
      * 
      * @param source Abiquo model dto source.
      * @param target Client resource object to update with source's info.
