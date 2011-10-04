@@ -28,7 +28,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * 
  * @author Ignasi Barrera
  */
-public class Datacenter extends DatacenterDto
+public class Datacenter extends DatacenterDto implements DomainWrapper
 {
     private static final long serialVersionUID = 1L;
 
@@ -39,4 +39,21 @@ public class Datacenter extends DatacenterDto
         this.context = context;
     }
 
+    @Override
+    public void delete()
+    {
+        context.getInfrastructureService().deleteDatacenter(this.getId());
+    }
+
+    @Override
+    public void save()
+    {
+        context.getInfrastructureService().createDatacenter(this.getName(), this.getLocation());
+    }
+
+    @Override
+    public void update()
+    {
+        context.getInfrastructureService().updateDatacenter(this);
+    }
 }

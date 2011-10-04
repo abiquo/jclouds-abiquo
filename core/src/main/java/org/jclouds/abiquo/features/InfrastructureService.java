@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.features;
 
+import org.jclouds.abiquo.domain.Datacenter;
 import org.jclouds.abiquo.internal.BaseInfrastructureService;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -37,7 +38,7 @@ public interface InfrastructureService
     /**
      * Get the list of all datacenters.
      */
-    Iterable<DatacenterDto> listDatacenters();
+    Iterable<Datacenter> listDatacenters();
 
     /**
      * Creates a new datacenter.
@@ -45,14 +46,14 @@ public interface InfrastructureService
     DatacenterDto createDatacenter(final String name, final String location);
 
     /**
-     * Get the list of datacenters matching the given filtger.
+     * Get the list of datacenters matching the given filter.
      */
-    Iterable<DatacenterDto> listDatacenters(Predicate<DatacenterDto> filter);
+    Iterable<Datacenter> listDatacenters(Predicate<DatacenterDto> filter);
 
     /**
      * Get the datacenter with the given id, or return <code>null</code> if not found.
      */
-    DatacenterDto getDatacenter(Integer datacenterId);
+    Datacenter getDatacenter(Integer datacenterId);
 
     /**
      * Delete the given datacenter .
@@ -60,4 +61,12 @@ public interface InfrastructureService
      * @param datacenterId The id of the datacenter to delete.
      */
     void deleteDatacenter(final Integer datacenterId);
+
+    /**
+     * Update the given datacenter with the new values.
+     * 
+     * @param dc New values for the Datacenter.
+     * @return Datacenter with the new values;
+     */
+    Datacenter updateDatacenter(Datacenter dc);
 }

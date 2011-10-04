@@ -20,12 +20,15 @@
 package org.jclouds.abiquo.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.factory.TransformerFactory.getClientTransformer;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.Datacenter;
+import org.jclouds.abiquo.domain.factory.TransformationException;
 import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.srategy.ListDatacenters;
@@ -58,30 +61,69 @@ public class BaseInfrastructureService implements InfrastructureService
     }
 
     @Override
-    public Iterable<DatacenterDto> listDatacenters()
+    public Iterable<Datacenter> listDatacenters()
     {
-        return listDatacenters.execute();
+        try
+        {
+            return getClientTransformer(DatacenterDto.class, Datacenter.class)
+                .createResourceIterable(listDatacenters.execute());
+        }
+        catch (Exception e)
+        {
+            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
+                .toString());
+        }
     }
 
     @Override
-    public DatacenterDto createDatacenter(final String name, final String location)
+    public Datacenter createDatacenter(final String name, final String location)
     {
         DatacenterDto dto = new DatacenterDto();
         dto.setName(name);
         dto.setLocation(location);
-        return abiquoContext.getApi().getInfrastructureClient().createDatacenter(dto);
+        dto = abiquoContext.getApi().getInfrastructureClient().createDatacenter(dto);
+
+        try
+        {
+            return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
+        }
+        catch (Exception e)
+        {
+            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
+                .toString());
+        }
     }
 
     @Override
-    public Iterable<DatacenterDto> listDatacenters(final Predicate<DatacenterDto> filter)
+    public Iterable<Datacenter> listDatacenters(final Predicate<DatacenterDto> filter)
     {
-        return listDatacenters.execute(filter);
+        try
+        {
+            return getClientTransformer(DatacenterDto.class, Datacenter.class)
+                .createResourceIterable(listDatacenters.execute(filter));
+        }
+        catch (Exception e)
+        {
+            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
+                .toString());
+        }
     }
 
     @Override
-    public DatacenterDto getDatacenter(final Integer datacenterId)
+    public Datacenter getDatacenter(final Integer datacenterId)
     {
-        return abiquoContext.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+        DatacenterDto dto =
+            abiquoContext.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+
+        try
+        {
+            return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
+        }
+        catch (Exception e)
+        {
+            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
+                .toString());
+        }
     }
 
     @Override
@@ -90,4 +132,23 @@ public class BaseInfrastructureService implements InfrastructureService
         abiquoContext.getApi().getInfrastructureClient().deleteDatacenter(datacenterId);
     }
 
+    @Override
+    public Datacenter updateDatacenter(final Datacenter dc)
+    {
+        try
+        {
+            DatacenterDto dto =
+                getClientTransformer(DatacenterDto.class, Datacenter.class).toDto(dc);
+
+            dto =
+                abiquoContext.getApi().getInfrastructureClient().updateDatacenter(dto.getId(), dc);
+
+            return getClientTransformer(DatacenterDto.class, Datacenter.class).createResource(dto);
+        }
+        catch (Exception e)
+        {
+            throw new TransformationException(DatacenterDto.class.toString(), Datacenter.class
+                .toString());
+        }
+    }
 }
