@@ -20,6 +20,7 @@
 package org.jclouds.abiquo;
 
 import org.jclouds.abiquo.domain.factory.DomainFactory;
+import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.abiquo.internal.AbiquoContextImpl;
 import org.jclouds.rest.RestContext;
 
@@ -33,7 +34,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AbiquoContextImpl.class)
 public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClient>
 {
-    AbiquoService getAbiquoService();
+    InfrastructureService getInfrastructureService();
 
     DomainFactory getDomainFactory();
 }

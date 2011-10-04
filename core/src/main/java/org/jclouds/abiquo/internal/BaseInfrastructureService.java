@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoService;
+import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.srategy.ListDatacenters;
 import org.jclouds.logging.Logger;
@@ -39,7 +39,7 @@ import com.google.common.base.Predicate;
  * 
  * @author Ignasi Barrera
  */
-public class BaseAbiquoService implements AbiquoService
+public class BaseInfrastructureService implements InfrastructureService
 {
     @Resource
     @Named(AbiquoConstants.ABIQUO_LOGGER)
@@ -50,17 +50,11 @@ public class BaseAbiquoService implements AbiquoService
     private final ListDatacenters listDatacenters;
 
     @Inject
-    protected BaseAbiquoService(final AbiquoContext abiquoContext,
+    protected BaseInfrastructureService(final AbiquoContext abiquoContext,
         final ListDatacenters listDatacenters)
     {
         this.abiquoContext = checkNotNull(abiquoContext, "abiquoContext");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
-    }
-
-    @Override
-    public AbiquoContext getContext()
-    {
-        return abiquoContext;
     }
 
     @Override

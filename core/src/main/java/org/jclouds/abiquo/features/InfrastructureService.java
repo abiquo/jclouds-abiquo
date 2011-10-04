@@ -17,9 +17,9 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.features;
 
-import org.jclouds.abiquo.internal.BaseAbiquoService;
+import org.jclouds.abiquo.internal.BaseInfrastructureService;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.base.Predicate;
@@ -30,13 +30,9 @@ import com.google.inject.ImplementedBy;
  * 
  * @author Ignasi Barrera
  */
-@ImplementedBy(BaseAbiquoService.class)
-public interface AbiquoService
+@ImplementedBy(BaseInfrastructureService.class)
+public interface InfrastructureService
 {
-    /**
-     * Get the Abiquo context.
-     */
-    AbiquoContext getContext();
 
     /**
      * Get the list of all datacenters.

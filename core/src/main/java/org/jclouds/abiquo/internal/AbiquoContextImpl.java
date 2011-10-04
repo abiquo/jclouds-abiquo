@@ -28,8 +28,8 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoService;
 import org.jclouds.abiquo.domain.factory.DomainFactory;
+import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.domain.Credentials;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.location.Provider;
@@ -50,7 +50,7 @@ import com.google.inject.TypeLiteral;
 public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsyncClient> implements
     AbiquoContext
 {
-    private final AbiquoService abiquoService;
+    private final InfrastructureService infrastructureService;
 
     private final DomainFactory domainFactory;
 
@@ -60,18 +60,18 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
         final TypeLiteral<AbiquoClient> syncApi, final TypeLiteral<AbiquoAsyncClient> asyncApi,
         @Provider final URI endpoint, @Provider final String provider,
         @Identity final String identity, @ApiVersion final String apiVersion,
-        final AbiquoService abiquoService, final DomainFactory domainFactory)
+        final InfrastructureService infrastructureService, final DomainFactory domainFactory)
     {
         super(closer, credentialStore, utils, injector, syncApi, asyncApi, endpoint, provider,
             identity, apiVersion, null);
-        this.abiquoService = abiquoService;
+        this.infrastructureService = infrastructureService;
         this.domainFactory = domainFactory;
     }
 
     @Override
-    public AbiquoService getAbiquoService()
+    public InfrastructureService getInfrastructureService()
     {
-        return abiquoService;
+        return infrastructureService;
     }
 
     @Override
