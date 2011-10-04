@@ -33,7 +33,7 @@ import com.google.inject.TypeLiteral;
  * @author Ignasi Barrera
  */
 @Singleton
-public class ParseDatacenter extends ParseXML<DatacenterDto>
+public class ParseDatacenter extends ParseXMLWithJAXB<DatacenterDto>
 {
     @Inject
     public ParseDatacenter(XMLParser xml, TypeLiteral<DatacenterDto> type)

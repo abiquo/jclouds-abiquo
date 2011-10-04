@@ -32,7 +32,7 @@ import org.jclouds.PropertiesBuilder;
  */
 public class AbiquoPropertiesBuilder extends PropertiesBuilder
 {
-    public AbiquoPropertiesBuilder(Properties properties)
+    public AbiquoPropertiesBuilder(final Properties properties)
     {
         super(properties);
     }

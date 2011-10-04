@@ -35,19 +35,19 @@ import com.google.inject.Module;
  */
 public class AbiquoContextBuilder extends RestContextBuilder<AbiquoClient, AbiquoAsyncClient>
 {
-    public AbiquoContextBuilder(Properties props)
+    public AbiquoContextBuilder(final Properties props)
     {
         super(AbiquoClient.class, AbiquoAsyncClient.class, props);
     }
 
     @Override
-    protected void addClientModule(List<Module> modules)
+    protected void addClientModule(final List<Module> modules)
     {
         modules.add(new AbiquoRestClientModule());
     }
 
     @Override
-    public AbiquoContextBuilder withModules(Iterable<Module> modules)
+    public AbiquoContextBuilder withModules(final Iterable<Module> modules)
     {
         return (AbiquoContextBuilder) super.withModules(modules);
     }

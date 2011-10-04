@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.features;
 
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
@@ -39,7 +39,7 @@ import com.abiquo.server.core.infrastructure.DatacentersDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class AbiquoClientLiveTest extends BaseAbiquoClientLiveTest
+public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
 {
     private DatacenterDto datacenter;
 
@@ -57,27 +57,28 @@ public class AbiquoClientLiveTest extends BaseAbiquoClientLiveTest
 
     public void testListDatacenters() throws Exception
     {
-        DatacentersDto datacenters = client.listDatacenters();
+        DatacentersDto datacenters = infrastructureClient.listDatacenters();
         assertNotNull(datacenters);
         assertFalse(datacenters.getCollection().isEmpty());
     }
 
     public void testGetDatacenter() throws Exception
     {
-        DatacenterDto dc = client.getDatacenter(datacenter.getId());
+        DatacenterDto dc = infrastructureClient.getDatacenter(datacenter.getId());
         assertNotNull(dc);
     }
 
     public void testGetUnexistingDatacenter() throws Exception
     {
-        DatacenterDto dc = client.getDatacenter(datacenter.getId() + 100);
+        DatacenterDto dc = infrastructureClient.getDatacenter(datacenter.getId() + 100);
         assertNull(dc);
     }
 
     public void testUpdateDatacenter() throws Exception
     {
         datacenter.setLocation("Anotherone");
-        DatacenterDto updated = client.updateDatacenter(datacenter.getId(), datacenter);
+        DatacenterDto updated =
+            infrastructureClient.updateDatacenter(datacenter.getId(), datacenter);
         assertNotNull(updated);
         assertEquals(updated.getLocation(), "Anotherone");
     }
@@ -87,7 +88,7 @@ public class AbiquoClientLiveTest extends BaseAbiquoClientLiveTest
         Random generator = new Random(System.currentTimeMillis());
         DatacenterDto datacenter = Datacenter.object();
         datacenter.setName(PREFIX + datacenter.getName() + generator.nextInt(100));
-        DatacenterDto created = client.createDatacenter(datacenter);
+        DatacenterDto created = infrastructureClient.createDatacenter(datacenter);
         assertNotNull(created);
         assertNotNull(created.getId());
         return created;
@@ -95,7 +96,7 @@ public class AbiquoClientLiveTest extends BaseAbiquoClientLiveTest
 
     private void deleteDatacenter() throws Exception
     {
-        client.deleteDatacenter(datacenter.getId());
+        infrastructureClient.deleteDatacenter(datacenter.getId());
     }
 
 }

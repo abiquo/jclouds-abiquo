@@ -17,12 +17,14 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.features;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Properties;
 
+import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoContextFactory;
 import org.testng.annotations.AfterGroups;
 import org.testng.annotations.BeforeGroups;
 
@@ -35,8 +37,6 @@ public abstract class BaseAbiquoClientLiveTest
 {
     protected AbiquoContext context;
 
-    protected AbiquoClient client;
-
     protected String provider = AbiquoContextFactory.PROVIDER_NAME;
 
     protected String identity;
@@ -44,6 +44,8 @@ public abstract class BaseAbiquoClientLiveTest
     protected String credential;
 
     protected String endpoint;
+
+    protected InfrastructureClient infrastructureClient;
 
     protected abstract void setupEntities() throws Exception;
 
@@ -60,7 +62,7 @@ public abstract class BaseAbiquoClientLiveTest
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
         context = new AbiquoContextFactory().createContext(identity, credential, props);
-        client = context.getApi();
+        infrastructureClient = context.getApi().getInfrastructureClient();
 
         setupEntities();
     }

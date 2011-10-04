@@ -44,7 +44,7 @@ import com.google.inject.TypeLiteral;
  * @author Ignasi Barrera
  */
 @Singleton
-public class ParseXML<T> implements Function<HttpResponse, T>
+public class ParseXMLWithJAXB<T> implements Function<HttpResponse, T>
 {
     @Resource
     protected Logger logger = Logger.NULL;
@@ -54,7 +54,7 @@ public class ParseXML<T> implements Function<HttpResponse, T>
     protected final TypeLiteral<T> type;
 
     @Inject
-    public ParseXML(final XMLParser xml, final TypeLiteral<T> type)
+    public ParseXMLWithJAXB(final XMLParser xml, final TypeLiteral<T> type)
     {
         this.xml = xml;
         this.type = type;

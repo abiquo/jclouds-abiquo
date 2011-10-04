@@ -19,8 +19,12 @@
 
 package org.jclouds.abiquo.config;
 
+import java.util.Map;
+
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.features.InfrastructureAsyncClient;
+import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.RequiresHttp;
@@ -29,6 +33,8 @@ import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
 import org.jclouds.rest.ConfiguresRestClient;
 import org.jclouds.rest.config.RestClientModule;
+
+import com.google.common.collect.ImmutableMap;
 
 /**
  * Configures the Abiquo connection.
@@ -39,9 +45,14 @@ import org.jclouds.rest.config.RestClientModule;
 @ConfiguresRestClient
 public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, AbiquoAsyncClient>
 {
+    public static final Map<Class< ? >, Class< ? >> DELEGATE_MAP = ImmutableMap
+        .<Class< ? >, Class< ? >> builder()
+        .put(InfrastructureClient.class, InfrastructureAsyncClient.class) //
+        .build();
+
     public AbiquoRestClientModule()
     {
-        super(AbiquoClient.class, AbiquoAsyncClient.class);
+        super(AbiquoClient.class, AbiquoAsyncClient.class, DELEGATE_MAP);
     }
 
     @Override

@@ -64,13 +64,13 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
         Random generator = new Random(System.currentTimeMillis());
         DatacenterDto datacenter = Datacenter.object();
         datacenter.setName(PREFIX + datacenter.getName() + generator.nextInt(100));
-        this.datacenter = client.createDatacenter(datacenter);
+        this.datacenter = client.getInfrastructureClient().createDatacenter(datacenter);
     }
 
     @Override
     protected void teardownEntities()
     {
-        client.deleteDatacenter(datacenter.getId());
+        client.getInfrastructureClient().deleteDatacenter(datacenter.getId());
     }
 
     @Test

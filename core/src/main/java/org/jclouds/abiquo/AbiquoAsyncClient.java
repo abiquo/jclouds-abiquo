@@ -19,81 +19,23 @@
 
 package org.jclouds.abiquo;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.core.MediaType;
-
-import org.jclouds.abiquo.binders.BindToXMLPayload;
-import org.jclouds.abiquo.functions.ParseDatacenter;
-import org.jclouds.abiquo.functions.ParseDatacenters;
-import org.jclouds.http.filters.BasicAuthentication;
-import org.jclouds.rest.annotations.BinderParam;
-import org.jclouds.rest.annotations.ExceptionParser;
-import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.annotations.ResponseParser;
-import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
-
-import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.abiquo.server.core.infrastructure.DatacentersDto;
-import com.google.common.util.concurrent.ListenableFuture;
+import org.jclouds.abiquo.features.InfrastructureAsyncClient;
+import org.jclouds.rest.annotations.Delegate;
 
 /**
  * Provides asynchronous access to Abiquo via their REST API.
  * 
  * @see http://community.abiquo.com/display/ABI18/API+Reference
- * @see AbiquoClient
+ * @see InfrastructureAsyncClient
  * @author Ignasi Barrera
  */
-@RequestFilters(BasicAuthentication.class)
-@Consumes(MediaType.APPLICATION_XML)
 public interface AbiquoAsyncClient
 {
     public static final String API_VERSION = "2.0-SNAPSHOT";
 
     /**
-     * @see AbiquoClient#listDatacenters()
+     * Provides asynchronous access to Infrastructure features.
      */
-    @GET
-    @Path("/admin/datacenters")
-    @ResponseParser(ParseDatacenters.class)
-    ListenableFuture<DatacentersDto> listDatacenters();
-
-    /**
-     * @see AbiquoClient#createDatacenter(DatacenterDto)
-     */
-    @POST
-    @Path("/admin/datacenters")
-    @ResponseParser(ParseDatacenter.class)
-    ListenableFuture<DatacenterDto> createDatacenter(
-        @BinderParam(BindToXMLPayload.class) DatacenterDto datacenter);
-
-    /**
-     * @see AbiquoClient#getDatacenter
-     */
-    @GET
-    @Path("/admin/datacenters/{datacenter}")
-    @ResponseParser(ParseDatacenter.class)
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<DatacenterDto> getDatacenter(@PathParam("datacenter") Integer datacenterId);
-
-    /**
-     * @see AbiquoClient#updateDatacenter(Integer, DatacenterDto)
-     */
-    @PUT
-    @Path("/admin/datacenters/{datacenter}")
-    @ResponseParser(ParseDatacenter.class)
-    ListenableFuture<DatacenterDto> updateDatacenter(@PathParam("datacenter") Integer datacenterId,
-        @BinderParam(BindToXMLPayload.class) DatacenterDto datacenter);
-
-    /**
-     * @see AbiquoClient#deleteDatacenter(Integer datacenterId)
-     */
-    @DELETE
-    @Path("/admin/datacenters/{datacenter}")
-    ListenableFuture<Void> deleteDatacenter(@PathParam("datacenter") Integer datacenterId);
+    @Delegate
+    InfrastructureAsyncClient getInfrastructureClient();
 }

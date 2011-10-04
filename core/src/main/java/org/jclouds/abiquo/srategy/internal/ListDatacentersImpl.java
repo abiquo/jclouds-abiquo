@@ -72,7 +72,7 @@ public class ListDatacentersImpl implements ListDatacenters
     @Override
     public Iterable<DatacenterDto> execute()
     {
-        return abiquoClient.listDatacenters().getCollection();
+        return abiquoClient.getInfrastructureClient().listDatacenters().getCollection();
     }
 
     @Override

@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo;
 
-import org.jclouds.abiquo.domain.Datacenter;
 import org.jclouds.abiquo.internal.BaseAbiquoService;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -60,9 +59,9 @@ public interface AbiquoService
     DatacenterDto getDatacenter(Integer datacenterId);
 
     /**
-     * Delete the datacenter d.
+     * Delete the given datacenter .
      * 
-     * @param d Datacenter to delete.
+     * @param datacenterId The id of the datacenter to delete.
      */
-    void deleteDatacenter(final Datacenter d);
+    void deleteDatacenter(final Integer datacenterId);
 }

@@ -44,7 +44,7 @@ public abstract class ParseXMLTest<T> extends BaseHandlerTest
     @Test
     public void testObjectFromResponse() throws Exception
     {
-        ParseXML<T> function = getParser();
+        ParseXMLWithJAXB<T> function = getParser();
         HttpResponse response = createMock(HttpResponse.class);
         Payload payload = createMock(Payload.class);
 
@@ -65,7 +65,7 @@ public abstract class ParseXMLTest<T> extends BaseHandlerTest
     /**
      * Get the parser to test.
      */
-    protected abstract ParseXML<T> getParser();
+    protected abstract ParseXMLWithJAXB<T> getParser();
 
     /**
      * Get the payload to be used in the test.

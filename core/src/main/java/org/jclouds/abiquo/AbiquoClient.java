@@ -21,10 +21,9 @@ package org.jclouds.abiquo;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.concurrent.Timeout;
-
-import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.abiquo.server.core.infrastructure.DatacentersDto;
+import org.jclouds.rest.annotations.Delegate;
 
 /**
  * Provides synchronous access to Abiquo.
@@ -37,41 +36,8 @@ import com.abiquo.server.core.infrastructure.DatacentersDto;
 public interface AbiquoClient
 {
     /**
-     * List all datacenters.
-     * 
-     * @return The list of Datacenters.
+     * Provides synchronous access to Infrastructure features.
      */
-    DatacentersDto listDatacenters();
-
-    /**
-     * Create a new datacenter.
-     * 
-     * @param datacenter The datacenter to be created.
-     * @return The created datacenter.
-     */
-    DatacenterDto createDatacenter(DatacenterDto datacenter);
-
-    /**
-     * Gte the given datacenter.
-     * 
-     * @param datacenterId The id of the datacenter.
-     * @return The datacenter or <code>null</code> if it does not exist.
-     */
-    DatacenterDto getDatacenter(Integer datacenterId);
-
-    /**
-     * Updates an existing datacenter.
-     * 
-     * @param datacenterId The id of the datacenter to update.
-     * @param datacenter The new attributes for the datacenter.
-     * @return The updated datacenter.
-     */
-    DatacenterDto updateDatacenter(Integer datacenterId, DatacenterDto datacenter);
-
-    /**
-     * Deletes an existing datacenter.
-     * 
-     * @param datacenterId The id of the datacenter to delete.
-     */
-    void deleteDatacenter(Integer datacenterId);
+    @Delegate
+    InfrastructureClient getInfrastructureClient();
 }

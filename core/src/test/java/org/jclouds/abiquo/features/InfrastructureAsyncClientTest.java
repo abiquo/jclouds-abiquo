@@ -17,46 +17,39 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.features;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.utils.DomainUtils.withHeader;
-import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.abiquo.functions.ParseDatacenter;
 import org.jclouds.abiquo.functions.ParseDatacenters;
 import org.jclouds.abiquo.utils.DomainUtils.Datacenter;
-import org.jclouds.http.HttpRequest;
-import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
-import org.jclouds.rest.RestClientTest;
-import org.jclouds.rest.RestContextSpec;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.google.inject.Module;
 import com.google.inject.TypeLiteral;
 
 /**
- * Tests annotation parsing of {@code AbiquoAsyncClient}
+ * Tests annotation parsing of {@code InfrastructureAsyncClient}
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
+public class InfrastructureAsyncClientTest extends
+    BaseAbiquoAsyncClientTest<InfrastructureAsyncClient>
 {
 
     public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AbiquoAsyncClient.class.getMethod("listDatacenters");
-        GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method);
+        Method method = InfrastructureAsyncClient.class.getMethod("listDatacenters");
+        GeneratedHttpRequest<InfrastructureAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/datacenters HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
@@ -71,8 +64,9 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
 
     public void testCreateDatacenter() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AbiquoAsyncClient.class.getMethod("createDatacenter", DatacenterDto.class);
-        GeneratedHttpRequest<AbiquoAsyncClient> request =
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("createDatacenter", DatacenterDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, Datacenter.object());
 
         assertRequestLineEquals(request, "POST http://localhost/api/admin/datacenters HTTP/1.1");
@@ -88,8 +82,9 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
 
     public void testGetDatacenter() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AbiquoAsyncClient.class.getMethod("getDatacenter", Integer.class);
-        GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method, 1);
+        Method method = InfrastructureAsyncClient.class.getMethod("getDatacenter", Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
@@ -105,10 +100,9 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
     public void testUpdateDatacenter() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            AbiquoAsyncClient.class.getMethod("updateDatacenter", Integer.class,
+            InfrastructureAsyncClient.class.getMethod("updateDatacenter", Integer.class,
                 DatacenterDto.class);
-
-        GeneratedHttpRequest<AbiquoAsyncClient> request =
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, 1, Datacenter.objectWithId());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/datacenters/1 HTTP/1.1");
@@ -125,8 +119,10 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
 
     public void testDeleteDatacenter() throws SecurityException, NoSuchMethodException
     {
-        Method method = AbiquoAsyncClient.class.getMethod("deleteDatacenter", Integer.class);
-        GeneratedHttpRequest<AbiquoAsyncClient> request = processor.createRequest(method, 1);
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("deleteDatacenter", Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
@@ -140,45 +136,10 @@ public class AbiquoAsyncClientTest extends RestClientTest<AbiquoAsyncClient>
     }
 
     @Override
-    protected void checkFilters(final HttpRequest request)
+    protected TypeLiteral<RestAnnotationProcessor<InfrastructureAsyncClient>> createTypeLiteral()
     {
-        assertEquals(request.getFilters().size(), 1);
-        assertEquals(request.getFilters().get(0).getClass(), BasicAuthentication.class);
-    }
-
-    @Override
-    protected TypeLiteral<RestAnnotationProcessor<AbiquoAsyncClient>> createTypeLiteral()
-    {
-        return new TypeLiteral<RestAnnotationProcessor<AbiquoAsyncClient>>()
+        return new TypeLiteral<RestAnnotationProcessor<InfrastructureAsyncClient>>()
         {
         };
-    }
-
-    @Override
-    protected Module createModule()
-    {
-        return new AbiquoRestClientModule();
-    }
-
-    @Override
-    public RestContextSpec<AbiquoClient, AbiquoAsyncClient> createContextSpec()
-    {
-        String identity =
-            checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
-        String credential =
-            checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
-        String endpoint =
-            checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
-        String apiVersion =
-            checkNotNull(System.getProperty("test.abiquo.apiversion"), "test.abiquo.apiversion");
-
-        return new RestContextSpec<AbiquoClient, AbiquoAsyncClient>(AbiquoContextFactory.PROVIDER_NAME,
-            endpoint,
-            apiVersion,
-            null,
-            identity,
-            credential,
-            AbiquoClient.class,
-            AbiquoAsyncClient.class);
     }
 }
