@@ -57,8 +57,11 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
     @Override
     protected void tearDown() throws Exception
     {
-        deleteDatacenter();
+        infrastructureClient.deleteRack(datacenter.getId(), rack.getId());
+        infrastructureClient.deleteDatacenter(datacenter.getId());
     }
+
+    // Datacenter
 
     public void testListDatacenters() throws Exception
     {
@@ -88,12 +91,36 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(updated.getLocation(), "Anotherone");
     }
 
+    // Rack
+
     public void testListRacks() throws Exception
     {
         RacksDto racks = infrastructureClient.listRacks(datacenter.getId());
         assertNotNull(racks);
         assertFalse(racks.getCollection().isEmpty());
     }
+
+    public void testGetRack() throws Exception
+    {
+        RackDto r = infrastructureClient.getRack(datacenter.getId(), rack.getId());
+        assertNotNull(r);
+    }
+
+    public void testGetUnexistingRack() throws Exception
+    {
+        RackDto r = infrastructureClient.getRack(datacenter.getId(), rack.getId() + 100);
+        assertNull(r);
+    }
+
+    public void testUpdateRack() throws Exception
+    {
+        rack.setName("Updated Rack");
+        RackDto updated = infrastructureClient.updateRack(datacenter.getId(), rack.getId(), rack);
+        assertNotNull(updated);
+        assertEquals(updated.getName(), "Updated Rack");
+    }
+
+    // Helper methods
 
     private DatacenterDto createDatacenter() throws Exception
     {
@@ -117,8 +144,4 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
         return created;
     }
 
-    private void deleteDatacenter() throws Exception
-    {
-        infrastructureClient.deleteDatacenter(datacenter.getId());
-    }
 }

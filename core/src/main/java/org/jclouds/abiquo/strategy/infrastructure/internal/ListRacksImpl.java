@@ -22,7 +22,6 @@ package org.jclouds.abiquo.strategy.infrastructure.internal;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import javax.inject.Named;
@@ -34,7 +33,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.strategy.infrastructure.ListRacks;
 
-import com.abiquo.server.core.infrastructure.RackDto;
+import com.abiquo.server.core.infrastructure.RacksDto;
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 
@@ -64,17 +63,15 @@ public class ListRacksImpl implements ListRacks
     }
 
     @Override
-    public Iterable<Rack> execute(final Datacenter dc)
+    public Iterable<Rack> execute(final Datacenter datacenter)
     {
-        List<RackDto> dtos =
-            context.getApi().getInfrastructureClient().listRacks(dc.getId()).getCollection();
-
-        return wrap(context, Rack.class, dtos);
+        RacksDto result = context.getApi().getInfrastructureClient().listRacks(datacenter.getId());
+        return wrap(context, Rack.class, result.getCollection());
     }
 
     @Override
-    public Iterable<Rack> execute(final Datacenter dc, final Predicate<Rack> selector)
+    public Iterable<Rack> execute(final Datacenter datacenter, final Predicate<Rack> selector)
     {
-        return filter(execute(dc), selector);
+        return filter(execute(datacenter), selector);
     }
 }

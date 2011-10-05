@@ -44,12 +44,12 @@ public class Rack extends DomainWrapper<RackDto>
     public void delete()
     {
         // context.getApi().getInfrastructureClient().deleteRack(getId());
+        // target = null;
     }
 
     @Override
     public void save()
     {
-        // Create rack
         // target = context.getApi().getInfrastructureClient().createRack(target);
     }
 
@@ -57,8 +57,7 @@ public class Rack extends DomainWrapper<RackDto>
     public void update()
     {
         // Update rack
-        // TODO not implemented target =
-        // context.getApi().getInfrastructureClient().updateRack(getId(), target);
+        // target = context.getApi().getInfrastructureClient().updateRack(getId(), target);
     }
 
     public static Builder builder(final AbiquoContext context)
@@ -165,10 +164,11 @@ public class Rack extends DomainWrapper<RackDto>
 
         public static Builder fromRack(final Rack in)
         {
-            return Rack.builder(in.context).id(in.getId()).name(in.getName()).shortDescription(
-                in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(in.getNrsq()).vlanIdMax(
-                in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin()).vlanPerVdcExpected(
-                in.getVlanPerVdcExpected()).VlansIdAvoided(in.getVlansIdAvoided());
+            return Rack.builder(in.context).id(in.getId()).name(in.getName())
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
+                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcExpected(in.getVlanPerVdcExpected())
+                .VlansIdAvoided(in.getVlansIdAvoided());
         }
     }
 

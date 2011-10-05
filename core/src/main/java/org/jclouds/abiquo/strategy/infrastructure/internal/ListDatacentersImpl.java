@@ -22,7 +22,6 @@ package org.jclouds.abiquo.strategy.infrastructure.internal;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 
 import javax.inject.Named;
@@ -33,7 +32,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 
@@ -65,10 +64,8 @@ public class ListDatacentersImpl implements ListDatacenters
     @Override
     public Iterable<Datacenter> execute()
     {
-        List<DatacenterDto> dtos =
-            context.getApi().getInfrastructureClient().listDatacenters().getCollection();
-
-        return wrap(context, Datacenter.class, dtos);
+        DatacentersDto result = context.getApi().getInfrastructureClient().listDatacenters();
+        return wrap(context, Datacenter.class, result.getCollection());
     }
 
     @Override

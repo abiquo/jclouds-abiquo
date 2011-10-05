@@ -102,7 +102,7 @@ public interface InfrastructureClient
      * @param rackId The id of the rack.
      * @return The datacenter or <code>null</code> if it does not exist.
      */
-    DatacenterDto getRack(Integer datacenterId, Integer rackId);
+    RackDto getRack(Integer datacenterId, Integer rackId);
 
     /**
      * Updates an existing rack from the given datacenter.

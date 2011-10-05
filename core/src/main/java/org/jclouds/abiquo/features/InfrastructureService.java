@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.features;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.internal.BaseInfrastructureService;
 
 import com.google.common.base.Predicate;
@@ -34,7 +35,6 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseInfrastructureService.class)
 public interface InfrastructureService
 {
-
     /**
      * Get the list of all datacenters.
      */
@@ -49,4 +49,20 @@ public interface InfrastructureService
      * Get the first datacenter that matches the given filter or <code>null</code> if none is found.
      */
     Datacenter findDatacenter(final Predicate<Datacenter> filter);
+
+    /**
+     * Get the list of the racks in the given datacenter.
+     */
+    Iterable<Rack> listRacks(Datacenter datacenter);
+
+    /**
+     * Get the list of the racks in the given datacenter matching the given filter.
+     */
+    Iterable<Rack> listRacks(Datacenter datacenter, Predicate<Rack> filter);
+
+    /**
+     * Get the first rack in the given datacenter that matches the given filter or <code>null</code>
+     * if none is found.
+     */
+    Rack findRack(Datacenter datacenter, final Predicate<Rack> filter);
 }

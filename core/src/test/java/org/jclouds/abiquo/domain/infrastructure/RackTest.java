@@ -36,7 +36,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "live")
+@Test(groups = "live", enabled = false)
 public class RackTest extends BaseAbiquoClientLiveTest
 {
     /** The domain object to test and it's parent. */
@@ -76,6 +76,7 @@ public class RackTest extends BaseAbiquoClientLiveTest
         assertNull(infrastructureClient.getDatacenter(idDatacenter));
     }
 
+    @Test(enabled = false)
     public void testUpdate()
     {
         datacenter.setLocation("New York");
@@ -87,7 +88,7 @@ public class RackTest extends BaseAbiquoClientLiveTest
         assertEquals(updated.getLocation(), "New York");
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test(enabled = false, expectedExceptions = IllegalStateException.class)
     public void testCreateRepeated()
     {
         Datacenter repeated = Builder.fromDatacenter(datacenter).build();
