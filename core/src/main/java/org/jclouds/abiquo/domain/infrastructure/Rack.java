@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
@@ -56,6 +58,7 @@ public class Rack extends DomainWrapper<RackDto>
     @Override
     public void save()
     {
+        checkNotNull(datacenter, "The Rack should be assigned to a Datacenter");
         target = context.getApi().getInfrastructureClient().createRack(datacenter.unwrap(), target);
     }
 
@@ -190,8 +193,6 @@ public class Rack extends DomainWrapper<RackDto>
             Rack rack = new Rack(context, dto);
             rack.datacenter = datacenter;
             return rack;
-
-            // TODO: Validate mandatory fields in build methods?
         }
 
         public static Builder fromRack(final Rack in)
