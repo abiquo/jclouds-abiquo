@@ -25,6 +25,7 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 
 /**
@@ -83,4 +84,14 @@ public interface InfrastructureClient
      * @return The list of not managed racks for the datacenter.
      */
     RacksDto listRacks(Integer datacenterId);
+
+    /**
+     * Create a new not managed rack in a datacenter.
+     * 
+     * @param datacenterId The id of the datacenter.
+     * @param rack The rack to be created.
+     * @return The created rack.
+     */
+    RackDto createRack(final Integer datacenterId, final RackDto rack);
+
 }

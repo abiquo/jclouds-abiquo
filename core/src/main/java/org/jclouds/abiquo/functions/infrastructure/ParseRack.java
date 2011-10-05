@@ -25,19 +25,19 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.functions.ParseXMLWithJAXB;
 import org.jclouds.abiquo.xml.XMLParser;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Parses a datacenter object.
+ * Parses a rack object.
  * 
- * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 @Singleton
-public class ParseDatacenter extends ParseXMLWithJAXB<DatacenterDto>
+public class ParseRack extends ParseXMLWithJAXB<RackDto>
 {
     @Inject
-    public ParseDatacenter(final XMLParser xml, final TypeLiteral<DatacenterDto> type)
+    public ParseRack(final XMLParser xml, final TypeLiteral<RackDto> type)
     {
         super(xml, type);
     }

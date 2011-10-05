@@ -32,6 +32,8 @@ import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.RackDto;
+import com.abiquo.server.core.infrastructure.RacksDto;
 
 /**
  * Tests behavior of {@code AbiquoClient}
@@ -43,10 +45,13 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
 {
     private DatacenterDto datacenter;
 
+    private RackDto rack;
+
     @Override
     protected void setupEntities() throws Exception
     {
         datacenter = createDatacenter();
+        rack = createRack();
     }
 
     @Override
@@ -83,6 +88,13 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(updated.getLocation(), "Anotherone");
     }
 
+    public void testListRacks() throws Exception
+    {
+        RacksDto racks = infrastructureClient.listRacks(datacenter.getId());
+        assertNotNull(racks);
+        assertFalse(racks.getCollection().isEmpty());
+    }
+
     private DatacenterDto createDatacenter() throws Exception
     {
         Random generator = new Random(System.currentTimeMillis());
@@ -94,13 +106,19 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
         return created;
     }
 
+    private RackDto createRack() throws Exception
+    {
+        Random generator = new Random(System.currentTimeMillis());
+        RackDto rack = Infrastructure.rackPost();
+        rack.setName(PREFIX + rack.getName() + generator.nextInt(100));
+        RackDto created = infrastructureClient.createRack(datacenter.getId(), rack);
+        assertNotNull(created);
+        assertNotNull(created.getId());
+        return created;
+    }
+
     private void deleteDatacenter() throws Exception
     {
         infrastructureClient.deleteDatacenter(datacenter.getId());
-    }
-
-    public void testListRacks() throws Exception
-    {
-        infrastructureClient.listRacks(datacenter.getId());
     }
 }

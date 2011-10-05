@@ -31,6 +31,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.abiquo.binders.BindToXMLPayload;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
+import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
 import org.jclouds.abiquo.reference.AbiquoMediaType;
 import org.jclouds.http.filters.BasicAuthentication;
@@ -42,6 +43,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -108,4 +110,10 @@ public interface InfrastructureAsyncClient
     @Consumes(AbiquoMediaType.APPLICATION_NOTMANAGEDRACKSDTO_XML)
     @ResponseParser(ParseRacks.class)
     ListenableFuture<RacksDto> listRacks(@PathParam("datacenter") Integer datacenterId);
+
+    @POST
+    @Path("/datacenters/{datacenter}/racks")
+    @ResponseParser(ParseRack.class)
+    ListenableFuture<RackDto> createRack(@PathParam("datacenter") Integer datacenterId,
+        @BinderParam(BindToXMLPayload.class) RackDto rack);
 }

@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 
 /**
  * Infrastructure domain utilities.
@@ -36,6 +37,19 @@ public class Infrastructure
         return datacenter;
     }
 
+    public static RackDto rackPost()
+    {
+        RackDto rack = new RackDto();
+        rack.setName("Aloha");
+        rack.setShortDescription("A hawaian rack");
+        rack.setHaEnabled(false);
+        rack.setVlanIdMin(6);
+        rack.setVlanIdMax(3024);
+        rack.setVlanPerVdcExpected(6);
+        rack.setNrsq(80);
+        return rack;
+    }
+
     public static DatacenterDto datacenterPut()
     {
         DatacenterDto datacenter = datacenterPost();
@@ -50,6 +64,21 @@ public class Infrastructure
         buffer.append("<location>Honolulu</location>");
         buffer.append("<name>DC</name>");
         buffer.append("</datacenter>");
+        return buffer.toString();
+    }
+
+    public static String rackPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<rack>");
+        buffer.append("<haEnabled>false</haEnabled>");
+        buffer.append("<name>Aloha</name>");
+        buffer.append("<nrsq>80</nrsq>");
+        buffer.append("<shortDescription>A hawaian rack</shortDescription>");
+        buffer.append("<vlanIdMax>3024</vlanIdMax>");
+        buffer.append("<vlanIdMin>6</vlanIdMin>");
+        buffer.append("<vlanPerVdcExpected>6</vlanPerVdcExpected>");
+        buffer.append("</rack>");
         return buffer.toString();
     }
 

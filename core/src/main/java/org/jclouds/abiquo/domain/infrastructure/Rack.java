@@ -32,7 +32,6 @@ import com.abiquo.server.core.infrastructure.RackDto;
  */
 public class Rack extends DomainWrapper<RackDto>
 {
-    public RackDto target;
 
     /**
      * Constructor to be used only by the builder.
@@ -81,6 +80,16 @@ public class Rack extends DomainWrapper<RackDto>
 
         private Boolean haEnabled;
 
+        private Integer nrsq;
+
+        private Integer vlanIdMax;
+
+        private Integer vlanIdMin;
+
+        private Integer vlanPerVdcExpected;
+
+        private String vlansIdAvoided;
+
         public Builder(final AbiquoContext context)
         {
             super();
@@ -111,6 +120,36 @@ public class Rack extends DomainWrapper<RackDto>
             return this;
         }
 
+        public Builder nrsq(final Integer nrsq)
+        {
+            this.nrsq = nrsq;
+            return this;
+        }
+
+        public Builder vlanIdMax(final Integer vlanIdMax)
+        {
+            this.vlanIdMax = vlanIdMax;
+            return this;
+        }
+
+        public Builder vlanIdMin(final Integer vlanIdMin)
+        {
+            this.vlanIdMin = vlanIdMin;
+            return this;
+        }
+
+        public Builder vlanPerVdcExpected(final Integer vlanPerVdcExpected)
+        {
+            this.vlanPerVdcExpected = vlanPerVdcExpected;
+            return this;
+        }
+
+        public Builder VlansIdAvoided(final String vlansIdAvoided)
+        {
+            this.vlansIdAvoided = vlansIdAvoided;
+            return this;
+        }
+
         public Rack build()
         {
             RackDto dto = new RackDto();
@@ -118,13 +157,20 @@ public class Rack extends DomainWrapper<RackDto>
             dto.setName(name);
             dto.setShortDescription(shortDescription);
             dto.setHaEnabled(haEnabled);
+            dto.setNrsq(nrsq);
+            dto.setVlanIdMax(vlanIdMax);
+            dto.setVlanIdMin(vlanIdMin);
+            dto.setVlanPerVdcExpected(vlanPerVdcExpected);
+            dto.setVlansIdAvoided(vlansIdAvoided);
             return new Rack(context, dto);
         }
 
         public static Builder fromRack(final Rack in)
         {
             return Rack.builder(in.context).id(in.getId()).name(in.getName()).shortDescription(
-                in.getShortDescription()).haEnabled(in.isHaEnabled());
+                in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(in.getNrsq()).vlanIdMax(
+                in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin()).vlanPerVdcExpected(
+                in.getVlanPerVdcExpected()).VlansIdAvoided(in.getVlansIdAvoided());
         }
     }
 
@@ -163,5 +209,55 @@ public class Rack extends DomainWrapper<RackDto>
     public boolean isHaEnabled()
     {
         return target.isHaEnabled();
+    }
+
+    public Integer getNrsq()
+    {
+        return target.getNrsq();
+    }
+
+    public Integer getVlanIdMax()
+    {
+        return target.getVlanIdMax();
+    }
+
+    public Integer getVlanIdMin()
+    {
+        return target.getVlanIdMin();
+    }
+
+    public Integer getVlanPerVdcExpected()
+    {
+        return target.getVlanPerVdcExpected();
+    }
+
+    public String getVlansIdAvoided()
+    {
+        return target.getVlansIdAvoided();
+    }
+
+    public void setNrsq(final Integer nrsq)
+    {
+        target.setNrsq(nrsq);
+    }
+
+    public void setVlanIdMax(final Integer vlanIdMax)
+    {
+        target.setVlanIdMax(vlanIdMax);
+    }
+
+    public void setVlanIdMin(final Integer vlanIdMin)
+    {
+        target.setVlanIdMin(vlanIdMin);
+    }
+
+    public void setVlanPerVdcExpected(final Integer vlanPerVdcExpected)
+    {
+        target.setVlanPerVdcExpected(vlanPerVdcExpected);
+    }
+
+    public void setVlansIdAvoided(final String vlansIdAvoided)
+    {
+        target.setVlansIdAvoided(vlansIdAvoided);
     }
 }
