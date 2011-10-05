@@ -29,6 +29,7 @@ import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.RackDto;
+import com.google.common.collect.Iterables;
 
 /**
  * Unit tests for the {@link Datacenter} domain class.
@@ -80,6 +81,13 @@ public class RackTest extends BaseAbiquoClientLiveTest
         RackDto updated = infrastructureClient.getRack(datacenter.getId(), rack.getId());
 
         assertEquals(updated.getName(), "Updated rack");
+    }
+
+    public void testListRacks()
+    {
+        Iterable<Rack> racks = datacenter.listRacks();
+        assertEquals(Iterables.size(racks), 1);
+        assertEquals(Iterables.getOnlyElement(racks).getId(), rack.getId());
     }
 
     private static String randomName()
