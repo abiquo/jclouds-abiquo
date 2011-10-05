@@ -25,11 +25,11 @@ import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
-import org.testng.annotations.AfterGroups;
-import org.testng.annotations.BeforeGroups;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 
 /**
- * Tests behavior of {@code AbiquoClient}
+ * Base class for live and domain tests.
  * 
  * @author Ignasi Barrera
  */
@@ -47,11 +47,7 @@ public abstract class BaseAbiquoClientLiveTest
 
     protected InfrastructureClient infrastructureClient;
 
-    protected abstract void setupEntities() throws Exception;
-
-    protected abstract void teardownEntities() throws Exception;
-
-    @BeforeGroups(groups = "live")
+    @BeforeClass(groups = "live")
     protected void setupClient() throws Exception
     {
         identity = checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
@@ -64,18 +60,28 @@ public abstract class BaseAbiquoClientLiveTest
         context = new AbiquoContextFactory().createContext(identity, credential, props);
         infrastructureClient = context.getApi().getInfrastructureClient();
 
-        setupEntities();
+        setup();
     }
 
-    @AfterGroups(groups = "live")
+    @AfterClass(groups = "live")
     public void teardownClient() throws Exception
     {
-        teardownEntities();
+        tearDown();
 
         if (context != null)
         {
             context.close();
         }
+    }
+
+    protected void setup() throws Exception
+    {
+        // Override if necessary
+    }
+
+    protected void tearDown() throws Exception
+    {
+        // Override if necessary
     }
 
 }

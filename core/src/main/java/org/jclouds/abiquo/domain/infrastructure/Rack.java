@@ -32,7 +32,6 @@ import com.abiquo.server.core.infrastructure.RackDto;
  */
 public class Rack extends DomainWrapper<RackDto>
 {
-
     /**
      * Constructor to be used only by the builder.
      */

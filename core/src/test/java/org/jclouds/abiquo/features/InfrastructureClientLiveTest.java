@@ -48,14 +48,14 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
     private RackDto rack;
 
     @Override
-    protected void setupEntities() throws Exception
+    protected void setup() throws Exception
     {
         datacenter = createDatacenter();
         rack = createRack();
     }
 
     @Override
-    protected void teardownEntities() throws Exception
+    protected void tearDown() throws Exception
     {
         deleteDatacenter();
     }

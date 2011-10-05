@@ -31,7 +31,6 @@ import org.jclouds.lifecycle.Closer;
 import org.jclouds.rest.RestContextFactory;
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
@@ -42,7 +41,6 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "live")
 public abstract class BaseAbiquoStrategyLiveTest
 {
     protected Injector injector;
@@ -66,25 +64,26 @@ public abstract class BaseAbiquoStrategyLiveTest
                 ImmutableSet.<Module> of(), props).buildInjector();
 
         setupStrategy();
-        setupEntities();
+        setup();
     }
 
     protected abstract void setupStrategy();
 
-    protected void setupEntities()
+    protected void setup()
     {
-
+        // Override if necessary
     }
 
-    protected void teardownEntities()
+    protected void tearDown()
     {
-
+        // Override if necessary
     }
 
     @AfterTest(groups = "live")
     public void teardownClient() throws IOException
     {
-        teardownEntities();
+        tearDown();
+
         if (injector != null)
         {
             injector.getInstance(Closer.class).close();

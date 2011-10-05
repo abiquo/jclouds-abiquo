@@ -35,7 +35,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Datacenter(AbiquoContext context, DatacenterDto target)
+    protected Datacenter(final AbiquoContext context, final DatacenterDto target)
     {
         super(context, target);
     }
@@ -44,19 +44,18 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteDatacenter(getId());
+        target = null;
     }
 
     @Override
     public void save()
     {
-        // Create datacenter
         target = context.getApi().getInfrastructureClient().createDatacenter(target);
     }
 
     @Override
     public void update()
     {
-        // Update datacenter
         target = context.getApi().getInfrastructureClient().updateDatacenter(getId(), target);
     }
 
@@ -132,12 +131,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return target.getName();
     }
 
-    public void setLocation(String location)
+    public void setLocation(final String location)
     {
         target.setLocation(location);
     }
 
-    public void setName(String name)
+    public void setName(final String name)
     {
         target.setName(name);
     }

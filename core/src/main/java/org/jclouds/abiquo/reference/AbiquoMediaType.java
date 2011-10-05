@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.reference;
 
 import javax.ws.rs.core.MediaType;
