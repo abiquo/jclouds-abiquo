@@ -65,35 +65,34 @@ public interface InfrastructureClient
     /**
      * Updates an existing datacenter.
      * 
-     * @param datacenterId The id of the datacenter to update.
      * @param datacenter The new attributes for the datacenter.
      * @return The updated datacenter.
      */
-    DatacenterDto updateDatacenter(Integer datacenterId, DatacenterDto datacenter);
+    DatacenterDto updateDatacenter(DatacenterDto datacenter);
 
     /**
      * Deletes an existing datacenter.
      * 
-     * @param datacenterId The id of the datacenter to delete.
+     * @param datacenter The idatacenter to delete.
      */
-    void deleteDatacenter(Integer datacenterId);
+    void deleteDatacenter(DatacenterDto datacenter);
 
     /**
      * List all not managed racks for a datacenter.
      * 
-     * @param datacenterId The id of the datacenter.
+     * @param datacenter The datacenter.
      * @return The list of not managed racks for the datacenter.
      */
-    RacksDto listRacks(Integer datacenterId);
+    RacksDto listRacks(DatacenterDto dataceter);
 
     /**
      * Create a new not managed rack in a datacenter.
      * 
-     * @param datacenterId The id of the datacenter.
+     * @param datacenter The datacenter.
      * @param rack The rack to be created.
      * @return The created rack.
      */
-    RackDto createRack(final Integer datacenterId, final RackDto rack);
+    RackDto createRack(final DatacenterDto datacenter, final RackDto rack);
 
     /**
      * Gte the given rack from the given datacenter.
@@ -107,18 +106,16 @@ public interface InfrastructureClient
     /**
      * Updates an existing rack from the given datacenter.
      * 
-     * @param datacenterId The id of the datacenter.
-     * @param rackId The id of the rack to update.
+     * @param datacenter The datacenter.
      * @param rack The new attributes for the rack.
      * @return The updated rack.
      */
-    RackDto updateRack(final Integer datacenterId, final Integer rackId, final RackDto rack);
+    RackDto updateRack(final RackDto rack);
 
     /**
-     * Deletes an existing rack from the given datacenter.
+     * Deletes an existing rack.
      * 
-     * @param datacenterId The id of the datacenter.
-     * @param datacenterId The id of the rack to delete.
+     * @param rack The rack to delete.
      */
-    void deleteRack(Integer datacenterId, Integer rackId);
+    void deleteRack(final RackDto rack);
 }

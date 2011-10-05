@@ -65,7 +65,7 @@ public class BindToXMLPayload implements Binder
         }
         catch (IOException ex)
         {
-            throw new BindException(request, input, ex);
+            throw new BindException(request, ex);
         }
     }
 

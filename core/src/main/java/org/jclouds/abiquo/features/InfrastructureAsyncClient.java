@@ -28,12 +28,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayload;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
 import org.jclouds.abiquo.reference.AbiquoMediaType;
+import org.jclouds.abiquo.rest.annotations.PathFromLink;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
@@ -87,37 +90,36 @@ public interface InfrastructureAsyncClient
     ListenableFuture<DatacenterDto> getDatacenter(@PathParam("datacenter") Integer datacenterId);
 
     /**
-     * @see InfrastructureClient#updateDatacenter(Integer, DatacenterDto)
+     * @see InfrastructureClient#updateDatacenter(DatacenterDto)
      */
     @PUT
-    @Path("/datacenters/{datacenter}")
     @ResponseParser(ParseDatacenter.class)
-    ListenableFuture<DatacenterDto> updateDatacenter(@PathParam("datacenter") Integer datacenterId,
-        @BinderParam(BindToXMLPayload.class) DatacenterDto datacenter);
+    ListenableFuture<DatacenterDto> updateDatacenter(
+        @PathFromLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#deleteDatacenter(Integer datacenterId)
+     * @see InfrastructureClient#deleteDatacenter(DatacenterDto)
      */
     @DELETE
-    @Path("/datacenters/{datacenter}")
-    ListenableFuture<Void> deleteDatacenter(@PathParam("datacenter") Integer datacenterId);
+    ListenableFuture<Void> deleteDatacenter(
+        @PathFromLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#listRacks(Integer datacenterId)
+     * @see InfrastructureClient#listRacks(DatacenterDto)
      */
     @GET
-    @Path("/datacenters/{datacenter}/racks")
     @Consumes(AbiquoMediaType.APPLICATION_NOTMANAGEDRACKSDTO_XML)
     @ResponseParser(ParseRacks.class)
-    ListenableFuture<RacksDto> listRacks(@PathParam("datacenter") Integer datacenterId);
+    ListenableFuture<RacksDto> listRacks(
+        @PathFromLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#createRack(Integer, RackDto)
+     * @see InfrastructureClient#createRack
      */
     @POST
-    @Path("/datacenters/{datacenter}/racks")
     @ResponseParser(ParseRack.class)
-    ListenableFuture<RackDto> createRack(@PathParam("datacenter") Integer datacenterId,
+    ListenableFuture<RackDto> createRack(
+        @PathFromLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(BindToXMLPayload.class) RackDto rack);
 
     /**
@@ -131,19 +133,17 @@ public interface InfrastructureAsyncClient
         @PathParam("rack") Integer rackId);
 
     /**
-     * @see InfrastructureClient#updateRack(Integer, Integer, RackDto)
+     * @see InfrastructureClient#updateRack(RackDto)
      */
     @PUT
-    @Path("/datacenters/{datacenter}/racks/{rack}")
     @ResponseParser(ParseRack.class)
-    ListenableFuture<RackDto> updateRack(@PathParam("datacenter") Integer datacenterId,
-        @PathParam("rack") Integer rackId, @BinderParam(BindToXMLPayload.class) RackDto rack);
+    ListenableFuture<RackDto> updateRack(
+        @PathFromLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
 
     /**
-     * @see InfrastructureClient#deleteRack(Integer, Integer)
+     * @see InfrastructureClient#deleteRack(RackDto)
      */
     @DELETE
-    @Path("/datacenters/{datacenter}/racks/{rack}")
-    ListenableFuture<Void> deleteRack(@PathParam("datacenter") Integer datacenterId,
-        @PathParam("rack") Integer rackId);
+    ListenableFuture<Void> deleteRack(
+        @PathFromLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 }

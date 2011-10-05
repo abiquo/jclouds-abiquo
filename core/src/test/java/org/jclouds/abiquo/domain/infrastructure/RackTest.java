@@ -25,11 +25,10 @@ import static org.testng.Assert.assertNull;
 
 import java.util.UUID;
 
-import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 
 /**
  * Unit tests for the {@link Datacenter} domain class.
@@ -49,15 +48,12 @@ public class RackTest extends BaseAbiquoClientLiveTest
     {
         datacenter = Datacenter.builder(context).name(randomName()).location("Honolulu").build();
         datacenter.save();
-
         assertNotNull(datacenter.getId());
 
         rack =
             Rack.builder(context).name("Aloha").shortDescription("A hawaian rack").haEnabled(false)
                 .vlanIdMin(6).vlanIdMax(3024).vlanPerVdcExpected(6).build();
-
         rack.save();
-
         assertNotNull(rack.getId());
     }
 
@@ -68,31 +64,22 @@ public class RackTest extends BaseAbiquoClientLiveTest
         Integer idDatacenter = datacenter.getId();
 
         rack.delete();
-
         assertNull(infrastructureClient.getRack(idDatacenter, idRack));
 
         datacenter.delete();
-
         assertNull(infrastructureClient.getDatacenter(idDatacenter));
     }
 
     @Test(enabled = false)
     public void testUpdate()
     {
-        datacenter.setLocation("New York");
-        datacenter.update();
+        rack.setName("Updated rack");
+        rack.update();
 
         // Recover the updated datacenter
-        DatacenterDto updated = infrastructureClient.getDatacenter(datacenter.getId());
+        RackDto updated = infrastructureClient.getRack(datacenter.getId(), rack.getId());
 
-        assertEquals(updated.getLocation(), "New York");
-    }
-
-    @Test(enabled = false, expectedExceptions = IllegalStateException.class)
-    public void testCreateRepeated()
-    {
-        Datacenter repeated = Builder.fromDatacenter(datacenter).build();
-        repeated.save();
+        assertEquals(updated.getName(), "Updated rack");
     }
 
     private static String randomName()

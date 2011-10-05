@@ -43,7 +43,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     /** The wrapped object. */
     protected T target;
 
-    protected DomainWrapper(AbiquoContext context, T target)
+    protected DomainWrapper(final AbiquoContext context, final T target)
     {
         super();
         this.context = context;
@@ -56,6 +56,11 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     public T unwrap()
     {
         return target;
+    }
+
+    protected Integer getParentId(final String parentLinkRel)
+    {
+        return target.getIdFromLink(parentLinkRel);
     }
 
     /**
@@ -77,7 +82,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      * Wraps an object in the given wrapper class.
      */
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> W wrap(
-        AbiquoContext context, Class<W> wrapperClass, T target)
+        final AbiquoContext context, final Class<W> wrapperClass, final T target)
     {
         try
         {
@@ -99,12 +104,12 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      * Wrap a collection of objects to the given wrapper class.
      */
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> Iterable<W> wrap(
-        final AbiquoContext context, final Class<W> wrapperClass, Iterable<T> targets)
+        final AbiquoContext context, final Class<W> wrapperClass, final Iterable<T> targets)
     {
         return transform(targets, new Function<T, W>()
         {
             @Override
-            public W apply(T input)
+            public W apply(final T input)
             {
                 return wrap(context, wrapperClass, input);
             }

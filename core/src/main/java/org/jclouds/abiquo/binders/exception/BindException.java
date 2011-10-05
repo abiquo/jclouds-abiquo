@@ -32,52 +32,40 @@ public class BindException extends RuntimeException
 
     private HttpRequest request;
 
-    private Object input;
-
-    public BindException(final HttpRequest request, final Object input)
+    public BindException(final HttpRequest request)
     {
         super();
         this.request = request;
-        this.input = input;
     }
 
-    public BindException(final HttpRequest request, final Object input, final String message)
+    public BindException(final HttpRequest request, final String message)
     {
         super(message);
         this.request = request;
-        this.input = input;
     }
 
-    public BindException(final HttpRequest request, final Object input, final Throwable cause)
+    public BindException(final HttpRequest request, final Throwable cause)
     {
         super(cause.getMessage(), cause);
         this.request = request;
-        this.input = input;
     }
 
-    public BindException(final HttpRequest request, final Object input, final String message,
-        final Throwable cause)
+    public BindException(final HttpRequest request, final String message, final Throwable cause)
     {
         super(message, cause);
         this.request = request;
-        this.input = input;
     }
 
     @Override
     public String getMessage()
     {
-        String msg = "Could not bind object [" + input + "] to request" + request + ": ";
+        String msg = "Could not bind object to request" + request + ": ";
         return msg + super.getMessage();
     }
 
     public HttpRequest getRequest()
     {
         return request;
-    }
-
-    public Object getInput()
-    {
-        return input;
     }
 
 }

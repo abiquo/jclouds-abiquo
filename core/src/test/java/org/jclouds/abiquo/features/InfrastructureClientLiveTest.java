@@ -57,8 +57,8 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
     @Override
     protected void tearDown() throws Exception
     {
-        infrastructureClient.deleteRack(datacenter.getId(), rack.getId());
-        infrastructureClient.deleteDatacenter(datacenter.getId());
+        infrastructureClient.deleteRack(rack);
+        infrastructureClient.deleteDatacenter(datacenter);
     }
 
     // Datacenter
@@ -85,8 +85,7 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
     public void testUpdateDatacenter() throws Exception
     {
         datacenter.setLocation("Anotherone");
-        DatacenterDto updated =
-            infrastructureClient.updateDatacenter(datacenter.getId(), datacenter);
+        DatacenterDto updated = infrastructureClient.updateDatacenter(datacenter);
         assertNotNull(updated);
         assertEquals(updated.getLocation(), "Anotherone");
     }
@@ -95,7 +94,7 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
 
     public void testListRacks() throws Exception
     {
-        RacksDto racks = infrastructureClient.listRacks(datacenter.getId());
+        RacksDto racks = infrastructureClient.listRacks(datacenter);
         assertNotNull(racks);
         assertFalse(racks.getCollection().isEmpty());
     }
@@ -115,7 +114,7 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
     public void testUpdateRack() throws Exception
     {
         rack.setName("Updated Rack");
-        RackDto updated = infrastructureClient.updateRack(datacenter.getId(), rack.getId(), rack);
+        RackDto updated = infrastructureClient.updateRack(rack);
         assertNotNull(updated);
         assertEquals(updated.getName(), "Updated Rack");
     }
@@ -138,7 +137,7 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
         Random generator = new Random(System.currentTimeMillis());
         RackDto rack = Infrastructure.rackPost();
         rack.setName(PREFIX + rack.getName() + generator.nextInt(100));
-        RackDto created = infrastructureClient.createRack(datacenter.getId(), rack);
+        RackDto created = infrastructureClient.createRack(datacenter, rack);
         assertNotNull(created);
         assertNotNull(created.getId());
         return created;

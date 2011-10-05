@@ -43,21 +43,21 @@ public class Rack extends DomainWrapper<RackDto>
     @Override
     public void delete()
     {
-        // context.getApi().getInfrastructureClient().deleteRack(getId());
-        // target = null;
+        context.getApi().getInfrastructureClient().deleteRack(target);
+        target = null;
     }
 
     @Override
     public void save()
     {
+        // TODO: How do we get the datacenter to have the racks link?
         // target = context.getApi().getInfrastructureClient().createRack(target);
     }
 
     @Override
     public void update()
     {
-        // Update rack
-        // target = context.getApi().getInfrastructureClient().updateRack(getId(), target);
+        target = context.getApi().getInfrastructureClient().updateRack(target);
     }
 
     public static Builder builder(final AbiquoContext context)

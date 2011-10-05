@@ -43,7 +43,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @Override
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteDatacenter(getId());
+        context.getApi().getInfrastructureClient().deleteDatacenter(target);
         target = null;
     }
 
@@ -56,7 +56,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @Override
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateDatacenter(getId(), target);
+        target = context.getApi().getInfrastructureClient().updateDatacenter(target);
     }
 
     public Iterable<Rack> listRacks()
