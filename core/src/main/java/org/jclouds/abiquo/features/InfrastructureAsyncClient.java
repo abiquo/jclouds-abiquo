@@ -78,7 +78,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#getDatacenter
+     * @see InfrastructureClient#getDatacenter(Integer)
      */
     @GET
     @Path("/datacenters/{datacenter}")
@@ -111,9 +111,39 @@ public interface InfrastructureAsyncClient
     @ResponseParser(ParseRacks.class)
     ListenableFuture<RacksDto> listRacks(@PathParam("datacenter") Integer datacenterId);
 
+    /**
+     * @see InfrastructureClient#createRack(Integer, RackDto)
+     */
     @POST
     @Path("/datacenters/{datacenter}/racks")
     @ResponseParser(ParseRack.class)
     ListenableFuture<RackDto> createRack(@PathParam("datacenter") Integer datacenterId,
         @BinderParam(BindToXMLPayload.class) RackDto rack);
+
+    /**
+     * @see InfrastructureClient#getRack(Integer, Integer)
+     */
+    @GET
+    @Path("/datacenters/{datacenter}/racks/{rack}")
+    @ResponseParser(ParseRack.class)
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<RackDto> getRack(@PathParam("datacenter") Integer datacenterId,
+        @PathParam("rack") Integer rackId);
+
+    /**
+     * @see InfrastructureClient#updateRack(Integer, Integer, RackDto)
+     */
+    @PUT
+    @Path("/datacenters/{datacenter}/racks/{rack}")
+    @ResponseParser(ParseRack.class)
+    ListenableFuture<RackDto> updateRack(@PathParam("datacenter") Integer datacenterId,
+        @PathParam("rack") Integer rackId, @BinderParam(BindToXMLPayload.class) RackDto rack);
+
+    /**
+     * @see InfrastructureClient#deleteRack(Integer, Integer)
+     */
+    @DELETE
+    @Path("/datacenters/{datacenter}/racks/{rack}")
+    ListenableFuture<Void> deleteRack(@PathParam("datacenter") Integer datacenterId,
+        @PathParam("rack") Integer rackId);
 }

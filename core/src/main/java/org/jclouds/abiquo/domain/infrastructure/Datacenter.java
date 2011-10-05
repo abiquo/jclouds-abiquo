@@ -59,6 +59,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         target = context.getApi().getInfrastructureClient().updateDatacenter(getId(), target);
     }
 
+    public Iterable<Rack> getRacks()
+    {
+        // return wrap(context.getApi().getInfrastructureClient().listRacks(this.getId());
+    }
+
     public static Builder builder(final AbiquoContext context)
     {
         return new Builder(context);
@@ -109,8 +114,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
         public static Builder fromDatacenter(final Datacenter in)
         {
-            return Datacenter.builder(in.context).id(in.getId()).name(in.getName())
-                .location(in.getLocation());
+            return Datacenter.builder(in.context).id(in.getId()).name(in.getName()).location(
+                in.getLocation());
         }
     }
 

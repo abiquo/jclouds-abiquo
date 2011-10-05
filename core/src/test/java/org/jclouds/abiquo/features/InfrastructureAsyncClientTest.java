@@ -177,6 +177,65 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testGetRack() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getRack", Integer.class, Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, 1, 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseRack.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateRack() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("updateRack", Integer.class, Integer.class,
+                RackDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, 1, 1, Infrastructure.rackPut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(Infrastructure.rackPutPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseRack.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteRack() throws SecurityException, NoSuchMethodException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("deleteRack", Integer.class, Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, 1, 1);
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     @Override
     protected TypeLiteral<RestAnnotationProcessor<InfrastructureAsyncClient>> createTypeLiteral()
     {

@@ -57,6 +57,13 @@ public class Infrastructure
         return datacenter;
     }
 
+    public static RackDto rackPut()
+    {
+        RackDto rack = rackPost();
+        rack.setId(1);
+        return rack;
+    }
+
     public static String datacenterPostPayload()
     {
         StringBuffer buffer = new StringBuffer();
@@ -90,6 +97,22 @@ public class Infrastructure
         buffer.append("<location>Honolulu</location>");
         buffer.append("<name>DC</name>");
         buffer.append("</datacenter>");
+        return buffer.toString();
+    }
+
+    public static String rackPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<rack>");
+        buffer.append("<haEnabled>false</haEnabled>");
+        buffer.append("<id>1</id>");
+        buffer.append("<name>Aloha</name>");
+        buffer.append("<nrsq>80</nrsq>");
+        buffer.append("<shortDescription>A hawaian rack</shortDescription>");
+        buffer.append("<vlanIdMax>3024</vlanIdMax>");
+        buffer.append("<vlanIdMin>6</vlanIdMin>");
+        buffer.append("<vlanPerVdcExpected>6</vlanPerVdcExpected>");
+        buffer.append("</rack>");
         return buffer.toString();
     }
 }

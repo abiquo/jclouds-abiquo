@@ -55,7 +55,7 @@ public interface InfrastructureClient
     DatacenterDto createDatacenter(DatacenterDto datacenter);
 
     /**
-     * Gte the given datacenter.
+     * Get the given datacenter.
      * 
      * @param datacenterId The id of the datacenter.
      * @return The datacenter or <code>null</code> if it does not exist.
@@ -95,4 +95,30 @@ public interface InfrastructureClient
      */
     RackDto createRack(final Integer datacenterId, final RackDto rack);
 
+    /**
+     * Gte the given rack from the given datacenter.
+     * 
+     * @param datacenterId The id of the datacenter.
+     * @param rackId The id of the rack.
+     * @return The datacenter or <code>null</code> if it does not exist.
+     */
+    DatacenterDto getRack(Integer datacenterId, Integer rackId);
+
+    /**
+     * Updates an existing rack from the given datacenter.
+     * 
+     * @param datacenterId The id of the datacenter.
+     * @param rackId The id of the rack to update.
+     * @param rack The new attributes for the rack.
+     * @return The updated rack.
+     */
+    RackDto updateRack(final Integer datacenterId, final Integer rackId, final RackDto rack);
+
+    /**
+     * Deletes an existing rack from the given datacenter.
+     * 
+     * @param datacenterId The id of the datacenter.
+     * @param datacenterId The id of the rack to delete.
+     */
+    void deleteRack(Integer datacenterId, Integer rackId);
 }

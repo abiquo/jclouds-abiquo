@@ -43,15 +43,14 @@ public class Rack extends DomainWrapper<RackDto>
     @Override
     public void delete()
     {
-        // TODO not implemented context.getApi().getInfrastructureClient().deleteRack(getId());
+        // context.getApi().getInfrastructureClient().deleteRack(getId());
     }
 
     @Override
     public void save()
     {
         // Create rack
-        // TODO not implemented target =
-        // context.getApi().getInfrastructureClient().createRack(target);
+        // target = context.getApi().getInfrastructureClient().createRack(target);
     }
 
     @Override
