@@ -17,39 +17,20 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.infrastructure;
+package org.jclouds.abiquo.strategy;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.Arrays;
-
-import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.DomainWrapper;
 
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link DatacenterDto} filters.
+ * List all entities of the given type.
  * 
  * @author Ignasi Barrera
  */
-public class DatacenterPredicates
+public interface ListRootEntities<T extends DomainWrapper< ? >>
 {
-    public static Predicate<Datacenter> datacenterName(final String name)
-    {
-        return datacenterNames(checkNotNull(name, "name must be defined"));
-    }
+    Iterable<T> execute();
 
-    public static Predicate<Datacenter> datacenterNames(final String... names)
-    {
-        checkNotNull(names, "names must be defined");
-
-        return new Predicate<Datacenter>()
-        {
-            @Override
-            public boolean apply(final Datacenter datacenter)
-            {
-                return Arrays.asList(names).contains(datacenter.getName());
-            }
-        };
-    }
+    Iterable<T> execute(Predicate<T> selector);
 }

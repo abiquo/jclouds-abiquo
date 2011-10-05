@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import org.jclouds.abiquo.domain.Infrastructure;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
+import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
@@ -130,6 +131,24 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListRacks() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = InfrastructureAsyncClient.class.getMethod("listRacks", Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/notmanagedrackdto+xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseRacks.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

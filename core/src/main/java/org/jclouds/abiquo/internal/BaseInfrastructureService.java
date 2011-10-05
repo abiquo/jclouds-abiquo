@@ -24,8 +24,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.features.InfrastructureService;
-import org.jclouds.abiquo.srategy.infrastructure.ListDatacenters;
+import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
+import org.jclouds.abiquo.strategy.infrastructure.ListRacks;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -40,10 +42,14 @@ public class BaseInfrastructureService implements InfrastructureService
 {
     private final ListDatacenters listDatacenters;
 
+    private final ListRacks listRacks;
+
     @Inject
-    protected BaseInfrastructureService(final ListDatacenters listDatacenters)
+    protected BaseInfrastructureService(final ListDatacenters listDatacenters,
+        final ListRacks listRacks)
     {
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
+        this.listRacks = checkNotNull(listRacks, "listRacks");
     }
 
     @Override
@@ -62,5 +68,11 @@ public class BaseInfrastructureService implements InfrastructureService
     public Datacenter findDatacenter(final Predicate<Datacenter> filter)
     {
         return Iterables.getFirst(listDatacenters(), null);
+    }
+
+    @Override
+    public Iterable<Rack> listRacks(final Datacenter parent)
+    {
+        return listRacks.execute(parent);
     }
 }

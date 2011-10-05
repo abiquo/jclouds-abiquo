@@ -17,21 +17,20 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.srategy.infrastructure;
+package org.jclouds.abiquo.strategy;
 
-import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.srategy.ListEntities;
-import org.jclouds.abiquo.srategy.infrastructure.internal.ListDatacentersImpl;
+import org.jclouds.abiquo.domain.DomainWrapper;
 
-import com.google.inject.ImplementedBy;
+import com.google.common.base.Predicate;
 
 /**
- * List datacenters.
+ * List all entities of the given type.
  * 
  * @author Ignasi Barrera
  */
-@ImplementedBy(ListDatacentersImpl.class)
-public interface ListDatacenters extends ListEntities<Datacenter>
+public interface ListEntities<T extends DomainWrapper< ? >, P extends DomainWrapper< ? >>
 {
+    Iterable<T> execute(P parent);
 
+    Iterable<T> execute(P parent, Predicate<T> selector);
 }

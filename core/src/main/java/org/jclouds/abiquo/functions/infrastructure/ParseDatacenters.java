@@ -29,7 +29,7 @@ import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Parses a datacenter sobject.
+ * Parses a datacenter object.
  * 
  * @author Ignasi Barrera
  */
@@ -37,7 +37,7 @@ import com.google.inject.TypeLiteral;
 public class ParseDatacenters extends ParseXMLWithJAXB<DatacentersDto>
 {
     @Inject
-    public ParseDatacenters(XMLParser xml, TypeLiteral<DatacentersDto> type)
+    public ParseDatacenters(final XMLParser xml, final TypeLiteral<DatacentersDto> type)
     {
         super(xml, type);
     }
