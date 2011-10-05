@@ -99,4 +99,8 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
         infrastructureClient.deleteDatacenter(datacenter.getId());
     }
 
+    public void testListRacks() throws Exception
+    {
+        infrastructureClient.listRacks(datacenter.getId());
+    }
 }

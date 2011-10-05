@@ -31,8 +31,8 @@ import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.Infrastructure;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
-import org.jclouds.abiquo.srategy.infrastructure.internal.ListDatacentersImpl;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
+import org.jclouds.abiquo.strategy.infrastructure.internal.ListDatacentersImpl;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 

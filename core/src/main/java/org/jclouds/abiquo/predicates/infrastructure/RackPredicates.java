@@ -23,32 +23,33 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
-import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Rack;
 
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link DatacenterDto} filters.
+ * Container for {@link RackDto} filters.
  * 
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-public class DatacenterPredicates
+public class RackPredicates
 {
-    public static Predicate<Datacenter> datacenterName(final String name)
+    public static Predicate<Rack> rackName(final String name)
     {
-        return datacenterNames(checkNotNull(name, "name must be defined"));
+        return rackNames(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<Datacenter> datacenterNames(final String... names)
+    public static Predicate<Rack> rackNames(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
-        return new Predicate<Datacenter>()
+        return new Predicate<Rack>()
         {
             @Override
-            public boolean apply(final Datacenter datacenter)
+            public boolean apply(final Rack rack)
             {
-                return Arrays.asList(names).contains(datacenter.getName());
+                return Arrays.asList(names).contains(rack.getName());
             }
         };
     }

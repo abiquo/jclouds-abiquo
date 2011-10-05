@@ -25,6 +25,7 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.RacksDto;
 
 /**
  * Provides synchronous access to Abiquo Infrastructure API.
@@ -74,4 +75,12 @@ public interface InfrastructureClient
      * @param datacenterId The id of the datacenter to delete.
      */
     void deleteDatacenter(Integer datacenterId);
+
+    /**
+     * List all not managed racks for a datacenter.
+     * 
+     * @param datacenterId The id of the datacenter.
+     * @return The list of not managed racks for the datacenter.
+     */
+    RacksDto listRacks(Integer datacenterId);
 }

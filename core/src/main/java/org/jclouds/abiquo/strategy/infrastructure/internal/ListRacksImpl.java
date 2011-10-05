@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.srategy.infrastructure.internal;
+package org.jclouds.abiquo.strategy.infrastructure.internal;
 
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
@@ -31,20 +31,21 @@ import javax.inject.Singleton;
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.srategy.infrastructure.ListDatacenters;
+import org.jclouds.abiquo.domain.infrastructure.Rack;
+import org.jclouds.abiquo.strategy.infrastructure.ListRacks;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 
 /**
- * List datacenters.
+ * List racks.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Singleton
-public class ListDatacentersImpl implements ListDatacenters
+public class ListRacksImpl implements ListRacks
 {
     protected final AbiquoContext context;
 
@@ -55,26 +56,25 @@ public class ListDatacentersImpl implements ListDatacenters
     protected Long maxTime;
 
     @Inject
-    ListDatacentersImpl(@Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
-        AbiquoContext context)
+    ListRacksImpl(@Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
+        final AbiquoContext context)
     {
         this.userExecutor = userExecutor;
         this.context = context;
     }
 
     @Override
-    public Iterable<Datacenter> execute()
+    public Iterable<Rack> execute(final Datacenter dc)
     {
-        List<DatacenterDto> dtos =
-            context.getApi().getInfrastructureClient().listDatacenters().getCollection();
+        List<RackDto> dtos =
+            context.getApi().getInfrastructureClient().listRacks(dc.getId()).getCollection();
 
-        return wrap(context, Datacenter.class, dtos);
+        return wrap(context, Rack.class, dtos);
     }
 
     @Override
-    public Iterable<Datacenter> execute(final Predicate<Datacenter> selector)
+    public Iterable<Rack> execute(final Datacenter dc, final Predicate<Rack> selector)
     {
-        return filter(execute(), selector);
+        return filter(execute(dc), selector);
     }
-
 }

@@ -17,18 +17,29 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.srategy;
+package org.jclouds.abiquo.functions.infrastructure;
 
-import com.google.common.base.Predicate;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import org.jclouds.abiquo.functions.ParseXMLWithJAXB;
+import org.jclouds.abiquo.xml.XMLParser;
+
+import com.abiquo.server.core.infrastructure.RacksDto;
+import com.google.inject.TypeLiteral;
 
 /**
- * List all entities of the given type.
+ * Parses a racks object.
  * 
- * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-public interface ListEntities<T>
+@Singleton
+public class ParseRacks extends ParseXMLWithJAXB<RacksDto>
 {
-    Iterable<T> execute();
+    @Inject
+    public ParseRacks(final XMLParser xml, final TypeLiteral<RacksDto> type)
+    {
+        super(xml, type);
+    }
 
-    Iterable<T> execute(Predicate<T> selector);
 }

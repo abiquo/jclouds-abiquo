@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.features;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.internal.BaseInfrastructureService;
 
 import com.google.common.base.Predicate;
@@ -50,4 +51,8 @@ public interface InfrastructureService
      */
     Datacenter findDatacenter(final Predicate<Datacenter> filter);
 
+    /**
+     * Get the list of all not managed racks for a datacenter.
+     */
+    Iterable<Rack> listRacks(Datacenter parent);
 }
