@@ -35,7 +35,7 @@ import com.abiquo.server.core.infrastructure.RackDto;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "live", enabled = false)
+@Test(groups = "live")
 public class RackTest extends BaseAbiquoClientLiveTest
 {
     /** The domain object to test and it's parent. */
@@ -51,8 +51,9 @@ public class RackTest extends BaseAbiquoClientLiveTest
         assertNotNull(datacenter.getId());
 
         rack =
-            Rack.builder(context).name("Aloha").shortDescription("A hawaian rack").haEnabled(false)
-                .vlanIdMin(6).vlanIdMax(3024).vlanPerVdcExpected(6).build();
+            Rack.builder(context).datacenter(datacenter).name("Aloha")
+                .shortDescription("A hawaian rack").haEnabled(false).vlanIdMin(6).vlanIdMax(3024)
+                .vlanPerVdcExpected(6).build();
         rack.save();
         assertNotNull(rack.getId());
     }
@@ -70,7 +71,6 @@ public class RackTest extends BaseAbiquoClientLiveTest
         assertNull(infrastructureClient.getDatacenter(idDatacenter));
     }
 
-    @Test(enabled = false)
     public void testUpdate()
     {
         rack.setName("Updated rack");

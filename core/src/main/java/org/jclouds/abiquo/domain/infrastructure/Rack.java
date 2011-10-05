@@ -29,9 +29,13 @@ import com.abiquo.server.core.infrastructure.RackDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
+ * @see http://community.abiquo.com/display/ABI18/Rack+Resource
  */
 public class Rack extends DomainWrapper<RackDto>
 {
+    /** The datacenter where the rack belongs. */
+    private Datacenter datacenter;
+
     /**
      * Constructor to be used only by the builder.
      */
@@ -50,8 +54,7 @@ public class Rack extends DomainWrapper<RackDto>
     @Override
     public void save()
     {
-        // TODO: How do we get the datacenter to have the racks link?
-        // target = context.getApi().getInfrastructureClient().createRack(target);
+        target = context.getApi().getInfrastructureClient().createRack(datacenter.unwrap(), target);
     }
 
     @Override
@@ -86,6 +89,8 @@ public class Rack extends DomainWrapper<RackDto>
         private Integer vlanPerVdcExpected;
 
         private String vlansIdAvoided;
+
+        private Datacenter datacenter;
 
         public Builder(final AbiquoContext context)
         {
@@ -147,6 +152,12 @@ public class Rack extends DomainWrapper<RackDto>
             return this;
         }
 
+        public Builder datacenter(final Datacenter datacenter)
+        {
+            this.datacenter = datacenter;
+            return this;
+        }
+
         public Rack build()
         {
             RackDto dto = new RackDto();
@@ -159,7 +170,11 @@ public class Rack extends DomainWrapper<RackDto>
             dto.setVlanIdMin(vlanIdMin);
             dto.setVlanPerVdcExpected(vlanPerVdcExpected);
             dto.setVlansIdAvoided(vlansIdAvoided);
-            return new Rack(context, dto);
+            Rack rack = new Rack(context, dto);
+            rack.datacenter = datacenter;
+            return rack;
+
+            // TODO: Validate mandatory fields in build methods?
         }
 
         public static Builder fromRack(final Rack in)
@@ -168,7 +183,7 @@ public class Rack extends DomainWrapper<RackDto>
                 .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
                 .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
                 .vlanPerVdcExpected(in.getVlanPerVdcExpected())
-                .VlansIdAvoided(in.getVlansIdAvoided());
+                .VlansIdAvoided(in.getVlansIdAvoided()).datacenter(in.datacenter);
         }
     }
 

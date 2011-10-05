@@ -49,6 +49,8 @@ public class InfrastructureAsyncClientTest extends
     BaseAbiquoAsyncClientTest<InfrastructureAsyncClient>
 {
 
+    // Datacenter
+
     public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncClient.class.getMethod("listDatacenters");
@@ -137,6 +139,8 @@ public class InfrastructureAsyncClientTest extends
 
         checkFilters(request);
     }
+
+    // Rack
 
     public void testListRacks() throws SecurityException, NoSuchMethodException, IOException
     {

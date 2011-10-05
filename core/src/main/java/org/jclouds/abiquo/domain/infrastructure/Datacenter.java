@@ -29,6 +29,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
+ * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource
  */
 public class Datacenter extends DomainWrapper<DatacenterDto>
 {
