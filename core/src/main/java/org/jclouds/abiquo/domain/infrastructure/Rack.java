@@ -21,7 +21,9 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
 
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 
 /**
@@ -61,6 +63,21 @@ public class Rack extends DomainWrapper<RackDto>
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateRack(target);
+    }
+
+    // Parent access
+
+    public Datacenter getDatacenter()
+    {
+        if (datacenter == null)
+        {
+            Integer datacenterId = target.getIdFromLink(ApiParentLinkName.DATACENTER);
+            DatacenterDto dto =
+                context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+            datacenter = wrap(context, Datacenter.class, dto);
+        }
+
+        return datacenter;
     }
 
     public static Builder builder(final AbiquoContext context)
