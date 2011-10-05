@@ -31,7 +31,8 @@ import com.abiquo.server.core.infrastructure.DatacentersDto;
  * 
  * @see http://community.abiquo.com/display/ABI18/API+Reference
  * @see InfrastructureAsyncClient
- * @author Ignasi Barrera@author Francesc Montserrat
+ * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface InfrastructureClient

@@ -44,13 +44,13 @@ public class InfrastructureClientLiveTest extends BaseAbiquoClientLiveTest
     private DatacenterDto datacenter;
 
     @Override
-    protected void setupEntities() throws Exception
+    protected void setup() throws Exception
     {
         datacenter = createDatacenter();
     }
 
     @Override
-    protected void teardownEntities() throws Exception
+    protected void tearDown() throws Exception
     {
         deleteDatacenter();
     }

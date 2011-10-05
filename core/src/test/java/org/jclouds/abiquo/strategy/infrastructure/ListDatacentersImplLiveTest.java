@@ -33,7 +33,6 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.abiquo.srategy.infrastructure.internal.ListDatacentersImpl;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -52,7 +51,6 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
 
     private DatacenterDto datacenter;
 
-    @BeforeTest(groups = "live", dependsOnMethods = "setupClient")
     @Override
     protected void setupStrategy()
     {
@@ -61,7 +59,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     }
 
     @Override
-    protected void setupEntities()
+    protected void setup()
     {
         Random generator = new Random(System.currentTimeMillis());
         DatacenterDto datacenter = Infrastructure.datacenterPost();
@@ -70,12 +68,11 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     }
 
     @Override
-    protected void teardownEntities()
+    protected void tearDown()
     {
         client.getInfrastructureClient().deleteDatacenter(datacenter.getId());
     }
 
-    @Test
     public void testExecute()
     {
         Iterable<Datacenter> datacenters = strategy.execute();
@@ -83,7 +80,6 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
         assertTrue(size(datacenters) > 0);
     }
 
-    @Test
     public void testExecutePredicateWithoutResults()
     {
         Iterable<Datacenter> datacenters =
@@ -92,7 +88,6 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
         assertEquals(size(datacenters), 0);
     }
 
-    @Test
     public void testExecutePredicateWithResults()
     {
         Iterable<Datacenter> datacenters =
