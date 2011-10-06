@@ -185,9 +185,10 @@ public class InfrastructureAsyncClientTest extends
     public void testGetRack() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncClient.class.getMethod("getRack", Integer.class, Integer.class);
+            InfrastructureAsyncClient.class
+                .getMethod("getRack", DatacenterDto.class, Integer.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1, 1);
+            processor.createRequest(method, Infrastructure.datacenterPut(), 1);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");

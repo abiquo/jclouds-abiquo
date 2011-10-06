@@ -95,18 +95,17 @@ public interface InfrastructureClient
     RackDto createRack(final DatacenterDto datacenter, final RackDto rack);
 
     /**
-     * Gte the given rack from the given datacenter.
+     * Get the given rack from the given datacenter.
      * 
-     * @param datacenterId The id of the datacenter.
+     * @param datacenter The datacenter.
      * @param rackId The id of the rack.
      * @return The datacenter or <code>null</code> if it does not exist.
      */
-    RackDto getRack(Integer datacenterId, Integer rackId);
+    RackDto getRack(DatacenterDto datacenter, Integer rackId);
 
     /**
      * Updates an existing rack from the given datacenter.
      * 
-     * @param datacenter The datacenter.
      * @param rack The new attributes for the rack.
      * @return The updated rack.
      */

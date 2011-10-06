@@ -56,6 +56,7 @@ public class RackTest extends BaseAbiquoClientLiveTest
                 .shortDescription("A hawaian rack").haEnabled(false).vlanIdMin(6).vlanIdMax(3024)
                 .vlanPerVdcExpected(6).build();
         rack.save();
+
         assertNotNull(rack.getId());
     }
 
@@ -66,7 +67,7 @@ public class RackTest extends BaseAbiquoClientLiveTest
         Integer idDatacenter = datacenter.getId();
 
         rack.delete();
-        assertNull(infrastructureClient.getRack(idDatacenter, idRack));
+        assertNull(infrastructureClient.getRack(datacenter.unwrap(), idRack));
 
         datacenter.delete();
         assertNull(infrastructureClient.getDatacenter(idDatacenter));
@@ -78,7 +79,7 @@ public class RackTest extends BaseAbiquoClientLiveTest
         rack.update();
 
         // Recover the updated datacenter
-        RackDto updated = infrastructureClient.getRack(datacenter.getId(), rack.getId());
+        RackDto updated = infrastructureClient.getRack(datacenter.unwrap(), rack.getId());
 
         assertEquals(updated.getName(), "Updated rack");
     }

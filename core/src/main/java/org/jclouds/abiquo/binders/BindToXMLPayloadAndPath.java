@@ -60,17 +60,11 @@ public class BindToXMLPayloadAndPath extends BindToXMLPayload
         checkState(gRequest.getArgs() != null, "args should be initialized at this point");
         SingleResourceTransportDto dto = BindToPath.checkValidInput(payload);
 
-        R updatedRequest = request;
+        // Update the request URI with the configured link URI
         RESTLink linkToUse = BindToPath.getLinkToUse(gRequest, dto);
-
-        // Only replace the URI if we have the PathFromLink annotation
-        if (linkToUse != null)
-        {
-            updatedRequest = BindToPath.bindLinkToPath(updatedRequest, linkToUse);
-        }
+        R updatedRequest = BindToPath.bindLinkToPath(request, linkToUse);
 
         // Add the payload
         return super.bindToRequest(updatedRequest, payload);
     }
-
 }

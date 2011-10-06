@@ -28,6 +28,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayload;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
@@ -126,11 +127,11 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#getRack(Integer, Integer)
      */
     @GET
-    @Path("/datacenters/{datacenter}/racks/{rack}")
     @ResponseParser(ParseRack.class)
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<RackDto> getRack(@PathParam("datacenter") Integer datacenterId,
-        @PathParam("rack") Integer rackId);
+    ListenableFuture<RackDto> getRack(
+        @PathFromLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendToPath.class) Integer rackId);
 
     /**
      * @see InfrastructureClient#updateRack(RackDto)

@@ -43,7 +43,7 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 
 /**
- * Binds teh given object to the payload and extracts the path parameters from the edit link.
+ * Binds the given object to the payload and extracts the path parameters from the edit link.
  * <p>
  * This method should be used in {@link PUT} methods to automatically extract the path parameters
  * from the edit link of the updated object.
@@ -63,14 +63,8 @@ public class BindToPath implements Binder
         checkState(gRequest.getArgs() != null, "args should be initialized at this point");
         SingleResourceTransportDto dto = checkValidInput(input);
 
+        // Update the request URI with the configured link URI
         RESTLink linkToUse = getLinkToUse(gRequest, dto);
-
-        if (linkToUse == null)
-        {
-            throw new BindException(request,
-                "Expected PathFromLink annotation not found in parameter");
-        }
-
         return bindLinkToPath(request, linkToUse);
     }
 
@@ -91,7 +85,13 @@ public class BindToPath implements Binder
             (PathFromLink) Iterables.find(Arrays.asList(annotations),
                 Predicates.instanceOf(PathFromLink.class), null);
 
-        return linkName == null ? null : checkNotNull(payload.searchLink(linkName.value()),
+        if (linkName == null)
+        {
+            throw new BindException(request,
+                "Expected a PathFromLink annotation but not found in the parameter");
+        }
+
+        return checkNotNull(payload.searchLink(linkName.value()),
             "No link was found in object with rel: " + linkName);
     }
 
