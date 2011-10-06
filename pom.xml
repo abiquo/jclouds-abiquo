@@ -15,5 +15,13 @@
         <module>core</module>
     </modules>
 
+    <profiles>
+        <profile>
+            <id>live</id>
+            <modules>
+                <module>live</module>
+            </modules>
+        </profile>
+    </profiles>
 </project>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+    
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.jclouds.provider</groupId>
@@ -9,26 +9,12 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath>../project/pom.xml</relativePath>
     </parent>
-
+    
     <artifactId>jclouds-abiquo</artifactId>
     <packaging>bundle</packaging>
     <name>JClouds Abiquo :: Core</name>
     <description>JClouds components to access Abiquo</description>
-
-    <scm>
-        <url>http://github.com/nacx/jclouds-abiquo</url>
-        <connection>scm:git:git://github.com/nacx/jclouds-abiquo.git</connection>
-        <developerConnection>scm:git:git@github.com:nacx/jclouds-abiquo.git</developerConnection>
-    </scm>
-
-    <properties>
-        <abiquo.version>2.0-SNAPSHOT</abiquo.version>
-        <test.abiquo.identity>admin</test.abiquo.identity>
-        <test.abiquo.credential>xabiquo</test.abiquo.credential>
-        <test.abiquo.apiversion>${abiquo.version}</test.abiquo.apiversion>
-        <test.abiquo.endpoint>http://localhost/api</test.abiquo.endpoint>
-    </properties>
-
+    
     <dependencies>
         <!-- JClouds -->
         <dependency>
@@ -36,7 +22,7 @@
             <artifactId>jclouds-core</artifactId>
             <version>${jclouds.version}</version>
         </dependency>
-
+        
         <!-- Abiquo -->
         <dependency>
             <groupId>com.abiquo</groupId>
@@ -67,7 +53,7 @@
             <artifactId>logback-classic</artifactId>
             <version>0.9.11</version>
         </dependency>
-
+        
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.jclouds</groupId>
@@ -89,7 +75,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
+    
     <build>
         <plugins>
             <plugin>
@@ -114,38 +100,30 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>live</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <configuration>
-                            <systemPropertyVariables>
-                                <test.abiquo.identity>${test.abiquo.identity}</test.abiquo.identity>
-                                <test.abiquo.credential>${test.abiquo.credential}</test.abiquo.credential>
-                                <test.abiquo.endpoint>${test.abiquo.endpoint}</test.abiquo.endpoint>
-                                <test.abiquo.apiversion>${test.abiquo.apiversion}</test.abiquo.apiversion>
-                            </systemPropertyVariables>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>integration</id>
-                                <phase>integration-test</phase>
-                                <goals>
-                                    <goal>test</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
-
+    
 </project>

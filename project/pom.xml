@@ -20,7 +20,18 @@
         <jclouds.version>1.0.0</jclouds.version>
         <maven.compile.source>1.6</maven.compile.source>
         <maven.compile.target>1.6</maven.compile.target>
+        <abiquo.version>2.0-SNAPSHOT</abiquo.version>
+        <test.abiquo.identity>admin</test.abiquo.identity>
+        <test.abiquo.credential>xabiquo</test.abiquo.credential>
+        <test.abiquo.apiversion>${abiquo.version}</test.abiquo.apiversion>
+        <test.abiquo.endpoint>http://localhost/api</test.abiquo.endpoint>
     </properties>
+    
+    <scm>
+        <url>http://github.com/nacx/jclouds-abiquo</url>
+        <connection>scm:git:git://github.com/nacx/jclouds-abiquo.git</connection>
+        <developerConnection>scm:git:git@github.com:nacx/jclouds-abiquo.git</developerConnection>
+    </scm>
 
     <repositories>
         <repository>
@@ -165,37 +176,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <profile>
-            <id>live</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>integration</id>
-                                <phase>integration-test</phase>
-                                <goals>
-                                    <goal>test</goal>
-                                </goals>
-                                <configuration>
-                                    <groups>live,integration</groups>
-                                    <excludedGroups>unit,performance</excludedGroups>
-                                    <properties>
-                                        <property>
-                                            <name>suitename</name>
-                                            <value>Live Integration Tests</value>
-                                        </property>
-                                    </properties>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>

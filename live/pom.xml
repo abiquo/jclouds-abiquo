@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.jclouds.provider</groupId>
+        <artifactId>abiquo-parent</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../project/pom.xml</relativePath>
+    </parent>
+    
+    <artifactId>jclouds-abiquo-live</artifactId>
+    <name>JClouds Abiquo :: Live Tests</name>
+    <description>JClouds live tests to access Abiquo</description>
+    
+    <dependencies>
+        <!-- JClouds Abiquo -->
+        <dependency>
+            <groupId>org.jclouds.provider</groupId>
+            <artifactId>jclouds-abiquo</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jclouds.provider</groupId>
+            <artifactId>jclouds-abiquo</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.jclouds</groupId>
+            <artifactId>jclouds-core</artifactId>
+            <version>${jclouds.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>1.2.16</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jclouds.driver</groupId>
+            <artifactId>jclouds-log4j</artifactId>
+            <version>${jclouds.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <test.abiquo.identity>${test.abiquo.identity}</test.abiquo.identity>
+                        <test.abiquo.credential>${test.abiquo.credential}</test.abiquo.credential>
+                        <test.abiquo.endpoint>${test.abiquo.endpoint}</test.abiquo.endpoint>
+                        <test.abiquo.apiversion>${test.abiquo.apiversion}</test.abiquo.apiversion>
+                    </systemPropertyVariables>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>integration</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                        <configuration>
+                            <groups>live,integration</groups>
+                            <excludedGroups>unit,performance</excludedGroups>
+                            <properties>
+                                <property>
+                                    <name>suitename</name>
+                                    <value>Live Integration Tests</value>
+                                </property>
+                            </properties>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+    <profiles>
+        <profile>
+            <id>live</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+    </profiles>
+    
+</project>
