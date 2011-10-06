@@ -29,6 +29,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
+ * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource
  */
 public class Datacenter extends DomainWrapper<DatacenterDto>
 {
@@ -43,7 +44,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @Override
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteDatacenter(getId());
+        context.getApi().getInfrastructureClient().deleteDatacenter(target);
         target = null;
     }
 
@@ -56,7 +57,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @Override
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateDatacenter(getId(), target);
+        target = context.getApi().getInfrastructureClient().updateDatacenter(target);
     }
 
     public Iterable<Rack> listRacks()

@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain;
 
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 
@@ -47,6 +48,7 @@ public class Infrastructure
         rack.setVlanIdMax(3024);
         rack.setVlanPerVdcExpected(6);
         rack.setNrsq(80);
+        rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         return rack;
     }
 
@@ -54,6 +56,8 @@ public class Infrastructure
     {
         DatacenterDto datacenter = datacenterPost();
         datacenter.setId(1);
+        datacenter.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1"));
+        datacenter.addLink(new RESTLink("racks", "http://localhost/api/admin/datacenters/1/racks"));
         return datacenter;
     }
 
@@ -61,6 +65,7 @@ public class Infrastructure
     {
         RackDto rack = rackPost();
         rack.setId(1);
+        rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
         return rack;
     }
 
@@ -78,6 +83,7 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<rack>");
+        buffer.append(link("http://localhost/api/admin/datacenters/1", "datacenter"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<name>Aloha</name>");
         buffer.append("<nrsq>80</nrsq>");
@@ -93,6 +99,8 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<datacenter>");
+        buffer.append(link("http://localhost/api/admin/datacenters/1", "edit"));
+        buffer.append(link("http://localhost/api/admin/datacenters/1/racks", "racks"));
         buffer.append("<id>1</id>");
         buffer.append("<location>Honolulu</location>");
         buffer.append("<name>DC</name>");
@@ -104,6 +112,8 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<rack>");
+        buffer.append(link("http://localhost/api/admin/datacenters/1", "datacenter"));
+        buffer.append(link("http://localhost/api/admin/datacenters/1/racks/1", "edit"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<id>1</id>");
         buffer.append("<name>Aloha</name>");
@@ -114,5 +124,10 @@ public class Infrastructure
         buffer.append("<vlanPerVdcExpected>6</vlanPerVdcExpected>");
         buffer.append("</rack>");
         return buffer.toString();
+    }
+
+    private static String link(final String href, final String rel)
+    {
+        return "<link href=\"" + href + "\" rel=\"" + rel + "\"/>";
     }
 }

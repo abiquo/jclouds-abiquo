@@ -21,57 +21,39 @@ package org.jclouds.abiquo.binders;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.IOException;
+import java.net.URI;
+import java.net.URL;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.MediaType;
+import javax.inject.Singleton;
 
 import org.jclouds.abiquo.binders.exception.BindException;
-import org.jclouds.abiquo.xml.XMLParser;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.io.MutableContentMetadata;
 import org.jclouds.rest.Binder;
 
-import com.google.common.base.Strings;
-
 /**
- * Binds the request parameters to an XML formatted payload.
+ * Appends the parameter value to the end of the request URI.
  * 
  * @author Ignasi Barrera
  */
-public class BindToXMLPayload implements Binder
+@Singleton
+public class AppendToPath implements Binder
 {
-    protected final XMLParser xmlParser;
 
-    @Inject
-    public BindToXMLPayload(final XMLParser xmlParser)
-    {
-        this.xmlParser = checkNotNull(xmlParser, "xmlParser");
-    }
-
+    @SuppressWarnings("unchecked")
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
+        checkNotNull(input, "input");
+
         try
         {
-            String xml = xmlParser.toXML(input);
-            request.setPayload(xml);
-            MutableContentMetadata metadata = request.getPayload().getContentMetadata();
-            if (hasInvalidContentType(metadata))
-            {
-                metadata.setContentType(MediaType.APPLICATION_XML);
-            }
-            return request;
+            // Append the parameter to the request URI
+            URI path = new URL(request.getEndpoint() + "/" + input).toURI();
+            return (R) request.toBuilder().endpoint(path).build();
         }
-        catch (IOException ex)
+        catch (Exception ex)
         {
             throw new BindException(request, ex);
         }
-    }
-
-    private static boolean hasInvalidContentType(final MutableContentMetadata metadata)
-    {
-        return Strings.isNullOrEmpty(metadata.getContentType())
-            || metadata.getContentType().equals("application/unknown");
     }
 }

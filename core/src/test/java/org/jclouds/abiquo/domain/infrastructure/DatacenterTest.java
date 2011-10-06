@@ -20,12 +20,10 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 
-import java.util.UUID;
-
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
+import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -37,36 +35,22 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class DatacenterTest extends BaseAbiquoClientLiveTest
+public class DatacenterTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
 {
-    /** The domain object to test. */
-    private Datacenter datacenter;
 
     @Override
-    protected void setup() throws Exception
+    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
     {
-        datacenter = Datacenter.builder(context).name(randomName()).location("Honolulu").build();
-        datacenter.save();
-
-        assertNotNull(datacenter.getId());
-    }
-
-    @Override
-    protected void tearDown() throws Exception
-    {
-        Integer idDatacenter = datacenter.getId();
-        datacenter.delete();
-
-        assertNull(infrastructureClient.getDatacenter(idDatacenter));
+        return new InfrastructureTestEnvironment(context);
     }
 
     public void testUpdate()
     {
-        datacenter.setLocation("New York");
-        datacenter.update();
+        env.datacenter.setLocation("New York");
+        env.datacenter.update();
 
         // Recover the updated datacenter
-        DatacenterDto updated = infrastructureClient.getDatacenter(datacenter.getId());
+        DatacenterDto updated = env.infrastructure.getDatacenter(env.datacenter.getId());
 
         assertEquals(updated.getLocation(), "New York");
     }
@@ -74,13 +58,8 @@ public class DatacenterTest extends BaseAbiquoClientLiveTest
     @Test(expectedExceptions = IllegalStateException.class)
     public void testCreateRepeated()
     {
-        Datacenter repeated = Builder.fromDatacenter(datacenter).build();
+        Datacenter repeated = Builder.fromDatacenter(env.datacenter).build();
         repeated.save();
-    }
-
-    private static String randomName()
-    {
-        return UUID.randomUUID().toString().substring(0, 15);
     }
 
 }

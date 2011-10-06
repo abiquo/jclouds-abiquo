@@ -49,6 +49,8 @@ public class InfrastructureAsyncClientTest extends
     BaseAbiquoAsyncClientTest<InfrastructureAsyncClient>
 {
 
+    // Datacenter
+
     public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncClient.class.getMethod("listDatacenters");
@@ -104,10 +106,9 @@ public class InfrastructureAsyncClientTest extends
     public void testUpdateDatacenter() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncClient.class.getMethod("updateDatacenter", Integer.class,
-                DatacenterDto.class);
+            InfrastructureAsyncClient.class.getMethod("updateDatacenter", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1, Infrastructure.datacenterPut());
+            processor.createRequest(method, Infrastructure.datacenterPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
@@ -124,9 +125,9 @@ public class InfrastructureAsyncClientTest extends
     public void testDeleteDatacenter() throws SecurityException, NoSuchMethodException
     {
         Method method =
-            InfrastructureAsyncClient.class.getMethod("deleteDatacenter", Integer.class);
+            InfrastructureAsyncClient.class.getMethod("deleteDatacenter", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1);
+            processor.createRequest(method, Infrastructure.datacenterPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
@@ -139,11 +140,13 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    // Rack
+
     public void testListRacks() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = InfrastructureAsyncClient.class.getMethod("listRacks", Integer.class);
+        Method method = InfrastructureAsyncClient.class.getMethod("listRacks", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1);
+            processor.createRequest(method, Infrastructure.datacenterPut());
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
@@ -160,9 +163,11 @@ public class InfrastructureAsyncClientTest extends
     public void testCreateRack() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncClient.class.getMethod("createRack", Integer.class, RackDto.class);
+            InfrastructureAsyncClient.class.getMethod("createRack", DatacenterDto.class,
+                RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1, Infrastructure.rackPost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.rackPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
@@ -180,9 +185,10 @@ public class InfrastructureAsyncClientTest extends
     public void testGetRack() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncClient.class.getMethod("getRack", Integer.class, Integer.class);
+            InfrastructureAsyncClient.class
+                .getMethod("getRack", DatacenterDto.class, Integer.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1, 1);
+            processor.createRequest(method, Infrastructure.datacenterPut(), 1);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
@@ -198,11 +204,9 @@ public class InfrastructureAsyncClientTest extends
 
     public void testUpdateRack() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            InfrastructureAsyncClient.class.getMethod("updateRack", Integer.class, Integer.class,
-                RackDto.class);
+        Method method = InfrastructureAsyncClient.class.getMethod("updateRack", RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1, 1, Infrastructure.rackPut());
+            processor.createRequest(method, Infrastructure.rackPut());
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
@@ -219,10 +223,9 @@ public class InfrastructureAsyncClientTest extends
 
     public void testDeleteRack() throws SecurityException, NoSuchMethodException
     {
-        Method method =
-            InfrastructureAsyncClient.class.getMethod("deleteRack", Integer.class, Integer.class);
+        Method method = InfrastructureAsyncClient.class.getMethod("deleteRack", RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, 1, 1);
+            processor.createRequest(method, Infrastructure.rackPut());
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");

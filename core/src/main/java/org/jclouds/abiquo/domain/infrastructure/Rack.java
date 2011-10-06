@@ -19,9 +19,13 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
 
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 
 /**
@@ -29,9 +33,13 @@ import com.abiquo.server.core.infrastructure.RackDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
+ * @see http://community.abiquo.com/display/ABI18/Rack+Resource
  */
 public class Rack extends DomainWrapper<RackDto>
 {
+    /** The datacenter where the rack belongs. */
+    private Datacenter datacenter;
+
     /**
      * Constructor to be used only by the builder.
      */
@@ -43,21 +51,36 @@ public class Rack extends DomainWrapper<RackDto>
     @Override
     public void delete()
     {
-        // context.getApi().getInfrastructureClient().deleteRack(getId());
-        // target = null;
+        context.getApi().getInfrastructureClient().deleteRack(target);
+        target = null;
     }
 
     @Override
     public void save()
     {
-        // target = context.getApi().getInfrastructureClient().createRack(target);
+        checkNotNull(datacenter, "The Rack should be assigned to a Datacenter");
+        target = context.getApi().getInfrastructureClient().createRack(datacenter.unwrap(), target);
     }
 
     @Override
     public void update()
     {
-        // Update rack
-        // target = context.getApi().getInfrastructureClient().updateRack(getId(), target);
+        target = context.getApi().getInfrastructureClient().updateRack(target);
+    }
+
+    // Parent access
+
+    public Datacenter getDatacenter()
+    {
+        if (datacenter == null)
+        {
+            Integer datacenterId = target.getIdFromLink(ApiParentLinkName.DATACENTER);
+            DatacenterDto dto =
+                context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+            datacenter = wrap(context, Datacenter.class, dto);
+        }
+
+        return datacenter;
     }
 
     public static Builder builder(final AbiquoContext context)
@@ -86,6 +109,8 @@ public class Rack extends DomainWrapper<RackDto>
         private Integer vlanPerVdcExpected;
 
         private String vlansIdAvoided;
+
+        private Datacenter datacenter;
 
         public Builder(final AbiquoContext context)
         {
@@ -147,6 +172,12 @@ public class Rack extends DomainWrapper<RackDto>
             return this;
         }
 
+        public Builder datacenter(final Datacenter datacenter)
+        {
+            this.datacenter = datacenter;
+            return this;
+        }
+
         public Rack build()
         {
             RackDto dto = new RackDto();
@@ -159,7 +190,9 @@ public class Rack extends DomainWrapper<RackDto>
             dto.setVlanIdMin(vlanIdMin);
             dto.setVlanPerVdcExpected(vlanPerVdcExpected);
             dto.setVlansIdAvoided(vlansIdAvoided);
-            return new Rack(context, dto);
+            Rack rack = new Rack(context, dto);
+            rack.datacenter = datacenter;
+            return rack;
         }
 
         public static Builder fromRack(final Rack in)
@@ -168,7 +201,7 @@ public class Rack extends DomainWrapper<RackDto>
                 .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
                 .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
                 .vlanPerVdcExpected(in.getVlanPerVdcExpected())
-                .VlansIdAvoided(in.getVlansIdAvoided());
+                .VlansIdAvoided(in.getVlansIdAvoided()).datacenter(in.datacenter);
         }
     }
 

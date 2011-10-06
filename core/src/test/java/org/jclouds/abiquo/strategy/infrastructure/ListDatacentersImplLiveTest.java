@@ -70,7 +70,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     @Override
     protected void tearDown()
     {
-        client.getInfrastructureClient().deleteDatacenter(datacenter.getId());
+        client.getInfrastructureClient().deleteDatacenter(datacenter);
     }
 
     public void testExecute()

@@ -65,7 +65,7 @@ public class ListRacksImpl implements ListRacks
     @Override
     public Iterable<Rack> execute(final Datacenter datacenter)
     {
-        RacksDto result = context.getApi().getInfrastructureClient().listRacks(datacenter.getId());
+        RacksDto result = context.getApi().getInfrastructureClient().listRacks(datacenter.unwrap());
         return wrap(context, Rack.class, result.getCollection());
     }
 
