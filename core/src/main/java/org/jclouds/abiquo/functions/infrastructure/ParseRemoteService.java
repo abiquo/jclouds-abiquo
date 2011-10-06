@@ -25,19 +25,19 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.functions.ParseXMLWithJAXB;
 import org.jclouds.abiquo.xml.XMLParser;
 
-import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Parses a datacenters object.
+ * Parses a remote service object.
  * 
- * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 @Singleton
-public class ParseDatacenters extends ParseXMLWithJAXB<DatacentersDto>
+public class ParseRemoteService extends ParseXMLWithJAXB<RemoteServiceDto>
 {
     @Inject
-    public ParseDatacenters(final XMLParser xml, final TypeLiteral<DatacentersDto> type)
+    public ParseRemoteService(final XMLParser xml, final TypeLiteral<RemoteServiceDto> type)
     {
         super(xml, type);
     }

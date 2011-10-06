@@ -29,14 +29,18 @@ import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
+import org.jclouds.abiquo.functions.infrastructure.ParseRemoteService;
+import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServices;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RackDto;
+import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -166,8 +170,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRack", DatacenterDto.class,
                 RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(),
-                Infrastructure.rackPost());
+            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
+                .rackPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
@@ -229,6 +233,114 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    // Remote service
+
+    public void testListRemoteService() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listRemoteServices", DatacenterDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, Infrastructure.datacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseRemoteServices.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCreateRemoteService() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("createRemoteService", DatacenterDto.class,
+                RemoteServiceDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
+                .remoteServicePost());
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(Infrastructure.remoteServicePostPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseRemoteService.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetRemoteService() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getRemoteService", DatacenterDto.class,
+                RemoteServiceType.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                RemoteServiceType.STORAGE_SYSTEM_MONITOR.toString());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/remoteservices/storagesystemmonitor HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseRemoteService.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateRemoteService() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class
+                .getMethod("updateRemoteService", RemoteServiceDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, Infrastructure.remoteServicePut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/datacenters/1/remoteservices/nodecollector HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(Infrastructure.remoteServicePutPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseRemoteService.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteRemoteService() throws SecurityException, NoSuchMethodException
+    {
+        Method method =
+            InfrastructureAsyncClient.class
+                .getMethod("deleteRemoteService", RemoteServiceDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, Infrastructure.remoteServicePut());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/admin/datacenters/1/remoteservices/nodecollector HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 

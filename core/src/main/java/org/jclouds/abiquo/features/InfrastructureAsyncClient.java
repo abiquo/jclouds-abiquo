@@ -36,6 +36,7 @@ import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
+import org.jclouds.abiquo.functions.infrastructure.ParseRemoteService;
 import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServices;
 import org.jclouds.abiquo.reference.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
@@ -46,10 +47,12 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
+import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -166,12 +169,36 @@ public interface InfrastructureAsyncClient
         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#getRack(DatacenterDto, Integer)
+     * @see InfrastructureClient#createRemoteService(DatacenterDto, RemoteServiceDto)
+     */
+    @POST
+    @ResponseParser(ParseRemoteService.class)
+    ListenableFuture<RemoteServiceDto> createRemoteService(
+        @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(BindToXMLPayload.class) RemoteServiceDto remoteService);
+
+    /**
+     * @see InfrastructureClient#getRemoteService(DatacenterDto, RemoteServiceType)
      */
     @GET
-    @ResponseParser(ParseRack.class)
+    @ResponseParser(ParseRemoteService.class)
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<RackDto> getRack(
-        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @BinderParam(AppendToPath.class) Integer rackId);
+    ListenableFuture<RemoteServiceDto> getRemoteService(
+        @EndpointLink("remoteservices") @BinderParam(BindToPath.class) final DatacenterDto datacenter,
+        @BinderParam(AppendToPath.class) final RemoteServiceType remoteServiceId);
+
+    /**
+     * @see InfrastructureClient#updateRemoteService(RemoteServiceDto)
+     */
+    @PUT
+    @ResponseParser(ParseRemoteService.class)
+    ListenableFuture<RemoteServiceDto> updateRemoteService(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RemoteServiceDto remoteService);
+
+    /**
+     * @see InfrastructureClient#deleteRemoteService(RemoteServiceDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteRemoteService(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
 }

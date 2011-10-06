@@ -16,30 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jclouds.abiquo;
 
-package org.jclouds.abiquo.functions.infrastructure;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import org.jclouds.abiquo.functions.ParseXMLWithJAXB;
-import org.jclouds.abiquo.xml.XMLParser;
-
-import com.abiquo.server.core.infrastructure.DatacentersDto;
-import com.google.inject.TypeLiteral;
-
-/**
- * Parses a datacenters object.
- * 
- * @author Ignasi Barrera
- */
-@Singleton
-public class ParseDatacenters extends ParseXMLWithJAXB<DatacentersDto>
+public class Test
 {
-    @Inject
-    public ParseDatacenters(final XMLParser xml, final TypeLiteral<DatacentersDto> type)
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args)
     {
-        super(xml, type);
+        // TODO Auto-generated method stub
+
     }
 
 }

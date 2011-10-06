@@ -30,7 +30,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 
 /**
- * Adds high level functionality to {@link RackDto}.
+ * Adds high level functionality to {@link RemoteServiceDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -52,22 +52,22 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     @Override
     public void delete()
     {
-        // context.getApi().getInfrastructureClient().deleteRemoteService(target);
+        context.getApi().getInfrastructureClient().deleteRemoteService(target);
         target = null;
     }
 
     @Override
     public void save()
     {
-        // target =
-        // context.getApi().getInfrastructureClient().createRemoteService(datacenter.unwrap(),
-        // target);
+        target =
+            context.getApi().getInfrastructureClient().createRemoteService(datacenter.unwrap(),
+                target);
     }
 
     @Override
     public void update()
     {
-        // target = context.getApi().getInfrastructureClient().updateRemoteService(target);
+        target = context.getApi().getInfrastructureClient().updateRemoteService(target);
     }
 
     // Parent access
@@ -91,22 +91,6 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         private AbiquoContext context;
 
         private Integer id;
-
-        private String name;
-
-        private String shortDescription;
-
-        private Boolean haEnabled;
-
-        private Integer nrsq;
-
-        private Integer vlanIdMax;
-
-        private Integer vlanIdMin;
-
-        private Integer vlanPerVdcExpected;
-
-        private String vlansIdAvoided;
 
         private Datacenter datacenter;
 

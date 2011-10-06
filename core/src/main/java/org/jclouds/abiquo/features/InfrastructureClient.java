@@ -23,10 +23,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
+import com.abiquo.server.core.infrastructure.RemoteServiceDto;
+import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 
 /**
  * Provides synchronous access to Abiquo Infrastructure API.
@@ -99,7 +102,7 @@ public interface InfrastructureClient
      * 
      * @param datacenter The datacenter.
      * @param rackId The id of the rack.
-     * @return The datacenter or <code>null</code> if it does not exist.
+     * @return The rack or <code>null</code> if it does not exist.
      */
     RackDto getRack(DatacenterDto datacenter, Integer rackId);
 
@@ -124,5 +127,39 @@ public interface InfrastructureClient
      * @param datacenter The datacenter.
      * @return The list of remote services for the datacenter.
      */
-    RacksDto listRemoteServices(DatacenterDto dataceter);
+    RemoteServicesDto listRemoteServices(DatacenterDto dataceter);
+
+    /**
+     * Create a new remote service in a datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @param remoteService The remote service to be created.
+     * @return The created remote service.
+     */
+    RemoteServiceDto createRemoteService(final DatacenterDto datacenter,
+        final RemoteServiceDto remoteService);
+
+    /**
+     * Get the given remote service from the given datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @param remoteServiceId The id of the remote service.
+     * @return The datacenter or <code>null</code> if it does not exist.
+     */
+    RemoteServiceDto getRemoteService(DatacenterDto datacenter, RemoteServiceType remoteServiceId);
+
+    /**
+     * Updates an existing remote service from the given datacenter.
+     * 
+     * @param remoteService The new attributes for the remote service.
+     * @return The updated remote service.
+     */
+    RemoteServiceDto updateRemoteService(RemoteServiceDto remoteService);
+
+    /**
+     * Deletes an existing remote service.
+     * 
+     * @param remoteService The remote service to delete.
+     */
+    void deleteRemoteService(RemoteServiceDto remoteService);
 }
