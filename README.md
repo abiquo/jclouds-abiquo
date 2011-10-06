@@ -29,5 +29,5 @@ will do our best to fix it.
 License
 -------
 
-See LICENSE file for details.
+See LICENSE and NOTICE file for details.
 
