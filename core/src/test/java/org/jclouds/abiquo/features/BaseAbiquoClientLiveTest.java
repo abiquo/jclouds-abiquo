@@ -25,6 +25,7 @@ import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
+import org.jclouds.abiquo.environment.TestEnvironment;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
@@ -33,55 +34,46 @@ import org.testng.annotations.BeforeClass;
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoClientLiveTest
+public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
 {
+    /** The rest context. */
     protected AbiquoContext context;
 
-    protected String provider = AbiquoContextFactory.PROVIDER_NAME;
-
-    protected String identity;
-
-    protected String credential;
-
-    protected String endpoint;
-
-    protected InfrastructureClient infrastructureClient;
+    /** The test environment. */
+    protected E env;
 
     @BeforeClass(groups = "live")
     protected void setupClient() throws Exception
     {
-        identity = checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
-        credential =
+        String identity =
+            checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
+        String credential =
             checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
-        endpoint = checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
+        String endpoint =
+            checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
 
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
         context = new AbiquoContextFactory().createContext(identity, credential, props);
-        infrastructureClient = context.getApi().getInfrastructureClient();
+        env = environment(context);
 
-        setup();
+        env.setup();
     }
+
+    /**
+     * Get the test environment for the current tests.
+     */
+    protected abstract E environment(AbiquoContext context);
 
     @AfterClass(groups = "live")
     public void teardownClient() throws Exception
     {
-        tearDown();
+        env.tearDown();
 
         if (context != null)
         {
             context.close();
         }
-    }
-
-    protected void setup() throws Exception
-    {
-        // Override if necessary
-    }
-
-    protected void tearDown() throws Exception
-    {
-        // Override if necessary
     }
 
 }

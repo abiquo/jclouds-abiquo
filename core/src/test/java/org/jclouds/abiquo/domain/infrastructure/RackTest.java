@@ -20,11 +20,9 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNull;
 
-import java.util.UUID;
-
+import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -37,63 +35,30 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RackTest extends BaseAbiquoClientLiveTest
+public class RackTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
 {
-    /** The domain object to test and it's parent. */
-    private Rack rack;
-
-    private Datacenter datacenter;
-
     @Override
-    protected void setup() throws Exception
+    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
     {
-        datacenter = Datacenter.builder(context).name(randomName()).location("Honolulu").build();
-        datacenter.save();
-        assertNotNull(datacenter.getId());
-
-        rack =
-            Rack.builder(context).datacenter(datacenter).name("Aloha")
-                .shortDescription("A hawaian rack").haEnabled(false).vlanIdMin(6).vlanIdMax(3024)
-                .vlanPerVdcExpected(6).build();
-        rack.save();
-
-        assertNotNull(rack.getId());
-    }
-
-    @Override
-    protected void tearDown() throws Exception
-    {
-        Integer idRack = rack.getId();
-        Integer idDatacenter = datacenter.getId();
-
-        rack.delete();
-        assertNull(infrastructureClient.getRack(datacenter.unwrap(), idRack));
-
-        datacenter.delete();
-        assertNull(infrastructureClient.getDatacenter(idDatacenter));
+        return new InfrastructureTestEnvironment(context);
     }
 
     public void testUpdate()
     {
-        rack.setName("Updated rack");
-        rack.update();
+        env.rack.setName("Updated rack");
+        env.rack.update();
 
         // Recover the updated datacenter
-        RackDto updated = infrastructureClient.getRack(datacenter.unwrap(), rack.getId());
+        RackDto updated = env.infrastructure.getRack(env.datacenter.unwrap(), env.rack.getId());
 
         assertEquals(updated.getName(), "Updated rack");
     }
 
     public void testListRacks()
     {
-        Iterable<Rack> racks = datacenter.listRacks();
+        Iterable<Rack> racks = env.datacenter.listRacks();
         assertEquals(Iterables.size(racks), 1);
-        assertEquals(Iterables.getOnlyElement(racks).getId(), rack.getId());
-    }
-
-    private static String randomName()
-    {
-        return UUID.randomUUID().toString().substring(0, 15);
+        assertEquals(Iterables.getOnlyElement(racks).getId(), env.rack.getId());
     }
 
 }
