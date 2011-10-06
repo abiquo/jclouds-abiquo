@@ -117,4 +117,12 @@ public interface InfrastructureClient
      * @param rack The rack to delete.
      */
     void deleteRack(final RackDto rack);
+
+    /**
+     * List all remote services of the datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @return The list of remote services for the datacenter.
+     */
+    RacksDto listRemoteServices(DatacenterDto dataceter);
 }

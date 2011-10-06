@@ -36,6 +36,7 @@ import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
+import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServices;
 import org.jclouds.abiquo.reference.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.filters.BasicAuthentication;
@@ -49,6 +50,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
+import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -64,6 +66,9 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin")
 public interface InfrastructureAsyncClient
 {
+
+    // Datacenter
+
     /**
      * @see InfrastructureClient#listDatacenters()
      */
@@ -105,6 +110,8 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteDatacenter(
         @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
+    // Rack
+
     /**
      * @see InfrastructureClient#listRacks(DatacenterDto)
      */
@@ -115,7 +122,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#createRack
+     * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
      */
     @POST
     @ResponseParser(ParseRack.class)
@@ -147,4 +154,24 @@ public interface InfrastructureAsyncClient
     @DELETE
     ListenableFuture<Void> deleteRack(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
+
+    // Remote service
+    /**
+     * @see InfrastructureClient#listRemoteServices(DatacenterDto)
+     */
+    @GET
+    @Consumes(MediaType.APPLICATION_XML)
+    @ResponseParser(ParseRemoteServices.class)
+    ListenableFuture<RemoteServicesDto> listRemoteServices(
+        @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#getRack(DatacenterDto, Integer)
+     */
+    @GET
+    @ResponseParser(ParseRack.class)
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<RackDto> getRack(
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendToPath.class) Integer rackId);
 }

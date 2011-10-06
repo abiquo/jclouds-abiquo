@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.ClientErrors;
 import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -58,7 +59,6 @@ public class Rack extends DomainWrapper<RackDto>
     @Override
     public void save()
     {
-        checkNotNull(datacenter, "The Rack should be assigned to a Datacenter");
         target = context.getApi().getInfrastructureClient().createRack(datacenter.unwrap(), target);
     }
 
@@ -72,20 +72,16 @@ public class Rack extends DomainWrapper<RackDto>
 
     public Datacenter getDatacenter()
     {
-        if (datacenter == null)
-        {
-            Integer datacenterId = target.getIdFromLink(ApiParentLinkName.DATACENTER);
-            DatacenterDto dto =
-                context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
-            datacenter = wrap(context, Datacenter.class, dto);
-        }
+        Integer datacenterId = target.getIdFromLink(ApiParentLinkName.DATACENTER);
+        DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+        datacenter = wrap(context, Datacenter.class, dto);
 
         return datacenter;
     }
 
-    public static Builder builder(final AbiquoContext context)
+    public static Builder builder(final AbiquoContext context, final Datacenter datacenter)
     {
-        return new Builder(context);
+        return new Builder(context, datacenter);
     }
 
     public static class Builder
@@ -112,9 +108,11 @@ public class Rack extends DomainWrapper<RackDto>
 
         private Datacenter datacenter;
 
-        public Builder(final AbiquoContext context)
+        public Builder(final AbiquoContext context, final Datacenter datacenter)
         {
             super();
+            checkNotNull(datacenter, ClientErrors.NULL_PARENT + Datacenter.class);
+            this.datacenter = datacenter;
             this.context = context;
         }
 
@@ -174,6 +172,7 @@ public class Rack extends DomainWrapper<RackDto>
 
         public Builder datacenter(final Datacenter datacenter)
         {
+            checkNotNull(datacenter, ClientErrors.NULL_PARENT + Datacenter.class);
             this.datacenter = datacenter;
             return this;
         }
@@ -197,11 +196,11 @@ public class Rack extends DomainWrapper<RackDto>
 
         public static Builder fromRack(final Rack in)
         {
-            return Rack.builder(in.context).id(in.getId()).name(in.getName())
-                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
-                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
-                .vlanPerVdcExpected(in.getVlanPerVdcExpected())
-                .VlansIdAvoided(in.getVlansIdAvoided()).datacenter(in.datacenter);
+            return Rack.builder(in.context, in.datacenter).id(in.getId()).name(in.getName())
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(
+                    in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcExpected(in.getVlanPerVdcExpected()).VlansIdAvoided(
+                    in.getVlansIdAvoided());
         }
     }
 
