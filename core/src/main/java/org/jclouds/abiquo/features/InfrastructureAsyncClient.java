@@ -37,7 +37,7 @@ import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
 import org.jclouds.abiquo.reference.AbiquoMediaType;
-import org.jclouds.abiquo.rest.annotations.PathFromLink;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
@@ -96,14 +96,14 @@ public interface InfrastructureAsyncClient
     @PUT
     @ResponseParser(ParseDatacenter.class)
     ListenableFuture<DatacenterDto> updateDatacenter(
-        @PathFromLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterDto datacenter);
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterDto datacenter);
 
     /**
      * @see InfrastructureClient#deleteDatacenter(DatacenterDto)
      */
     @DELETE
     ListenableFuture<Void> deleteDatacenter(
-        @PathFromLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+        @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
      * @see InfrastructureClient#listRacks(DatacenterDto)
@@ -112,7 +112,7 @@ public interface InfrastructureAsyncClient
     @Consumes(AbiquoMediaType.APPLICATION_NOTMANAGEDRACKSDTO_XML)
     @ResponseParser(ParseRacks.class)
     ListenableFuture<RacksDto> listRacks(
-        @PathFromLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
      * @see InfrastructureClient#createRack
@@ -120,7 +120,7 @@ public interface InfrastructureAsyncClient
     @POST
     @ResponseParser(ParseRack.class)
     ListenableFuture<RackDto> createRack(
-        @PathFromLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(BindToXMLPayload.class) RackDto rack);
 
     /**
@@ -130,7 +130,7 @@ public interface InfrastructureAsyncClient
     @ResponseParser(ParseRack.class)
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<RackDto> getRack(
-        @PathFromLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(AppendToPath.class) Integer rackId);
 
     /**
@@ -139,12 +139,12 @@ public interface InfrastructureAsyncClient
     @PUT
     @ResponseParser(ParseRack.class)
     ListenableFuture<RackDto> updateRack(
-        @PathFromLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
 
     /**
      * @see InfrastructureClient#deleteRack(RackDto)
      */
     @DELETE
     ListenableFuture<Void> deleteRack(
-        @PathFromLink("edit") @BinderParam(BindToPath.class) RackDto rack);
+        @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 }

@@ -25,20 +25,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Indicates that the annotated parameter will generate the request URI based on the link specified
- * in the value.
+ * Indicates the link to be used to generate the enpoind for the request.
  * 
  * @author Ignasi Barrera
  */
 @Target({ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface PathFromLink
+public @interface EndpointLink
 {
 
     /**
-     * Gets the <code>rel</code> of the link that will be used to generate the request URI.
-     * 
-     * @return The <code>rel</code> of the link that will be used to generate the request URI.
+     * The name of the link that will be used to generate the request endpoint.
      */
     String value();
 }

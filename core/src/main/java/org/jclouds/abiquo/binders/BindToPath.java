@@ -32,7 +32,7 @@ import javax.inject.Singleton;
 import javax.ws.rs.PUT;
 
 import org.jclouds.abiquo.binders.exception.BindException;
-import org.jclouds.abiquo.rest.annotations.PathFromLink;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
@@ -81,14 +81,14 @@ public class BindToPath implements Binder
         int argIndex = request.getArgs().indexOf(payload);
         Annotation[] annotations = request.getJavaMethod().getParameterAnnotations()[argIndex];
 
-        PathFromLink linkName =
-            (PathFromLink) Iterables.find(Arrays.asList(annotations),
-                Predicates.instanceOf(PathFromLink.class), null);
+        EndpointLink linkName =
+            (EndpointLink) Iterables.find(Arrays.asList(annotations),
+                Predicates.instanceOf(EndpointLink.class), null);
 
         if (linkName == null)
         {
             throw new BindException(request,
-                "Expected a PathFromLink annotation but not found in the parameter");
+                "Expected a EndpointLink annotation but not found in the parameter");
         }
 
         return checkNotNull(payload.searchLink(linkName.value()),
