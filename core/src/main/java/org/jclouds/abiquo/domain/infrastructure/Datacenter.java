@@ -23,6 +23,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.google.common.base.Predicate;
 
 /**
  * Adds high level functionality to {@link DatacenterDto}.
@@ -63,6 +64,16 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public Iterable<Rack> listRacks()
     {
         return context.getInfrastructureService().listRacks(this);
+    }
+
+    public Iterable<Rack> listRacks(final Predicate<Rack> filter)
+    {
+        return context.getInfrastructureService().listRacks(this, filter);
+    }
+
+    public Rack findRack(final Predicate<Rack> filter)
+    {
+        return context.getInfrastructureService().findRack(this, filter);
     }
 
     public static Builder builder(final AbiquoContext context)
