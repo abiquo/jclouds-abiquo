@@ -124,7 +124,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) RackDto rack);
 
     /**
-     * @see InfrastructureClient#getRack(Integer, Integer)
+     * @see InfrastructureClient#getRack(DatacenterDto, Integer)
      */
     @GET
     @ResponseParser(ParseRack.class)
