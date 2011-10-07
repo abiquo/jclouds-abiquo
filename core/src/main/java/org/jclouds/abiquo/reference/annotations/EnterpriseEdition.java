@@ -19,20 +19,17 @@
 
 package org.jclouds.abiquo.reference.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 
 /**
- * Indicates that the annotated method or class will access Abiquo Enterprise Edition
- * functionallity. If the target Abiquo Cloud platform is a COmmunity Edition version, the
- * invocation of the method may have unexpected results.
+ * Indicates that the annotated element will access Abiquo Enterprise Edition functionallity. If the
+ * target Abiquo Cloud platform is a Community Edition version, the invocation of the method may
+ * have unexpected results.
  * 
  * @author Ignasi Barrera
  */
-@Target({ElementType.TYPE, ElementType.METHOD})
-@Retention(RetentionPolicy.SOURCE)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface EnterpriseEdition
 {
 }
