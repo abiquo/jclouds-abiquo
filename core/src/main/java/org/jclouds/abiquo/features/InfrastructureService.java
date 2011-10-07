@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
+import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.internal.BaseInfrastructureService;
 
 import com.google.common.base.Predicate;
@@ -43,7 +44,7 @@ public interface InfrastructureService
     /**
      * Get the list of datacenters matching the given filter.
      */
-    Iterable<Datacenter> listDatacenters(Predicate<Datacenter> filter);
+    Iterable<Datacenter> listDatacenters(final Predicate<Datacenter> filter);
 
     /**
      * Get the first datacenter that matches the given filter or <code>null</code> if none is found.
@@ -53,16 +54,34 @@ public interface InfrastructureService
     /**
      * Get the list of the racks in the given datacenter.
      */
-    Iterable<Rack> listRacks(Datacenter datacenter);
+    Iterable<Rack> listRacks(final Datacenter datacenter);
 
     /**
      * Get the list of the racks in the given datacenter matching the given filter.
      */
-    Iterable<Rack> listRacks(Datacenter datacenter, Predicate<Rack> filter);
+    Iterable<Rack> listRacks(final Datacenter datacenter, final Predicate<Rack> filter);
 
     /**
      * Get the first rack in the given datacenter that matches the given filter or <code>null</code>
      * if none is found.
      */
-    Rack findRack(Datacenter datacenter, final Predicate<Rack> filter);
+    Rack findRack(final Datacenter datacenter, final Predicate<Rack> filter);
+
+    /**
+     * Get the list of the remote services in the given datacenter.
+     */
+    Iterable<RemoteService> listRemoteServices(final Datacenter datacenter);
+
+    /**
+     * Get the list of the remote services in the given datacenter matching the given filters.
+     */
+    Iterable<RemoteService> listRemoteServices(final Datacenter datacenter,
+        final Predicate<RemoteService> filter);
+
+    /**
+     * Get the first remote service in the given datacenter that matches the given filter or
+     * <code>null</code> if none is found.
+     */
+    RemoteService findRemoteService(final Datacenter datacenter,
+        final Predicate<RemoteService> filter);
 }

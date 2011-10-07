@@ -23,9 +23,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.ClientErrors;
 import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
+import org.jclouds.abiquo.reference.ClientErrors;
 
+import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 
@@ -60,8 +61,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient().createRemoteService(datacenter.unwrap(),
-                target);
+            context.getApi().getInfrastructureClient()
+                .createRemoteService(datacenter.unwrap(), target);
     }
 
     @Override
@@ -130,5 +131,10 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public Integer getId()
     {
         return target.getId();
+    }
+
+    public RemoteServiceType getType()
+    {
+        return target.getType();
     }
 }

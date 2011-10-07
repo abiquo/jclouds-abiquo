@@ -26,9 +26,11 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
+import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.abiquo.strategy.infrastructure.ListRacks;
+import org.jclouds.abiquo.strategy.infrastructure.ListRemoteServices;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -46,12 +48,15 @@ public class BaseInfrastructureService implements InfrastructureService
 
     private final ListRacks listRacks;
 
+    private final ListRemoteServices listRemoteServices;
+
     @Inject
     protected BaseInfrastructureService(final ListDatacenters listDatacenters,
-        final ListRacks listRacks)
+        final ListRacks listRacks, final ListRemoteServices listRemoteServices)
     {
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
         this.listRacks = checkNotNull(listRacks, "listRacks");
+        this.listRemoteServices = checkNotNull(listRemoteServices, "listRemoteServices");
     }
 
     @Override
@@ -88,6 +93,26 @@ public class BaseInfrastructureService implements InfrastructureService
     public Rack findRack(final Datacenter datacenter, final Predicate<Rack> filter)
     {
         return Iterables.getFirst(listRacks(datacenter), null);
+    }
+
+    @Override
+    public Iterable<RemoteService> listRemoteServices(final Datacenter datacenter)
+    {
+        return listRemoteServices.execute(datacenter);
+    }
+
+    @Override
+    public Iterable<RemoteService> listRemoteServices(final Datacenter datacenter,
+        final Predicate<RemoteService> filter)
+    {
+        return listRemoteServices.execute(datacenter, filter);
+    }
+
+    @Override
+    public RemoteService findRemoteService(final Datacenter datacenter,
+        final Predicate<RemoteService> filter)
+    {
+        return Iterables.getFirst(listRemoteServices(datacenter), null);
     }
 
 }

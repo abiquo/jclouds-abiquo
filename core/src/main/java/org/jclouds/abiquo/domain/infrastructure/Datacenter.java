@@ -76,6 +76,21 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return context.getInfrastructureService().findRack(this, filter);
     }
 
+    public Iterable<RemoteService> listRemoteServices()
+    {
+        return context.getInfrastructureService().listRemoteServices(this);
+    }
+
+    public Iterable<RemoteService> listRemoteServices(final Predicate<RemoteService> filter)
+    {
+        return context.getInfrastructureService().listRemoteServices(this, filter);
+    }
+
+    public RemoteService findRemoteService(final Predicate<RemoteService> filter)
+    {
+        return context.getInfrastructureService().findRemoteService(this, filter);
+    }
+
     public static Builder builder(final AbiquoContext context)
     {
         return new Builder(context);
