@@ -48,12 +48,21 @@ public class AppendToPath implements Binder
         try
         {
             // Append the parameter to the request URI
-            URI path = new URL(request.getEndpoint().toString() + "/" + input.toString()).toURI();
+            String valueToAppend = getValue(request, input);
+            URI path = new URL(request.getEndpoint().toString() + "/" + valueToAppend).toURI();
             return (R) request.toBuilder().endpoint(path).build();
         }
         catch (Exception ex)
         {
             throw new BindException(request, ex);
         }
+    }
+
+    /**
+     * Get the value that will be appended to the request URI.
+     */
+    protected <R extends HttpRequest> String getValue(final R request, final Object input)
+    {
+        return input.toString();
     }
 }

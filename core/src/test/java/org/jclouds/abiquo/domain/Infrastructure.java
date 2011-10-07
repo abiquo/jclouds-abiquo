@@ -107,7 +107,7 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<rack>");
-        buffer.append(link("http://localhost/api/admin/datacenters/1", "datacenter"));
+        buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<name>Aloha</name>");
         buffer.append("<nrsq>80</nrsq>");
@@ -134,10 +134,9 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<datacenter>");
-        buffer.append(link("http://localhost/api/admin/datacenters/1/racks", "racks"));
-        buffer.append(link("http://localhost/api/admin/datacenters/1/remoteservices",
-            "remoteservices"));
-        buffer.append(link("http://localhost/api/admin/datacenters/1", "edit"));
+        buffer.append(link("/admin/datacenters/1/racks", "racks"));
+        buffer.append(link("/admin/datacenters/1/remoteservices", "remoteservices"));
+        buffer.append(link("/admin/datacenters/1", "edit"));
         buffer.append("<id>1</id>");
         buffer.append("<location>Honolulu</location>");
         buffer.append("<name>DC</name>");
@@ -149,8 +148,8 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<rack>");
-        buffer.append(link("http://localhost/api/admin/datacenters/1", "datacenter"));
-        buffer.append(link("http://localhost/api/admin/datacenters/1/racks/1", "edit"));
+        buffer.append(link("/admin/datacenters/1", "datacenter"));
+        buffer.append(link("/admin/datacenters/1/racks/1", "edit"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<id>1</id>");
         buffer.append("<name>Aloha</name>");
@@ -167,9 +166,8 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<remoteService>");
-        buffer.append(link("http://localhost/api/admin/datacenters/1", "datacenter"));
-        buffer.append(link("http://localhost/api/admin/datacenters/1/remoteservices/nodecollector",
-            "edit"));
+        buffer.append(link("/admin/datacenters/1", "datacenter"));
+        buffer.append(link("/admin/datacenters/1/remoteservices/nodecollector", "edit"));
         buffer.append("<id>1</id>");
         buffer.append("<status>0</status>");
         buffer.append("<type>NODE_COLLECTOR</type>");
@@ -180,6 +178,6 @@ public class Infrastructure
 
     private static String link(final String href, final String rel)
     {
-        return "<link href=\"" + href + "\" rel=\"" + rel + "\"/>";
+        return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\"/>";
     }
 }

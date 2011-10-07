@@ -119,13 +119,8 @@ public class BindToPath implements Binder
 
     static SingleResourceTransportDto checkValidInput(final Object input)
     {
-        checkNotNull(input, "payload");
-
-        if (!(input instanceof SingleResourceTransportDto))
-        {
-            throw new IllegalArgumentException("The BindToXMLPayloadAndPath binder can "
-                + "only be used to bind SingleResourceTransportDto objects");
-        }
+        checkArgument(checkNotNull(input, "input") instanceof SingleResourceTransportDto,
+            "this binder is only valid for SingleResourceTransportDto objects");
 
         return (SingleResourceTransportDto) input;
     }

@@ -170,8 +170,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRack", DatacenterDto.class,
                 RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
-                .rackPost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.rackPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
@@ -272,8 +272,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRemoteService", DatacenterDto.class,
                 RemoteServiceDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
-                .remoteServicePost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.remoteServicePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
@@ -295,7 +295,7 @@ public class InfrastructureAsyncClientTest extends
                 RemoteServiceType.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, Infrastructure.datacenterPut(),
-                RemoteServiceType.STORAGE_SYSTEM_MONITOR.toString());
+                RemoteServiceType.STORAGE_SYSTEM_MONITOR);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/remoteservices/storagesystemmonitor HTTP/1.1");

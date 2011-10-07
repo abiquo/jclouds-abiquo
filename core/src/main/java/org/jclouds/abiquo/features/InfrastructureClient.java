@@ -143,10 +143,10 @@ public interface InfrastructureClient
      * Get the given remote service from the given datacenter.
      * 
      * @param datacenter The datacenter.
-     * @param remoteServiceId The id of the remote service.
-     * @return The datacenter or <code>null</code> if it does not exist.
+     * @param remoteServiceType The type of the remote service.
+     * @return The remote service or <code>null</code> if it does not exist.
      */
-    RemoteServiceDto getRemoteService(DatacenterDto datacenter, RemoteServiceType remoteServiceId);
+    RemoteServiceDto getRemoteService(DatacenterDto datacenter, RemoteServiceType remoteServiceType);
 
     /**
      * Updates an existing remote service from the given datacenter.

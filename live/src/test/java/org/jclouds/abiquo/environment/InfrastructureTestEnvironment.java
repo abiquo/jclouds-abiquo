@@ -61,9 +61,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(datacenter.getId());
 
         rack =
-            Rack.builder(context).datacenter(datacenter).name("Aloha")
-                .shortDescription("A hawaian rack").haEnabled(false).vlanIdMin(6).vlanIdMax(3024)
-                .vlanPerVdcExpected(6).build();
+            Rack.builder(context, datacenter).name("Aloha").shortDescription("A hawaian rack")
+                .haEnabled(false).vlanIdMin(6).vlanIdMax(3024).vlanPerVdcExpected(6).build();
         rack.save();
 
         assertNotNull(rack.getId());

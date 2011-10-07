@@ -32,6 +32,7 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayload;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseRack;
@@ -159,6 +160,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 
     // Remote service
+
     /**
      * @see InfrastructureClient#listRemoteServices(DatacenterDto)
      */
@@ -185,7 +187,7 @@ public interface InfrastructureAsyncClient
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<RemoteServiceDto> getRemoteService(
         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) final DatacenterDto datacenter,
-        @BinderParam(AppendToPath.class) final RemoteServiceType remoteServiceId);
+        @BinderParam(AppendRemoteServiceTypeToPath.class) final RemoteServiceType remoteServiceType);
 
     /**
      * @see InfrastructureClient#updateRemoteService(RemoteServiceDto)
