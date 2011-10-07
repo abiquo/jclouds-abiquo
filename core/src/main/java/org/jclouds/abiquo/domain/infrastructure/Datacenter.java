@@ -21,7 +21,9 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.AbiquoKeywords.AbiquoEdition;
 
+import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.base.Predicate;
 
@@ -34,6 +36,18 @@ import com.google.common.base.Predicate;
  */
 public class Datacenter extends DomainWrapper<DatacenterDto>
 {
+    /**
+     * IP address of the datacenter (used to create all remote services with the same ip).
+     */
+    private String ip;
+
+    /**
+     * Indicates the Abiquo edition to create the available remote services.
+     * 
+     * @see http://wiki.abiquo.com/display/ABI18/Introduction+-+The+Abiquo+Platform
+     */
+    private AbiquoEdition edition;
+
     /**
      * Constructor to be used only by the builder.
      */
@@ -52,6 +66,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @Override
     public void save()
     {
+        // If remote services data is set, create remote services.
+        if (ip != null && edition != null)
+        {
+            createRemoteServices();
+        }
+
         target = context.getApi().getInfrastructureClient().createDatacenter(target);
     }
 
@@ -91,6 +111,39 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return context.getInfrastructureService().findRemoteService(this, filter);
     }
 
+    private void createRemoteServices()
+    {
+        if (this.edition == AbiquoEdition.ENTERPRISE)
+        {
+            RemoteService.builder(context, this).type(RemoteServiceType.BPM_SERVICE).uri(
+                RemoteService.generateUri(this.ip, RemoteServiceType.BPM_SERVICE)).build().save();
+
+            RemoteService.builder(context, this).type(RemoteServiceType.DHCP_SERVICE).uri(
+                RemoteService.generateUri(this.ip, RemoteServiceType.DHCP_SERVICE)).build().save();
+
+            RemoteService.builder(context, this).type(RemoteServiceType.STORAGE_SYSTEM_MONITOR)
+                .uri(RemoteService.generateUri(this.ip, RemoteServiceType.STORAGE_SYSTEM_MONITOR))
+                .build().save();
+
+            // TODO Community in Abiquo 2.0
+            RemoteService.builder(context, this).type(RemoteServiceType.NODE_COLLECTOR).uri(
+                RemoteService.generateUri(this.ip, RemoteServiceType.NODE_COLLECTOR));
+        }
+
+        RemoteService.builder(context, this).type(RemoteServiceType.APPLIANCE_MANAGER).uri(
+            RemoteService.generateUri(this.ip, RemoteServiceType.APPLIANCE_MANAGER)).build();
+
+        RemoteService.builder(context, this).type(RemoteServiceType.DHCP_SERVICE).uri(
+            RemoteService.generateUri(this.ip, RemoteServiceType.DHCP_SERVICE)).build().save();
+
+        RemoteService.builder(context, this).type(RemoteServiceType.VIRTUAL_FACTORY).uri(
+            RemoteService.generateUri(this.ip, RemoteServiceType.VIRTUAL_FACTORY)).build().save();
+
+        RemoteService.builder(context, this).type(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR).uri(
+            RemoteService.generateUri(this.ip, RemoteServiceType.VIRTUAL_SYSTEM_MONITOR)).build()
+            .save();
+    }
+
     public static Builder builder(final AbiquoContext context)
     {
         return new Builder(context);
@@ -106,6 +159,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
         private String location;
 
+        private String ip;
+
+        private AbiquoEdition edition;
+
         public Builder(final AbiquoContext context)
         {
             super();
@@ -115,6 +172,13 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         public Builder id(final Integer id)
         {
             this.id = id;
+            return this;
+        }
+
+        public Builder remoteServices(final String ip, final AbiquoEdition edition)
+        {
+            this.ip = ip;
+            this.edition = edition;
             return this;
         }
 
@@ -136,13 +200,16 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
             dto.setId(id);
             dto.setName(name);
             dto.setLocation(location);
-            return new Datacenter(context, dto);
+            Datacenter datacenter = new Datacenter(context, dto);
+            datacenter.edition = edition;
+            datacenter.ip = ip;
+            return datacenter;
         }
 
         public static Builder fromDatacenter(final Datacenter in)
         {
-            return Datacenter.builder(in.context).id(in.getId()).name(in.getName())
-                .location(in.getLocation());
+            return Datacenter.builder(in.context).id(in.getId()).name(in.getName()).location(
+                in.getLocation());
         }
     }
 

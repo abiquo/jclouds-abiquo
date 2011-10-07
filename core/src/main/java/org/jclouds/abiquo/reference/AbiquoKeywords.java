@@ -46,4 +46,9 @@ public class AbiquoKeywords
 
         public final static String COST_CODE = "costcode";
     }
+
+    public enum AbiquoEdition
+    {
+        ENTERPRISE, COMMUNITY;
+    }
 }

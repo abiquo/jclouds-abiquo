@@ -26,7 +26,6 @@ import java.util.Arrays;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
-import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.google.common.base.Predicate;
 
 /**

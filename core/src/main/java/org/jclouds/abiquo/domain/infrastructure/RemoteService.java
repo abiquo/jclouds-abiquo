@@ -23,8 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
 import org.jclouds.abiquo.reference.ClientErrors;
+import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -61,14 +61,25 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient()
-                .createRemoteService(datacenter.unwrap(), target);
+            context.getApi().getInfrastructureClient().createRemoteService(datacenter.unwrap(),
+                target);
     }
 
     @Override
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateRemoteService(target);
+    }
+
+    public static String generateUri(final String ip, final Integer port,
+        final RemoteServiceType type)
+    {
+        return type.getDefaultProtocol() + ip + ":" + port + "/" + type.getServiceMapping();
+    }
+
+    public static String generateUri(final String ip, final RemoteServiceType type)
+    {
+        return generateUri(ip, type.getDefaultPort(), type);
     }
 
     // Parent access
@@ -95,6 +106,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
         private Datacenter datacenter;
 
+        private String uri;
+
+        private RemoteServiceType type;
+
+        private Integer status;
+
         public Builder(final AbiquoContext context, final Datacenter datacenter)
         {
             super();
@@ -110,11 +127,31 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
             return this;
         }
 
+        public Builder status(final Integer status)
+        {
+            this.status = status;
+            return this;
+        }
+
+        public Builder type(final RemoteServiceType type)
+        {
+            this.type = type;
+            return this;
+        }
+
+        public Builder uri(final String uri)
+        {
+            this.uri = uri;
+            return this;
+        }
+
         public RemoteService build()
         {
             RemoteServiceDto dto = new RemoteServiceDto();
             dto.setId(id);
-
+            dto.setType(type);
+            dto.setUri(uri);
+            dto.setStatus(status);
             RemoteService remoteservice = new RemoteService(context, dto);
             remoteservice.datacenter = datacenter;
             return remoteservice;
@@ -122,7 +159,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
         public static Builder fromRemoteService(final RemoteService in)
         {
-            return null;
+            return RemoteService.builder(in.context, in.datacenter).status(in.getStatus()).type(
+                in.getType()).uri(in.getUri());
         }
     }
 
@@ -136,5 +174,30 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public RemoteServiceType getType()
     {
         return target.getType();
+    }
+
+    public int getStatus()
+    {
+        return target.getStatus();
+    }
+
+    public String getUri()
+    {
+        return target.getUri();
+    }
+
+    public void setStatus(final int status)
+    {
+        target.setStatus(status);
+    }
+
+    public void setType(final RemoteServiceType type)
+    {
+        target.setType(type);
+    }
+
+    public void setUri(final String uri)
+    {
+        target.setUri(uri);
     }
 }
