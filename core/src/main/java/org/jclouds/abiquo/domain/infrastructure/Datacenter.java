@@ -115,33 +115,23 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     {
         if (this.edition == AbiquoEdition.ENTERPRISE)
         {
-            RemoteService.builder(context, this).type(RemoteServiceType.BPM_SERVICE).uri(
-                RemoteService.generateUri(this.ip, RemoteServiceType.BPM_SERVICE)).build().save();
-
-            RemoteService.builder(context, this).type(RemoteServiceType.DHCP_SERVICE).uri(
-                RemoteService.generateUri(this.ip, RemoteServiceType.DHCP_SERVICE)).build().save();
-
-            RemoteService.builder(context, this).type(RemoteServiceType.STORAGE_SYSTEM_MONITOR)
-                .uri(RemoteService.generateUri(this.ip, RemoteServiceType.STORAGE_SYSTEM_MONITOR))
-                .build().save();
-
+            createRemoteService(RemoteServiceType.BPM_SERVICE);
+            createRemoteService(RemoteServiceType.DHCP_SERVICE);
+            createRemoteService(RemoteServiceType.STORAGE_SYSTEM_MONITOR);
             // TODO Community in Abiquo 2.0
-            RemoteService.builder(context, this).type(RemoteServiceType.NODE_COLLECTOR).uri(
-                RemoteService.generateUri(this.ip, RemoteServiceType.NODE_COLLECTOR));
+            // createRemoteService(RemoteServiceType.NODE_COLLECTOR);
         }
 
-        RemoteService.builder(context, this).type(RemoteServiceType.APPLIANCE_MANAGER).uri(
-            RemoteService.generateUri(this.ip, RemoteServiceType.APPLIANCE_MANAGER)).build();
+        createRemoteService(RemoteServiceType.APPLIANCE_MANAGER);
+        createRemoteService(RemoteServiceType.VIRTUAL_FACTORY);
+        createRemoteService(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR);
+        createRemoteService(RemoteServiceType.BPM_SERVICE);
+    }
 
-        RemoteService.builder(context, this).type(RemoteServiceType.DHCP_SERVICE).uri(
-            RemoteService.generateUri(this.ip, RemoteServiceType.DHCP_SERVICE)).build().save();
-
-        RemoteService.builder(context, this).type(RemoteServiceType.VIRTUAL_FACTORY).uri(
-            RemoteService.generateUri(this.ip, RemoteServiceType.VIRTUAL_FACTORY)).build().save();
-
-        RemoteService.builder(context, this).type(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR).uri(
-            RemoteService.generateUri(this.ip, RemoteServiceType.VIRTUAL_SYSTEM_MONITOR)).build()
-            .save();
+    private void createRemoteService(RemoteServiceType type)
+    {
+        RemoteService.builder(context, this).type(type)
+            .uri(RemoteService.generateUri(this.ip, type)).build().save();
     }
 
     public static Builder builder(final AbiquoContext context)
@@ -208,8 +198,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
         public static Builder fromDatacenter(final Datacenter in)
         {
-            return Datacenter.builder(in.context).id(in.getId()).name(in.getName()).location(
-                in.getLocation());
+            return Datacenter.builder(in.context).id(in.getId()).name(in.getName())
+                .location(in.getLocation());
         }
     }
 
