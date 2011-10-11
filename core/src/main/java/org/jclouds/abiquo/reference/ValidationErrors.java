@@ -24,7 +24,7 @@ package org.jclouds.abiquo.reference;
  * 
  * @author Francesc Montserrat
  */
-public class ClientErrors
+public class ValidationErrors
 {
     public static final String NULL_PARENT = "The resource should be assigned to a parent ";
 

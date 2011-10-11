@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.ClientErrors;
+import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -111,7 +111,7 @@ public class Rack extends DomainWrapper<RackDto>
         public Builder(final AbiquoContext context, final Datacenter datacenter)
         {
             super();
-            checkNotNull(datacenter, ClientErrors.NULL_PARENT + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.NULL_PARENT + Datacenter.class);
             this.datacenter = datacenter;
             this.context = context;
         }
@@ -172,7 +172,7 @@ public class Rack extends DomainWrapper<RackDto>
 
         public Builder datacenter(final Datacenter datacenter)
         {
-            checkNotNull(datacenter, ClientErrors.NULL_PARENT + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.NULL_PARENT + Datacenter.class);
             this.datacenter = datacenter;
             return this;
         }
