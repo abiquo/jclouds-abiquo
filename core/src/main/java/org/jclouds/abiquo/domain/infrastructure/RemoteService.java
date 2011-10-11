@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ClientErrors;
-import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -61,8 +61,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient().createRemoteService(datacenter.unwrap(),
-                target);
+            context.getApi().getInfrastructureClient()
+                .createRemoteService(datacenter.unwrap(), target);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
     public Datacenter getDatacenter()
     {
-        Integer datacenterId = target.getIdFromLink(ApiParentLinkName.DATACENTER);
+        Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
         DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
         datacenter = wrap(context, Datacenter.class, dto);
 
@@ -159,8 +159,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
         public static Builder fromRemoteService(final RemoteService in)
         {
-            return RemoteService.builder(in.context, in.datacenter).status(in.getStatus()).type(
-                in.getType()).uri(in.getUri());
+            return RemoteService.builder(in.context, in.datacenter).status(in.getStatus())
+                .type(in.getType()).uri(in.getUri());
         }
     }
 

@@ -39,7 +39,7 @@ import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
 import org.jclouds.abiquo.functions.infrastructure.ParseRemoteService;
 import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServices;
-import org.jclouds.abiquo.reference.AbiquoMediaType;
+import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;

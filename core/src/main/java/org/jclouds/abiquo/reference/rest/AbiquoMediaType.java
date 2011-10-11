@@ -17,12 +17,12 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.reference;
+package org.jclouds.abiquo.reference.rest;
 
 import javax.ws.rs.core.MediaType;
 
 /**
- * Defines JAX-RS {@link MediaType} used in Abiquo API
+ * Defines JAX-RS {@link MediaType} used in Abiquo API.
  * 
  * @author Francesc Montserrat
  */

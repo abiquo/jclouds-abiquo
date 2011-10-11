@@ -20,7 +20,7 @@
 package org.jclouds.abiquo.reference;
 
 /**
- * Error constants
+ * Error constants.
  * 
  * @author Francesc Montserrat
  */

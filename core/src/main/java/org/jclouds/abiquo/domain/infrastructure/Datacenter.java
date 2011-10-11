@@ -21,7 +21,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.AbiquoKeywords.AbiquoEdition;
+import org.jclouds.abiquo.reference.AbiquoEdition;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -128,7 +128,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         createRemoteService(RemoteServiceType.BPM_SERVICE);
     }
 
-    private void createRemoteService(RemoteServiceType type)
+    private void createRemoteService(final RemoteServiceType type)
     {
         RemoteService.builder(context, this).type(type)
             .uri(RemoteService.generateUri(this.ip, type)).build().save();

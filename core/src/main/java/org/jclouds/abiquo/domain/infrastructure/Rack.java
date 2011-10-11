@@ -24,7 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ClientErrors;
-import org.jclouds.abiquo.reference.AbiquoKeywords.ApiParentLinkName;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -72,7 +72,7 @@ public class Rack extends DomainWrapper<RackDto>
 
     public Datacenter getDatacenter()
     {
-        Integer datacenterId = target.getIdFromLink(ApiParentLinkName.DATACENTER);
+        Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
         DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
         datacenter = wrap(context, Datacenter.class, dto);
 
@@ -197,10 +197,10 @@ public class Rack extends DomainWrapper<RackDto>
         public static Builder fromRack(final Rack in)
         {
             return Rack.builder(in.context, in.datacenter).id(in.getId()).name(in.getName())
-                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(
-                    in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
-                .vlanPerVdcExpected(in.getVlanPerVdcExpected()).VlansIdAvoided(
-                    in.getVlansIdAvoided());
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
+                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcExpected(in.getVlanPerVdcExpected())
+                .VlansIdAvoided(in.getVlansIdAvoided());
         }
     }
 
