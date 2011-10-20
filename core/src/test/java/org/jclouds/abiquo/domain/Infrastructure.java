@@ -134,9 +134,9 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<datacenter>");
+        buffer.append(link("/admin/datacenters/1", "edit"));
         buffer.append(link("/admin/datacenters/1/racks", "racks"));
         buffer.append(link("/admin/datacenters/1/remoteservices", "remoteservices"));
-        buffer.append(link("/admin/datacenters/1", "edit"));
         buffer.append("<id>1</id>");
         buffer.append("<location>Honolulu</location>");
         buffer.append("<name>DC</name>");
