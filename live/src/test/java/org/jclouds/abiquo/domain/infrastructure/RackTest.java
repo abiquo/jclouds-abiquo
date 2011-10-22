@@ -30,7 +30,7 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.collect.Iterables;
 
 /**
- * Unit tests for the {@link Datacenter} domain class.
+ * Live tests for the {@link Datacenter} domain class.
  * 
  * @author Ignasi Barrera
  */
@@ -48,7 +48,7 @@ public class RackTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnviron
         env.rack.setName("Updated rack");
         env.rack.update();
 
-        // Recover the updated datacenter
+        // Recover the updated rack
         RackDto updated = env.infrastructure.getRack(env.datacenter.unwrap(), env.rack.getId());
 
         assertEquals(updated.getName(), "Updated rack");

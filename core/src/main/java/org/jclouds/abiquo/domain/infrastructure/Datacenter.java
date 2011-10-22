@@ -19,13 +19,19 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.collect.Iterables.transform;
+
+import java.util.List;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link DatacenterDto}.
@@ -66,13 +72,14 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @Override
     public void save()
     {
+        // Datacenter must be persisted first, so links get populated in the target object
+        target = context.getApi().getInfrastructureClient().createDatacenter(target);
+
         // If remote services data is set, create remote services.
         if (ip != null && edition != null)
         {
             createRemoteServices();
         }
-
-        target = context.getApi().getInfrastructureClient().createDatacenter(target);
     }
 
     @Override
@@ -81,34 +88,71 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         target = context.getApi().getInfrastructureClient().updateDatacenter(target);
     }
 
-    public Iterable<Rack> listRacks()
+    public List<Rack> listRacks()
     {
-        return context.getInfrastructureService().listRacks(this);
+        Iterable<Rack> racks = context.getInfrastructureService().listRacks(this);
+        return Lists.newLinkedList(setDatacenterInAllRacks(racks));
     }
 
-    public Iterable<Rack> listRacks(final Predicate<Rack> filter)
+    public List<Rack> listRacks(final Predicate<Rack> filter)
     {
-        return context.getInfrastructureService().listRacks(this, filter);
+        Iterable<Rack> racks = context.getInfrastructureService().listRacks(this, filter);
+        return Lists.newLinkedList(setDatacenterInAllRacks(racks));
     }
 
     public Rack findRack(final Predicate<Rack> filter)
     {
-        return context.getInfrastructureService().findRack(this, filter);
+        Rack rack = context.getInfrastructureService().findRack(this, filter);
+        rack.datacenter = this;
+        return rack;
     }
 
-    public Iterable<RemoteService> listRemoteServices()
+    public List<RemoteService> listRemoteServices()
     {
-        return context.getInfrastructureService().listRemoteServices(this);
+        Iterable<RemoteService> remoteServices =
+            context.getInfrastructureService().listRemoteServices(this);
+        return Lists.newLinkedList(setDatacenterInAllRemoteServices(remoteServices));
     }
 
-    public Iterable<RemoteService> listRemoteServices(final Predicate<RemoteService> filter)
+    public List<RemoteService> listRemoteServices(final Predicate<RemoteService> filter)
     {
-        return context.getInfrastructureService().listRemoteServices(this, filter);
+        Iterable<RemoteService> remoteServices =
+            context.getInfrastructureService().listRemoteServices(this, filter);
+        return Lists.newLinkedList(setDatacenterInAllRemoteServices(remoteServices));
     }
 
     public RemoteService findRemoteService(final Predicate<RemoteService> filter)
     {
-        return context.getInfrastructureService().findRemoteService(this, filter);
+        RemoteService remoteService =
+            context.getInfrastructureService().findRemoteService(this, filter);
+        remoteService.datacenter = this;
+        return remoteService;
+    }
+
+    private Iterable<Rack> setDatacenterInAllRacks(Iterable<Rack> racks)
+    {
+        return Lists.newLinkedList(transform(racks, new Function<Rack, Rack>()
+        {
+            @Override
+            public Rack apply(Rack input)
+            {
+                input.datacenter = Datacenter.this;
+                return input;
+            }
+        }));
+    }
+
+    private Iterable<RemoteService> setDatacenterInAllRemoteServices(Iterable<RemoteService> racks)
+    {
+        return Lists.newLinkedList(transform(racks, new Function<RemoteService, RemoteService>()
+        {
+            @Override
+            public RemoteService apply(RemoteService input)
+            {
+                input.datacenter = Datacenter.this;
+                return input;
+            }
+        }));
     }
 
     private void createRemoteServices()
@@ -118,20 +162,17 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
             createRemoteService(RemoteServiceType.BPM_SERVICE);
             createRemoteService(RemoteServiceType.DHCP_SERVICE);
             createRemoteService(RemoteServiceType.STORAGE_SYSTEM_MONITOR);
-            // TODO Community in Abiquo 2.0
-            // createRemoteService(RemoteServiceType.NODE_COLLECTOR);
         }
 
         createRemoteService(RemoteServiceType.APPLIANCE_MANAGER);
         createRemoteService(RemoteServiceType.VIRTUAL_FACTORY);
         createRemoteService(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR);
-        createRemoteService(RemoteServiceType.BPM_SERVICE);
+        createRemoteService(RemoteServiceType.NODE_COLLECTOR);
     }
 
     private void createRemoteService(final RemoteServiceType type)
     {
-        RemoteService.builder(context, this).type(type)
-            .uri(RemoteService.generateUri(this.ip, type)).build().save();
+        RemoteService.builder(context, this).type(type).ip(this.ip).build().save();
     }
 
     public static Builder builder(final AbiquoContext context)

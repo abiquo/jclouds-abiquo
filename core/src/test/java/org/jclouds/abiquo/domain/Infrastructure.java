@@ -67,10 +67,10 @@ public class Infrastructure
     {
         DatacenterDto datacenter = datacenterPost();
         datacenter.setId(1);
+        datacenter.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1"));
         datacenter.addLink(new RESTLink("racks", "http://localhost/api/admin/datacenters/1/racks"));
         datacenter.addLink(new RESTLink("remoteservices",
             "http://localhost/api/admin/datacenters/1/remoteservices"));
-        datacenter.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1"));
         return datacenter;
     }
 

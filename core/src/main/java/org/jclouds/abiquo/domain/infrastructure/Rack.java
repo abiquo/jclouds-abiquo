@@ -39,7 +39,8 @@ import com.abiquo.server.core.infrastructure.RackDto;
 public class Rack extends DomainWrapper<RackDto>
 {
     /** The datacenter where the rack belongs. */
-    private Datacenter datacenter;
+    // Package protected to be set by Datacenter list methods
+    Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.

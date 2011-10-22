@@ -74,7 +74,7 @@ public class BaseInfrastructureService implements InfrastructureService
     @Override
     public Datacenter findDatacenter(final Predicate<Datacenter> filter)
     {
-        return Iterables.getFirst(listDatacenters(), null);
+        return Iterables.getFirst(listDatacenters(filter), null);
     }
 
     @Override
@@ -92,7 +92,7 @@ public class BaseInfrastructureService implements InfrastructureService
     @Override
     public Rack findRack(final Datacenter datacenter, final Predicate<Rack> filter)
     {
-        return Iterables.getFirst(listRacks(datacenter), null);
+        return Iterables.getFirst(listRacks(datacenter, filter), null);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class BaseInfrastructureService implements InfrastructureService
     public RemoteService findRemoteService(final Datacenter datacenter,
         final Predicate<RemoteService> filter)
     {
-        return Iterables.getFirst(listRemoteServices(datacenter), null);
+        return Iterables.getFirst(listRemoteServices(datacenter, filter), null);
     }
 
 }

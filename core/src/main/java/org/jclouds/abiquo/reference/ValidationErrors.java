@@ -28,4 +28,6 @@ public class ValidationErrors
 {
     public static final String NULL_PARENT = "The resource should be assigned to a parent ";
 
+    public static final String MISSING_REQUIRED_FIELD = "Missing required field: ";
+
 }

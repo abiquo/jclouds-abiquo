@@ -19,46 +19,52 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates.remoteServiceType;
 import static org.testng.Assert.assertEquals;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
+import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 
 /**
- * Live tests for the {@link Datacenter} domain class.
+ * Live tests for the {@link RemoteService} domain class.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class DatacenterTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class RemoteServiceTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
 {
 
     @Override
-    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
+    protected InfrastructureTestEnvironment environment(AbiquoContext context)
     {
         return new InfrastructureTestEnvironment(context);
     }
 
     public void testUpdate()
     {
-        env.datacenter.setLocation("New York");
-        env.datacenter.update();
+        RemoteService rs =
+            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.VIRTUAL_FACTORY));
+        rs.setUri("http://testuri");
+        rs.update();
 
-        // Recover the updated datacenter
-        DatacenterDto updated = env.infrastructure.getDatacenter(env.datacenter.getId());
+        // Recover the updated remote service
+        RemoteServiceDto updated =
+            env.infrastructure.getRemoteService(env.datacenter.unwrap(),
+                RemoteServiceType.VIRTUAL_FACTORY);
 
-        assertEquals(updated.getLocation(), "New York");
+        assertEquals(updated.getUri(), rs.getUri());
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
     public void testCreateRepeated()
     {
-        Datacenter repeated = Builder.fromDatacenter(env.datacenter).build();
+        RemoteService repeated = Builder.fromRemoteService(env.remoteServices.get(1)).build();
         repeated.save();
     }
 

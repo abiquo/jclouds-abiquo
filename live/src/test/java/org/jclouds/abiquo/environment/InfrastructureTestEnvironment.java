@@ -19,15 +19,20 @@
 
 package org.jclouds.abiquo.environment;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
+import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.reference.AbiquoEdition;
 
 /**
  * Test environment for infrastructure live tests.
@@ -46,6 +51,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public Rack rack;
 
+    public List<RemoteService> remoteServices;
+
     public InfrastructureTestEnvironment(final AbiquoContext context)
     {
         super();
@@ -56,15 +63,19 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     @Override
     public void setup() throws Exception
     {
-        datacenter = Datacenter.builder(context).name(randomName()).location("Honolulu").build();
+        datacenter =
+            Datacenter.builder(context).name(randomName()).location("Honolulu")
+                .remoteServices("80.80.80.80", AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
+
+        remoteServices = datacenter.listRemoteServices();
+        assertEquals(remoteServices.size(), 7);
 
         rack =
             Rack.builder(context, datacenter).name("Aloha").shortDescription("A hawaian rack")
                 .haEnabled(false).vlanIdMin(6).vlanIdMax(3024).vlanPerVdcExpected(6).build();
         rack.save();
-
         assertNotNull(rack.getId());
     }
 
@@ -76,6 +87,12 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
         rack.delete();
         assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
+
+        for (RemoteService rs : remoteServices)
+        {
+            rs.delete();
+        }
+        assertTrue(datacenter.listRemoteServices().isEmpty());
 
         datacenter.delete();
         assertNull(infrastructure.getDatacenter(idDatacenter));
