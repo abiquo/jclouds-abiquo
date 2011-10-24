@@ -94,6 +94,22 @@ public interface InfrastructureClient
      *            xen-3, vmx-04, hyperv-301, xenserver}.
      * @param user User to log in.
      * @param password Password to authenticate.
+     * @return The physical machine or <code>null</code> if it does not exist.
+     */
+    MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip,
+        HypervisorType hypervisorType, String user, String password);
+
+    /**
+     * Retrieve remote machine information.
+     * 
+     * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource#DatacenterResource-
+     *      Retrieveremotemachineinformation
+     * @param datacenter The datacenter.
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
      * @param options Optional query params.
      * @return The physical machine or <code>null</code> if it does not exist.
      */

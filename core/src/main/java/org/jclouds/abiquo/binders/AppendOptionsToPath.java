@@ -19,59 +19,51 @@
 
 package org.jclouds.abiquo.binders;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.net.URI;
-import java.net.URL;
-import java.util.Map.Entry;
-
+import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.ws.rs.core.UriBuilder;
 
 import org.jclouds.abiquo.binders.exception.BindException;
-import org.jclouds.abiquo.domain.infrastructure.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.http.utils.ModifyRequest;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.Binder;
 
 /**
  * Appends the parameter value to the end of the request URI.
  * 
+ * @author Francesc Montserrat
  * @author Ignasi Barrera
  */
 @Singleton
 public class AppendOptionsToPath implements Binder
 {
-    @SuppressWarnings("unchecked")
+    /** The configured URI builder. */
+    private UriBuilder uriBuilder;
+
+    @Inject
+    public AppendOptionsToPath(UriBuilder uriBuilder)
+    {
+        this.uriBuilder = uriBuilder;
+    }
+
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkNotNull(input, "input");
-        QueryOptions options = (QueryOptions) input;
+        checkArgument(checkNotNull(input, "input") instanceof QueryOptions,
+            "this binder is only valid for QueryOptions objects");
 
         try
         {
-            // Append the parameter to the request URI
-            String valueToAppend = getValues(request, options);
-            URI path = new URL(request.getEndpoint().toString() + valueToAppend).toURI();
-            return (R) request.toBuilder().endpoint(path).build();
+            QueryOptions options = (QueryOptions) input;
+            return ModifyRequest.addQueryParams(request, options.getOptions(), uriBuilder);
         }
         catch (Exception ex)
         {
             throw new BindException(request, ex);
         }
-    }
-
-    /**
-     * Get the query param list from a QueryOptions.
-     */
-    protected <R extends HttpRequest> String getValues(final R request, final QueryOptions input)
-    {
-        String s = "";
-
-        for (Entry<String, String> pair : input.getMap().entries())
-        {
-            s = "&" + pair.getKey() + "=" + pair.getValue();
-        }
-
-        return s;
     }
 }

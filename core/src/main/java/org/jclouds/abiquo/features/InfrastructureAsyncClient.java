@@ -76,7 +76,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin")
 public interface InfrastructureAsyncClient
 {
-
     // Datacenter
 
     /**
@@ -119,6 +118,18 @@ public interface InfrastructureAsyncClient
     @DELETE
     ListenableFuture<Void> deleteDatacenter(
         @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#discoverSingleMachine(DatacenterDto, String, HypervisorType,
+     *      String, String)
+     */
+    @GET
+    @ResponseParser(ParseMachine.class)
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<MachineDto> discoverSingleMachine(
+        @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @QueryParam("ip") String ip, @QueryParam("hypervisortype") HypervisorType hypervisorType,
+        @QueryParam("user") String user, @QueryParam("password") String password);
 
     /**
      * @see InfrastructureClient#discoverSingleMachine(DatacenterDto, String, HypervisorType,

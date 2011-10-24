@@ -55,7 +55,6 @@ import com.google.inject.TypeLiteral;
 public class InfrastructureAsyncClientTest extends
     BaseAbiquoAsyncClientTest<InfrastructureAsyncClient>
 {
-
     // Datacenter
 
     public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
@@ -173,8 +172,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRack", DatacenterDto.class,
                 RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
-                .rackPost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.rackPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
@@ -275,8 +274,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRemoteService", DatacenterDto.class,
                 RemoteServiceDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
-                .remoteServicePost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.remoteServicePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
@@ -354,6 +353,31 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testDiscoverSingleMachineWithoutOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("discoverSingleMachine", DatacenterDto.class,
+                String.class, HypervisorType.class, String.class, String.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, Infrastructure.datacenterPut(), "10.60.1.222",
+                HypervisorType.XENSERVER, "user", "pass");
+
+        String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
+        String query = "hypervisortype=XENSERVER&ip=10.60.1.222&user=user&password=pass";
+        String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
+
+        assertRequestLineEquals(request, expectedRequest);
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseMachine.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
     public void testDiscoverSingleMachineAllParams() throws SecurityException,
         NoSuchMethodException
     {
@@ -362,13 +386,14 @@ public class InfrastructureAsyncClientTest extends
                 String.class, HypervisorType.class, String.class, String.class,
                 MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor
-                .createRequest(method, Infrastructure.datacenterPut(), "80.80.80.80",
-                    HypervisorType.KVM, "user", "password", MachineOptions.builder().port(8889)
-                        .build());
+            processor.createRequest(method, Infrastructure.datacenterPut(), "80.80.80.80",
+                HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(8889).build());
 
-        assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/action/discoversingle HTTP/1.1");
+        String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
+        String query = "hypervisortype=KVM&ip=80.80.80.80&user=user&password=pass&port=8889";
+        String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
+
+        assertRequestLineEquals(request, expectedRequest);
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -388,10 +413,13 @@ public class InfrastructureAsyncClientTest extends
                 MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, Infrastructure.datacenterPut(), "80.80.80.80",
-                HypervisorType.KVM, "user", "password", MachineOptions.builder().build());
+                HypervisorType.KVM, "user", "pass", MachineOptions.builder().build());
 
-        assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/action/discoversingle HTTP/1.1");
+        String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
+        String query = "hypervisortype=KVM&ip=80.80.80.80&user=user&password=pass";
+        String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
+
+        assertRequestLineEquals(request, expectedRequest);
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 

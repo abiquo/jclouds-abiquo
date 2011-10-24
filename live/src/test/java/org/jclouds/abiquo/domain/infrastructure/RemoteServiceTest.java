@@ -21,6 +21,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates.remoteServiceType;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNull;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
@@ -59,6 +60,20 @@ public class RemoteServiceTest extends BaseAbiquoClientLiveTest<InfrastructureTe
                 RemoteServiceType.VIRTUAL_FACTORY);
 
         assertEquals(updated.getUri(), rs.getUri());
+    }
+
+    public void testDelete()
+    {
+        RemoteService rs =
+            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.BPM_SERVICE));
+        rs.delete();
+
+        // Recover the deleted remote service
+        RemoteServiceDto deleted =
+            env.infrastructure.getRemoteService(env.datacenter.unwrap(),
+                RemoteServiceType.BPM_SERVICE);
+
+        assertNull(deleted);
     }
 
     @Test(expectedExceptions = IllegalStateException.class)

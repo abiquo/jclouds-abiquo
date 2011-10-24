@@ -22,7 +22,6 @@ package org.jclouds.abiquo.environment;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 import java.util.UUID;
@@ -64,8 +63,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     public void setup() throws Exception
     {
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
-                "80.80.80.80", AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu")
+                .remoteServices("80.80.80.80", AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -88,13 +87,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         rack.delete();
         assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
 
-        for (RemoteService rs : remoteServices)
-        {
-            rs.delete();
-        }
-        assertTrue(datacenter.listRemoteServices().isEmpty());
-
-        datacenter.delete();
+        datacenter.delete(); // Abiquo API will delete remote services too
         assertNull(infrastructure.getDatacenter(idDatacenter));
     }
 

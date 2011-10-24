@@ -22,12 +22,12 @@ package org.jclouds.abiquo.binders;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.net.URI;
-import java.net.URL;
 
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.binders.exception.BindException;
 import org.jclouds.http.HttpRequest;
+import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
 
 /**
@@ -38,8 +38,6 @@ import org.jclouds.rest.Binder;
 @Singleton
 public class AppendToPath implements Binder
 {
-
-    @SuppressWarnings("unchecked")
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
@@ -49,8 +47,8 @@ public class AppendToPath implements Binder
         {
             // Append the parameter to the request URI
             String valueToAppend = getValue(request, input);
-            URI path = new URL(request.getEndpoint().toString() + "/" + valueToAppend).toURI();
-            return (R) request.toBuilder().endpoint(path).build();
+            URI path = URI.create(request.getEndpoint().toString() + "/" + valueToAppend);
+            return ModifyRequest.endpoint(request, path);
         }
         catch (Exception ex)
         {

@@ -25,14 +25,15 @@ import static com.google.common.base.Preconditions.checkState;
 
 import java.lang.annotation.Annotation;
 import java.net.URI;
-import java.net.URL;
 import java.util.Arrays;
 
 import javax.inject.Singleton;
+import javax.ws.rs.PUT;
 
 import org.jclouds.abiquo.binders.exception.BindException;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
+import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 
@@ -81,8 +82,8 @@ public class BindToPath implements Binder
         Annotation[] annotations = request.getJavaMethod().getParameterAnnotations()[argIndex];
 
         EndpointLink linkName =
-            (EndpointLink) Iterables.find(Arrays.asList(annotations), Predicates
-                .instanceOf(EndpointLink.class), null);
+            (EndpointLink) Iterables.find(Arrays.asList(annotations),
+                Predicates.instanceOf(EndpointLink.class), null);
 
         if (linkName == null)
         {
@@ -101,14 +102,16 @@ public class BindToPath implements Binder
      * @param link The link to use as the request URI.
      * @return The updated request.
      */
-    @SuppressWarnings("unchecked")
     static <R extends HttpRequest> R bindLinkToPath(final R request, final RESTLink link)
     {
         try
         {
+            // Preserve current query and matrix parameters
+            String newEndpoint = link.getHref() + getParameterString(request);
+
             // Replace the URI with the edit link in the DTO
-            URI path = new URL(link.getHref()).toURI();
-            return (R) request.toBuilder().endpoint(path).build();
+            URI path = URI.create(newEndpoint);
+            return ModifyRequest.endpoint(request, path);
         }
         catch (Exception ex)
         {
@@ -122,5 +125,35 @@ public class BindToPath implements Binder
             "this binder is only valid for SingleResourceTransportDto objects");
 
         return (SingleResourceTransportDto) input;
+    }
+
+    private static <R extends HttpRequest> String getParameterString(R request)
+    {
+        String endpoint = request.getEndpoint().toString();
+
+        int query = endpoint.indexOf('?');
+        int matrix = endpoint.indexOf(';');
+
+        if (query == -1 && matrix == -1)
+        {
+            // No parameters
+            return "";
+        }
+        else if (query != -1 && matrix != -1)
+        {
+            // Both parameter types
+            return endpoint.substring(query < matrix ? query : matrix);
+        }
+        else if (query != -1)
+        {
+            // Only request parameters
+            return endpoint.substring(query);
+        }
+        else
+        {
+            // Only matrix parameters
+            return endpoint.substring(matrix);
+        }
+
     }
 }

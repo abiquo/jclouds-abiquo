@@ -16,16 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.domain.infrastructure.options;
+
+package org.jclouds.abiquo.domain.options;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
+/**
+ * Base class for all query parameter based options.
+ * 
+ * @author Francesc Montserrat
+ */
 public abstract class QueryOptions
 {
+    /** The option map. */
     protected Multimap<String, String> map = LinkedListMultimap.create();
 
-    public Multimap<String, String> getMap()
+    /**
+     * Gets the option map.
+     */
+    public Multimap<String, String> getOptions()
     {
         return map;
     }

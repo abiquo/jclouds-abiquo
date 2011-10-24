@@ -16,7 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.domain.infrastructure.options;
+
+import org.jclouds.abiquo.domain.options.QueryOptions;
 
 public class MachineOptions extends QueryOptions
 {
@@ -28,7 +31,9 @@ public class MachineOptions extends QueryOptions
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
-        return new MachineOptions();
+        MachineOptions options = new MachineOptions();
+        options.map.putAll(map);
+        return options;
     }
 
     @Override
@@ -42,7 +47,7 @@ public class MachineOptions extends QueryOptions
         private Integer port;
 
         /**
-         * @see MachineOptions#port(Integer)
+         * Set the optional hypervisor port.
          */
         public Builder port(final Integer port)
         {
