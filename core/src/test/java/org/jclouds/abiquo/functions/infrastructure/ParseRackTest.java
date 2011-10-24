@@ -31,7 +31,7 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Test Datacenters parsing.
+ * Test Rack parsing.
  * 
  * @author Ignasi Barrera
  */

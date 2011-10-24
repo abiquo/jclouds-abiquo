@@ -67,6 +67,10 @@ public class Infrastructure
     {
         DatacenterDto datacenter = datacenterPost();
         datacenter.setId(1);
+        datacenter.addLink(new RESTLink("discovermultiple",
+            "http://localhost/api/admin/datacenters/1/action/discovermultiple"));
+        datacenter.addLink(new RESTLink("discoversingle",
+            "http://localhost/api/admin/datacenters/1/action/discoversingle"));
         datacenter.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1"));
         datacenter.addLink(new RESTLink("racks", "http://localhost/api/admin/datacenters/1/racks"));
         datacenter.addLink(new RESTLink("remoteservices",
@@ -134,6 +138,8 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<datacenter>");
+        buffer.append(link("/admin/datacenters/1/action/discovermultiple", "discovermultiple"));
+        buffer.append(link("/admin/datacenters/1/action/discoversingle", "discoversingle"));
         buffer.append(link("/admin/datacenters/1", "edit"));
         buffer.append(link("/admin/datacenters/1/racks", "racks"));
         buffer.append(link("/admin/datacenters/1/remoteservices", "remoteservices"));

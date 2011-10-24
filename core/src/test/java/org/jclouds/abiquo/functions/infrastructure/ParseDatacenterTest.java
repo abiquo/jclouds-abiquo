@@ -31,7 +31,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Test Datacenters parsing.
+ * Test Datacenter parsing.
  * 
  * @author Ignasi Barrera
  */

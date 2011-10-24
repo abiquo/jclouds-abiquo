@@ -26,15 +26,19 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayload;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
+import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
+import org.jclouds.abiquo.functions.infrastructure.ParseMachine;
 import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
 import org.jclouds.abiquo.functions.infrastructure.ParseRemoteService;
@@ -48,9 +52,11 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
@@ -113,6 +119,19 @@ public interface InfrastructureAsyncClient
     @DELETE
     ListenableFuture<Void> deleteDatacenter(
         @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#discoverSingleMachine(DatacenterDto, String, HypervisorType,
+     *      String, String, MachineOptions)
+     */
+    @GET
+    @ResponseParser(ParseMachine.class)
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<MachineDto> discoverSingleMachine(
+        @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @QueryParam("ip") String ip, @QueryParam("hypervisortype") HypervisorType hypervisorType,
+        @QueryParam("user") String user, @QueryParam("password") String password,
+        @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
     // Rack
 

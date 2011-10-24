@@ -21,11 +21,14 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
@@ -76,9 +79,26 @@ public interface InfrastructureClient
     /**
      * Deletes an existing datacenter.
      * 
-     * @param datacenter The idatacenter to delete.
+     * @param datacenter The datacenter to delete.
      */
     void deleteDatacenter(DatacenterDto datacenter);
+
+    /**
+     * Retrieve remote machine information.
+     * 
+     * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource#DatacenterResource-
+     *      Retrieveremotemachineinformation
+     * @param datacenter The datacenter.
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @param options Optional query params.
+     * @return The physical machine or <code>null</code> if it does not exist.
+     */
+    MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip,
+        HypervisorType hypervisorType, String user, String password, MachineOptions options);
 
     /**
      * List all not managed racks for a datacenter.
@@ -86,7 +106,7 @@ public interface InfrastructureClient
      * @param datacenter The datacenter.
      * @return The list of not managed racks for the datacenter.
      */
-    RacksDto listRacks(DatacenterDto dataceter);
+    RacksDto listRacks(DatacenterDto datacenter);
 
     /**
      * Create a new not managed rack in a datacenter.
