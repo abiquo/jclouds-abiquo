@@ -23,7 +23,6 @@ import com.google.common.collect.Multimap;
 
 public abstract class QueryOptions
 {
-
     protected Multimap<String, String> map = LinkedListMultimap.create();
 
     public Multimap<String, String> getMap()
