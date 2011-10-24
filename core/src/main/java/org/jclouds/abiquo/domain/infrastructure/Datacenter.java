@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
-import static com.google.common.collect.Iterables.transform;
-
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -29,7 +27,6 @@ import org.jclouds.abiquo.reference.AbiquoEdition;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
@@ -91,68 +88,37 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<Rack> listRacks()
     {
         Iterable<Rack> racks = context.getInfrastructureService().listRacks(this);
-        return Lists.newLinkedList(setDatacenterInAllRacks(racks));
+        return Lists.newLinkedList(racks);
     }
 
     public List<Rack> listRacks(final Predicate<Rack> filter)
     {
         Iterable<Rack> racks = context.getInfrastructureService().listRacks(this, filter);
-        return Lists.newLinkedList(setDatacenterInAllRacks(racks));
+        return Lists.newLinkedList(racks);
     }
 
     public Rack findRack(final Predicate<Rack> filter)
     {
-        Rack rack = context.getInfrastructureService().findRack(this, filter);
-        rack.datacenter = this;
-        return rack;
+        return context.getInfrastructureService().findRack(this, filter);
     }
 
     public List<RemoteService> listRemoteServices()
     {
         Iterable<RemoteService> remoteServices =
             context.getInfrastructureService().listRemoteServices(this);
-        return Lists.newLinkedList(setDatacenterInAllRemoteServices(remoteServices));
+        return Lists.newLinkedList(remoteServices);
     }
 
     public List<RemoteService> listRemoteServices(final Predicate<RemoteService> filter)
     {
         Iterable<RemoteService> remoteServices =
             context.getInfrastructureService().listRemoteServices(this, filter);
-        return Lists.newLinkedList(setDatacenterInAllRemoteServices(remoteServices));
+        return Lists.newLinkedList(remoteServices);
     }
 
     public RemoteService findRemoteService(final Predicate<RemoteService> filter)
     {
-        RemoteService remoteService =
-            context.getInfrastructureService().findRemoteService(this, filter);
-        remoteService.datacenter = this;
-        return remoteService;
-    }
-
-    private Iterable<Rack> setDatacenterInAllRacks(Iterable<Rack> racks)
-    {
-        return Lists.newLinkedList(transform(racks, new Function<Rack, Rack>()
-        {
-            @Override
-            public Rack apply(Rack input)
-            {
-                input.datacenter = Datacenter.this;
-                return input;
-            }
-        }));
-    }
-
-    private Iterable<RemoteService> setDatacenterInAllRemoteServices(Iterable<RemoteService> racks)
-    {
-        return Lists.newLinkedList(transform(racks, new Function<RemoteService, RemoteService>()
-        {
-            @Override
-            public RemoteService apply(RemoteService input)
-            {
-                input.datacenter = Datacenter.this;
-                return input;
-            }
-        }));
+        return context.getInfrastructureService().findRemoteService(this, filter);
     }
 
     private void createRemoteServices()
@@ -239,8 +205,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
         public static Builder fromDatacenter(final Datacenter in)
         {
-            return Datacenter.builder(in.context).id(in.getId()).name(in.getName())
-                .location(in.getLocation());
+            return Datacenter.builder(in.context).id(in.getId()).name(in.getName()).location(
+                in.getLocation());
         }
     }
 

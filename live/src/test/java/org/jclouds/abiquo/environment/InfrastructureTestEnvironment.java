@@ -64,8 +64,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     public void setup() throws Exception
     {
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu")
-                .remoteServices("80.80.80.80", AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
+                "80.80.80.80", AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -74,7 +74,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
         rack =
             Rack.builder(context, datacenter).name("Aloha").shortDescription("A hawaian rack")
-                .haEnabled(false).vlanIdMin(6).vlanIdMax(3024).vlanPerVdcExpected(6).build();
+                .haEnabled(false).vlanIdMin(6).vlanIdMax(3024).vlanPerVdcReserved(6).build();
         rack.save();
         assertNotNull(rack.getId());
     }

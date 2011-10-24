@@ -40,8 +40,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 public class RemoteService extends DomainWrapper<RemoteServiceDto>
 {
     /** The datacenter using the remote service. */
-    // Package protected to be set by Datacenter list methods
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -62,8 +61,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient()
-                .createRemoteService(datacenter.unwrap(), target);
+            context.getApi().getInfrastructureClient().createRemoteService(datacenter.unwrap(),
+                target);
     }
 
     @Override
@@ -174,8 +173,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         public static Builder fromRemoteService(final RemoteService in)
         {
             Builder builder =
-                RemoteService.builder(in.context, in.datacenter).status(in.getStatus())
-                    .type(in.getType());
+                RemoteService.builder(in.context, in.getDatacenter()).status(in.getStatus()).type(
+                    in.getType());
             builder.uri = in.getUri();
             return builder;
         }
