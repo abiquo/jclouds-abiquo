@@ -64,7 +64,7 @@ public class ParseRackTest extends ParseXMLTest<RackDto>
         assertEquals(rack.isHaEnabled(), false);
         assertEquals(rack.getVlanIdMin(), Integer.valueOf(6));
         assertEquals(rack.getVlanIdMax(), Integer.valueOf(3024));
-        assertEquals(rack.getVlanPerVdcExpected(), Integer.valueOf(6));
+        assertEquals(rack.getVlanPerVdcReserved(), Integer.valueOf(6));
         assertEquals(rack.getNrsq(), Integer.valueOf(80));
     }
 

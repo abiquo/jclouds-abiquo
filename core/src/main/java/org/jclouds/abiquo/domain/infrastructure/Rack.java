@@ -103,7 +103,7 @@ public class Rack extends DomainWrapper<RackDto>
 
         private Integer vlanIdMin;
 
-        private Integer vlanPerVdcExpected;
+        private Integer vlanPerVdcReserved;
 
         private String vlansIdAvoided;
 
@@ -159,9 +159,9 @@ public class Rack extends DomainWrapper<RackDto>
             return this;
         }
 
-        public Builder vlanPerVdcExpected(final Integer vlanPerVdcExpected)
+        public Builder vlanPerVdcReserved(final Integer vlanPerVdcExpected)
         {
-            this.vlanPerVdcExpected = vlanPerVdcExpected;
+            this.vlanPerVdcReserved = vlanPerVdcExpected;
             return this;
         }
 
@@ -188,7 +188,7 @@ public class Rack extends DomainWrapper<RackDto>
             dto.setNrsq(nrsq);
             dto.setVlanIdMax(vlanIdMax);
             dto.setVlanIdMin(vlanIdMin);
-            dto.setVlanPerVdcExpected(vlanPerVdcExpected);
+            dto.setVlanPerVdcReserved(vlanPerVdcReserved);
             dto.setVlansIdAvoided(vlansIdAvoided);
             Rack rack = new Rack(context, dto);
             rack.datacenter = datacenter;
@@ -198,10 +198,10 @@ public class Rack extends DomainWrapper<RackDto>
         public static Builder fromRack(final Rack in)
         {
             return Rack.builder(in.context, in.datacenter).id(in.getId()).name(in.getName())
-                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
-                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
-                .vlanPerVdcExpected(in.getVlanPerVdcExpected())
-                .VlansIdAvoided(in.getVlansIdAvoided());
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(
+                    in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcReserved(in.getVlanPerVdcReserved()).VlansIdAvoided(
+                    in.getVlansIdAvoided());
         }
     }
 
@@ -257,9 +257,9 @@ public class Rack extends DomainWrapper<RackDto>
         return target.getVlanIdMin();
     }
 
-    public Integer getVlanPerVdcExpected()
+    public Integer getVlanPerVdcReserved()
     {
-        return target.getVlanPerVdcExpected();
+        return target.getVlanPerVdcReserved();
     }
 
     public String getVlansIdAvoided()
@@ -282,9 +282,9 @@ public class Rack extends DomainWrapper<RackDto>
         target.setVlanIdMin(vlanIdMin);
     }
 
-    public void setVlanPerVdcExpected(final Integer vlanPerVdcExpected)
+    public void setVlanPerVdcReserved(final Integer vlanPerVdcReserved)
     {
-        target.setVlanPerVdcExpected(vlanPerVdcExpected);
+        target.setVlanPerVdcReserved(vlanPerVdcReserved);
     }
 
     public void setVlansIdAvoided(final String vlansIdAvoided)

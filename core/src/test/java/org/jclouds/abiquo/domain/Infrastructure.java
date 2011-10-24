@@ -48,7 +48,7 @@ public class Infrastructure
         rack.setHaEnabled(false);
         rack.setVlanIdMin(6);
         rack.setVlanIdMax(3024);
-        rack.setVlanPerVdcExpected(6);
+        rack.setVlanPerVdcReserved(6);
         rack.setNrsq(80);
         rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         return rack;
@@ -114,7 +114,7 @@ public class Infrastructure
         buffer.append("<shortDescription>A hawaian rack</shortDescription>");
         buffer.append("<vlanIdMax>3024</vlanIdMax>");
         buffer.append("<vlanIdMin>6</vlanIdMin>");
-        buffer.append("<vlanPerVdcExpected>6</vlanPerVdcExpected>");
+        buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
         buffer.append("</rack>");
         return buffer.toString();
     }
@@ -157,7 +157,7 @@ public class Infrastructure
         buffer.append("<shortDescription>A hawaian rack</shortDescription>");
         buffer.append("<vlanIdMax>3024</vlanIdMax>");
         buffer.append("<vlanIdMin>6</vlanIdMin>");
-        buffer.append("<vlanPerVdcExpected>6</vlanPerVdcExpected>");
+        buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
         buffer.append("</rack>");
         return buffer.toString();
     }
