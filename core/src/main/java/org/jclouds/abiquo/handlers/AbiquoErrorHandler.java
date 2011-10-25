@@ -19,20 +19,19 @@
 
 package org.jclouds.abiquo.handlers;
 
-import java.util.Iterator;
+import static javax.ws.rs.core.Response.Status.fromStatusCode;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.functions.ParseErrors;
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
-import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceNotFoundException;
 
-import com.abiquo.model.transport.error.ErrorDto;
 import com.abiquo.model.transport.error.ErrorsDto;
 import com.google.common.io.Closeables;
 
@@ -58,8 +57,7 @@ public class AbiquoErrorHandler implements HttpErrorHandler
     public void handleError(final HttpCommand command, final HttpResponse response)
     {
         ErrorsDto errors = errorParser.apply(response);
-        String message = getMessage(errors);
-        Exception exception = new HttpResponseException(command, response, message);
+        Exception exception = new AbiquoException(fromStatusCode(response.getStatusCode()), errors);
 
         try
         {
@@ -67,10 +65,10 @@ public class AbiquoErrorHandler implements HttpErrorHandler
             {
                 case 401:
                 case 403:
-                    exception = new AuthorizationException(message, exception);
+                    exception = new AuthorizationException(errors.toString(), exception);
                     break;
                 case 404:
-                    exception = new ResourceNotFoundException(message, exception);
+                    exception = new ResourceNotFoundException(errors.toString(), exception);
                     break;
             }
         }
@@ -82,21 +80,6 @@ public class AbiquoErrorHandler implements HttpErrorHandler
             }
             command.setException(exception);
         }
-    }
-
-    private String getMessage(final ErrorsDto errors)
-    {
-        StringBuffer buffer = new StringBuffer();
-        for (Iterator<ErrorDto> it = errors.getCollection().iterator(); it.hasNext();)
-        {
-            ErrorDto error = it.next();
-            buffer.append(error.getMessage());
-            if (it.hasNext())
-            {
-                buffer.append("\n");
-            }
-        }
-        return buffer.toString();
     }
 
 }
