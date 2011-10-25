@@ -26,8 +26,12 @@ import java.util.Properties;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.environment.TestEnvironment;
+import org.jclouds.logging.config.NullLoggingModule;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
 
 /**
  * Base class for live and domain tests.
@@ -54,7 +58,10 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
 
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
-        context = new AbiquoContextFactory().createContext(identity, credential, props);
+
+        context =
+            new AbiquoContextFactory().createContext(identity, credential,
+                ImmutableSet.<Module> of(new NullLoggingModule()), props);
         env = environment(context);
 
         env.setup();

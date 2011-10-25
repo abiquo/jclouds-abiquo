@@ -21,6 +21,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates.remoteServiceType;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNull;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -74,6 +75,17 @@ public class RemoteServiceTest extends BaseAbiquoClientLiveTest<InfrastructureTe
                 RemoteServiceType.BPM_SERVICE);
 
         assertNull(deleted);
+    }
+
+    public void testIsAvailable()
+    {
+        RemoteService rs =
+            env.datacenter
+                .findRemoteService(remoteServiceType(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR));
+        rs.setUri("http://10.60.1.234/unexisting");
+        rs.update();
+
+        assertFalse(rs.isAvailable());
     }
 
     @Test(expectedExceptions = IllegalStateException.class)
