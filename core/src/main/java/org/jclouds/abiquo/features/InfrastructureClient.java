@@ -198,4 +198,12 @@ public interface InfrastructureClient
      * @param remoteService The remote service to delete.
      */
     void deleteRemoteService(RemoteServiceDto remoteService);
+
+    /**
+     * Check if the given remote service is available and properly configured.
+     * 
+     * @param remoteService The remote service to check.
+     * @return A Boolean indicating if the remote service is available.
+     */
+    boolean isAvailable(RemoteServiceDto remoteService);
 }

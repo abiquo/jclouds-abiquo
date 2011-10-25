@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.Infrastructure;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.functions.ReturnTrueIf2xxFalseOtherwise;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseMachine;
@@ -352,6 +353,27 @@ public class InfrastructureAsyncClientTest extends
 
         checkFilters(request);
     }
+
+    public void testIsAvailableRemoteService() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("isAvailable", RemoteServiceDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, Infrastructure.remoteServicePut());
+
+        assertRequestLineEquals(request, "GET http://localhost:80/nodecollector/check HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReturnTrueIf2xxFalseOtherwise.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    // Machine
 
     public void testDiscoverSingleMachineWithoutOptions() throws SecurityException,
         NoSuchMethodException, IOException

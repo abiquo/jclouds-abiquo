@@ -35,7 +35,9 @@ import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayload;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
+import org.jclouds.abiquo.binders.infrastructure.BindRemoteServiceCheck;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.functions.ReturnTrueIf2xxFalseOtherwise;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseMachine;
@@ -233,4 +235,12 @@ public interface InfrastructureAsyncClient
     @DELETE
     ListenableFuture<Void> deleteRemoteService(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
+
+    /**
+     * @see InfrastructureClient#isAvailable(RemoteServiceDto)
+     */
+    @GET
+    @ResponseParser(ReturnTrueIf2xxFalseOtherwise.class)
+    ListenableFuture<Boolean> isAvailable(
+        @BinderParam(BindRemoteServiceCheck.class) RemoteServiceDto remoteService);
 }

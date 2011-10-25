@@ -64,8 +64,21 @@ public class BindToPath implements Binder
         SingleResourceTransportDto dto = checkValidInput(input);
 
         // Update the request URI with the configured link URI
-        RESTLink linkToUse = getLinkToUse(gRequest, dto);
-        return bindLinkToPath(request, linkToUse);
+        String newEndpoint = getNewEndpoint(gRequest, dto);
+        return bindToPath(request, newEndpoint);
+    }
+
+    /**
+     * Get the new endpoint to use.
+     * 
+     * @param gRequest The request.
+     * @param dto The input parameter.
+     * @return The new endpoint to use.
+     */
+    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest,
+        final SingleResourceTransportDto dto)
+    {
+        return getLinkToUse(gRequest, dto).getHref();
     }
 
     /**
@@ -99,15 +112,15 @@ public class BindToPath implements Binder
      * Bind the given link to the request URI.
      * 
      * @param request The request to modify.
-     * @param link The link to use as the request URI.
+     * @param endpoint The endpoint to use as the request URI.
      * @return The updated request.
      */
-    static <R extends HttpRequest> R bindLinkToPath(final R request, final RESTLink link)
+    static <R extends HttpRequest> R bindToPath(final R request, final String endpoint)
     {
         try
         {
             // Preserve current query and matrix parameters
-            String newEndpoint = link.getHref() + getParameterString(request);
+            String newEndpoint = endpoint + getParameterString(request);
 
             // Replace the URI with the edit link in the DTO
             URI path = URI.create(newEndpoint);
@@ -127,7 +140,7 @@ public class BindToPath implements Binder
         return (SingleResourceTransportDto) input;
     }
 
-    private static <R extends HttpRequest> String getParameterString(R request)
+    private static <R extends HttpRequest> String getParameterString(final R request)
     {
         String endpoint = request.getEndpoint().toString();
 

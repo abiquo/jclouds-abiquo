@@ -25,12 +25,12 @@ import static com.google.common.base.Preconditions.checkState;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.ws.rs.PUT;
 
 import org.jclouds.abiquo.xml.XMLParser;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 
-import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.SingleResourceTransportDto;
 
 /**
@@ -60,10 +60,23 @@ public class BindToXMLPayloadAndPath extends BindToXMLPayload
         SingleResourceTransportDto dto = BindToPath.checkValidInput(payload);
 
         // Update the request URI with the configured link URI
-        RESTLink linkToUse = BindToPath.getLinkToUse(gRequest, dto);
-        R updatedRequest = BindToPath.bindLinkToPath(request, linkToUse);
+        String newEndpoint = getNewEndpoint(gRequest, dto);
+        R updatedRequest = BindToPath.bindToPath(request, newEndpoint);
 
         // Add the payload
         return super.bindToRequest(updatedRequest, payload);
+    }
+
+    /**
+     * Get the new endpoint to use.
+     * 
+     * @param gRequest The request.
+     * @param dto The input parameter.
+     * @return The new endpoint to use.
+     */
+    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest,
+        final SingleResourceTransportDto dto)
+    {
+        return BindToPath.getLinkToUse(gRequest, dto).getHref();
     }
 }
