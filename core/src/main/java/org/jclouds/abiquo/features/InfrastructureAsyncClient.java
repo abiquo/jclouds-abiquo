@@ -41,6 +41,7 @@ import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseMachine;
+import org.jclouds.abiquo.functions.infrastructure.ParseMachines;
 import org.jclouds.abiquo.functions.infrastructure.ParseRack;
 import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
 import org.jclouds.abiquo.functions.infrastructure.ParseRemoteService;
@@ -59,6 +60,7 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
@@ -243,4 +245,48 @@ public interface InfrastructureAsyncClient
     @ExceptionParser(ReturnFalseOn5xx.class)
     ListenableFuture<Boolean> isAvailable(
         @BinderParam(BindRemoteServiceCheck.class) RemoteServiceDto remoteService);
+
+    // Machine
+
+    /**
+     * @see InfrastructureClient#listMachines(RackDto)
+     */
+    @GET
+    @ResponseParser(ParseMachines.class)
+    ListenableFuture<MachinesDto> listMachines(
+        @EndpointLink("machines") @BinderParam(BindToPath.class) RackDto rack);
+
+    /**
+     * @see InfrastructureClient#createMachine(RackDto, MachineDto)
+     */
+    @POST
+    @ResponseParser(ParseMachine.class)
+    ListenableFuture<MachineDto> createMachine(
+        @EndpointLink("machines") @BinderParam(BindToPath.class) RackDto rack,
+        @BinderParam(BindToXMLPayload.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#getMachine(RackDto, Integer)
+     */
+    @GET
+    @ResponseParser(ParseMachine.class)
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<MachineDto> getMachine(
+        @EndpointLink("machines") @BinderParam(BindToPath.class) final RackDto rack,
+        @BinderParam(AppendToPath.class) Integer machineId);
+
+    /**
+     * @see InfrastructureClient#updateMachine(MachineDto)
+     */
+    @PUT
+    @ResponseParser(ParseMachine.class)
+    ListenableFuture<MachineDto> updateMachine(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#deleteMachine(MachineDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteMachine(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
 }

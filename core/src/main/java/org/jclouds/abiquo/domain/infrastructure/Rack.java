@@ -21,6 +21,8 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -28,6 +30,8 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RackDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link RackDto}.
@@ -39,7 +43,8 @@ import com.abiquo.server.core.infrastructure.RackDto;
 public class Rack extends DomainWrapper<RackDto>
 {
     /** The datacenter where the rack belongs. */
-    private Datacenter datacenter;
+    // Package protected to allow navigation from children
+    Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -48,6 +53,8 @@ public class Rack extends DomainWrapper<RackDto>
     {
         super(context, target);
     }
+
+    // Domain operations
 
     @Override
     public void delete()
@@ -78,6 +85,27 @@ public class Rack extends DomainWrapper<RackDto>
 
         return datacenter;
     }
+
+    // Children access
+
+    public List<Machine> listMachines()
+    {
+        Iterable<Machine> machines = context.getInfrastructureService().listMachines(this);
+        return Lists.newLinkedList(machines);
+    }
+
+    public List<Machine> listMachines(final Predicate<Machine> filter)
+    {
+        Iterable<Machine> machines = context.getInfrastructureService().listMachines(this, filter);
+        return Lists.newLinkedList(machines);
+    }
+
+    public Machine findMachine(final Predicate<Machine> filter)
+    {
+        return context.getInfrastructureService().findMachine(this, filter);
+    }
+
+    // Builder
 
     public static Builder builder(final AbiquoContext context, final Datacenter datacenter)
     {

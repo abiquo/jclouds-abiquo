@@ -29,6 +29,7 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
@@ -45,6 +46,8 @@ import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface InfrastructureClient
 {
+    // Datacenter
+
     /**
      * List all datacenters.
      * 
@@ -116,6 +119,8 @@ public interface InfrastructureClient
     MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip,
         HypervisorType hypervisorType, String user, String password, MachineOptions options);
 
+    // Rack
+
     /**
      * List all not managed racks for a datacenter.
      * 
@@ -156,6 +161,8 @@ public interface InfrastructureClient
      * @param rack The rack to delete.
      */
     void deleteRack(final RackDto rack);
+
+    // Remote service
 
     /**
      * List all remote services of the datacenter.
@@ -206,4 +213,46 @@ public interface InfrastructureClient
      * @return A Boolean indicating if the remote service is available.
      */
     boolean isAvailable(RemoteServiceDto remoteService);
+
+    // Machine
+    /**
+     * Create a new physical machine in a rack.
+     * 
+     * @param rack The rack.
+     * @param machine The physical machine to be created.
+     * @return The created physical machine.
+     */
+    MachineDto createMachine(RackDto rack, MachineDto machine);
+
+    /**
+     * Get the given machine from the given rack.
+     * 
+     * @param rack The rack.
+     * @param machineId The id of the machine.
+     * @return The machine or <code>null</code> if it does not exist.
+     */
+    MachineDto getMachine(RackDto rack, Integer machineId);
+
+    /**
+     * Updates an existing physical machine.
+     * 
+     * @param machine The new attributes for the physical machine.
+     * @return The updated machine.
+     */
+    MachineDto updateMachine(MachineDto machine);
+
+    /**
+     * Deletes an existing physical machine.
+     * 
+     * @param machine The physical machine to delete.
+     */
+    void deleteMachine(MachineDto machine);
+
+    /**
+     * List all machines racks for a rack.
+     * 
+     * @param rack The rack.
+     * @return The list of physical machines for the rack.
+     */
+    MachinesDto listMachines(RackDto rack);
 }

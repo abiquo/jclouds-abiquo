@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 
@@ -50,8 +51,18 @@ public class Infrastructure
         rack.setVlanIdMax(3024);
         rack.setVlanPerVdcReserved(6);
         rack.setNrsq(80);
-        rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         return rack;
+    }
+
+    public static MachineDto machinePost()
+    {
+        MachineDto machine = new MachineDto();
+        machine.setName("Kamehameha");
+        machine.setVirtualCpuCores(3);
+        machine.setDescription("A hawaian machine");
+        machine.setVirtualRamInMb(512);
+        machine.setVirtualSwitch("192.168.1.10");
+        return machine;
     }
 
     public static RemoteServiceDto remoteServicePost()
@@ -82,7 +93,10 @@ public class Infrastructure
     {
         RackDto rack = rackPost();
         rack.setId(1);
+        rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
+        rack.addLink(new RESTLink("machines",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines"));
         return rack;
     }
 
@@ -95,6 +109,18 @@ public class Infrastructure
         remoteService.addLink(new RESTLink("edit",
             "http://localhost/api/admin/datacenters/1/remoteservices/nodecollector"));
         return remoteService;
+    }
+
+    public static MachineDto machinePut()
+    {
+        MachineDto machine = machinePost();
+        machine.setId(1);
+        machine.addLink(new RESTLink("edit",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1"));
+        machine.addLink(new RESTLink("rack", "http://localhost/api/admin/datacenters/1/racks/1"));
+        machine.setVirtualCpuCores(5);
+
+        return machine;
     }
 
     public static String datacenterPostPayload()
@@ -111,7 +137,6 @@ public class Infrastructure
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<rack>");
-        buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<name>Aloha</name>");
         buffer.append("<nrsq>80</nrsq>");
@@ -120,6 +145,23 @@ public class Infrastructure
         buffer.append("<vlanIdMin>6</vlanIdMin>");
         buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
         buffer.append("</rack>");
+        return buffer.toString();
+    }
+
+    public static String machinePostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<machine>");
+        buffer.append("<datastores/>");
+        buffer.append("<description>A hawaian machine</description>");
+        buffer.append("<name>Kamehameha</name>");
+        buffer.append("<cpu>3</cpu>");
+        buffer.append("<cpuRatio>1</cpuRatio>");
+        buffer.append("<cpuUsed>1</cpuUsed>");
+        buffer.append("<ram>512</ram>");
+        buffer.append("<ramUsed>1</ramUsed>");
+        buffer.append("<virtualSwitch>192.168.1.10</virtualSwitch>");
+        buffer.append("</machine>");
         return buffer.toString();
     }
 
@@ -156,6 +198,7 @@ public class Infrastructure
         buffer.append("<rack>");
         buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append(link("/admin/datacenters/1/racks/1", "edit"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines", "machines"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<id>1</id>");
         buffer.append("<name>Aloha</name>");
@@ -179,6 +222,26 @@ public class Infrastructure
         buffer.append("<type>NODE_COLLECTOR</type>");
         buffer.append("<uri>http://localhost:80/nodecollector</uri>");
         buffer.append("</remoteService>");
+        return buffer.toString();
+    }
+
+    public static String machinePutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<machine>");
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1", "edit"));
+        buffer.append(link("/admin/datacenters/1/racks/1", "rack"));
+        buffer.append("<datastores/>");
+        buffer.append("<description>A hawaian machine</description>");
+        buffer.append("<id>1</id>");
+        buffer.append("<name>Kamehameha</name>");
+        buffer.append("<cpu>5</cpu>");
+        buffer.append("<cpuRatio>1</cpuRatio>");
+        buffer.append("<cpuUsed>1</cpuUsed>");
+        buffer.append("<ram>512</ram>");
+        buffer.append("<ramUsed>1</ramUsed>");
+        buffer.append("<virtualSwitch>192.168.1.10</virtualSwitch>");
+        buffer.append("</machine>");
         return buffer.toString();
     }
 
