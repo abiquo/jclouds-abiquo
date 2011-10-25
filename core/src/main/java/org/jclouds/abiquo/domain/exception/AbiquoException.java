@@ -21,6 +21,7 @@ package org.jclouds.abiquo.domain.exception;
 
 import static com.google.common.collect.Iterables.any;
 import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
 import static org.jclouds.abiquo.predicates.ErrorPredicates.errorCode;
 
 import java.util.List;
@@ -61,6 +62,14 @@ public class AbiquoException extends RuntimeException
     public boolean hasError(final String code)
     {
         return any(errors.getCollection(), errorCode(code));
+    }
+
+    /**
+     * Find the first error with the given code.
+     */
+    public ErrorDto findError(final String code)
+    {
+        return find(errors.getCollection(), errorCode(code), null);
     }
 
     /**
