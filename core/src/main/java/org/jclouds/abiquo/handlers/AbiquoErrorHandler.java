@@ -29,6 +29,7 @@ import org.jclouds.abiquo.functions.ParseErrors;
 import org.jclouds.http.HttpCommand;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
+import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ResourceNotFoundException;
 
@@ -56,8 +57,23 @@ public class AbiquoErrorHandler implements HttpErrorHandler
     @Override
     public void handleError(final HttpCommand command, final HttpResponse response)
     {
-        ErrorsDto errors = errorParser.apply(response);
-        Exception exception = new AbiquoException(fromStatusCode(response.getStatusCode()), errors);
+        Exception exception = null;
+        String message = null;
+
+        try
+        {
+            ErrorsDto errors = errorParser.apply(response);
+            message = errors.toString();
+            exception = new AbiquoException(fromStatusCode(response.getStatusCode()), errors);
+        }
+        catch (Exception ex)
+        {
+            // If it is not an abiquo Exception (can not be unmarshalled), propagate a standard one
+            message =
+                String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
+                    response.getStatusLine());
+            exception = new HttpResponseException(command, response, message);
+        }
 
         try
         {
@@ -65,10 +81,10 @@ public class AbiquoErrorHandler implements HttpErrorHandler
             {
                 case 401:
                 case 403:
-                    exception = new AuthorizationException(errors.toString(), exception);
+                    exception = new AuthorizationException(message, exception);
                     break;
                 case 404:
-                    exception = new ResourceNotFoundException(errors.toString(), exception);
+                    exception = new ResourceNotFoundException(message, exception);
                     break;
             }
         }

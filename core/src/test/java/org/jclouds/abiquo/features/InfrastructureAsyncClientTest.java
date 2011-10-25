@@ -26,7 +26,7 @@ import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.Infrastructure;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
-import org.jclouds.abiquo.functions.ReturnTrueIf2xxFalseOtherwise;
+import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseMachine;
@@ -35,6 +35,7 @@ import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
 import org.jclouds.abiquo.functions.infrastructure.ParseRemoteService;
 import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServices;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
+import org.jclouds.http.functions.ReturnTrueIf2xx;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
@@ -366,9 +367,9 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ReturnTrueIf2xxFalseOtherwise.class);
+        assertResponseParserClassEquals(method, request, ReturnTrueIf2xx.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnFalseOn5xx.class);
 
         checkFilters(request);
     }

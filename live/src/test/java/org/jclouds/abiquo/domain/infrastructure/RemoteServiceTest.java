@@ -42,7 +42,7 @@ public class RemoteServiceTest extends BaseAbiquoClientLiveTest<InfrastructureTe
 {
 
     @Override
-    protected InfrastructureTestEnvironment environment(AbiquoContext context)
+    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
     {
         return new InfrastructureTestEnvironment(context);
     }

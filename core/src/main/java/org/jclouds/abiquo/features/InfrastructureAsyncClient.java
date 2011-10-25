@@ -37,7 +37,7 @@ import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.binders.infrastructure.BindRemoteServiceCheck;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
-import org.jclouds.abiquo.functions.ReturnTrueIf2xxFalseOtherwise;
+import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
 import org.jclouds.abiquo.functions.infrastructure.ParseMachine;
@@ -240,7 +240,7 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#isAvailable(RemoteServiceDto)
      */
     @GET
-    @ResponseParser(ReturnTrueIf2xxFalseOtherwise.class)
+    @ExceptionParser(ReturnFalseOn5xx.class)
     ListenableFuture<Boolean> isAvailable(
         @BinderParam(BindRemoteServiceCheck.class) RemoteServiceDto remoteService);
 }
