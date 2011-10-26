@@ -133,13 +133,13 @@ public class Rack extends DomainWrapper<RackDto>
 
         private boolean haEnabled = false;
 
-        private int nrsq = DEFAULT_NRSQ;
+        private Integer nrsq = DEFAULT_NRSQ;
 
-        private int vlanIdMax = DEFAULT_VLAN_ID_MAX;
+        private Integer vlanIdMax = DEFAULT_VLAN_ID_MAX;
 
-        private int vlanIdMin = DEFAULT_VLAN_ID_MIN;
+        private Integer vlanIdMin = DEFAULT_VLAN_ID_MIN;
 
-        private int vlanPerVdcReserved = DEFAULT_VLAN_PER_VDC;
+        private Integer vlanPerVdcReserved = DEFAULT_VLAN_PER_VDC;
 
         private String vlansIdAvoided;
 

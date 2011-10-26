@@ -104,7 +104,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
         private RemoteServiceType type;
 
-        private int status;
+        private Integer status;
 
         // To be used only internally by the builder
         private String uri;
