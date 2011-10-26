@@ -22,12 +22,14 @@ package org.jclouds.abiquo.domain;
 import static com.google.common.collect.Iterables.transform;
 
 import java.lang.reflect.Constructor;
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.WrapperException;
 
 import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.google.common.base.Function;
+import com.google.common.collect.Lists;
 
 /**
  * This class is used to decorate transport objects with high level functionality.
@@ -88,16 +90,29 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     /**
      * Wrap a collection of objects to the given wrapper class.
      */
-    public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> Iterable<W> wrap(
+    public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<W> wrap(
         final AbiquoContext context, final Class<W> wrapperClass, final Iterable<T> targets)
     {
-        return transform(targets, new Function<T, W>()
+        return Lists.newLinkedList(transform(targets, new Function<T, W>()
         {
             @Override
             public W apply(final T input)
             {
                 return wrap(context, wrapperClass, input);
             }
-        });
+        }));
+    }
+
+    public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<T> unwrap(
+        final Iterable<W> targets)
+    {
+        return Lists.newLinkedList(transform(targets, new Function<W, T>()
+        {
+            @Override
+            public T apply(final W input)
+            {
+                return input.unwrap();
+            }
+        }));
     }
 }
