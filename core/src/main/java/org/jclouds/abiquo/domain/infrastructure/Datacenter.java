@@ -59,6 +59,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         super(context, target);
     }
 
+    // Domain operations
+
     @Override
     public void delete()
     {
@@ -84,6 +86,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     {
         target = context.getApi().getInfrastructureClient().updateDatacenter(target);
     }
+
+    // Children access
 
     public List<Rack> listRacks()
     {
@@ -140,6 +144,17 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     {
         RemoteService.builder(context, this).type(type).ip(this.ip).build().save();
     }
+
+    // Actions
+
+    public Machine discoverSingleMachine()
+    {
+        return null;
+        // TODO discover machine action
+
+    }
+
+    // Builder
 
     public static Builder builder(final AbiquoContext context)
     {
