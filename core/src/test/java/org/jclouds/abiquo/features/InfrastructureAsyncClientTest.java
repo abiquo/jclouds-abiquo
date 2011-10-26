@@ -176,8 +176,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRack", DatacenterDto.class,
                 RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
-                .rackPost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.rackPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
@@ -278,8 +278,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRemoteService", DatacenterDto.class,
                 RemoteServiceDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
-                .remoteServicePost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.remoteServicePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
@@ -389,7 +389,7 @@ public class InfrastructureAsyncClientTest extends
                 HypervisorType.XENSERVER, "user", "pass");
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
-        String query = "hypervisortype=XENSERVER&ip=10.60.1.222&user=user&password=pass";
+        String query = "hypervisor=XENSERVER&ip=10.60.1.222&user=user&password=pass";
         String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
 
         assertRequestLineEquals(request, expectedRequest);
@@ -415,7 +415,7 @@ public class InfrastructureAsyncClientTest extends
                 HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
-        String query = "hypervisortype=KVM&ip=80.80.80.80&user=user&password=pass&port=8889";
+        String query = "hypervisor=KVM&ip=80.80.80.80&user=user&password=pass&port=8889";
         String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
 
         assertRequestLineEquals(request, expectedRequest);
@@ -441,7 +441,7 @@ public class InfrastructureAsyncClientTest extends
                 HypervisorType.KVM, "user", "pass", MachineOptions.builder().build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
-        String query = "hypervisortype=KVM&ip=80.80.80.80&user=user&password=pass";
+        String query = "hypervisor=KVM&ip=80.80.80.80&user=user&password=pass";
         String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
 
         assertRequestLineEquals(request, expectedRequest);

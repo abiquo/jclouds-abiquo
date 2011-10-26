@@ -132,7 +132,7 @@ public interface InfrastructureAsyncClient
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<MachineDto> discoverSingleMachine(
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @QueryParam("ip") String ip, @QueryParam("hypervisortype") HypervisorType hypervisorType,
+        @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
         @QueryParam("user") String user, @QueryParam("password") String password);
 
     /**
@@ -144,7 +144,7 @@ public interface InfrastructureAsyncClient
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<MachineDto> discoverSingleMachine(
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @QueryParam("ip") String ip, @QueryParam("hypervisortype") HypervisorType hypervisorType,
+        @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
         @QueryParam("user") String user, @QueryParam("password") String password,
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 

@@ -42,6 +42,18 @@ import com.google.common.collect.Lists;
  */
 public class Rack extends DomainWrapper<RackDto>
 {
+    /** The default minimum VLAN id. */
+    private static final int DEFAULT_VLAN_ID_MIN = 2;
+
+    /** The default maximum VLAN id. */
+    private static final int DEFAULT_VLAN_ID_MAX = 4094;
+
+    /** The default maximum VLAN per virtual datacenter. */
+    private static final int DEFAULT_VLAN_PER_VDC = 1;
+
+    /** The default nrsq factor. */
+    private static final int DEFAULT_NRSQ = 10;
+
     /** The datacenter where the rack belongs. */
     // Package protected to allow navigation from children
     Datacenter datacenter;
@@ -119,15 +131,15 @@ public class Rack extends DomainWrapper<RackDto>
 
         private String shortDescription;
 
-        private Boolean haEnabled;
+        private boolean haEnabled = false;
 
-        private Integer nrsq;
+        private int nrsq = DEFAULT_NRSQ;
 
-        private Integer vlanIdMax;
+        private int vlanIdMax = DEFAULT_VLAN_ID_MAX;
 
-        private Integer vlanIdMin;
+        private int vlanIdMin = DEFAULT_VLAN_ID_MIN;
 
-        private Integer vlanPerVdcReserved;
+        private int vlanPerVdcReserved = DEFAULT_VLAN_PER_VDC;
 
         private String vlansIdAvoided;
 
@@ -159,31 +171,31 @@ public class Rack extends DomainWrapper<RackDto>
             return this;
         }
 
-        public Builder haEnabled(final Boolean haEnabled)
+        public Builder haEnabled(final boolean haEnabled)
         {
             this.haEnabled = haEnabled;
             return this;
         }
 
-        public Builder nrsq(final Integer nrsq)
+        public Builder nrsq(final int nrsq)
         {
             this.nrsq = nrsq;
             return this;
         }
 
-        public Builder vlanIdMax(final Integer vlanIdMax)
+        public Builder vlanIdMax(final int vlanIdMax)
         {
             this.vlanIdMax = vlanIdMax;
             return this;
         }
 
-        public Builder vlanIdMin(final Integer vlanIdMin)
+        public Builder vlanIdMin(final int vlanIdMin)
         {
             this.vlanIdMin = vlanIdMin;
             return this;
         }
 
-        public Builder vlanPerVdcReserved(final Integer vlanPerVdcExpected)
+        public Builder vlanPerVdcReserved(final int vlanPerVdcExpected)
         {
             this.vlanPerVdcReserved = vlanPerVdcExpected;
             return this;
@@ -222,10 +234,10 @@ public class Rack extends DomainWrapper<RackDto>
         public static Builder fromRack(final Rack in)
         {
             return Rack.builder(in.context, in.datacenter).id(in.getId()).name(in.getName())
-                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(
-                    in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
-                .vlanPerVdcReserved(in.getVlanPerVdcReserved()).VlansIdAvoided(
-                    in.getVlansIdAvoided());
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
+                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcReserved(in.getVlanPerVdcReserved())
+                .VlansIdAvoided(in.getVlansIdAvoided());
         }
     }
 
