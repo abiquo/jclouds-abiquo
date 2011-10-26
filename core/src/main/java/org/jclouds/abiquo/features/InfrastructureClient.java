@@ -119,6 +119,45 @@ public interface InfrastructureClient
     MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip,
         HypervisorType hypervisorType, String user, String password, MachineOptions options);
 
+    /**
+     * Retrieve a list of remote machine information.
+     * 
+     * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource#DatacenterResource-
+     *      Retrievealistofremotemachineinformation
+     * @param datacenter The datacenter.
+     * @param ipFrom IP address of the remote first hypervisor to check.
+     * @param ipTo IP address of the remote last hypervisor to check.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @return The physical machine list or <code>null</code> if there are no machines in the ip
+     *         range.
+     */
+    MachinesDto discoverMultipleMachines(final DatacenterDto datacenter, final String ipFrom,
+        final String ipTo, final HypervisorType hypervisorType, final String user,
+        final String password);
+
+    /**
+     * Retrieve a list of remote machine information.
+     * 
+     * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource#DatacenterResource-
+     *      Retrievealistofremotemachineinformation
+     * @param datacenter The datacenter.
+     * @param ipFrom IP address of the remote first hypervisor to check.
+     * @param ipTo IP address of the remote last hypervisor to check.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @param options Optional query params.
+     * @return The physical machine list or <code>null</code> if there are no machines in the ip
+     *         range.
+     */
+    MachinesDto discoverMultipleMachines(final DatacenterDto datacenter, final String ipFrom,
+        final String ipTo, final HypervisorType hypervisorType, final String user,
+        final String password, final MachineOptions options);
+
     // Rack
 
     /**

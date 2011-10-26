@@ -45,8 +45,6 @@ import com.abiquo.server.core.infrastructure.RackDto;
  */
 public class Machine extends DomainWrapper<MachineDto>
 {
-    MachineDto target;
-
     /** The rack where the machine belongs. */
     // Package protected to allow navigation from children
     Rack rack;
@@ -111,8 +109,6 @@ public class Machine extends DomainWrapper<MachineDto>
     public static class Builder
     {
         private AbiquoContext context;
-
-        private Integer id;
 
         private String name, description;
 
@@ -180,7 +176,7 @@ public class Machine extends DomainWrapper<MachineDto>
             return this;
         }
 
-        public Builder ipmiPort(final Integer ipmiPort)
+        public Builder ipmiPort(final int ipmiPort)
         {
             this.ipmiPort = ipmiPort;
             return this;
@@ -220,12 +216,6 @@ public class Machine extends DomainWrapper<MachineDto>
             return this;
         }
 
-        public Builder id(final Integer id)
-        {
-            this.id = id;
-            return this;
-        }
-
         public Builder virtualSwitch(final String virtualSwitch)
         {
             this.virtualSwitch = virtualSwitch;
@@ -244,7 +234,7 @@ public class Machine extends DomainWrapper<MachineDto>
             return this;
         }
 
-        public Builder port(final Integer port)
+        public Builder port(final int port)
         {
             this.port = port;
             return this;
@@ -256,31 +246,31 @@ public class Machine extends DomainWrapper<MachineDto>
             return this;
         }
 
-        public Builder virtualRamInMb(final Integer virtualRamInMb)
+        public Builder virtualRamInMb(final int virtualRamInMb)
         {
             this.virtualRamInMb = virtualRamInMb;
             return this;
         }
 
-        public Builder virtualRamUsedInMb(final Integer virtualRamUsedInMb)
+        public Builder virtualRamUsedInMb(final int virtualRamUsedInMb)
         {
             this.virtualRamUsedInMb = virtualRamUsedInMb;
             return this;
         }
 
-        public Builder virtualCpuCores(final Integer virtualCpuCores)
+        public Builder virtualCpuCores(final int virtualCpuCores)
         {
             this.virtualCpuCores = virtualCpuCores;
             return this;
         }
 
-        public Builder virtualCpusUsed(final Integer virtualCpusUsed)
+        public Builder virtualCpusUsed(final int virtualCpusUsed)
         {
             this.virtualCpusUsed = virtualCpusUsed;
             return this;
         }
 
-        public Builder virtualCpusPerCore(final Integer virtualCpusPerCore)
+        public Builder virtualCpusPerCore(final int virtualCpusPerCore)
         {
             this.virtualCpusPerCore = virtualCpusPerCore;
             return this;
@@ -309,7 +299,6 @@ public class Machine extends DomainWrapper<MachineDto>
         public Machine build()
         {
             MachineDto dto = new MachineDto();
-            dto.setId(id);
             dto.setName(name);
             dto.setDescription(description);
             dto.setVirtualRamInMb(virtualRamInMb);
@@ -342,16 +331,15 @@ public class Machine extends DomainWrapper<MachineDto>
 
         public static Builder fromMachine(final Machine in)
         {
-            return Machine.builder(in.context, in.rack).id(in.getId()).name(in.getName())
-                .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
-                .virtualCpusPerCore(in.getVirtualCpusPerCore()).virtualCpusUsed(
-                    in.getVirtualCpusUsed()).virtualRamInMb(in.getVirtualRamInMb())
-                .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
-                .virtualSwitch(in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp()).ipService(
-                    in.getIpService()).hypervisorType(in.getType()).user(in.getUser()).password(
-                    in.getPassword()).ipmiIp(in.getIpmiIp()).ipmiPassword(in.getIpmiPassword())
-                .ipmiPort(in.getIpmiPort()).ipmiUser(in.getIpmiUser()).state(in.getState())
-                .datastores(in.getDatastores());
+            return Machine.builder(in.context, in.rack).name(in.getName()).description(
+                in.getDescription()).virtualCpuCores(in.getVirtualCpuCores()).virtualCpusPerCore(
+                in.getVirtualCpusPerCore()).virtualCpusUsed(in.getVirtualCpusUsed())
+                .virtualRamInMb(in.getVirtualRamInMb()).virtualRamUsedInMb(
+                    in.getVirtualRamUsedInMb()).virtualSwitch(in.getVirtualSwitch()).port(
+                    in.getPort()).ip(in.getIp()).ipService(in.getIpService()).hypervisorType(
+                    in.getType()).user(in.getUser()).password(in.getPassword()).ipmiIp(
+                    in.getIpmiIp()).ipmiPassword(in.getIpmiPassword()).ipmiPort(in.getIpmiPort())
+                .ipmiUser(in.getIpmiUser()).state(in.getState()).datastores(in.getDatastores());
 
         }
     }

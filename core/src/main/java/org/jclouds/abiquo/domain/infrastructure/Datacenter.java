@@ -23,12 +23,14 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
@@ -158,6 +160,43 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return machine;
     }
 
+    public Machine discoverSingleMachine(final String ip, final HypervisorType hypervisorType,
+        final String user, final String password, final int port)
+    {
+        MachineDto dto =
+            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
+                hypervisorType, user, password, MachineOptions.builder().port(8889).build());
+
+        Machine machine = wrap(context, Machine.class, dto);
+
+        return machine;
+    }
+
+    public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
+        final HypervisorType hypervisorType, final String user, final String password)
+    {
+        MachinesDto dto =
+            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
+                ipTo, hypervisorType, user, password);
+
+        List<Machine> machines = wrap(context, Machine.class, dto.getCollection());
+
+        return machines;
+    }
+
+    public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
+        final HypervisorType hypervisorType, final String user, final String password,
+        final int port)
+    {
+        MachinesDto dto =
+            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
+                ipTo, hypervisorType, user, password, MachineOptions.builder().port(8889).build());
+
+        List<Machine> machines = wrap(context, Machine.class, dto.getCollection());
+
+        return machines;
+    }
+
     // Builder
 
     public static Builder builder(final AbiquoContext context)
@@ -168,8 +207,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public static class Builder
     {
         private AbiquoContext context;
-
-        private Integer id;
 
         private String name;
 
@@ -183,12 +220,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         {
             super();
             this.context = context;
-        }
-
-        public Builder id(final Integer id)
-        {
-            this.id = id;
-            return this;
         }
 
         public Builder remoteServices(final String ip, final AbiquoEdition edition)
@@ -213,7 +244,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         public Datacenter build()
         {
             DatacenterDto dto = new DatacenterDto();
-            dto.setId(id);
             dto.setName(name);
             dto.setLocation(location);
             Datacenter datacenter = new Datacenter(context, dto);
@@ -224,8 +254,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
         public static Builder fromDatacenter(final Datacenter in)
         {
-            return Datacenter.builder(in.context).id(in.getId()).name(in.getName()).location(
-                in.getLocation());
+            return Datacenter.builder(in.context).name(in.getName()).location(in.getLocation());
         }
     }
 

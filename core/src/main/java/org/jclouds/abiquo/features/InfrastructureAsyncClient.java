@@ -148,6 +148,33 @@ public interface InfrastructureAsyncClient
         @QueryParam("user") String user, @QueryParam("password") String password,
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
+    /**
+     * @see InfrastructureClient#discoverMultipleMachines(DatacenterDto, String, String,
+     *      HypervisorType, String, String)
+     */
+    @GET
+    @ResponseParser(ParseMachines.class)
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<MachineDto> discoverMultipleMachines(
+        @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,
+        @QueryParam("hypervisor") HypervisorType hypervisorType, @QueryParam("user") String user,
+        @QueryParam("password") String password);
+
+    /**
+     * @see InfrastructureClient#discoverMultipleMachines(DatacenterDto, String, String,
+     *      HypervisorType, String, String, MachineOptions)
+     */
+    @GET
+    @ResponseParser(ParseMachines.class)
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<MachineDto> discoverMultipleMachines(
+        @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,
+        @QueryParam("hypervisor") HypervisorType hypervisorType, @QueryParam("user") String user,
+        @QueryParam("password") String password,
+        @BinderParam(AppendOptionsToPath.class) MachineOptions options);
+
     // Rack
 
     /**
