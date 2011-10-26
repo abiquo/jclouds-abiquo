@@ -51,14 +51,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         super(context, target);
     }
 
-    @Override
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteRemoteService(target);
         target = null;
     }
 
-    @Override
     public void save()
     {
         target =
@@ -66,7 +64,6 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
                 target);
     }
 
-    @Override
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateRemoteService(target);

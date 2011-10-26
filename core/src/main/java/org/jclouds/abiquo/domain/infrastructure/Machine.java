@@ -19,6 +19,10 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -41,28 +45,29 @@ public class Machine extends DomainWrapper<MachineDto>
     // Package protected to allow navigation from children
     Rack rack;
 
+    /** List of available virtual switches provided by discover operation **/
+    private List<String> virtualSwitches;
+
     /**
      * Constructor to be used only by the builder.
      */
     protected Machine(final AbiquoContext context, final MachineDto target)
     {
         super(context, target);
+        extractSwitches();
     }
 
-    @Override
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteMachine(target);
         target = null;
     }
 
-    @Override
     public void save()
     {
         target = context.getApi().getInfrastructureClient().createMachine(rack.unwrap(), target);
     }
 
-    @Override
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateMachine(target);
@@ -78,6 +83,11 @@ public class Machine extends DomainWrapper<MachineDto>
         rack = wrap(context, Rack.class, dto);
 
         return rack;
+    }
+
+    public void setRack(final Rack rack)
+    {
+        this.rack = rack;
     }
 
     public String getDescription()
@@ -277,13 +287,41 @@ public class Machine extends DomainWrapper<MachineDto>
         target.setVirtualSwitch(virtualSwitch);
     }
 
-    // public Datastores getDatastores()
-    // {
-    // return target.getDatastores();
-    // }
-    //
-    // public void setDatastores(final Datastores datastores)
-    // {
-    // target.setDatastores(datastores);
-    // }
+    public Iterable<Datastore> getDatastores()
+    {
+        return wrap(context, Datastore.class, target.getDatastores().getCollection());
+    }
+
+    // Aux operations
+
+    /**
+     * Converts the tokenized String provided by the API throw the operation into a list of Strings
+     * and stores it at the atribute switches.
+     */
+    public void extractSwitches()
+    {
+        StringTokenizer st = new StringTokenizer(getVirtualSwitch(), "/");
+
+        this.virtualSwitches = new ArrayList<String>();
+
+        while (st.hasMoreTokens())
+        {
+            this.virtualSwitches.add(st.nextToken());
+        }
+
+        if (virtualSwitches.size() > 0)
+        {
+            this.setVirtualSwitch(virtualSwitches.get(0));
+        }
+    }
+
+    public List<String> getVirtualSwitches()
+    {
+        return virtualSwitches;
+    }
+
+    public void setVirtualSwitches(final List<String> virtualSwitches)
+    {
+        this.virtualSwitches = virtualSwitches;
+    }
 }

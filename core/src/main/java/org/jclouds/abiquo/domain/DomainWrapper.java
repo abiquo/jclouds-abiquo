@@ -64,21 +64,6 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     }
 
     /**
-     * Default save operation in domain.
-     */
-    public abstract void save();
-
-    /**
-     * Default update operation in domain.
-     */
-    public abstract void update();
-
-    /**
-     * Default delete operation in domain.
-     */
-    public abstract void delete();
-
-    /**
      * Wraps an object in the given wrapper class.
      */
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> W wrap(

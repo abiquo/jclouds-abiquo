@@ -56,20 +56,17 @@ public class Rack extends DomainWrapper<RackDto>
 
     // Domain operations
 
-    @Override
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteRack(target);
         target = null;
     }
 
-    @Override
     public void save()
     {
         target = context.getApi().getInfrastructureClient().createRack(datacenter.unwrap(), target);
     }
 
-    @Override
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateRack(target);
