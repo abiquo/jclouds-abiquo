@@ -19,9 +19,14 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.fail;
+
+import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -55,11 +60,19 @@ public class DatacenterTest extends BaseAbiquoClientLiveTest<InfrastructureTestE
         assertEquals(updated.getLocation(), "New York");
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void testCreateRepeated()
     {
         Datacenter repeated = Builder.fromDatacenter(env.datacenter).build();
-        repeated.save();
-    }
 
+        try
+        {
+            repeated.save();
+            fail("Should not be able to create datacenters with the same name");
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.CONFLICT, "DC-3");
+        }
+    }
 }

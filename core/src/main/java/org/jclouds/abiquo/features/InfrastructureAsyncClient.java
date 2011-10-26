@@ -199,7 +199,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#listRemoteServices(DatacenterDto)
      */
     @GET
-    @Consumes(MediaType.APPLICATION_XML)
     @ResponseParser(ParseRemoteServices.class)
     ListenableFuture<RemoteServicesDto> listRemoteServices(
         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter);

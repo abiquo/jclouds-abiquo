@@ -45,6 +45,13 @@ public class BindRemoteServiceCheck extends BindToPath
             "this binder is only valid for RemoteServiceDto objects");
 
         RemoteServiceDto remoteService = (RemoteServiceDto) dto;
+
+        if (!remoteService.getType().canBeChecked())
+        {
+            throw new IllegalArgumentException("The given remote service ["
+                + remoteService.getType().name() + "] cannot be checked");
+        }
+
         return remoteService.getUri() + "/check";
     }
 

@@ -20,11 +20,15 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates.remoteServiceType;
+import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.fail;
+
+import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -77,22 +81,29 @@ public class RemoteServiceTest extends BaseAbiquoClientLiveTest<InfrastructureTe
         assertNull(deleted);
     }
 
-    public void testIsAvailable()
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testIsAvailableNonCheckeable()
     {
         RemoteService rs =
-            env.datacenter
-                .findRemoteService(remoteServiceType(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR));
-        rs.setUri("http://10.60.1.234/unexisting");
-        rs.update();
+            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.DHCP_SERVICE));
 
-        assertFalse(rs.isAvailable());
+        rs.isAvailable();
     }
 
-    @Test(expectedExceptions = IllegalStateException.class)
+    @Test
     public void testCreateRepeated()
     {
         RemoteService repeated = Builder.fromRemoteService(env.remoteServices.get(1)).build();
-        repeated.save();
+
+        try
+        {
+            repeated.save();
+            fail("Should not be able to create duplicated remote services in the datacenter");
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.CONFLICT, "RS-6");
+        }
     }
 
 }
