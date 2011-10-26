@@ -25,8 +25,10 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.MachineDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 
@@ -61,14 +63,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
     // Domain operations
 
-    @Override
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteDatacenter(target);
         target = null;
     }
 
-    @Override
     public void save()
     {
         // Datacenter must be persisted first, so links get populated in the target object
@@ -81,7 +81,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         }
     }
 
-    @Override
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateDatacenter(target);
@@ -147,11 +146,16 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
     // Actions
 
-    public Machine discoverSingleMachine()
+    public Machine discoverSingleMachine(final String ip, final HypervisorType hypervisorType,
+        final String user, final String password)
     {
-        return null;
-        // TODO discover machine action
+        MachineDto dto =
+            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
+                hypervisorType, user, password);
 
+        Machine machine = wrap(context, Machine.class, dto);
+
+        return machine;
     }
 
     // Builder
