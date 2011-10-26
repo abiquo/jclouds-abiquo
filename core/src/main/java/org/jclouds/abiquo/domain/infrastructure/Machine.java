@@ -58,7 +58,7 @@ public class Machine extends DomainWrapper<MachineDto>
     protected Machine(final AbiquoContext context, final MachineDto target)
     {
         super(context, target);
-        extractSwitches();
+        extractVirtualSwitches();
     }
 
     public void delete()
@@ -331,14 +331,15 @@ public class Machine extends DomainWrapper<MachineDto>
 
         public static Builder fromMachine(final Machine in)
         {
-            return Machine.builder(in.context, in.rack).name(in.getName()).description(
-                in.getDescription()).virtualCpuCores(in.getVirtualCpuCores()).virtualCpusPerCore(
-                in.getVirtualCpusPerCore()).virtualCpusUsed(in.getVirtualCpusUsed())
-                .virtualRamInMb(in.getVirtualRamInMb()).virtualRamUsedInMb(
-                    in.getVirtualRamUsedInMb()).virtualSwitch(in.getVirtualSwitch()).port(
-                    in.getPort()).ip(in.getIp()).ipService(in.getIpService()).hypervisorType(
-                    in.getType()).user(in.getUser()).password(in.getPassword()).ipmiIp(
-                    in.getIpmiIp()).ipmiPassword(in.getIpmiPassword()).ipmiPort(in.getIpmiPort())
+            return Machine.builder(in.context, in.rack).name(in.getName())
+                .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
+                .virtualCpusPerCore(in.getVirtualCpusPerCore())
+                .virtualCpusUsed(in.getVirtualCpusUsed()).virtualRamInMb(in.getVirtualRamInMb())
+                .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
+                .virtualSwitch(in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp())
+                .ipService(in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
+                .password(in.getPassword()).ipmiIp(in.getIpmiIp())
+                .ipmiPassword(in.getIpmiPassword()).ipmiPort(in.getIpmiPort())
                 .ipmiUser(in.getIpmiUser()).state(in.getState()).datastores(in.getDatastores());
 
         }
@@ -549,13 +550,12 @@ public class Machine extends DomainWrapper<MachineDto>
     }
 
     /**
-     * Converts the tokenized String provided by the API throw the operation into a list of Strings
-     * and stores it at the atribute switches.
+     * Converts the tokenized String provided by the node collector API to a list of Strings and
+     * stores it at the attribute switches.
      */
-    public void extractSwitches()
+    private void extractVirtualSwitches()
     {
         StringTokenizer st = new StringTokenizer(getVirtualSwitch(), "/");
-
         this.virtualSwitches = new ArrayList<String>();
 
         while (st.hasMoreTokens())
@@ -569,13 +569,11 @@ public class Machine extends DomainWrapper<MachineDto>
         }
     }
 
-    public List<String> getVirtualSwitches()
+    /**
+     * Returns the virtual switches available. One of them needs to be selected.
+     */
+    public List<String> getAvailableVirtualSwitches()
     {
         return virtualSwitches;
-    }
-
-    public void setVirtualSwitches(final List<String> virtualSwitches)
-    {
-        this.virtualSwitches = virtualSwitches;
     }
 }
