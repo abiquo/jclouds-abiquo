@@ -45,6 +45,15 @@ import com.abiquo.server.core.infrastructure.RackDto;
  */
 public class Machine extends DomainWrapper<MachineDto>
 {
+    /** The default virtual ram used in MB. */
+    private static final int DEFAULT_VRAM_USED = 1;
+
+    /** The default virtual cpu used in MB. */
+    private static final int DEFAULT_VCPU_USED = 1;
+
+    /** The default virtual cpu per core. */
+    private static final int DEFAULT_VCPU_PER_CORE = 1;
+
     /** The rack where the machine belongs. */
     // Package protected to allow navigation from children
     Rack rack;
@@ -114,13 +123,13 @@ public class Machine extends DomainWrapper<MachineDto>
 
         private Integer virtualRamInMb;
 
-        private Integer virtualRamUsedInMb = 1;
+        private Integer virtualRamUsedInMb = DEFAULT_VRAM_USED;
 
         private Integer virtualCpuCores;
 
-        private Integer virtualCpusUsed = 1;
+        private Integer virtualCpusUsed = DEFAULT_VCPU_USED;
 
-        private Integer virtualCpusPerCore = 1;
+        private Integer virtualCpusPerCore = DEFAULT_VCPU_PER_CORE;
 
         private String virtualSwitch;
 
@@ -307,7 +316,10 @@ public class Machine extends DomainWrapper<MachineDto>
             dto.setVirtualCpusUsed(virtualCpusUsed);
             dto.setVirtualCpusPerCore(virtualCpusPerCore);
             dto.setVirtualSwitch(virtualSwitch);
-            dto.setPort(port);
+            if (port != null)
+            {
+                dto.setPort(port);
+            }
             dto.setIp(ip);
             dto.setIpService(ipService);
             dto.setType(type);
@@ -315,7 +327,10 @@ public class Machine extends DomainWrapper<MachineDto>
             dto.setPassword(password);
             dto.setIpmiIp(ipmiIp);
             dto.setIpmiPassword(ipmiPassword);
-            dto.setIpmiPort(ipmiPort);
+            if (ipmiPort != null)
+            {
+                dto.setIpmiPort(ipmiPort);
+            }
             dto.setIpmiUser(ipmiUser);
             dto.setState(state);
 

@@ -39,6 +39,9 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
  */
 public class RemoteService extends DomainWrapper<RemoteServiceDto>
 {
+    /** The default status. */
+    private static final int DEFAULT_STATUS = 0;
+
     /** The datacenter using the remote service. */
     // Package protected to allow navigation from children
     Datacenter datacenter;
@@ -104,7 +107,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
         private RemoteServiceType type;
 
-        private Integer status;
+        private Integer status = DEFAULT_STATUS;
 
         // To be used only internally by the builder
         private String uri;
