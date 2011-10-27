@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.Infrastructure;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
@@ -398,7 +399,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachine.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
         checkFilters(request);
     }
@@ -424,7 +425,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachine.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
         checkFilters(request);
     }
@@ -450,7 +451,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachine.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
         checkFilters(request);
     }
@@ -477,7 +478,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachines.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
         checkFilters(request);
     }
@@ -505,7 +506,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachines.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
         checkFilters(request);
     }

@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.find;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ import java.util.StringTokenizer;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
@@ -35,6 +37,7 @@ import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
+import com.google.common.base.Predicates;
 
 /**
  * Adds high level functionality to {@link MachineDto}.
@@ -98,14 +101,16 @@ public class Machine extends DomainWrapper<MachineDto>
         return rack;
     }
 
-    public void setRack(final Rack rack)
+    // Children access
+
+    public List<Datastore> getDatastores()
     {
-        this.rack = rack;
+        return wrap(context, Datastore.class, target.getDatastores().getCollection());
     }
 
-    public String getDescription()
+    public Datastore findDatastore(final String name)
     {
-        return target.getDescription();
+        return find(getDatastores(), DatastorePredicates.datastoreName(name), null);
     }
 
     // Builder
@@ -557,12 +562,17 @@ public class Machine extends DomainWrapper<MachineDto>
         target.setVirtualSwitch(virtualSwitch);
     }
 
-    // Aux operations
-
-    public List<Datastore> getDatastores()
+    public void setRack(final Rack rack)
     {
-        return wrap(context, Datastore.class, target.getDatastores().getCollection());
+        this.rack = rack;
     }
+
+    public String getDescription()
+    {
+        return target.getDescription();
+    }
+
+    // Aux operations
 
     /**
      * Converts the tokenized String provided by the node collector API to a list of Strings and
@@ -590,5 +600,10 @@ public class Machine extends DomainWrapper<MachineDto>
     public List<String> getAvailableVirtualSwitches()
     {
         return virtualSwitches;
+    }
+
+    public String findAvailableVirtualSwitch(final String vswitch)
+    {
+        return find(virtualSwitches, Predicates.equalTo(vswitch));
     }
 }

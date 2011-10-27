@@ -21,6 +21,8 @@ package org.jclouds.abiquo.binders.infrastructure;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import javax.inject.Singleton;
+
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.http.HttpRequest;
 
@@ -33,6 +35,7 @@ import com.abiquo.model.enumerator.RemoteServiceType;
  * 
  * @author Ignasi Barrera
  */
+@Singleton
 public class AppendRemoteServiceTypeToPath extends AppendToPath
 {
     @Override

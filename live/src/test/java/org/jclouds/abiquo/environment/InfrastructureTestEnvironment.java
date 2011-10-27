@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.environment;
 
+import static com.google.common.collect.Iterables.find;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -28,10 +29,17 @@ import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Datastore;
+import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.jclouds.abiquo.reference.AbiquoEdition;
+import org.jclouds.abiquo.util.Config;
+
+import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.RemoteServiceType;
 
 /**
  * Test environment for infrastructure live tests.
@@ -48,9 +56,11 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public Datacenter datacenter;
 
+    public List<RemoteService> remoteServices;
+
     public Rack rack;
 
-    public List<RemoteService> remoteServices;
+    private Machine machine;
 
     public InfrastructureTestEnvironment(final AbiquoContext context)
     {
@@ -62,37 +72,103 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     @Override
     public void setup() throws Exception
     {
-        datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu")
-                .remoteServices("80.80.80.80", AbiquoEdition.ENTERPRISE).build();
-        datacenter.save();
-        assertNotNull(datacenter.getId());
-
-        remoteServices = datacenter.listRemoteServices();
-        assertEquals(remoteServices.size(), 7);
-
-        rack =
-            Rack.builder(context, datacenter).name("Aloha").shortDescription("A hawaian rack")
-                .haEnabled(false).vlanIdMin(6).vlanIdMax(3024).vlanPerVdcReserved(6).build();
-        rack.save();
-        assertNotNull(rack.getId());
+        createDatacenter();
+        createRack();
+        createMachine();
     }
 
     @Override
     public void tearDown() throws Exception
     {
-        Integer idRack = rack.getId();
-        Integer idDatacenter = datacenter.getId();
+        deleteMachine();
+        deleteRack();
+        deleteDatacenter();
+    }
 
-        rack.delete();
-        assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
+    // Setup
 
-        datacenter.delete(); // Abiquo API will delete remote services too
-        assertNull(infrastructure.getDatacenter(idDatacenter));
+    private void createDatacenter()
+    {
+        String remoteServicesAddress = Config.get("abiquo.remoteservices.address");
+
+        datacenter =
+            Datacenter.builder(context).name(randomName()).location("Honolulu")
+                .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+        datacenter.save();
+        assertNotNull(datacenter.getId());
+
+        remoteServices = datacenter.listRemoteServices();
+        assertEquals(remoteServices.size(), 7);
+    }
+
+    private void createMachine()
+    {
+        String ip = Config.get("abiquo.hypervisor.address");
+        HypervisorType type = HypervisorType.valueOf(Config.get("abiquo.hypervisor.type"));
+        String user = Config.get("abiquo.hypervisor.user");
+        String pass = Config.get("abiquo.hypervisor.pass");
+
+        machine = datacenter.discoverSingleMachine(ip, type, user, pass);
+
+        String vswitch =
+            machine.findAvailableVirtualSwitch(Config.get("abiquo.hypervisor.vswitch"));
+        machine.setVirtualSwitch(vswitch);
+
+        Datastore datastore = machine.findDatastore(Config.get("abiquo.hypervisor.datastore"));
+        datastore.setEnabled(true);
+
+        machine.setRack(rack);
+        machine.save();
+    }
+
+    private void createRack()
+    {
+        rack = Rack.builder(context, datacenter).name("Aloha").build();
+        rack.save();
+        assertNotNull(rack.getId());
+    }
+
+    // Teardown
+
+    private void deleteMachine()
+    {
+        if (machine != null && rack != null)
+        {
+            Integer idMachine = machine.getId();
+            machine.delete();
+            assertNull(infrastructure.getMachine(rack.unwrap(), idMachine));
+        }
+    }
+
+    private void deleteRack()
+    {
+        if (rack != null && datacenter != null)
+        {
+            Integer idRack = rack.getId();
+            rack.delete();
+            assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
+        }
+    }
+
+    private void deleteDatacenter()
+    {
+        if (datacenter != null)
+        {
+            Integer idDatacenter = datacenter.getId();
+            datacenter.delete(); // Abiquo API will delete remote services too
+            assertNull(infrastructure.getDatacenter(idDatacenter));
+        }
     }
 
     private static String randomName()
     {
         return UUID.randomUUID().toString().substring(0, 15);
+    }
+
+    // Utility methods
+
+    public RemoteService findRemoteService(final RemoteServiceType type)
+    {
+        return find(remoteServices, RemoteServicePredicates.remoteServiceType(type));
     }
 }

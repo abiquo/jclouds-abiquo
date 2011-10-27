@@ -56,14 +56,6 @@
         <plugins>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <test.abiquo.identity>${test.abiquo.identity}</test.abiquo.identity>
-                        <test.abiquo.credential>${test.abiquo.credential}</test.abiquo.credential>
-                        <test.abiquo.endpoint>${test.abiquo.endpoint}</test.abiquo.endpoint>
-                        <test.abiquo.apiversion>${test.abiquo.apiversion}</test.abiquo.apiversion>
-                    </systemPropertyVariables>
-                </configuration>
                 <executions>
                     <execution>
                         <id>integration</id>

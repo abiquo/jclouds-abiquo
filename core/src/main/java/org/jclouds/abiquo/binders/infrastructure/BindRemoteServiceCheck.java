@@ -21,6 +21,8 @@ package org.jclouds.abiquo.binders.infrastructure;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+import javax.inject.Singleton;
+
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 
@@ -35,6 +37,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
  *             http://jira.abiquo.com/browse/ABICLOUDPREMIUM-2607
  */
 @Deprecated
+@Singleton
 public class BindRemoteServiceCheck extends BindToPath
 {
     @Override

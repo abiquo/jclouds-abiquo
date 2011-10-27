@@ -24,6 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.io.IOException;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.exception.BindException;
@@ -39,6 +40,7 @@ import com.google.common.base.Strings;
  * 
  * @author Ignasi Barrera
  */
+@Singleton
 public class BindToXMLPayload implements Binder
 {
     protected final XMLParser xmlParser;

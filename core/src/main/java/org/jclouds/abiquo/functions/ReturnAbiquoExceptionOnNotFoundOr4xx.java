@@ -23,8 +23,8 @@ import static org.jclouds.util.Throwables2.propagateOrNull;
 
 import javax.inject.Singleton;
 
-import org.jclouds.http.HttpResponse;
-import org.jclouds.http.HttpResponseException;
+import org.jclouds.abiquo.domain.exception.AbiquoException;
+import org.jclouds.rest.ResourceNotFoundException;
 
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
@@ -32,43 +32,33 @@ import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
 
 /**
- * Return false on service error exceptions.
+ * Return an Abiquo Exception on not found errors.
  * 
  * @author Ignasi Barrera
  */
 @Singleton
-public class ReturnFalseOn5xx implements Function<Exception, Object>
+public class ReturnAbiquoExceptionOnNotFoundOr4xx implements Function<Exception, Object>
 {
     @Override
     public Object apply(final Exception from)
     {
         Throwable exception =
-            Iterables.find(Throwables.getCausalChain(from), hasResponse(from), null);
+            Iterables.find(Throwables.getCausalChain(from), isNotFoundAndHasAbiquoException(from),
+                null);
 
-        if (exception != null)
-        {
-            HttpResponseException responseException = (HttpResponseException) exception;
-            HttpResponse response = responseException.getResponse();
-
-            if (response != null && response.getStatusCode() >= 500
-                && response.getStatusCode() < 600)
-            {
-                return false;
-            }
-        }
-
-        return Object.class.cast(propagateOrNull(from));
+        return Object.class.cast(propagateOrNull(exception == null ? from
+            : (AbiquoException) exception.getCause()));
     }
 
-    private static Predicate<Throwable> hasResponse(final Throwable exception)
+    private static Predicate<Throwable> isNotFoundAndHasAbiquoException(final Throwable exception)
     {
         return new Predicate<Throwable>()
         {
             @Override
             public boolean apply(final Throwable input)
             {
-                return input instanceof HttpResponseException
-                    && ((HttpResponseException) input).getResponse() != null;
+                return input instanceof ResourceNotFoundException
+                    && input.getCause() instanceof AbiquoException;
             }
         };
     }

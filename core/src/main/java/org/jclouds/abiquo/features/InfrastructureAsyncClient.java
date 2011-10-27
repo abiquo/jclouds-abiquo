@@ -37,6 +37,7 @@ import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.binders.infrastructure.BindRemoteServiceCheck;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
@@ -128,6 +129,7 @@ public interface InfrastructureAsyncClient
      *      String, String)
      */
     @GET
+    @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
     @ResponseParser(ParseMachine.class)
     ListenableFuture<MachineDto> discoverSingleMachine(
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
@@ -139,6 +141,7 @@ public interface InfrastructureAsyncClient
      *      String, String, MachineOptions)
      */
     @GET
+    @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
     @ResponseParser(ParseMachine.class)
     ListenableFuture<MachineDto> discoverSingleMachine(
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
@@ -151,6 +154,7 @@ public interface InfrastructureAsyncClient
      *      HypervisorType, String, String)
      */
     @GET
+    @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
     @ResponseParser(ParseMachines.class)
     ListenableFuture<MachineDto> discoverMultipleMachines(
         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
@@ -163,6 +167,7 @@ public interface InfrastructureAsyncClient
      *      HypervisorType, String, String, MachineOptions)
      */
     @GET
+    @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
     @ResponseParser(ParseMachines.class)
     ListenableFuture<MachineDto> discoverMultipleMachines(
         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
