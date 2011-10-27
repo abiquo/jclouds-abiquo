@@ -176,8 +176,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRack", DatacenterDto.class,
                 RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
-                .rackPost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.rackPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
@@ -278,8 +278,8 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRemoteService", DatacenterDto.class,
                 RemoteServiceDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), Infrastructure
-                .remoteServicePost());
+            processor.createRequest(method, Infrastructure.datacenterPut(),
+                Infrastructure.remoteServicePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
@@ -398,7 +398,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachine.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }
@@ -424,7 +424,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachine.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }
@@ -450,7 +450,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachine.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }
@@ -477,7 +477,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachines.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }
@@ -491,8 +491,8 @@ public class InfrastructureAsyncClientTest extends
                 String.class, String.class, MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, Infrastructure.datacenterPut(), "80.80.80.80",
-                "80.80.80.86", HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(
-                    8889).build());
+                "80.80.80.86", HypervisorType.KVM, "user", "pass",
+                MachineOptions.builder().port(8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discovermultiple";
         String query =
@@ -505,7 +505,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertResponseParserClassEquals(method, request, ParseMachines.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }

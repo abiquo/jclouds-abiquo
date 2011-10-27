@@ -129,7 +129,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ResponseParser(ParseMachine.class)
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<MachineDto> discoverSingleMachine(
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
@@ -141,7 +140,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ResponseParser(ParseMachine.class)
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<MachineDto> discoverSingleMachine(
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
@@ -154,7 +152,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ResponseParser(ParseMachines.class)
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<MachineDto> discoverMultipleMachines(
         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,
@@ -167,7 +164,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ResponseParser(ParseMachines.class)
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<MachineDto> discoverMultipleMachines(
         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,

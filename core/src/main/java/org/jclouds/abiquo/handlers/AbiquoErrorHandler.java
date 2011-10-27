@@ -31,7 +31,6 @@ import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.AuthorizationException;
-import org.jclouds.rest.ResourceNotFoundException;
 
 import com.abiquo.model.transport.error.ErrorsDto;
 import com.google.common.io.Closeables;
@@ -82,9 +81,6 @@ public class AbiquoErrorHandler implements HttpErrorHandler
                 case 401:
                 case 403:
                     exception = new AuthorizationException(message, exception);
-                    break;
-                case 404:
-                    exception = new ResourceNotFoundException(message, exception);
                     break;
             }
         }
