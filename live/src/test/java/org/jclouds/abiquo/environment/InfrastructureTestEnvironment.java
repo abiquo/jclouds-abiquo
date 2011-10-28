@@ -60,7 +60,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public Rack rack;
 
-    private Machine machine;
+    public Machine machine;
 
     public InfrastructureTestEnvironment(final AbiquoContext context)
     {

@@ -20,11 +20,14 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.jclouds.abiquo.util.Assert.assertHasError;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
+import org.jclouds.abiquo.domain.infrastructure.Machine.Builder;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.util.Config;
@@ -32,6 +35,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.server.core.infrastructure.MachineDto;
 
 /**
  * Live tests for the {@link Machine} domain class.
@@ -47,7 +51,6 @@ public class MachineTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvi
         return new InfrastructureTestEnvironment(context);
     }
 
-    @Test
     public void testDiscoverMachineWithouRemoteService()
     {
         RemoteService nc = env.findRemoteService(RemoteServiceType.NODE_COLLECTOR);
@@ -66,5 +69,27 @@ public class MachineTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvi
         {
             assertHasError(ex, Status.NOT_FOUND, "RS-2");
         }
+    }
+
+    public void testCreate()
+    {
+        Machine newmachine =
+            Builder.fromMachine(env.machine).hypervisorType(HypervisorType.XEN_3).ip("10.60.1.98")
+                .ipService("10.60.1.98").build();
+
+        newmachine.save();
+        assertNotNull(newmachine.getId());
+
+        newmachine.delete();
+    }
+
+    public void testUpdate()
+    {
+        env.machine.setName("API Machine");
+        env.machine.update();
+
+        // Recover the updated machine
+        MachineDto updated = env.infrastructure.getMachine(env.rack.unwrap(), env.machine.getId());
+        assertEquals(updated.getName(), "API Machine");
     }
 }
