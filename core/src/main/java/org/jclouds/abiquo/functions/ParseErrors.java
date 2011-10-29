@@ -22,7 +22,8 @@ package org.jclouds.abiquo.functions;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.xml.XMLParser;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.xml.XMLParser;
 
 import com.abiquo.model.transport.error.ErrorsDto;
 import com.google.inject.TypeLiteral;

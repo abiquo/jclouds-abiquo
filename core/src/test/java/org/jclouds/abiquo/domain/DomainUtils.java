@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.domain;
 
+import org.jclouds.xml.XMLParser;
+
 /**
  * Utility class to build domain objects used in tests.
  * 
@@ -26,15 +28,12 @@ package org.jclouds.abiquo.domain;
  */
 public class DomainUtils
 {
-    public static final String XML_HEADER =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>";
-
     /**
      * Adds the XML header to the given XML.
      */
     public static String withHeader(final String xml)
     {
-        return XML_HEADER + xml;
+        return XMLParser.DEFAULT_XML_HEADER + xml;
     }
 
 }

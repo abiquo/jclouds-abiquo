@@ -30,11 +30,11 @@ import java.util.Arrays;
 import javax.inject.Singleton;
 import javax.ws.rs.PUT;
 
-import org.jclouds.abiquo.binders.exception.BindException;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
+import org.jclouds.rest.binders.BindException;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 import com.abiquo.model.rest.RESTLink;

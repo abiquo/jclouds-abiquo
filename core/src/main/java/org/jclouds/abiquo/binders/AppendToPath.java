@@ -25,10 +25,10 @@ import java.net.URI;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.binders.exception.BindException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
+import org.jclouds.rest.binders.BindException;
 
 /**
  * Appends the parameter value to the end of the request URI.

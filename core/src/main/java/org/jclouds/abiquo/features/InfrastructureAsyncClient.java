@@ -32,28 +32,20 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
-import org.jclouds.abiquo.binders.BindToXMLPayload;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.binders.infrastructure.BindRemoteServiceCheck;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
-import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
-import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
-import org.jclouds.abiquo.functions.infrastructure.ParseMachine;
-import org.jclouds.abiquo.functions.infrastructure.ParseMachines;
-import org.jclouds.abiquo.functions.infrastructure.ParseRack;
-import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
-import org.jclouds.abiquo.functions.infrastructure.ParseRemoteService;
-import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServices;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
+import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.RequestFilters;
-import org.jclouds.rest.annotations.ResponseParser;
+import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -81,14 +73,13 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin")
 public interface InfrastructureAsyncClient
 {
-    // Datacenter
+    /* ********************** Datacenter ********************** */
 
     /**
      * @see InfrastructureClient#listDatacenters()
      */
     @GET
     @Path("/datacenters")
-    @ResponseParser(ParseDatacenters.class)
     ListenableFuture<DatacentersDto> listDatacenters();
 
     /**
@@ -96,7 +87,6 @@ public interface InfrastructureAsyncClient
      */
     @POST
     @Path("/datacenters")
-    @ResponseParser(ParseDatacenter.class)
     ListenableFuture<DatacenterDto> createDatacenter(
         @BinderParam(BindToXMLPayload.class) DatacenterDto datacenter);
 
@@ -105,7 +95,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @Path("/datacenters/{datacenter}")
-    @ResponseParser(ParseDatacenter.class)
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<DatacenterDto> getDatacenter(@PathParam("datacenter") Integer datacenterId);
 
@@ -113,7 +102,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#updateDatacenter(DatacenterDto)
      */
     @PUT
-    @ResponseParser(ParseDatacenter.class)
     ListenableFuture<DatacenterDto> updateDatacenter(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterDto datacenter);
 
@@ -130,7 +118,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
-    @ResponseParser(ParseMachine.class)
     ListenableFuture<MachineDto> discoverSingleMachine(
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
@@ -142,7 +129,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
-    @ResponseParser(ParseMachine.class)
     ListenableFuture<MachineDto> discoverSingleMachine(
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
@@ -155,7 +141,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
-    @ResponseParser(ParseMachines.class)
     ListenableFuture<MachineDto> discoverMultipleMachines(
         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,
@@ -168,7 +153,6 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
-    @ResponseParser(ParseMachines.class)
     ListenableFuture<MachineDto> discoverMultipleMachines(
         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,
@@ -176,14 +160,14 @@ public interface InfrastructureAsyncClient
         @QueryParam("password") String password,
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
-    // Rack
+    /* ********************** Rack ********************** */
 
     /**
      * @see InfrastructureClient#listRacks(DatacenterDto)
      */
     @GET
     @Consumes(AbiquoMediaType.APPLICATION_NOTMANAGEDRACKSDTO_XML)
-    @ResponseParser(ParseRacks.class)
+    @JAXBResponseParser
     ListenableFuture<RacksDto> listRacks(
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
@@ -191,7 +175,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
      */
     @POST
-    @ResponseParser(ParseRack.class)
     ListenableFuture<RackDto> createRack(
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(BindToXMLPayload.class) RackDto rack);
@@ -200,7 +183,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#getRack(DatacenterDto, Integer)
      */
     @GET
-    @ResponseParser(ParseRack.class)
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<RackDto> getRack(
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
@@ -210,7 +192,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#updateRack(RackDto)
      */
     @PUT
-    @ResponseParser(ParseRack.class)
     ListenableFuture<RackDto> updateRack(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
 
@@ -221,13 +202,12 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteRack(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 
-    // Remote service
+    /* ********************** Remote Service ********************** */
 
     /**
      * @see InfrastructureClient#listRemoteServices(DatacenterDto)
      */
     @GET
-    @ResponseParser(ParseRemoteServices.class)
     ListenableFuture<RemoteServicesDto> listRemoteServices(
         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
@@ -235,7 +215,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#createRemoteService(DatacenterDto, RemoteServiceDto)
      */
     @POST
-    @ResponseParser(ParseRemoteService.class)
     ListenableFuture<RemoteServiceDto> createRemoteService(
         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(BindToXMLPayload.class) RemoteServiceDto remoteService);
@@ -244,7 +223,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#getRemoteService(DatacenterDto, RemoteServiceType)
      */
     @GET
-    @ResponseParser(ParseRemoteService.class)
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<RemoteServiceDto> getRemoteService(
         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) final DatacenterDto datacenter,
@@ -254,7 +232,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#updateRemoteService(RemoteServiceDto)
      */
     @PUT
-    @ResponseParser(ParseRemoteService.class)
     ListenableFuture<RemoteServiceDto> updateRemoteService(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RemoteServiceDto remoteService);
 
@@ -273,13 +250,12 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Boolean> isAvailable(
         @BinderParam(BindRemoteServiceCheck.class) RemoteServiceDto remoteService);
 
-    // Machine
+    /* ********************** Machine ********************** */
 
     /**
      * @see InfrastructureClient#listMachines(RackDto)
      */
     @GET
-    @ResponseParser(ParseMachines.class)
     ListenableFuture<MachinesDto> listMachines(
         @EndpointLink("machines") @BinderParam(BindToPath.class) RackDto rack);
 
@@ -287,7 +263,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#createMachine(RackDto, MachineDto)
      */
     @POST
-    @ResponseParser(ParseMachine.class)
     ListenableFuture<MachineDto> createMachine(
         @EndpointLink("machines") @BinderParam(BindToPath.class) RackDto rack,
         @BinderParam(BindToXMLPayload.class) MachineDto machine);
@@ -296,7 +271,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#getMachine(RackDto, Integer)
      */
     @GET
-    @ResponseParser(ParseMachine.class)
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<MachineDto> getMachine(
         @EndpointLink("machines") @BinderParam(BindToPath.class) final RackDto rack,
@@ -306,7 +280,6 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#updateMachine(MachineDto)
      */
     @PUT
-    @ResponseParser(ParseMachine.class)
     ListenableFuture<MachineDto> updateMachine(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) MachineDto machine);
 

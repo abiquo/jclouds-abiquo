@@ -28,14 +28,7 @@ import org.jclouds.abiquo.domain.Infrastructure;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
-import org.jclouds.abiquo.functions.infrastructure.ParseDatacenter;
-import org.jclouds.abiquo.functions.infrastructure.ParseDatacenters;
-import org.jclouds.abiquo.functions.infrastructure.ParseMachine;
-import org.jclouds.abiquo.functions.infrastructure.ParseMachines;
-import org.jclouds.abiquo.functions.infrastructure.ParseRack;
-import org.jclouds.abiquo.functions.infrastructure.ParseRacks;
-import org.jclouds.abiquo.functions.infrastructure.ParseRemoteService;
-import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServices;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.http.functions.ReturnTrueIf2xx;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -71,7 +64,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseDatacenters.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -90,7 +83,7 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, withHeader(Infrastructure.datacenterPostPayload()),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseDatacenter.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -107,7 +100,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseDatacenter.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
@@ -126,7 +119,7 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, withHeader(Infrastructure.datacenterPutPayload()),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseDatacenter.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -164,7 +157,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/notmanagedrackdto+xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseRacks.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -186,7 +179,7 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, withHeader(Infrastructure.rackPostPayload()),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseRack.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -206,7 +199,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseRack.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
@@ -225,7 +218,7 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, withHeader(Infrastructure.rackPutPayload()),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseRack.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -265,7 +258,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseRemoteServices.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -288,7 +281,7 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, withHeader(Infrastructure.remoteServicePostPayload()),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseRemoteService.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -309,7 +302,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseRemoteService.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
@@ -331,7 +324,7 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, withHeader(Infrastructure.remoteServicePutPayload()),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseRemoteService.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -397,7 +390,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseMachine.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
@@ -423,7 +416,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseMachine.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
@@ -449,7 +442,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseMachine.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
@@ -476,7 +469,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseMachines.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
@@ -504,7 +497,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseMachines.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
 
@@ -522,7 +515,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseMachines.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -541,7 +534,7 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ParseMachine.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
@@ -562,7 +555,7 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, withHeader(Infrastructure.machinePostPayload()),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseMachine.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -582,7 +575,7 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, withHeader(Infrastructure.machinePutPayload()),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseMachine.class);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
