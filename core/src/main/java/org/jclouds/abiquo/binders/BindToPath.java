@@ -117,19 +117,12 @@ public class BindToPath implements Binder
      */
     static <R extends HttpRequest> R bindToPath(final R request, final String endpoint)
     {
-        try
-        {
-            // Preserve current query and matrix parameters
-            String newEndpoint = endpoint + getParameterString(request);
+        // Preserve current query and matrix parameters
+        String newEndpoint = endpoint + getParameterString(request);
 
-            // Replace the URI with the edit link in the DTO
-            URI path = URI.create(newEndpoint);
-            return ModifyRequest.endpoint(request, path);
-        }
-        catch (Exception ex)
-        {
-            throw new BindException(request, ex);
-        }
+        // Replace the URI with the edit link in the DTO
+        URI path = URI.create(newEndpoint);
+        return ModifyRequest.endpoint(request, path);
     }
 
     static SingleResourceTransportDto checkValidInput(final Object input)

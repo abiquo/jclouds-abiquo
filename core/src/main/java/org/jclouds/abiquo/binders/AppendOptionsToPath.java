@@ -30,7 +30,6 @@ import org.jclouds.abiquo.domain.options.QueryOptions;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
-import org.jclouds.rest.binders.BindException;
 
 /**
  * Appends the parameter value to the end of the request URI.
@@ -55,15 +54,7 @@ public class AppendOptionsToPath implements Binder
     {
         checkArgument(checkNotNull(input, "input") instanceof QueryOptions,
             "this binder is only valid for QueryOptions objects");
-
-        try
-        {
-            QueryOptions options = (QueryOptions) input;
-            return ModifyRequest.addQueryParams(request, options.getOptions(), uriBuilder);
-        }
-        catch (Exception ex)
-        {
-            throw new BindException(request, ex);
-        }
+        QueryOptions options = (QueryOptions) input;
+        return ModifyRequest.addQueryParams(request, options.getOptions(), uriBuilder);
     }
 }

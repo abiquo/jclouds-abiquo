@@ -28,7 +28,6 @@ import javax.inject.Singleton;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
-import org.jclouds.rest.binders.BindException;
 
 /**
  * Appends the parameter value to the end of the request URI.
@@ -41,19 +40,10 @@ public class AppendToPath implements Binder
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkNotNull(input, "input");
-
-        try
-        {
-            // Append the parameter to the request URI
-            String valueToAppend = getValue(request, input);
-            URI path = URI.create(request.getEndpoint().toString() + "/" + valueToAppend);
-            return ModifyRequest.endpoint(request, path);
-        }
-        catch (Exception ex)
-        {
-            throw new BindException(request, ex);
-        }
+        // Append the parameter to the request URI
+        String valueToAppend = getValue(request, checkNotNull(input, "input"));
+        URI path = URI.create(request.getEndpoint().toString() + "/" + valueToAppend);
+        return ModifyRequest.endpoint(request, path);
     }
 
     /**
