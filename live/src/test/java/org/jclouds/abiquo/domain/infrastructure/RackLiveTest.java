@@ -35,7 +35,7 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RackTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class RackLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
 {
     @Override
     protected InfrastructureTestEnvironment environment(final AbiquoContext context)

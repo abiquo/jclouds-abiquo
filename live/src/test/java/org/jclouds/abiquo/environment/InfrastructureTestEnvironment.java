@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.environment;
 
 import static com.google.common.collect.Iterables.find;
+import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -123,7 +124,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     private void createRack()
     {
-        rack = Rack.builder(context, datacenter).name("Aloha").build();
+        rack = Rack.builder(context, datacenter).name(PREFIX + "Aloha").build();
         rack.save();
         assertNotNull(rack.getId());
     }
@@ -162,7 +163,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     private static String randomName()
     {
-        return UUID.randomUUID().toString().substring(0, 15);
+        return PREFIX + UUID.randomUUID().toString().substring(0, 12);
     }
 
     // Utility methods

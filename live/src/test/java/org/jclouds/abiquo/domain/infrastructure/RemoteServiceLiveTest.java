@@ -43,7 +43,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RemoteServiceTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
 {
 
     @Override

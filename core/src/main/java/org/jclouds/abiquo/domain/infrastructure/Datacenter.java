@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.collect.Iterables.filter;
+
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -31,7 +33,10 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.RacksDto;
+import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
@@ -92,38 +97,35 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
     public List<Rack> listRacks()
     {
-        Iterable<Rack> racks = context.getInfrastructureService().listRacks(this);
-        return Lists.newLinkedList(racks);
+        RacksDto racks = context.getApi().getInfrastructureClient().listRacks(target);
+        return wrap(context, Rack.class, racks.getCollection());
     }
 
     public List<Rack> listRacks(final Predicate<Rack> filter)
     {
-        Iterable<Rack> racks = context.getInfrastructureService().listRacks(this, filter);
-        return Lists.newLinkedList(racks);
+        return Lists.newLinkedList(filter(listRacks(), filter));
     }
 
     public Rack findRack(final Predicate<Rack> filter)
     {
-        return context.getInfrastructureService().findRack(this, filter);
+        return Iterables.getFirst(filter(listRacks(), filter), null);
     }
 
     public List<RemoteService> listRemoteServices()
     {
-        Iterable<RemoteService> remoteServices =
-            context.getInfrastructureService().listRemoteServices(this);
-        return Lists.newLinkedList(remoteServices);
+        RemoteServicesDto remoteServices =
+            context.getApi().getInfrastructureClient().listRemoteServices(target);
+        return wrap(context, RemoteService.class, remoteServices.getCollection());
     }
 
     public List<RemoteService> listRemoteServices(final Predicate<RemoteService> filter)
     {
-        Iterable<RemoteService> remoteServices =
-            context.getInfrastructureService().listRemoteServices(this, filter);
-        return Lists.newLinkedList(remoteServices);
+        return Lists.newLinkedList(filter(listRemoteServices(), filter));
     }
 
     public RemoteService findRemoteService(final Predicate<RemoteService> filter)
     {
-        return context.getInfrastructureService().findRemoteService(this, filter);
+        return Iterables.getFirst(filter(listRemoteServices(), filter), null);
     }
 
     private void createRemoteServices()
@@ -152,36 +154,33 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final String user, final String password)
     {
         MachineDto dto =
-            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
-                hypervisorType, user, password);
+            context.getApi().getInfrastructureClient()
+                .discoverSingleMachine(target, ip, hypervisorType, user, password);
 
-        Machine machine = wrap(context, Machine.class, dto);
-
-        return machine;
+        return wrap(context, Machine.class, dto);
     }
 
     public Machine discoverSingleMachine(final String ip, final HypervisorType hypervisorType,
         final String user, final String password, final int port)
     {
         MachineDto dto =
-            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
-                hypervisorType, user, password, MachineOptions.builder().port(8889).build());
+            context
+                .getApi()
+                .getInfrastructureClient()
+                .discoverSingleMachine(target, ip, hypervisorType, user, password,
+                    MachineOptions.builder().port(port).build());
 
-        Machine machine = wrap(context, Machine.class, dto);
-
-        return machine;
+        return wrap(context, Machine.class, dto);
     }
 
     public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
         final HypervisorType hypervisorType, final String user, final String password)
     {
         MachinesDto dto =
-            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
-                ipTo, hypervisorType, user, password);
+            context.getApi().getInfrastructureClient()
+                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password);
 
-        List<Machine> machines = wrap(context, Machine.class, dto.getCollection());
-
-        return machines;
+        return wrap(context, Machine.class, dto.getCollection());
     }
 
     public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
@@ -189,12 +188,13 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final int port)
     {
         MachinesDto dto =
-            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
-                ipTo, hypervisorType, user, password, MachineOptions.builder().port(8889).build());
+            context
+                .getApi()
+                .getInfrastructureClient()
+                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
+                    MachineOptions.builder().port(port).build());
 
-        List<Machine> machines = wrap(context, Machine.class, dto.getCollection());
-
-        return machines;
+        return wrap(context, Machine.class, dto.getCollection());
     }
 
     // Builder

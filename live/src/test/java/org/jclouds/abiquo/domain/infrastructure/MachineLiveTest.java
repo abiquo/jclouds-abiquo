@@ -43,7 +43,7 @@ import com.abiquo.server.core.infrastructure.MachineDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class MachineTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
 {
     @Override
     protected InfrastructureTestEnvironment environment(final AbiquoContext context)

@@ -17,36 +17,36 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.features;
+package org.jclouds.abiquo.strategy;
 
+import java.io.IOException;
 import java.util.Properties;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContextFactory;
-import org.jclouds.abiquo.environment.TestEnvironment;
 import org.jclouds.abiquo.util.Config;
+import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.jclouds.rest.RestContextFactory;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.inject.Injector;
 import com.google.inject.Module;
 
 /**
- * Base class for live and domain tests.
+ * Base class for strategy live tests.
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
+public abstract class BaseAbiquoStrategyLiveTest
 {
-    /** The rest context. */
-    protected AbiquoContext context;
+    protected Injector injector;
 
-    /** The test environment. */
-    protected E env;
-
-    @BeforeClass(groups = "live")
-    protected void setupClient() throws Exception
+    @BeforeTest(groups = "live")
+    public void setupClient() throws IOException
     {
         String identity = Config.get("abiquo.api.user");
         String credential = Config.get("abiquo.api.pass");
@@ -55,28 +55,35 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
 
-        context =
-            new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
-        env = environment(context);
+        injector =
+            new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
+                AbiquoContextFactory.PROVIDER_NAME, identity, credential,
+                ImmutableSet.<Module> of(new Log4JLoggingModule()), props).buildInjector();
 
-        env.setup();
+        setupStrategy();
+        setup();
     }
 
-    /**
-     * Get the test environment for the current tests.
-     */
-    protected abstract E environment(AbiquoContext context);
+    protected abstract void setupStrategy();
 
-    @AfterClass(groups = "live")
-    public void teardownClient() throws Exception
+    protected void setup()
     {
-        env.tearDown();
+        // Override if necessary
+    }
 
-        if (context != null)
+    protected void tearDown()
+    {
+        // Override if necessary
+    }
+
+    @AfterTest(groups = "live")
+    public void teardownClient() throws IOException
+    {
+        tearDown();
+
+        if (injector != null)
         {
-            context.close();
+            injector.getInstance(Closer.class).close();
         }
     }
-
 }

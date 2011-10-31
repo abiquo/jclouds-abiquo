@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
@@ -29,8 +30,10 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
@@ -91,7 +94,6 @@ public class Rack extends DomainWrapper<RackDto>
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
         DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
         datacenter = wrap(context, Datacenter.class, dto);
-
         return datacenter;
     }
 
@@ -99,19 +101,18 @@ public class Rack extends DomainWrapper<RackDto>
 
     public List<Machine> listMachines()
     {
-        Iterable<Machine> machines = context.getInfrastructureService().listMachines(this);
-        return Lists.newLinkedList(machines);
+        MachinesDto machines = context.getApi().getInfrastructureClient().listMachines(target);
+        return wrap(context, Machine.class, machines.getCollection());
     }
 
     public List<Machine> listMachines(final Predicate<Machine> filter)
     {
-        Iterable<Machine> machines = context.getInfrastructureService().listMachines(this, filter);
-        return Lists.newLinkedList(machines);
+        return Lists.newLinkedList(filter(listMachines(), filter));
     }
 
     public Machine findMachine(final Predicate<Machine> filter)
     {
-        return context.getInfrastructureService().findMachine(this, filter);
+        return Iterables.getFirst(filter(listMachines(), filter), null);
     }
 
     // Builder

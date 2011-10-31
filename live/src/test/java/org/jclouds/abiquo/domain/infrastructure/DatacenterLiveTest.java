@@ -40,7 +40,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class DatacenterTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
 {
 
     @Override

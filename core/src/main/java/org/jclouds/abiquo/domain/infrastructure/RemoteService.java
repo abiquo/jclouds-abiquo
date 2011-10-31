@@ -84,7 +84,6 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
         DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
         datacenter = wrap(context, Datacenter.class, dto);
-
         return datacenter;
     }
 

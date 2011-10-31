@@ -20,9 +20,6 @@
 package org.jclouds.abiquo.features;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.domain.infrastructure.Machine;
-import org.jclouds.abiquo.domain.infrastructure.Rack;
-import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.internal.BaseInfrastructureService;
 
 import com.google.common.base.Predicate;
@@ -54,59 +51,4 @@ public interface InfrastructureService
      */
     Datacenter findDatacenter(final Predicate<Datacenter> filter);
 
-    // Rack
-
-    /**
-     * Get the list of the racks in the given datacenter.
-     */
-    Iterable<Rack> listRacks(final Datacenter datacenter);
-
-    /**
-     * Get the list of the racks in the given datacenter matching the given filter.
-     */
-    Iterable<Rack> listRacks(final Datacenter datacenter, final Predicate<Rack> filter);
-
-    /**
-     * Get the first rack in the given datacenter that matches the given filter or <code>null</code>
-     * if none is found.
-     */
-    Rack findRack(final Datacenter datacenter, final Predicate<Rack> filter);
-
-    // Remote service
-
-    /**
-     * Get the list of the remote services in the given datacenter.
-     */
-    Iterable<RemoteService> listRemoteServices(final Datacenter datacenter);
-
-    /**
-     * Get the list of the remote services in the given datacenter matching the given filters.
-     */
-    Iterable<RemoteService> listRemoteServices(final Datacenter datacenter,
-        final Predicate<RemoteService> filter);
-
-    /**
-     * Get the first remote service in the given datacenter that matches the given filter or
-     * <code>null</code> if none is found.
-     */
-    RemoteService findRemoteService(final Datacenter datacenter,
-        final Predicate<RemoteService> filter);
-
-    // Machine
-
-    /**
-     * Get the list of the machines in the given rack.
-     */
-    Iterable<Machine> listMachines(final Rack rack);
-
-    /**
-     * Get the list of the machines in the given rack matching the given filters.
-     */
-    Iterable<Machine> listMachines(final Rack rack, final Predicate<Machine> filter);
-
-    /**
-     * Get the first machine in the given rack that matches the given filter or <code>null</code> if
-     * none is found.
-     */
-    Machine findMachine(final Rack rack, final Predicate<Machine> filter);
 }

@@ -97,7 +97,6 @@ public class Machine extends DomainWrapper<MachineDto>
         RackDto dto =
             context.getApi().getInfrastructureClient().getRack(rack.datacenter.unwrap(), rackId);
         rack = wrap(context, Rack.class, dto);
-
         return rack;
     }
 
@@ -351,17 +350,26 @@ public class Machine extends DomainWrapper<MachineDto>
 
         public static Builder fromMachine(final Machine in)
         {
-            return Machine.builder(in.context, in.rack).name(in.getName())
-                .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
-                .virtualCpusPerCore(in.getVirtualCpusPerCore())
-                .virtualCpusUsed(in.getVirtualCpusUsed()).virtualRamInMb(in.getVirtualRamInMb())
-                .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
-                .virtualSwitch(in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp())
-                .ipService(in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
-                .password(in.getPassword()).ipmiIp(in.getIpmiIp())
-                .ipmiPassword(in.getIpmiPassword()).ipmiPort(in.getIpmiPort())
-                .ipmiUser(in.getIpmiUser()).state(in.getState()).datastores(in.getDatastores());
+            Builder builder =
+                Machine.builder(in.context, in.rack).name(in.getName())
+                    .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
+                    .virtualCpusPerCore(in.getVirtualCpusPerCore())
+                    .virtualCpusUsed(in.getVirtualCpusUsed())
+                    .virtualRamInMb(in.getVirtualRamInMb())
+                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
+                    .virtualSwitch(in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp())
+                    .ipService(in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
+                    .password(in.getPassword()).ipmiIp(in.getIpmiIp())
+                    .ipmiPassword(in.getIpmiPassword()).ipmiUser(in.getIpmiUser())
+                    .state(in.getState()).datastores(in.getDatastores());
 
+            // Parameters that can be null
+            if (in.getIpmiPort() != null)
+            {
+                builder.ipmiPort(in.getIpmiPort());
+            }
+
+            return builder;
         }
     }
 

@@ -22,12 +22,8 @@ package org.jclouds.abiquo.strategy.infrastructure.internal;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
-import java.util.concurrent.ExecutorService;
-
-import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
@@ -45,19 +41,14 @@ import com.google.inject.Inject;
 @Singleton
 public class ListDatacentersImpl implements ListDatacenters
 {
+    // This strategy does not have still an Executor instance because the current methods call
+    // single client methods
+
     protected final AbiquoContext context;
 
-    protected final ExecutorService userExecutor;
-
-    @Inject(optional = true)
-    @Named(Constants.PROPERTY_REQUEST_TIMEOUT)
-    protected Long maxTime;
-
     @Inject
-    ListDatacentersImpl(@Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
-        final AbiquoContext context)
+    ListDatacentersImpl(final AbiquoContext context)
     {
-        this.userExecutor = userExecutor;
         this.context = context;
     }
 

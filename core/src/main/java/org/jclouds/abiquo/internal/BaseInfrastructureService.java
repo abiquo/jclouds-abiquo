@@ -25,14 +25,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.domain.infrastructure.Machine;
-import org.jclouds.abiquo.domain.infrastructure.Rack;
-import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.features.InfrastructureService;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
-import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
-import org.jclouds.abiquo.strategy.infrastructure.ListRacks;
-import org.jclouds.abiquo.strategy.infrastructure.ListRemoteServices;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -48,21 +42,10 @@ public class BaseInfrastructureService implements InfrastructureService
 {
     private final ListDatacenters listDatacenters;
 
-    private final ListRacks listRacks;
-
-    private final ListRemoteServices listRemoteServices;
-
-    private final ListMachines listMachines;
-
     @Inject
-    protected BaseInfrastructureService(final ListDatacenters listDatacenters,
-        final ListRacks listRacks, final ListRemoteServices listRemoteServices,
-        final ListMachines listMachines)
+    protected BaseInfrastructureService(final ListDatacenters listDatacenters)
     {
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
-        this.listRacks = checkNotNull(listRacks, "listRacks");
-        this.listRemoteServices = checkNotNull(listRemoteServices, "listRemoteServices");
-        this.listMachines = checkNotNull(listMachines, "listMachines");
     }
 
     @Override
@@ -81,62 +64,6 @@ public class BaseInfrastructureService implements InfrastructureService
     public Datacenter findDatacenter(final Predicate<Datacenter> filter)
     {
         return Iterables.getFirst(listDatacenters(filter), null);
-    }
-
-    @Override
-    public Iterable<Rack> listRacks(final Datacenter datacenter)
-    {
-        return listRacks.execute(datacenter);
-    }
-
-    @Override
-    public Iterable<Rack> listRacks(final Datacenter datacenter, final Predicate<Rack> filter)
-    {
-        return listRacks.execute(datacenter, filter);
-    }
-
-    @Override
-    public Rack findRack(final Datacenter datacenter, final Predicate<Rack> filter)
-    {
-        return Iterables.getFirst(listRacks(datacenter, filter), null);
-    }
-
-    @Override
-    public Iterable<RemoteService> listRemoteServices(final Datacenter datacenter)
-    {
-        return listRemoteServices.execute(datacenter);
-    }
-
-    @Override
-    public Iterable<RemoteService> listRemoteServices(final Datacenter datacenter,
-        final Predicate<RemoteService> filter)
-    {
-        return listRemoteServices.execute(datacenter, filter);
-    }
-
-    @Override
-    public RemoteService findRemoteService(final Datacenter datacenter,
-        final Predicate<RemoteService> filter)
-    {
-        return Iterables.getFirst(listRemoteServices(datacenter, filter), null);
-    }
-
-    @Override
-    public Machine findMachine(final Rack rack, final Predicate<Machine> filter)
-    {
-        return Iterables.getFirst(listMachines(rack, filter), null);
-    }
-
-    @Override
-    public Iterable<Machine> listMachines(final Rack rack)
-    {
-        return listMachines.execute(rack);
-    }
-
-    @Override
-    public Iterable<Machine> listMachines(final Rack rack, final Predicate<Machine> filter)
-    {
-        return listMachines.execute(rack, filter);
     }
 
 }
