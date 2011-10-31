@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates.remoteServiceType;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
@@ -37,6 +38,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
+import com.google.common.collect.Iterables;
 
 /**
  * Live tests for the {@link RemoteService} domain class.
@@ -68,6 +70,8 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         assertEquals(updated.getUri(), rs.getUri());
     }
 
+    // Make this test run after listing tests to avoid altering the results
+    @Test(dependsOnMethods = {"testListRemoteServices", "testFindRemoteService"})
     public void testDelete()
     {
         RemoteService rs =
@@ -109,6 +113,23 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         {
             assertHasError(ex, Status.CONFLICT, "RS-6");
         }
+    }
+
+    public void testListRemoteServices()
+    {
+        Iterable<RemoteService> remoteServices = env.datacenter.listRemoteServices();
+        assertEquals(Iterables.size(remoteServices), env.remoteServices.size());
+
+        remoteServices =
+            env.datacenter.listRemoteServices(remoteServiceType(RemoteServiceType.NODE_COLLECTOR));
+        assertEquals(Iterables.size(remoteServices), 1);
+    }
+
+    public void testFindRemoteService()
+    {
+        RemoteService remoteService =
+            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.NODE_COLLECTOR));
+        assertNotNull(remoteService);
     }
 
 }

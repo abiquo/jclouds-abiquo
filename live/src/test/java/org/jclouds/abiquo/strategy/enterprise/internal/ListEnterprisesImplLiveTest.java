@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.strategy.infrastructure.internal;
+package org.jclouds.abiquo.strategy.enterprise.internal;
 
 import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
@@ -28,13 +28,14 @@ import static org.testng.Assert.assertTrue;
 import java.util.Random;
 
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.InfrastructureResources;
-import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
+import org.jclouds.abiquo.domain.EnterpriseResources;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
+import org.jclouds.abiquo.strategy.infrastructure.internal.ListDatacentersImpl;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 
 /**
  * Live tests for the {@link ListDatacentersImpl} strategy.
@@ -42,18 +43,18 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
+public class ListEnterprisesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
-    private ListDatacentersImpl strategy;
+    private ListEnterprisesImpl strategy;
 
     private AbiquoClient client;
 
-    private DatacenterDto datacenter;
+    private EnterpriseDto enterprise;
 
     @Override
     protected void setupStrategy()
     {
-        this.strategy = injector.getInstance(ListDatacentersImpl.class);
+        this.strategy = injector.getInstance(ListEnterprisesImpl.class);
         this.client = injector.getInstance(AbiquoClient.class);
     }
 
@@ -61,37 +62,37 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     protected void setup()
     {
         Random generator = new Random(System.currentTimeMillis());
-        DatacenterDto datacenter = InfrastructureResources.datacenterPost();
-        datacenter.setName(PREFIX + datacenter.getName() + generator.nextInt(100));
-        this.datacenter = client.getInfrastructureClient().createDatacenter(datacenter);
+        EnterpriseDto enterprise = EnterpriseResources.enterprisePost();
+        enterprise.setName(PREFIX + enterprise.getName() + generator.nextInt(100));
+        this.enterprise = client.getEnterpriseClient().createEnterprise(enterprise);
     }
 
     @Override
     protected void tearDown()
     {
-        client.getInfrastructureClient().deleteDatacenter(datacenter);
+        client.getEnterpriseClient().deleteEnterprise(enterprise);
     }
 
     public void testExecute()
     {
-        Iterable<Datacenter> datacenters = strategy.execute();
-        assertNotNull(datacenters);
-        assertTrue(size(datacenters) > 0);
+        Iterable<Enterprise> enterprises = strategy.execute();
+        assertNotNull(enterprises);
+        assertTrue(size(enterprises) > 0);
     }
 
     public void testExecutePredicateWithoutResults()
     {
-        Iterable<Datacenter> datacenters =
-            strategy.execute(DatacenterPredicates.datacenterName("UNEXISTING"));
-        assertNotNull(datacenters);
-        assertEquals(size(datacenters), 0);
+        Iterable<Enterprise> enterprises =
+            strategy.execute(EnterprisePredicates.enterpriseName("UNEXISTING"));
+        assertNotNull(enterprises);
+        assertEquals(size(enterprises), 0);
     }
 
     public void testExecutePredicateWithResults()
     {
-        Iterable<Datacenter> datacenters =
-            strategy.execute(DatacenterPredicates.datacenterName(datacenter.getName()));
-        assertNotNull(datacenters);
-        assertEquals(size(datacenters), 1);
+        Iterable<Enterprise> enterprises =
+            strategy.execute(EnterprisePredicates.enterpriseName(enterprise.getName()));
+        assertNotNull(enterprises);
+        assertEquals(size(enterprises), 1);
     }
 }

@@ -19,7 +19,10 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static org.jclouds.abiquo.predicates.infrastructure.RackPredicates.rackName;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
@@ -58,7 +61,21 @@ public class RackLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnv
     {
         Iterable<Rack> racks = env.datacenter.listRacks();
         assertEquals(Iterables.size(racks), 1);
-        assertEquals(Iterables.getOnlyElement(racks).getId(), env.rack.getId());
+
+        racks = env.datacenter.listRacks(rackName(env.rack.getName()));
+        assertEquals(Iterables.size(racks), 1);
+
+        racks = env.datacenter.listRacks(rackName(env.rack.getName() + "FAIL"));
+        assertEquals(Iterables.size(racks), 0);
+    }
+
+    public void testFindRack()
+    {
+        Rack rack = env.datacenter.findRack(rackName(env.rack.getName()));
+        assertNotNull(rack);
+
+        rack = env.datacenter.findRack(rackName(env.rack.getName() + "FAIL"));
+        assertNull(rack);
     }
 
 }

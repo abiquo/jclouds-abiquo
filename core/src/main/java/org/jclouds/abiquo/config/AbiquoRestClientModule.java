@@ -47,10 +47,11 @@ import com.google.common.collect.ImmutableMap;
 @ConfiguresRestClient
 public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, AbiquoAsyncClient>
 {
-    public static final Map<Class< ? >, Class< ? >> DELEGATE_MAP =
-        ImmutableMap.<Class< ? >, Class< ? >> builder().put(InfrastructureClient.class,
-            InfrastructureAsyncClient.class).put(EnterpriseClient.class,
-            EnterpriseAsyncClient.class).build();
+    public static final Map<Class< ? >, Class< ? >> DELEGATE_MAP = ImmutableMap
+        .<Class< ? >, Class< ? >> builder() //
+        .put(InfrastructureClient.class, InfrastructureAsyncClient.class) //
+        .put(EnterpriseClient.class, EnterpriseAsyncClient.class) //
+        .build();
 
     public AbiquoRestClientModule()
     {

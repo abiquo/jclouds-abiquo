@@ -135,9 +135,17 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     {
         if (machine != null && rack != null)
         {
-            Integer idMachine = machine.getId();
-            machine.delete();
-            assertNull(infrastructure.getMachine(rack.unwrap(), idMachine));
+            try
+            {
+                Integer idMachine = machine.getId();
+                machine.delete();
+                assertNull(infrastructure.getMachine(rack.unwrap(), idMachine));
+            }
+            catch (Exception ex)
+            {
+                // Do not abort tear down
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -145,9 +153,17 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     {
         if (rack != null && datacenter != null)
         {
-            Integer idRack = rack.getId();
-            rack.delete();
-            assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
+            try
+            {
+                Integer idRack = rack.getId();
+                rack.delete();
+                assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
+            }
+            catch (Exception ex)
+            {
+                // Do not abort tear down
+                ex.printStackTrace();
+            }
         }
     }
 
@@ -155,9 +171,17 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     {
         if (datacenter != null)
         {
-            Integer idDatacenter = datacenter.getId();
-            datacenter.delete(); // Abiquo API will delete remote services too
-            assertNull(infrastructure.getDatacenter(idDatacenter));
+            try
+            {
+                Integer idDatacenter = datacenter.getId();
+                datacenter.delete(); // Abiquo API will delete remote services too
+                assertNull(infrastructure.getDatacenter(idDatacenter));
+            }
+            catch (Exception ex)
+            {
+                // Do not abort tear down
+                ex.printStackTrace();
+            }
         }
     }
 

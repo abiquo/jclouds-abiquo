@@ -92,4 +92,16 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTest
         MachineDto updated = env.infrastructure.getMachine(env.rack.unwrap(), env.machine.getId());
         assertEquals(updated.getName(), "API Machine");
     }
+
+    public void testFindDatastore()
+    {
+        Datastore datastore = env.machine.getDatastores().get(0);
+        assertEquals(env.machine.findDatastore(datastore.getName()), datastore);
+    }
+
+    public void testFindAvailableVirtualSwitch()
+    {
+        String vswitch = env.machine.getAvailableVirtualSwitches().get(0);
+        assertEquals(env.machine.findAvailableVirtualSwitch(vswitch), vswitch);
+    }
 }

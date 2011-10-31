@@ -49,7 +49,7 @@ import com.google.inject.TypeLiteral;
 public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsyncClient> implements
     AbiquoContext
 {
-    private final AdministrationService infrastructureService;
+    private final AdministrationService administrationService;
 
     @Inject
     protected AbiquoContextImpl(final Closer closer,
@@ -57,17 +57,17 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
         final TypeLiteral<AbiquoClient> syncApi, final TypeLiteral<AbiquoAsyncClient> asyncApi,
         @Provider final URI endpoint, @Provider final String provider,
         @Identity final String identity, @ApiVersion final String apiVersion,
-        final AdministrationService infrastructureService)
+        final AdministrationService administrationService)
     {
         super(closer, credentialStore, utils, injector, syncApi, asyncApi, endpoint, provider,
             identity, apiVersion, null);
-        this.infrastructureService = infrastructureService;
+        this.administrationService = administrationService;
     }
 
     @Override
-    public AdministrationService getInfrastructureService()
+    public AdministrationService getAdministrationService()
     {
-        return infrastructureService;
+        return administrationService;
     }
 
 }
