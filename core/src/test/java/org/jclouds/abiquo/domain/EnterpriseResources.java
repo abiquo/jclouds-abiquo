@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 
 /**
@@ -42,6 +43,8 @@ public class EnterpriseResources
         EnterpriseDto enterprise = enterprisePost();
         enterprise.setId(1);
         enterprise.addLink(new RESTLink("edit", "http://localhost/api/admin/enterprises/1"));
+        enterprise
+            .addLink(new RESTLink("limits", "http://localhost/api/admin/enterprises/1/limits"));
 
         return enterprise;
     }
@@ -75,6 +78,7 @@ public class EnterpriseResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<enterprise>");
         buffer.append(link("/admin/enterprises/1", "edit"));
+        buffer.append(link("/admin/enterprises/1/limits", "limits"));
         buffer.append("<cpuHard>0</cpuHard>");
         buffer.append("<cpuSoft>0</cpuSoft>");
         buffer.append("<hdHard>0</hdHard>");
@@ -93,6 +97,75 @@ public class EnterpriseResources
         buffer.append("<repositoryHard>0</repositoryHard>");
         buffer.append("<repositorySoft>0</repositorySoft>");
         buffer.append("</enterprise>");
+        return buffer.toString();
+    }
+
+    public static DatacenterLimitsDto datacenterLimitsPost()
+    {
+        DatacenterLimitsDto limits = new DatacenterLimitsDto();
+        limits.setCpuCountLimits(0, 0);
+        limits.setHdLimitsInMb(0, 0);
+        limits.setPublicIPLimits(0, 0);
+        limits.setRamLimitsInMb(0, 0);
+        limits.setStorageLimits(0, 0);
+        limits.setVlansLimits(0, 0);
+        limits.setRepositoryHardLimitsInMb(0);
+        limits.setRepositorySoftLimitsInMb(0);
+        return limits;
+    }
+
+    public static DatacenterLimitsDto datacenterLimitsPut(final EnterpriseDto enterprise)
+    {
+        DatacenterLimitsDto limits = datacenterLimitsPost();
+        limits.setId(1);
+        enterprise.addLink(new RESTLink("edit", "http://localhost/api/admin/enterprises/"
+            + enterprise.getId() + "/limits/1"));
+        return limits;
+    }
+
+    public static String datacenterLimitsPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<limit>");
+        buffer.append("<cpuHard>0</cpuHard>");
+        buffer.append("<cpuSoft>0</cpuSoft>");
+        buffer.append("<hdHard>0</hdHard>");
+        buffer.append("<hdSoft>0</hdSoft>");
+        buffer.append("<publicIpsHard>0</publicIpsHard>");
+        buffer.append("<publicIpsSoft>0</publicIpsSoft>");
+        buffer.append("<ramHard>0</ramHard>");
+        buffer.append("<ramSoft>0</ramSoft>");
+        buffer.append("<storageHard>0</storageHard>");
+        buffer.append("<storageSoft>0</storageSoft>");
+        buffer.append("<vlansHard>0</vlansHard>");
+        buffer.append("<vlansSoft>0</vlansSoft>");
+        buffer.append("<repositoryHard>0</repositoryHard>");
+        buffer.append("<repositorySoft>0</repositorySoft>");
+        buffer.append("</limit>");
+        return buffer.toString();
+    }
+
+    public static String datacenterLimitsPutPayload(final EnterpriseDto enterprise)
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<limit>");
+        buffer.append(link("http://localhost/api/admin/enterprises/" + enterprise.getId()
+            + "/limits/1", "edit"));
+        buffer.append("<cpuHard>0</cpuHard>");
+        buffer.append("<cpuSoft>0</cpuSoft>");
+        buffer.append("<hdHard>0</hdHard>");
+        buffer.append("<hdSoft>0</hdSoft>");
+        buffer.append("<publicIpsHard>0</publicIpsHard>");
+        buffer.append("<publicIpsSoft>0</publicIpsSoft>");
+        buffer.append("<ramHard>0</ramHard>");
+        buffer.append("<ramSoft>0</ramSoft>");
+        buffer.append("<storageHard>0</storageHard>");
+        buffer.append("<storageSoft>0</storageSoft>");
+        buffer.append("<vlansHard>0</vlansHard>");
+        buffer.append("<vlansSoft>0</vlansSoft>");
+        buffer.append("<repositoryHard>0</repositoryHard>");
+        buffer.append("<repositorySoft>0</repositorySoft>");
+        buffer.append("</limit>");
         return buffer.toString();
     }
 

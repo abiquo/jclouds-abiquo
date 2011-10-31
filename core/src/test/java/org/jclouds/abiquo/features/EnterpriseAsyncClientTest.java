@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.EnterpriseResources;
+import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -32,7 +33,9 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -44,7 +47,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<EnterpriseAsyncClient>
 {
-    // Enterprise
+    /* ********************** Enterprise ********************** */
 
     public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -127,6 +130,36 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /* ********************** Enterprise Limits ********************** */
+
+    public void testCreateEnterpriseLimits() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
+        DatacenterDto datacenter = InfrastructureResources.datacenterPut();
+        DatacenterLimitsDto limits = EnterpriseResources.datacenterLimitsPost();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("createLimits", EnterpriseDto.class,
+                DatacenterDto.class, DatacenterLimitsDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, enterprise, datacenter, limits);
+
+        String limitsUri = enterprise.searchLink("limits").getHref();
+        String requstURI =
+            String.format("POST %s?datacenter=%d HTTP/1.1", limitsUri, datacenter.getId());
+
+        assertRequestLineEquals(request, requstURI);
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(EnterpriseResources.datacenterLimitsPostPayload()),
+            "application/xml", false);
+
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

@@ -23,8 +23,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisesDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
  * Provides synchronous access to Abiquo Enterprise API.
@@ -37,7 +39,7 @@ import com.abiquo.server.core.enterprise.EnterprisesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface EnterpriseClient
 {
-    // Enterprise
+    /* ********************** Enterprise ********************** */
 
     /**
      * List all enterprises.
@@ -76,5 +78,18 @@ public interface EnterpriseClient
      * @param enterprise The enterprise to delete.
      */
     void deleteEnterprise(EnterpriseDto enterprise);
+
+    /* ********************** Enterprise Limits ********************** */
+
+    /**
+     * Allows the given enterprise to use the given datacenter with the given limits.
+     * 
+     * @param enterprise The enterprise.
+     * @param datacenter The datacenter to allow to the given enterprise.
+     * @param limits The usage limits for the enterprise in the given datacenter.
+     * @return The usage limits for the enterprise in the given datacenter.
+     */
+    DatacenterLimitsDto createLimits(EnterpriseDto enterprise, DatacenterDto datacenter,
+        DatacenterLimitsDto limits);
 
 }

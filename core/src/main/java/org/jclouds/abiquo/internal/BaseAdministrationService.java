@@ -24,8 +24,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.features.InfrastructureService;
+import org.jclouds.abiquo.features.AdministrationService;
+import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 
 import com.google.common.base.Predicate;
@@ -38,14 +40,20 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Singleton
-public class BaseInfrastructureService implements InfrastructureService
+public class BaseAdministrationService implements AdministrationService
 {
     private final ListDatacenters listDatacenters;
 
+    private final ListEnterprises listEnterprises;
+
+    /* ********************** Datacenter ********************** */
+
     @Inject
-    protected BaseInfrastructureService(final ListDatacenters listDatacenters)
+    protected BaseAdministrationService(final ListDatacenters listDatacenters,
+        final ListEnterprises listEnterprises)
     {
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
+        this.listEnterprises = checkNotNull(listEnterprises, "listEnterprises");
     }
 
     @Override
@@ -64,6 +72,26 @@ public class BaseInfrastructureService implements InfrastructureService
     public Datacenter findDatacenter(final Predicate<Datacenter> filter)
     {
         return Iterables.getFirst(listDatacenters(filter), null);
+    }
+
+    /* ********************** Enterprise ********************** */
+
+    @Override
+    public Iterable<Enterprise> listEnterprises()
+    {
+        return listEnterprises.execute();
+    }
+
+    @Override
+    public Iterable<Enterprise> listEnterprises(final Predicate<Enterprise> filter)
+    {
+        return listEnterprises.execute(filter);
+    }
+
+    @Override
+    public Enterprise findEnterprise(final Predicate<Enterprise> filter)
+    {
+        return Iterables.getFirst(listEnterprises(filter), null);
     }
 
 }

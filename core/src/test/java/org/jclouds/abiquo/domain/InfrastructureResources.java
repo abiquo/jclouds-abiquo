@@ -31,7 +31,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
  * 
  * @author Ignasi Barrera
  */
-public class Infrastructure
+public class InfrastructureResources
 {
     public static DatacenterDto datacenterPost()
     {

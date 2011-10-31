@@ -28,7 +28,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.Random;
 
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.Infrastructure;
+import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
@@ -61,7 +61,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     protected void setup()
     {
         Random generator = new Random(System.currentTimeMillis());
-        DatacenterDto datacenter = Infrastructure.datacenterPost();
+        DatacenterDto datacenter = InfrastructureResources.datacenterPost();
         datacenter.setName(PREFIX + datacenter.getName() + generator.nextInt(100));
         this.datacenter = client.getInfrastructureClient().createDatacenter(datacenter);
     }

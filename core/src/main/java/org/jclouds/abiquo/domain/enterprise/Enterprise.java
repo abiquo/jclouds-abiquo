@@ -34,8 +34,6 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
  */
 public class Enterprise extends DomainWrapper<EnterpriseDto>
 {
-    EnterpriseDto target;
-
     /**
      * Constructor to be used only by the builder.
      */
@@ -68,12 +66,12 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
 
     public void allowDatacenter(final Datacenter datacenter)
     {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     public void prohibeDatacenter(final Datacenter datacenter)
     {
-
+        throw new UnsupportedOperationException("Not implemented yet");
     }
 
     // Builder
@@ -248,15 +246,16 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return Enterprise.builder(in.context).name(in.getName()).ramSoftLimitInMb(
-                in.getRamSoftLimitInMb()).ramHardLimitInMb(in.getRamHardLimitInMb())
-                .cpuCountSoftLimit(in.getCpuCountSoftLimit()).cpuCountHardLimit(
-                    in.getCpuCountHardLimit()).hdHardLimitInMb(in.getHdHardLimitInMb())
-                .hdSoftLimitInMb(in.getHdSoftLimitInMb()).storageHard(in.getStorageHard())
-                .storageSoft(in.getStorageSoft()).vlansHard(in.getVlansHard()).vlansSoft(
-                    in.getVlansSoft()).publicIpsHard(in.getPublicIpsHard()).publicIpsSoft(
-                    in.getPublicIpsSoft()).repositoryHard(in.getHdHardLimitInMb()).repositorySoft(
-                    in.getRepositorySoft())
+            return Enterprise.builder(in.context).name(in.getName())
+                .ramSoftLimitInMb(in.getRamSoftLimitInMb())
+                .ramHardLimitInMb(in.getRamHardLimitInMb())
+                .cpuCountSoftLimit(in.getCpuCountSoftLimit())
+                .cpuCountHardLimit(in.getCpuCountHardLimit())
+                .hdHardLimitInMb(in.getHdHardLimitInMb()).hdSoftLimitInMb(in.getHdSoftLimitInMb())
+                .storageHard(in.getStorageHard()).storageSoft(in.getStorageSoft())
+                .vlansHard(in.getVlansHard()).vlansSoft(in.getVlansSoft())
+                .publicIpsHard(in.getPublicIpsHard()).publicIpsSoft(in.getPublicIpsSoft())
+                .repositoryHard(in.getHdHardLimitInMb()).repositorySoft(in.getRepositorySoft())
                 .isReservationRestricted(in.getIsReservationRestricted());
         }
     }

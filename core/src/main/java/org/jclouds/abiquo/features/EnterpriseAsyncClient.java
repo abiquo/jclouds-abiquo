@@ -57,23 +57,21 @@ import com.google.common.util.concurrent.ListenableFuture;
  */
 @RequestFilters(BasicAuthentication.class)
 @Consumes(MediaType.APPLICATION_XML)
-@Path("/admin")
+@Path("/admin/enterprises")
 public interface EnterpriseAsyncClient
 {
-    /*            ********************** Enterprise ********************** */
+    /* ********************** Enterprise ********************** */
 
     /**
      * @see EnterpriseClient#listEnterprises()
      */
     @GET
-    @Path("/enterprises")
     ListenableFuture<EnterprisesDto> listEnterprises();
 
     /**
      * @see EnterpriseClient#createEnterprise(EnterpriseDto)
      */
     @POST
-    @Path("/enterprises")
     ListenableFuture<EnterpriseDto> createEnterprise(
         @BinderParam(BindToXMLPayload.class) EnterpriseDto enterprise);
 
@@ -81,7 +79,7 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#getEnterprise(Integer)
      */
     @GET
-    @Path("/enterprises/{enterprise}")
+    @Path("{enterprise}")
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<EnterpriseDto> getEnterprise(@PathParam("enterprise") Integer enterpriseId);
 
@@ -99,13 +97,14 @@ public interface EnterpriseAsyncClient
     ListenableFuture<Void> deleteEnterprise(
         @EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
-    /*            ********************** Enterprise Limits ********************** */
+    /* ********************** Enterprise Limits ********************** */
 
     /**
-     * @see EnterpriseClientClient#createLimits(EnterpriseDto, DatacenterDto)
+     * @see EnterpriseClient#createLimits(EnterpriseDto, DatacenterDto, DatacenterLimitsDto)
      */
     @POST
     ListenableFuture<DatacenterLimitsDto> createLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
-        @QueryParam("datacenter") @ParamParser(DatacenterId.class) final DatacenterDto datacenter);
+        @QueryParam("datacenter") @ParamParser(DatacenterId.class) final DatacenterDto datacenter,
+        @BinderParam(BindToXMLPayload.class) DatacenterLimitsDto limits);
 }

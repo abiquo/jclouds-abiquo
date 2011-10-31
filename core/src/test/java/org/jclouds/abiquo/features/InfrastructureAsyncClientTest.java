@@ -24,7 +24,7 @@ import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import org.jclouds.abiquo.domain.Infrastructure;
+import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
@@ -53,7 +53,7 @@ import com.google.inject.TypeLiteral;
 public class InfrastructureAsyncClientTest extends
     BaseAbiquoAsyncClientTest<InfrastructureAsyncClient>
 {
-    // Datacenter
+    /* ********************** Datacenter ********************** */
 
     public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -76,11 +76,11 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("createDatacenter", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPost());
+            processor.createRequest(method, InfrastructureResources.datacenterPost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/admin/datacenters HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Infrastructure.datacenterPostPayload()),
+        assertPayloadEquals(request, withHeader(InfrastructureResources.datacenterPostPayload()),
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -112,11 +112,11 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("updateDatacenter", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut());
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Infrastructure.datacenterPutPayload()),
+        assertPayloadEquals(request, withHeader(InfrastructureResources.datacenterPutPayload()),
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -131,7 +131,7 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("deleteDatacenter", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut());
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
@@ -144,13 +144,13 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    // Rack
+    /* ********************** Rack ********************** */
 
     public void testListRacks() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncClient.class.getMethod("listRacks", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut());
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
@@ -170,13 +170,13 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRack", DatacenterDto.class,
                 RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(),
-                Infrastructure.rackPost());
+            processor.createRequest(method, InfrastructureResources.datacenterPut(),
+                InfrastructureResources.rackPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Infrastructure.rackPostPayload()),
+        assertPayloadEquals(request, withHeader(InfrastructureResources.rackPostPayload()),
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -192,7 +192,7 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class
                 .getMethod("getRack", DatacenterDto.class, Integer.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), 1);
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), 1);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
@@ -210,12 +210,12 @@ public class InfrastructureAsyncClientTest extends
     {
         Method method = InfrastructureAsyncClient.class.getMethod("updateRack", RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.rackPut());
+            processor.createRequest(method, InfrastructureResources.rackPut());
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Infrastructure.rackPutPayload()),
+        assertPayloadEquals(request, withHeader(InfrastructureResources.rackPutPayload()),
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -229,7 +229,7 @@ public class InfrastructureAsyncClientTest extends
     {
         Method method = InfrastructureAsyncClient.class.getMethod("deleteRack", RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.rackPut());
+            processor.createRequest(method, InfrastructureResources.rackPut());
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
@@ -243,7 +243,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    // Remote service
+    /* ********************** Remote Service ********************** */
 
     public void testListRemoteServices() throws SecurityException, NoSuchMethodException,
         IOException
@@ -251,7 +251,7 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("listRemoteServices", DatacenterDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut());
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
@@ -272,14 +272,15 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createRemoteService", DatacenterDto.class,
                 RemoteServiceDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(),
-                Infrastructure.remoteServicePost());
+            processor.createRequest(method, InfrastructureResources.datacenterPut(),
+                InfrastructureResources.remoteServicePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Infrastructure.remoteServicePostPayload()),
-            "application/xml", false);
+        assertPayloadEquals(request,
+            withHeader(InfrastructureResources.remoteServicePostPayload()), "application/xml",
+            false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -294,7 +295,7 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("getRemoteService", DatacenterDto.class,
                 RemoteServiceType.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(),
+            processor.createRequest(method, InfrastructureResources.datacenterPut(),
                 RemoteServiceType.STORAGE_SYSTEM_MONITOR);
 
         assertRequestLineEquals(request,
@@ -316,12 +317,12 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class
                 .getMethod("updateRemoteService", RemoteServiceDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.remoteServicePut());
+            processor.createRequest(method, InfrastructureResources.remoteServicePut());
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/datacenters/1/remoteservices/nodecollector HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Infrastructure.remoteServicePutPayload()),
+        assertPayloadEquals(request, withHeader(InfrastructureResources.remoteServicePutPayload()),
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -337,7 +338,7 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class
                 .getMethod("deleteRemoteService", RemoteServiceDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.remoteServicePut());
+            processor.createRequest(method, InfrastructureResources.remoteServicePut());
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/remoteservices/nodecollector HTTP/1.1");
@@ -357,9 +358,9 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("isAvailable", RemoteServiceDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.remoteServicePut());
+            processor.createRequest(method, InfrastructureResources.remoteServicePut());
 
-        String checkUri = Infrastructure.remoteServicePut().searchLink("check").getHref();
+        String checkUri = InfrastructureResources.remoteServicePut().searchLink("check").getHref();
         assertRequestLineEquals(request, String.format("GET %s HTTP/1.1", checkUri));
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
@@ -371,7 +372,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    // Machine
+    /* ********************** Machine ********************** */
 
     public void testDiscoverSingleMachineWithoutOptions() throws SecurityException,
         NoSuchMethodException, IOException
@@ -380,7 +381,7 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("discoverSingleMachine", DatacenterDto.class,
                 String.class, HypervisorType.class, String.class, String.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), "10.60.1.222",
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
                 HypervisorType.XENSERVER, "user", "pass");
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
@@ -406,7 +407,7 @@ public class InfrastructureAsyncClientTest extends
                 String.class, HypervisorType.class, String.class, String.class,
                 MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), "80.80.80.80",
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
                 HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
@@ -432,7 +433,7 @@ public class InfrastructureAsyncClientTest extends
                 String.class, HypervisorType.class, String.class, String.class,
                 MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), "80.80.80.80",
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
                 HypervisorType.KVM, "user", "pass", MachineOptions.builder().build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discoversingle";
@@ -458,7 +459,7 @@ public class InfrastructureAsyncClientTest extends
                 DatacenterDto.class, String.class, String.class, HypervisorType.class,
                 String.class, String.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), "10.60.1.222",
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
                 "10.60.1.250", HypervisorType.XENSERVER, "user", "pass");
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discovermultiple";
@@ -485,7 +486,7 @@ public class InfrastructureAsyncClientTest extends
                 DatacenterDto.class, String.class, String.class, HypervisorType.class,
                 String.class, String.class, MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.datacenterPut(), "80.80.80.80",
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
                 "80.80.80.86", HypervisorType.KVM, "user", "pass",
                 MachineOptions.builder().port(8889).build());
 
@@ -509,7 +510,7 @@ public class InfrastructureAsyncClientTest extends
     {
         Method method = InfrastructureAsyncClient.class.getMethod("listMachines", RackDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.rackPut());
+            processor.createRequest(method, InfrastructureResources.rackPut());
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks/1/machines HTTP/1.1");
@@ -528,7 +529,7 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("getMachine", RackDto.class, Integer.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.rackPut(), 1);
+            processor.createRequest(method, InfrastructureResources.rackPut(), 1);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1 HTTP/1.1");
@@ -548,12 +549,13 @@ public class InfrastructureAsyncClientTest extends
             InfrastructureAsyncClient.class.getMethod("createMachine", RackDto.class,
                 MachineDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.rackPut(), Infrastructure.machinePost());
+            processor.createRequest(method, InfrastructureResources.rackPut(),
+                InfrastructureResources.machinePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/datacenters/1/racks/1/machines HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Infrastructure.machinePostPayload()),
+        assertPayloadEquals(request, withHeader(InfrastructureResources.machinePostPayload()),
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -568,12 +570,12 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("updateMachine", MachineDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.machinePut());
+            processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/datacenters/1/racks/1/machines/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(Infrastructure.machinePutPayload()),
+        assertPayloadEquals(request, withHeader(InfrastructureResources.machinePutPayload()),
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -588,7 +590,7 @@ public class InfrastructureAsyncClientTest extends
         Method method =
             InfrastructureAsyncClient.class.getMethod("deleteMachine", MachineDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, Infrastructure.machinePut());
+            processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/racks/1/machines/1 HTTP/1.1");

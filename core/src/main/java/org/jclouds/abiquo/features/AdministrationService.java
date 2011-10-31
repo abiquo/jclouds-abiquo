@@ -19,8 +19,9 @@
 
 package org.jclouds.abiquo.features;
 
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.internal.BaseInfrastructureService;
+import org.jclouds.abiquo.internal.BaseAdministrationService;
 
 import com.google.common.base.Predicate;
 import com.google.inject.ImplementedBy;
@@ -31,10 +32,10 @@ import com.google.inject.ImplementedBy;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@ImplementedBy(BaseInfrastructureService.class)
-public interface InfrastructureService
+@ImplementedBy(BaseAdministrationService.class)
+public interface AdministrationService
 {
-    // Datacenter
+    /* ********************** Datacenter ********************** */
 
     /**
      * Get the list of all datacenters.
@@ -50,5 +51,23 @@ public interface InfrastructureService
      * Get the first datacenter that matches the given filter or <code>null</code> if none is found.
      */
     Datacenter findDatacenter(final Predicate<Datacenter> filter);
+
+    /* ********************** Enterprise ********************** */
+
+    /**
+     * Get the list of all enterprises.
+     */
+    Iterable<Enterprise> listEnterprises();
+
+    /**
+     * Get the list of enterprises matching the given filter.
+     */
+    Iterable<Enterprise> listEnterprises(final Predicate<Enterprise> filter);
+
+    /**
+     * Get the first enterprises that matches the given filter or <code>null</code> if none is
+     * found.
+     */
+    Enterprise findEnterprise(final Predicate<Enterprise> filter);
 
 }

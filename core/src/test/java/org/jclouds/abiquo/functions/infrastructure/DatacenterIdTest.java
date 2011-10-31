@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.functions.infrastructure;
 
 import static org.testng.Assert.assertEquals;

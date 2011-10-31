@@ -46,7 +46,7 @@ import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface InfrastructureClient
 {
-    // Datacenter
+    /* ********************** Datacenter ********************** */
 
     /**
      * List all datacenters.
@@ -158,7 +158,7 @@ public interface InfrastructureClient
         final String ipTo, final HypervisorType hypervisorType, final String user,
         final String password, final MachineOptions options);
 
-    // Rack
+    /* ********************** Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -201,7 +201,7 @@ public interface InfrastructureClient
      */
     void deleteRack(final RackDto rack);
 
-    // Remote service
+    /* ********************** Remote Service ********************** */
 
     /**
      * List all remote services of the datacenter.
@@ -253,7 +253,8 @@ public interface InfrastructureClient
      */
     boolean isAvailable(RemoteServiceDto remoteService);
 
-    // Machine
+    /* ********************** Machine ********************** */
+
     /**
      * Create a new physical machine in a rack.
      * 
