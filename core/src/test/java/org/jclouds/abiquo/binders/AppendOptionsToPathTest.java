@@ -63,9 +63,8 @@ public class AppendOptionsToPathTest
         AppendOptionsToPath binder = new AppendOptionsToPath(new UriBuilderImpl());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, EMPTY_OPTIONS);
-
-        assertEquals(request.getRequestLine(), "GET http://localhost HTTP/1.1");
+        HttpRequest newRequest = binder.bindToRequest(request, EMPTY_OPTIONS);
+        assertEquals(newRequest.getRequestLine(), "GET http://localhost HTTP/1.1");
     }
 
     public void testBindOptions()
@@ -73,9 +72,9 @@ public class AppendOptionsToPathTest
         AppendOptionsToPath binder = new AppendOptionsToPath(new UriBuilderImpl());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, DUMMY_OPTIONS);
-
-        assertEquals(request.getRequestLine(), "GET http://localhost?option=optionvalue HTTP/1.1");
+        HttpRequest newRequest = binder.bindToRequest(request, DUMMY_OPTIONS);
+        assertEquals(newRequest.getRequestLine(),
+            "GET http://localhost?option=optionvalue HTTP/1.1");
     }
 
     private QueryOptions EMPTY_OPTIONS = new QueryOptions()

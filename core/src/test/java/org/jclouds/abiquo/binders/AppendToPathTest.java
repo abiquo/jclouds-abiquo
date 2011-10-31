@@ -48,9 +48,8 @@ public class AppendToPathTest
         AppendToPath binder = new AppendToPath();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, "expanded/path");
-
-        assertEquals(request.getRequestLine(), "GET http://localhost/expanded/path HTTP/1.1");
+        HttpRequest newRequest = binder.bindToRequest(request, "expanded/path");
+        assertEquals(newRequest.getRequestLine(), "GET http://localhost/expanded/path HTTP/1.1");
     }
 
     public void testBindNumber()
@@ -58,8 +57,7 @@ public class AppendToPathTest
         AppendToPath binder = new AppendToPath();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, 57);
-
-        assertEquals(request.getRequestLine(), "GET http://localhost/57 HTTP/1.1");
+        HttpRequest newRequest = binder.bindToRequest(request, 57);
+        assertEquals(newRequest.getRequestLine(), "GET http://localhost/57 HTTP/1.1");
     }
 }
