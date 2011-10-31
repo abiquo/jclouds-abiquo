@@ -27,7 +27,7 @@ import java.lang.reflect.Method;
 import org.jclouds.abiquo.domain.Infrastructure;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
-import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
+import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.http.functions.ReturnTrueIf2xx;
@@ -359,13 +359,14 @@ public class InfrastructureAsyncClientTest extends
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, Infrastructure.remoteServicePut());
 
-        assertRequestLineEquals(request, "GET http://localhost:80/nodecollector/check HTTP/1.1");
+        String checkUri = Infrastructure.remoteServicePut().searchLink("check").getHref();
+        assertRequestLineEquals(request, String.format("GET %s HTTP/1.1", checkUri));
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReturnTrueIf2xx.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnFalseOn5xx.class);
+        assertExceptionParserClassEquals(method, ReturnFalseIfNotAvailable.class);
 
         checkFilters(request);
     }

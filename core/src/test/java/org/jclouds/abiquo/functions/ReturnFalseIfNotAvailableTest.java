@@ -27,21 +27,22 @@ import static org.testng.Assert.assertEquals;
 
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
+import org.jclouds.rest.ResourceNotFoundException;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
 
 /**
- * unit tests for the {@link ReturnFalseOn5xx} function.
+ * unit tests for the {@link ReturnFalseIfNotAvailable} function.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class ReturnFalseOn5xxTest
+public class ReturnFalseIfNotAvailableTest
 {
-    public void testReturnOriginalExceptionIfNotHttpResponseException()
+    public void testReturnOriginalExceptionIfUnknownException()
     {
-        Function<Exception, Object> function = new ReturnFalseOn5xx();
+        Function<Exception, Object> function = new ReturnFalseIfNotAvailable();
         RuntimeException exception = new RuntimeException();
 
         try
@@ -56,7 +57,7 @@ public class ReturnFalseOn5xxTest
 
     public void testReturnFalseIf5xx()
     {
-        Function<Exception, Object> function = new ReturnFalseOn5xx();
+        Function<Exception, Object> function = new ReturnFalseIfNotAvailable();
         HttpResponse response = createMock(HttpResponse.class);
         HttpResponseException exception = createMock(HttpResponseException.class);
 
@@ -80,7 +81,7 @@ public class ReturnFalseOn5xxTest
 
     public void testReturnExceptionIfNot5xx()
     {
-        Function<Exception, Object> function = new ReturnFalseOn5xx();
+        Function<Exception, Object> function = new ReturnFalseIfNotAvailable();
         HttpResponse response = createMock(HttpResponse.class);
         HttpResponseException exception = createMock(HttpResponseException.class);
 
@@ -108,4 +109,13 @@ public class ReturnFalseOn5xxTest
         verify(response);
         verify(exception);
     }
+
+    public void testReturnFalseIfResourceNotFound()
+    {
+        Function<Exception, Object> function = new ReturnFalseIfNotAvailable();
+        ResourceNotFoundException exception = new ResourceNotFoundException();
+
+        assertEquals(function.apply(exception), false);
+    }
+
 }

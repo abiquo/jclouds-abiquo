@@ -209,7 +209,7 @@ public class Machine extends DomainWrapper<MachineDto>
 
         public Builder ip(final String ip)
         {
-            this.user = ip;
+            this.ip = ip;
             if (ipService == null)
             {
                 ipService = ip;

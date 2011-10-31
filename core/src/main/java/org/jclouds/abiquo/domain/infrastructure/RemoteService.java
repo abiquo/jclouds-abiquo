@@ -74,7 +74,9 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
     public boolean isAvailable()
     {
-        return context.getApi().getInfrastructureClient().isAvailable(target);
+        // If the remote service can not be checked, assume it is available
+        return !getType().canBeChecked() ? true : context.getApi().getInfrastructureClient()
+            .isAvailable(target);
     }
 
     // Parent access
