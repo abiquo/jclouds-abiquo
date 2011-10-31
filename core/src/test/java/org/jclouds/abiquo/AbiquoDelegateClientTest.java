@@ -57,12 +57,14 @@ public class AbiquoDelegateClientTest extends BaseAbiquoAsyncClientTest<AbiquoAs
         ExecutionException
     {
         assertNotNull(syncClient.getInfrastructureClient());
+        assertNotNull(syncClient.getEnterpriseClient());
     }
 
     public void testAsync() throws SecurityException, NoSuchMethodException, InterruptedException,
         ExecutionException
     {
         assertNotNull(asyncClient.getInfrastructureClient());
+        assertNotNull(asyncClient.getEnterpriseClient());
     }
 
     @Override

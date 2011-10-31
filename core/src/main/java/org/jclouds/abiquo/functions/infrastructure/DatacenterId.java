@@ -16,35 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jclouds.abiquo.functions.infrastructure;
 
-package org.jclouds.abiquo;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.concurrent.TimeUnit;
+import javax.inject.Singleton;
 
-import org.jclouds.abiquo.features.EnterpriseClient;
-import org.jclouds.abiquo.features.InfrastructureClient;
-import org.jclouds.concurrent.Timeout;
-import org.jclouds.rest.annotations.Delegate;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.google.common.base.Function;
 
 /**
- * Provides synchronous access to Abiquo.
+ * Parses a {@link DatacenterDto} object to extract its id.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
- * @see AbiquoAsyncClient
- * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient
+@Singleton
+public class DatacenterId implements Function<Object, String>
 {
-    /**
-     * Provides synchronous access to Infrastructure features.
-     */
-    @Delegate
-    InfrastructureClient getInfrastructureClient();
+    @Override
+    public String apply(final Object input)
+    {
+        checkArgument(checkNotNull(input, "input") instanceof DatacenterDto,
+            "This parser is only valid for DatacenterDto objects");
 
-    /**
-     * Provides synchronous access to Enterprise features.
-     */
-    @Delegate
-    EnterpriseClient getEnterpriseClient();
+        return ((DatacenterDto) input).getId().toString();
+    }
+
 }

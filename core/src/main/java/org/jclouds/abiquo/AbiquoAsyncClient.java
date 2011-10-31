@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo;
 
+import org.jclouds.abiquo.features.EnterpriseAsyncClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
 import org.jclouds.rest.annotations.Delegate;
 
@@ -38,4 +39,10 @@ public interface AbiquoAsyncClient
      */
     @Delegate
     InfrastructureAsyncClient getInfrastructureClient();
+
+    /**
+     * Provides asynchronous access to Enterprise features.
+     */
+    @Delegate
+    EnterpriseAsyncClient getEnterpriseClient();
 }

@@ -97,7 +97,7 @@ public interface InfrastructureClient
      *            xen-3, vmx-04, hyperv-301, xenserver}.
      * @param user User to log in.
      * @param password Password to authenticate.
-     * @return The physical machine or <code>null</code> if it does not exist.
+     * @return The physical machine.
      */
     MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip,
         HypervisorType hypervisorType, String user, String password);
@@ -114,7 +114,7 @@ public interface InfrastructureClient
      * @param user User to log in.
      * @param password Password to authenticate.
      * @param options Optional query params.
-     * @return The physical machine or <code>null</code> if it does not exist.
+     * @return The physical machine.
      */
     MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip,
         HypervisorType hypervisorType, String user, String password, MachineOptions options);

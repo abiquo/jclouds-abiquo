@@ -23,6 +23,8 @@ import java.util.Map;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.features.EnterpriseAsyncClient;
+import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
@@ -45,10 +47,10 @@ import com.google.common.collect.ImmutableMap;
 @ConfiguresRestClient
 public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, AbiquoAsyncClient>
 {
-    public static final Map<Class< ? >, Class< ? >> DELEGATE_MAP = ImmutableMap
-        .<Class< ? >, Class< ? >> builder()
-        .put(InfrastructureClient.class, InfrastructureAsyncClient.class) //
-        .build();
+    public static final Map<Class< ? >, Class< ? >> DELEGATE_MAP =
+        ImmutableMap.<Class< ? >, Class< ? >> builder().put(InfrastructureClient.class,
+            InfrastructureAsyncClient.class).put(EnterpriseClient.class,
+            EnterpriseAsyncClient.class).build();
 
     public AbiquoRestClientModule()
     {

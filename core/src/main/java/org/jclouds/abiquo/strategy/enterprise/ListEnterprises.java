@@ -17,34 +17,21 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.strategy.enterprise;
 
-import java.util.concurrent.TimeUnit;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.strategy.ListRootEntities;
+import org.jclouds.abiquo.strategy.enterprise.internal.ListEnterprisesImpl;
 
-import org.jclouds.abiquo.features.EnterpriseClient;
-import org.jclouds.abiquo.features.InfrastructureClient;
-import org.jclouds.concurrent.Timeout;
-import org.jclouds.rest.annotations.Delegate;
+import com.google.inject.ImplementedBy;
 
 /**
- * Provides synchronous access to Abiquo.
+ * List enterprises.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
- * @see AbiquoAsyncClient
  * @author Ignasi Barrera
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient
+@ImplementedBy(ListEnterprisesImpl.class)
+public interface ListEnterprises extends ListRootEntities<Enterprise>
 {
-    /**
-     * Provides synchronous access to Infrastructure features.
-     */
-    @Delegate
-    InfrastructureClient getInfrastructureClient();
 
-    /**
-     * Provides synchronous access to Enterprise features.
-     */
-    @Delegate
-    EnterpriseClient getEnterpriseClient();
 }

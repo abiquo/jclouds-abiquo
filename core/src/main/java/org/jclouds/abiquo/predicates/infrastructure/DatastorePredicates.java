@@ -25,7 +25,6 @@ import java.util.Arrays;
 
 import org.jclouds.abiquo.domain.infrastructure.Datastore;
 
-import com.abiquo.server.core.infrastructure.DatastoreDto;
 import com.google.common.base.Predicate;
 
 /**

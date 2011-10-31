@@ -73,7 +73,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin")
 public interface InfrastructureAsyncClient
 {
-    /* ********************** Datacenter ********************** */
+    /*  ********************** Datacenter ********************** */
 
     /**
      * @see InfrastructureClient#listDatacenters()
@@ -160,7 +160,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("password") String password,
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
-    /* ********************** Rack ********************** */
+    /*  ********************** Rack ********************** */
 
     /**
      * @see InfrastructureClient#listRacks(DatacenterDto)
@@ -202,7 +202,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteRack(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 
-    /* ********************** Remote Service ********************** */
+    /*  ********************** Remote Service ********************** */
 
     /**
      * @see InfrastructureClient#listRemoteServices(DatacenterDto)
@@ -250,7 +250,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Boolean> isAvailable(
         @BinderParam(BindRemoteServiceCheck.class) RemoteServiceDto remoteService);
 
-    /* ********************** Machine ********************** */
+    /*  ********************** Machine ********************** */
 
     /**
      * @see InfrastructureClient#listMachines(RackDto)

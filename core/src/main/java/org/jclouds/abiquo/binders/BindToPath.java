@@ -28,7 +28,6 @@ import java.net.URI;
 import java.util.Arrays;
 
 import javax.inject.Singleton;
-import javax.ws.rs.PUT;
 
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
@@ -95,8 +94,8 @@ public class BindToPath implements Binder
         Annotation[] annotations = request.getJavaMethod().getParameterAnnotations()[argIndex];
 
         EndpointLink linkName =
-            (EndpointLink) Iterables.find(Arrays.asList(annotations),
-                Predicates.instanceOf(EndpointLink.class), null);
+            (EndpointLink) Iterables.find(Arrays.asList(annotations), Predicates
+                .instanceOf(EndpointLink.class), null);
 
         if (linkName == null)
         {
