@@ -23,6 +23,7 @@ import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicat
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import javax.ws.rs.core.Response.Status;
@@ -81,16 +82,20 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         assertNull(deleted);
     }
 
-    @Test(expectedExceptions = IllegalArgumentException.class)
     public void testIsAvailableNonCheckeable()
     {
         RemoteService rs =
             env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.DHCP_SERVICE));
-
-        rs.isAvailable();
+        assertTrue(rs.isAvailable());
     }
 
-    @Test
+    public void testIsAvailable()
+    {
+        RemoteService rs =
+            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.NODE_COLLECTOR));
+        assertTrue(rs.isAvailable());
+    }
+
     public void testCreateRepeated()
     {
         RemoteService repeated = Builder.fromRemoteService(env.remoteServices.get(1)).build();

@@ -106,6 +106,8 @@ public class Infrastructure
         remoteService.setId(1);
         remoteService
             .addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
+        remoteService.addLink(new RESTLink("check",
+            "http://localhost/api/admin/datacenters/1/remoteservices/nodecollector/action/check"));
         remoteService.addLink(new RESTLink("edit",
             "http://localhost/api/admin/datacenters/1/remoteservices/nodecollector"));
         return remoteService;
@@ -216,6 +218,8 @@ public class Infrastructure
         StringBuffer buffer = new StringBuffer();
         buffer.append("<remoteService>");
         buffer.append(link("/admin/datacenters/1", "datacenter"));
+        buffer.append(link("/admin/datacenters/1/remoteservices/nodecollector/action/check",
+            "check"));
         buffer.append(link("/admin/datacenters/1/remoteservices/nodecollector", "edit"));
         buffer.append("<id>1</id>");
         buffer.append("<status>0</status>");

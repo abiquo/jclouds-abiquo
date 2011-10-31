@@ -34,10 +34,9 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
-import org.jclouds.abiquo.binders.infrastructure.BindRemoteServiceCheck;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
-import org.jclouds.abiquo.functions.ReturnFalseOn5xx;
+import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.filters.BasicAuthentication;
@@ -246,9 +245,9 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#isAvailable(RemoteServiceDto)
      */
     @GET
-    @ExceptionParser(ReturnFalseOn5xx.class)
+    @ExceptionParser(ReturnFalseIfNotAvailable.class)
     ListenableFuture<Boolean> isAvailable(
-        @BinderParam(BindRemoteServiceCheck.class) RemoteServiceDto remoteService);
+        @EndpointLink("check") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
 
     /* ********************** Machine ********************** */
 
