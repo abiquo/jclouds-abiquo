@@ -129,7 +129,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(rack.getId());
     }
 
-    // Teardown
+    // Tear down
 
     private void deleteMachine()
     {

@@ -42,7 +42,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.google.common.collect.Iterables;
 
 /**
- * Live tests for the {@link RemoteService} domain class.
+ * Live integration tests for the {@link RemoteService} domain class.
  * 
  * @author Ignasi Barrera
  */

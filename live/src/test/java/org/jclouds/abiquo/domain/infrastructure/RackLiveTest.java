@@ -33,7 +33,7 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.collect.Iterables;
 
 /**
- * Live tests for the {@link Datacenter} domain class.
+ * Live integration tests for the {@link Datacenter} domain class.
  * 
  * @author Ignasi Barrera
  */

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain.infrastructure;
+package org.jclouds.abiquo.domain.enterprise;
 
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
@@ -26,52 +26,53 @@ import static org.testng.Assert.fail;
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.enterprise.Enterprise.Builder;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
-import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
+import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 
 /**
- * Live integration tests for the {@link Datacenter} domain class.
+ * Live integration tests for the {@link Enterprise} domain class.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnvironment>
 {
 
     @Override
-    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
+    protected EnterpriseTestEnvironment environment(final AbiquoContext context)
     {
-        return new InfrastructureTestEnvironment(context);
+        return new EnterpriseTestEnvironment(context);
     }
 
     public void testUpdate()
     {
-        env.datacenter.setLocation("New York");
-        env.datacenter.update();
+        env.enterprise.setName("Updated Enterprise");
+        env.enterprise.update();
 
-        // Recover the updated datacenter
-        DatacenterDto updated = env.infrastructure.getDatacenter(env.datacenter.getId());
+        // Recover the updated enterprise
+        EnterpriseDto updated = env.client.getEnterprise(env.enterprise.getId());
 
-        assertEquals(updated.getLocation(), "New York");
+        assertEquals(updated.getName(), "Updated Enterprise");
     }
 
     public void testCreateRepeated()
     {
-        Datacenter repeated = Builder.fromDatacenter(env.datacenter).build();
+        Enterprise repeated = Builder.fromEnterprise(env.enterprise).build();
 
         try
         {
             repeated.save();
-            fail("Should not be able to create datacenters with the same name");
+            fail("Should not be able to create enterprises with the same name");
         }
         catch (AbiquoException ex)
         {
-            assertHasError(ex, Status.CONFLICT, "DC-3");
+            assertHasError(ex, Status.CONFLICT, "ENTERPRISE-4");
         }
     }
+
 }

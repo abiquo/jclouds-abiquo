@@ -34,6 +34,12 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
  */
 public class Enterprise extends DomainWrapper<EnterpriseDto>
 {
+    /** The default limits for enterprises (unlimited). */
+    private static final int DEFAULT_LIMITS = 0;
+
+    /** The default value for the reservation restricted flag. */
+    private static final boolean DEFAULT_RESERVATION_RESTRICTED = false;
+
     /**
      * Constructor to be used only by the builder.
      */
@@ -87,35 +93,35 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
 
         private String name;
 
-        private Integer ramSoftLimitInMb;
+        private Integer ramSoftLimitInMb = DEFAULT_LIMITS;
 
-        private Integer ramHardLimitInMb;
+        private Integer ramHardLimitInMb = DEFAULT_LIMITS;
 
-        private Integer cpuCountSoftLimit;
+        private Integer cpuCountSoftLimit = DEFAULT_LIMITS;
 
-        private Integer cpuCountHardLimit;
+        private Integer cpuCountHardLimit = DEFAULT_LIMITS;
 
-        private Long hdSoftLimitInMb;
+        private Long hdSoftLimitInMb = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long hdHardLimitInMb;
+        private Long hdHardLimitInMb = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long storageSoft;
+        private Long storageSoft = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long storageHard;
+        private Long storageHard = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long vlansSoft;
+        private Long vlansSoft = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long vlansHard;
+        private Long vlansHard = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long publicIpsSoft;
+        private Long publicIpsSoft = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long publicIpsHard;
+        private Long publicIpsHard = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long repositorySoft;
+        private Long repositorySoft = Long.valueOf(DEFAULT_LIMITS);
 
-        private Long repositoryHard;
+        private Long repositoryHard = Long.valueOf(DEFAULT_LIMITS);
 
-        private Boolean isReservationRestricted;
+        private Boolean isReservationRestricted = DEFAULT_RESERVATION_RESTRICTED;
 
         public Builder(final AbiquoContext context)
         {
@@ -261,6 +267,11 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
     }
 
     // Delegate methods
+
+    public Integer getId()
+    {
+        return target.getId();
+    }
 
     public int getCpuCountHardLimit()
     {

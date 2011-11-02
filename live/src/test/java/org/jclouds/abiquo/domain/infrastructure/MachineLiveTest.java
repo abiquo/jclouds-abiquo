@@ -38,7 +38,7 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.MachineDto;
 
 /**
- * Live tests for the {@link Machine} domain class.
+ * Live integration tests for the {@link Machine} domain class.
  * 
  * @author Ignasi Barrera
  */
