@@ -103,6 +103,9 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         }));
     }
 
+    /**
+     * Unwrap a collection of objects.
+     */
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<T> unwrap(
         final Iterable<W> targets)
     {

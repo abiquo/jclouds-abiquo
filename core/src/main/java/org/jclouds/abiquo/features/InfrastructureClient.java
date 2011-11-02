@@ -26,6 +26,7 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -46,7 +47,7 @@ import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface InfrastructureClient
 {
-    /* ********************** Datacenter ********************** */
+    /*        ********************** Datacenter ********************** */
 
     /**
      * List all datacenters.
@@ -158,7 +159,15 @@ public interface InfrastructureClient
         final String ipTo, final HypervisorType hypervisorType, final String user,
         final String password, final MachineOptions options);
 
-    /* ********************** Rack ********************** */
+    /**
+     * Retreives limits for the given datacenter and any enterprise.
+     * 
+     * @param datacenter The datacenter.
+     * @return The usage limits for the datacenter on any enterprise.
+     */
+    DatacentersLimitsDto listLimits(DatacenterDto datacenter);
+
+    /*        ********************** Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -201,7 +210,7 @@ public interface InfrastructureClient
      */
     void deleteRack(final RackDto rack);
 
-    /* ********************** Remote Service ********************** */
+    /*        ********************** Remote Service ********************** */
 
     /**
      * List all remote services of the datacenter.
@@ -253,7 +262,7 @@ public interface InfrastructureClient
      */
     boolean isAvailable(RemoteServiceDto remoteService);
 
-    /* ********************** Machine ********************** */
+    /*        ********************** Machine ********************** */
 
     /**
      * Create a new physical machine in a rack.

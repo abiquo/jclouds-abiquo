@@ -42,6 +42,7 @@ import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
+import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisesDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -60,7 +61,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin/enterprises")
 public interface EnterpriseAsyncClient
 {
-    /* ********************** Enterprise ********************** */
+    /*                                   ********************** Enterprise ********************** */
 
     /**
      * @see EnterpriseClient#listEnterprises()
@@ -97,7 +98,7 @@ public interface EnterpriseAsyncClient
     ListenableFuture<Void> deleteEnterprise(
         @EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
-    /* ********************** Enterprise Limits ********************** */
+    /*                                   ********************** Enterprise Limits ********************** */
 
     /**
      * @see EnterpriseClient#createLimits(EnterpriseDto, DatacenterDto, DatacenterLimitsDto)
@@ -107,4 +108,34 @@ public interface EnterpriseAsyncClient
         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
         @QueryParam("datacenter") @ParamParser(DatacenterId.class) final DatacenterDto datacenter,
         @BinderParam(BindToXMLPayload.class) DatacenterLimitsDto limits);
+
+    /**
+     * @see EnterpriseClient#getLimits(EnterpriseDto, DatacenterDto)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<DatacenterLimitsDto> getLimits(
+        @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
+        @QueryParam("datacenter") @ParamParser(DatacenterId.class) final DatacenterDto datacenter);
+
+    /**
+     * @see EnterpriseClient#updateLimits(DatacenterLimitsDto)
+     */
+    @PUT
+    ListenableFuture<DatacenterLimitsDto> updateLimits(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterLimitsDto limits);
+
+    /**
+     * @see EnterpriseClient#deleteLimits(DatacenterLimitsDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteLimits(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterLimitsDto limits);
+
+    /**
+     * @see EnterpriseClient#listLimits(Enterprise)
+     */
+    @GET
+    ListenableFuture<DatacentersLimitsDto> listLimits(
+        @EndpointLink("limits") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 }

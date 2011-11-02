@@ -25,11 +25,13 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
@@ -154,8 +156,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final String user, final String password)
     {
         MachineDto dto =
-            context.getApi().getInfrastructureClient()
-                .discoverSingleMachine(target, ip, hypervisorType, user, password);
+            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
+                hypervisorType, user, password);
 
         return wrap(context, Machine.class, dto);
     }
@@ -164,11 +166,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final String user, final String password, final int port)
     {
         MachineDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverSingleMachine(target, ip, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
+                hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         return wrap(context, Machine.class, dto);
     }
@@ -177,8 +176,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final HypervisorType hypervisorType, final String user, final String password)
     {
         MachinesDto dto =
-            context.getApi().getInfrastructureClient()
-                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password);
+            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
+                ipTo, hypervisorType, user, password);
 
         return wrap(context, Machine.class, dto.getCollection());
     }
@@ -188,13 +187,17 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final int port)
     {
         MachinesDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
+                ipTo, hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         return wrap(context, Machine.class, dto.getCollection());
+    }
+
+    public List<Limits> listLimits()
+    {
+        DatacentersLimitsDto dto =
+            context.getApi().getInfrastructureClient().listLimits(this.unwrap());
+        return DomainWrapper.wrap(context, Limits.class, dto.getCollection());
     }
 
     // Builder

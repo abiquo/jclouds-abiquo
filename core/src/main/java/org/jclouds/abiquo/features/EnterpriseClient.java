@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
+import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisesDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -39,7 +40,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface EnterpriseClient
 {
-    /* ********************** Enterprise ********************** */
+    /*                     ********************** Enterprise ********************** */
 
     /**
      * List all enterprises.
@@ -79,7 +80,7 @@ public interface EnterpriseClient
      */
     void deleteEnterprise(EnterpriseDto enterprise);
 
-    /* ********************** Enterprise Limits ********************** */
+    /*                     ********************** Enterprise Limits ********************** */
 
     /**
      * Allows the given enterprise to use the given datacenter with the given limits.
@@ -92,4 +93,35 @@ public interface EnterpriseClient
     DatacenterLimitsDto createLimits(EnterpriseDto enterprise, DatacenterDto datacenter,
         DatacenterLimitsDto limits);
 
+    /**
+     * Retreives the limits for the given enterprise and datacenter.
+     * 
+     * @param enterprise The enterprise.
+     * @param datacenter The datacenter.
+     * @return The usage limits for the enterprise in the given datacenter.
+     */
+    DatacenterLimitsDto getLimits(EnterpriseDto enterprise, DatacenterDto datacenter);
+
+    /**
+     * Retreives limits for the given enterprise and any datacenter.
+     * 
+     * @param enterprise The enterprise.
+     * @return The usage limits for the enterprise on any datacenter.
+     */
+    DatacentersLimitsDto listLimits(EnterpriseDto enterprise);
+
+    /**
+     * Updates an existing enterprise-datacenter limits.
+     * 
+     * @param limits The new set of limits.
+     * @return The updated limits.
+     */
+    DatacenterLimitsDto updateLimits(DatacenterLimitsDto limits);
+
+    /**
+     * Deletes existing limits for a pair enterprise-datacenter.
+     * 
+     * @param limits The klimits to delete.
+     */
+    void deleteLimits(DatacenterLimitsDto limits);
 }

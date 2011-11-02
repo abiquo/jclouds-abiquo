@@ -118,7 +118,7 @@ public class EnterpriseResources
     {
         DatacenterLimitsDto limits = datacenterLimitsPost();
         limits.setId(1);
-        enterprise.addLink(new RESTLink("edit", "http://localhost/api/admin/enterprises/"
+        limits.addLink(new RESTLink("edit", "http://localhost/api/admin/enterprises/"
             + enterprise.getId() + "/limits/1"));
         return limits;
     }
@@ -149,8 +149,7 @@ public class EnterpriseResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<limit>");
-        buffer.append(link("http://localhost/api/admin/enterprises/" + enterprise.getId()
-            + "/limits/1", "edit"));
+        buffer.append(link("/admin/enterprises/" + enterprise.getId() + "/limits/1", "edit"));
         buffer.append("<cpuHard>0</cpuHard>");
         buffer.append("<cpuSoft>0</cpuSoft>");
         buffer.append("<hdHard>0</hdHard>");
@@ -163,6 +162,7 @@ public class EnterpriseResources
         buffer.append("<storageSoft>0</storageSoft>");
         buffer.append("<vlansHard>0</vlansHard>");
         buffer.append("<vlansSoft>0</vlansSoft>");
+        buffer.append("<id>1</id>");
         buffer.append("<repositoryHard>0</repositoryHard>");
         buffer.append("<repositorySoft>0</repositorySoft>");
         buffer.append("</limit>");

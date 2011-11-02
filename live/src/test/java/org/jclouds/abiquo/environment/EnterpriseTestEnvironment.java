@@ -27,7 +27,9 @@ import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.EnterpriseClient;
+import org.jclouds.abiquo.features.InfrastructureClient;
 
 /**
  * Test environment for enterprise live tests.
@@ -40,27 +42,34 @@ public class EnterpriseTestEnvironment implements TestEnvironment
     private AbiquoContext context;
 
     // Environment data made public so tests can use them easily
-    public EnterpriseClient client;
+    public EnterpriseClient enterpriseClient;
+
+    public InfrastructureClient infrastructureClient;
 
     public Enterprise enterprise;
+
+    public Datacenter datacenter;
 
     public EnterpriseTestEnvironment(final AbiquoContext context)
     {
         super();
         this.context = context;
-        this.client = context.getApi().getEnterpriseClient();
+        this.enterpriseClient = context.getApi().getEnterpriseClient();
+        this.infrastructureClient = context.getApi().getInfrastructureClient();
     }
 
     @Override
     public void setup() throws Exception
     {
         createEnterprise();
+        createDatacenter();
     }
 
     @Override
     public void tearDown() throws Exception
     {
         deleteEnterprise();
+        deleteDatacenter();
     }
 
     // Setup
@@ -72,6 +81,13 @@ public class EnterpriseTestEnvironment implements TestEnvironment
         assertNotNull(enterprise.getId());
     }
 
+    private void createDatacenter()
+    {
+        datacenter = Datacenter.builder(context).name(randomName()).location("Honolulu").build();
+        datacenter.save();
+        assertNotNull(datacenter.getId());
+    }
+
     // Tear down
 
     private void deleteEnterprise()
@@ -80,7 +96,17 @@ public class EnterpriseTestEnvironment implements TestEnvironment
         {
             Integer idEnterprise = enterprise.getId();
             enterprise.delete();
-            assertNull(client.getEnterprise(idEnterprise));
+            assertNull(enterpriseClient.getEnterprise(idEnterprise));
+        }
+    }
+
+    private void deleteDatacenter()
+    {
+        if (datacenter != null)
+        {
+            Integer idDatacenter = datacenter.getId();
+            datacenter.delete(); // Abiquo API will delete remote services too
+            assertNull(infrastructureClient.getDatacenter(idDatacenter));
         }
     }
 

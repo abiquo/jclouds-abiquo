@@ -49,6 +49,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -72,7 +73,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin")
 public interface InfrastructureAsyncClient
 {
-    /*  ********************** Datacenter ********************** */
+    /*       ********************** Datacenter ********************** */
 
     /**
      * @see InfrastructureClient#listDatacenters()
@@ -159,7 +160,14 @@ public interface InfrastructureAsyncClient
         @QueryParam("password") String password,
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
-    /*  ********************** Rack ********************** */
+    /**
+     * @see InfrastructureClient#listLimits(DatacenterDto)
+     */
+    @GET
+    ListenableFuture<DatacentersLimitsDto> listLimits(
+        @EndpointLink("limits") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /*       ********************** Rack ********************** */
 
     /**
      * @see InfrastructureClient#listRacks(DatacenterDto)
@@ -201,7 +209,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteRack(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 
-    /*  ********************** Remote Service ********************** */
+    /*       ********************** Remote Service ********************** */
 
     /**
      * @see InfrastructureClient#listRemoteServices(DatacenterDto)
@@ -249,7 +257,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Boolean> isAvailable(
         @EndpointLink("check") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
 
-    /*  ********************** Machine ********************** */
+    /*       ********************** Machine ********************** */
 
     /**
      * @see InfrastructureClient#listMachines(RackDto)

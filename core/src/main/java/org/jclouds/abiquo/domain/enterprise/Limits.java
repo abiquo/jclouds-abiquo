@@ -19,26 +19,21 @@
 
 package org.jclouds.abiquo.domain.enterprise;
 
-import java.util.List;
-
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
-import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
-import com.abiquo.server.core.enterprise.EnterpriseDto;
 
 /**
- * Adds high level functionality to {@link EnterpriseDto}.
+ * Adds high level functionality to {@link DatacenterLimitsDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI18/Enterprise+Resource
+ * @see http://community.abiquo.com/display/ABI18/Datacenter+Limits+Resource
  */
-public class Enterprise extends DomainWrapper<EnterpriseDto>
+public class Limits extends DomainWrapper<DatacenterLimitsDto>
 {
-    /** The default limits for enterprises (unlimited). */
+    /** The default limits (unlimited). */
     private static final int DEFAULT_LIMITS = 0;
 
     /** The default value for the reservation restricted flag. */
@@ -47,63 +42,16 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Enterprise(final AbiquoContext context, final EnterpriseDto target)
+    protected Limits(final AbiquoContext context, final DatacenterLimitsDto target)
     {
         super(context, target);
     }
 
     // Domain operations
 
-    public void delete()
-    {
-        context.getApi().getEnterpriseClient().deleteEnterprise(target);
-        target = null;
-    }
-
-    public void save()
-    {
-        target = context.getApi().getEnterpriseClient().createEnterprise(target);
-    }
-
     public void update()
     {
-        target = context.getApi().getEnterpriseClient().updateEnterprise(target);
-    }
-
-    // Children access
-
-    public List<Limits> listLimits()
-    {
-        DatacentersLimitsDto dto = context.getApi().getEnterpriseClient().listLimits(this.unwrap());
-        return DomainWrapper.wrap(context, Limits.class, dto.getCollection());
-    }
-
-    // Actions
-
-    public Limits allowDatacenter(final Datacenter datacenter)
-    {
-        // Create new limits
-        Limits limits = Limits.builder(context).build();
-
-        // Save new limits
-        DatacenterLimitsDto dto =
-            context.getApi().getEnterpriseClient().createLimits(this.unwrap(), datacenter.unwrap(),
-                limits.unwrap());
-
-        return DomainWrapper.wrap(context, Limits.class, dto);
-    }
-
-    public void prohibeDatacenter(final Datacenter datacenter)
-    {
-        // Get limits
-        DatacenterLimitsDto dto =
-            context.getApi().getEnterpriseClient().getLimits(this.unwrap(), datacenter.unwrap());
-
-        // Delete limits (if any)
-        if (dto != null)
-        {
-            context.getApi().getEnterpriseClient().deleteLimits(dto);
-        }
+        target = context.getApi().getEnterpriseClient().updateLimits(target);
     }
 
     // Builder
@@ -116,8 +64,6 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
     public static class Builder
     {
         private AbiquoContext context;
-
-        private String name;
 
         private Integer ramSoftLimitInMb = DEFAULT_LIMITS;
 
@@ -146,8 +92,6 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
         private Long repositorySoft = Long.valueOf(DEFAULT_LIMITS);
 
         private Long repositoryHard = Long.valueOf(DEFAULT_LIMITS);
-
-        private Boolean isReservationRestricted = DEFAULT_RESERVATION_RESTRICTED;
 
         public Builder(final AbiquoContext context)
         {
@@ -204,46 +148,32 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
             return this;
         }
 
-        public Builder isReservationRestricted(final boolean isReservationRestricted)
+        public Limits build()
         {
-            this.isReservationRestricted = isReservationRestricted;
-            return this;
-        }
-
-        public Builder name(final String name)
-        {
-            this.name = name;
-            return this;
-        }
-
-        public Enterprise build()
-        {
-            EnterpriseDto dto = new EnterpriseDto();
-            dto.setName(name);
+            DatacenterLimitsDto dto = new DatacenterLimitsDto();
             dto.setRamLimitsInMb(ramSoftLimitInMb, ramHardLimitInMb);
             dto.setCpuCountLimits(cpuCountSoftLimit, cpuCountHardLimit);
             dto.setHdLimitsInMb(hdSoftLimitInMb, hdHardLimitInMb);
             dto.setStorageLimits(storageSoft, storageHard);
             dto.setVlansLimits(vlansSoft, vlansHard);
             dto.setPublicIPLimits(publicIpsSoft, publicIpsHard);
-            dto.setRepositoryLimits(repositorySoft, repositoryHard);
-            dto.setIsReservationRestricted(isReservationRestricted);
+            dto.setRepositoryHardLimitsInMb(repositoryHard);
+            dto.setRepositorySoftLimitsInMb(repositorySoft);
 
-            Enterprise enterprise = new Enterprise(context, dto);
+            Limits limits = new Limits(context, dto);
 
-            return enterprise;
+            return limits;
         }
 
-        public static Builder fromEnterprise(final Enterprise in)
+        public static Builder fromEnterprise(final Limits in)
         {
-            return Enterprise.builder(in.context).name(in.getName()).ramLimits(
-                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
-                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
-                .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
-                .isReservationRestricted(in.getIsReservationRestricted());
+            return Limits.builder(in.context).ramLimits(in.getRamSoftLimitInMb(),
+                in.getRamHardLimitInMb()).cpuCountLimits(in.getCpuCountSoftLimit(),
+                in.getCpuCountHardLimit()).hdLimitsInMb(in.getHdSoftLimitInMb(),
+                in.getHdHardLimitInMb()).storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard()).publicIpsLimits(
+                    in.getPublicIpsSoft(), in.getPublicIpsHard()).repositoryLimits(
+                    in.getRepositorySoft(), in.getRepositoryHard());
         }
     }
 
@@ -274,16 +204,6 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
         return target.getHdSoftLimitInMb();
     }
 
-    public boolean getIsReservationRestricted()
-    {
-        return target.getIsReservationRestricted();
-    }
-
-    public String getName()
-    {
-        return target.getName();
-    }
-
     public long getPublicIpsHard()
     {
         return target.getPublicIpsHard();
@@ -306,12 +226,12 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
 
     public long getRepositoryHard()
     {
-        return target.getRepositoryHard();
+        return target.getRepositoryHardLimitsInMb();
     }
 
     public long getRepositorySoft()
     {
-        return target.getRepositorySoft();
+        return target.getRepositorySoftLimitsInMb();
     }
 
     public long getStorageHard()
@@ -364,16 +284,6 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
         target.setHdSoftLimitInMb(hdSoftLimitInMb);
     }
 
-    public void setIsReservationRestricted(final boolean isReservationRestricted)
-    {
-        target.setIsReservationRestricted(isReservationRestricted);
-    }
-
-    public void setName(final String name)
-    {
-        target.setName(name);
-    }
-
     public void setPublicIPLimits(final long softLimit, final long hardLimit)
     {
         target.setPublicIPLimits(softLimit, hardLimit);
@@ -406,17 +316,18 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
 
     public void setRepositoryHard(final long repositoryHard)
     {
-        target.setRepositoryHard(repositoryHard);
+        target.setRepositoryHardLimitsInMb(repositoryHard);
     }
 
     public void setRepositoryLimits(final long soft, final long hard)
     {
-        target.setRepositoryLimits(soft, hard);
+        target.setRepositoryHardLimitsInMb(hard);
+        target.setRepositorySoftLimitsInMb(soft);
     }
 
     public void setRepositorySoft(final long repositorySoft)
     {
-        target.setRepositorySoft(repositorySoft);
+        target.setRepositorySoftLimitsInMb(repositorySoft);
     }
 
     public void setStorageHard(final long storageHard)

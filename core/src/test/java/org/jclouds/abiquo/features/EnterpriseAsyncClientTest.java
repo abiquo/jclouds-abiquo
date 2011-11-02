@@ -47,7 +47,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<EnterpriseAsyncClient>
 {
-    /* ********************** Enterprise ********************** */
+    /*                                   ********************** Enterprise ********************** */
 
     public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -136,7 +136,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    /* ********************** Enterprise Limits ********************** */
+    /*********************** Enterprise Limits ********************** */
 
     public void testCreateEnterpriseLimits() throws SecurityException, NoSuchMethodException,
         IOException
@@ -152,14 +152,100 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
             processor.createRequest(method, enterprise, datacenter, limits);
 
         String limitsUri = enterprise.searchLink("limits").getHref();
-        String requstURI =
+        String requestURI =
             String.format("POST %s?datacenter=%d HTTP/1.1", limitsUri, datacenter.getId());
 
-        assertRequestLineEquals(request, requstURI);
+        assertRequestLineEquals(request, requestURI);
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, withHeader(EnterpriseResources.datacenterLimitsPostPayload()),
             "application/xml", false);
 
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetLimits() throws SecurityException, NoSuchMethodException, IOException
+    {
+        EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
+        DatacenterDto datacenter = InfrastructureResources.datacenterPut();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("getLimits", EnterpriseDto.class,
+                DatacenterDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, enterprise, datacenter);
+
+        String limitsUri = enterprise.searchLink("limits").getHref();
+        String requestURI =
+            String.format("GET %s?datacenter=%d HTTP/1.1", limitsUri, datacenter.getId());
+
+        assertPayloadEquals(request, null, null, false);
+        assertRequestLineEquals(request, requestURI);
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateLimits() throws SecurityException, NoSuchMethodException, IOException
+    {
+        EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("updateLimits", DatacenterLimitsDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.datacenterLimitsPut(enterprise));
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(EnterpriseResources
+            .datacenterLimitsPutPayload(enterprise)), "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteLimits() throws SecurityException, NoSuchMethodException
+    {
+        EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("deleteLimits", DatacenterLimitsDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.datacenterLimitsPut(enterprise));
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListLimitsEnterprise() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method = EnterpriseAsyncClient.class.getMethod("listLimits", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/limits HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

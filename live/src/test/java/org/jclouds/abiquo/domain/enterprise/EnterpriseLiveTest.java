@@ -55,7 +55,7 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         env.enterprise.update();
 
         // Recover the updated enterprise
-        EnterpriseDto updated = env.client.getEnterprise(env.enterprise.getId());
+        EnterpriseDto updated = env.enterpriseClient.getEnterprise(env.enterprise.getId());
 
         assertEquals(updated.getName(), "Updated Enterprise");
     }
@@ -75,4 +75,13 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         }
     }
 
+    public void testAllowDatacenter()
+    {
+        env.enterprise.allowDatacenter(env.datacenter);
+    }
+
+    public void testProhibeDatacenter()
+    {
+        env.enterprise.prohibeDatacenter(env.datacenter);
+    }
 }
