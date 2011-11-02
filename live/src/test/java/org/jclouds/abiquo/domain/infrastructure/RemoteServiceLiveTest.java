@@ -34,6 +34,7 @@ import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -70,8 +71,6 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         assertEquals(updated.getUri(), rs.getUri());
     }
 
-    // Make this test run after listing tests to avoid altering the results
-    @Test(dependsOnMethods = {"testListRemoteServices", "testFindRemoteService"})
     public void testDelete()
     {
         RemoteService rs =
@@ -84,6 +83,19 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
                 RemoteServiceType.BPM_SERVICE);
 
         assertNull(deleted);
+
+        // Recreate it to avoid altering other tests
+        String ip = Config.get("abiquo.remoteservices.address");
+        RemoteService bpm =
+            RemoteService.builder(context, env.datacenter).type(RemoteServiceType.BPM_SERVICE)
+                .ip(ip).build();
+        bpm.save();
+
+        RemoteServiceDto saved =
+            env.infrastructure.getRemoteService(env.datacenter.unwrap(),
+                RemoteServiceType.BPM_SERVICE);
+
+        assertNotNull(saved);
     }
 
     public void testIsAvailableNonCheckeable()

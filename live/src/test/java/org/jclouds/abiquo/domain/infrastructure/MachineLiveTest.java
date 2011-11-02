@@ -96,12 +96,14 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTest
     public void testFindDatastore()
     {
         Datastore datastore = env.machine.getDatastores().get(0);
-        assertEquals(env.machine.findDatastore(datastore.getName()), datastore);
+        Datastore found = env.machine.findDatastore(datastore.getName());
+        assertEquals(found.getName(), datastore.getName());
     }
 
     public void testFindAvailableVirtualSwitch()
     {
         String vswitch = env.machine.getAvailableVirtualSwitches().get(0);
-        assertEquals(env.machine.findAvailableVirtualSwitch(vswitch), vswitch);
+        String found = env.machine.findAvailableVirtualSwitch(vswitch);
+        assertEquals(found, vswitch);
     }
 }

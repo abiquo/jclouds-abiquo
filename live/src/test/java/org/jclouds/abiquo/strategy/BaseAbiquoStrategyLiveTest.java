@@ -29,8 +29,8 @@ import org.jclouds.abiquo.util.Config;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
 import org.jclouds.rest.RestContextFactory;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Injector;
@@ -45,7 +45,7 @@ public abstract class BaseAbiquoStrategyLiveTest
 {
     protected Injector injector;
 
-    @BeforeTest(groups = "live")
+    @BeforeClass(groups = "live")
     public void setupClient() throws IOException
     {
         String identity = Config.get("abiquo.api.user");
@@ -76,7 +76,7 @@ public abstract class BaseAbiquoStrategyLiveTest
         // Override if necessary
     }
 
-    @AfterTest(groups = "live")
+    @AfterClass(groups = "live")
     public void teardownClient() throws IOException
     {
         tearDown();

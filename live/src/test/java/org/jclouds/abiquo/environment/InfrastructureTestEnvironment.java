@@ -135,17 +135,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     {
         if (machine != null && rack != null)
         {
-            try
-            {
-                Integer idMachine = machine.getId();
-                machine.delete();
-                assertNull(infrastructure.getMachine(rack.unwrap(), idMachine));
-            }
-            catch (Exception ex)
-            {
-                // Do not abort tear down
-                ex.printStackTrace();
-            }
+            Integer idMachine = machine.getId();
+            machine.delete();
+            assertNull(infrastructure.getMachine(rack.unwrap(), idMachine));
         }
     }
 
@@ -153,17 +145,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     {
         if (rack != null && datacenter != null)
         {
-            try
-            {
-                Integer idRack = rack.getId();
-                rack.delete();
-                assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
-            }
-            catch (Exception ex)
-            {
-                // Do not abort tear down
-                ex.printStackTrace();
-            }
+            Integer idRack = rack.getId();
+            rack.delete();
+            assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
         }
     }
 
@@ -171,17 +155,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     {
         if (datacenter != null)
         {
-            try
-            {
-                Integer idDatacenter = datacenter.getId();
-                datacenter.delete(); // Abiquo API will delete remote services too
-                assertNull(infrastructure.getDatacenter(idDatacenter));
-            }
-            catch (Exception ex)
-            {
-                // Do not abort tear down
-                ex.printStackTrace();
-            }
+            Integer idDatacenter = datacenter.getId();
+            datacenter.delete(); // Abiquo API will delete remote services too
+            assertNull(infrastructure.getDatacenter(idDatacenter));
         }
     }
 
