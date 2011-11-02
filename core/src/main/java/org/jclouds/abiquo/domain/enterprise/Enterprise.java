@@ -129,87 +129,52 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
             this.context = context;
         }
 
-        public Builder ramSoftLimitInMb(final int ramSoftLimitInMb)
+        public Builder ramLimits(final int soft, final int hard)
         {
-            this.ramSoftLimitInMb = ramSoftLimitInMb;
+            this.ramSoftLimitInMb = soft;
+            this.ramHardLimitInMb = hard;
             return this;
         }
 
-        public Builder ramHardLimitInMb(final int ramHardLimitInMb)
+        public Builder cpuCountLimits(final int soft, final int hard)
         {
-            this.ramHardLimitInMb = ramHardLimitInMb;
+            this.cpuCountSoftLimit = soft;
+            this.cpuCountHardLimit = hard;
             return this;
         }
 
-        public Builder cpuCountSoftLimit(final int cpuCountSoftLimit)
+        public Builder hdLimitsInMb(final long soft, final long hard)
         {
-            this.cpuCountSoftLimit = cpuCountSoftLimit;
+            this.hdSoftLimitInMb = soft;
+            this.hdHardLimitInMb = hard;
             return this;
         }
 
-        public Builder cpuCountHardLimit(final int cpuCountHardLimit)
+        public Builder storageLimits(final long soft, final long hard)
         {
-            this.cpuCountHardLimit = cpuCountHardLimit;
+            this.storageSoft = soft;
+            this.storageHard = hard;
             return this;
         }
 
-        public Builder hdSoftLimitInMb(final long hdSoftLimitInMb)
+        public Builder vlansLimits(final long soft, final long hard)
         {
-            this.hdSoftLimitInMb = hdSoftLimitInMb;
+            this.vlansSoft = soft;
+            this.vlansHard = hard;
             return this;
         }
 
-        public Builder hdHardLimitInMb(final long hdHardLimitInMb)
+        public Builder publicIpsLimits(final long soft, final long hard)
         {
-            this.hdHardLimitInMb = hdHardLimitInMb;
+            this.publicIpsSoft = soft;
+            this.publicIpsHard = hard;
             return this;
         }
 
-        public Builder storageSoft(final long storageSoft)
+        public Builder repositoryLimits(final long soft, final long hard)
         {
-            this.storageSoft = storageSoft;
-            return this;
-        }
-
-        public Builder storageHard(final long storageHard)
-        {
-            this.storageSoft = storageHard;
-            return this;
-        }
-
-        public Builder vlansSoft(final long vlansSoft)
-        {
-            this.vlansSoft = vlansSoft;
-            return this;
-        }
-
-        public Builder vlansHard(final long vlansHard)
-        {
-            this.vlansHard = vlansHard;
-            return this;
-        }
-
-        public Builder publicIpsSoft(final long publicIpsSoft)
-        {
-            this.publicIpsSoft = publicIpsSoft;
-            return this;
-        }
-
-        public Builder publicIpsHard(final long publicIpsHard)
-        {
-            this.publicIpsHard = publicIpsHard;
-            return this;
-        }
-
-        public Builder repositorySoft(final long repositorySoft)
-        {
-            this.repositorySoft = repositorySoft;
-            return this;
-        }
-
-        public Builder repositoryHard(final long repositoryHard)
-        {
-            this.repositoryHard = repositoryHard;
+            this.repositorySoft = soft;
+            this.repositoryHard = hard;
             return this;
         }
 
@@ -229,20 +194,13 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
         {
             EnterpriseDto dto = new EnterpriseDto();
             dto.setName(name);
-            dto.setRamSoftLimitInMb(ramSoftLimitInMb);
-            dto.setRamHardLimitInMb(ramHardLimitInMb);
-            dto.setCpuCountSoftLimit(cpuCountSoftLimit);
-            dto.setCpuCountHardLimit(cpuCountHardLimit);
-            dto.setHdHardLimitInMb(hdHardLimitInMb);
-            dto.setHdSoftLimitInMb(hdSoftLimitInMb);
-            dto.setStorageHard(storageHard);
-            dto.setStorageSoft(storageSoft);
-            dto.setVlansHard(vlansHard);
-            dto.setVlansSoft(vlansSoft);
-            dto.setPublicIpsHard(publicIpsHard);
-            dto.setPublicIpsSoft(publicIpsSoft);
-            dto.setRepositoryHard(repositoryHard);
-            dto.setRepositorySoft(repositorySoft);
+            dto.setRamLimitsInMb(ramSoftLimitInMb, ramHardLimitInMb);
+            dto.setCpuCountLimits(cpuCountSoftLimit, cpuCountHardLimit);
+            dto.setHdLimitsInMb(hdSoftLimitInMb, hdHardLimitInMb);
+            dto.setStorageLimits(storageSoft, storageHard);
+            dto.setVlansLimits(vlansSoft, vlansHard);
+            dto.setPublicIPLimits(publicIpsSoft, publicIpsHard);
+            dto.setRepositoryLimits(repositorySoft, repositoryHard);
             dto.setIsReservationRestricted(isReservationRestricted);
 
             Enterprise enterprise = new Enterprise(context, dto);
@@ -252,16 +210,13 @@ public class Enterprise extends DomainWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return Enterprise.builder(in.context).name(in.getName())
-                .ramSoftLimitInMb(in.getRamSoftLimitInMb())
-                .ramHardLimitInMb(in.getRamHardLimitInMb())
-                .cpuCountSoftLimit(in.getCpuCountSoftLimit())
-                .cpuCountHardLimit(in.getCpuCountHardLimit())
-                .hdHardLimitInMb(in.getHdHardLimitInMb()).hdSoftLimitInMb(in.getHdSoftLimitInMb())
-                .storageHard(in.getStorageHard()).storageSoft(in.getStorageSoft())
-                .vlansHard(in.getVlansHard()).vlansSoft(in.getVlansSoft())
-                .publicIpsHard(in.getPublicIpsHard()).publicIpsSoft(in.getPublicIpsSoft())
-                .repositoryHard(in.getHdHardLimitInMb()).repositorySoft(in.getRepositorySoft())
+            return Enterprise.builder(in.context).name(in.getName()).ramLimits(
+                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
+                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
+                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
+                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
+                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+                .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
                 .isReservationRestricted(in.getIsReservationRestricted());
         }
     }
