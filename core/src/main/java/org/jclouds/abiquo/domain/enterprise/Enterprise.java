@@ -105,7 +105,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
             context.getApi().getEnterpriseClient().getLimits(this.unwrap(), datacenter.unwrap());
 
         // Delete limits (if any)
-        if (dto != null && !dto.getCollection().isEmpty())
+        if (dto != null && !dto.isEmpty())
         {
             // Should be only one limit
             context.getApi().getEnterpriseClient().deleteLimits(dto.getCollection().get(0));
