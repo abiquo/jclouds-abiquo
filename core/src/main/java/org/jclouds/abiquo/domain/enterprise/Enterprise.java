@@ -29,6 +29,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.UsersDto;
 
 /**
  * Adds high level functionality to {@link EnterpriseDto}.
@@ -76,6 +77,12 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return wrap(context, Limits.class, dto.getCollection());
     }
 
+    public List<User> listUsers()
+    {
+        UsersDto dto = context.getApi().getEnterpriseClient().listUsers(this.unwrap());
+        return wrap(context, User.class, dto.getCollection());
+    }
+
     // Actions
 
     public Limits allowDatacenter(final Datacenter datacenter)
@@ -85,8 +92,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         // Save new limits
         DatacenterLimitsDto dto =
-            context.getApi().getEnterpriseClient()
-                .createLimits(this.unwrap(), datacenter.unwrap(), limits.unwrap());
+            context.getApi().getEnterpriseClient().createLimits(this.unwrap(), datacenter.unwrap(),
+                limits.unwrap());
 
         return wrap(context, Limits.class, dto);
     }
@@ -156,13 +163,12 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return ((Builder) Enterprise.builder(in.context).name(in.getName())
-                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
-                .storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+            return ((Builder) Enterprise.builder(in.context).name(in.getName()).ramLimits(
+                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
+                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
+                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
+                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
+                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
                 .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard()))
                 .isReservationRestricted(in.getIsReservationRestricted());
         }

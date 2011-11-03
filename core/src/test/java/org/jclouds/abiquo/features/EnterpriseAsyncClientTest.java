@@ -35,6 +35,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.inject.TypeLiteral;
 
@@ -47,7 +48,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<EnterpriseAsyncClient>
 {
-    /* ********************** Enterprise ********************** */
+    /*                                  ********************** Enterprise ********************** */
 
     public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -136,7 +137,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    /* ********************** Enterprise Limits ********************** */
+    /*                                  ********************** Enterprise Limits ********************** */
 
     public void testCreateEnterpriseLimits() throws SecurityException, NoSuchMethodException,
         IOException
@@ -202,9 +203,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request,
-            withHeader(EnterpriseResources.datacenterLimitsPutPayload(enterprise)),
-            "application/xml", false);
+        assertPayloadEquals(request, withHeader(EnterpriseResources
+            .datacenterLimitsPutPayload(enterprise)), "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -247,6 +247,85 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*                                  ********************** User ********************** */
+
+    public void testListUsers() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = EnterpriseAsyncClient.class.getMethod("listUsers", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/users HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCreateUser() throws SecurityException, NoSuchMethodException, IOException
+    {
+        EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
+        UserDto user = EnterpriseResources.userPost();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("createUser", EnterpriseDto.class, UserDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, enterprise, user);
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/admin/enterprises/1/users HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(EnterpriseResources.userPostPayload()),
+            "application/xml", false);
+
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateUser() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = EnterpriseAsyncClient.class.getMethod("updateUser", UserDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.userPut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/enterprises/1/users/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(EnterpriseResources.userPutPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteUser() throws SecurityException, NoSuchMethodException
+    {
+        Method method = EnterpriseAsyncClient.class.getMethod("deleteUser", UserDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.userPut());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/admin/enterprises/1/users/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

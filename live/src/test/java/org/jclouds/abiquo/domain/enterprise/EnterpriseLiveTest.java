@@ -111,6 +111,12 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         tearDownLimits();
     }
 
+    public void testDeleteTwiceWorks()
+    {
+        env.enterprise.prohibitDatacenter(env.datacenter);
+        env.enterprise.prohibitDatacenter(env.datacenter);
+    }
+
     public void testListLimits()
     {
         Limits limits = env.enterprise.allowDatacenter(env.datacenter);

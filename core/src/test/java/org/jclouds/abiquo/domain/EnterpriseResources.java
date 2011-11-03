@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.UserDto;
 
 /**
  * Enterprise domain utilities.
@@ -45,6 +46,7 @@ public class EnterpriseResources
         enterprise.addLink(new RESTLink("edit", "http://localhost/api/admin/enterprises/1"));
         enterprise
             .addLink(new RESTLink("limits", "http://localhost/api/admin/enterprises/1/limits"));
+        enterprise.addLink(new RESTLink("users", "http://localhost/api/admin/enterprises/1/users"));
 
         return enterprise;
     }
@@ -79,6 +81,7 @@ public class EnterpriseResources
         buffer.append("<enterprise>");
         buffer.append(link("/admin/enterprises/1", "edit"));
         buffer.append(link("/admin/enterprises/1/limits", "limits"));
+        buffer.append(link("/admin/enterprises/1/users", "users"));
         buffer.append("<cpuHard>0</cpuHard>");
         buffer.append("<cpuSoft>0</cpuSoft>");
         buffer.append("<hdHard>0</hdHard>");
@@ -111,7 +114,7 @@ public class EnterpriseResources
         limits.setVlansLimits(0, 0);
         limits.setRepositoryHardLimitsInMb(0);
         limits.setRepositorySoftLimitsInMb(0);
-        limits.setIdDCEnterpriseStats(0);
+        limits.setIdDcEnterpriseStats(0);
         return limits;
     }
 
@@ -140,7 +143,7 @@ public class EnterpriseResources
         buffer.append("<storageSoft>0</storageSoft>");
         buffer.append("<vlansHard>0</vlansHard>");
         buffer.append("<vlansSoft>0</vlansSoft>");
-        buffer.append("<idDCEnterpriseStats>0</idDCEnterpriseStats>");
+        buffer.append("<idDcEnterpriseStats>0</idDcEnterpriseStats>");
         buffer.append("<repositoryHard>0</repositoryHard>");
         buffer.append("<repositorySoft>0</repositorySoft>");
         buffer.append("</limit>");
@@ -165,11 +168,79 @@ public class EnterpriseResources
         buffer.append("<vlansHard>0</vlansHard>");
         buffer.append("<vlansSoft>0</vlansSoft>");
         buffer.append("<id>1</id>");
-        buffer.append("<idDCEnterpriseStats>0</idDCEnterpriseStats>");
+        buffer.append("<idDcEnterpriseStats>0</idDcEnterpriseStats>");
         buffer.append("<repositoryHard>0</repositoryHard>");
         buffer.append("<repositorySoft>0</repositorySoft>");
         buffer.append("</limit>");
         return buffer.toString();
+    }
+
+    public static String userPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<user>");
+        buffer.append(link("/admin/roles/1", "role"));
+        buffer.append("<active>true</active>");
+        buffer.append("<authType>ABIQUO</authType>");
+        buffer.append("<description>A hawaian user</description>");
+        buffer.append("<email>abe.joha@aloha.com</email>");
+        buffer.append("<locale>en_US</locale>");
+        buffer.append("<name>Aberahama</name>");
+        buffer.append("<nick>abejo</nick>");
+        buffer.append("<password>c69a39bd64ffb77ea7ee3369dce742f3</password>");
+        buffer.append("<surname>Johanson</surname>");
+        buffer.append("</user>");
+        return buffer.toString();
+    }
+
+    public static UserDto userPost()
+    {
+        UserDto user = new UserDto();
+        user.setName("Aberahama");
+        user.setSurname("Johanson");
+        user.setDescription("A hawaian user");
+        user.setEmail("abe.joha@aloha.com");
+        user.setNick("abejo");
+        user.setAuthType("ABIQUO");
+        user.setLocale("en_US");
+        user.setActive(true);
+        user.setPassword("c69a39bd64ffb77ea7ee3369dce742f3");
+        user.addLink(new RESTLink("role", "http://localhost/api/admin/roles/1"));
+        return user;
+    }
+
+    public static String userPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<user>");
+        buffer.append(link("/admin/roles/1", "role"));
+        buffer.append(link("/admin/enterprises/1/users/1", "edit"));
+        buffer.append(link("/admin/enterprises/1", "enterprise"));
+        buffer
+            .append(link("/admin/enterprises/1/users/1/action/virtualmachines", "virtualmachines"));
+        buffer.append("<active>true</active>");
+        buffer.append("<authType>ABIQUO</authType>");
+        buffer.append("<description>A hawaian user</description>");
+        buffer.append("<email>abe.joha@aloha.com</email>");
+        buffer.append("<id>1</id>");
+        buffer.append("<locale>en_US</locale>");
+        buffer.append("<name>Aberahama</name>");
+        buffer.append("<nick>abejo</nick>");
+        buffer.append("<password>c69a39bd64ffb77ea7ee3369dce742f3</password>");
+        buffer.append("<surname>Johanson</surname>");
+        buffer.append("</user>");
+        return buffer.toString();
+    }
+
+    public static UserDto userPut()
+    {
+        UserDto user = userPost();
+        user.setId(1);
+        user.addLink(new RESTLink("edit", "http://localhost/api/admin/enterprises/1/users/1"));
+        user.addLink(new RESTLink("enterprise", "http://localhost/api/admin/enterprises/1"));
+        user.addLink(new RESTLink("virtualmachines",
+            "http://localhost/api/admin/enterprises/1/users/1/action/virtualmachines"));
+        return user;
     }
 
     private static String link(final String href, final String rel)

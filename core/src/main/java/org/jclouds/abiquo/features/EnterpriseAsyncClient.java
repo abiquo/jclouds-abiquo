@@ -45,6 +45,8 @@ import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisesDto;
+import com.abiquo.server.core.enterprise.UserDto;
+import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -61,7 +63,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin/enterprises")
 public interface EnterpriseAsyncClient
 {
-    /* ********************** Enterprise ********************** */
+    /*                      ********************** Enterprise ********************** */
 
     /**
      * @see EnterpriseClient#listEnterprises()
@@ -98,7 +100,7 @@ public interface EnterpriseAsyncClient
     ListenableFuture<Void> deleteEnterprise(
         @EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
-    /* ********************** Enterprise Limits ********************** */
+    /*                      ********************** Enterprise Limits ********************** */
 
     /**
      * @see EnterpriseClient#createLimits(EnterpriseDto, DatacenterDto, DatacenterLimitsDto)
@@ -138,4 +140,35 @@ public interface EnterpriseAsyncClient
     @GET
     ListenableFuture<DatacentersLimitsDto> listLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /*                      ********************** User ********************** */
+
+    /**
+     * @see EnterpriseClient#listUsers(EnterpriseDto)
+     */
+    @GET
+    ListenableFuture<UsersDto> listUsers(
+        @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /**
+     * @see EnterpriseClient#createUser(EnterpriseDto)
+     */
+    @POST
+    ListenableFuture<UserDto> createUser(
+        @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+        @BinderParam(BindToXMLPayload.class) UserDto limits);
+
+    /**
+     * @see EnterpriseClient#updateUser(UserDto)
+     */
+    @PUT
+    ListenableFuture<UserDto> updateUser(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UserDto user);
+
+    /**
+     * @see EnterpriseClient#deleteUser(UserDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteUser(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) UserDto user);
 }

@@ -27,6 +27,8 @@ import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisesDto;
+import com.abiquo.server.core.enterprise.UserDto;
+import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
@@ -40,7 +42,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface EnterpriseClient
 {
-    /* ********************** Enterprise ********************** */
+    /*                 ********************** Enterprise ********************** */
 
     /**
      * List all enterprises.
@@ -80,7 +82,7 @@ public interface EnterpriseClient
      */
     void deleteEnterprise(EnterpriseDto enterprise);
 
-    /* ********************** Enterprise Limits ********************** */
+    /*                 ********************** Enterprise Limits ********************** */
 
     /**
      * Allows the given enterprise to use the given datacenter with the given limits.
@@ -121,7 +123,41 @@ public interface EnterpriseClient
     /**
      * Deletes existing limits for a pair enterprise-datacenter.
      * 
-     * @param limits The klimits to delete.
+     * @param limits The limits to delete.
      */
     void deleteLimits(DatacenterLimitsDto limits);
+
+    /*                 ********************** User ********************** */
+
+    /**
+     * Retreives users of the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @return The users of the enterprise.
+     */
+    UsersDto listUsers(EnterpriseDto enterprise);
+
+    /**
+     * Create a new user in the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @param user The user to be created.
+     * @return The created user.
+     */
+    UserDto createUser(EnterpriseDto enterprise, UserDto limits);
+
+    /**
+     * Updates an existing user.
+     * 
+     * @param enterprise The new attributes for the user.
+     * @return The updated user.
+     */
+    UserDto updateUser(UserDto user);
+
+    /**
+     * Deletes existing user.
+     * 
+     * @param user The user to delete.
+     */
+    void deleteUser(UserDto user);
 }
