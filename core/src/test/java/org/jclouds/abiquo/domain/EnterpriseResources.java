@@ -111,7 +111,6 @@ public class EnterpriseResources
         limits.setVlansLimits(0, 0);
         limits.setRepositoryHardLimitsInMb(0);
         limits.setRepositorySoftLimitsInMb(0);
-        limits.setIdDCEnterpriseStats(0);
         return limits;
     }
 
@@ -140,7 +139,6 @@ public class EnterpriseResources
         buffer.append("<storageSoft>0</storageSoft>");
         buffer.append("<vlansHard>0</vlansHard>");
         buffer.append("<vlansSoft>0</vlansSoft>");
-        buffer.append("<idDCEnterpriseStats>0</idDCEnterpriseStats>");
         buffer.append("<repositoryHard>0</repositoryHard>");
         buffer.append("<repositorySoft>0</repositorySoft>");
         buffer.append("</limit>");
@@ -165,7 +163,6 @@ public class EnterpriseResources
         buffer.append("<vlansHard>0</vlansHard>");
         buffer.append("<vlansSoft>0</vlansSoft>");
         buffer.append("<id>1</id>");
-        buffer.append("<idDCEnterpriseStats>0</idDCEnterpriseStats>");
         buffer.append("<repositoryHard>0</repositoryHard>");
         buffer.append("<repositorySoft>0</repositorySoft>");
         buffer.append("</limit>");
