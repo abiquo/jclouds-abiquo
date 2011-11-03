@@ -21,11 +21,16 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
+
+import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
@@ -55,7 +60,7 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureT
         env.datacenter.update();
 
         // Recover the updated datacenter
-        DatacenterDto updated = env.infrastructure.getDatacenter(env.datacenter.getId());
+        DatacenterDto updated = env.infrastructureClient.getDatacenter(env.datacenter.getId());
 
         assertEquals(updated.getLocation(), "New York");
     }
@@ -73,5 +78,25 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureT
         {
             assertHasError(ex, Status.CONFLICT, "DC-3");
         }
+    }
+
+    public void testListLimits()
+    {
+        Limits enterpriseLimits = env.enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(enterpriseLimits);
+
+        List<Limits> allLimits = env.datacenter.listLimits();
+        assertNotNull(allLimits);
+
+        // Maybe datacenter already has limits for other enterprises
+        int numLimits = allLimits.size();
+        assertTrue(numLimits > 0);
+
+        // Cleanup with the prohibe method
+        env.enterprise.prohibitDatacenter(env.datacenter);
+
+        List<Limits> limits = env.datacenter.listLimits();
+        assertNotNull(limits);
+        assertTrue(limits.size() < numLimits);
     }
 }

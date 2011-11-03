@@ -52,7 +52,7 @@ public class RackLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnv
         env.rack.update();
 
         // Recover the updated rack
-        RackDto updated = env.infrastructure.getRack(env.datacenter.unwrap(), env.rack.getId());
+        RackDto updated = env.infrastructureClient.getRack(env.datacenter.unwrap(), env.rack.getId());
 
         assertEquals(updated.getName(), "Updated rack");
     }

@@ -65,7 +65,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
         // Recover the updated remote service
         RemoteServiceDto updated =
-            env.infrastructure.getRemoteService(env.datacenter.unwrap(),
+            env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
                 RemoteServiceType.VIRTUAL_FACTORY);
 
         assertEquals(updated.getUri(), rs.getUri());
@@ -79,7 +79,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
         // Recover the deleted remote service
         RemoteServiceDto deleted =
-            env.infrastructure.getRemoteService(env.datacenter.unwrap(),
+            env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
                 RemoteServiceType.BPM_SERVICE);
 
         assertNull(deleted);
@@ -92,7 +92,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         bpm.save();
 
         RemoteServiceDto saved =
-            env.infrastructure.getRemoteService(env.datacenter.unwrap(),
+            env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
                 RemoteServiceType.BPM_SERVICE);
 
         assertNotNull(saved);

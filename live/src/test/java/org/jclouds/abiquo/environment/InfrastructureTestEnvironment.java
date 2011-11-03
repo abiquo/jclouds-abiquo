@@ -29,11 +29,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Datastore;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService;
+import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.jclouds.abiquo.reference.AbiquoEdition;
@@ -53,7 +55,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     private AbiquoContext context;
 
     // Environment data made public so tests can use them easily
-    public InfrastructureClient infrastructure;
+    public InfrastructureClient infrastructureClient;
+
+    public EnterpriseClient enterpriseClient;
 
     public Datacenter datacenter;
 
@@ -63,11 +67,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public Machine machine;
 
+    public Enterprise enterprise;
+
     public InfrastructureTestEnvironment(final AbiquoContext context)
     {
         super();
         this.context = context;
-        this.infrastructure = context.getApi().getInfrastructureClient();
+        this.infrastructureClient = context.getApi().getInfrastructureClient();
+        this.enterpriseClient = context.getApi().getEnterpriseClient();
     }
 
     @Override
@@ -76,6 +83,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         createDatacenter();
         createRack();
         createMachine();
+        createEnterprise();
     }
 
     @Override
@@ -84,6 +92,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         deleteMachine();
         deleteRack();
         deleteDatacenter();
+        deleteEnterprise();
     }
 
     // Setup
@@ -129,6 +138,13 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(rack.getId());
     }
 
+    private void createEnterprise()
+    {
+        enterprise = Enterprise.builder(context).name(randomName()).build();
+        enterprise.save();
+        assertNotNull(enterprise.getId());
+    }
+
     // Tear down
 
     private void deleteMachine()
@@ -137,7 +153,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer idMachine = machine.getId();
             machine.delete();
-            assertNull(infrastructure.getMachine(rack.unwrap(), idMachine));
+            assertNull(infrastructureClient.getMachine(rack.unwrap(), idMachine));
         }
     }
 
@@ -147,7 +163,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer idRack = rack.getId();
             rack.delete();
-            assertNull(infrastructure.getRack(datacenter.unwrap(), idRack));
+            assertNull(infrastructureClient.getRack(datacenter.unwrap(), idRack));
         }
     }
 
@@ -157,7 +173,17 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer idDatacenter = datacenter.getId();
             datacenter.delete(); // Abiquo API will delete remote services too
-            assertNull(infrastructure.getDatacenter(idDatacenter));
+            assertNull(infrastructureClient.getDatacenter(idDatacenter));
+        }
+    }
+
+    private void deleteEnterprise()
+    {
+        if (enterprise != null)
+        {
+            Integer idEnterprise = enterprise.getId();
+            enterprise.delete();
+            assertNull(enterpriseClient.getEnterprise(idEnterprise));
         }
     }
 

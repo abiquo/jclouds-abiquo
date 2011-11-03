@@ -21,7 +21,12 @@ package org.jclouds.abiquo.domain.enterprise;
 
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
+
+import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
@@ -32,6 +37,7 @@ import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 
 /**
@@ -75,13 +81,92 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         }
     }
 
-    public void testAllowDatacenter()
+    public void testAllowProhibitDatacenter()
     {
-        env.enterprise.allowDatacenter(env.datacenter);
+        Limits limits = env.enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(limits);
+
+        DatacentersLimitsDto limitsDto =
+            env.enterpriseClient.getLimits(env.enterprise.unwrap(), env.datacenter.unwrap());
+        assertNotNull(limitsDto);
+        assertFalse(limitsDto.isEmpty());
+
+        tearDownLimits();
     }
 
-    public void testProhibeDatacenter()
+    public void testAllowTwiceFails()
     {
-        env.enterprise.prohibeDatacenter(env.datacenter);
+        Limits limits = env.enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(limits);
+
+        try
+        {
+            env.enterprise.allowDatacenter(env.datacenter);
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.CONFLICT, "LIMIT-7");
+        }
+
+        tearDownLimits();
+    }
+
+    public void testListLimits()
+    {
+        Limits limits = env.enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(limits);
+
+        List<Limits> allLimits = env.enterprise.listLimits();
+        assertNotNull(allLimits);
+        assertEquals(allLimits.size(), 1);
+
+        tearDownLimits();
+    }
+
+    public void testUpdateInvalidLimits()
+    {
+        Limits limits = env.enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(limits);
+
+        // CPU soft remains to 0 => conflict because hard is smaller
+        limits.setCpuCountHardLimit(2);
+
+        try
+        {
+            limits.update();
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.BAD_REQUEST, "CONSTR-LIMITRANGE");
+        }
+
+        tearDownLimits();
+    }
+
+    public void testUpdateLimits()
+    {
+        Limits limits = env.enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(limits);
+
+        limits.setCpuCountLimits(4, 5);
+        limits.update();
+
+        DatacentersLimitsDto limitsDto =
+            env.enterpriseClient.getLimits(env.enterprise.unwrap(), env.datacenter.unwrap());
+        assertNotNull(limitsDto);
+        assertEquals(limitsDto.getCollection().get(0).getCpuCountHardLimit(), 5);
+        assertEquals(limitsDto.getCollection().get(0).getCpuCountSoftLimit(), 4);
+
+        tearDownLimits();
+    }
+
+    private void tearDownLimits()
+    {
+        // Cleanup with the prohibe method
+        env.enterprise.prohibitDatacenter(env.datacenter);
+        DatacentersLimitsDto limitsDto =
+            env.enterpriseClient.getLimits(env.enterprise.unwrap(), env.datacenter.unwrap());
+        assertNotNull(limitsDto);
+        assertTrue(limitsDto.isEmpty());
     }
 }

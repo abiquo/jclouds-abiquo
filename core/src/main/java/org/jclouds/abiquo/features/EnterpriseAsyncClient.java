@@ -61,7 +61,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin/enterprises")
 public interface EnterpriseAsyncClient
 {
-    /*                                   ********************** Enterprise ********************** */
+    /* ********************** Enterprise ********************** */
 
     /**
      * @see EnterpriseClient#listEnterprises()
@@ -98,7 +98,7 @@ public interface EnterpriseAsyncClient
     ListenableFuture<Void> deleteEnterprise(
         @EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
-    /*                                   ********************** Enterprise Limits ********************** */
+    /* ********************** Enterprise Limits ********************** */
 
     /**
      * @see EnterpriseClient#createLimits(EnterpriseDto, DatacenterDto, DatacenterLimitsDto)
@@ -114,7 +114,7 @@ public interface EnterpriseAsyncClient
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<DatacenterLimitsDto> getLimits(
+    ListenableFuture<DatacentersLimitsDto> getLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
         @QueryParam("datacenter") @ParamParser(DatacenterId.class) final DatacenterDto datacenter);
 
@@ -133,7 +133,7 @@ public interface EnterpriseAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterLimitsDto limits);
 
     /**
-     * @see EnterpriseClient#listLimits(Enterprise)
+     * @see EnterpriseClient#listLimits(EnterpriseDto)
      */
     @GET
     ListenableFuture<DatacentersLimitsDto> listLimits(

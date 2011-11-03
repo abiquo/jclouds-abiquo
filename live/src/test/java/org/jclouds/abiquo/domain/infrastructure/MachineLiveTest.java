@@ -89,7 +89,7 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTest
         env.machine.update();
 
         // Recover the updated machine
-        MachineDto updated = env.infrastructure.getMachine(env.rack.unwrap(), env.machine.getId());
+        MachineDto updated = env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
         assertEquals(updated.getName(), "API Machine");
     }
 

@@ -40,7 +40,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface EnterpriseClient
 {
-    /*                     ********************** Enterprise ********************** */
+    /* ********************** Enterprise ********************** */
 
     /**
      * List all enterprises.
@@ -80,7 +80,7 @@ public interface EnterpriseClient
      */
     void deleteEnterprise(EnterpriseDto enterprise);
 
-    /*                     ********************** Enterprise Limits ********************** */
+    /* ********************** Enterprise Limits ********************** */
 
     /**
      * Allows the given enterprise to use the given datacenter with the given limits.
@@ -100,7 +100,7 @@ public interface EnterpriseClient
      * @param datacenter The datacenter.
      * @return The usage limits for the enterprise in the given datacenter.
      */
-    DatacenterLimitsDto getLimits(EnterpriseDto enterprise, DatacenterDto datacenter);
+    DatacentersLimitsDto getLimits(EnterpriseDto enterprise, DatacenterDto datacenter);
 
     /**
      * Retreives limits for the given enterprise and any datacenter.

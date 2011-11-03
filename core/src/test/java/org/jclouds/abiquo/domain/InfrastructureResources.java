@@ -82,9 +82,9 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/action/discovermultiple"));
         datacenter.addLink(new RESTLink("discoversingle",
             "http://localhost/api/admin/datacenters/1/action/discoversingle"));
-        datacenter.addLink(new RESTLink("limits",
-            "http://localhost/api/admin/datacenters/1/action/limits"));
         datacenter.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1"));
+        datacenter.addLink(new RESTLink("getLimits",
+            "http://localhost/api/admin/datacenters/1/action/getLimits"));
         datacenter.addLink(new RESTLink("racks", "http://localhost/api/admin/datacenters/1/racks"));
         datacenter.addLink(new RESTLink("remoteservices",
             "http://localhost/api/admin/datacenters/1/remoteservices"));
@@ -106,10 +106,10 @@ public class InfrastructureResources
     {
         RemoteServiceDto remoteService = remoteServicePost();
         remoteService.setId(1);
-        remoteService
-            .addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         remoteService.addLink(new RESTLink("check",
             "http://localhost/api/admin/datacenters/1/remoteservices/nodecollector/action/check"));
+        remoteService
+            .addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         remoteService.addLink(new RESTLink("edit",
             "http://localhost/api/admin/datacenters/1/remoteservices/nodecollector"));
         return remoteService;
@@ -186,8 +186,8 @@ public class InfrastructureResources
         buffer.append("<datacenter>");
         buffer.append(link("/admin/datacenters/1/action/discovermultiple", "discovermultiple"));
         buffer.append(link("/admin/datacenters/1/action/discoversingle", "discoversingle"));
-        buffer.append(link("/admin/datacenters/1/action/limits", "limits"));
         buffer.append(link("/admin/datacenters/1", "edit"));
+        buffer.append(link("/admin/datacenters/1/action/getLimits", "getLimits"));
         buffer.append(link("/admin/datacenters/1/racks", "racks"));
         buffer.append(link("/admin/datacenters/1/remoteservices", "remoteservices"));
         buffer.append("<id>1</id>");
@@ -220,9 +220,9 @@ public class InfrastructureResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<remoteService>");
-        buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append(link("/admin/datacenters/1/remoteservices/nodecollector/action/check",
             "check"));
+        buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append(link("/admin/datacenters/1/remoteservices/nodecollector", "edit"));
         buffer.append("<id>1</id>");
         buffer.append("<status>0</status>");
