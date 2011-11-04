@@ -166,7 +166,7 @@ public interface EnterpriseAsyncClient
     @POST
     ListenableFuture<UserDto> createUser(
         @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
-        @BinderParam(BindToXMLPayload.class) UserDto limits);
+        @BinderParam(BindToXMLPayload.class) UserDto user);
 
     /**
      * @see EnterpriseClient#updateUser(UserDto)

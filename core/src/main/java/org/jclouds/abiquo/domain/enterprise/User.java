@@ -122,6 +122,8 @@ public class User extends DomainWrapper<UserDto>
         public Builder(final AbiquoContext context, final Enterprise enterprise, final Role role)
         {
             super();
+            checkNotNull(enterprise, ValidationErrors.NULL_PARENT + Enterprise.class);
+            checkNotNull(role, ValidationErrors.NULL_PARENT + Role.class);
             this.context = context;
             this.enterprise = enterprise;
             this.role = role;
@@ -136,7 +138,6 @@ public class User extends DomainWrapper<UserDto>
 
         public Builder role(final Role role)
         {
-            checkNotNull(role, ValidationErrors.NULL_PARENT + Role.class);
             this.role = role;
             return this;
         }
@@ -211,10 +212,10 @@ public class User extends DomainWrapper<UserDto>
 
         public static Builder fromUser(final User in)
         {
-            return User.builder(in.context, in.enterprise, in.role).active(in.isActive()).authType(
-                in.getAuthType()).description(in.getDescription()).email(in.getEmail()).locale(
-                in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick()).password(
-                in.getPassword());
+            return User.builder(in.context, in.enterprise, in.role).active(in.isActive())
+                .authType(in.getAuthType()).description(in.getDescription()).email(in.getEmail())
+                .locale(in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick())
+                .password(in.getPassword());
         }
     }
 
