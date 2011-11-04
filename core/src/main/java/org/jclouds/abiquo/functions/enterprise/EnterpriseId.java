@@ -17,39 +17,31 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.infrastructure;
+package org.jclouds.abiquo.functions.enterprise;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Arrays;
+import javax.inject.Singleton;
 
-import org.jclouds.abiquo.domain.infrastructure.Datastore;
-
-import com.google.common.base.Predicate;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.google.common.base.Function;
 
 /**
- * Container for {@link Datastore} filters.
+ * Parses a {@link EnterpriseDto} object to extract its id.
  * 
- * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-public class DatastorePredicates
+@Singleton
+public class EnterpriseId implements Function<Object, String>
 {
-    public static Predicate<Datastore> datastoreName(final String name)
+    @Override
+    public String apply(final Object input)
     {
-        return datastoreNames(checkNotNull(name, "name must be defined"));
+        checkArgument(checkNotNull(input, "input") instanceof EnterpriseDto,
+            "This parser is only valid for EnterpriseDto objects");
+
+        return ((EnterpriseDto) input).getId().toString();
     }
 
-    public static Predicate<Datastore> datastoreNames(final String... names)
-    {
-        checkNotNull(names, "names must be defined");
-
-        return new Predicate<Datastore>()
-        {
-            @Override
-            public boolean apply(final Datastore datastore)
-            {
-                return Arrays.asList(names).contains(datastore.getName());
-            }
-        };
-    }
 }

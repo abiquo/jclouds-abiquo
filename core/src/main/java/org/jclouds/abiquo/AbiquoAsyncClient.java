@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo;
 
+import org.jclouds.abiquo.features.AdminAsyncClient;
 import org.jclouds.abiquo.features.EnterpriseAsyncClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
 import org.jclouds.rest.annotations.Delegate;
@@ -33,6 +34,12 @@ import org.jclouds.rest.annotations.Delegate;
 public interface AbiquoAsyncClient
 {
     public static final String API_VERSION = "2.0-SNAPSHOT";
+
+    /**
+     * Provides asynchronous access to Admin features.
+     */
+    @Delegate
+    AdminAsyncClient getAdminClient();
 
     /**
      * Provides asynchronous access to Infrastructure features.

@@ -17,38 +17,38 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.infrastructure;
+package org.jclouds.abiquo.predicates.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
-import org.jclouds.abiquo.domain.infrastructure.Datastore;
+import org.jclouds.abiquo.domain.enterprise.User;
 
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link Datastore} filters.
+ * Container for {@link User} filters.
  * 
  * @author Ignasi Barrera
  */
-public class DatastorePredicates
+public class UserPredicates
 {
-    public static Predicate<Datastore> datastoreName(final String name)
+    public static Predicate<User> userNick(final String nick)
     {
-        return datastoreNames(checkNotNull(name, "name must be defined"));
+        return userNicks(checkNotNull(nick, "nick must be defined"));
     }
 
-    public static Predicate<Datastore> datastoreNames(final String... names)
+    public static Predicate<User> userNicks(final String... nicks)
     {
-        checkNotNull(names, "names must be defined");
+        checkNotNull(nicks, "names must be defined");
 
-        return new Predicate<Datastore>()
+        return new Predicate<User>()
         {
             @Override
-            public boolean apply(final Datastore datastore)
+            public boolean apply(final User user)
             {
-                return Arrays.asList(names).contains(datastore.getName());
+                return Arrays.asList(nicks).contains(user.getNick());
             }
         };
     }

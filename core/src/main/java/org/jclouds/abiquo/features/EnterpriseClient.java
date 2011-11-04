@@ -42,7 +42,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface EnterpriseClient
 {
-    /*                 ********************** Enterprise ********************** */
+    /*           ********************** Enterprise ********************** */
 
     /**
      * List all enterprises.
@@ -82,7 +82,7 @@ public interface EnterpriseClient
      */
     void deleteEnterprise(EnterpriseDto enterprise);
 
-    /*                 ********************** Enterprise Limits ********************** */
+    /*           ********************** Enterprise Limits ********************** */
 
     /**
      * Allows the given enterprise to use the given datacenter with the given limits.
@@ -127,7 +127,7 @@ public interface EnterpriseClient
      */
     void deleteLimits(DatacenterLimitsDto limits);
 
-    /*                 ********************** User ********************** */
+    /*           ********************** User ********************** */
 
     /**
      * Retreives users of the given enterprise.
@@ -145,6 +145,15 @@ public interface EnterpriseClient
      * @return The created user.
      */
     UserDto createUser(EnterpriseDto enterprise, UserDto limits);
+
+    /**
+     * Get the given user from the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @param userId The id of the user.
+     * @return The user or <code>null</code> if it does not exist.
+     */
+    UserDto getUser(final EnterpriseDto enterprise, final Integer idUser);
 
     /**
      * Updates an existing user.

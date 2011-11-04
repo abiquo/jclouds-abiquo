@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.domain.enterprise;
 
+import static com.google.common.collect.Iterables.filter;
+
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -30,6 +32,9 @@ import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.UsersDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link EnterpriseDto}.
@@ -81,6 +86,16 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     {
         UsersDto dto = context.getApi().getEnterpriseClient().listUsers(this.unwrap());
         return wrap(context, User.class, dto.getCollection());
+    }
+
+    public List<User> listUsers(final Predicate<User> filter)
+    {
+        return Lists.newLinkedList(filter(listUsers(), filter));
+    }
+
+    public User findUser(final Predicate<User> filter)
+    {
+        return Iterables.getFirst(filter(listUsers(), filter), null);
     }
 
     // Actions

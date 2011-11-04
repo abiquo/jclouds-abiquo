@@ -26,6 +26,7 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.UserDto;
 
 /**
@@ -74,6 +75,14 @@ public class User extends DomainWrapper<UserDto>
     public void update()
     {
         target = context.getApi().getEnterpriseClient().updateUser(target);
+    }
+
+    // Children access
+
+    public Role getRole()
+    {
+        RoleDto role = context.getApi().getAdminClient().getRole(target);
+        return wrap(context, Role.class, role);
     }
 
     // Builder

@@ -29,6 +29,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.functions.infrastructure.DatacenterId;
@@ -63,7 +64,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin/enterprises")
 public interface EnterpriseAsyncClient
 {
-    /*                      ********************** Enterprise ********************** */
+    /*********************** Enterprise ********************** */
 
     /**
      * @see EnterpriseClient#listEnterprises()
@@ -100,7 +101,7 @@ public interface EnterpriseAsyncClient
     ListenableFuture<Void> deleteEnterprise(
         @EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
-    /*                      ********************** Enterprise Limits ********************** */
+    /*********************** Enterprise Limits ********************** */
 
     /**
      * @see EnterpriseClient#createLimits(EnterpriseDto, DatacenterDto, DatacenterLimitsDto)
@@ -141,7 +142,7 @@ public interface EnterpriseAsyncClient
     ListenableFuture<DatacentersLimitsDto> listLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
-    /*                      ********************** User ********************** */
+    /*********************** User ********************** */
 
     /**
      * @see EnterpriseClient#listUsers(EnterpriseDto)
@@ -149,6 +150,15 @@ public interface EnterpriseAsyncClient
     @GET
     ListenableFuture<UsersDto> listUsers(
         @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /**
+     * @see EnterpriseClient#getUser(EnterpriseDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<UserDto> getUser(
+        @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto datacenter,
+        @BinderParam(AppendToPath.class) Integer userId);
 
     /**
      * @see EnterpriseClient#createUser(EnterpriseDto)

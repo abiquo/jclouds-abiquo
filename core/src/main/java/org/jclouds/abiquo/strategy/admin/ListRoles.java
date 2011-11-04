@@ -17,40 +17,21 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.infrastructure;
+package org.jclouds.abiquo.strategy.admin;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.jclouds.abiquo.domain.enterprise.Role;
+import org.jclouds.abiquo.strategy.ListRootEntities;
+import org.jclouds.abiquo.strategy.admin.internal.ListRolesImpl;
 
-import java.util.Arrays;
-
-import org.jclouds.abiquo.domain.infrastructure.Rack;
-
-import com.google.common.base.Predicate;
+import com.google.inject.ImplementedBy;
 
 /**
- * Container for {@link Rack} filters.
+ * List roles.
  * 
  * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
-public class RackPredicates
+@ImplementedBy(ListRolesImpl.class)
+public interface ListRoles extends ListRootEntities<Role>
 {
-    public static Predicate<Rack> rackName(final String name)
-    {
-        return rackNames(checkNotNull(name, "name must be defined"));
-    }
 
-    public static Predicate<Rack> rackNames(final String... names)
-    {
-        checkNotNull(names, "names must be defined");
-
-        return new Predicate<Rack>()
-        {
-            @Override
-            public boolean apply(final Rack rack)
-            {
-                return Arrays.asList(names).contains(rack.getName());
-            }
-        };
-    }
 }

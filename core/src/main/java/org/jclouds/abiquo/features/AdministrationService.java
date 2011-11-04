@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.features;
 
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.internal.BaseAdministrationService;
 
@@ -35,7 +36,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseAdministrationService.class)
 public interface AdministrationService
 {
-    /* ********************** Datacenter ********************** */
+    /*********************** Datacenter ********************** */
 
     /**
      * Get the list of all datacenters.
@@ -52,7 +53,7 @@ public interface AdministrationService
      */
     Datacenter findDatacenter(final Predicate<Datacenter> filter);
 
-    /* ********************** Enterprise ********************** */
+    /*********************** Enterprise ********************** */
 
     /**
      * Get the list of all enterprises.
@@ -70,4 +71,20 @@ public interface AdministrationService
      */
     Enterprise findEnterprise(final Predicate<Enterprise> filter);
 
+    /*********************** Role ********************** */
+
+    /**
+     * Get the list of global roles.
+     */
+    Iterable<Role> listRoles();
+
+    /**
+     * Get the list of roles matching the given filter.
+     */
+    Iterable<Role> listRoles(final Predicate<Role> filter);
+
+    /**
+     * Get the first role that matches the given filter or <code>null</code> if none is found.
+     */
+    Role findRole(final Predicate<Role> filter);
 }

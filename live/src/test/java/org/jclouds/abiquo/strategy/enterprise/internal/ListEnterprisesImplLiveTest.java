@@ -32,7 +32,6 @@ import org.jclouds.abiquo.domain.EnterpriseResources;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
-import org.jclouds.abiquo.strategy.infrastructure.internal.ListDatacentersImpl;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;

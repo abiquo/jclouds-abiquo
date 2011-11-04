@@ -25,8 +25,10 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.AdministrationService;
+import org.jclouds.abiquo.strategy.admin.ListRoles;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 
@@ -46,14 +48,17 @@ public class BaseAdministrationService implements AdministrationService
 
     private final ListEnterprises listEnterprises;
 
-    /* ********************** Datacenter ********************** */
+    private final ListRoles listRoles;
+
+    /*          ********************** Datacenter ********************** */
 
     @Inject
     protected BaseAdministrationService(final ListDatacenters listDatacenters,
-        final ListEnterprises listEnterprises)
+        final ListEnterprises listEnterprises, final ListRoles listRoles)
     {
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
         this.listEnterprises = checkNotNull(listEnterprises, "listEnterprises");
+        this.listRoles = checkNotNull(listRoles, "listRoles");
     }
 
     @Override
@@ -74,7 +79,7 @@ public class BaseAdministrationService implements AdministrationService
         return Iterables.getFirst(listDatacenters(filter), null);
     }
 
-    /* ********************** Enterprise ********************** */
+    /*          ********************** Enterprise ********************** */
 
     @Override
     public Iterable<Enterprise> listEnterprises()
@@ -92,6 +97,24 @@ public class BaseAdministrationService implements AdministrationService
     public Enterprise findEnterprise(final Predicate<Enterprise> filter)
     {
         return Iterables.getFirst(listEnterprises(filter), null);
+    }
+
+    @Override
+    public Role findRole(final Predicate<Role> filter)
+    {
+        return Iterables.getFirst(listRoles(filter), null);
+    }
+
+    @Override
+    public Iterable<Role> listRoles()
+    {
+        return listRoles.execute();
+    }
+
+    @Override
+    public Iterable<Role> listRoles(final Predicate<Role> filter)
+    {
+        return listRoles.execute(filter);
     }
 
 }

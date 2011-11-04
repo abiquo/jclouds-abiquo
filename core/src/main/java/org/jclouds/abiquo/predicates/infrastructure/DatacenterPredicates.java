@@ -28,7 +28,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link DatacenterDto} filters.
+ * Container for {@link Datacenter} filters.
  * 
  * @author Ignasi Barrera
  */

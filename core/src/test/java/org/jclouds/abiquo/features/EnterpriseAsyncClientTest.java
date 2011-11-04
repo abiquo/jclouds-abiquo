@@ -48,7 +48,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<EnterpriseAsyncClient>
 {
-    /*                                   ********************** Enterprise ********************** */
+    /*********************** Enterprise ********************** */
 
     public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -137,7 +137,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    /*                                   ********************** Enterprise Limits ********************** */
+    /*********************** Enterprise Limits ********************** */
 
     public void testCreateEnterpriseLimits() throws SecurityException, NoSuchMethodException,
         IOException
@@ -253,7 +253,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    /*                                   ********************** User ********************** */
+    /*********************** User ********************** */
 
     public void testListUsers() throws SecurityException, NoSuchMethodException, IOException
     {

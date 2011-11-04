@@ -25,11 +25,10 @@ import java.util.Arrays;
 
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 
-import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link EnterpriseDto} filters.
+ * Container for {@link Enterprise} filters.
  * 
  * @author Ignasi Barrera
  */

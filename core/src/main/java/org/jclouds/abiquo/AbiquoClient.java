@@ -21,6 +21,7 @@ package org.jclouds.abiquo;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.features.AdminClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.concurrent.Timeout;
@@ -36,6 +37,12 @@ import org.jclouds.rest.annotations.Delegate;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface AbiquoClient
 {
+    /**
+     * Provides synchronous access to Admin features.
+     */
+    @Delegate
+    AdminClient getAdminClient();
+
     /**
      * Provides synchronous access to Infrastructure features.
      */

@@ -73,7 +73,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin")
 public interface InfrastructureAsyncClient
 {
-    /*   ********************** Datacenter ********************** */
+    /*    ********************** Datacenter ********************** */
 
     /**
      * @see InfrastructureClient#listDatacenters()
@@ -167,7 +167,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<DatacentersLimitsDto> listLimits(
         @EndpointLink("getLimits") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
-    /*   ********************** Rack ********************** */
+    /*********************** Rack ********************** */
 
     /**
      * @see InfrastructureClient#listRacks(DatacenterDto)
@@ -209,7 +209,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteRack(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 
-    /*   ********************** Remote Service ********************** */
+    /*    ********************** Remote Service ********************** */
 
     /**
      * @see InfrastructureClient#listRemoteServices(DatacenterDto)
@@ -257,7 +257,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Boolean> isAvailable(
         @EndpointLink("check") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
 
-    /*   ********************** Machine ********************** */
+    /*    ********************** Machine ********************** */
 
     /**
      * @see InfrastructureClient#listMachines(RackDto)

@@ -29,7 +29,7 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link RemoteServiceDto} filters.
+ * Container for {@link RemoteService} filters.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
