@@ -36,7 +36,7 @@ public class RolePredicates
 {
     public static Predicate<Role> roleName(final String name)
     {
-        return roleName(checkNotNull(name, "name must be defined"));
+        return roleNames(checkNotNull(name, "name must be defined"));
     }
 
     public static Predicate<Role> roleNames(final String... names)

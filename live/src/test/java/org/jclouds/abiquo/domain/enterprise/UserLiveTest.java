@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain.enterprise;
 
+import static org.jclouds.abiquo.predicates.enterprise.UserPredicates.userNick;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.fail;
@@ -32,6 +33,7 @@ import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.UserDto;
+import com.google.common.collect.Iterables;
 
 /**
  * Live integration tests for the {@link User} domain class.
@@ -72,5 +74,17 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
         {
             assertHasError(ex, Status.CONFLICT, "USER-4");
         }
+    }
+
+    public void testListUser()
+    {
+        Iterable<User> users = env.enterprise.listUsers();
+        assertEquals(Iterables.size(users), 1);
+
+        users = env.enterprise.listUsers(userNick(env.user.getNick()));
+        assertEquals(Iterables.size(users), 1);
+
+        users = env.enterprise.listUsers(userNick(env.user.getName() + "FAIL"));
+        assertEquals(Iterables.size(users), 0);
     }
 }
