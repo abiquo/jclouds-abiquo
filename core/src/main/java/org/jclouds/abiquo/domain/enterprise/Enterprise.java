@@ -107,8 +107,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         // Save new limits
         DatacenterLimitsDto dto =
-            context.getApi().getEnterpriseClient().createLimits(this.unwrap(), datacenter.unwrap(),
-                limits.unwrap());
+            context.getApi().getEnterpriseClient()
+                .createLimits(this.unwrap(), datacenter.unwrap(), limits.unwrap());
 
         return wrap(context, Limits.class, dto);
     }
@@ -134,7 +134,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return new Builder(context);
     }
 
-    public static class Builder extends LimitsBuilder
+    public static class Builder extends LimitsBuilder<Builder>
     {
         private AbiquoContext context;
 
@@ -178,13 +178,14 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return ((Builder) Enterprise.builder(in.context).name(in.getName()).ramLimits(
-                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
-                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
-                .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard()))
+            return Enterprise.builder(in.context).name(in.getName())
+                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+                .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
                 .isReservationRestricted(in.getIsReservationRestricted());
         }
     }

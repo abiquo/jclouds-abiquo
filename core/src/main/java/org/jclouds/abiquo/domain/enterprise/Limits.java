@@ -56,7 +56,7 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
         return new Builder(context);
     }
 
-    public static class Builder extends LimitsBuilder
+    public static class Builder extends LimitsBuilder<Builder>
     {
         private AbiquoContext context;
 
@@ -85,7 +85,7 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
 
         public static Builder fromEnterprise(final Limits in)
         {
-            return (Builder) Limits.builder(in.context)
+            return Limits.builder(in.context)
                 .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
                 .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
                 .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())

@@ -23,8 +23,9 @@ package org.jclouds.abiquo.domain.builder;
  * Base class for all builders that represent limits.
  * 
  * @author Ignasi Barrera
+ * @param <T> The type of the target builder.
  */
-public class LimitsBuilder
+public abstract class LimitsBuilder<T extends LimitsBuilder<T>>
 {
     /** The default limits for enterprises (unlimited). */
     protected static final int DEFAULT_LIMITS = 0;
@@ -57,52 +58,59 @@ public class LimitsBuilder
 
     protected Long repositoryHard = Long.valueOf(DEFAULT_LIMITS);
 
-    public LimitsBuilder ramLimits(final int soft, final int hard)
+    @SuppressWarnings("unchecked")
+    public T ramLimits(final int soft, final int hard)
     {
         this.ramSoftLimitInMb = soft;
         this.ramHardLimitInMb = hard;
-        return this;
+        return (T) this;
     }
 
-    public LimitsBuilder cpuCountLimits(final int soft, final int hard)
+    @SuppressWarnings("unchecked")
+    public T cpuCountLimits(final int soft, final int hard)
     {
         this.cpuCountSoftLimit = soft;
         this.cpuCountHardLimit = hard;
-        return this;
+        return (T) this;
     }
 
-    public LimitsBuilder hdLimitsInMb(final long soft, final long hard)
+    @SuppressWarnings("unchecked")
+    public T hdLimitsInMb(final long soft, final long hard)
     {
         this.hdSoftLimitInMb = soft;
         this.hdHardLimitInMb = hard;
-        return this;
+        return (T) this;
     }
 
-    public LimitsBuilder storageLimits(final long soft, final long hard)
+    @SuppressWarnings("unchecked")
+    public T storageLimits(final long soft, final long hard)
     {
         this.storageSoft = soft;
         this.storageHard = hard;
-        return this;
+        return (T) this;
     }
 
-    public LimitsBuilder vlansLimits(final long soft, final long hard)
+    @SuppressWarnings("unchecked")
+    public T vlansLimits(final long soft, final long hard)
     {
         this.vlansSoft = soft;
         this.vlansHard = hard;
-        return this;
+        return (T) this;
     }
 
-    public LimitsBuilder publicIpsLimits(final long soft, final long hard)
+    @SuppressWarnings("unchecked")
+    public T publicIpsLimits(final long soft, final long hard)
     {
         this.publicIpsSoft = soft;
         this.publicIpsHard = hard;
-        return this;
+        return (T) this;
     }
 
-    public LimitsBuilder repositoryLimits(final long soft, final long hard)
+    @SuppressWarnings("unchecked")
+    public T repositoryLimits(final long soft, final long hard)
     {
         this.repositorySoft = soft;
         this.repositoryHard = hard;
-        return this;
+        return (T) this;
     }
 }
