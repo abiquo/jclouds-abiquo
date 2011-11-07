@@ -23,32 +23,32 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
-import org.jclouds.abiquo.domain.enterprise.User;
+import org.jclouds.abiquo.domain.enterprise.Role;
 
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link User} filters.
+ * Container for {@link Role} filters.
  * 
  * @author Ignasi Barrera
  */
-public class UserPredicates
+public class RolePredicates
 {
-    public static Predicate<User> userNick(final String nick)
+    public static Predicate<Role> roleName(final String name)
     {
-        return userNicks(checkNotNull(nick, "nick must be defined"));
+        return roleName(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<User> userNicks(final String... nicks)
+    public static Predicate<Role> roleNames(final String... names)
     {
-        checkNotNull(nicks, "nicks must be defined");
+        checkNotNull(names, "names must be defined");
 
-        return new Predicate<User>()
+        return new Predicate<Role>()
         {
             @Override
-            public boolean apply(final User user)
+            public boolean apply(final Role role)
             {
-                return Arrays.asList(nicks).contains(user.getNick());
+                return Arrays.asList(names).contains(role.getName());
             }
         };
     }
