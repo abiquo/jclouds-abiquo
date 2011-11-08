@@ -57,6 +57,7 @@ public class AbiquoDelegateClientTest extends BaseAbiquoAsyncClientTest<AbiquoAs
         ExecutionException
     {
         assertNotNull(syncClient.getAdminClient());
+        assertNotNull(syncClient.getConfigClient());
         assertNotNull(syncClient.getInfrastructureClient());
         assertNotNull(syncClient.getEnterpriseClient());
     }
@@ -65,6 +66,7 @@ public class AbiquoDelegateClientTest extends BaseAbiquoAsyncClientTest<AbiquoAs
         ExecutionException
     {
         assertNotNull(asyncClient.getAdminClient());
+        assertNotNull(asyncClient.getConfigClient());
         assertNotNull(asyncClient.getInfrastructureClient());
         assertNotNull(asyncClient.getEnterpriseClient());
     }

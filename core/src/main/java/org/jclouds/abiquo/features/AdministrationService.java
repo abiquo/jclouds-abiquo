@@ -38,7 +38,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseAdministrationService.class)
 public interface AdministrationService
 {
-    /*********************** Datacenter ********************** */
+    /* ********************** Datacenter ********************** */
 
     /**
      * Get the list of all datacenters.
@@ -55,7 +55,7 @@ public interface AdministrationService
      */
     Datacenter findDatacenter(final Predicate<Datacenter> filter);
 
-    /*********************** Enterprise ********************** */
+    /* ********************** Enterprise ********************** */
 
     /**
      * Get the list of all enterprises.
@@ -73,7 +73,7 @@ public interface AdministrationService
      */
     Enterprise findEnterprise(final Predicate<Enterprise> filter);
 
-    /*********************** Role ********************** */
+    /* ********************** Role ********************** */
 
     /**
      * Get the list of global roles.
@@ -90,14 +90,14 @@ public interface AdministrationService
      */
     Role findRole(final Predicate<Role> filter);
 
-    /*********************** User ********************** */
+    /* ********************** User ********************** */
 
     /**
      * Get the current user.
      */
     User getCurrentUserInfo();
 
-    /*********************** License ********************** */
+    /* ********************** License ********************** */
 
     /**
      * Get the list of all licenses.

@@ -38,7 +38,7 @@ import com.abiquo.server.core.config.LicensesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface ConfigClient
 {
-    /*********************** License ********************** */
+    /* ********************** License ********************** */
 
     /**
      * List all licenses.

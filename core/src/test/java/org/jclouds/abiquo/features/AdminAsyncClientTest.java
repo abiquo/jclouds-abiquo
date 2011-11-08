@@ -46,7 +46,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncClient>
 {
-    /*********************** Role ********************** */
+    /* ********************** Role ********************** */
 
     public void testListRoles() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -131,11 +131,11 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         checkFilters(request);
     }
 
-    /*********************** Login ********************** */
+    /* s********************** Current User ********************** */
 
-    public void testGetLogin() throws SecurityException, NoSuchMethodException, IOException
+    public void testGetCurrentUser() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AdminAsyncClient.class.getMethod("getLogin");
+        Method method = AdminAsyncClient.class.getMethod("getCurrentUser");
         GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/login HTTP/1.1");

@@ -19,10 +19,7 @@
 
 package org.jclouds.abiquo.environment;
 
-import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertNotNull;
-
-import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.License;
@@ -78,11 +75,6 @@ public class ConfigTestEnvironment implements TestEnvironment
     }
 
     // Utility methods
-
-    private static String randomName()
-    {
-        return PREFIX + UUID.randomUUID().toString().substring(0, 12);
-    }
 
     public static String readLicense()
     {

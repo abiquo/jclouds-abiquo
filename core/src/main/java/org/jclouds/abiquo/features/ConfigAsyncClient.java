@@ -52,7 +52,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/config")
 public interface ConfigAsyncClient
 {
-    /*********************** License ********************** */
+    /* ********************** License ********************** */
 
     /**
      * @see ConfigClient#listLicenses()
@@ -81,5 +81,5 @@ public interface ConfigAsyncClient
      */
     @DELETE
     ListenableFuture<Void> removeLicense(
-        @EndpointLink("edit") @BinderParam(BindToPath.class) LicenseDto role);
+        @EndpointLink("edit") @BinderParam(BindToPath.class) LicenseDto license);
 }

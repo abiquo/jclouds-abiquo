@@ -48,7 +48,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<EnterpriseAsyncClient>
 {
-    /*********************** Enterprise ********************** */
+    /* ********************** Enterprise ********************** */
 
     public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -137,7 +137,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    /*********************** Enterprise Limits ********************** */
+    /* ********************** Enterprise Limits ********************** */
 
     public void testCreateEnterpriseLimits() throws SecurityException, NoSuchMethodException,
         IOException
@@ -203,8 +203,9 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(EnterpriseResources
-            .datacenterLimitsPutPayload(enterprise)), "application/xml", false);
+        assertPayloadEquals(request,
+            withHeader(EnterpriseResources.datacenterLimitsPutPayload(enterprise)),
+            "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -253,7 +254,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    /*********************** User ********************** */
+    /* ********************** User ********************** */
 
     public void testListUsers() throws SecurityException, NoSuchMethodException, IOException
     {

@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.strategy;
 
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
@@ -47,7 +48,7 @@ public class GlobalResources
 
     public User getLogin()
     {
-        UserDto result = context.getApi().getAdminClient().getLogin();
+        UserDto result = context.getApi().getAdminClient().getCurrentUser();
         return wrap(context, User.class, result);
     }
 }

@@ -38,16 +38,16 @@ import com.abiquo.server.core.enterprise.UserDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface AdminClient
 {
-    /*********************** User ********************** */
+    /* ********************** User ********************** */
 
     /**
-     * Get logged user.
+     * Get the information of the current user.
      * 
-     * @return The logged user.
+     * @return The information of the current user.
      */
-    UserDto getLogin();
+    UserDto getCurrentUser();
 
-    /*********************** Role ********************** */
+    /* ********************** Role ********************** */
 
     /**
      * List global roles.

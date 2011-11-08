@@ -58,13 +58,16 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Consumes(MediaType.APPLICATION_XML)
 public interface AdminAsyncClient
 {
-    /*********************** Login ********************** */
+    /* ********************** Login ********************** */
 
+    /**
+     * @see AdminClient#getCurrentUser()
+     */
     @GET
     @Path("/login")
-    ListenableFuture<UserDto> getLogin();
+    ListenableFuture<UserDto> getCurrentUser();
 
-    /*********************** Role ********************** */
+    /* ********************** Role ********************** */
 
     /**
      * @see AdminClient#listRoles()

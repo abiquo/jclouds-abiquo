@@ -44,7 +44,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsyncClient>
 {
-    /*********************** License ********************** */
+    /* ********************** License ********************** */
 
     public void testListLicense() throws SecurityException, NoSuchMethodException, IOException
     {

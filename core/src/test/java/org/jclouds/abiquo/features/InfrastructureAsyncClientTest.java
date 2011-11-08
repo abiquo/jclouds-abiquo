@@ -53,7 +53,7 @@ import com.google.inject.TypeLiteral;
 public class InfrastructureAsyncClientTest extends
     BaseAbiquoAsyncClientTest<InfrastructureAsyncClient>
 {
-    /*********************** Datacenter ********************** */
+    /* ********************** Datacenter ********************** */
 
     public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -164,7 +164,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /*          ********************** Rack ********************** */
+    /* ********************** Rack ********************** */
 
     public void testListRacks() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -263,7 +263,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /*          ********************** Remote Service ********************** */
+    /* ********************** Remote Service ********************** */
 
     public void testListRemoteServices() throws SecurityException, NoSuchMethodException,
         IOException
@@ -392,7 +392,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /*          ********************** Machine ********************** */
+    /* ********************** Machine ********************** */
 
     public void testDiscoverSingleMachineWithoutOptions() throws SecurityException,
         NoSuchMethodException, IOException
@@ -507,8 +507,8 @@ public class InfrastructureAsyncClientTest extends
                 String.class, String.class, MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
-                "80.80.80.86", HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(
-                    8889).build());
+                "80.80.80.86", HypervisorType.KVM, "user", "pass",
+                MachineOptions.builder().port(8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discovermultiple";
         String query =
