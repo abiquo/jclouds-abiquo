@@ -63,7 +63,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 /**
  * Provides asynchronous access to Abiquo Infrastructure API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see InfrastructureClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -73,7 +73,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/admin")
 public interface InfrastructureAsyncClient
 {
-    /*      ********************** Datacenter ********************** */
+    /* ********************** Datacenter ********************** */
 
     /**
      * @see InfrastructureClient#listDatacenters()
@@ -209,7 +209,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteRack(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
 
-    /*      ********************** Remote Service ********************** */
+    /* ********************** Remote Service ********************** */
 
     /**
      * @see InfrastructureClient#listRemoteServices(DatacenterDto)
@@ -257,7 +257,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Boolean> isAvailable(
         @EndpointLink("check") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
 
-    /*      ********************** Machine ********************** */
+    /* ********************** Machine ********************** */
 
     /**
      * @see InfrastructureClient#listMachines(RackDto)

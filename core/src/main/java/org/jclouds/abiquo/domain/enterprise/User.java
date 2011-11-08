@@ -41,6 +41,12 @@ public class User extends DomainWrapper<UserDto>
     /** Default active value of the user */
     private static final boolean DEFAULT_ACTIVE = true;
 
+    /** The default authentication type. */
+    private static final String DEFAULT_AUTH_TYPE = "ABIQUO";
+
+    /** The default locale for the user. */
+    private static final String DEFAULT_LOCALE = "en_US";
+
     /** The enterprise where the user belongs. */
     // Package protected to allow navigation from children
     Enterprise enterprise;
@@ -104,7 +110,7 @@ public class User extends DomainWrapper<UserDto>
 
         private String nick;
 
-        private String locale;
+        private String locale = DEFAULT_LOCALE;
 
         private String password;
 
@@ -116,7 +122,7 @@ public class User extends DomainWrapper<UserDto>
 
         private String description;
 
-        private String authType;
+        private String authType = DEFAULT_AUTH_TYPE;
 
         public Builder(final AbiquoContext context, final Enterprise enterprise, final Role role)
         {
