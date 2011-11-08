@@ -19,8 +19,13 @@
 
 package org.jclouds.abiquo.domain;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
+
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.config.LicenseDto;
+import com.google.common.io.Resources;
 
 /**
  * Enterprise domain utilities.
@@ -33,7 +38,7 @@ public class ConfigResources
     public static LicenseDto licensePost()
     {
         LicenseDto license = new LicenseDto();
-        license.setCode(readLicense());
+        license.setCode(readLicense("expiredLicense"));
         license.setCustomerid("3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c");
         return license;
     }
@@ -53,7 +58,7 @@ public class ConfigResources
         buffer.append("<license>");
         buffer.append(link("/admin/enterprises/config/licenses/1", "edit"));
         buffer.append("<customerid>3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c</customerid>");
-        buffer.append("<code>" + readLicense() + "</code>");
+        buffer.append("<code>" + readLicense("expiredLicense") + "</code>");
         buffer.append("<id>1</id>");
         buffer.append("</license>");
         return buffer.toString();
@@ -64,7 +69,7 @@ public class ConfigResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<license>");
         buffer.append("<customerid>3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c</customerid>");
-        buffer.append("<code>" + readLicense() + "</code>");
+        buffer.append("<code>" + readLicense("expiredLicense") + "</code>");
         buffer.append("</license>");
         return buffer.toString();
     }
@@ -74,8 +79,16 @@ public class ConfigResources
         return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\"/>";
     }
 
-    private static String readLicense()
+    private static String readLicense(final String filename)
     {
-        return "B9cG06GaLHhUlpD9AWxKVkZPd4qPB0OAbm2Blr4374Y6rtPhcukg4MMLNK0uWn5fnsoBSqVX8o0hwQ1I6D3zUbFBSibMaK5xIZQfZmReHf04HPPBg0ZyaPRTBoKy6dCLnWpQIKe8vLemAudZ0w4spdzYMH2jw2TImN+2vd4QDU1qmUItYMsV5Sz+e8YVEGbUVkjRjQCmIUJskVxC+sW47dokgl5Qo8hN+4I6vKgEnXFdOSRFW2cyGgpHVH4Js4hwLG+PS2LXPS4UwvISJXRF6tO7Rgg9iaObcBD/byH5jGmggtSECUtXqI70nesIbMXRHQ1aGHARqbHH3+0Znjcu5g==";
+        URL url = ConfigResources.class.getResource("/" + filename);
+        try
+        {
+            return Resources.toString(url, Charset.defaultCharset());
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Could not read file " + filename);
+        }
     }
 }

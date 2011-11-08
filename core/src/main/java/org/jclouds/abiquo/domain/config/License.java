@@ -55,9 +55,9 @@ public class License extends DomainWrapper<LicenseDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context)
+    public static Builder builder(final AbiquoContext context, final String code)
     {
-        return new Builder(context);
+        return new Builder(context, code);
     }
 
     public static class Builder
@@ -66,16 +66,11 @@ public class License extends DomainWrapper<LicenseDto>
 
         private String code;
 
-        private String customerId;
-
-        private Integer numCores;
-
-        private String expiration;
-
-        public Builder(final AbiquoContext context)
+        public Builder(final AbiquoContext context, final String code)
         {
             super();
             this.context = context;
+            this.code = code;
         }
 
         public Builder code(final String code)
@@ -84,31 +79,10 @@ public class License extends DomainWrapper<LicenseDto>
             return this;
         }
 
-        public Builder customerId(final String customerId)
-        {
-            this.customerId = customerId;
-            return this;
-        }
-
-        public Builder numCores(final Integer numCores)
-        {
-            this.numCores = numCores;
-            return this;
-        }
-
-        public Builder expiration(final String expiration)
-        {
-            this.expiration = expiration;
-            return this;
-        }
-
         public License build()
         {
             LicenseDto dto = new LicenseDto();
             dto.setCode(code);
-            dto.setCustomerid(customerId);
-            dto.setExpiration(expiration);
-            dto.setNumcores(numCores);
 
             License license = new License(context, dto);
             return license;
@@ -116,8 +90,7 @@ public class License extends DomainWrapper<LicenseDto>
 
         public static Builder fromLicense(final License in)
         {
-            return License.builder(in.context).code(in.getCode()).customerId(in.getCustomerid())
-                .expiration(in.getExpiration()).numCores(in.getNumcores());
+            return License.builder(in.context, in.getCode());
         }
     }
 
@@ -128,12 +101,12 @@ public class License extends DomainWrapper<LicenseDto>
         return target.getCode();
     }
 
-    public String getCustomerid()
+    public String getCustomerId()
     {
         return target.getCustomerid();
     }
 
-    public String getEnabledip()
+    public String getEnabledIp()
     {
         return target.getEnabledip();
     }
@@ -148,7 +121,7 @@ public class License extends DomainWrapper<LicenseDto>
         return target.getId();
     }
 
-    public Integer getNumcores()
+    public Integer getNumCores()
     {
         return target.getNumcores();
     }

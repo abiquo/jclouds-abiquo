@@ -48,7 +48,7 @@ public class LicensePredicates
             @Override
             public boolean apply(final License license)
             {
-                return Arrays.asList(codes).contains(license.getCustomerid());
+                return Arrays.asList(codes).contains(license.getCustomerId());
             }
         };
     }

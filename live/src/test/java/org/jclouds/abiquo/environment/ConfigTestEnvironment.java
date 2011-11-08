@@ -21,9 +21,15 @@ package org.jclouds.abiquo.environment;
 
 import static org.testng.Assert.assertNotNull;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.features.AdministrationService;
+
+import com.google.common.io.Resources;
 
 /**
  * Test environment for enterprise live tests.
@@ -60,9 +66,9 @@ public class ConfigTestEnvironment implements TestEnvironment
     }
 
     // Setup
-    private void createLicense()
+    private void createLicense() throws IOException
     {
-        license = License.builder(context).code(readLicense()).build();
+        license = License.builder(context, readLicense()).build();
 
         license.add();
         assertNotNull(license.getId());
@@ -76,8 +82,10 @@ public class ConfigTestEnvironment implements TestEnvironment
 
     // Utility methods
 
-    public static String readLicense()
+    public static String readLicense() throws IOException
     {
-        return "B9cG06GaLHhUlpD9AWxKVkZPd4qPB0OAbm2Blr4374Y6rtPhcukg4MMLNK0uWn5fnsoBSqVX8o0hwQ1I6D3zUbFBSibMaK5xIZQfZmReHf04HPPBg0ZyaPRTBoKy6dCLnWpQIKe8vLemAudZ0w4spdzYMH2jw2TImN+2vd4QDU1qmUItYMsV5Sz+e8YVEGbUVkjRjQCmIUJskVxC+sW47dokgl5Qo8hN+4I6vKgEnXFdOSRFW2cyGgpHVH4Js4hwLG+PS2LXPS4UwvISJXRF6tO7Rgg9iaObcBD/byH5jGmggtSECUtXqI70nesIbMXRHQ1aGHARqbHH3+0Znjcu5g==";
+        URL url = ConfigTestEnvironment.class.getResource("/expiredLicense");
+
+        return Resources.toString(url, Charset.defaultCharset());
     }
 }
