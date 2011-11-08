@@ -30,7 +30,7 @@ import org.jclouds.rest.annotations.Delegate;
 /**
  * Provides synchronous access to Abiquo.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see AbiquoAsyncClient
  * @author Ignasi Barrera
  */

@@ -34,7 +34,7 @@ import com.abiquo.server.core.enterprise.UserDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI18/Users+Resource
+ * @see http://community.abiquo.com/display/ABI20/Users+Resource
  */
 public class User extends DomainWrapper<UserDto>
 {

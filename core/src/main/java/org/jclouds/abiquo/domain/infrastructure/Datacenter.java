@@ -46,7 +46,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource
+ * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource
  */
 public class Datacenter extends DomainWrapper<DatacenterDto>
 {
@@ -58,7 +58,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Indicates the Abiquo edition to create the available remote services.
      * 
-     * @see http://wiki.abiquo.com/display/ABI18/Introduction+-+The+Abiquo+Platform
+     * @see http://wiki.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform
      */
     private AbiquoEdition edition;
 

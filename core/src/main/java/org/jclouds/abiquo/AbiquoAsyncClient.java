@@ -27,7 +27,7 @@ import org.jclouds.rest.annotations.Delegate;
 /**
  * Provides asynchronous access to Abiquo via their REST API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see InfrastructureAsyncClient
  * @author Ignasi Barrera
  */

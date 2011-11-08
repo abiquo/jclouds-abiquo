@@ -29,7 +29,7 @@ import com.abiquo.server.core.enterprise.RoleDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI18/Users+Resource
+ * @see http://community.abiquo.com/display/ABI20/Roles+Resource
  */
 public class Role extends DomainWrapper<RoleDto>
 {

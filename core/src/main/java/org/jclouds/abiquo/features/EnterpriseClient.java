@@ -34,7 +34,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 /**
  * Provides synchronous access to Abiquo Enterprise API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see EnterpriseAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

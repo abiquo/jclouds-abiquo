@@ -49,7 +49,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 /**
  * Provides asynchronous access to Abiquo Infrastructure API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see AdminClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

@@ -44,7 +44,7 @@ import com.google.common.base.Predicates;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI18/Machine+Resource
+ * @see http://community.abiquo.com/display/ABI20/Machine+Resource
  */
 public class Machine extends DomainWrapper<MachineDto>
 {

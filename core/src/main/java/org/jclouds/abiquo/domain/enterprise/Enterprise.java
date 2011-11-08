@@ -41,7 +41,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI18/Enterprise+Resource
+ * @see http://community.abiquo.com/display/ABI20/Enterprise+Resource
  */
 public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 {
