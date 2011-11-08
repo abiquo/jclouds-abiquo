@@ -39,7 +39,7 @@ import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 /**
  * Provides synchronous access to Abiquo Infrastructure API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see InfrastructureAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -90,7 +90,7 @@ public interface InfrastructureClient
     /**
      * Retrieve remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource#DatacenterResource-
+     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
      *      Retrieveremotemachineinformation
      * @param datacenter The datacenter.
      * @param ip IP address of the remote hypervisor to connect.
@@ -106,7 +106,7 @@ public interface InfrastructureClient
     /**
      * Retrieve remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource#DatacenterResource-
+     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
      *      Retrieveremotemachineinformation
      * @param datacenter The datacenter.
      * @param ip IP address of the remote hypervisor to connect.
@@ -123,7 +123,7 @@ public interface InfrastructureClient
     /**
      * Retrieve a list of remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource#DatacenterResource-
+     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
      *      Retrievealistofremotemachineinformation
      * @param datacenter The datacenter.
      * @param ipFrom IP address of the remote first hypervisor to check.
@@ -142,7 +142,7 @@ public interface InfrastructureClient
     /**
      * Retrieve a list of remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI18/Datacenter+Resource#DatacenterResource-
+     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
      *      Retrievealistofremotemachineinformation
      * @param datacenter The datacenter.
      * @param ipFrom IP address of the remote first hypervisor to check.

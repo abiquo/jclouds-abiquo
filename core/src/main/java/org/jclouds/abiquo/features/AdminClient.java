@@ -30,7 +30,7 @@ import com.abiquo.server.core.enterprise.UserDto;
 /**
  * Provides synchronous access to Abiquo Admin API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see AdminAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
