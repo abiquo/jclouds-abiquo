@@ -131,6 +131,24 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         checkFilters(request);
     }
 
+    /*********************** Login ********************** */
+
+    public void testGetLogin() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = AdminAsyncClient.class.getMethod("getLogin");
+        GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/login HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     @Override
     protected TypeLiteral<RestAnnotationProcessor<AdminAsyncClient>> createTypeLiteral()
     {

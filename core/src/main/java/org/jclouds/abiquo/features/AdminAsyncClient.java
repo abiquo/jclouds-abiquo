@@ -56,16 +56,21 @@ import com.google.common.util.concurrent.ListenableFuture;
  */
 @RequestFilters(BasicAuthentication.class)
 @Consumes(MediaType.APPLICATION_XML)
-@Path("/admin")
 public interface AdminAsyncClient
 {
+    /*********************** Login ********************** */
+
+    @GET
+    @Path("/login")
+    ListenableFuture<UserDto> getLogin();
+
     /*********************** Role ********************** */
 
     /**
      * @see AdminClient#listRoles()
      */
     @GET
-    @Path("/roles")
+    @Path("/admin/roles")
     ListenableFuture<RolesDto> listRoles();
 
     /**
@@ -82,7 +87,7 @@ public interface AdminAsyncClient
      * @see AdminClient#getRole(Integer)
      */
     @GET
-    @Path("/roles/{role}")
+    @Path("/admin/roles/{role}")
     @Consumes(AbiquoMediaType.APPLICATION_LINK_XML)
     @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
@@ -109,7 +114,7 @@ public interface AdminAsyncClient
      * @see AdminClient#createRole(RoleDto)
      */
     @POST
-    @Path("/roles")
+    @Path("/admin/roles")
     @JAXBResponseParser
     @Produces(AbiquoMediaType.APPLICATION_LINK_XML)
     @Consumes(AbiquoMediaType.APPLICATION_LINK_XML)

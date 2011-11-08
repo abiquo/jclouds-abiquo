@@ -24,11 +24,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Role;
+import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.AdministrationService;
+import org.jclouds.abiquo.strategy.GlobalResources;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
+import org.jclouds.abiquo.strategy.config.ListLicenses;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 
@@ -36,7 +40,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
 /**
- * Provides high level Abiquo operations.
+ * Provides high level Abiquo administration operations.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -50,15 +54,22 @@ public class BaseAdministrationService implements AdministrationService
 
     private final ListRoles listRoles;
 
-    /*          ********************** Datacenter ********************** */
+    private final ListLicenses listLicenses;
+
+    private final GlobalResources globalResources;
+
+    /*********************** Datacenter ********************** */
 
     @Inject
     protected BaseAdministrationService(final ListDatacenters listDatacenters,
-        final ListEnterprises listEnterprises, final ListRoles listRoles)
+        final ListEnterprises listEnterprises, final ListRoles listRoles,
+        final ListLicenses listLicenses, final GlobalResources globalResources)
     {
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
         this.listEnterprises = checkNotNull(listEnterprises, "listEnterprises");
         this.listRoles = checkNotNull(listRoles, "listRoles");
+        this.listLicenses = checkNotNull(listLicenses, "listLicenses");
+        this.globalResources = checkNotNull(globalResources, "globalResources");
     }
 
     @Override
@@ -79,7 +90,7 @@ public class BaseAdministrationService implements AdministrationService
         return Iterables.getFirst(listDatacenters(filter), null);
     }
 
-    /*          ********************** Enterprise ********************** */
+    /*********************** Enterprise ********************** */
 
     @Override
     public Iterable<Enterprise> listEnterprises()
@@ -99,11 +110,7 @@ public class BaseAdministrationService implements AdministrationService
         return Iterables.getFirst(listEnterprises(filter), null);
     }
 
-    @Override
-    public Role findRole(final Predicate<Role> filter)
-    {
-        return Iterables.getFirst(listRoles(filter), null);
-    }
+    /*********************** Role ********************** */
 
     @Override
     public Iterable<Role> listRoles()
@@ -117,4 +124,43 @@ public class BaseAdministrationService implements AdministrationService
         return listRoles.execute(filter);
     }
 
+    @Override
+    public Role findRole(final Predicate<Role> filter)
+    {
+        return Iterables.getFirst(listRoles(filter), null);
+    }
+
+    /*********************** User ********************** */
+
+    @Override
+    public User getCurrentUserInfo()
+    {
+        return globalResources.getLogin();
+    }
+
+    /*********************** License ********************** */
+
+    @Override
+    public Iterable<License> listLicenses()
+    {
+        return listLicenses.execute();
+    }
+
+    @Override
+    public Iterable<License> listLicenses(final boolean active)
+    {
+        return listLicenses.execute(active);
+    }
+
+    @Override
+    public Iterable<License> listLicenses(final Predicate<License> filter)
+    {
+        return listLicenses.execute(filter);
+    }
+
+    @Override
+    public License findLicense(final Predicate<License> filter)
+    {
+        return Iterables.getFirst(listLicenses(filter), null);
+    }
 }

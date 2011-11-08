@@ -25,6 +25,8 @@ import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.features.AdminAsyncClient;
 import org.jclouds.abiquo.features.AdminClient;
+import org.jclouds.abiquo.features.ConfigAsyncClient;
+import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseAsyncClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
@@ -54,6 +56,7 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
             .put(InfrastructureClient.class, InfrastructureAsyncClient.class) //
             .put(EnterpriseClient.class, EnterpriseAsyncClient.class) //
             .put(AdminClient.class, AdminAsyncClient.class) //
+            .put(ConfigClient.class, ConfigAsyncClient.class) //
             .build();
 
     public AbiquoRestClientModule()

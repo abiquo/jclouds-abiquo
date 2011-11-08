@@ -67,7 +67,6 @@ public class User extends DomainWrapper<UserDto>
 
     public void save()
     {
-        // TODO change for parser?
         target.addLink(new RESTLink("role", role.unwrap().getEditLink().getHref()));
         target = context.getApi().getEnterpriseClient().createUser(enterprise.unwrap(), target);
     }
@@ -212,10 +211,10 @@ public class User extends DomainWrapper<UserDto>
 
         public static Builder fromUser(final User in)
         {
-            return User.builder(in.context, in.enterprise, in.role).active(in.isActive())
-                .authType(in.getAuthType()).description(in.getDescription()).email(in.getEmail())
-                .locale(in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick())
-                .password(in.getPassword());
+            return User.builder(in.context, in.enterprise, in.role).active(in.isActive()).authType(
+                in.getAuthType()).description(in.getDescription()).email(in.getEmail()).locale(
+                in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick()).password(
+                in.getPassword());
         }
     }
 

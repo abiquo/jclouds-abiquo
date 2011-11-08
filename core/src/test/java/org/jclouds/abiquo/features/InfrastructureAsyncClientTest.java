@@ -164,7 +164,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /*    ********************** Rack ********************** */
+    /*          ********************** Rack ********************** */
 
     public void testListRacks() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -263,7 +263,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /*    ********************** Remote Service ********************** */
+    /*          ********************** Remote Service ********************** */
 
     public void testListRemoteServices() throws SecurityException, NoSuchMethodException,
         IOException
@@ -392,7 +392,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /*    ********************** Machine ********************** */
+    /*          ********************** Machine ********************** */
 
     public void testDiscoverSingleMachineWithoutOptions() throws SecurityException,
         NoSuchMethodException, IOException

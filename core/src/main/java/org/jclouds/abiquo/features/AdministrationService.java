@@ -19,8 +19,10 @@
 
 package org.jclouds.abiquo.features;
 
+import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Role;
+import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.internal.BaseAdministrationService;
 
@@ -87,4 +89,36 @@ public interface AdministrationService
      * Get the first role that matches the given filter or <code>null</code> if none is found.
      */
     Role findRole(final Predicate<Role> filter);
+
+    /*********************** User ********************** */
+
+    /**
+     * Get the current user.
+     */
+    User getCurrentUserInfo();
+
+    /*********************** License ********************** */
+
+    /**
+     * Get the list of all licenses.
+     */
+    Iterable<License> listLicenses();
+
+    /**
+     * Get the list of all active/inactive licenses.
+     * 
+     * @param active Defines if searching for active (<code>true</code>) or inactive (
+     *            <code>false</code>) licenses.
+     */
+    Iterable<License> listLicenses(boolean active);
+
+    /**
+     * Get the list of licenses matching the given filter.
+     */
+    Iterable<License> listLicenses(final Predicate<License> filter);
+
+    /**
+     * Get the first license that matches the given filter or <code>null</code> if none is found.
+     */
+    License findLicense(final Predicate<License> filter);
 }

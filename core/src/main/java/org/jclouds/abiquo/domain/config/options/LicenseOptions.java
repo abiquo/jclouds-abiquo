@@ -17,11 +17,11 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain.infrastructure.options;
+package org.jclouds.abiquo.domain.config.options;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
-public class MachineOptions extends QueryOptions
+public class LicenseOptions extends QueryOptions
 {
     public static Builder builder()
     {
@@ -31,7 +31,7 @@ public class MachineOptions extends QueryOptions
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
-        MachineOptions options = new MachineOptions();
+        LicenseOptions options = new LicenseOptions();
         options.map.putAll(map);
         return options;
     }
@@ -44,23 +44,32 @@ public class MachineOptions extends QueryOptions
 
     public static class Builder
     {
-        private Integer port;
+        private Boolean active;
 
         /**
-         * Set the optional hypervisor port.
+         * Search active licenses
          */
-        public Builder port(final int port)
+        public Builder active(final boolean active)
         {
-            this.port = port;
+            this.active = active;
             return this;
         }
 
-        public MachineOptions build()
+        /**
+         * Search inaactive licenses
+         */
+        public Builder inactive(final boolean inactive)
         {
-            MachineOptions options = new MachineOptions();
-            if (port != null)
+            this.active = !inactive;
+            return this;
+        }
+
+        public LicenseOptions build()
+        {
+            LicenseOptions options = new LicenseOptions();
+            if (active != null)
             {
-                options.map.put("port", port.toString());
+                options.map.put("active", active.toString());
             }
             return options;
         }

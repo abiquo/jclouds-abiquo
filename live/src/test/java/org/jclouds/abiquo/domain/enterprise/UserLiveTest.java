@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain.enterprise;
 import static org.jclouds.abiquo.predicates.enterprise.UserPredicates.userNick;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
 import javax.ws.rs.core.Response.Status;
@@ -86,5 +87,12 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
 
         users = env.enterprise.listUsers(userNick(env.user.getName() + "FAIL"));
         assertEquals(Iterables.size(users), 0);
+    }
+
+    public void testGetCurrentUser()
+    {
+        User user = context.getAdministrationService().getCurrentUserInfo();
+        assertNotNull(user);
+        assertEquals(user.getNick(), context.getIdentity());
     }
 }

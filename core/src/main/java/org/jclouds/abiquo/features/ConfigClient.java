@@ -17,48 +17,56 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.features.AdminClient;
-import org.jclouds.abiquo.features.ConfigClient;
-import org.jclouds.abiquo.features.EnterpriseClient;
-import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.concurrent.Timeout;
-import org.jclouds.rest.annotations.Delegate;
+
+import com.abiquo.server.core.config.LicenseDto;
+import com.abiquo.server.core.config.LicensesDto;
 
 /**
- * Provides synchronous access to Abiquo.
+ * Provides synchronous access to Abiquo Admin API.
  * 
  * @see http://community.abiquo.com/display/ABI18/API+Reference
- * @see AbiquoAsyncClient
+ * @see AdminAsyncClient
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient
+public interface ConfigClient
 {
-    /**
-     * Provides synchronous access to Admin features.
-     */
-    @Delegate
-    AdminClient getAdminClient();
+    /*********************** License ********************** */
 
     /**
-     * Provides synchronous access to Infrastructure features.
+     * List all licenses.
+     * 
+     * @return The list of licenses.
      */
-    @Delegate
-    InfrastructureClient getInfrastructureClient();
+    LicensesDto listLicenses();
 
     /**
-     * Provides synchronous access to Enterprise features.
+     * List all active/inactive licenses.
+     * 
+     * @param options Optional query params.
+     * @return The list of licenses.
      */
-    @Delegate
-    EnterpriseClient getEnterpriseClient();
+    LicensesDto listLicenses(LicenseOptions options);
 
     /**
-     * Provides synchronous access to configuration features.
+     * Add a new license.
+     * 
+     * @param license The license to add.
+     * @return The added license.
      */
-    @Delegate
-    ConfigClient getConfigClient();
+    LicenseDto addLicense(LicenseDto license);
+
+    /**
+     * Removes an existing license.
+     * 
+     * @param license The license to delete.
+     */
+    void removeLicense(LicenseDto license);
 }
