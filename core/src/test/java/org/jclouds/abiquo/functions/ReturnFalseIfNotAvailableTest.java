@@ -20,11 +20,11 @@
 package org.jclouds.abiquo.functions;
 
 import static org.easymock.EasyMock.expect;
-import static org.easymock.classextension.EasyMock.createMock;
-import static org.easymock.classextension.EasyMock.replay;
-import static org.easymock.classextension.EasyMock.verify;
+import static org.easymock.EasyMock.replay;
+import static org.easymock.EasyMock.verify;
 import static org.testng.Assert.assertEquals;
 
+import org.easymock.EasyMock;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.HttpResponseException;
 import org.jclouds.rest.ResourceNotFoundException;
@@ -58,8 +58,8 @@ public class ReturnFalseIfNotAvailableTest
     public void testReturnFalseIf5xx()
     {
         Function<Exception, Object> function = new ReturnFalseIfNotAvailable();
-        HttpResponse response = createMock(HttpResponse.class);
-        HttpResponseException exception = createMock(HttpResponseException.class);
+        HttpResponse response = EasyMock.createMock(HttpResponse.class);
+        HttpResponseException exception = EasyMock.createMock(HttpResponseException.class);
 
         // Status code is called twice
         expect(response.getStatusCode()).andReturn(503);
@@ -82,8 +82,8 @@ public class ReturnFalseIfNotAvailableTest
     public void testReturnExceptionIfNot5xx()
     {
         Function<Exception, Object> function = new ReturnFalseIfNotAvailable();
-        HttpResponse response = createMock(HttpResponse.class);
-        HttpResponseException exception = createMock(HttpResponseException.class);
+        HttpResponse response = EasyMock.createMock(HttpResponse.class);
+        HttpResponseException exception = EasyMock.createMock(HttpResponseException.class);
 
         // Status code is called twice
         expect(response.getStatusCode()).andReturn(600);
