@@ -73,12 +73,15 @@ public class User extends DomainWrapper<UserDto>
 
     public void save()
     {
+        // set role link
         target.addLink(new RESTLink("role", role.unwrap().getEditLink().getHref()));
         target = context.getApi().getEnterpriseClient().createUser(enterprise.unwrap(), target);
     }
 
     public void update()
     {
+        // update role link
+        target.searchLink("role").setHref(role.unwrap().getEditLink().getHref());
         target = context.getApi().getEnterpriseClient().updateUser(target);
     }
 
@@ -319,5 +322,10 @@ public class User extends DomainWrapper<UserDto>
     public void setSurname(final String surname)
     {
         target.setSurname(surname);
+    }
+
+    public void setRole(final Role role)
+    {
+        this.role = role;
     }
 }
