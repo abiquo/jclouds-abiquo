@@ -31,6 +31,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.UserDto;
@@ -75,6 +76,21 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
         {
             assertHasError(ex, Status.CONFLICT, "USER-4");
         }
+    }
+
+    public void testChangeRoleAndUpdate()
+    {
+        Role role = Role.Builder.fromRole(env.role).build();
+        role.setName("Another role");
+        role.save();
+
+        env.user.setRole(role);
+        env.user.update();
+
+        Role role2 = env.enterprise.findUser(UserPredicates.userNick(env.user.getNick())).getRole();
+
+        assertEquals(role.getId(), role2.getId());
+        assertEquals(role2.getName(), "Another role");
     }
 
     public void testListUser()

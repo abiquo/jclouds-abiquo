@@ -80,8 +80,12 @@ public class User extends DomainWrapper<UserDto>
 
     public void update()
     {
-        // update role link
-        target.searchLink("role").setHref(role.unwrap().getEditLink().getHref());
+        // update role link (if exists)
+        if (role != null)
+        {
+            target.searchLink("role").setHref(role.unwrap().getEditLink().getHref());
+        }
+
         target = context.getApi().getEnterpriseClient().updateUser(target);
     }
 
