@@ -9,7 +9,7 @@ details on building and using the **jclouds-abiquo** provider and API client in 
 
 You can also find detailed information
 about the Abiquo REST API in the
-[Abiquo API Reference](http://community.abiquo.com/display/ABI18/API+Reference) documentation page.
+[Abiquo API Reference](http://community.abiquo.com/display/ABI20/API+Reference) documentation page.
 
 
 Note on patches/pull requests
