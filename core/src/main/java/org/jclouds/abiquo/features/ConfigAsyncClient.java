@@ -29,6 +29,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;
@@ -52,13 +53,14 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/config")
 public interface ConfigAsyncClient
 {
-    /* ********************** License ********************** */
+    /*   ********************** License ********************** */
 
     /**
      * @see ConfigClient#listLicenses()
      */
     @GET
     @Path("/licenses")
+    @EnterpriseEdition
     ListenableFuture<LicensesDto> listLicenses();
 
     /**
@@ -66,6 +68,7 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/licenses")
+    @EnterpriseEdition
     ListenableFuture<LicensesDto> listLicenses(
         @BinderParam(AppendOptionsToPath.class) LicenseOptions options);
 
@@ -74,12 +77,14 @@ public interface ConfigAsyncClient
      */
     @POST
     @Path("/licenses")
+    @EnterpriseEdition
     ListenableFuture<LicenseDto> addLicense(@BinderParam(BindToXMLPayload.class) LicenseDto license);
 
     /**
      * @see ConfigClient#removeLicense(LicenseDto)
      */
     @DELETE
+    @EnterpriseEdition
     ListenableFuture<Void> removeLicense(
         @EndpointLink("edit") @BinderParam(BindToPath.class) LicenseDto license);
 }

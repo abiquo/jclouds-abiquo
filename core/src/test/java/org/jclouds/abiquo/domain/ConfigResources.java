@@ -38,7 +38,7 @@ public class ConfigResources
     public static LicenseDto licensePost()
     {
         LicenseDto license = new LicenseDto();
-        license.setCode(readLicense("expiredLicense"));
+        license.setCode(readLicense("license/expired"));
         license.setCustomerid("3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c");
         return license;
     }
@@ -58,7 +58,7 @@ public class ConfigResources
         buffer.append("<license>");
         buffer.append(link("/admin/enterprises/config/licenses/1", "edit"));
         buffer.append("<customerid>3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c</customerid>");
-        buffer.append("<code>" + readLicense("expiredLicense") + "</code>");
+        buffer.append("<code>" + readLicense("license/expired") + "</code>");
         buffer.append("<id>1</id>");
         buffer.append("</license>");
         return buffer.toString();
@@ -69,7 +69,7 @@ public class ConfigResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<license>");
         buffer.append("<customerid>3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c</customerid>");
-        buffer.append("<code>" + readLicense("expiredLicense") + "</code>");
+        buffer.append("<code>" + readLicense("license/expired") + "</code>");
         buffer.append("</license>");
         return buffer.toString();
     }

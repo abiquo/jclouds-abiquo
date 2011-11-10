@@ -21,6 +21,7 @@ package org.jclouds.abiquo.domain.config;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.server.core.config.LicenseDto;
 
@@ -30,6 +31,7 @@ import com.abiquo.server.core.config.LicenseDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
+@EnterpriseEdition
 public class License extends DomainWrapper<LicenseDto>
 {
     /**

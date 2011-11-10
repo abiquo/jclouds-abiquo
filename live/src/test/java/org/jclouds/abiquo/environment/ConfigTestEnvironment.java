@@ -84,7 +84,7 @@ public class ConfigTestEnvironment implements TestEnvironment
 
     public static String readLicense() throws IOException
     {
-        URL url = ConfigTestEnvironment.class.getResource("/expiredLicense");
+        URL url = ConfigTestEnvironment.class.getResource("/license/expired");
 
         return Resources.toString(url, Charset.defaultCharset());
     }
