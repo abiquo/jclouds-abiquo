@@ -46,7 +46,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncClient>
 {
-    /* ********************** Role ********************** */
+    /*********************** Role ***********************/
 
     public void testListRoles() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -131,7 +131,26 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         checkFilters(request);
     }
 
-    /* s********************** Current User ********************** */
+    public void testListPrivilegesByRoles() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method = AdminAsyncClient.class.getMethod("listPrivileges", RoleDto.class);
+        GeneratedHttpRequest<AdminAsyncClient> request =
+            processor.createRequest(method, AdminResources.rolePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/roles/1/action/privileges HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Current User **********************/
 
     public void testGetCurrentUser() throws SecurityException, NoSuchMethodException, IOException
     {

@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.features;
 
 import org.jclouds.abiquo.domain.config.License;
+import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
@@ -38,7 +39,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseAdministrationService.class)
 public interface AdministrationService
 {
-    /* ********************** Datacenter ********************** */
+    /*********************** Datacenter ***********************/
 
     /**
      * Get the list of all datacenters.
@@ -55,7 +56,7 @@ public interface AdministrationService
      */
     Datacenter findDatacenter(final Predicate<Datacenter> filter);
 
-    /* ********************** Enterprise ********************** */
+    /*********************** Enterprise ***********************/
 
     /**
      * Get the list of all enterprises.
@@ -73,7 +74,7 @@ public interface AdministrationService
      */
     Enterprise findEnterprise(final Predicate<Enterprise> filter);
 
-    /* ********************** Role ********************** */
+    /*********************** Role ***********************/
 
     /**
      * Get the list of global roles.
@@ -90,14 +91,31 @@ public interface AdministrationService
      */
     Role findRole(final Predicate<Role> filter);
 
-    /* ********************** User ********************** */
+    /*********************** Privilege ***********************/
+
+    /**
+     * Get the list of global privileges.
+     */
+    Iterable<Privilege> listPrivileges();
+
+    /**
+     * Get the list of privileges matching the given filter.
+     */
+    Iterable<Privilege> listPrivileges(final Predicate<Privilege> filter);
+
+    /**
+     * Get the first privilege that matches the given filter or <code>null</code> if none is found.
+     */
+    Privilege findPrivilege(final Predicate<Privilege> filter);
+
+    /*********************** User ***********************/
 
     /**
      * Get the current user.
      */
     User getCurrentUserInfo();
 
-    /* ********************** License ********************** */
+    /*********************** License ***********************/
 
     /**
      * Get the list of all licenses.

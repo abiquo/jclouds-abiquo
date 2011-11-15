@@ -17,40 +17,32 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain.infrastructure;
+package org.jclouds.abiquo.domain.config;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
-import com.abiquo.server.core.infrastructure.DatastoreDto;
+import com.abiquo.server.core.enterprise.PrivilegeDto;
 
 /**
- * Adds high level functionality to {@link DatastoreDto}.
+ * Adds high level functionality to {@link PrivilegeDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public class Datastore extends DomainWrapper<DatastoreDto>
+@EnterpriseEdition
+public class Privilege extends DomainWrapper<PrivilegeDto>
 {
     /**
      * Constructor to be used only by the builder. This resource cannot be created.
      */
-    private Datastore(final AbiquoContext context, final DatastoreDto target)
+    private Privilege(final AbiquoContext context, final PrivilegeDto target)
     {
         super(context, target);
     }
 
     // Delegate methods
-
-    public String getDatastoreUUID()
-    {
-        return target.getDatastoreUUID();
-    }
-
-    public String getDirectory()
-    {
-        return target.getDirectory();
-    }
 
     public Integer getId()
     {
@@ -60,31 +52,6 @@ public class Datastore extends DomainWrapper<DatastoreDto>
     public String getName()
     {
         return target.getName();
-    }
-
-    public String getRootPath()
-    {
-        return target.getRootPath();
-    }
-
-    public long getSize()
-    {
-        return target.getSize();
-    }
-
-    public long getUsedSize()
-    {
-        return target.getUsedSize();
-    }
-
-    public boolean isEnabled()
-    {
-        return target.isEnabled();
-    }
-
-    public void setEnabled(final boolean enabled)
-    {
-        target.setEnabled(enabled);
     }
 
 }

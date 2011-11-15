@@ -95,13 +95,6 @@ public class ListLicensesImplLiveTest extends BaseAbiquoStrategyLiveTest
         assertEquals(size(licenses), 0);
     }
 
-    public void testExecutePredicateInactiveWithoutResults()
-    {
-        Iterable<License> licenses = strategy.execute(LicensePredicates.customerId("FAIL"));
-        assertNotNull(licenses);
-        assertEquals(size(licenses), 0);
-    }
-
     public void testExecutePredicateWithResults()
     {
         Iterable<License> licenses =

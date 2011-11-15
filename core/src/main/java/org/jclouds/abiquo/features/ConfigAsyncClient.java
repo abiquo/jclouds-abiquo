@@ -24,6 +24,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
@@ -33,11 +34,15 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
+import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
+import com.abiquo.server.core.enterprise.PrivilegeDto;
+import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -53,7 +58,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Path("/config")
 public interface ConfigAsyncClient
 {
-    /*   ********************** License ********************** */
+    /*********************** License ***********************/
 
     /**
      * @see ConfigClient#listLicenses()
@@ -87,4 +92,21 @@ public interface ConfigAsyncClient
     @EnterpriseEdition
     ListenableFuture<Void> removeLicense(
         @EndpointLink("edit") @BinderParam(BindToPath.class) LicenseDto license);
+
+    /*********************** Privilege ***********************/
+
+    /**
+     * @see ConfigClient#listPrivileges()
+     */
+    @GET
+    @Path("/privileges")
+    ListenableFuture<PrivilegesDto> listPrivileges();
+
+    /**
+     * @see ConfigClient#getPrivilege(Integer)
+     */
+    @GET
+    @Path("/privileges/{privilege}")
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<PrivilegeDto> getPrivilege(@PathParam("privilege") Integer privilegeId);
 }

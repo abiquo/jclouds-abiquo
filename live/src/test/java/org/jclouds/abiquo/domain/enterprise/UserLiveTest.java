@@ -80,16 +80,12 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
 
     public void testChangeRoleAndUpdate()
     {
-        Role role = Role.Builder.fromRole(env.role).build();
-        role.setName("Another role");
-        role.save();
-
-        env.user.setRole(role);
+        env.user.setRole(env.anotherRole);
         env.user.update();
 
         Role role2 = env.enterprise.findUser(UserPredicates.userNick(env.user.getNick())).getRole();
 
-        assertEquals(role.getId(), role2.getId());
+        assertEquals(env.anotherRole.getId(), role2.getId());
         assertEquals(role2.getName(), "Another role");
     }
 

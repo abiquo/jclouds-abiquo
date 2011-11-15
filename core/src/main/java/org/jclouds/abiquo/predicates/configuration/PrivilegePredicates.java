@@ -23,32 +23,32 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
-import org.jclouds.abiquo.domain.config.License;
+import org.jclouds.abiquo.domain.config.Privilege;
 
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link License} filters.
+ * Container for {@link Privilege} filters.
  * 
  * @author Ignasi Barrera
  */
-public class LicensePredicates
+public class PrivilegePredicates
 {
-    public static Predicate<License> customerId(final String customerId)
+    public static Predicate<Privilege> name(final String name)
     {
-        return customerIds(checkNotNull(customerId, "Id must be defined"));
+        return names(checkNotNull(name, "Name must be defined"));
     }
 
-    public static Predicate<License> customerIds(final String... customerIds)
+    public static Predicate<Privilege> names(final String... names)
     {
-        checkNotNull(customerIds, "codes must be defined");
+        checkNotNull(names, "Names must be defined");
 
-        return new Predicate<License>()
+        return new Predicate<Privilege>()
         {
             @Override
-            public boolean apply(final License license)
+            public boolean apply(final Privilege privilege)
             {
-                return Arrays.asList(customerIds).contains(license.getCustomerId());
+                return Arrays.asList(names).contains(privilege.getName());
             }
         };
     }

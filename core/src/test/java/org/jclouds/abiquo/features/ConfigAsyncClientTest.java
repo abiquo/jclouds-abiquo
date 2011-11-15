@@ -28,6 +28,7 @@ import org.jclouds.abiquo.domain.ConfigResources;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
+import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
@@ -44,9 +45,9 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsyncClient>
 {
-    /* ********************** License ********************** */
+    /*********************** License ***********************/
 
-    public void testListLicense() throws SecurityException, NoSuchMethodException, IOException
+    public void testListLicenses() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = ConfigAsyncClient.class.getMethod("listLicenses");
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
@@ -111,6 +112,40 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Privilege ***********************/
+
+    public void testListPrivileges() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("listPrivileges");
+        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/privileges HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetPrivilege() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("getPrivilege", Integer.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/privileges/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
         checkFilters(request);
     }

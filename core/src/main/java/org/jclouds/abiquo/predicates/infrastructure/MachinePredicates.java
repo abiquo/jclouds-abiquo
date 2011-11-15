@@ -17,38 +17,39 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.configuration;
+package org.jclouds.abiquo.predicates.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
-import org.jclouds.abiquo.domain.config.License;
+import org.jclouds.abiquo.domain.infrastructure.Machine;
 
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link License} filters.
+ * Container for {@link Machine} filters.
  * 
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-public class LicensePredicates
+public class MachinePredicates
 {
-    public static Predicate<License> customerId(final String customerId)
+    public static Predicate<Machine> machineIP(final String ip)
     {
-        return customerIds(checkNotNull(customerId, "Id must be defined"));
+        return machineIPs(checkNotNull(ip, "ip must be defined"));
     }
 
-    public static Predicate<License> customerIds(final String... customerIds)
+    public static Predicate<Machine> machineIPs(final String... ips)
     {
-        checkNotNull(customerIds, "codes must be defined");
+        checkNotNull(ips, "ips must be defined");
 
-        return new Predicate<License>()
+        return new Predicate<Machine>()
         {
             @Override
-            public boolean apply(final License license)
+            public boolean apply(final Machine machine)
             {
-                return Arrays.asList(customerIds).contains(license.getCustomerId());
+                return Arrays.asList(ips).contains(machine.getIp());
             }
         };
     }

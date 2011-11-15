@@ -19,10 +19,19 @@
 
 package org.jclouds.abiquo.domain.enterprise;
 
+import static com.google.common.collect.Iterables.filter;
+
+import java.util.List;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.config.Privilege;
 
+import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link RoleDto}.
@@ -60,6 +69,38 @@ public class Role extends DomainWrapper<RoleDto>
     public void update()
     {
         target = context.getApi().getAdminClient().updateRole(target);
+    }
+
+    public void addPrivilege(final Privilege privilege)
+    {
+        // TODO Disabled: A non commited improvement is necessary in the api server to allow this
+        // feature
+        // checkNotNull(privilege, ValidationErrors.NULL_RESOURCE + Privilege.class);
+        // checkNotNull(privilege.getId(), ValidationErrors.MISSING_REQUIRED_FIELD +
+        // Privilege.class);
+        //
+        // target.addLink(new RESTLink("privilege" + privilege.getId(),
+        // privilege.unwrap().searchLink(
+        // "self").getHref()));
+    }
+
+    // Children access
+
+    public List<Privilege> listPrivileges()
+    {
+        PrivilegesDto dto = context.getApi().getAdminClient().listPrivileges(target);
+
+        return wrap(context, Privilege.class, dto.getCollection());
+    }
+
+    public List<Privilege> listPrivileges(final Predicate<Privilege> filter)
+    {
+        return Lists.newLinkedList(filter(listPrivileges(), filter));
+    }
+
+    public Privilege findPrivileges(final Predicate<Privilege> filter)
+    {
+        return Iterables.getFirst(filter(listPrivileges(), filter), null);
     }
 
     // Builder

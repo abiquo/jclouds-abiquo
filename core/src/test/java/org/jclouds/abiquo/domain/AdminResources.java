@@ -36,6 +36,8 @@ public class AdminResources
     public static RoleDto rolePost()
     {
         RoleDto role = new RoleDto();
+        role.addLink(new RESTLink("privileges",
+            "http://localhost/api/admin/roles/1/action/privileges"));
         role.setName("HAWAIAN_ADMIN");
         return role;
     }
@@ -53,6 +55,7 @@ public class AdminResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<role>");
+        buffer.append(link("/admin/roles/1/action/privileges", "privileges"));
         buffer.append("<blocked>false</blocked>");
         buffer.append("<name>HAWAIAN_ADMIN</name>");
         buffer.append("</role>");
@@ -64,6 +67,7 @@ public class AdminResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<role>");
         buffer.append(link("/admin/roles/1", "edit"));
+        buffer.append(link("/admin/roles/1/action/privileges", "privileges"));
         buffer.append("<blocked>false</blocked>");
         buffer.append("<id>1</id>");
         buffer.append("<name>HAWAIAN_ADMIN</name>");

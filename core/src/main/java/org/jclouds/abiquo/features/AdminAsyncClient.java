@@ -41,6 +41,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
@@ -58,7 +59,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 @Consumes(MediaType.APPLICATION_XML)
 public interface AdminAsyncClient
 {
-    /* ********************** Login ********************** */
+    /*********************** Login ***********************/
 
     /**
      * @see AdminClient#getCurrentUser()
@@ -67,7 +68,7 @@ public interface AdminAsyncClient
     @Path("/login")
     ListenableFuture<UserDto> getCurrentUser();
 
-    /* ********************** Role ********************** */
+    /*********************** Role ***********************/
 
     /**
      * @see AdminClient#listRoles()
@@ -122,4 +123,11 @@ public interface AdminAsyncClient
     @Produces(AbiquoMediaType.APPLICATION_LINK_XML)
     @Consumes(AbiquoMediaType.APPLICATION_LINK_XML)
     ListenableFuture<RoleDto> createRole(@BinderParam(BindToXMLPayload.class) RoleDto role);
+
+    /**
+     * @see AdminClient#listPrivileges(RoleDto)
+     */
+    @GET
+    ListenableFuture<PrivilegesDto> listPrivileges(
+        @EndpointLink("privileges") @BinderParam(BindToPath.class) RoleDto role);
 }

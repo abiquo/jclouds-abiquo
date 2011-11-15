@@ -17,17 +17,20 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.reference;
+package org.jclouds.abiquo.strategy.config;
+
+import org.jclouds.abiquo.domain.config.Privilege;
+import org.jclouds.abiquo.strategy.ListRootEntities;
+import org.jclouds.abiquo.strategy.config.internal.ListPrivilegesImpl;
+
+import com.google.inject.ImplementedBy;
 
 /**
- * Error constants.
+ * List privileges.
  * 
- * @author Francesc Montserrat
+ * @author Ignasi Barrera
  */
-public class ValidationErrors
+@ImplementedBy(ListPrivilegesImpl.class)
+public interface ListPrivileges extends ListRootEntities<Privilege>
 {
-    public static final String NULL_RESOURCE = "The resource should be assigned to a ";
-
-    public static final String MISSING_REQUIRED_FIELD = "Missing required field: ";
-
 }

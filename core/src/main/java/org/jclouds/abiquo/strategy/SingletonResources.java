@@ -17,17 +17,38 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.reference;
+package org.jclouds.abiquo.strategy;
+
+import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
+
+import javax.inject.Singleton;
+
+import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.enterprise.User;
+
+import com.abiquo.server.core.enterprise.UserDto;
+import com.google.inject.Inject;
 
 /**
- * Error constants.
+ * Get logged user.
  * 
+ * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public class ValidationErrors
+@Singleton
+public class SingletonResources
 {
-    public static final String NULL_RESOURCE = "The resource should be assigned to a ";
+    protected final AbiquoContext context;
 
-    public static final String MISSING_REQUIRED_FIELD = "Missing required field: ";
+    @Inject
+    SingletonResources(final AbiquoContext context)
+    {
+        this.context = context;
+    }
 
+    public User getLogin()
+    {
+        UserDto result = context.getApi().getAdminClient().getCurrentUser();
+        return wrap(context, User.class, result);
+    }
 }

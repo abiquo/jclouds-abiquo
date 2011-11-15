@@ -21,17 +21,22 @@ package org.jclouds.abiquo.domain.admin;
 
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.configuration.PrivilegePredicates;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.enterprise.PrivilegeDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 
 /**
@@ -73,5 +78,19 @@ public class RoleLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
         {
             assertHasError(ex, Status.CONFLICT, "ROLE-7");
         }
+    }
+
+    @Test(enabled = false)
+    // Disabled: A non commited improvement is necessary in the api server to allow this feature
+    public void testAddPrivilege()
+    {
+        PrivilegeDto dto = env.configClient.getPrivilege(8);
+        env.role.addPrivilege(DomainWrapper.wrap(context, Privilege.class, dto));
+
+        env.role.update();
+
+        Privilege privilege = env.role.findPrivileges(PrivilegePredicates.name(dto.getName()));
+
+        assertNotNull(privilege);
     }
 }

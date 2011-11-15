@@ -33,6 +33,7 @@ import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.AdminClient;
 import org.jclouds.abiquo.features.AdministrationService;
+import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
@@ -54,6 +55,8 @@ public class EnterpriseTestEnvironment implements TestEnvironment
 
     public AdminClient adminClient;
 
+    public ConfigClient configClient;
+
     public Enterprise enterprise;
 
     public Datacenter datacenter;
@@ -61,6 +64,8 @@ public class EnterpriseTestEnvironment implements TestEnvironment
     public User user;
 
     public Role role;
+
+    public Role anotherRole;
 
     public AdministrationService administrationService;
 
@@ -72,13 +77,14 @@ public class EnterpriseTestEnvironment implements TestEnvironment
         this.enterpriseClient = context.getApi().getEnterpriseClient();
         this.infrastructureClient = context.getApi().getInfrastructureClient();
         this.adminClient = context.getApi().getAdminClient();
+        this.configClient = context.getApi().getConfigClient();
     }
 
     @Override
     public void setup() throws Exception
     {
         createEnterprise();
-        createRole();
+        createRoles();
         createUser();
         createDatacenter();
     }
@@ -87,7 +93,8 @@ public class EnterpriseTestEnvironment implements TestEnvironment
     public void tearDown() throws Exception
     {
         deleteUser();
-        deleteRole();
+        deleteRole(role);
+        deleteRole(anotherRole);
         deleteEnterprise();
         deleteDatacenter();
     }
@@ -107,11 +114,17 @@ public class EnterpriseTestEnvironment implements TestEnvironment
         assertEquals(role.getId(), user.getRole().getId());
     }
 
-    private void createRole()
+    private void createRoles()
     {
         role = Role.builder(context).name(randomName()).blocked(false).build();
         role.save();
+
+        anotherRole = Role.Builder.fromRole(role).build();
+        anotherRole.setName("Another role");
+        anotherRole.save();
+
         assertNotNull(role.getId());
+        assertNotNull(anotherRole.getId());
     }
 
     private void createEnterprise()
@@ -161,7 +174,7 @@ public class EnterpriseTestEnvironment implements TestEnvironment
         }
     }
 
-    private void deleteRole()
+    private void deleteRole(final Role role)
     {
         if (role != null)
         {

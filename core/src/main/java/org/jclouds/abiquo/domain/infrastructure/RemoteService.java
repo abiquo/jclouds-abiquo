@@ -116,14 +116,14 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         public Builder(final AbiquoContext context, final Datacenter datacenter)
         {
             super();
-            checkNotNull(datacenter, ValidationErrors.NULL_PARENT + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
             this.datacenter = datacenter;
             this.context = context;
         }
 
         public Builder datacenter(final Datacenter datacenter)
         {
-            checkNotNull(datacenter, ValidationErrors.NULL_PARENT + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
             this.datacenter = datacenter;
             return this;
         }

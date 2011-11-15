@@ -25,14 +25,16 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.config.License;
+import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.AdministrationService;
-import org.jclouds.abiquo.strategy.GlobalResources;
+import org.jclouds.abiquo.strategy.SingletonResources;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
 import org.jclouds.abiquo.strategy.config.ListLicenses;
+import org.jclouds.abiquo.strategy.config.ListPrivileges;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 
@@ -56,20 +58,24 @@ public class BaseAdministrationService implements AdministrationService
 
     private final ListLicenses listLicenses;
 
-    private final GlobalResources globalResources;
+    private final ListPrivileges listPrivileges;
+
+    private final SingletonResources singletonResources;
 
     /*********************** Datacenter ********************** */
 
     @Inject
     protected BaseAdministrationService(final ListDatacenters listDatacenters,
         final ListEnterprises listEnterprises, final ListRoles listRoles,
-        final ListLicenses listLicenses, final GlobalResources globalResources)
+        final ListLicenses listLicenses, final ListPrivileges listPrivileges,
+        final SingletonResources globalResources)
     {
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
         this.listEnterprises = checkNotNull(listEnterprises, "listEnterprises");
         this.listRoles = checkNotNull(listRoles, "listRoles");
         this.listLicenses = checkNotNull(listLicenses, "listLicenses");
-        this.globalResources = checkNotNull(globalResources, "globalResources");
+        this.listPrivileges = checkNotNull(listPrivileges, "listPrivileges");
+        this.singletonResources = checkNotNull(globalResources, "globalResources");
     }
 
     @Override
@@ -130,15 +136,34 @@ public class BaseAdministrationService implements AdministrationService
         return Iterables.getFirst(listRoles(filter), null);
     }
 
-    /*********************** User ********************** */
+    /*********************** Privilege ***********************/
+    @Override
+    public Privilege findPrivilege(final Predicate<Privilege> filter)
+    {
+        return Iterables.getFirst(listPrivileges(filter), null);
+    }
+
+    @Override
+    public Iterable<Privilege> listPrivileges()
+    {
+        return listPrivileges.execute();
+    }
+
+    @Override
+    public Iterable<Privilege> listPrivileges(final Predicate<Privilege> filter)
+    {
+        return listPrivileges.execute(filter);
+    }
+
+    /*********************** User ***********************/
 
     @Override
     public User getCurrentUserInfo()
     {
-        return globalResources.getLogin();
+        return singletonResources.getLogin();
     }
 
-    /*********************** License ********************** */
+    /*********************** License ***********************/
 
     @Override
     public Iterable<License> listLicenses()

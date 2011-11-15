@@ -166,7 +166,7 @@ public class Machine extends DomainWrapper<MachineDto>
         public Builder(final AbiquoContext context, final Rack rack)
         {
             super();
-            checkNotNull(rack, ValidationErrors.NULL_PARENT + Rack.class);
+            checkNotNull(rack, ValidationErrors.NULL_RESOURCE + Rack.class);
             this.rack = rack;
             this.context = context;
         }
@@ -304,7 +304,7 @@ public class Machine extends DomainWrapper<MachineDto>
 
         public Builder rack(final Rack rack)
         {
-            checkNotNull(rack, ValidationErrors.NULL_PARENT + Datacenter.class);
+            checkNotNull(rack, ValidationErrors.NULL_RESOURCE + Datacenter.class);
             this.rack = rack;
             return this;
         }

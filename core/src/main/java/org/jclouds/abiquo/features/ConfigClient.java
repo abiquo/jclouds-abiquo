@@ -27,6 +27,8 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
+import com.abiquo.server.core.enterprise.PrivilegeDto;
+import com.abiquo.server.core.enterprise.PrivilegesDto;
 
 /**
  * Provides synchronous access to Abiquo Admin API.
@@ -39,7 +41,7 @@ import com.abiquo.server.core.config.LicensesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface ConfigClient
 {
-    /*   ********************** License ********************** */
+    /*********************** License ***********************/
 
     /**
      * List all licenses.
@@ -74,4 +76,22 @@ public interface ConfigClient
      */
     @EnterpriseEdition
     void removeLicense(LicenseDto license);
+
+    /*********************** Privilege ***********************/
+
+    /**
+     * List all privileges in the system.
+     * 
+     * @return The list of privileges.
+     */
+    PrivilegesDto listPrivileges();
+
+    /**
+     * Get the given privilege.
+     * 
+     * @param privilegeId The id of the privilege.
+     * @return The privilege or <code>null</code> if it does not exist.
+     */
+    PrivilegeDto getPrivilege(Integer privilegeId);
+
 }

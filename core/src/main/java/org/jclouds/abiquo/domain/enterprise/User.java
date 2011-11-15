@@ -134,8 +134,8 @@ public class User extends DomainWrapper<UserDto>
         public Builder(final AbiquoContext context, final Enterprise enterprise, final Role role)
         {
             super();
-            checkNotNull(enterprise, ValidationErrors.NULL_PARENT + Enterprise.class);
-            checkNotNull(role, ValidationErrors.NULL_PARENT + Role.class);
+            checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
+            checkNotNull(role, ValidationErrors.NULL_RESOURCE + Role.class);
             this.context = context;
             this.enterprise = enterprise;
             this.role = role;
@@ -143,7 +143,7 @@ public class User extends DomainWrapper<UserDto>
 
         public Builder enterprise(final Enterprise enterprise)
         {
-            checkNotNull(enterprise, ValidationErrors.NULL_PARENT + Enterprise.class);
+            checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
             this.enterprise = enterprise;
             return this;
         }
