@@ -24,6 +24,8 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
+import java.util.List;
+
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -80,16 +82,18 @@ public class RoleLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
         }
     }
 
-    @Test(enabled = false)
-    // Disabled: A non commited improvement is necessary in the api server to allow this feature
     public void testAddPrivilege()
     {
         PrivilegeDto dto = env.configClient.getPrivilege(8);
-        env.role.addPrivilege(DomainWrapper.wrap(context, Privilege.class, dto));
+        Privilege privilege = DomainWrapper.wrap(context, Privilege.class, dto);
+        List<Privilege> privileges = env.role.listPrivileges();
+        privileges.add(privilege);
+
+        env.role.setPrivileges(privileges);
 
         env.role.update();
 
-        Privilege privilege = env.role.findPrivileges(PrivilegePredicates.name(dto.getName()));
+        privilege = env.role.findPrivileges(PrivilegePredicates.name(dto.getName()));
 
         assertNotNull(privilege);
     }

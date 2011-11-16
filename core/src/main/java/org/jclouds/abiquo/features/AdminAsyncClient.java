@@ -128,6 +128,8 @@ public interface AdminAsyncClient
      * @see AdminClient#listPrivileges(RoleDto)
      */
     @GET
+    @JAXBResponseParser
+    @Consumes(AbiquoMediaType.APPLICATION_FLAT_XML)
     ListenableFuture<PrivilegesDto> listPrivileges(
         @EndpointLink("privileges") @BinderParam(BindToPath.class) RoleDto role);
 }

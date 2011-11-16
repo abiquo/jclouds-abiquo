@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain.enterprise;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
@@ -26,7 +27,10 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
+import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.google.common.base.Predicate;
@@ -71,17 +75,33 @@ public class Role extends DomainWrapper<RoleDto>
         target = context.getApi().getAdminClient().updateRole(target);
     }
 
-    public void addPrivilege(final Privilege privilege)
+    @EnterpriseEdition
+    public void setPrivileges(final List<Privilege> privileges)
     {
-        // TODO Disabled: A non commited improvement is necessary in the api server to allow this
-        // feature
-        // checkNotNull(privilege, ValidationErrors.NULL_RESOURCE + Privilege.class);
-        // checkNotNull(privilege.getId(), ValidationErrors.MISSING_REQUIRED_FIELD +
-        // Privilege.class);
-        //
-        // target.addLink(new RESTLink("privilege" + privilege.getId(),
-        // privilege.unwrap().searchLink(
-        // "self").getHref()));
+        for (Privilege privilege : privileges)
+        {
+            addPrivilege(privilege);
+        }
+    }
+
+    @EnterpriseEdition
+    private void addPrivilege(final Privilege privilege)
+    {
+        checkNotNull(privilege, ValidationErrors.NULL_RESOURCE + Privilege.class);
+        checkNotNull(privilege.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
+            + Privilege.class);
+
+        RESTLink link = privilege.unwrap().searchLink("self");
+
+        // rel would be "privilege" if the object is coming from a privilege list.
+        if (link == null)
+        {
+            link = privilege.unwrap().searchLink("privilege");
+        }
+
+        checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
+
+        target.addLink(new RESTLink("privilege" + privilege.getId(), link.getHref()));
     }
 
     // Children access

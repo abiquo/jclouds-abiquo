@@ -35,6 +35,8 @@ public class AbiquoMediaType extends MediaType
 
     public final static String APPLICATION_LINK_XML = "application/link+xml";
 
+    public final static String APPLICATION_FLAT_XML = "application/flat+xml";
+
     public final static String APPLICATION_OCTET_STEAM = "application/octet-stream";
 
     public static final String APPLICATION_SINGLE_MACHINE_XML = "application/machinedto+xml";

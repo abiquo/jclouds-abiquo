@@ -140,7 +140,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/roles/1/action/privileges HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: application/flat+xml\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
