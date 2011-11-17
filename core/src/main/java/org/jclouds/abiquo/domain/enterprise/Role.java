@@ -75,6 +75,19 @@ public class Role extends DomainWrapper<RoleDto>
         target = context.getApi().getAdminClient().updateRole(target);
     }
 
+    public void setEnterprise(final Enterprise enterprise)
+    {
+        checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
+        checkNotNull(enterprise.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
+            + Enterprise.class);
+
+        RESTLink link = enterprise.unwrap().searchLink("edit");
+
+        checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
+
+        target.addLink(new RESTLink("enterprise", link.getHref()));
+    }
+
     @EnterpriseEdition
     public void setPrivileges(final List<Privilege> privileges)
     {

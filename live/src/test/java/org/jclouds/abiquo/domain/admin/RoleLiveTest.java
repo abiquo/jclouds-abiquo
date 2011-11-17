@@ -36,6 +36,7 @@ import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.configuration.PrivilegePredicates;
+import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.PrivilegeDto;
@@ -80,6 +81,18 @@ public class RoleLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
         {
             assertHasError(ex, Status.CONFLICT, "ROLE-7");
         }
+    }
+
+    public void testCreateEnterpriseRole()
+    {
+        Role entRole = Role.Builder.fromRole(env.role).build();
+        entRole.setName(entRole.getName() + "enterprise");
+        entRole.setEnterprise(env.enterprise);
+        entRole.save();
+
+        entRole = env.enterprise.findRole(RolePredicates.roleName(entRole.getName()));
+
+        assertNotNull(entRole);
     }
 
     public void testAddPrivilege()

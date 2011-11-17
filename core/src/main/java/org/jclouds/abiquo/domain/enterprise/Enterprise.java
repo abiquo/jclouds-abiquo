@@ -31,6 +31,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -98,6 +99,22 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return Iterables.getFirst(filter(listUsers(), filter), null);
     }
 
+    public List<Role> listRoles()
+    {
+        RolesDto dto = context.getApi().getAdminClient().listRoles(target);
+        return wrap(context, Role.class, dto.getCollection());
+    }
+
+    public List<Role> listRoles(final Predicate<Role> filter)
+    {
+        return Lists.newLinkedList(filter(listRoles(), filter));
+    }
+
+    public Role findRole(final Predicate<Role> filter)
+    {
+        return Iterables.getFirst(filter(listRoles(), filter), null);
+    }
+
     // Actions
 
     public Limits allowDatacenter(final Datacenter datacenter)
@@ -107,8 +124,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         // Save new limits
         DatacenterLimitsDto dto =
-            context.getApi().getEnterpriseClient()
-                .createLimits(this.unwrap(), datacenter.unwrap(), limits.unwrap());
+            context.getApi().getEnterpriseClient().createLimits(this.unwrap(), datacenter.unwrap(),
+                limits.unwrap());
 
         return wrap(context, Limits.class, dto);
     }
@@ -178,13 +195,12 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return Enterprise.builder(in.context).name(in.getName())
-                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
-                .storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+            return Enterprise.builder(in.context).name(in.getName()).ramLimits(
+                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
+                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
+                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
+                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
+                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
                 .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
                 .isReservationRestricted(in.getIsReservationRestricted());
         }

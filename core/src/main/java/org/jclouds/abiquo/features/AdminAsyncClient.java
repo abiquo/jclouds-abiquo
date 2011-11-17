@@ -27,20 +27,24 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.functions.enterprise.EnterpriseId;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.RolesDto;
@@ -76,6 +80,14 @@ public interface AdminAsyncClient
     @GET
     @Path("/admin/roles")
     ListenableFuture<RolesDto> listRoles();
+
+    /**
+     * @see AdminClient#listRoles(Enterprise enterprise)
+     */
+    @GET
+    @Path("/admin/roles")
+    ListenableFuture<RolesDto> listRoles(
+        @QueryParam("identerprise") @ParamParser(EnterpriseId.class) final EnterpriseDto enterprise);
 
     /**
      * @see AdminClient#getRole(UserDto)

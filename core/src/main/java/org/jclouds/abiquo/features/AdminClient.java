@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.RolesDto;
@@ -39,7 +40,7 @@ import com.abiquo.server.core.enterprise.UserDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface AdminClient
 {
-    /*     ********************** User ********************** */
+    /*        ********************** User ********************** */
 
     /**
      * Get the information of the current user.
@@ -48,7 +49,7 @@ public interface AdminClient
      */
     UserDto getCurrentUser();
 
-    /*     ********************** Role ********************** */
+    /*        ********************** Role ********************** */
 
     /**
      * List global roles.
@@ -56,6 +57,13 @@ public interface AdminClient
      * @return The list of global Roles.
      */
     RolesDto listRoles();
+
+    /**
+     * List enterprise roles.
+     * 
+     * @return The list of Roles for the given enterprise.
+     */
+    RolesDto listRoles(EnterpriseDto enterprise);
 
     /**
      * Retrieves the role of the given user.
