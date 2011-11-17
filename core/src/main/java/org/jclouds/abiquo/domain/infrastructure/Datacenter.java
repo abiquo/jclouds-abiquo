@@ -46,7 +46,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource
+ * @see <a href="http://community.abiquo.com/display/ABI20/Datacenter+Resource">
+ *      http://community.abiquo.com/display/ABI20/Datacenter+Resource</a>
  */
 public class Datacenter extends DomainWrapper<DatacenterDto>
 {
@@ -58,7 +59,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Indicates the Abiquo edition to create the available remote services.
      * 
-     * @see http://wiki.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform
+     * @see <a href="http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform">
+     *      http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform</a>
      */
     private AbiquoEdition edition;
 
@@ -72,12 +74,25 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
     // Domain operations
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-DeleteanexistingDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-DeleteanexistingDatacenter</a>
+     */
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteDatacenter(target);
         target = null;
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-CreateanewDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-CreateanewDatacenter</a>
+     *@see <a
+     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService">
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService</a>
+     */
     public void save()
     {
         // Datacenter must be persisted first, so links get populated in the target object
@@ -90,6 +105,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         }
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-UpdateanexistingDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-UpdateanexistingDatacenter</a>
+     */
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateDatacenter(target);
@@ -97,6 +117,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
     // Children access
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks">
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks</a>
+     */
     public List<Rack> listRacks()
     {
         RacksDto racks = context.getApi().getInfrastructureClient().listRacks(target);
@@ -113,6 +138,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return Iterables.getFirst(filter(listRacks(), filter), null);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-RetrievealistofRemoteServices">
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-RetrievealistofRemoteServices</a>
+     */
     public List<RemoteService> listRemoteServices()
     {
         RemoteServicesDto remoteServices =
@@ -150,8 +180,43 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         RemoteService.builder(context, this).type(type).ip(this.ip).build().save();
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinadatacenterforalltheenterprisesusingit">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinadatacenterforalltheenterprisesusingit</a>
+     */
+    public List<Limits> listLimits()
+    {
+        DatacentersLimitsDto dto =
+            context.getApi().getInfrastructureClient().listLimits(this.unwrap());
+        return DomainWrapper.wrap(context, Limits.class, dto.getCollection());
+    }
+
+    public List<Limits> listLimits(final Predicate<Limits> filter)
+    {
+        return Lists.newLinkedList(filter(listLimits(), filter));
+    }
+
+    public Limits findLimits(final Predicate<Limits> filter)
+    {
+        return Iterables.getFirst(filter(listLimits(), filter), null);
+    }
+
     // Actions
 
+    /**
+     * Searches a remote machine and retrieves an Machine object with its information.
+     * 
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @return A physical machine if found or <code>null</code>.
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation</a>
+     */
     public Machine discoverSingleMachine(final String ip, final HypervisorType hypervisorType,
         final String user, final String password)
     {
@@ -162,6 +227,20 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, Machine.class, dto);
     }
 
+    /**
+     * Searches a remote machine and retrieves an Machine object with its information.
+     * 
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @param port Port to connect.
+     * @return A physical machine if found or <code>null</code>.
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation</a>
+     */
     public Machine discoverSingleMachine(final String ip, final HypervisorType hypervisorType,
         final String user, final String password, final int port)
     {
@@ -172,6 +251,20 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, Machine.class, dto);
     }
 
+    /**
+     * Searches multiple remote machines and retrieves an Machine list with its information.
+     * 
+     * @param ipFrom IP address of the remote first hypervisor to check.
+     * @param ipTo IP address of the remote last hypervisor to check.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @return The physical machine list.
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation</a>
+     */
     public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
         final HypervisorType hypervisorType, final String user, final String password)
     {
@@ -182,6 +275,21 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, Machine.class, dto.getCollection());
     }
 
+    /**
+     * Searches multiple remote machines and retrieves an Machine list with its information.
+     * 
+     * @param ipFrom IP address of the remote first hypervisor to check.
+     * @param ipTo IP address of the remote last hypervisor to check.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @param port Port to connect.
+     * @return The physical machine list.
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation</a>
+     */
     public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
         final HypervisorType hypervisorType, final String user, final String password,
         final int port)
@@ -191,13 +299,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
                 ipTo, hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         return wrap(context, Machine.class, dto.getCollection());
-    }
-
-    public List<Limits> listLimits()
-    {
-        DatacentersLimitsDto dto =
-            context.getApi().getInfrastructureClient().listLimits(this.unwrap());
-        return DomainWrapper.wrap(context, Limits.class, dto.getCollection());
     }
 
     // Builder

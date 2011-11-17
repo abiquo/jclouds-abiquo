@@ -30,9 +30,9 @@
     </properties>
     
     <scm>
-        <url>http://github.com/nacx/jclouds-abiquo</url>
-        <connection>scm:git:git://github.com/nacx/jclouds-abiquo.git</connection>
-        <developerConnection>scm:git:git@github.com:nacx/jclouds-abiquo.git</developerConnection>
+        <url>https://github.com/abiquo/jclouds-abiquo</url>
+        <connection>scm:git:git://github.com/abiquo/jclouds-abiquo.git</connection>
+        <developerConnection>scm:git:git@github.com:abiquo/jclouds-abiquo.git</developerConnection>
     </scm>
 
     <repositories>

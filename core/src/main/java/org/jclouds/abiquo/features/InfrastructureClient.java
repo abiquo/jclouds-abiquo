@@ -47,7 +47,7 @@ import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface InfrastructureClient
 {
-    /* ********************** Datacenter ********************** */
+    /*   ********************** Datacenter ********************** */
 
     /**
      * List all datacenters.
@@ -132,8 +132,7 @@ public interface InfrastructureClient
      *            xen-3, vmx-04, hyperv-301, xenserver}.
      * @param user User to log in.
      * @param password Password to authenticate.
-     * @return The physical machine list or <code>null</code> if there are no machines in the ip
-     *         range.
+     * @return The physical machine list.
      */
     MachinesDto discoverMultipleMachines(final DatacenterDto datacenter, final String ipFrom,
         final String ipTo, final HypervisorType hypervisorType, final String user,
@@ -152,8 +151,7 @@ public interface InfrastructureClient
      * @param user User to log in.
      * @param password Password to authenticate.
      * @param options Optional query params.
-     * @return The physical machine list or <code>null</code> if there are no machines in the ip
-     *         range.
+     * @return The physical machine list.
      */
     MachinesDto discoverMultipleMachines(final DatacenterDto datacenter, final String ipFrom,
         final String ipTo, final HypervisorType hypervisorType, final String user,
@@ -167,7 +165,7 @@ public interface InfrastructureClient
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
 
-    /* ********************** Rack ********************** */
+    /*   ********************** Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -210,7 +208,7 @@ public interface InfrastructureClient
      */
     void deleteRack(final RackDto rack);
 
-    /* ********************** Remote Service ********************** */
+    /*   ********************** Remote Service ********************** */
 
     /**
      * List all remote services of the datacenter.
@@ -262,7 +260,7 @@ public interface InfrastructureClient
      */
     boolean isAvailable(RemoteServiceDto remoteService);
 
-    /* ********************** Machine ********************** */
+    /*   ********************** Machine ********************** */
 
     /**
      * Create a new physical machine in a rack.

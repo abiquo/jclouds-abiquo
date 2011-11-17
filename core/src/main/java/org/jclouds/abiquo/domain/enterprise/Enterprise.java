@@ -42,7 +42,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Enterprise+Resource
+ * @see <a href="http://community.abiquo.com/display/ABI20/Enterprise+Resource">
+ *      http://community.abiquo.com/display/ABI20/Enterprise+Resource</a>
  */
 public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 {
@@ -59,17 +60,32 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
     // Domain operations
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DeleteanexistingEnterprise">
+     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DeleteanexistingEnterprise</a>
+     */
     public void delete()
     {
         context.getApi().getEnterpriseClient().deleteEnterprise(target);
         target = null;
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-CreateanewEnterprise">
+     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-CreateanewEnterprise</a>
+     */
     public void save()
     {
         target = context.getApi().getEnterpriseClient().createEnterprise(target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-UpdatesanexistingEnterprise">
+     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-UpdatesanexistingEnterprise</a>
+     */
     public void update()
     {
         target = context.getApi().getEnterpriseClient().updateEnterprise(target);
@@ -77,12 +93,32 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
     // Children access
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise</a>
+     */
     public List<Limits> listLimits()
     {
         DatacentersLimitsDto dto = context.getApi().getEnterpriseClient().listLimits(this.unwrap());
         return wrap(context, Limits.class, dto.getCollection());
     }
 
+    public List<Limits> listLimits(final Predicate<Limits> filter)
+    {
+        return Lists.newLinkedList(filter(listLimits(), filter));
+    }
+
+    public Limits findLimits(final Predicate<Limits> filter)
+    {
+        return Iterables.getFirst(filter(listLimits(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers">
+     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers</a>
+     */
     public List<User> listUsers()
     {
         UsersDto dto = context.getApi().getEnterpriseClient().listUsers(this.unwrap());
@@ -99,6 +135,11 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return Iterables.getFirst(filter(listUsers(), filter), null);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles">
+     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles</a>
+     */
     public List<Role> listRoles()
     {
         RolesDto dto = context.getApi().getAdminClient().listRoles(target);
@@ -116,7 +157,16 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     // Actions
-
+    /**
+     * Allows the given datacenter to be used by this enterprise. Creates a {@link DatacenterLimits}
+     * object.
+     * 
+     * @param datacenter The datacenter.
+     * @return Default datacenter limits of the enterprise for the given datacenter.
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-CreateanewLimitforanenterpriseinadatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-CreateanewLimitforanenterpriseinadatacenter</a>
+     */
     public Limits allowDatacenter(final Datacenter datacenter)
     {
         // Create new limits
@@ -130,6 +180,16 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return wrap(context, Limits.class, dto);
     }
 
+    /**
+     * Prohibe the given datacenter to be used by this enterprise. Deletes a
+     * {@link DatacenterLimits} object.
+     * 
+     * @param datacenter The datacenter.
+     * @return Default datacenter limits of the enterprise for the given datacenter.
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Deleteanexistinglimitforanenterpriseinadatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Deleteanexistinglimitforanenterpriseinadatacenter</a>
+     */
     public void prohibitDatacenter(final Datacenter datacenter)
     {
         // Get limits
