@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.predicates.configuration;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Predicates.not;
 
 import java.util.Arrays;
 
@@ -51,5 +52,26 @@ public class PrivilegePredicates
                 return Arrays.asList(names).contains(privilege.getName());
             }
         };
+    }
+
+    public static Predicate<Privilege> nameNot(final String name)
+    {
+        return namesNot(checkNotNull(name, "Name must be defined"));
+    }
+
+    public static Predicate<Privilege> namesNot(final String... names)
+    {
+        checkNotNull(names, "Names must be defined");
+
+        Predicate<Privilege> predicate = new Predicate<Privilege>()
+        {
+            @Override
+            public boolean apply(final Privilege privilege)
+            {
+                return Arrays.asList(names).contains(privilege.getName());
+            }
+        };
+
+        return not(predicate);
     }
 }
