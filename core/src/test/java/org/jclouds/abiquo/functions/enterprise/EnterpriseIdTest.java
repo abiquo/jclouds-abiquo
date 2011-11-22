@@ -17,11 +17,10 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions.infrastructure;
+package org.jclouds.abiquo.functions.enterprise;
 
 import static org.testng.Assert.assertEquals;
 
-import org.jclouds.abiquo.functions.enterprise.EnterpriseId;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
