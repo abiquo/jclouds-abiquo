@@ -35,6 +35,8 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 
 /**
  * Provides synchronous access to Abiquo Infrastructure API.
@@ -47,7 +49,7 @@ import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface InfrastructureClient
 {
-    /*   ********************** Datacenter ********************** */
+    /*                          ********************** Datacenter ********************** */
 
     /**
      * List all datacenters.
@@ -165,7 +167,7 @@ public interface InfrastructureClient
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
 
-    /*   ********************** Rack ********************** */
+    /*                          ********************** Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -208,7 +210,7 @@ public interface InfrastructureClient
      */
     void deleteRack(final RackDto rack);
 
-    /*   ********************** Remote Service ********************** */
+    /*********************** Remote Service ********************** */
 
     /**
      * List all remote services of the datacenter.
@@ -260,7 +262,7 @@ public interface InfrastructureClient
      */
     boolean isAvailable(RemoteServiceDto remoteService);
 
-    /*   ********************** Machine ********************** */
+    /*********************** Machine ********************** */
 
     /**
      * Create a new physical machine in a rack.
@@ -302,4 +304,39 @@ public interface InfrastructureClient
      * @return The list of physical machines for the rack.
      */
     MachinesDto listMachines(RackDto rack);
+
+    /*********************** Storage Devices ***********************/
+
+    /**
+     * List all storage devices of the datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @return The list of storage devices in the datacenter.
+     */
+    StorageDevicesDto listStorageDevices(DatacenterDto datacenter);
+
+    /**
+     * Create a new storage device.
+     * 
+     * @param datacenter The datacenter.
+     * @param rack The storage device to be created.
+     * @return The created storage device.
+     */
+    StorageDeviceDto createStorageDevice(final DatacenterDto datacenter,
+        final StorageDeviceDto storageDevice);
+
+    /**
+     * Deletes an existing storage device.
+     * 
+     * @param machine The storage device to delete.
+     */
+    void deleteStorageDevice(StorageDeviceDto storageDevice);
+
+    /**
+     * Updates an existing storage device.
+     * 
+     * @param machine The new attributes for the storage device.
+     * @return The updated storage device.
+     */
+    StorageDeviceDto updateStorageDevice(StorageDeviceDto storageDevice);
 }

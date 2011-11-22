@@ -42,6 +42,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -53,7 +54,7 @@ import com.google.inject.TypeLiteral;
 public class InfrastructureAsyncClientTest extends
     BaseAbiquoAsyncClientTest<InfrastructureAsyncClient>
 {
-    /* ********************** Datacenter ********************** */
+    /*********************** Datacenter ***********************/
 
     public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -164,7 +165,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /* ********************** Rack ********************** */
+    /*********************** Rack ***********************/
 
     public void testListRacks() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -263,7 +264,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /* ********************** Remote Service ********************** */
+    /*********************** Remote Service **********************/
 
     public void testListRemoteServices() throws SecurityException, NoSuchMethodException,
         IOException
@@ -392,7 +393,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    /* ********************** Machine ********************** */
+    /*********************** Machine ***********************/
 
     public void testDiscoverSingleMachineWithoutOptions() throws SecurityException,
         NoSuchMethodException, IOException
@@ -507,8 +508,8 @@ public class InfrastructureAsyncClientTest extends
                 String.class, String.class, MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
-                "80.80.80.86", HypervisorType.KVM, "user", "pass",
-                MachineOptions.builder().port(8889).build());
+                "80.80.80.86", HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(
+                    8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discovermultiple";
         String query =
@@ -618,6 +619,94 @@ public class InfrastructureAsyncClientTest extends
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Storage Device ***********************/
+
+    public void testListStorageDevices() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listStorageDevices", DatacenterDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/storage/devices HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCreateStorageDevice() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("createStorageDevice", DatacenterDto.class,
+                StorageDeviceDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(),
+                InfrastructureResources.storageDevicePost());
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/admin/datacenters/1/storage/devices HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request,
+            withHeader(InfrastructureResources.storageDevicePostPayload()), "application/xml",
+            false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteStorageDevice() throws SecurityException, NoSuchMethodException
+    {
+        Method method =
+            InfrastructureAsyncClient.class
+                .getMethod("deleteStorageDevice", StorageDeviceDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.storageDevicePut());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/admin/datacenters/1/storage/devices/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateStorageDevice() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class
+                .getMethod("updateStorageDevice", StorageDeviceDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.storageDevicePut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/datacenters/1/storage/devices/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(InfrastructureResources.storageDevicePutPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

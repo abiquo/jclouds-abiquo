@@ -37,6 +37,7 @@ import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -136,6 +137,28 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public Rack findRack(final Predicate<Rack> filter)
     {
         return Iterables.getFirst(filter(listRacks(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices">
+     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices</a>
+     */
+    public List<StorageDevice> listStorageDevices()
+    {
+        StorageDevicesDto devices =
+            context.getApi().getInfrastructureClient().listStorageDevices(target);
+        return wrap(context, StorageDevice.class, devices.getCollection());
+    }
+
+    public List<StorageDevice> listStorageDevices(final Predicate<StorageDevice> filter)
+    {
+        return Lists.newLinkedList(filter(listStorageDevices(), filter));
+    }
+
+    public StorageDevice findStorageDevices(final Predicate<StorageDevice> filter)
+    {
+        return Iterables.getFirst(filter(listStorageDevices(), filter), null);
     }
 
     /**

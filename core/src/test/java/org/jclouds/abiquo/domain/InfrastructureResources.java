@@ -25,6 +25,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 
 /**
  * Infrastructure domain utilities.
@@ -74,10 +75,23 @@ public class InfrastructureResources
         return remoteService;
     }
 
+    public static StorageDeviceDto storageDevicePost()
+    {
+        StorageDeviceDto storage = new StorageDeviceDto();
+        storage.setName("Aloha aloha");
+        storage.setIscsiIp("10.10.10.10");
+        storage.setIscsiPort(99);
+        storage.setManagementPort(90);
+
+        return storage;
+    }
+
     public static DatacenterDto datacenterPut()
     {
         DatacenterDto datacenter = datacenterPost();
         datacenter.setId(1);
+        datacenter.addLink(new RESTLink("devices",
+            "http://localhost/api/admin/datacenters/1/storage/devices"));
         datacenter.addLink(new RESTLink("discovermultiple",
             "http://localhost/api/admin/datacenters/1/action/discovermultiple"));
         datacenter.addLink(new RESTLink("discoversingle",
@@ -100,6 +114,18 @@ public class InfrastructureResources
         rack.addLink(new RESTLink("machines",
             "http://localhost/api/admin/datacenters/1/racks/1/machines"));
         return rack;
+    }
+
+    public static StorageDeviceDto storageDevicePut()
+    {
+        StorageDeviceDto storageDevice = storageDevicePost();
+        storageDevice.setId(1);
+        storageDevice
+            .addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
+        storageDevice.addLink(new RESTLink("edit",
+            "http://localhost/api/admin/datacenters/1/storage/devices/1"));
+
+        return storageDevice;
     }
 
     public static RemoteServiceDto remoteServicePut()
@@ -152,6 +178,18 @@ public class InfrastructureResources
         return buffer.toString();
     }
 
+    public static String storageDevicePostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<device>");
+        buffer.append("<iscsiIp>10.10.10.10</iscsiIp>");
+        buffer.append("<iscsiPort>99</iscsiPort>");
+        buffer.append("<managementPort>90</managementPort>");
+        buffer.append("<name>Aloha aloha</name>");
+        buffer.append("</device>");
+        return buffer.toString();
+    }
+
     public static String machinePostPayload()
     {
         StringBuffer buffer = new StringBuffer();
@@ -184,6 +222,7 @@ public class InfrastructureResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<datacenter>");
+        buffer.append(link("/admin/datacenters/1/storage/devices", "devices"));
         buffer.append(link("/admin/datacenters/1/action/discovermultiple", "discovermultiple"));
         buffer.append(link("/admin/datacenters/1/action/discoversingle", "discoversingle"));
         buffer.append(link("/admin/datacenters/1", "edit"));
@@ -213,6 +252,21 @@ public class InfrastructureResources
         buffer.append("<vlanIdMin>6</vlanIdMin>");
         buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
         buffer.append("</rack>");
+        return buffer.toString();
+    }
+
+    public static String storageDevicePutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<device>");
+        buffer.append(link("/admin/datacenters/1", "datacenter"));
+        buffer.append(link("/admin/datacenters/1/storage/devices/1", "edit"));
+        buffer.append("<id>1</id>");
+        buffer.append("<iscsiIp>10.10.10.10</iscsiIp>");
+        buffer.append("<iscsiPort>99</iscsiPort>");
+        buffer.append("<managementPort>90</managementPort>");
+        buffer.append("<name>Aloha aloha</name>");
+        buffer.append("</device>");
         return buffer.toString();
     }
 

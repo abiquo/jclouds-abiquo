@@ -58,6 +58,8 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -298,4 +300,33 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
 
     /*********************** Storage ***********************/
+
+    /**
+     * @see InfrastructureClient#listStorageDevices(DatacenterDto)
+     */
+    @GET
+    ListenableFuture<StorageDevicesDto> listStorageDevices(
+        @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#createStorageDevice(DatacenterDto, StorageDeviceDto)
+     */
+    @POST
+    ListenableFuture<RackDto> createStorageDevice(
+        @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(BindToXMLPayload.class) StorageDeviceDto storageDevice);
+
+    /**
+     * @see InfrastructureClient#deleteStorageDevice(StorageDeviceDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteStorageDevice(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice);
+
+    /**
+     * @see InfrastructureClient#updateStorageDevice(StorageDeviceDto)
+     */
+    @PUT
+    ListenableFuture<StorageDeviceDto> updateStorageDevice(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StorageDeviceDto storageDevice);
 }
