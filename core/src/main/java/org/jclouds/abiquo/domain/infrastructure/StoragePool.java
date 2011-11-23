@@ -121,6 +121,8 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
         return storageDevice;
     }
 
+    // Builder
+
     public static Builder builder(final AbiquoContext context, final StorageDevice storageDevice)
     {
         return new Builder(context, storageDevice);
@@ -222,6 +224,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     // Delegate methods
+
     public long getAvailableSizeInMb()
     {
         return target.getAvailableSizeInMb();

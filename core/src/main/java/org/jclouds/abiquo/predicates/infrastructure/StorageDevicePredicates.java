@@ -35,12 +35,12 @@ import com.google.common.base.Predicate;
  */
 public class StorageDevicePredicates
 {
-    public static Predicate<StorageDevice> name(final String name)
+    public static Predicate<StorageDevice> storageDeviceName(final String name)
     {
-        return names(checkNotNull(name, "name must be defined"));
+        return storageDeviceNames(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<StorageDevice> names(final String... names)
+    public static Predicate<StorageDevice> storageDeviceNames(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
@@ -50,6 +50,25 @@ public class StorageDevicePredicates
             public boolean apply(final StorageDevice storageDevice)
             {
                 return Arrays.asList(names).contains(storageDevice.getName());
+            }
+        };
+    }
+
+    public static Predicate<StorageDevice> storageDeviceManagementIP(final String ip)
+    {
+        return storageDeviceNames(checkNotNull(ip, "name must be defined"));
+    }
+
+    public static Predicate<StorageDevice> storageDeviceManagementIPs(final String... ips)
+    {
+        checkNotNull(ips, "names must be defined");
+
+        return new Predicate<StorageDevice>()
+        {
+            @Override
+            public boolean apply(final StorageDevice storageDevice)
+            {
+                return Arrays.asList(ips).contains(storageDevice.getManagementIp());
             }
         };
     }

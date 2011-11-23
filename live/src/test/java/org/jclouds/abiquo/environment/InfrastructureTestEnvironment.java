@@ -35,6 +35,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datastore;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService;
+import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
@@ -43,6 +44,7 @@ import org.jclouds.abiquo.util.Config;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.model.enumerator.StorageTechnologyType;
 
 /**
  * Test environment for infrastructure live tests.
@@ -69,6 +71,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public Enterprise enterprise;
 
+    public StorageDevice storageDevice;
+
     public InfrastructureTestEnvironment(final AbiquoContext context)
     {
         super();
@@ -83,12 +87,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         createDatacenter();
         createRack();
         createMachine();
+        createStorageDevice();
         createEnterprise();
     }
 
     @Override
     public void tearDown() throws Exception
     {
+        deleteStorageDevice();
         deleteMachine();
         deleteRack();
         deleteDatacenter();
@@ -102,8 +108,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String remoteServicesAddress = Config.get("abiquo.remoteservices.address");
 
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu")
-                .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
+                remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -138,6 +144,23 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(rack.getId());
     }
 
+    private void createStorageDevice()
+    {
+        String ip = Config.get("abiquo.hypervisor.address");
+        StorageTechnologyType type =
+            StorageTechnologyType.valueOf(Config.get("abiquo.storage.type"));
+        String user = Config.get("abiquo.storage.user");
+        String pass = Config.get("abiquo.storage.pass");
+
+        storageDevice =
+            StorageDevice.builder(context, datacenter).iscsiIp(ip).iscsiPort(3260).managementIp(ip)
+                .name(PREFIX + "Storage Device").managementPort(8180).username(user).password(pass)
+                .storageTechnology(type).build();
+
+        storageDevice.save();
+        assertNotNull(storageDevice.getId());
+    }
+
     private void createEnterprise()
     {
         enterprise = Enterprise.builder(context).name(randomName()).build();
@@ -146,6 +169,16 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     }
 
     // Tear down
+
+    private void deleteStorageDevice()
+    {
+        if (storageDevice != null)
+        {
+            Integer idStorageDevice = storageDevice.getId();
+            storageDevice.delete();
+            assertNull(infrastructureClient.getStorageDevice(datacenter.unwrap(), idStorageDevice));
+        }
+    }
 
     private void deleteMachine()
     {

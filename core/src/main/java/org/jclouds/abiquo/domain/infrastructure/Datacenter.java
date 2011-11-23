@@ -156,7 +156,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return Lists.newLinkedList(filter(listStorageDevices(), filter));
     }
 
-    public StorageDevice findStorageDevices(final Predicate<StorageDevice> filter)
+    public StorageDevice findStorageDevice(final Predicate<StorageDevice> filter)
     {
         return Iterables.getFirst(filter(listStorageDevices(), filter), null);
     }

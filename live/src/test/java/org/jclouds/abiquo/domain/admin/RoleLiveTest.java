@@ -106,7 +106,7 @@ public class RoleLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
 
         env.role.update();
 
-        privilege = env.role.findPrivileges(PrivilegePredicates.name(dto.getName()));
+        privilege = env.role.findPrivileges(PrivilegePredicates.privilegeName(dto.getName()));
 
         assertNotNull(privilege);
     }

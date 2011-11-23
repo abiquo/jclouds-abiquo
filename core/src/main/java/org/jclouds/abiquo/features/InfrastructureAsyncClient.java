@@ -327,7 +327,7 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#createStorageDevice(DatacenterDto, StorageDeviceDto)
      */
     @POST
-    ListenableFuture<RackDto> createStorageDevice(
+    ListenableFuture<StorageDeviceDto> createStorageDevice(
         @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(BindToXMLPayload.class) StorageDeviceDto storageDevice);
 
