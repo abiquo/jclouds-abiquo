@@ -42,7 +42,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Roles+Resource
+ * @see <a href="http://community.abiquo.com/display/ABI20/Roles+Resource">
+ *      http://community.abiquo.com/display/ABI20/Roles+Resource</a>
  */
 public class Role extends DomainWrapper<RoleDto>
 {
@@ -59,17 +60,32 @@ public class Role extends DomainWrapper<RoleDto>
 
     // Domain operations
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-DeleteanexistingRole">
+     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-DeleteanexistingRole</a>
+     */
     public void delete()
     {
         context.getApi().getAdminClient().deleteRole(target);
         target = null;
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-CreateanewRole">
+     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-CreateanewRole</a>
+     */
     public void save()
     {
         target = context.getApi().getAdminClient().createRole(target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-UpdateanexistingRole">
+     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-UpdateanexistingRole</a>
+     */
     public void update()
     {
         target = context.getApi().getAdminClient().updateRole(target);
@@ -118,7 +134,11 @@ public class Role extends DomainWrapper<RoleDto>
     }
 
     // Children access
-
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-RetrievealistofprivilegesfromaRole">
+     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-RetrievealistofprivilegesfromaRole</a>
+     */
     public List<Privilege> listPrivileges()
     {
         PrivilegesDto dto = context.getApi().getAdminClient().listPrivileges(target);

@@ -52,4 +52,23 @@ public class DatacenterPredicates
             }
         };
     }
+
+    public static Predicate<Datacenter> datacenterLocation(final String location)
+    {
+        return datacenterLocations(checkNotNull(location, "location must be defined"));
+    }
+
+    public static Predicate<Datacenter> datacenterLocations(final String... locations)
+    {
+        checkNotNull(locations, "locations must be defined");
+
+        return new Predicate<Datacenter>()
+        {
+            @Override
+            public boolean apply(final Datacenter datacenter)
+            {
+                return Arrays.asList(locations).contains(datacenter.getLocation());
+            }
+        };
+    }
 }

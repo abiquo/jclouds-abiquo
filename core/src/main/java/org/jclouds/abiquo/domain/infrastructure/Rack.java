@@ -77,18 +77,32 @@ public class Rack extends DomainWrapper<RackDto>
         target = null;
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack">
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack</a>
+     */
     public void save()
     {
         target = context.getApi().getInfrastructureClient().createRack(datacenter.unwrap(), target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack">
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack</a>
+     */
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateRack(target);
     }
 
     // Parent access
-
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     */
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);

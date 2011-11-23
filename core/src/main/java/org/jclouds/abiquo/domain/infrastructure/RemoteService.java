@@ -54,24 +54,44 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         super(context, target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-DeleteaRemoteService">
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-DeleteaRemoteService</a>
+     */
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteRemoteService(target);
         target = null;
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService">
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService</a>
+     */
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient()
-                .createRemoteService(datacenter.unwrap(), target);
+            context.getApi().getInfrastructureClient().createRemoteService(datacenter.unwrap(),
+                target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-UpdateanexistingRemoteService">
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-UpdateanexistingRemoteService</a>
+     */
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateRemoteService(target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CheckthestatusofaRemoteService">
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CheckthestatusofaRemoteService</a>
+     */
     public boolean isAvailable()
     {
         // If the remote service can not be checked, assume it is available
@@ -81,6 +101,11 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
     // Parent access
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     */
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
@@ -180,8 +205,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         public static Builder fromRemoteService(final RemoteService in)
         {
             Builder builder =
-                RemoteService.builder(in.context, in.getDatacenter()).status(in.getStatus())
-                    .type(in.getType());
+                RemoteService.builder(in.context, in.getDatacenter()).status(in.getStatus()).type(
+                    in.getType());
             builder.uri = in.getUri();
             return builder;
         }

@@ -35,6 +35,25 @@ import com.google.common.base.Predicate;
  */
 public class MachinePredicates
 {
+    public static Predicate<Machine> machineName(final String ip)
+    {
+        return machineNames(checkNotNull(ip, "name must be defined"));
+    }
+
+    public static Predicate<Machine> machineNames(final String... ips)
+    {
+        checkNotNull(ips, "name must be defined");
+
+        return new Predicate<Machine>()
+        {
+            @Override
+            public boolean apply(final Machine machine)
+            {
+                return Arrays.asList(ips).contains(machine.getName());
+            }
+        };
+    }
+
     public static Predicate<Machine> machineIP(final String ip)
     {
         return machineIPs(checkNotNull(ip, "ip must be defined"));

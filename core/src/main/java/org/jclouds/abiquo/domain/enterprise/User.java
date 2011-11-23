@@ -34,7 +34,8 @@ import com.abiquo.server.core.enterprise.UserDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Users+Resource
+ * @see <a href="http://community.abiquo.com/display/ABI20/Users+Resource">
+ *      http://community.abiquo.com/display/ABI20/Users+Resource</a>
  */
 public class User extends DomainWrapper<UserDto>
 {
@@ -65,12 +66,22 @@ public class User extends DomainWrapper<UserDto>
 
     // Domain operations
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Deleteanexistinguser">
+     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Deleteanexistinguser</a>
+     */
     public void delete()
     {
         context.getApi().getEnterpriseClient().deleteUser(target);
         target = null;
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Createanewuser">
+     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Createanewuser</a>
+     */
     public void save()
     {
         // set role link
@@ -78,6 +89,11 @@ public class User extends DomainWrapper<UserDto>
         target = context.getApi().getEnterpriseClient().createUser(enterprise.unwrap(), target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Updatesanexistinguser">
+     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Updatesanexistinguser</a>
+     */
     public void update()
     {
         // update role link (if exists)

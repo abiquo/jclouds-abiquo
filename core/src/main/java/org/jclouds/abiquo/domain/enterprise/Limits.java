@@ -30,7 +30,8 @@ import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource
+ * @see <a href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource">
+ *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource</a>
  */
 public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
 {
@@ -44,6 +45,11 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
 
     // Domain operations
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-UpdatesanexistingLimitforanenterpriseinadatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-UpdatesanexistingLimitforanenterpriseinadatacenter</a>
+     */
     public void update()
     {
         target = context.getApi().getEnterpriseClient().updateLimits(target);
@@ -85,14 +91,13 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
 
         public static Builder fromEnterprise(final Limits in)
         {
-            return Limits.builder(in.context)
-                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
-                .storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
-                .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard());
+            return Limits.builder(in.context).ramLimits(in.getRamSoftLimitInMb(),
+                in.getRamHardLimitInMb()).cpuCountLimits(in.getCpuCountSoftLimit(),
+                in.getCpuCountHardLimit()).hdLimitsInMb(in.getHdSoftLimitInMb(),
+                in.getHdHardLimitInMb()).storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard()).publicIpsLimits(
+                    in.getPublicIpsSoft(), in.getPublicIpsHard()).repositoryLimits(
+                    in.getRepositorySoft(), in.getRepositoryHard());
         }
     }
 
