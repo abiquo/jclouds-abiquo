@@ -60,6 +60,8 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.TierDto;
+import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -329,4 +331,20 @@ public interface InfrastructureAsyncClient
     @PUT
     ListenableFuture<StorageDeviceDto> updateStorageDevice(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StorageDeviceDto storageDevice);
+
+    /*********************** Tier ***********************/
+
+    /**
+     * @see InfrastructureClient#listTiers(DatacenterDto)
+     */
+    @GET
+    ListenableFuture<TiersDto> listTiers(
+        @EndpointLink("tiers") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#updateTier(TierDto)
+     */
+    @PUT
+    ListenableFuture<TierDto> updateTier(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TierDto tier);
 }

@@ -235,10 +235,10 @@ public class Rack extends DomainWrapper<RackDto>
         public static Builder fromRack(final Rack in)
         {
             return Rack.builder(in.context, in.datacenter).id(in.getId()).name(in.getName())
-                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
-                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
-                .vlanPerVdcReserved(in.getVlanPerVdcReserved())
-                .VlansIdAvoided(in.getVlansIdAvoided());
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(
+                    in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcReserved(in.getVlanPerVdcReserved()).VlansIdAvoided(
+                    in.getVlansIdAvoided());
         }
     }
 

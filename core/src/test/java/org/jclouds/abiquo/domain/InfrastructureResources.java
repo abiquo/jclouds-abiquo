@@ -26,6 +26,7 @@ import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
+import com.abiquo.server.core.infrastructure.storage.TierDto;
 
 /**
  * Infrastructure domain utilities.
@@ -102,6 +103,8 @@ public class InfrastructureResources
         datacenter.addLink(new RESTLink("racks", "http://localhost/api/admin/datacenters/1/racks"));
         datacenter.addLink(new RESTLink("remoteservices",
             "http://localhost/api/admin/datacenters/1/remoteservices"));
+        datacenter.addLink(new RESTLink("tiers",
+            "http://localhost/api/admin/datacenters/1/storage/tiers"));
         return datacenter;
     }
 
@@ -114,6 +117,19 @@ public class InfrastructureResources
         rack.addLink(new RESTLink("machines",
             "http://localhost/api/admin/datacenters/1/racks/1/machines"));
         return rack;
+    }
+
+    public static TierDto tierPut()
+    {
+        TierDto tier = new TierDto();
+        tier.setId(1);
+        tier.setEnabled(true);
+        tier.setName("Tier");
+        tier.addLink(new RESTLink("edit",
+            "http://localhost/api/admin/datacenters/1/storage/tiers/1"));
+        tier.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
+
+        return tier;
     }
 
     public static StorageDeviceDto storageDevicePut()
@@ -229,10 +245,24 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/action/getLimits", "getLimits"));
         buffer.append(link("/admin/datacenters/1/racks", "racks"));
         buffer.append(link("/admin/datacenters/1/remoteservices", "remoteservices"));
+        buffer.append(link("/admin/datacenters/1/storage/tiers", "tiers"));
         buffer.append("<id>1</id>");
         buffer.append("<location>Honolulu</location>");
         buffer.append("<name>DC</name>");
         buffer.append("</datacenter>");
+        return buffer.toString();
+    }
+
+    public static String tierPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<tier>");
+        buffer.append(link("/admin/datacenters/1/storage/tiers/1", "edit"));
+        buffer.append(link("/admin/datacenters/1", "datacenter"));
+        buffer.append("<enabled>true</enabled>");
+        buffer.append("<id>1</id>");
+        buffer.append("<name>Tier</name>");
+        buffer.append("</tier>");
         return buffer.toString();
     }
 

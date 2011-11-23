@@ -37,6 +37,8 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.TierDto;
+import com.abiquo.server.core.infrastructure.storage.TiersDto;
 
 /**
  * Provides synchronous access to Abiquo Infrastructure API.
@@ -49,7 +51,7 @@ import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface InfrastructureClient
 {
-    /*                          ********************** Datacenter ********************** */
+    /*                                       ********************** Datacenter ********************** */
 
     /**
      * List all datacenters.
@@ -167,7 +169,7 @@ public interface InfrastructureClient
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
 
-    /*                          ********************** Rack ********************** */
+    /*                                       ********************** Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -319,7 +321,7 @@ public interface InfrastructureClient
      * Create a new storage device.
      * 
      * @param datacenter The datacenter.
-     * @param rack The storage device to be created.
+     * @param storageDevice The storage device to be created.
      * @return The created storage device.
      */
     StorageDeviceDto createStorageDevice(final DatacenterDto datacenter,
@@ -328,15 +330,31 @@ public interface InfrastructureClient
     /**
      * Deletes an existing storage device.
      * 
-     * @param machine The storage device to delete.
+     * @param storageDevice The storage device to delete.
      */
     void deleteStorageDevice(StorageDeviceDto storageDevice);
 
     /**
      * Updates an existing storage device.
      * 
-     * @param machine The new attributes for the storage device.
+     * @param storageDevice The new attributes for the storage device.
      * @return The updated storage device.
      */
     StorageDeviceDto updateStorageDevice(StorageDeviceDto storageDevice);
+
+    /**
+     * List all tiers of the datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @return The list of tiers in the datacenter.
+     */
+    TiersDto listTiers(DatacenterDto datacenter);
+
+    /**
+     * Updates a tier.
+     * 
+     * @param tier The new attributes for the tier.
+     * @return The updated tier.
+     */
+    TierDto updateTier(TierDto tier);
 }
