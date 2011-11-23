@@ -22,6 +22,7 @@ package org.jclouds.abiquo.features;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -37,6 +38,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 
@@ -51,7 +53,7 @@ import com.abiquo.server.core.infrastructure.storage.TiersDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface InfrastructureClient
 {
-    /*                                       ********************** Datacenter ********************** */
+    /*********************** Datacenter ***********************/
 
     /**
      * List all datacenters.
@@ -169,7 +171,7 @@ public interface InfrastructureClient
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
 
-    /*                                       ********************** Rack ********************** */
+    /*                                             ********************** Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -357,4 +359,13 @@ public interface InfrastructureClient
      * @return The updated tier.
      */
     TierDto updateTier(TierDto tier);
+
+    /**
+     * List storage pools on a storage device.
+     * 
+     * @param storageDevice The storage device.
+     * @return The list of storage pools in the storage device.
+     */
+    StoragePoolsDto listStoragePools(StorageDeviceDto storageDeviceDto,
+        StoragePoolOptions storagePoolOptions);
 }

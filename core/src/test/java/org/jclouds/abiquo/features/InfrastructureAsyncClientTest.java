@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
@@ -745,6 +746,52 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.tierPutPayload()),
             "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** StoragePool ***********************/
+
+    public void testListSyncStoragePools() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listStoragePools", StorageDeviceDto.class,
+                StoragePoolOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.storageDevicePut(),
+                StoragePoolOptions.builder().sync(true).build());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/storage/devices/1/pools?sync=true HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListStoragePoolsNoParams() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listStoragePools", StorageDeviceDto.class,
+                StoragePoolOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.storageDevicePut(),
+                StoragePoolOptions.builder().build());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/storage/devices/1/pools HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

@@ -140,6 +140,8 @@ public class InfrastructureResources
             .addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         storageDevice.addLink(new RESTLink("edit",
             "http://localhost/api/admin/datacenters/1/storage/devices/1"));
+        storageDevice.addLink(new RESTLink("pools",
+            "http://localhost/api/admin/datacenters/1/storage/devices/1/pools"));
 
         return storageDevice;
     }
@@ -291,6 +293,7 @@ public class InfrastructureResources
         buffer.append("<device>");
         buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append(link("/admin/datacenters/1/storage/devices/1", "edit"));
+        buffer.append(link("/admin/datacenters/1/storage/devices/1/pools", "pools"));
         buffer.append("<id>1</id>");
         buffer.append("<iscsiIp>10.10.10.10</iscsiIp>");
         buffer.append("<iscsiPort>99</iscsiPort>");

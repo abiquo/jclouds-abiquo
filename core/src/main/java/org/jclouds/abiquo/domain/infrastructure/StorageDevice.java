@@ -20,15 +20,23 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
+
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.StorageTechnologyType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link StorageDeviceDto}.
@@ -42,8 +50,6 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     /** The datacenter where the storage device is. */
     // Package protected to allow navigation from children
     Datacenter datacenter;
-
-    StorageDeviceDto target;
 
     /**
      * Constructor to be used only by the builder.
@@ -99,6 +105,60 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
         DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
         datacenter = wrap(context, Datacenter.class, dto);
         return datacenter;
+    }
+
+    // Children access
+
+    /**
+     * List storage pools from device (synchronized).
+     * 
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools">
+     *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools</a>
+     * @return Storage Pools from device (synchronized).
+     */
+    public List<StoragePool> listRemoteStoragePools()
+    {
+        StoragePoolsDto storagePools =
+            context.getApi().getInfrastructureClient().listStoragePools(target,
+                StoragePoolOptions.builder().sync(true).build());
+        return wrap(context, StoragePool.class, storagePools.getCollection());
+    }
+
+    public List<StoragePool> listRemoteStoragePools(final Predicate<StoragePool> filter)
+    {
+        return Lists.newLinkedList(filter(listRemoteStoragePools(), filter));
+    }
+
+    public StoragePool findRemoteStoragePool(final Predicate<StoragePool> filter)
+    {
+        return Iterables.getFirst(filter(listRemoteStoragePools(), filter), null);
+    }
+
+    /**
+     * List storage pools from device (from Database).
+     * 
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools">
+     *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools</a>
+     * @return Storage Pools from device (from Database).
+     */
+    public List<StoragePool> listStoragePools()
+    {
+        StoragePoolsDto storagePools =
+            context.getApi().getInfrastructureClient().listStoragePools(target,
+                StoragePoolOptions.builder().sync(false).build());
+        return wrap(context, StoragePool.class, storagePools.getCollection());
+    }
+
+    public List<StoragePool> listStoragePools(final Predicate<StoragePool> filter)
+    {
+        return Lists.newLinkedList(filter(listStoragePools(), filter));
+    }
+
+    public StoragePool findStoragePool(final Predicate<StoragePool> filter)
+    {
+        return Iterables.getFirst(filter(listStoragePools(), filter), null);
     }
 
     public static Builder builder(final AbiquoContext context, final Datacenter datacenter)

@@ -35,6 +35,7 @@ import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
@@ -60,6 +61,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -347,4 +349,14 @@ public interface InfrastructureAsyncClient
     @PUT
     ListenableFuture<TierDto> updateTier(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TierDto tier);
+
+    /*********************** Storage Pool ***********************/
+
+    /**
+     * @see InfrastructureClient#listStoragePools(StorageDeviceDto, StoragePoolOptions)
+     */
+    @GET
+    ListenableFuture<StoragePoolsDto> listStoragePools(
+        @EndpointLink("pools") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice,
+        @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
 }
