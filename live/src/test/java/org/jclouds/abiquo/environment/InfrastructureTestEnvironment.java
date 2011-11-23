@@ -36,6 +36,8 @@ import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
+import org.jclouds.abiquo.domain.infrastructure.StoragePool;
+import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
@@ -73,6 +75,10 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public StorageDevice storageDevice;
 
+    public StoragePool storagePool;
+
+    public Tier tier;
+
     public InfrastructureTestEnvironment(final AbiquoContext context)
     {
         super();
@@ -88,12 +94,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         createRack();
         createMachine();
         createStorageDevice();
+        createStoragePool();
         createEnterprise();
     }
 
     @Override
     public void tearDown() throws Exception
     {
+        deleteStoragePool();
         deleteStorageDevice();
         deleteMachine();
         deleteRack();
@@ -161,6 +169,19 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(storageDevice.getId());
     }
 
+    private void createStoragePool()
+    {
+        storagePool =
+            StoragePool.builder(context, storageDevice).enabled(true).name(randomName())
+                .availableSizeInMb(100).totalSizeInMb(100).build();
+
+        tier = datacenter.listTiers().get(0);
+
+        storagePool.setTier(tier);
+        storagePool.save();
+        assertNotNull(storagePool.getIdStorage());
+    }
+
     private void createEnterprise()
     {
         enterprise = Enterprise.builder(context).name(randomName()).build();
@@ -169,6 +190,17 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     }
 
     // Tear down
+
+    private void deleteStoragePool()
+    {
+        if (storagePool != null)
+        {
+            String idStoragePool = storagePool.getIdStorage();
+            storagePool.delete();
+            assertNull(infrastructureClient.getStoragePool(storageDevice.unwrap(), idStoragePool));
+        }
+
+    }
 
     private void deleteStorageDevice()
     {

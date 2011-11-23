@@ -172,7 +172,7 @@ public interface InfrastructureClient
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
 
-    /*                                                                ********************** Rack ********************** */
+    /*                                                                             ********************** Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -370,6 +370,14 @@ public interface InfrastructureClient
      */
     TierDto updateTier(TierDto tier);
 
+    /**
+     * Get the tier.
+     * 
+     * @param tierId The id of the tier.
+     * @return The tier or <code>null</code> if it does not exist.
+     */
+    TierDto getTier(DatacenterDto datacenter, Integer tierId);
+
     /*********************** Storage Pool ***********************/
 
     /**
@@ -404,4 +412,12 @@ public interface InfrastructureClient
      * @param storagePool The storage pool to delete.
      */
     void deleteStoragePool(StoragePoolDto storagePool);
+
+    /**
+     * Get the storage pool.
+     * 
+     * @param storagePoolId The id of the storage pool.
+     * @return The storage pool or <code>null</code> if it does not exist.
+     */
+    StoragePoolDto getStoragePool(StorageDeviceDto storageDevice, String storagePoolId);
 }

@@ -52,7 +52,7 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         env.storageDevice.setName("Updated storage device");
         env.storageDevice.update();
 
-        // Recover the updated rack
+        // Recover the updated storage device
         StorageDeviceDto updated =
             env.infrastructureClient.getStorageDevice(env.datacenter.unwrap(), env.storageDevice
                 .getId());

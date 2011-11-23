@@ -30,6 +30,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
+import com.abiquo.server.core.infrastructure.storage.TierDto;
 
 /**
  * Adds high level functionality to {@link StoragePoolDto}.
@@ -40,6 +41,9 @@ import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
  */
 public class StoragePool extends DomainWrapper<StoragePoolDto>
 {
+    /** The default value for the used space. */
+    private static final long DEFAULT_USED_SIZE = 0;
+
     /** The datacenter where the storage device is. */
     // Package protected to allow navigation from children
     StorageDevice storageDevice;
@@ -101,6 +105,15 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
         checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
 
+        // Replace tier (if any)
+        RESTLink oldLink = target.searchLink("tier");
+
+        if (oldLink != null)
+        {
+            oldLink.setHref(link.getHref());
+        }
+
+        // or add one (if none)
         target.addLink(new RESTLink("tier", link.getHref()));
     }
 
@@ -114,11 +127,26 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     public StorageDevice getStorageDevice()
     {
         Integer storageId = target.getIdFromLink(ParentLinkName.STORAGE_DEVICE);
+        checkNotNull(storageId, ValidationErrors.MISSING_REQUIRED_LINK);
+
         StorageDeviceDto dto =
             context.getApi().getInfrastructureClient().getStorageDevice(
-                storageDevice.datacenter.unwrap(), storageId);
+                storageDevice.getDatacenter().unwrap(), storageId);
         storageDevice = wrap(context, StorageDevice.class, dto);
         return storageDevice;
+    }
+
+    // Children access
+
+    public Tier getTier()
+    {
+        Integer tierId = target.getIdFromLink(ParentLinkName.TIER);
+        checkNotNull(tierId, ValidationErrors.MISSING_REQUIRED_LINK);
+
+        TierDto dto =
+            context.getApi().getInfrastructureClient().getTier(
+                storageDevice.getDatacenter().unwrap(), tierId);
+        return wrap(context, Tier.class, dto);
     }
 
     // Builder
@@ -144,7 +172,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
         private Long totalSizeInMb;
 
-        private Long usedSizeInMb;
+        private Long usedSizeInMb = DEFAULT_USED_SIZE;
 
         public Builder(final AbiquoContext context, final StorageDevice storageDevice)
         {

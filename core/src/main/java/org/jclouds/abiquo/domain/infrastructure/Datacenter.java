@@ -38,6 +38,7 @@ import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -223,6 +224,27 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public Limits findLimits(final Predicate<Limits> filter)
     {
         return Iterables.getFirst(filter(listLimits(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers">
+     *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers</a>
+     */
+    public List<Tier> listTiers()
+    {
+        TiersDto dto = context.getApi().getInfrastructureClient().listTiers(this.unwrap());
+        return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
+    }
+
+    public List<Tier> listTiers(final Predicate<Tier> filter)
+    {
+        return Lists.newLinkedList(filter(listTiers(), filter));
+    }
+
+    public Tier findTier(final Predicate<Tier> filter)
+    {
+        return Iterables.getFirst(filter(listTiers(), filter), null);
     }
 
     // Actions

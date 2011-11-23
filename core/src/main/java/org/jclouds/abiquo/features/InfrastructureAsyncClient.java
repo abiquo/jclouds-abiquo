@@ -361,6 +361,15 @@ public interface InfrastructureAsyncClient
     ListenableFuture<TierDto> updateTier(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TierDto tier);
 
+    /**
+     * @see InfrastructureClient#getTier(DatacenterDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<TierDto> getTier(
+        @EndpointLink("tiers") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendToPath.class) Integer tierId);
+
     /*********************** Storage Pool ***********************/
 
     /**
@@ -400,4 +409,15 @@ public interface InfrastructureAsyncClient
     @DELETE
     ListenableFuture<Void> deleteStoragePool(
         @EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool);
+
+    /**
+     * @see InfrastructureClient#getStoragePool(StorageDeviceDto, String)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
+    @JAXBResponseParser
+    ListenableFuture<StoragePoolDto> getStoragePool(
+        @EndpointLink("pools") @BinderParam(BindToPath.class) final StorageDeviceDto storageDevice,
+        @BinderParam(AppendToPath.class) final String machineId);
 }
