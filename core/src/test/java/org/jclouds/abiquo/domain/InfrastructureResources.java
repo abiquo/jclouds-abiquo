@@ -26,6 +26,7 @@ import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 
 /**
@@ -87,6 +88,13 @@ public class InfrastructureResources
         return storage;
     }
 
+    public static StoragePoolDto storagePoolPost()
+    {
+        StoragePoolDto storagePool = new StoragePoolDto();
+        storagePool.setName("Hawaian Storage Pool");
+        return storagePool;
+    }
+
     public static DatacenterDto datacenterPut()
     {
         DatacenterDto datacenter = datacenterPost();
@@ -146,6 +154,18 @@ public class InfrastructureResources
         return storageDevice;
     }
 
+    public static StoragePoolDto storagePoolPut()
+    {
+        StoragePoolDto storagePool = storagePoolPost();
+        storagePool.setIdStorage("tururututu");
+        storagePool.addLink(new RESTLink("device",
+            "http://localhost/api/admin/datacenters/1/storage/devices/1"));
+        storagePool.addLink(new RESTLink("edit",
+            "http://localhost/api/admin/datacenters/1/storage/devices/1/pools/tururututu"));
+
+        return storagePool;
+    }
+
     public static RemoteServiceDto remoteServicePut()
     {
         RemoteServiceDto remoteService = remoteServicePost();
@@ -193,6 +213,19 @@ public class InfrastructureResources
         buffer.append("<vlanIdMin>6</vlanIdMin>");
         buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
         buffer.append("</rack>");
+        return buffer.toString();
+    }
+
+    public static String storagePoolPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<storagePool>");
+        buffer.append("<availableSizeInMb>0</availableSizeInMb>");
+        buffer.append("<enabled>false</enabled>");
+        buffer.append("<name>Hawaian Storage Pool</name>");
+        buffer.append("<totalSizeInMb>0</totalSizeInMb>");
+        buffer.append("<usedSizeInMb>0</usedSizeInMb>");
+        buffer.append("</storagePool>");
         return buffer.toString();
     }
 
@@ -252,6 +285,22 @@ public class InfrastructureResources
         buffer.append("<location>Honolulu</location>");
         buffer.append("<name>DC</name>");
         buffer.append("</datacenter>");
+        return buffer.toString();
+    }
+
+    public static String storagePoolPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<storagePool>");
+        buffer.append(link("/admin/datacenters/1/storage/devices/1", "device"));
+        buffer.append(link("/admin/datacenters/1/storage/devices/1/pools/tururututu", "edit"));
+        buffer.append("<availableSizeInMb>0</availableSizeInMb>");
+        buffer.append("<enabled>false</enabled>");
+        buffer.append("<idStorage>tururututu</idStorage>");
+        buffer.append("<name>Hawaian Storage Pool</name>");
+        buffer.append("<totalSizeInMb>0</totalSizeInMb>");
+        buffer.append("<usedSizeInMb>0</usedSizeInMb>");
+        buffer.append("</storagePool>");
         return buffer.toString();
     }
 

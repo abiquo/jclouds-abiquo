@@ -26,6 +26,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
@@ -61,6 +62,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
@@ -303,7 +305,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteMachine(
         @EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
 
-    /*********************** Storage ***********************/
+    /*********************** Storage Device ***********************/
 
     /**
      * @see InfrastructureClient#listStorageDevices(DatacenterDto)
@@ -311,6 +313,15 @@ public interface InfrastructureAsyncClient
     @GET
     ListenableFuture<StorageDevicesDto> listStorageDevices(
         @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#getStorageDevice(DatacenterDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<StorageDeviceDto> getStorageDevice(
+        @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendToPath.class) Integer storageDeviceId);
 
     /**
      * @see InfrastructureClient#createStorageDevice(DatacenterDto, StorageDeviceDto)
@@ -356,7 +367,37 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#listStoragePools(StorageDeviceDto, StoragePoolOptions)
      */
     @GET
+    @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLSDTO_XML)
+    @JAXBResponseParser
     ListenableFuture<StoragePoolsDto> listStoragePools(
         @EndpointLink("pools") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice,
         @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
+
+    /**
+     * @see InfrastructureClient#createStoragePool(StorageDeviceDto, StoragePoolDto)
+     */
+    @POST
+    @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
+    @Produces(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
+    @JAXBResponseParser
+    ListenableFuture<StoragePoolDto> createStoragePool(
+        @EndpointLink("pools") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice,
+        @BinderParam(BindToXMLPayload.class) StoragePoolDto storagePool);
+
+    /**
+     * @see InfrastructureClient#updateStoragePool(StoragePoolDto)
+     */
+    @PUT
+    @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
+    @Produces(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
+    @JAXBResponseParser
+    ListenableFuture<StoragePoolDto> updateStoragePool(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StoragePoolDto StoragePoolDto);
+
+    /**
+     * @see InfrastructureClient#deleteStoragePool(StoragePoolDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteStoragePool(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool);
 }

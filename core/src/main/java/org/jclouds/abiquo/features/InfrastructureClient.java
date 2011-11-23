@@ -38,6 +38,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
@@ -171,7 +172,7 @@ public interface InfrastructureClient
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
 
-    /*                                             ********************** Rack ********************** */
+    /*                                                                ********************** Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -309,7 +310,7 @@ public interface InfrastructureClient
      */
     MachinesDto listMachines(RackDto rack);
 
-    /*********************** Storage Devices ***********************/
+    /*********************** Storage Device ***********************/
 
     /**
      * List all storage devices of the datacenter.
@@ -318,6 +319,14 @@ public interface InfrastructureClient
      * @return The list of storage devices in the datacenter.
      */
     StorageDevicesDto listStorageDevices(DatacenterDto datacenter);
+
+    /**
+     * Get the storage device.
+     * 
+     * @param storageDeviceId The id of the storage device.
+     * @return The storage device or <code>null</code> if it does not exist.
+     */
+    StorageDeviceDto getStorageDevice(DatacenterDto datacenter, Integer storageDeviceId);
 
     /**
      * Create a new storage device.
@@ -344,6 +353,7 @@ public interface InfrastructureClient
      */
     StorageDeviceDto updateStorageDevice(StorageDeviceDto storageDevice);
 
+    /*********************** Tier ***********************/
     /**
      * List all tiers of the datacenter.
      * 
@@ -360,6 +370,8 @@ public interface InfrastructureClient
      */
     TierDto updateTier(TierDto tier);
 
+    /*********************** Storage Pool ***********************/
+
     /**
      * List storage pools on a storage device.
      * 
@@ -368,4 +380,28 @@ public interface InfrastructureClient
      */
     StoragePoolsDto listStoragePools(StorageDeviceDto storageDeviceDto,
         StoragePoolOptions storagePoolOptions);
+
+    /**
+     * Create a new storage pool in a storage device.
+     * 
+     * @param storageDevice The storage device.
+     * @param storagePool The storage pool to be created.
+     * @return The created storage pool.
+     */
+    StoragePoolDto createStoragePool(StorageDeviceDto storageDevice, StoragePoolDto storagePool);
+
+    /**
+     * Updates a storage pool.
+     * 
+     * @param storagePool The new attributes for the storage pull.
+     * @return The updated tier.
+     */
+    StoragePoolDto updateStoragePool(StoragePoolDto storagePool);
+
+    /**
+     * Deletes an existing storage pool.
+     * 
+     * @param storagePool The storage pool to delete.
+     */
+    void deleteStoragePool(StoragePoolDto storagePool);
 }
