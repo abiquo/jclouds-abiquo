@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
 
 import java.lang.reflect.Constructor;
@@ -26,7 +27,9 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.WrapperException;
+import org.jclouds.abiquo.reference.ValidationErrors;
 
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -117,5 +120,27 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
                 return input.unwrap();
             }
         }));
+    }
+
+    /**
+     * Update or creates a link of "target" with the uri of a link from "source".
+     */
+    protected <T1 extends SingleResourceTransportDto, T2 extends SingleResourceTransportDto> void updateLink(
+        final T1 target, final String targetLinkRel, final T2 source, final String sourceLinkRel)
+    {
+        RESTLink parent;
+
+        checkNotNull(source.searchLink(sourceLinkRel), ValidationErrors.MISSING_REQUIRED_LINK);
+
+        // Insert
+        if ((parent = target.searchLink(targetLinkRel)) == null)
+        {
+            target.addLink(new RESTLink(targetLinkRel, source.searchLink(sourceLinkRel).getHref()));
+        }
+        // Replace
+        else
+        {
+            parent.setHref(source.searchLink(sourceLinkRel).getHref());
+        }
     }
 }

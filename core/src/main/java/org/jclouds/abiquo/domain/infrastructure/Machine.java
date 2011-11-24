@@ -95,8 +95,7 @@ public class Machine extends DomainWrapper<MachineDto>
     {
         Integer rackId = target.getIdFromLink(ParentLinkName.RACK);
         RackDto dto =
-            context.getApi().getInfrastructureClient().getRack(rack.getDatacenter().unwrap(),
-                rackId);
+            context.getApi().getInfrastructureClient().getRack(rack.datacenter.unwrap(), rackId);
         rack = wrap(context, Rack.class, dto);
         return rack;
     }

@@ -27,7 +27,6 @@ import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
-import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -101,20 +100,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
         checkNotNull(tier, ValidationErrors.NULL_RESOURCE + Privilege.class);
         checkNotNull(tier.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in " + Tier.class);
 
-        RESTLink link = tier.unwrap().searchLink("edit");
-
-        checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
-
-        // Replace tier (if any)
-        RESTLink oldLink = target.searchLink("tier");
-
-        if (oldLink != null)
-        {
-            oldLink.setHref(link.getHref());
-        }
-
-        // or add one (if none)
-        target.addLink(new RESTLink("tier", link.getHref()));
+        this.updateLink(target, ParentLinkName.TIER, tier.unwrap(), "edit");
     }
 
     // Parent access
@@ -131,7 +117,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
         StorageDeviceDto dto =
             context.getApi().getInfrastructureClient().getStorageDevice(
-                storageDevice.getDatacenter().unwrap(), storageId);
+                storageDevice.datacenter.unwrap(), storageId);
         storageDevice = wrap(context, StorageDevice.class, dto);
         return storageDevice;
     }
@@ -144,8 +130,8 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
         checkNotNull(tierId, ValidationErrors.MISSING_REQUIRED_LINK);
 
         TierDto dto =
-            context.getApi().getInfrastructureClient().getTier(
-                storageDevice.getDatacenter().unwrap(), tierId);
+            context.getApi().getInfrastructureClient().getTier(storageDevice.datacenter.unwrap(),
+                tierId);
         return wrap(context, Tier.class, dto);
     }
 

@@ -154,7 +154,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     private void createStorageDevice()
     {
-        String ip = Config.get("abiquo.hypervisor.address");
+        String ip = Config.get("abiquo.storage.address");
         StorageTechnologyType type =
             StorageTechnologyType.valueOf(Config.get("abiquo.storage.type"));
         String user = Config.get("abiquo.storage.user");

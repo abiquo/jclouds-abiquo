@@ -57,6 +57,24 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<Infrastructure
         assertEquals(env.storagePool.getTier().getName(), "Default Tier 3");
     }
 
+    public void testCreateFromRemote()
+    {
+        StoragePool storagePool = env.storageDevice.discoverStoragePools().get(0);
+        assertNotNull(storagePool);
+
+        storagePool.setTier(env.tier);
+
+        storagePool.save();
+
+        StoragePool storagePoolRecovered =
+            env.storageDevice.findStoragePool(StoragePoolPredicates.storagePoolName(storagePool
+                .getName()));
+
+        assertNotNull(storagePoolRecovered);
+
+        storagePool.delete();
+    }
+
     public void testListStoragePool()
     {
         Iterable<StoragePool> storagePools = env.storageDevice.listStoragePools();

@@ -117,22 +117,31 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
      *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools</a>
      * @return Storage Pools from device (synchronized).
      */
-    public List<StoragePool> listRemoteStoragePools()
+    public List<StoragePool> discoverStoragePools()
     {
         StoragePoolsDto storagePools =
             context.getApi().getInfrastructureClient().listStoragePools(target,
                 StoragePoolOptions.builder().sync(true).build());
-        return wrap(context, StoragePool.class, storagePools.getCollection());
+
+        List<StoragePool> storagePoolList =
+            wrap(context, StoragePool.class, storagePools.getCollection());
+
+        for (StoragePool storagePool : storagePoolList)
+        {
+            storagePool.storageDevice = this;
+        }
+
+        return storagePoolList;
     }
 
     public List<StoragePool> listRemoteStoragePools(final Predicate<StoragePool> filter)
     {
-        return Lists.newLinkedList(filter(listRemoteStoragePools(), filter));
+        return Lists.newLinkedList(filter(discoverStoragePools(), filter));
     }
 
     public StoragePool findRemoteStoragePool(final Predicate<StoragePool> filter)
     {
-        return Iterables.getFirst(filter(listRemoteStoragePools(), filter), null);
+        return Iterables.getFirst(filter(discoverStoragePools(), filter), null);
     }
 
     /**
