@@ -28,4 +28,7 @@ public interface AbiquoConstants
 {
     /** The Abiquo logger. */
     public static final String ABIQUO_LOGGER = "jclouds.abiquo";
+
+    /** The Abiquo authentication token context property. */
+    public static final String ABIQUO_TOKEN = "jclouds.abiquo.auth.token";
 }

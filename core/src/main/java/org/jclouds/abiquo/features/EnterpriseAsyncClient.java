@@ -33,8 +33,8 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.functions.infrastructure.DatacenterId;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
-import org.jclouds.http.filters.BasicAuthentication;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.ParamParser;
@@ -59,7 +59,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters(BasicAuthentication.class)
+@RequestFilters(AbiquoAuthentication.class)
 @Consumes(MediaType.APPLICATION_XML)
 @Path("/admin/enterprises")
 public interface EnterpriseAsyncClient
