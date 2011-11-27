@@ -78,8 +78,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient().createStorageDevice(datacenter.unwrap(),
-                target);
+            context.getApi().getInfrastructureClient()
+                .createStorageDevice(datacenter.unwrap(), target);
     }
 
     /**
@@ -120,8 +120,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public List<StoragePool> discoverStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient().listStoragePools(target,
-                StoragePoolOptions.builder().sync(true).build());
+            context.getApi().getInfrastructureClient()
+                .listStoragePools(target, StoragePoolOptions.builder().sync(true).build());
 
         List<StoragePool> storagePoolList =
             wrap(context, StoragePool.class, storagePools.getCollection());
@@ -155,8 +155,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public List<StoragePool> listStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient().listStoragePools(target,
-                StoragePoolOptions.builder().sync(false).build());
+            context.getApi().getInfrastructureClient()
+                .listStoragePools(target, StoragePoolOptions.builder().sync(false).build());
         return wrap(context, StoragePool.class, storagePools.getCollection());
     }
 
@@ -193,7 +193,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
 
         private String password;
 
-        private StorageTechnologyType storageTechnology;
+        private StorageTechnologyType type;
 
         private String username;
 
@@ -248,9 +248,20 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
             return this;
         }
 
-        public Builder storageTechnology(final StorageTechnologyType storageTechnology)
+        public Builder type(final StorageTechnologyType type)
         {
-            this.storageTechnology = storageTechnology;
+            this.type = type;
+
+            // Set default values
+            if (managementPort == null)
+            {
+                managementPort = type.getManagementPort();
+            }
+            if (iscsiPort == null)
+            {
+                iscsiPort = type.getISCSIPort();
+            }
+
             return this;
         }
 
@@ -269,7 +280,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
             dto.setManagementPort(managementPort);
             dto.setName(name);
             dto.setPassword(password);
-            dto.setStorageTechnology(storageTechnology);
+            dto.setStorageTechnology(type);
             dto.setUsername(username);
             StorageDevice storageDevice = new StorageDevice(context, dto);
             storageDevice.datacenter = datacenter;
@@ -281,9 +292,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
             Builder builder =
                 StorageDevice.builder(in.context, in.getDatacenter()).iscsiIp(in.getIscsiIp())
                     .iscsiPort(in.getIscsiPort()).managementIp(in.getManagementIp())
-                    .managementPort(in.getManagementPort()).name(in.getName()).password(
-                        in.getPassword()).storageTechnology(in.getStorageTechnology()).username(
-                        in.getUsername());
+                    .managementPort(in.getManagementPort()).name(in.getName())
+                    .password(in.getPassword()).type(in.getType()).username(in.getUsername());
 
             return builder;
         }
@@ -326,7 +336,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
         return target.getPassword();
     }
 
-    public StorageTechnologyType getStorageTechnology()
+    public StorageTechnologyType getType()
     {
         return target.getStorageTechnology();
     }
@@ -366,9 +376,9 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
         target.setPassword(password);
     }
 
-    public void setStorageTechnology(final StorageTechnologyType storageTechnology)
+    public void setType(final StorageTechnologyType type)
     {
-        target.setStorageTechnology(storageTechnology);
+        target.setStorageTechnology(type);
     }
 
     public void setUsername(final String username)
