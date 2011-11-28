@@ -29,7 +29,6 @@ import java.security.cert.CertificateException;
 
 import javax.ws.rs.core.HttpHeaders;
 
-import org.jclouds.encryption.internal.JCECrypto;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.utils.ModifyRequest;
 import org.testng.annotations.Test;
@@ -49,11 +48,11 @@ public class AbiquoAuthenticationTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
 
-        AbiquoAuthentication filter = new AbiquoAuthentication("user", "password", new JCECrypto());
+        AbiquoAuthentication filter = basicAuthFilter();
         HttpRequest filtered = filter.filter(request);
         HttpRequest expected =
             ModifyRequest.replaceHeader(request, HttpHeaders.AUTHORIZATION,
-                filter.basicAuth("user", "password"));
+                AbiquoAuthentication.basicAuth("user", "password"));
 
         assertFalse(filtered.getHeaders().containsKey(HttpHeaders.COOKIE));
         assertEquals(filtered, expected);
@@ -66,7 +65,9 @@ public class AbiquoAuthenticationTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
 
-        AbiquoAuthentication filter = new AbiquoAuthentication(null, "password", new JCECrypto());
+        AbiquoAuthentication filter = basicAuthFilter();
+        filter.identityOrToken = null;
+
         filter.filter(request);
     }
 
@@ -76,10 +77,11 @@ public class AbiquoAuthenticationTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
 
-        AbiquoAuthentication filter = new AbiquoAuthentication("token", null, new JCECrypto());
+        AbiquoAuthentication filter = tokenFilter();
         HttpRequest filtered = filter.filter(request);
         HttpRequest expected =
-            ModifyRequest.replaceHeader(request, HttpHeaders.COOKIE, filter.tokenAuth("token"));
+            ModifyRequest.replaceHeader(request, HttpHeaders.COOKIE,
+                AbiquoAuthentication.tokenAuth("token"));
 
         assertFalse(filtered.getHeaders().containsKey(HttpHeaders.AUTHORIZATION));
         assertEquals(filtered, expected);
@@ -92,7 +94,26 @@ public class AbiquoAuthenticationTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
 
-        AbiquoAuthentication filter = new AbiquoAuthentication(null, null, new JCECrypto());
+        AbiquoAuthentication filter = tokenFilter();
+        filter.identityOrToken = null;
+
         filter.filter(request);
+    }
+
+    private static AbiquoAuthentication basicAuthFilter() throws UnsupportedEncodingException,
+        NoSuchAlgorithmException, CertificateException
+    {
+        AbiquoAuthentication filter = new AbiquoAuthentication();
+        filter.identityOrToken = "user";
+        filter.credential = "password";
+        return filter;
+    }
+
+    private static AbiquoAuthentication tokenFilter() throws UnsupportedEncodingException,
+        NoSuchAlgorithmException, CertificateException
+    {
+        AbiquoAuthentication filter = new AbiquoAuthentication();
+        filter.identityOrToken = "token";
+        return filter;
     }
 }

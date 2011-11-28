@@ -25,12 +25,10 @@ import static org.jclouds.Constants.PROPERTY_IDENTITY;
 
 import java.io.UnsupportedEncodingException;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.ws.rs.core.HttpHeaders;
 
-import org.jclouds.crypto.Crypto;
 import org.jclouds.crypto.CryptoStreams;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
@@ -38,6 +36,7 @@ import org.jclouds.http.HttpRequestFilter;
 import org.jclouds.http.utils.ModifyRequest;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.inject.Inject;
 
 /**
  * Authenticates using Basic Authentication or a generated token from previous API sessions.
@@ -47,31 +46,38 @@ import com.google.common.annotations.VisibleForTesting;
 @Singleton
 public class AbiquoAuthentication implements HttpRequestFilter
 {
-    /** The authentication string. */
-    private final String header;
+    /** The name of the authentication token. */
+    public static final String AUTH_TOKEN_NAME = "auth";
 
-    /** Boolean indicating if basic authentication must be used. */
-    private boolean isBasicAuth = false;
-
+    /** The identity or the authentication token. */
     @Inject
-    public AbiquoAuthentication(@Named(PROPERTY_IDENTITY) String identityOrToken,
-        @Named(PROPERTY_CREDENTIAL) String credential, Crypto crypto)
-        throws UnsupportedEncodingException
-    {
-        isBasicAuth = (credential != null);
-        this.header =
-            isBasicAuth ? basicAuth(identityOrToken, credential) : tokenAuth(identityOrToken);
-    }
+    @Named(PROPERTY_IDENTITY)
+    protected String identityOrToken;
+
+    @Inject(optional = true)
+    @Named(PROPERTY_CREDENTIAL)
+    protected String credential;
 
     @Override
-    public HttpRequest filter(HttpRequest request) throws HttpException
+    public HttpRequest filter(final HttpRequest request) throws HttpException
     {
-        return ModifyRequest.replaceHeader(request, isBasicAuth ? HttpHeaders.AUTHORIZATION
-            : HttpHeaders.COOKIE, header);
+        try
+        {
+            boolean isBasicAuth = credential != null;
+            String header =
+                isBasicAuth ? basicAuth(identityOrToken, credential) : tokenAuth(identityOrToken);
+            return ModifyRequest.replaceHeader(request, isBasicAuth ? HttpHeaders.AUTHORIZATION
+                : HttpHeaders.COOKIE, header);
+        }
+        catch (UnsupportedEncodingException ex)
+        {
+            throw new HttpException(ex);
+        }
     }
 
     @VisibleForTesting
-    String basicAuth(String user, String password) throws UnsupportedEncodingException
+    static String basicAuth(final String user, final String password)
+        throws UnsupportedEncodingException
     {
         return "Basic "
             + CryptoStreams.base64(String.format("%s:%s", checkNotNull(user, "user"),
@@ -79,8 +85,8 @@ public class AbiquoAuthentication implements HttpRequestFilter
     }
 
     @VisibleForTesting
-    String tokenAuth(String token)
+    static String tokenAuth(final String token)
     {
-        return "auth=" + checkNotNull(token, "token");
+        return AUTH_TOKEN_NAME + "=" + checkNotNull(token, "token");
     }
 }
