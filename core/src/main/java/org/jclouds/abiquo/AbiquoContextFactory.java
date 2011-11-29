@@ -23,7 +23,6 @@ import java.util.Properties;
 
 import javax.annotation.Nullable;
 
-import org.jclouds.rest.RestContext;
 import org.jclouds.rest.RestContextBuilder;
 import org.jclouds.rest.RestContextFactory;
 import org.jclouds.util.Throwables2;
@@ -79,7 +78,7 @@ public class AbiquoContextFactory
     /**
      * @see #createContext(String, String, Properties)
      */
-    public AbiquoContext createContext(String token, final Properties overrides)
+    public AbiquoContext createContext(final String token, final Properties overrides)
     {
         return createContextInternal(PROVIDER_NAME, token, null, overrides);
     }

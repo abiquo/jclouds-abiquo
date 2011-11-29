@@ -17,31 +17,28 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain;
+package org.jclouds.abiquo.features;
 
-import org.jclouds.xml.XMLParser;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Path;
+import javax.ws.rs.core.MediaType;
+
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.rest.annotations.RequestFilters;
 
 /**
- * Utility class to build domain objects used in tests.
+ * Provides asynchronous access to Abiquo Network API.
  * 
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see NetworkClient
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-public class DomainUtils
+@RequestFilters(AbiquoAuthentication.class)
+@Consumes(MediaType.APPLICATION_XML)
+@Path("/admin")
+public interface NetworkAsyncClient
 {
-    /**
-     * Adds the XML header to the given XML.
-     */
-    public static String withHeader(final String xml)
-    {
-        return XMLParser.DEFAULT_XML_HEADER + xml;
-    }
-
-    /**
-     * Builds a link in xml format
-     */
-    public static String link(final String href, final String rel)
-    {
-        return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\"/>";
-    }
+    /*********************** Network ***********************/
 
 }

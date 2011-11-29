@@ -22,9 +22,11 @@ package org.jclouds.abiquo;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.features.AdminClient;
+import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.features.NetworkClient;
 import org.jclouds.concurrent.Timeout;
 import org.jclouds.rest.annotations.Delegate;
 
@@ -49,6 +51,18 @@ public interface AbiquoClient
      */
     @Delegate
     InfrastructureClient getInfrastructureClient();
+
+    /**
+     * Provides synchronous access to Network features.
+     */
+    @Delegate
+    NetworkClient getNetworkClient();
+
+    /**
+     * Provides synchronous access to Cloud features.
+     */
+    @Delegate
+    CloudClient getCloudClient();
 
     /**
      * Provides synchronous access to Enterprise features.

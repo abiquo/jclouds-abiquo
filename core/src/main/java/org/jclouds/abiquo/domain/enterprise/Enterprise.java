@@ -217,6 +217,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         private String name;
 
+        protected Long repositorySoft = Long.valueOf(DEFAULT_LIMITS);
+
+        protected Long repositoryHard = Long.valueOf(DEFAULT_LIMITS);
+
         private Boolean isReservationRestricted = DEFAULT_RESERVATION_RESTRICTED;
 
         public Builder(final AbiquoContext context)
@@ -234,6 +238,13 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         public Builder name(final String name)
         {
             this.name = name;
+            return this;
+        }
+
+        public Builder repositoryLimits(final long soft, final long hard)
+        {
+            this.repositorySoft = soft;
+            this.repositoryHard = hard;
             return this;
         }
 

@@ -66,10 +66,21 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
     {
         private AbiquoContext context;
 
+        protected Long repositorySoft = Long.valueOf(DEFAULT_LIMITS);
+
+        protected Long repositoryHard = Long.valueOf(DEFAULT_LIMITS);
+
         public Builder(final AbiquoContext context)
         {
             super();
             this.context = context;
+        }
+
+        public Builder repositoryLimits(final long soft, final long hard)
+        {
+            this.repositorySoft = soft;
+            this.repositoryHard = hard;
+            return this;
         }
 
         public Limits build()

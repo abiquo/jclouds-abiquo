@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.domain;
 
+import static org.jclouds.abiquo.domain.DomainUtils.link;
+
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -210,10 +212,5 @@ public class AdminResources
         user.addLink(new RESTLink("virtualmachines",
             "http://localhost/api/admin/enterprises/1/users/1/action/virtualmachines"));
         return user;
-    }
-
-    private static String link(final String href, final String rel)
-    {
-        return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\"/>";
     }
 }

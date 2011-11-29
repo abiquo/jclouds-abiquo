@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.domain;
 
+import static org.jclouds.abiquo.domain.DomainUtils.link;
+
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
@@ -72,11 +74,6 @@ public class ConfigResources
         buffer.append("<code>" + readLicense("license/expired") + "</code>");
         buffer.append("</license>");
         return buffer.toString();
-    }
-
-    private static String link(final String href, final String rel)
-    {
-        return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\"/>";
     }
 
     private static String readLicense(final String filename)
