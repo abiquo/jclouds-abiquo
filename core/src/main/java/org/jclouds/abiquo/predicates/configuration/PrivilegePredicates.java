@@ -35,14 +35,14 @@ import com.google.common.base.Predicate;
  */
 public class PrivilegePredicates
 {
-    public static Predicate<Privilege> privilegeName(final String name)
+    public static Predicate<Privilege> name(final String name)
     {
-        return privilegeNames(checkNotNull(name, "Name must be defined"));
+        return names(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<Privilege> privilegeNames(final String... names)
+    public static Predicate<Privilege> names(final String... names)
     {
-        checkNotNull(names, "Names must be defined");
+        checkNotNull(names, "names must be defined");
 
         return new Predicate<Privilege>()
         {
@@ -54,14 +54,14 @@ public class PrivilegePredicates
         };
     }
 
-    public static Predicate<Privilege> privilegeNameNot(final String name)
+    public static Predicate<Privilege> nameNot(final String name)
     {
-        return privilegeNamesNot(checkNotNull(name, "Name must be defined"));
+        return namesNot(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<Privilege> privilegeNamesNot(final String... names)
+    public static Predicate<Privilege> namesNot(final String... names)
     {
-        checkNotNull(names, "Names must be defined");
+        checkNotNull(names, "names must be defined");
 
         Predicate<Privilege> predicate = new Predicate<Privilege>()
         {

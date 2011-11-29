@@ -35,12 +35,12 @@ import com.google.common.base.Predicate;
  */
 public class StoragePoolPredicates
 {
-    public static Predicate<StoragePool> storagePoolName(final String name)
+    public static Predicate<StoragePool> name(final String name)
     {
-        return storagePoolNames(checkNotNull(name, "name must be defined"));
+        return names(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<StoragePool> storagePoolNames(final String... names)
+    public static Predicate<StoragePool> names(final String... names)
     {
         checkNotNull(names, "names must be defined");
 

@@ -34,12 +34,12 @@ import com.google.common.base.Predicate;
  */
 public class DatastorePredicates
 {
-    public static Predicate<Datastore> datastoreName(final String name)
+    public static Predicate<Datastore> name(final String name)
     {
-        return datastoreNames(checkNotNull(name, "name must be defined"));
+        return names(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<Datastore> datastoreNames(final String... names)
+    public static Predicate<Datastore> names(final String... names)
     {
         checkNotNull(names, "names must be defined");
 

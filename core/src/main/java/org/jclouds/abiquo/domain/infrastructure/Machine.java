@@ -109,7 +109,7 @@ public class Machine extends DomainWrapper<MachineDto>
 
     public Datastore findDatastore(final String name)
     {
-        return find(getDatastores(), DatastorePredicates.datastoreName(name), null);
+        return find(getDatastores(), DatastorePredicates.name(name), null);
     }
 
     // Builder

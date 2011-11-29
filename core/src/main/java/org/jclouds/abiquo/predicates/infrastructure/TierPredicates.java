@@ -35,12 +35,12 @@ import com.google.common.base.Predicate;
  */
 public class TierPredicates
 {
-    public static Predicate<Tier> tierName(final String name)
+    public static Predicate<Tier> name(final String name)
     {
-        return tierNames(checkNotNull(name, "name must be defined"));
+        return names(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<Tier> tierNames(final String... names)
+    public static Predicate<Tier> names(final String... names)
     {
         checkNotNull(names, "names must be defined");
 

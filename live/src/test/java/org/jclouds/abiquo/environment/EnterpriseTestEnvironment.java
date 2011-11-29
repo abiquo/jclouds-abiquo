@@ -170,7 +170,7 @@ public class EnterpriseTestEnvironment implements TestEnvironment
             String nick = user.getNick();
             user.delete();
             // Nick is unique in an enterprise
-            assertNull(enterprise.findUser(UserPredicates.userNick(nick)));
+            assertNull(enterprise.findUser(UserPredicates.nick(nick)));
         }
     }
 

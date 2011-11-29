@@ -22,7 +22,7 @@ package org.jclouds.abiquo.domain.exception;
 import static com.google.common.collect.Iterables.any;
 import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
-import static org.jclouds.abiquo.predicates.ErrorPredicates.errorCode;
+import static org.jclouds.abiquo.predicates.ErrorPredicates.code;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public class AbiquoException extends RuntimeException
      */
     public boolean hasError(final String code)
     {
-        return any(errors.getCollection(), errorCode(code));
+        return any(errors.getCollection(), code(code));
     }
 
     /**
@@ -69,7 +69,7 @@ public class AbiquoException extends RuntimeException
      */
     public ErrorDto findError(final String code)
     {
-        return find(errors.getCollection(), errorCode(code), null);
+        return find(errors.getCollection(), code(code), null);
     }
 
     /**
@@ -77,7 +77,7 @@ public class AbiquoException extends RuntimeException
      */
     public List<ErrorDto> findErrors(final String code)
     {
-        return Lists.newLinkedList(filter(errors.getCollection(), errorCode(code)));
+        return Lists.newLinkedList(filter(errors.getCollection(), code(code)));
     }
 
     /**

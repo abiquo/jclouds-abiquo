@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.domain.enterprise;
 
-import static org.jclouds.abiquo.predicates.enterprise.UserPredicates.userNick;
+import static org.jclouds.abiquo.predicates.enterprise.UserPredicates.nick;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -83,7 +83,7 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
         env.user.setRole(env.anotherRole);
         env.user.update();
 
-        Role role2 = env.enterprise.findUser(UserPredicates.userNick(env.user.getNick())).getRole();
+        Role role2 = env.enterprise.findUser(UserPredicates.nick(env.user.getNick())).getRole();
 
         assertEquals(env.anotherRole.getId(), role2.getId());
         assertEquals(role2.getName(), "Another role");
@@ -94,10 +94,10 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnviron
         Iterable<User> users = env.enterprise.listUsers();
         assertEquals(Iterables.size(users), 1);
 
-        users = env.enterprise.listUsers(userNick(env.user.getNick()));
+        users = env.enterprise.listUsers(nick(env.user.getNick()));
         assertEquals(Iterables.size(users), 1);
 
-        users = env.enterprise.listUsers(userNick(env.user.getName() + "FAIL"));
+        users = env.enterprise.listUsers(nick(env.user.getName() + "FAIL"));
         assertEquals(Iterables.size(users), 0);
     }
 
