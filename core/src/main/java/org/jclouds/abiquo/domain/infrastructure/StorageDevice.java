@@ -43,7 +43,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Storage+Device+Resource
+ * @see <a href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource">
+ *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource</a>
  */
 public class StorageDevice extends DomainWrapper<StorageDeviceDto>
 {
