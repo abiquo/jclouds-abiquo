@@ -265,15 +265,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public Machine discoverSingleMachine(final String ip, final HypervisorType hypervisorType,
         final String user, final String password)
     {
-        // Force the hypervisor default port, in order to persist the right one in the database
-        MachineDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverSingleMachine(target, ip, hypervisorType, user, password,
-                    MachineOptions.builder().port(hypervisorType.defaultPort).build());
-
-        return wrap(context, Machine.class, dto);
+        return discoverSingleMachine(ip, hypervisorType, user, password, hypervisorType.defaultPort);
     }
 
     /**
@@ -320,15 +312,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
         final HypervisorType hypervisorType, final String user, final String password)
     {
-        // Force the hypervisor default port, in order to persist the right one in the database
-        MachinesDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
-                    MachineOptions.builder().port(hypervisorType.defaultPort).build());
-
-        return wrap(context, Machine.class, dto.getCollection());
+        return discoverMultipleMachines(ipFrom, ipTo, hypervisorType, user, password,
+            hypervisorType.defaultPort);
     }
 
     /**
