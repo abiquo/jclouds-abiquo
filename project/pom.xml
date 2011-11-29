@@ -38,6 +38,7 @@
     <repositories>
         <repository>
             <id>jclouds</id>
+            <name>Sonatype Repository</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
         <repository>
@@ -50,10 +51,12 @@
     <distributionManagement>
         <repository>
             <id>abiquo-repo</id>
+            <name>Abiquo Releases Repository</name>
             <url>http://repo.community.abiquo.com/libs-releases-local</url>
         </repository>
         <snapshotRepository>
             <id>abiquo-repo</id>
+            <name>Abiquo Snapshot Repository</name>
             <url>http://repo.community.abiquo.com/libs-snapshots-local</url>
         </snapshotRepository>
     </distributionManagement>
