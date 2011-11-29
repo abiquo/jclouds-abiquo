@@ -123,6 +123,6 @@ public class AbiquoException extends RuntimeException
     @Override
     public String getMessage()
     {
-        return getHttpStatusName() + ": " + errors.toString();
+        return errors.toString();
     }
 }
