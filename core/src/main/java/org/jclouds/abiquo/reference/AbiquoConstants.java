@@ -28,4 +28,5 @@ public interface AbiquoConstants
 {
     /** The Abiquo logger. */
     public static final String ABIQUO_LOGGER = "jclouds.abiquo";
+
 }

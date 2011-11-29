@@ -63,6 +63,12 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         return target;
     }
 
+    /**
+     * Read the ID of the parent resource from the given link.
+     * 
+     * @param parentLinkRel The link to the parent resource.
+     * @return The ID of the parent resource.
+     */
     protected Integer getParentId(final String parentLinkRel)
     {
         return target.getIdFromLink(parentLinkRel);

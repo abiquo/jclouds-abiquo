@@ -116,8 +116,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String remoteServicesAddress = Config.get("abiquo.remoteservices.address");
 
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
-                remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu")
+                .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -161,9 +161,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.storage.pass");
 
         storageDevice =
-            StorageDevice.builder(context, datacenter).iscsiIp(ip).iscsiPort(3260).managementIp(ip)
-                .name(PREFIX + "Storage Device").managementPort(8180).username(user).password(pass)
-                .storageTechnology(type).build();
+            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip)
+                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
@@ -172,14 +171,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     private void createStoragePool()
     {
         storagePool =
-            StoragePool.builder(context, storageDevice).enabled(true).name(randomName())
-                .availableSizeInMb(100).totalSizeInMb(100).build();
+            StoragePool.builder(context, storageDevice).name(randomName()).totalSizeInMb(100)
+                .build();
 
         tier = datacenter.listTiers().get(0);
 
         storagePool.setTier(tier);
         storagePool.save();
-        assertNotNull(storagePool.getIdStorage());
+        assertNotNull(storagePool.getUUID());
     }
 
     private void createEnterprise()
@@ -195,7 +194,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     {
         if (storagePool != null)
         {
-            String idStoragePool = storagePool.getIdStorage();
+            String idStoragePool = storagePool.getUUID();
             storagePool.delete();
             assertNull(infrastructureClient.getStoragePool(storageDevice.unwrap(), idStoragePool));
         }
