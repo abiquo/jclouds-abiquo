@@ -36,7 +36,8 @@ import com.abiquo.server.core.infrastructure.storage.TierDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Storage+Pool+Resource
+ * @see <a href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource">
+ *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource</a>
  */
 public class StoragePool extends DomainWrapper<StoragePoolDto>
 {
