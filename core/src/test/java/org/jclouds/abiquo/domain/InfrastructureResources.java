@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.domain;
 
+import static org.jclouds.abiquo.domain.DomainUtils.link;
+
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -386,10 +388,5 @@ public class InfrastructureResources
         buffer.append("<virtualSwitch>192.168.1.10</virtualSwitch>");
         buffer.append("</machine>");
         return buffer.toString();
-    }
-
-    private static String link(final String href, final String rel)
-    {
-        return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\"/>";
     }
 }

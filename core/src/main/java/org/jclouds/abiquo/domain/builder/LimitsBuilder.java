@@ -54,10 +54,6 @@ public abstract class LimitsBuilder<T extends LimitsBuilder<T>>
 
     protected Long publicIpsHard = Long.valueOf(DEFAULT_LIMITS);
 
-    protected Long repositorySoft = Long.valueOf(DEFAULT_LIMITS);
-
-    protected Long repositoryHard = Long.valueOf(DEFAULT_LIMITS);
-
     @SuppressWarnings("unchecked")
     public T ramLimits(final int soft, final int hard)
     {
@@ -103,14 +99,6 @@ public abstract class LimitsBuilder<T extends LimitsBuilder<T>>
     {
         this.publicIpsSoft = soft;
         this.publicIpsHard = hard;
-        return (T) this;
-    }
-
-    @SuppressWarnings("unchecked")
-    public T repositoryLimits(final long soft, final long hard)
-    {
-        this.repositorySoft = soft;
-        this.repositoryHard = hard;
         return (T) this;
     }
 }

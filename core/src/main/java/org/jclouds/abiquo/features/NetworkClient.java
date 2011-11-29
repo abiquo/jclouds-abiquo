@@ -17,31 +17,23 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain;
+package org.jclouds.abiquo.features;
 
-import org.jclouds.xml.XMLParser;
+import java.util.concurrent.TimeUnit;
+
+import org.jclouds.concurrent.Timeout;
 
 /**
- * Utility class to build domain objects used in tests.
+ * Provides synchronous access to Abiquo Network API.
  * 
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see NetworkAsyncClient
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-public class DomainUtils
+@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
+public interface NetworkClient
 {
-    /**
-     * Adds the XML header to the given XML.
-     */
-    public static String withHeader(final String xml)
-    {
-        return XMLParser.DEFAULT_XML_HEADER + xml;
-    }
-
-    /**
-     * Builds a link in xml format
-     */
-    public static String link(final String href, final String rel)
-    {
-        return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\"/>";
-    }
+    /*********************** Network ***********************/
 
 }
