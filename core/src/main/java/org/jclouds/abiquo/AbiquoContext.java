@@ -20,6 +20,7 @@
 package org.jclouds.abiquo;
 
 import org.jclouds.abiquo.features.services.AdministrationService;
+import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.internal.AbiquoContextImpl;
 import org.jclouds.rest.RestContext;
 
@@ -34,4 +35,6 @@ import com.google.inject.ImplementedBy;
 public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClient>
 {
     AdministrationService getAdministrationService();
+
+    CloudService getCloudService();
 }
