@@ -29,7 +29,6 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicate;
@@ -107,9 +106,7 @@ public class Rack extends DomainWrapper<RackDto>
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
-        datacenter = wrap(context, Datacenter.class, dto);
-        return datacenter;
+        return context.getAdministrationService().getDatacenter(datacenterId);
     }
 
     // Children access

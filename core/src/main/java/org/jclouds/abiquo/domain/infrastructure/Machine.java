@@ -34,6 +34,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -93,9 +94,8 @@ public class Machine extends DomainWrapper<MachineDto>
 
     public Rack getRack()
     {
-        Integer rackId = target.getIdFromLink(ParentLinkName.RACK);
-        RackDto dto =
-            context.getApi().getInfrastructureClient().getRack(rack.datacenter.unwrap(), rackId);
+        RESTLink link = target.searchLink(ParentLinkName.RACK);
+        RackDto dto = context.getApi().getInfrastructureClient().getRack(link);
         rack = wrap(context, Rack.class, dto);
         return rack;
     }

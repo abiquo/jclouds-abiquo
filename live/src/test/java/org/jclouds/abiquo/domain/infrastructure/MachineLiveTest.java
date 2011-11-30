@@ -89,7 +89,8 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTest
         env.machine.update();
 
         // Recover the updated machine
-        MachineDto updated = env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
+        MachineDto updated =
+            env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
         assertEquals(updated.getName(), "API Machine");
     }
 
@@ -105,5 +106,12 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTest
         String vswitch = env.machine.getAvailableVirtualSwitches().get(0);
         String found = env.machine.findAvailableVirtualSwitch(vswitch);
         assertEquals(found, vswitch);
+    }
+
+    public void testGetRack()
+    {
+        Rack rack = env.machine.getRack();
+        assertNotNull(rack);
+        assertEquals(rack.getId(), env.rack.getId());
     }
 }

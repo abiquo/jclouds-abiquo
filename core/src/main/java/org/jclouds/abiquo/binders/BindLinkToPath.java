@@ -23,88 +23,39 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.base.Preconditions.checkState;
 
-import java.lang.annotation.Annotation;
 import java.net.URI;
-import java.util.Arrays;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
-import org.jclouds.rest.binders.BindException;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 import com.abiquo.model.rest.RESTLink;
-import com.abiquo.model.transport.SingleResourceTransportDto;
-import com.google.common.base.Predicates;
-import com.google.common.collect.Iterables;
 
 /**
- * Binds the given object to the payload and extracts the path parameters from the edit link.
+ * Binds the given link to the uri.
  * <p>
- * This method should be used in {@link PUT} and {@link DELETE} methods to automatically extract the
- * path parameters from the edit link of the updated object.
+ * This method should be used in {@link GET} methods to get parent resources.
  * 
- * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
 @Singleton
-public class BindToPath implements Binder
+public class BindLinkToPath implements Binder
 {
 
-    @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
         checkArgument(checkNotNull(request, "request") instanceof GeneratedHttpRequest< ? >,
             "this binder is only valid for GeneratedHttpRequests");
         GeneratedHttpRequest< ? > gRequest = (GeneratedHttpRequest< ? >) request;
         checkState(gRequest.getArgs() != null, "args should be initialized at this point");
-        SingleResourceTransportDto dto = checkValidInput(input);
+        RESTLink link = checkValidInput(input);
 
         // Update the request URI with the configured link URI
-        String newEndpoint = getNewEndpoint(gRequest, dto);
+        String newEndpoint = link.getHref();
         return bindToPath(request, newEndpoint);
-    }
-
-    /**
-     * Get the new endpoint to use.
-     * 
-     * @param gRequest The request.
-     * @param dto The input parameter.
-     * @return The new endpoint to use.
-     */
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest,
-        final SingleResourceTransportDto dto)
-    {
-        return getLinkToUse(gRequest, dto).getHref();
-    }
-
-    /**
-     * Get the link to be used to build the request URI.
-     * 
-     * @param request The current request.
-     * @param payload The object containing the link.
-     * @return The link to be used to build the request URI.
-     */
-    static RESTLink getLinkToUse(final GeneratedHttpRequest< ? > request,
-        final SingleResourceTransportDto payload)
-    {
-        int argIndex = request.getArgs().indexOf(payload);
-        Annotation[] annotations = request.getJavaMethod().getParameterAnnotations()[argIndex];
-
-        EndpointLink linkName =
-            (EndpointLink) Iterables.find(Arrays.asList(annotations), Predicates
-                .instanceOf(EndpointLink.class), null);
-
-        if (linkName == null)
-        {
-            throw new BindException(request,
-                "Expected a EndpointLink annotation but not found in the parameter");
-        }
-
-        return checkNotNull(payload.searchLink(linkName.value()),
-            "No link was found in object with rel: " + linkName);
     }
 
     /**
@@ -124,12 +75,12 @@ public class BindToPath implements Binder
         return ModifyRequest.endpoint(request, path);
     }
 
-    static SingleResourceTransportDto checkValidInput(final Object input)
+    static RESTLink checkValidInput(final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof SingleResourceTransportDto,
-            "this binder is only valid for SingleResourceTransportDto objects");
+        checkArgument(checkNotNull(input, "input") instanceof RESTLink,
+            "this binder is only valid for RESTLink objects");
 
-        return (SingleResourceTransportDto) input;
+        return (RESTLink) input;
     }
 
     private static <R extends HttpRequest> String getParameterString(final R request)
@@ -159,6 +110,6 @@ public class BindToPath implements Binder
             // Only matrix parameters
             return endpoint.substring(matrix);
         }
-
     }
+
 }
