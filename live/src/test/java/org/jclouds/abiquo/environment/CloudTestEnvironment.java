@@ -25,6 +25,7 @@ import static org.testng.Assert.assertNull;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
@@ -44,6 +45,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     public Network network;
 
+    public Enterprise defaultEnterprise;
+
     // Login with created user
     AbiquoContext enterpriseContext;
 
@@ -59,6 +62,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         createDatacenter();
         createRack();
         createMachine();
+        createEnterprise();
         findDefaultEnterprise();
         createVirtualDatacenter();
     }
@@ -70,13 +74,14 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         deleteMachine();
         deleteRack();
         deleteDatacenter();
+        deleteEnterprise();
     }
 
     // Setup
 
     protected void findDefaultEnterprise()
     {
-        enterprise =
+        defaultEnterprise =
             context.getAdministrationService().findEnterprise(EnterprisePredicates.name("Abiquo"));
     }
 
@@ -87,7 +92,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
                 "192.168.1.0").mask(24).defaultNetwork(true).build();
 
         virtualDatacenter =
-            VirtualDatacenter.builder(context, datacenter, enterprise).name(
+            VirtualDatacenter.builder(context, datacenter, defaultEnterprise).name(
                 PREFIX + "Virtual Aloha").cpuCountLimits(18, 20).hdLimitsInMb(279172872, 279172872)
                 .publicIpsLimits(2, 2).ramLimits(19456, 20480).storageLimits(289910292, 322122547)
                 .vlansLimits(1, 2).hypervisorType(machine.getType()).network(network).build();

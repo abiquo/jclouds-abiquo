@@ -24,14 +24,12 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.ConfigResources;
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.License;
+import org.jclouds.abiquo.environment.ConfigTestEnvironment;
 import org.jclouds.abiquo.predicates.configuration.LicensePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
-
-import com.abiquo.server.core.config.LicenseDto;
 
 /**
  * Live tests for the {@link ListLicenseImpl} strategy.
@@ -39,32 +37,20 @@ import com.abiquo.server.core.config.LicenseDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListLicensesImplLiveTest extends BaseAbiquoStrategyLiveTest
+public class ListLicensesImplLiveTest extends BaseAbiquoStrategyLiveTest<ConfigTestEnvironment>
 {
     private ListLicensesImpl strategy;
 
-    private AbiquoClient client;
-
-    private LicenseDto license;
+    @Override
+    protected ConfigTestEnvironment environment(final AbiquoContext context)
+    {
+        return new ConfigTestEnvironment(context);
+    }
 
     @Override
     protected void setupStrategy()
     {
         this.strategy = injector.getInstance(ListLicensesImpl.class);
-        this.client = injector.getInstance(AbiquoClient.class);
-    }
-
-    @Override
-    protected void setup()
-    {
-        LicenseDto license = ConfigResources.licensePost();
-        this.license = client.getConfigClient().addLicense(license);
-    }
-
-    @Override
-    protected void tearDown()
-    {
-        client.getConfigClient().removeLicense(license);
     }
 
     public void testExecute()
@@ -98,7 +84,7 @@ public class ListLicensesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithResults()
     {
         Iterable<License> licenses =
-            strategy.execute(LicensePredicates.customer(license.getCustomerid()));
+            strategy.execute(LicensePredicates.code(env.license.getCode()));
         assertNotNull(licenses);
         assertEquals(size(licenses), 1);
     }

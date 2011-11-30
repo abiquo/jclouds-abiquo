@@ -20,21 +20,16 @@
 package org.jclouds.abiquo.strategy.enterprise.internal;
 
 import static com.google.common.collect.Iterables.size;
-import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import java.util.Random;
-
-import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.EnterpriseResources;
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
-
-import com.abiquo.server.core.enterprise.EnterpriseDto;
 
 /**
  * Live tests for the {@link ListDatacentersImpl} strategy.
@@ -42,34 +37,21 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListEnterprisesImplLiveTest extends BaseAbiquoStrategyLiveTest
+public class ListEnterprisesImplLiveTest extends
+    BaseAbiquoStrategyLiveTest<EnterpriseTestEnvironment>
 {
     private ListEnterprisesImpl strategy;
 
-    private AbiquoClient client;
-
-    private EnterpriseDto enterprise;
+    @Override
+    protected EnterpriseTestEnvironment environment(final AbiquoContext context)
+    {
+        return new EnterpriseTestEnvironment(context);
+    }
 
     @Override
     protected void setupStrategy()
     {
         this.strategy = injector.getInstance(ListEnterprisesImpl.class);
-        this.client = injector.getInstance(AbiquoClient.class);
-    }
-
-    @Override
-    protected void setup()
-    {
-        Random generator = new Random(System.currentTimeMillis());
-        EnterpriseDto enterprise = EnterpriseResources.enterprisePost();
-        enterprise.setName(PREFIX + enterprise.getName() + generator.nextInt(100));
-        this.enterprise = client.getEnterpriseClient().createEnterprise(enterprise);
-    }
-
-    @Override
-    protected void tearDown()
-    {
-        client.getEnterpriseClient().deleteEnterprise(enterprise);
     }
 
     public void testExecute()
@@ -90,7 +72,7 @@ public class ListEnterprisesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithResults()
     {
         Iterable<Enterprise> enterprises =
-            strategy.execute(EnterprisePredicates.name(enterprise.getName()));
+            strategy.execute(EnterprisePredicates.name(env.enterprise.getName()));
         assertNotNull(enterprises);
         assertEquals(size(enterprises), 1);
     }

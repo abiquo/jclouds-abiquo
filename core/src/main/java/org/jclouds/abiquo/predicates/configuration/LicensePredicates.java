@@ -52,4 +52,23 @@ public class LicensePredicates
             }
         };
     }
+
+    public static Predicate<License> code(final String code)
+    {
+        return codes(checkNotNull(code, "code must be defined"));
+    }
+
+    public static Predicate<License> codes(final String... codes)
+    {
+        checkNotNull(codes, "customers must be defined");
+
+        return new Predicate<License>()
+        {
+            @Override
+            public boolean apply(final License license)
+            {
+                return Arrays.asList(codes).contains(license.getCode());
+            }
+        };
+    }
 }

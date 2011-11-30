@@ -20,21 +20,16 @@
 package org.jclouds.abiquo.strategy.infrastructure.internal;
 
 import static com.google.common.collect.Iterables.size;
-import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import java.util.Random;
-
-import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.InfrastructureResources;
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
-
-import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
  * Live tests for the {@link ListDatacentersImpl} strategy.
@@ -42,34 +37,21 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
+public class ListDatacentersImplLiveTest extends
+    BaseAbiquoStrategyLiveTest<InfrastructureTestEnvironment>
 {
     private ListDatacentersImpl strategy;
 
-    private AbiquoClient client;
-
-    private DatacenterDto datacenter;
+    @Override
+    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
+    {
+        return new InfrastructureTestEnvironment(context);
+    }
 
     @Override
     protected void setupStrategy()
     {
         this.strategy = injector.getInstance(ListDatacentersImpl.class);
-        this.client = injector.getInstance(AbiquoClient.class);
-    }
-
-    @Override
-    protected void setup()
-    {
-        Random generator = new Random(System.currentTimeMillis());
-        DatacenterDto datacenter = InfrastructureResources.datacenterPost();
-        datacenter.setName(PREFIX + datacenter.getName() + generator.nextInt(100));
-        this.datacenter = client.getInfrastructureClient().createDatacenter(datacenter);
-    }
-
-    @Override
-    protected void tearDown()
-    {
-        client.getInfrastructureClient().deleteDatacenter(datacenter);
     }
 
     public void testExecute()
@@ -90,7 +72,7 @@ public class ListDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithResults()
     {
         Iterable<Datacenter> datacenters =
-            strategy.execute(DatacenterPredicates.name(datacenter.getName()));
+            strategy.execute(DatacenterPredicates.name(env.datacenter.getName()));
         assertNotNull(datacenters);
         assertEquals(size(datacenters), 1);
     }

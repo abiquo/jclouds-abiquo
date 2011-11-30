@@ -24,7 +24,9 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.Privilege;
+import org.jclouds.abiquo.environment.ConfigTestEnvironment;
 import org.jclouds.abiquo.predicates.configuration.PrivilegePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
@@ -35,9 +37,15 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest
+public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest<ConfigTestEnvironment>
 {
     private ListPrivilegesImpl strategy;
+
+    @Override
+    protected ConfigTestEnvironment environment(final AbiquoContext context)
+    {
+        return new ConfigTestEnvironment(context);
+    }
 
     @Override
     protected void setupStrategy()

@@ -21,7 +21,7 @@ package org.jclouds.abiquo.features.services;
 
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.internal.BaseAdministrationService;
+import org.jclouds.abiquo.internal.BaseCloudService;
 
 import com.google.common.base.Predicate;
 import com.google.inject.ImplementedBy;
@@ -32,7 +32,7 @@ import com.google.inject.ImplementedBy;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@ImplementedBy(BaseAdministrationService.class)
+@ImplementedBy(BaseCloudService.class)
 public interface CloudService
 {
     /*********************** VirtualDatacenter ***********************/

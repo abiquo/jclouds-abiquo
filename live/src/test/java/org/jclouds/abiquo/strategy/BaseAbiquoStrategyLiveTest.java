@@ -19,12 +19,13 @@
 
 package org.jclouds.abiquo.strategy;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContextFactory;
+import org.jclouds.abiquo.environment.TestEnvironment;
+import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.util.Config;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
@@ -41,12 +42,14 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoStrategyLiveTest
+public abstract class BaseAbiquoStrategyLiveTest<E extends TestEnvironment> extends
+    BaseAbiquoClientLiveTest<E>
 {
     protected Injector injector;
 
+    @Override
     @BeforeClass(groups = "live")
-    public void setupClient() throws IOException
+    public void setupClient() throws Exception
     {
         String identity = Config.get("abiquo.api.user");
         String credential = Config.get("abiquo.api.pass");
@@ -55,31 +58,27 @@ public abstract class BaseAbiquoStrategyLiveTest
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
 
+        context =
+            new AbiquoContextFactory().createContext(identity, credential, ImmutableSet
+                .<Module> of(new Log4JLoggingModule()), props);
+
         injector =
             new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
                 AbiquoContextFactory.PROVIDER_NAME, identity, credential,
                 ImmutableSet.<Module> of(new Log4JLoggingModule()), props).buildInjector();
 
         setupStrategy();
-        setup();
+        env = environment(context);
+        env.setup();
     }
 
     protected abstract void setupStrategy();
 
-    protected void setup()
-    {
-        // Override if necessary
-    }
-
-    protected void tearDown()
-    {
-        // Override if necessary
-    }
-
+    @Override
     @AfterClass(groups = "live")
-    public void teardownClient() throws IOException
+    public void teardownClient() throws Exception
     {
-        tearDown();
+        env.tearDown();
 
         if (injector != null)
         {
