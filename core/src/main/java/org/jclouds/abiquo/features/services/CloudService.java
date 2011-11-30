@@ -60,4 +60,9 @@ public interface CloudService
      * is found.
      */
     VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter);
+
+    /**
+     * Get the virtual datacenter with the given id.
+     */
+    VirtualDatacenter getVirtualDatacenter(Integer virtualDatacenterId);
 }

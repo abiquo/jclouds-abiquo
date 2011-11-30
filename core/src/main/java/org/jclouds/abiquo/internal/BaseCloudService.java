@@ -20,10 +20,12 @@
 package org.jclouds.abiquo.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -31,6 +33,7 @@ import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 
+import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
@@ -44,6 +47,8 @@ import com.google.common.collect.Iterables;
 public class BaseCloudService implements CloudService
 {
     private final ListVirtualDatacenters listVirtualDatacenters;
+
+    private AbiquoContext context;
 
     @Inject
     protected BaseCloudService(final ListVirtualDatacenters listVirtualDatacenters)
@@ -78,6 +83,14 @@ public class BaseCloudService implements CloudService
         final Predicate<VirtualDatacenter> filter)
     {
         return listVirtualDatacenters.execute(filter);
+    }
+
+    @Override
+    public VirtualDatacenter getVirtualDatacenter(final Integer virtualDatacenterId)
+    {
+        VirtualDatacenterDto virtualDatacenter =
+            context.getApi().getCloudClient().getVirtualDatacenter(virtualDatacenterId);
+        return wrap(context, VirtualDatacenter.class, virtualDatacenter);
     }
 
     @Override
