@@ -35,12 +35,12 @@ import com.google.common.base.Predicate;
  */
 public class MachinePredicates
 {
-    public static Predicate<Machine> machineName(final String ip)
+    public static Predicate<Machine> name(final String ip)
     {
-        return machineNames(checkNotNull(ip, "name must be defined"));
+        return names(checkNotNull(ip, "name must be defined"));
     }
 
-    public static Predicate<Machine> machineNames(final String... ips)
+    public static Predicate<Machine> names(final String... ips)
     {
         checkNotNull(ips, "name must be defined");
 
@@ -54,12 +54,12 @@ public class MachinePredicates
         };
     }
 
-    public static Predicate<Machine> machineIP(final String ip)
+    public static Predicate<Machine> ip(final String ip)
     {
-        return machineIPs(checkNotNull(ip, "ip must be defined"));
+        return ips(checkNotNull(ip, "ip must be defined"));
     }
 
-    public static Predicate<Machine> machineIPs(final String... ips)
+    public static Predicate<Machine> ips(final String... ips)
     {
         checkNotNull(ips, "ips must be defined");
 

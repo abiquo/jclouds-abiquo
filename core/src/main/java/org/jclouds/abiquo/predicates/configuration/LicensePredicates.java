@@ -34,14 +34,14 @@ import com.google.common.base.Predicate;
  */
 public class LicensePredicates
 {
-    public static Predicate<License> customerId(final String customerId)
+    public static Predicate<License> customer(final String customerId)
     {
-        return customerIds(checkNotNull(customerId, "customerId must be defined"));
+        return customers(checkNotNull(customerId, "customer must be defined"));
     }
 
-    public static Predicate<License> customerIds(final String... customerIds)
+    public static Predicate<License> customers(final String... customerIds)
     {
-        checkNotNull(customerIds, "customerId must be defined");
+        checkNotNull(customerIds, "customers must be defined");
 
         return new Predicate<License>()
         {

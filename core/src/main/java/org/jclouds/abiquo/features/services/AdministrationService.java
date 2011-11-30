@@ -56,6 +56,11 @@ public interface AdministrationService
      */
     Datacenter findDatacenter(final Predicate<Datacenter> filter);
 
+    /**
+     * Get the datacenter with the given id.
+     */
+    Datacenter getDatacenter(final Integer datacenterId);
+
     /*********************** Enterprise ***********************/
 
     /**
@@ -74,6 +79,11 @@ public interface AdministrationService
      */
     Enterprise findEnterprise(final Predicate<Enterprise> filter);
 
+    /**
+     * Get the enterprise with the given id.
+     */
+    Enterprise getEnterprise(final Integer enterpriseId);
+
     /*********************** Role ***********************/
 
     /**
@@ -90,6 +100,11 @@ public interface AdministrationService
      * Get the first role that matches the given filter or <code>null</code> if none is found.
      */
     Role findRole(final Predicate<Role> filter);
+
+    /**
+     * Get the role with the given id.
+     */
+    Role getRole(final Integer roleId);
 
     /*********************** Privilege ***********************/
 

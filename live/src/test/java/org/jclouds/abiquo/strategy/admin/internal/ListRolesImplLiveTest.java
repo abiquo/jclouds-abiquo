@@ -81,14 +81,14 @@ public class ListRolesImplLiveTest extends BaseAbiquoStrategyLiveTest
 
     public void testExecutePredicateWithoutResults()
     {
-        Iterable<Role> roles = strategy.execute(RolePredicates.roleName("UNEXISTING"));
+        Iterable<Role> roles = strategy.execute(RolePredicates.name("UNEXISTING"));
         assertNotNull(roles);
         assertEquals(size(roles), 0);
     }
 
     public void testExecutePredicateWithResults()
     {
-        Iterable<Role> roles = strategy.execute(RolePredicates.roleName(role.getName()));
+        Iterable<Role> roles = strategy.execute(RolePredicates.name(role.getName()));
         assertNotNull(roles);
         assertEquals(size(roles), 1);
     }

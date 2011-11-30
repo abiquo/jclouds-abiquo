@@ -67,12 +67,12 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
         storageDevices =
             env.datacenter.listStorageDevices(StorageDevicePredicates
-                .storageDeviceName(env.storageDevice.getName()));
+                .name(env.storageDevice.getName()));
         assertEquals(Iterables.size(storageDevices), 1);
 
         storageDevices =
             env.datacenter.listStorageDevices(StorageDevicePredicates
-                .storageDeviceName(env.storageDevice.getName() + "FAIL"));
+                .name(env.storageDevice.getName() + "FAIL"));
         assertEquals(Iterables.size(storageDevices), 0);
     }
 
@@ -80,12 +80,12 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
     {
         StorageDevice storageDevice =
             env.datacenter.findStorageDevice(StorageDevicePredicates
-                .storageDeviceNames(env.storageDevice.getName()));
+                .names(env.storageDevice.getName()));
         assertNotNull(storageDevice);
 
         storageDevice =
             env.datacenter.findStorageDevice(StorageDevicePredicates
-                .storageDeviceNames(env.storageDevice.getName() + "FAIL"));
+                .names(env.storageDevice.getName() + "FAIL"));
         assertNull(storageDevice);
     }
 

@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
-import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates.remoteServiceType;
+import static org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates.type;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -59,7 +59,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
     public void testUpdate()
     {
         RemoteService rs =
-            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.VIRTUAL_FACTORY));
+            env.datacenter.findRemoteService(type(RemoteServiceType.VIRTUAL_FACTORY));
         rs.setUri("http://testuri");
         rs.update();
 
@@ -74,7 +74,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
     public void testDelete()
     {
         RemoteService rs =
-            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.BPM_SERVICE));
+            env.datacenter.findRemoteService(type(RemoteServiceType.BPM_SERVICE));
         rs.delete();
 
         // Recover the deleted remote service
@@ -101,14 +101,14 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
     public void testIsAvailableNonCheckeable()
     {
         RemoteService rs =
-            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.DHCP_SERVICE));
+            env.datacenter.findRemoteService(type(RemoteServiceType.DHCP_SERVICE));
         assertTrue(rs.isAvailable());
     }
 
     public void testIsAvailable()
     {
         RemoteService rs =
-            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.NODE_COLLECTOR));
+            env.datacenter.findRemoteService(type(RemoteServiceType.NODE_COLLECTOR));
         assertTrue(rs.isAvailable());
     }
 
@@ -133,14 +133,14 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         assertEquals(Iterables.size(remoteServices), env.remoteServices.size());
 
         remoteServices =
-            env.datacenter.listRemoteServices(remoteServiceType(RemoteServiceType.NODE_COLLECTOR));
+            env.datacenter.listRemoteServices(type(RemoteServiceType.NODE_COLLECTOR));
         assertEquals(Iterables.size(remoteServices), 1);
     }
 
     public void testFindRemoteService()
     {
         RemoteService remoteService =
-            env.datacenter.findRemoteService(remoteServiceType(RemoteServiceType.NODE_COLLECTOR));
+            env.datacenter.findRemoteService(type(RemoteServiceType.NODE_COLLECTOR));
         assertNotNull(remoteService);
     }
 

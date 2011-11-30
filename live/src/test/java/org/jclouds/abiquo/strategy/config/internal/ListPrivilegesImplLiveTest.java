@@ -55,7 +55,7 @@ public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithoutResults()
     {
         Iterable<Privilege> privileges =
-            strategy.execute(PrivilegePredicates.privilegeName("Destroy the universe"));
+            strategy.execute(PrivilegePredicates.name("Destroy the universe"));
         assertNotNull(privileges);
         assertEquals(size(privileges), 0);
     }
@@ -63,7 +63,7 @@ public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithResults()
     {
         Iterable<Privilege> privileges =
-            strategy.execute(PrivilegePredicates.privilegeName("USERS_MANAGE_USERS"));
+            strategy.execute(PrivilegePredicates.name("USERS_MANAGE_USERS"));
         assertNotNull(privileges);
         assertEquals(size(privileges), 1);
     }
@@ -71,7 +71,7 @@ public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecuteNotPredicateWithResults()
     {
         Iterable<Privilege> privileges =
-            strategy.execute(PrivilegePredicates.privilegeNameNot("USERS_MANAGE_USERS"));
+            strategy.execute(PrivilegePredicates.nameNot("USERS_MANAGE_USERS"));
 
         Iterable<Privilege> allPrivileges = strategy.execute();
 

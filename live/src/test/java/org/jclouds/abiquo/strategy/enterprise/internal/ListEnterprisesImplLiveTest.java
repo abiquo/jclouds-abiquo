@@ -82,7 +82,7 @@ public class ListEnterprisesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithoutResults()
     {
         Iterable<Enterprise> enterprises =
-            strategy.execute(EnterprisePredicates.enterpriseName("UNEXISTING"));
+            strategy.execute(EnterprisePredicates.name("UNEXISTING"));
         assertNotNull(enterprises);
         assertEquals(size(enterprises), 0);
     }
@@ -90,7 +90,7 @@ public class ListEnterprisesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithResults()
     {
         Iterable<Enterprise> enterprises =
-            strategy.execute(EnterprisePredicates.enterpriseName(enterprise.getName()));
+            strategy.execute(EnterprisePredicates.name(enterprise.getName()));
         assertNotNull(enterprises);
         assertEquals(size(enterprises), 1);
     }

@@ -55,7 +55,7 @@ public class TierLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnv
         tier.update();
 
         // Recover the updated tier
-        Tier updated = env.datacenter.findTier(TierPredicates.tierName("Updated tier"));
+        Tier updated = env.datacenter.findTier(TierPredicates.name("Updated tier"));
         assertEquals(updated.getName(), "Updated tier");
 
         // Set original name
@@ -68,7 +68,7 @@ public class TierLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnv
         Iterable<Tier> tiers = env.datacenter.listTiers();
         assertEquals(Iterables.size(tiers), 4);
 
-        tiers = env.datacenter.listTiers(TierPredicates.tierName("FAIL"));
+        tiers = env.datacenter.listTiers(TierPredicates.name("FAIL"));
         assertEquals(Iterables.size(tiers), 0);
     }
 }

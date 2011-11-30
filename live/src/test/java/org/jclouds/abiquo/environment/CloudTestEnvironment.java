@@ -77,8 +77,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     protected void findDefaultEnterprise()
     {
         enterprise =
-            context.getAdministrationService().findEnterprise(
-                EnterprisePredicates.enterpriseName("Abiquo"));
+            context.getAdministrationService().findEnterprise(EnterprisePredicates.name("Abiquo"));
     }
 
     protected void createVirtualDatacenter()

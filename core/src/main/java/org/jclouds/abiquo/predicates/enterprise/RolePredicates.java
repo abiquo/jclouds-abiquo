@@ -34,12 +34,12 @@ import com.google.common.base.Predicate;
  */
 public class RolePredicates
 {
-    public static Predicate<Role> roleName(final String name)
+    public static Predicate<Role> name(final String name)
     {
-        return roleNames(checkNotNull(name, "name must be defined"));
+        return names(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<Role> roleNames(final String... names)
+    public static Predicate<Role> names(final String... names)
     {
         checkNotNull(names, "names must be defined");
 

@@ -260,6 +260,6 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public RemoteService findRemoteService(final RemoteServiceType type)
     {
-        return find(remoteServices, RemoteServicePredicates.remoteServiceType(type));
+        return find(remoteServices, RemoteServicePredicates.type(type));
     }
 }

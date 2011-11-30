@@ -33,12 +33,12 @@ import com.google.common.base.Predicate;
  */
 public class ErrorPredicates
 {
-    public static Predicate<ErrorDto> errorCode(final String code)
+    public static Predicate<ErrorDto> code(final String code)
     {
-        return errorCodes(checkNotNull(code, "code must be defined"));
+        return codes(checkNotNull(code, "code must be defined"));
     }
 
-    public static Predicate<ErrorDto> errorCodes(final String... codes)
+    public static Predicate<ErrorDto> codes(final String... codes)
     {
         checkNotNull(codes, "codes must be defined");
 

@@ -49,7 +49,7 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<Infrastructure
 
     public void testUpdate()
     {
-        Tier tier3 = env.datacenter.findTier(TierPredicates.tierName("Default Tier 3"));
+        Tier tier3 = env.datacenter.findTier(TierPredicates.name("Default Tier 3"));
         assertNotNull(tier3);
         env.storagePool.setTier(tier3);
         env.storagePool.update();
@@ -67,7 +67,7 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<Infrastructure
         storagePool.save();
 
         StoragePool storagePoolRecovered =
-            env.storageDevice.findStoragePool(StoragePoolPredicates.storagePoolName(storagePool
+            env.storageDevice.findStoragePool(StoragePoolPredicates.name(storagePool
                 .getName()));
 
         assertNotNull(storagePoolRecovered);
@@ -82,12 +82,12 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<Infrastructure
 
         storagePools =
             env.storageDevice.listStoragePools(StoragePoolPredicates
-                .storagePoolName(env.storagePool.getName()));
+                .name(env.storagePool.getName()));
         assertEquals(Iterables.size(storagePools), 1);
 
         storagePools =
             env.storageDevice.listStoragePools(StoragePoolPredicates
-                .storagePoolName(env.storagePool.getName() + "FAIL"));
+                .name(env.storagePool.getName() + "FAIL"));
         assertEquals(Iterables.size(storagePools), 0);
     }
 
@@ -95,12 +95,12 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<Infrastructure
     {
         StoragePool storagePool =
             env.storageDevice.findStoragePool(StoragePoolPredicates
-                .storagePoolNames(env.storagePool.getName()));
+                .names(env.storagePool.getName()));
         assertNotNull(storagePool);
 
         storagePool =
             env.storageDevice.findStoragePool(StoragePoolPredicates
-                .storagePoolNames(env.storagePool.getName() + "FAIL"));
+                .names(env.storagePool.getName() + "FAIL"));
         assertNull(storagePool);
     }
 
