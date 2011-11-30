@@ -198,7 +198,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
                     in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
                     in.getVlansHard())
                 .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).network(
-                    in.getNetwork());
+                    in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }
 

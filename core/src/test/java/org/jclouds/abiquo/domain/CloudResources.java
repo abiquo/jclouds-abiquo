@@ -26,7 +26,7 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 
 /**
- * Infrastructure domain utilities.
+ * Cloud domain utilities.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -38,6 +38,7 @@ public class CloudResources
         VirtualDatacenterDto virtualDatacenter = new VirtualDatacenterDto();
         virtualDatacenter.setName("VDC");
         virtualDatacenter.setHypervisorType(HypervisorType.KVM);
+        virtualDatacenter.setVlan(NetworkResources.vlanPost());
         return virtualDatacenter;
     }
 
@@ -72,6 +73,7 @@ public class CloudResources
         buffer.append("<vlansSoft>0</vlansSoft>");
         buffer.append("<hypervisorType>KVM</hypervisorType>");
         buffer.append("<name>VDC</name>");
+        buffer.append(NetworkResources.VLANNetworkPostPayload());
         buffer.append("</virtualDatacenter>");
         return buffer.toString();
     }
@@ -98,6 +100,7 @@ public class CloudResources
         buffer.append("<hypervisorType>KVM</hypervisorType>");
         buffer.append("<id>1</id>");
         buffer.append("<name>VDC</name>");
+        buffer.append(NetworkResources.VLANNetworkPostPayload());
         buffer.append("</virtualDatacenter>");
         return buffer.toString();
     }

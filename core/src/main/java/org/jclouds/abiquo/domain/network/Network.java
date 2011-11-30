@@ -35,8 +35,6 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  */
 public class Network extends DomainWrapper<VLANNetworkDto>
 {
-    VLANNetworkDto target;
-
     /**
      * Constructor to be used only by the builder.
      */

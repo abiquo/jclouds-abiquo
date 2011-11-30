@@ -46,7 +46,7 @@ public interface CloudClient
      * @param options Optional query params.
      * @return The list of Datacenters.
      */
-    VirtualDatacentersDto listDatacenters(VirtualDatacenterOptions options);
+    VirtualDatacentersDto listVirtualDatacenters(VirtualDatacenterOptions options);
 
     /**
      * Get the given virtual datacenter.

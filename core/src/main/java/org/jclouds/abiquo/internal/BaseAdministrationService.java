@@ -30,7 +30,7 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.features.AdministrationService;
+import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.strategy.SingletonResources;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
 import org.jclouds.abiquo.strategy.config.ListLicenses;
@@ -62,8 +62,6 @@ public class BaseAdministrationService implements AdministrationService
 
     private final SingletonResources singletonResources;
 
-    /*********************** Datacenter ********************** */
-
     @Inject
     protected BaseAdministrationService(final ListDatacenters listDatacenters,
         final ListEnterprises listEnterprises, final ListRoles listRoles,
@@ -77,6 +75,8 @@ public class BaseAdministrationService implements AdministrationService
         this.listPrivileges = checkNotNull(listPrivileges, "listPrivileges");
         this.singletonResources = checkNotNull(globalResources, "globalResources");
     }
+
+    /*********************** Datacenter ********************** */
 
     @Override
     public Iterable<Datacenter> listDatacenters()
@@ -96,7 +96,7 @@ public class BaseAdministrationService implements AdministrationService
         return Iterables.getFirst(listDatacenters(filter), null);
     }
 
-    /*********************** Enterprise ********************** */
+    /*********************** Enterprise ***********************/
 
     @Override
     public Iterable<Enterprise> listEnterprises()

@@ -17,38 +17,38 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.configuration;
+package org.jclouds.abiquo.predicates.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
-import org.jclouds.abiquo.domain.config.License;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 
 import com.google.common.base.Predicate;
 
 /**
- * Container for {@link License} filters.
+ * Container for {@link VirtualDatacenter} filters.
  * 
  * @author Ignasi Barrera
  */
-public class LicensePredicates
+public class VirtualDatacenterPredicates
 {
-    public static Predicate<License> customerId(final String customerId)
+    public static Predicate<VirtualDatacenter> name(final String name)
     {
-        return customerIds(checkNotNull(customerId, "customerId must be defined"));
+        return names(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<License> customerIds(final String... customerIds)
+    public static Predicate<VirtualDatacenter> names(final String... names)
     {
-        checkNotNull(customerIds, "customerId must be defined");
+        checkNotNull(names, "names must be defined");
 
-        return new Predicate<License>()
+        return new Predicate<VirtualDatacenter>()
         {
             @Override
-            public boolean apply(final License license)
+            public boolean apply(final VirtualDatacenter virtualDatacenter)
             {
-                return Arrays.asList(customerIds).contains(license.getCustomerId());
+                return Arrays.asList(names).contains(virtualDatacenter.getName());
             }
         };
     }

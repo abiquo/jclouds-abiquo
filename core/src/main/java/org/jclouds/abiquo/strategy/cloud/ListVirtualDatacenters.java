@@ -17,21 +17,27 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.strategy.cloud;
 
-import org.jclouds.abiquo.features.services.AdministrationService;
-import org.jclouds.abiquo.internal.AbiquoContextImpl;
-import org.jclouds.rest.RestContext;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.strategy.ListRootEntities;
+import org.jclouds.abiquo.strategy.cloud.internal.ListVirtualDatacentersImpl;
 
+import com.google.common.base.Predicate;
 import com.google.inject.ImplementedBy;
 
 /**
- * Abiquo {@link RestContext} implementation to expose high level Abiquo functionalities.
+ * List virtual datacenters.
  * 
  * @author Ignasi Barrera
  */
-@ImplementedBy(AbiquoContextImpl.class)
-public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClient>
+@ImplementedBy(ListVirtualDatacentersImpl.class)
+public interface ListVirtualDatacenters extends ListRootEntities<VirtualDatacenter>
 {
-    AdministrationService getAdministrationService();
+    Iterable<VirtualDatacenter> execute(VirtualDatacenterOptions virtualDatacenterOptions);
+
+    Iterable<VirtualDatacenter> execute(Predicate<VirtualDatacenter> selector,
+        VirtualDatacenterOptions virtualDatacenterOptions);
+
 }

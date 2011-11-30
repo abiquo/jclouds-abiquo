@@ -25,12 +25,16 @@ import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.features.AdminAsyncClient;
 import org.jclouds.abiquo.features.AdminClient;
+import org.jclouds.abiquo.features.CloudAsyncClient;
+import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.features.ConfigAsyncClient;
 import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseAsyncClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.features.NetworkAsyncClient;
+import org.jclouds.abiquo.features.NetworkClient;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.RequiresHttp;
@@ -57,6 +61,8 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
             .put(EnterpriseClient.class, EnterpriseAsyncClient.class) //
             .put(AdminClient.class, AdminAsyncClient.class) //
             .put(ConfigClient.class, ConfigAsyncClient.class) //
+            .put(NetworkClient.class, NetworkAsyncClient.class) //
+            .put(CloudClient.class, CloudAsyncClient.class) //
             .build();
 
     public AbiquoRestClientModule()

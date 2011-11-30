@@ -32,10 +32,10 @@ import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.AdminClient;
-import org.jclouds.abiquo.features.AdministrationService;
 import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 
 /**

@@ -27,7 +27,7 @@ import java.nio.charset.Charset;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.License;
-import org.jclouds.abiquo.features.AdministrationService;
+import org.jclouds.abiquo.features.services.AdministrationService;
 
 import com.google.common.io.Resources;
 

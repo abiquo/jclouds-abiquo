@@ -28,7 +28,7 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.features.AdministrationService;
+import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.domain.Credentials;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.location.Provider;

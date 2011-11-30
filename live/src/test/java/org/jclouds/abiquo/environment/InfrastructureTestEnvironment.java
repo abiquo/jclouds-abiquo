@@ -56,7 +56,7 @@ import com.abiquo.model.enumerator.StorageTechnologyType;
 public class InfrastructureTestEnvironment implements TestEnvironment
 {
     /** The rest context. */
-    private AbiquoContext context;
+    protected AbiquoContext context;
 
     // Environment data made public so tests can use them easily
     public InfrastructureClient infrastructureClient;
@@ -111,13 +111,13 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     // Setup
 
-    private void createDatacenter()
+    protected void createDatacenter()
     {
         String remoteServicesAddress = Config.get("abiquo.remoteservices.address");
 
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu")
-                .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
+                remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -125,7 +125,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertEquals(remoteServices.size(), 7);
     }
 
-    private void createMachine()
+    protected void createMachine()
     {
         String ip = Config.get("abiquo.hypervisor.address");
         HypervisorType type = HypervisorType.valueOf(Config.get("abiquo.hypervisor.type"));
@@ -145,14 +145,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         machine.save();
     }
 
-    private void createRack()
+    protected void createRack()
     {
         rack = Rack.builder(context, datacenter).name(PREFIX + "Aloha").build();
         rack.save();
         assertNotNull(rack.getId());
     }
 
-    private void createStorageDevice()
+    protected void createStorageDevice()
     {
         String ip = Config.get("abiquo.storage.address");
         StorageTechnologyType type =
@@ -161,14 +161,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.storage.pass");
 
         storageDevice =
-            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip)
-                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
+            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip).name(
+                PREFIX + "Storage Device").username(user).password(pass).type(type).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
     }
 
-    private void createStoragePool()
+    protected void createStoragePool()
     {
         storagePool =
             StoragePool.builder(context, storageDevice).name(randomName()).totalSizeInMb(100)
@@ -181,7 +181,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(storagePool.getUUID());
     }
 
-    private void createEnterprise()
+    protected void createEnterprise()
     {
         enterprise = Enterprise.builder(context).name(randomName()).build();
         enterprise.save();
@@ -190,7 +190,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     // Tear down
 
-    private void deleteStoragePool()
+    protected void deleteStoragePool()
     {
         if (storagePool != null)
         {
@@ -201,7 +201,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     }
 
-    private void deleteStorageDevice()
+    protected void deleteStorageDevice()
     {
         if (storageDevice != null)
         {
@@ -211,7 +211,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    private void deleteMachine()
+    protected void deleteMachine()
     {
         if (machine != null && rack != null)
         {
@@ -221,7 +221,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    private void deleteRack()
+    protected void deleteRack()
     {
         if (rack != null && datacenter != null)
         {
@@ -231,7 +231,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    private void deleteDatacenter()
+    protected void deleteDatacenter()
     {
         if (datacenter != null)
         {
@@ -241,7 +241,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    private void deleteEnterprise()
+    protected void deleteEnterprise()
     {
         if (enterprise != null)
         {
@@ -251,7 +251,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    private static String randomName()
+    protected static String randomName()
     {
         return PREFIX + UUID.randomUUID().toString().substring(0, 12);
     }
