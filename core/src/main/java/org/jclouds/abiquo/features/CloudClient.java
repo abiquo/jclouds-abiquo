@@ -24,8 +24,10 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 
 /**
  * Provides synchronous access to Abiquo Cloud API.
@@ -81,4 +83,23 @@ public interface CloudClient
      * @param virtualDatacenter The virtual datacenter to delete.
      */
     void deleteVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+
+    /*********************** Virtual Appliance ***********************/
+
+    /**
+     * List all virtual appliance for a virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @return The list of virtual appliances for the virtual datacenter.
+     */
+    VirtualAppliancesDto listVirtualAppliances(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * Get the given virtual appliance from the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param virtualApplianceId The id of the virtual appliance.
+     * @return The virtual appliance or <code>null</code> if it does not exist.
+     */
+    RackDto getVirtualAppliance(VirtualDatacenterDto virtualDatacenter, Integer virtualApplianceId);
 }

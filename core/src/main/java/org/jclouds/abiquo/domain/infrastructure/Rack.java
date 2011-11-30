@@ -41,7 +41,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Rack+Resource
+ * @see <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
+ *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
 public class Rack extends DomainWrapper<RackDto>
 {

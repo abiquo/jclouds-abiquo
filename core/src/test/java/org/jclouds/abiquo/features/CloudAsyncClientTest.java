@@ -170,6 +170,49 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
+    /*********************** Virtual Appliance ***********************/
+
+    public void testListVirtualAppliance() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("listVirtualAppliances", VirtualDatacenterDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetVirtualAppliance() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("getVirtualAppliance", VirtualDatacenterDto.class,
+                Integer.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
     @Override
     protected TypeLiteral<RestAnnotationProcessor<CloudAsyncClient>> createTypeLiteral()
     {

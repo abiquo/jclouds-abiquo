@@ -30,6 +30,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
+import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
@@ -41,6 +42,8 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.cloud.VirtualApplianceDto;
+import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -100,4 +103,22 @@ public interface CloudAsyncClient
     @DELETE
     ListenableFuture<Void> deleteVirtualDatacenter(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /*********************** Virtual Appliance ***********************/
+
+    /**
+     * @see CloudClient#listVirtualAppliances(VirtualDatacenterDto)
+     */
+    @GET
+    ListenableFuture<VirtualAppliancesDto> listVirtualAppliances(
+        @EndpointLink("virtualappliance") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#getVirtualAppliance(VirtualDatacenterDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<VirtualApplianceDto> getVirtualAppliance(
+        @EndpointLink("virtualappliance") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendToPath.class) Integer virtualDatacenterId);
 }
