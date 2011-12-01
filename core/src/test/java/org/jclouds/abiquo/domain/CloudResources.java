@@ -23,6 +23,7 @@ import static org.jclouds.abiquo.domain.DomainUtils.link;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 
 /**
@@ -42,6 +43,13 @@ public class CloudResources
         return virtualDatacenter;
     }
 
+    public static VirtualApplianceDto virtualAppliancePost()
+    {
+        VirtualApplianceDto virtualAppliance = new VirtualApplianceDto();
+        virtualAppliance.setName("VA");
+        return virtualAppliance;
+    }
+
     public static VirtualDatacenterDto virtualDatacenterPut()
     {
         VirtualDatacenterDto virtualDatacenter = virtualDatacenterPost();
@@ -55,6 +63,17 @@ public class CloudResources
         virtualDatacenter.addLink(new RESTLink("virtualappliance",
             "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances"));
         return virtualDatacenter;
+    }
+
+    public static VirtualApplianceDto virtualAppliancePut()
+    {
+        VirtualApplianceDto virtualAppliance = virtualAppliancePost();
+        virtualAppliance.setId(1);
+        virtualAppliance.addLink(new RESTLink("virtualdatacenter",
+            "http://localhost/api/cloud/virtualdatacenters/1"));
+        virtualAppliance.addLink(new RESTLink("edit",
+            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1"));
+        return virtualAppliance;
     }
 
     public static String virtualDatacenterPostPayload()
@@ -77,6 +96,18 @@ public class CloudResources
         buffer.append("<name>VDC</name>");
         buffer.append(NetworkResources.VLANNetworkPostPayload());
         buffer.append("</virtualDatacenter>");
+        return buffer.toString();
+    }
+
+    public static String virtualAppliancePostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualAppliance>");
+        buffer.append("<error>0</error>");
+        buffer.append("<highDisponibility>0</highDisponibility>");
+        buffer.append("<name>VA</name>");
+        buffer.append("<publicApp>0</publicApp>");
+        buffer.append("</virtualAppliance>");
         return buffer.toString();
     }
 
@@ -105,6 +136,21 @@ public class CloudResources
         buffer.append("<name>VDC</name>");
         buffer.append(NetworkResources.VLANNetworkPostPayload());
         buffer.append("</virtualDatacenter>");
+        return buffer.toString();
+    }
+
+    public static String virtualAppliancePutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualAppliance>");
+        buffer.append(link("/cloud/virtualdatacenters/1", "virtualdatacenter"));
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "edit"));
+        buffer.append("<error>0</error>");
+        buffer.append("<highDisponibility>0</highDisponibility>");
+        buffer.append("<id>1</id>");
+        buffer.append("<name>VA</name>");
+        buffer.append("<publicApp>0</publicApp>");
+        buffer.append("</virtualAppliance>");
         return buffer.toString();
     }
 }

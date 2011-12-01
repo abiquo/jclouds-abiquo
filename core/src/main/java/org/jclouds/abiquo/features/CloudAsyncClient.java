@@ -121,4 +121,19 @@ public interface CloudAsyncClient
     ListenableFuture<VirtualApplianceDto> getVirtualAppliance(
         @EndpointLink("virtualappliance") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer virtualDatacenterId);
+
+    /**
+     * @see CloudClient#createVirtualAppliance(VirtualDatacenterDto, VirtualApplianceDto)
+     */
+    @POST
+    ListenableFuture<VirtualApplianceDto> createVirtualAppliance(
+        @EndpointLink("virtualappliance") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(BindToXMLPayload.class) VirtualApplianceDto virtualAppliance);
+
+    /**
+     * @see CloudClient#updateVirtualAppliance(VirtualDatacenterDto)
+     */
+    @PUT
+    ListenableFuture<VirtualApplianceDto> updateVirtualAppliance(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualApplianceDto virtualAppliance);
 }

@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
@@ -102,4 +103,22 @@ public interface CloudClient
      * @return The virtual appliance or <code>null</code> if it does not exist.
      */
     RackDto getVirtualAppliance(VirtualDatacenterDto virtualDatacenter, Integer virtualApplianceId);
+
+    /**
+     * Create a new virtual appliance in a virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param virtualAppliance The virtual appliance to be created.
+     * @return The created virtual appliance.
+     */
+    VirtualApplianceDto createVirtualAppliance(VirtualDatacenterDto virtualDatacenter,
+        VirtualApplianceDto virtualAppliance);
+
+    /**
+     * Updates an existing virtual appliance from the given virtual datacenter.
+     * 
+     * @param virtualAppliance The new attributes for the virtual appliance.
+     * @return The updated virtual appliance.
+     */
+    VirtualApplianceDto updateVirtualAppliance(VirtualApplianceDto virtualAppliance);
 }

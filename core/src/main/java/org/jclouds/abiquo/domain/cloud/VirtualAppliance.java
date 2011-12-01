@@ -41,8 +41,6 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     // Package protected to allow navigation from children
     VirtualDatacenter virtualDatacenter;
 
-    VirtualApplianceDto target;
-
     /**
      * Constructor to be used only by the builder.
      */
@@ -52,6 +50,18 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     // Domain operations
+
+    public void save()
+    {
+        target =
+            context.getApi().getCloudClient().createVirtualAppliance(virtualDatacenter.unwrap(),
+                target);
+    }
+
+    public void update()
+    {
+        target = context.getApi().getCloudClient().updateVirtualAppliance(target);
+    }
 
     // Parent access
     /**
