@@ -121,4 +121,11 @@ public interface CloudClient
      * @return The updated virtual appliance.
      */
     VirtualApplianceDto updateVirtualAppliance(VirtualApplianceDto virtualAppliance);
+
+    /**
+     * Deletes an existing virtual appliance.
+     * 
+     * @param virtualAppliance The virtual appliance to delete.
+     */
+    void deleteVirtualAppliance(VirtualApplianceDto virtualAppliance);
 }

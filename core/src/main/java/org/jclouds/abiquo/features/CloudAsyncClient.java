@@ -131,9 +131,16 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VirtualApplianceDto virtualAppliance);
 
     /**
-     * @see CloudClient#updateVirtualAppliance(VirtualDatacenterDto)
+     * @see CloudClient#updateVirtualAppliance(VirtualApplianceDto)
      */
     @PUT
     ListenableFuture<VirtualApplianceDto> updateVirtualAppliance(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualApplianceDto virtualAppliance);
+
+    /**
+     * @see CloudClient#deleteVirtualAppliance(VirtualApplianceDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteVirtualAppliance(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 }

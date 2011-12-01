@@ -51,6 +51,12 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     // Domain operations
 
+    public void delete()
+    {
+        context.getApi().getCloudClient().deleteVirtualAppliance(target);
+        target = null;
+    }
+
     public void save()
     {
         target =
