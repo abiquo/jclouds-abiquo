@@ -24,6 +24,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Network;
@@ -42,6 +43,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     public CloudClient cloudClient;
 
     public VirtualDatacenter virtualDatacenter;
+
+    public VirtualAppliance virtualAppliance;
 
     public Network network;
 
@@ -65,6 +68,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         createEnterprise();
         findDefaultEnterprise();
         createVirtualDatacenter();
+        createVirtualAppliance();
     }
 
     @Override
@@ -101,6 +105,15 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         assertNotNull(virtualDatacenter.getId());
     }
 
+    protected void createVirtualAppliance()
+    {
+        virtualAppliance =
+            VirtualAppliance.builder(context, virtualDatacenter).name("Virtual AppAloha").build();
+
+        virtualAppliance.save();
+        assertNotNull(virtualAppliance.getId());
+    }
+
     // Tear down
 
     protected void deleteVirtualDatacenter()
@@ -110,6 +123,17 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
             Integer idVirtualDatacenter = virtualDatacenter.getId();
             virtualDatacenter.delete();
             assertNull(cloudClient.getVirtualDatacenter(idVirtualDatacenter));
+        }
+    }
+
+    protected void deleteVirtualAppliance()
+    {
+        if (virtualAppliance != null && virtualDatacenter != null)
+        {
+            Integer idVirtualAppliance = virtualAppliance.getId();
+            virtualAppliance.delete();
+            assertNull(cloudClient.getVirtualAppliance(virtualDatacenter.unwrap(),
+                idVirtualAppliance));
         }
     }
 }

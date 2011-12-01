@@ -19,8 +19,11 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.VirtualMachineState;
@@ -39,7 +42,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 {
     /** The datacenter where the rack belongs. */
     // Package protected to allow navigation from children
-    VirtualDatacenter virtualDatacenter;
+    public VirtualDatacenter virtualDatacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -87,6 +90,59 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     // Children access
 
     // Builder
+    public static Builder builder(final AbiquoContext context,
+        final VirtualDatacenter virtualDatacenter)
+    {
+        return new Builder(context, virtualDatacenter);
+    }
+
+    public static class Builder
+    {
+        private AbiquoContext context;
+
+        private String name;
+
+        private VirtualDatacenter virtualDatacenter;
+
+        public Builder(final AbiquoContext context, final VirtualDatacenter virtualDatacenter)
+        {
+            super();
+            checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE
+                + VirtualDatacenter.class);
+            this.virtualDatacenter = virtualDatacenter;
+            this.context = context;
+        }
+
+        public Builder name(final String name)
+        {
+            this.name = name;
+            return this;
+        }
+
+        public Builder virtualDatacenter(final VirtualDatacenter virtualDatacenter)
+        {
+            checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE
+                + VirtualDatacenter.class);
+            this.virtualDatacenter = virtualDatacenter;
+            return this;
+        }
+
+        public VirtualAppliance build()
+        {
+            VirtualApplianceDto dto = new VirtualApplianceDto();
+            dto.setName(name);
+
+            VirtualAppliance virtualAppliance = new VirtualAppliance(context, dto);
+            virtualAppliance.virtualDatacenter = virtualDatacenter;
+
+            return virtualAppliance;
+        }
+
+        public static Builder fromVirtualAppliance(final VirtualAppliance in)
+        {
+            return VirtualAppliance.builder(in.context, in.virtualDatacenter).name(in.getName());
+        }
+    }
 
     // Delegate methods
 

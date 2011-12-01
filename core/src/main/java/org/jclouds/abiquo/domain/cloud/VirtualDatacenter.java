@@ -20,6 +20,9 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
+
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
@@ -31,7 +34,11 @@ import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link VirtualDatacenterDto}.
@@ -98,6 +105,30 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     // Children access
+
+    // Children access
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances</a>
+     */
+    public List<VirtualAppliance> listVirtualAppliances()
+    {
+        VirtualAppliancesDto virtualAppliances =
+            context.getApi().getCloudClient().listVirtualAppliances(target);
+        return wrap(context, VirtualAppliance.class, virtualAppliances.getCollection());
+    }
+
+    public List<VirtualAppliance> listVirtualAppliances(final Predicate<VirtualAppliance> filter)
+    {
+        return Lists.newLinkedList(filter(listVirtualAppliances(), filter));
+    }
+
+    public VirtualAppliance findVirtualAppliance(final Predicate<VirtualAppliance> filter)
+    {
+        return Iterables.getFirst(filter(listVirtualAppliances(), filter), null);
+    }
 
     // Actions
 

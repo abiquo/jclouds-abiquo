@@ -28,7 +28,6 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
-import com.abiquo.server.core.infrastructure.RackDto;
 
 /**
  * Provides synchronous access to Abiquo Cloud API.
@@ -102,7 +101,8 @@ public interface CloudClient
      * @param virtualApplianceId The id of the virtual appliance.
      * @return The virtual appliance or <code>null</code> if it does not exist.
      */
-    RackDto getVirtualAppliance(VirtualDatacenterDto virtualDatacenter, Integer virtualApplianceId);
+    VirtualApplianceDto getVirtualAppliance(VirtualDatacenterDto virtualDatacenter,
+        Integer virtualApplianceId);
 
     /**
      * Create a new virtual appliance in a virtual datacenter.
