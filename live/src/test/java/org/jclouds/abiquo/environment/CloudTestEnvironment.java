@@ -74,6 +74,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     @Override
     public void tearDown() throws Exception
     {
+        deleteVirtualAppliance();
         deleteVirtualDatacenter();
         deleteMachine();
         deleteRack();

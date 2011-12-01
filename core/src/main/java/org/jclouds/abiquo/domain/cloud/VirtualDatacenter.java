@@ -106,8 +106,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     // Children access
 
-    // Children access
-
     /**
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances">

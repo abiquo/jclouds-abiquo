@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 
 /**
- * Live integration tests for the {@link VirtualDatacenter} domain class.
+ * Live integration tests for the {@link VirtualAppliance} domain class.
  * 
  * @author Francesc Montserrat
  */
@@ -48,7 +48,7 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest<CloudTest
     public void testUpdate()
     {
         env.virtualAppliance.setName("Virtual AppAloha updated");
-        env.virtualDatacenter.update();
+        env.virtualAppliance.update();
 
         // Recover the updated virtual datacenter
         VirtualApplianceDto updated =
