@@ -131,7 +131,7 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VirtualApplianceDto virtualAppliance);
 
     /**
-     * @see CloudClient#updateVirtualAppliance(VirtualDatacenterDto)
+     * @see CloudClient#updateVirtualAppliance(VirtualApplianceDto)
      */
     @PUT
     ListenableFuture<VirtualApplianceDto> updateVirtualAppliance(
