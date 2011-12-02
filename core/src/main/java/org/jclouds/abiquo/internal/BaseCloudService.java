@@ -51,8 +51,10 @@ public class BaseCloudService implements CloudService
     private AbiquoContext context;
 
     @Inject
-    protected BaseCloudService(final ListVirtualDatacenters listVirtualDatacenters)
+    protected BaseCloudService(final AbiquoContext context,
+        final ListVirtualDatacenters listVirtualDatacenters)
     {
+        this.context = checkNotNull(context, "context");
         this.listVirtualDatacenters =
             checkNotNull(listVirtualDatacenters, "listVirtualDatacenters");
     }
