@@ -21,15 +21,10 @@ package org.jclouds.abiquo.binders;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.base.Preconditions.checkState;
-
-import java.net.URI;
 
 import javax.inject.Singleton;
+import javax.ws.rs.GET;
 
-import org.jclouds.http.HttpRequest;
-import org.jclouds.http.utils.ModifyRequest;
-import org.jclouds.rest.Binder;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 
 import com.abiquo.model.rest.RESTLink;
@@ -42,74 +37,16 @@ import com.abiquo.model.rest.RESTLink;
  * @author Francesc Montserrat
  */
 @Singleton
-public class BindLinkToPath implements Binder
+public class BindLinkToPath extends BindToPath
 {
 
-    public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
-    {
-        checkArgument(checkNotNull(request, "request") instanceof GeneratedHttpRequest< ? >,
-            "this binder is only valid for GeneratedHttpRequests");
-        GeneratedHttpRequest< ? > gRequest = (GeneratedHttpRequest< ? >) request;
-        checkState(gRequest.getArgs() != null, "args should be initialized at this point");
-        RESTLink link = checkValidInput(input);
-
-        // Update the request URI with the configured link URI
-        String newEndpoint = link.getHref();
-        return bindToPath(request, newEndpoint);
-    }
-
-    /**
-     * Bind the given link to the request URI.
-     * 
-     * @param request The request to modify.
-     * @param endpoint The endpoint to use as the request URI.
-     * @return The updated request.
-     */
-    static <R extends HttpRequest> R bindToPath(final R request, final String endpoint)
-    {
-        // Preserve current query and matrix parameters
-        String newEndpoint = endpoint + getParameterString(request);
-
-        // Replace the URI with the edit link in the DTO
-        URI path = URI.create(newEndpoint);
-        return ModifyRequest.endpoint(request, path);
-    }
-
-    static RESTLink checkValidInput(final Object input)
+    @Override
+    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
     {
         checkArgument(checkNotNull(input, "input") instanceof RESTLink,
             "this binder is only valid for RESTLink objects");
 
-        return (RESTLink) input;
-    }
-
-    private static <R extends HttpRequest> String getParameterString(final R request)
-    {
-        String endpoint = request.getEndpoint().toString();
-
-        int query = endpoint.indexOf('?');
-        int matrix = endpoint.indexOf(';');
-
-        if (query == -1 && matrix == -1)
-        {
-            // No parameters
-            return "";
-        }
-        else if (query != -1 && matrix != -1)
-        {
-            // Both parameter types
-            return endpoint.substring(query < matrix ? query : matrix);
-        }
-        else if (query != -1)
-        {
-            // Only request parameters
-            return endpoint.substring(query);
-        }
-        else
-        {
-            // Only matrix parameters
-            return endpoint.substring(matrix);
-        }
+        return ((RESTLink) input).getHref();
     }
 
 }

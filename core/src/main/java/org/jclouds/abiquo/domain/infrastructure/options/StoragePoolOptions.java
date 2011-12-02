@@ -21,6 +21,11 @@ package org.jclouds.abiquo.domain.infrastructure.options;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
+/**
+ * Available options to query storage pools.
+ * 
+ * @author Francesc Montserrat
+ */
 public class StoragePoolOptions extends QueryOptions
 {
     public static Builder builder()

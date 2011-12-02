@@ -25,6 +25,7 @@ import static com.google.common.base.Preconditions.checkState;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+import javax.ws.rs.PUT;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.binders.BindToXMLPayload;
@@ -57,10 +58,9 @@ public class BindToXMLPayloadAndPath extends BindToXMLPayload
             "this binder is only valid for GeneratedHttpRequests");
         GeneratedHttpRequest< ? > gRequest = (GeneratedHttpRequest< ? >) request;
         checkState(gRequest.getArgs() != null, "args should be initialized at this point");
-        SingleResourceTransportDto dto = BindToPath.checkValidInput(payload);
 
         // Update the request URI with the configured link URI
-        String newEndpoint = getNewEndpoint(gRequest, dto);
+        String newEndpoint = getNewEndpoint(gRequest, payload);
         R updatedRequest = BindToPath.bindToPath(request, newEndpoint);
 
         // Add the payload
@@ -71,12 +71,12 @@ public class BindToXMLPayloadAndPath extends BindToXMLPayload
      * Get the new endpoint to use.
      * 
      * @param gRequest The request.
-     * @param dto The input parameter.
+     * @param input The input parameter.
      * @return The new endpoint to use.
      */
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest,
-        final SingleResourceTransportDto dto)
+    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
     {
+        SingleResourceTransportDto dto = BindToPath.checkValidInput(input);
         return BindToPath.getLinkToUse(gRequest, dto).getHref();
     }
 }

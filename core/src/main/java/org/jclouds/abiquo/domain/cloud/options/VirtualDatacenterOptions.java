@@ -21,6 +21,11 @@ package org.jclouds.abiquo.domain.cloud.options;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
+/**
+ * Available options to query virtual datacenters.
+ * 
+ * @author Francesc Montserrat
+ */
 public class VirtualDatacenterOptions extends QueryOptions
 {
     public static Builder builder()

@@ -194,7 +194,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         }
 
         createRemoteService(RemoteServiceType.APPLIANCE_MANAGER);
-        createRemoteService(RemoteServiceType.VIRTUAL_FACTORY);
+        createRemoteService(RemoteServiceType.TARANTINO);
         createRemoteService(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR);
         createRemoteService(RemoteServiceType.NODE_COLLECTOR);
     }

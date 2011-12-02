@@ -58,23 +58,21 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
     public void testUpdate()
     {
-        RemoteService rs =
-            env.datacenter.findRemoteService(type(RemoteServiceType.VIRTUAL_FACTORY));
+        RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.TARANTINO));
         rs.setUri("http://testuri");
         rs.update();
 
         // Recover the updated remote service
         RemoteServiceDto updated =
             env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
-                RemoteServiceType.VIRTUAL_FACTORY);
+                RemoteServiceType.TARANTINO);
 
         assertEquals(updated.getUri(), rs.getUri());
     }
 
     public void testDelete()
     {
-        RemoteService rs =
-            env.datacenter.findRemoteService(type(RemoteServiceType.BPM_SERVICE));
+        RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.BPM_SERVICE));
         rs.delete();
 
         // Recover the deleted remote service
@@ -100,15 +98,13 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
     public void testIsAvailableNonCheckeable()
     {
-        RemoteService rs =
-            env.datacenter.findRemoteService(type(RemoteServiceType.DHCP_SERVICE));
+        RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.DHCP_SERVICE));
         assertTrue(rs.isAvailable());
     }
 
     public void testIsAvailable()
     {
-        RemoteService rs =
-            env.datacenter.findRemoteService(type(RemoteServiceType.NODE_COLLECTOR));
+        RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.NODE_COLLECTOR));
         assertTrue(rs.isAvailable());
     }
 
@@ -132,8 +128,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         Iterable<RemoteService> remoteServices = env.datacenter.listRemoteServices();
         assertEquals(Iterables.size(remoteServices), env.remoteServices.size());
 
-        remoteServices =
-            env.datacenter.listRemoteServices(type(RemoteServiceType.NODE_COLLECTOR));
+        remoteServices = env.datacenter.listRemoteServices(type(RemoteServiceType.NODE_COLLECTOR));
         assertEquals(Iterables.size(remoteServices), 1);
     }
 

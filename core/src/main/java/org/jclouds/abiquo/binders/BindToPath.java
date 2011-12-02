@@ -28,6 +28,8 @@ import java.net.URI;
 import java.util.Arrays;
 
 import javax.inject.Singleton;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.PUT;
 
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
@@ -60,10 +62,9 @@ public class BindToPath implements Binder
             "this binder is only valid for GeneratedHttpRequests");
         GeneratedHttpRequest< ? > gRequest = (GeneratedHttpRequest< ? >) request;
         checkState(gRequest.getArgs() != null, "args should be initialized at this point");
-        SingleResourceTransportDto dto = checkValidInput(input);
 
         // Update the request URI with the configured link URI
-        String newEndpoint = getNewEndpoint(gRequest, dto);
+        String newEndpoint = getNewEndpoint(gRequest, input);
         return bindToPath(request, newEndpoint);
     }
 
@@ -71,12 +72,12 @@ public class BindToPath implements Binder
      * Get the new endpoint to use.
      * 
      * @param gRequest The request.
-     * @param dto The input parameter.
+     * @param input The input parameter.
      * @return The new endpoint to use.
      */
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest,
-        final SingleResourceTransportDto dto)
+    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
     {
+        SingleResourceTransportDto dto = checkValidInput(input);
         return getLinkToUse(gRequest, dto).getHref();
     }
 
@@ -94,8 +95,8 @@ public class BindToPath implements Binder
         Annotation[] annotations = request.getJavaMethod().getParameterAnnotations()[argIndex];
 
         EndpointLink linkName =
-            (EndpointLink) Iterables.find(Arrays.asList(annotations), Predicates
-                .instanceOf(EndpointLink.class), null);
+            (EndpointLink) Iterables.find(Arrays.asList(annotations),
+                Predicates.instanceOf(EndpointLink.class), null);
 
         if (linkName == null)
         {

@@ -21,6 +21,11 @@ package org.jclouds.abiquo.domain.infrastructure.options;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
+/**
+ * Available options to query machines.
+ * 
+ * @author Francesc Montserrat
+ */
 public class MachineOptions extends QueryOptions
 {
     public static Builder builder()

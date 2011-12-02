@@ -60,6 +60,8 @@ public class AbiquoDelegateClientTest extends BaseAbiquoAsyncClientTest<AbiquoAs
         assertNotNull(syncClient.getConfigClient());
         assertNotNull(syncClient.getInfrastructureClient());
         assertNotNull(syncClient.getEnterpriseClient());
+        assertNotNull(syncClient.getCloudClient());
+        assertNotNull(syncClient.getNetworkClient());
     }
 
     public void testAsync() throws SecurityException, NoSuchMethodException, InterruptedException,
@@ -69,6 +71,8 @@ public class AbiquoDelegateClientTest extends BaseAbiquoAsyncClientTest<AbiquoAs
         assertNotNull(asyncClient.getConfigClient());
         assertNotNull(asyncClient.getInfrastructureClient());
         assertNotNull(asyncClient.getEnterpriseClient());
+        assertNotNull(asyncClient.getCloudClient());
+        assertNotNull(asyncClient.getNetworkClient());
     }
 
     @Override
