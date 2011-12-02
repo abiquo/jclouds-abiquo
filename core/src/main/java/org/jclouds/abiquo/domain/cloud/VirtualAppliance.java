@@ -26,7 +26,6 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
-import com.abiquo.model.enumerator.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 
@@ -63,8 +62,8 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createVirtualAppliance(virtualDatacenter.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualAppliance(virtualDatacenter.unwrap(), target);
     }
 
     public void update()
@@ -171,16 +170,6 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         return target.getPublicApp();
     }
 
-    public VirtualMachineState getState()
-    {
-        return target.getState();
-    }
-
-    public VirtualMachineState getSubState()
-    {
-        return target.getSubState();
-    }
-
     public void setHighDisponibility(final int highDisponibility)
     {
         target.setHighDisponibility(highDisponibility);
@@ -194,15 +183,5 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public void setPublicApp(final int publicApp)
     {
         target.setPublicApp(publicApp);
-    }
-
-    public void setState(final VirtualMachineState state)
-    {
-        target.setState(state);
-    }
-
-    public void setSubState(final VirtualMachineState subState)
-    {
-        target.setSubState(subState);
     }
 }
