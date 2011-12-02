@@ -433,4 +433,9 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         target.setName(name);
     }
 
+    public String getUUID()
+    {
+        return target.getUuid();
+    }
+
 }
