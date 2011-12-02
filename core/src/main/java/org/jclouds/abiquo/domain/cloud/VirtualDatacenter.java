@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
-import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
@@ -259,7 +258,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     public Network getNetwork()
     {
-        return DomainWrapper.wrap(context, Network.class, target.getVlan());
+        return wrap(context, Network.class, target.getVlan());
     }
 
     public void setNetwork(final Network network)

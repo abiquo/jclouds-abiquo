@@ -70,7 +70,7 @@ public class AbiquoAuthenticationLiveTest
     }
 
     // Current Token implementation is broken in the API. Enable this test when it is fixed
-    @Test(enabled = false)
+    @Test
     public void testAuthenticateWithFilter() throws IOException
     {
         String token = getAuthtenticationToken();
