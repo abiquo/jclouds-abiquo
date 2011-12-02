@@ -90,8 +90,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         Integer enterpriseId = enterprise.unwrap().getIdFromLink("edit");
 
         target =
-            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenterId,
-                enterpriseId);
+            context.getApi().getCloudClient()
+                .createVirtualDatacenter(target, datacenterId, enterpriseId);
     }
 
     /**
@@ -194,7 +194,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
             checkNotNull(network, ValidationErrors.NULL_RESOURCE + Network.class);
             this.network = network;
             return this;
-
         }
 
         public VirtualDatacenter build()
@@ -220,14 +219,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         public static Builder fromVirtualDatacenter(final VirtualDatacenter in)
         {
-            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise).name(
-                in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                    in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                    in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                    in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).network(
-                    in.getNetwork()).hypervisorType(in.getHypervisorType());
+            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise)
+                .name(in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+                .network(in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }
 

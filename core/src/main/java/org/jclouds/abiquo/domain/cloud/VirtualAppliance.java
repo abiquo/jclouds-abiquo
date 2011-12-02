@@ -41,7 +41,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 {
     /** The datacenter where the rack belongs. */
     // Package protected to allow navigation from children
-    public VirtualDatacenter virtualDatacenter;
+    VirtualDatacenter virtualDatacenter;
 
     /**
      * Constructor to be used only by the builder.
