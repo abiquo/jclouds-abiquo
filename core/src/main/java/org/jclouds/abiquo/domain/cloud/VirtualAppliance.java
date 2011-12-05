@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
@@ -56,6 +57,13 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public void delete()
     {
         context.getApi().getCloudClient().deleteVirtualAppliance(target);
+        target = null;
+    }
+
+    public void delete(final boolean force)
+    {
+        context.getApi().getCloudClient()
+            .deleteVirtualAppliance(target, VirtualApplianceOptions.builder().force(true).build());
         target = null;
     }
 

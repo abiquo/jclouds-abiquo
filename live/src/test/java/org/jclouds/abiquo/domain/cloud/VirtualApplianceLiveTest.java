@@ -69,7 +69,26 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest<CloudTest
             env.cloudClient.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
 
         assertEquals(virtualAppliances.size(), 2);
-        assertEquals(virtualAppliances.get(0).getName(), virtualAppliances.get(1).getName());
         repeated.delete();
+    }
+
+    public void testForceDelete()
+    {
+        VirtualAppliance vapp =
+            VirtualAppliance.Builder.fromVirtualAppliance(env.virtualAppliance).build();
+
+        vapp.save();
+
+        List<VirtualApplianceDto> virtualAppliances =
+            env.cloudClient.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
+
+        assertEquals(virtualAppliances.size(), 2);
+
+        vapp.delete(true);
+
+        virtualAppliances =
+            env.cloudClient.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
+
+        assertEquals(virtualAppliances.size(), 1);
     }
 }
