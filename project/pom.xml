@@ -97,6 +97,7 @@
                     <version>2.3.4</version>
                     <extensions>true</extensions>
                     <configuration>
+                        <classifier>api-deploy</classifier>
                         <instructions>
                             <_nouses>true</_nouses>
                         </instructions>
