@@ -84,6 +84,15 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return context.getApi().getCloudClient().changeVirtualMachineState(target, stateDto);
     }
 
+    public VirtualMachineState getState()
+    {
+        VirtualMachineStateDto stateDto =
+            context.getApi().getCloudClient().getVirtualMachineState(target);
+        VirtualMachineState state = VirtualMachineState.valueOf(stateDto.getPower());
+
+        return state;
+    }
+
     // Parent access
     /**
      * @see <a
@@ -131,8 +140,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         private String vdrpIP;
 
         private Integer idState;
-
-        private VirtualMachineState state;
 
         private Integer highDisponibility;
 
@@ -198,12 +205,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             return this;
         }
 
-        public Builder state(final VirtualMachineState state)
-        {
-            this.state = state;
-            return this;
-        }
-
         public Builder highDisponibility(final int highDisponibility)
         {
             this.highDisponibility = highDisponibility;
@@ -246,7 +247,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             dto.setVdrpIP(vdrpIP);
             dto.setVdrpPort(vdrpPort);
             dto.setIdState(idState);
-            dto.setState(state);
             dto.setHighDisponibility(highDisponibility);
             dto.setIdType(idType);
             dto.setPassword(password);
@@ -323,11 +323,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public RunlistElementsDto getRunlist()
     {
         return target.getRunlist();
-    }
-
-    public VirtualMachineState getState()
-    {
-        return target.getState();
     }
 
     public String getUuid()

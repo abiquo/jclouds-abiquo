@@ -43,6 +43,13 @@ import com.abiquo.server.core.cloud.VirtualMachinesDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
+/**
+ * @author Francesc Montserrat
+ *
+ */
+/**
+ * @author Francesc Montserrat
+ */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface CloudClient
 {
@@ -214,4 +221,12 @@ public interface CloudClient
      */
     AcceptedRequestDto changeVirtualMachineState(VirtualMachineDto virtualMachine,
         VirtualMachineStateDto state);
+
+    /**
+     * Get the state of the given virtual machine.
+     * 
+     * @param virtualMachine The given virtual machine.
+     * @return The state of the given virtual machine.
+     */
+    VirtualMachineStateDto getVirtualMachineState(VirtualMachineDto virtualMachine);
 }
