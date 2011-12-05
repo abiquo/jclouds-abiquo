@@ -23,6 +23,7 @@ import static org.jclouds.http.HttpUtils.releasePayload;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -40,6 +41,7 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
+import org.jclouds.rest.AuthorizationException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -52,7 +54,7 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "live", enabled = false)
+@Test(groups = "live")
 public class AbiquoAuthenticationLiveTest
 {
     private String identity;
@@ -69,9 +71,8 @@ public class AbiquoAuthenticationLiveTest
         endpoint = Config.get("abiquo.api.endpoint");
     }
 
-    // Current Token implementation is broken in the API. Enable this test when it is fixed
     @Test
-    public void testAuthenticateWithFilter() throws IOException
+    public void testAuthenticateWithToken() throws IOException
     {
         String token = getAuthtenticationToken();
 
@@ -83,16 +84,60 @@ public class AbiquoAuthenticationLiveTest
             new AbiquoContextFactory().createContext(token,
                 ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
 
-        // Perform a call to get the logged user and verify the identity
-        UserDto user = tokenContext.getApi().getAdminClient().getCurrentUser();
-        assertNotNull(user);
-        assertEquals(user.getNick(), identity);
+        try
+        {
+            // Perform a call to get the logged user and verify the identity
+            UserDto user = tokenContext.getApi().getAdminClient().getCurrentUser();
+            assertNotNull(user);
+            assertEquals(user.getNick(), identity);
+        }
+        finally
+        {
+            if (tokenContext != null)
+            {
+                tokenContext.close();
+            }
+        }
+    }
 
-        tokenContext.close();
+    @Test
+    public void testAuthenticateWithInvalidToken() throws IOException
+    {
+        String token = getAuthtenticationToken() + "INVALID";
+
+        // Create a new context that uses the generated token to perform the API calls
+        Properties props = new Properties();
+        props.setProperty("abiquo.endpoint", endpoint);
+
+        AbiquoContext tokenContext =
+            new AbiquoContextFactory().createContext(token,
+                ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
+
+        // Perform a call to get the logged user. It should fail
+        try
+        {
+            tokenContext.getApi().getAdminClient().getCurrentUser();
+        }
+        catch (AuthorizationException ex)
+        {
+            // Test succeeded
+            return;
+        }
+        finally
+        {
+            if (tokenContext != null)
+            {
+                tokenContext.close();
+            }
+        }
+
+        fail("Token authentication should have failed");
     }
 
     private String getAuthtenticationToken() throws UnsupportedEncodingException
     {
+        String token = null;
+
         // Create a standard context with the configured credentials
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
@@ -101,21 +146,30 @@ public class AbiquoAuthenticationLiveTest
             new AbiquoContextFactory().createContext(identity, credential,
                 ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
 
-        // Create a request to authenticate to the API and generate the token
-        HttpRequest request =
-            HttpRequest.builder().method("GET").endpoint(URI.create(endpoint)).build();
-        String auth = AbiquoAuthentication.basicAuth(identity, credential);
-        request = ModifyRequest.replaceHeader(request, HttpHeaders.AUTHORIZATION, auth);
+        try
+        {
+            // Create a request to authenticate to the API and generate the token
+            HttpRequest request =
+                HttpRequest.builder().method("GET").endpoint(URI.create(endpoint)).build();
+            String auth = AbiquoAuthentication.basicAuth(identity, credential);
+            request = ModifyRequest.replaceHeader(request, HttpHeaders.AUTHORIZATION, auth);
 
-        // Execute the request and read the generated token
-        HttpResponse response = context.utils().http().invoke(request);
-        assertEquals(response.getStatusCode(), 200);
-        String token = readAuthenticationToken(response);
-        assertNotNull(token);
+            // Execute the request and read the generated token
+            HttpResponse response = context.utils().http().invoke(request);
+            assertEquals(response.getStatusCode(), 200);
 
-        releasePayload(response);
+            token = readAuthenticationToken(response);
+            assertNotNull(token);
 
-        context.close();
+            releasePayload(response);
+        }
+        finally
+        {
+            if (context != null)
+            {
+                context.close();
+            }
+        }
 
         return token;
     }
