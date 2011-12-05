@@ -43,6 +43,7 @@ import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
@@ -55,19 +56,26 @@ import com.google.common.collect.Iterables;
 @Singleton
 public class BaseAdministrationService implements AdministrationService
 {
-    private final ListDatacenters listDatacenters;
+    @VisibleForTesting
+    protected AbiquoContext context;
 
-    private final ListEnterprises listEnterprises;
+    @VisibleForTesting
+    protected final ListDatacenters listDatacenters;
 
-    private final ListRoles listRoles;
+    @VisibleForTesting
+    protected final ListEnterprises listEnterprises;
 
-    private final ListLicenses listLicenses;
+    @VisibleForTesting
+    protected final ListRoles listRoles;
 
-    private final ListPrivileges listPrivileges;
+    @VisibleForTesting
+    protected final ListLicenses listLicenses;
 
-    private final SingletonResources singletonResources;
+    @VisibleForTesting
+    protected final ListPrivileges listPrivileges;
 
-    private AbiquoContext context;
+    @VisibleForTesting
+    protected final SingletonResources singletonResources;
 
     @Inject
     protected BaseAdministrationService(final AbiquoContext context,
