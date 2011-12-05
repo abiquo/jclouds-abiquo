@@ -25,6 +25,7 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.cloud.VirtualMachineDto;
 
 /**
  * Cloud domain utilities.
@@ -50,6 +51,13 @@ public class CloudResources
         return virtualAppliance;
     }
 
+    public static VirtualMachineDto virtualMachinePost()
+    {
+        VirtualMachineDto virtualMachine = new VirtualMachineDto();
+        virtualMachine.setName("VM");
+        return virtualMachine;
+    }
+
     public static VirtualDatacenterDto virtualDatacenterPut()
     {
         VirtualDatacenterDto virtualDatacenter = virtualDatacenterPost();
@@ -73,7 +81,25 @@ public class CloudResources
             "http://localhost/api/cloud/virtualdatacenters/1"));
         virtualAppliance.addLink(new RESTLink("edit",
             "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1"));
+        virtualAppliance.addLink(new RESTLink("deploy",
+            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/deploy"));
+        virtualAppliance.addLink(new RESTLink("undeploy",
+            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/undeploy"));
+        virtualAppliance.addLink(new RESTLink("virtualmachines",
+            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines"));
         return virtualAppliance;
+    }
+
+    public static VirtualMachineDto virtualMachinePut()
+    {
+        VirtualMachineDto virtualMachine = virtualMachinePost();
+        virtualMachine.setId(1);
+        virtualMachine.addLink(new RESTLink("virtualappliance",
+            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1"));
+        virtualMachine
+            .addLink(new RESTLink("edit",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1"));
+        return virtualMachine;
     }
 
     public static String virtualDatacenterPostPayload()
@@ -111,6 +137,15 @@ public class CloudResources
         return buffer.toString();
     }
 
+    public static String virtualMachinePostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualMachine>");
+        buffer.append("<name>VM</name>");
+        buffer.append("</virtualMachine>");
+        return buffer.toString();
+    }
+
     public static String virtualDatacenterPutPayload()
     {
         StringBuffer buffer = new StringBuffer();
@@ -145,12 +180,30 @@ public class CloudResources
         buffer.append("<virtualAppliance>");
         buffer.append(link("/cloud/virtualdatacenters/1", "virtualdatacenter"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "edit"));
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/action/deploy",
+            "deploy"));
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/action/undeploy",
+            "undeploy"));
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines",
+            "virtualmachines"));
         buffer.append("<error>0</error>");
         buffer.append("<highDisponibility>0</highDisponibility>");
         buffer.append("<id>1</id>");
         buffer.append("<name>VA</name>");
         buffer.append("<publicApp>0</publicApp>");
         buffer.append("</virtualAppliance>");
+        return buffer.toString();
+    }
+
+    public static String virtualMachinePutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualMachine>");
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "virtualappliance"));
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1",
+            "edit"));
+        buffer.append("<name>VM</name>");
+        buffer.append("</virtualMachine>");
         return buffer.toString();
     }
 }

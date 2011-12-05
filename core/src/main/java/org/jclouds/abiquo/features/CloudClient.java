@@ -25,10 +25,15 @@ import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
+import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachineStateDto;
+import com.abiquo.server.core.cloud.VirtualMachinesDto;
 
 /**
  * Provides synchronous access to Abiquo Cloud API.
@@ -138,4 +143,75 @@ public interface CloudClient
      */
     void deleteVirtualAppliance(VirtualApplianceDto virtualAppliance,
         VirtualApplianceOptions options);
+
+    /**
+     * Deploy/Undeploy a virtual appliance.
+     * 
+     * @param link The link of the deploy/undeploy action.
+     * @return Response message to the deploy request.
+     */
+    AcceptedRequestDto<String> actionVirtualAppliance(final RESTLink link);
+
+    /**
+     * Get the given virtual appliance from the virtual appliance link.
+     * 
+     * @param link Link to the virtual appliance.
+     * @return The virtual appliance or <code>null</code> if it does not exist.
+     */
+    VirtualApplianceDto getVirtualAppliance(RESTLink link);
+
+    /*********************** Virtual Machine ***********************/
+
+    /**
+     * List all virtual machines for a virtual appliance.
+     * 
+     * @param virtualAppliance The virtual appliance.
+     * @return The list of virtual machines for the virtual appliance.
+     */
+    VirtualMachinesDto listVirtualMachines(VirtualApplianceDto virtualAppliance);
+
+    /**
+     * Get the given virtual machine from the given virtual machine.
+     * 
+     * @param virtualAppliance The virtual appliance.
+     * @param virtualMachineId The id of the virtual machine.
+     * @return The virtual machine or <code>null</code> if it does not exist.
+     */
+    VirtualMachineDto getVirtualMachine(VirtualApplianceDto virtualAppliance,
+        Integer virtualMachineId);
+
+    /**
+     * Create a new virtual machine in a virtual appliance.
+     * 
+     * @param virtualAppliance The virtual appliance.
+     * @param virtualMachine The virtual machine to be created.
+     * @return The created virtual machine.
+     */
+    VirtualMachineDto createVirtualMachine(VirtualApplianceDto virtualAppliance,
+        VirtualMachineDto virtualMachine);
+
+    /**
+     * Deletes an existing virtual machine.
+     * 
+     * @param virtualMachine The virtual machine to delete.
+     */
+    void deleteVirtualMachine(VirtualMachineDto virtualMachine);
+
+    /**
+     * Updates an existing virtual machine from the given virtual appliance.
+     * 
+     * @param virtualMachine The new attributes for the virtual machine.
+     * @return The updated virtual machine.
+     */
+    VirtualMachineDto updateVirtualMachine(VirtualMachineDto virtualMachine);
+
+    /**
+     * Changes the state an existing virtual machine.
+     * 
+     * @param virtualMachine The given virtual machine.
+     * @param state The new state.
+     * @return Response message to the state change request.
+     */
+    AcceptedRequestDto changeVirtualMachineState(VirtualMachineDto virtualMachine,
+        VirtualMachineStateDto state);
 }

@@ -27,6 +27,8 @@ import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
+import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 
@@ -40,7 +42,7 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
  */
 public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 {
-    /** The datacenter where the rack belongs. */
+    /** The virtual datacenter where the virtual appliance belongs. */
     // Package protected to allow navigation from children
     VirtualDatacenter virtualDatacenter;
 
@@ -62,16 +64,16 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public void delete(final boolean force)
     {
-        context.getApi().getCloudClient()
-            .deleteVirtualAppliance(target, VirtualApplianceOptions.builder().force(true).build());
+        context.getApi().getCloudClient().deleteVirtualAppliance(target,
+            VirtualApplianceOptions.builder().force(true).build());
         target = null;
     }
 
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
-                .createVirtualAppliance(virtualDatacenter.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualAppliance(virtualDatacenter.unwrap(),
+                target);
     }
 
     public void update()
@@ -96,7 +98,21 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     // Children access
 
+    // Actions
+    public AcceptedRequestDto<String> deploy()
+    {
+        RESTLink deployLink = target.searchLink("deploy");
+        return context.getApi().getCloudClient().actionVirtualAppliance(deployLink);
+    }
+
+    public AcceptedRequestDto<String> undeploy()
+    {
+        RESTLink deployLink = target.searchLink("undeploy");
+        return context.getApi().getCloudClient().actionVirtualAppliance(deployLink);
+    }
+
     // Builder
+
     public static Builder builder(final AbiquoContext context,
         final VirtualDatacenter virtualDatacenter)
     {
