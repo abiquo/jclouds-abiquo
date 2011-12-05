@@ -33,6 +33,7 @@ import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.google.common.base.Predicate;
@@ -112,9 +113,9 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public List<VirtualAppliance> listVirtualAppliances()
     {
-        VirtualAppliancesDto virtualAppliances =
+        VirtualAppliancesDto vapps =
             context.getApi().getCloudClient().listVirtualAppliances(target);
-        return wrap(context, VirtualAppliance.class, virtualAppliances.getCollection());
+        return wrap(context, VirtualAppliance.class, vapps.getCollection());
     }
 
     public List<VirtualAppliance> listVirtualAppliances(final Predicate<VirtualAppliance> filter)
@@ -125,6 +126,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public VirtualAppliance findVirtualAppliance(final Predicate<VirtualAppliance> filter)
     {
         return Iterables.getFirst(filter(listVirtualAppliances(), filter), null);
+    }
+
+    public VirtualAppliance getVirtualAppliance(final Integer id)
+    {
+        VirtualApplianceDto vapp =
+            context.getApi().getCloudClient().getVirtualAppliance(target, id);
+        return wrap(context, VirtualAppliance.class, vapp);
     }
 
     // Actions

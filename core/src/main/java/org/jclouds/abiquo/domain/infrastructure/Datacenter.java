@@ -35,8 +35,10 @@ import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.google.common.base.Predicate;
@@ -140,6 +142,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return Iterables.getFirst(filter(listRacks(), filter), null);
     }
 
+    public Rack getRack(final Integer id)
+    {
+        RackDto rack = context.getApi().getInfrastructureClient().getRack(target, id);
+        return wrap(context, Rack.class, rack);
+    }
+
     /**
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices">
@@ -160,6 +168,13 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public StorageDevice findStorageDevice(final Predicate<StorageDevice> filter)
     {
         return Iterables.getFirst(filter(listStorageDevices(), filter), null);
+    }
+
+    public StorageDevice getStorageDevice(final Integer id)
+    {
+        StorageDeviceDto device =
+            context.getApi().getInfrastructureClient().getStorageDevice(target, id);
+        return wrap(context, StorageDevice.class, device);
     }
 
     /**

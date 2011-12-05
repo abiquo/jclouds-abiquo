@@ -33,6 +33,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import com.abiquo.model.enumerator.StorageTechnologyType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -169,6 +170,13 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public StoragePool findStoragePool(final Predicate<StoragePool> filter)
     {
         return Iterables.getFirst(filter(listStoragePools(), filter), null);
+    }
+
+    public StoragePool getStoragePool(final String id)
+    {
+        StoragePoolDto storagePool =
+            context.getApi().getInfrastructureClient().getStoragePool(target, id);
+        return wrap(context, StoragePool.class, storagePool);
     }
 
     public static Builder builder(final AbiquoContext context, final Datacenter datacenter)
