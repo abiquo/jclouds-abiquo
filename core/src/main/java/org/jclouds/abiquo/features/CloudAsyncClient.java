@@ -33,6 +33,7 @@ import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
@@ -143,4 +144,12 @@ public interface CloudAsyncClient
     @DELETE
     ListenableFuture<Void> deleteVirtualAppliance(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
+
+    /**
+     * @see CloudClient#deleteVirtualAppliance(VirtualApplianceDto, VirtualApplianceOptions)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteVirtualAppliance(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+        @BinderParam(AppendOptionsToPath.class) VirtualApplianceOptions options);
 }

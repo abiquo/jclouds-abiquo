@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.concurrent.Timeout;
 
@@ -128,4 +129,13 @@ public interface CloudClient
      * @param virtualAppliance The virtual appliance to delete.
      */
     void deleteVirtualAppliance(VirtualApplianceDto virtualAppliance);
+
+    /**
+     * Deletes an existing virtual appliance.
+     * 
+     * @param virtualAppliance The virtual appliance to delete.
+     * @param options The options to customize the delete operation (e.g. Force delete).
+     */
+    void deleteVirtualAppliance(VirtualApplianceDto virtualAppliance,
+        VirtualApplianceOptions options);
 }

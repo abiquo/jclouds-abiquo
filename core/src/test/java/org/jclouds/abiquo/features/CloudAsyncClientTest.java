@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.CloudResources;
+import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
@@ -221,8 +222,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVirtualAppliance", VirtualDatacenterDto.class,
                 VirtualApplianceDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), CloudResources
-                .virtualAppliancePost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                CloudResources.virtualAppliancePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances HTTP/1.1");
@@ -267,6 +268,28 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteVirtualApplianceWithOptions() throws SecurityException,
+        NoSuchMethodException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("deleteVirtualAppliance", VirtualApplianceDto.class,
+                VirtualApplianceOptions.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualAppliancePut(),
+                VirtualApplianceOptions.builder().force(true).build());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1?force=true HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
