@@ -256,10 +256,27 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             dto.setCpu(cpu);
             dto.setHdInBytes(hdInBytes);
             dto.setVdrpIP(vdrpIP);
-            dto.setVdrpPort(vdrpPort);
-            dto.setIdState(idState);
-            dto.setHighDisponibility(highDisponibility);
-            dto.setIdType(idType);
+
+            if (vdrpPort != null)
+            {
+                dto.setVdrpPort(vdrpPort);
+            }
+
+            if (idState != null)
+            {
+                dto.setIdState(idState);
+            }
+
+            if (highDisponibility != null)
+            {
+                dto.setHighDisponibility(highDisponibility);
+            }
+
+            if (idType != null)
+            {
+                dto.setIdType(idType);
+            }
+
             dto.setPassword(password);
             dto.setUuid(uuid);
 
