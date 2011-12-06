@@ -179,6 +179,13 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
 
         private String generateUri(final String ip, final Integer port, final RemoteServiceType type)
         {
+            // FIXME Remove this patch when api uri change from virtualfactory to tarantino
+            if (type.toString().toLowerCase().equals("tarantino"))
+            {
+                return type.getDefaultProtocol() + ip + ":" + port + "/virtualfactory";
+            }
+            // end of patch
+
             return type.getDefaultProtocol() + ip + ":" + port + "/" + type.getServiceMapping();
         }
 
@@ -195,6 +202,13 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
             RemoteServiceDto dto = new RemoteServiceDto();
             dto.setId(id);
             dto.setType(type);
+            // FIXME Remove this patch when api uri change from virtualfactory to tarantino
+            if (type.toString().toLowerCase().equals("tarantino"))
+            {
+                dto.setType(RemoteServiceType.VIRTUAL_FACTORY);
+            }
+            // end of patch
+
             dto.setUri(uri);
             dto.setStatus(status);
             RemoteService remoteservice = new RemoteService(context, dto);
