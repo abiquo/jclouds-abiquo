@@ -209,9 +209,9 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         }
 
         createRemoteService(RemoteServiceType.APPLIANCE_MANAGER);
-        createRemoteService(RemoteServiceType.TARANTINO);
         createRemoteService(RemoteServiceType.VIRTUAL_SYSTEM_MONITOR);
         createRemoteService(RemoteServiceType.NODE_COLLECTOR);
+        createRemoteService(RemoteServiceType.TARANTINO);
     }
 
     private void createRemoteService(final RemoteServiceType type)
@@ -301,11 +301,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final String user, final String password, final int port)
     {
         MachineDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverSingleMachine(target, ip, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
+                hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         return wrap(context, Machine.class, dto);
     }
@@ -351,11 +348,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final int port)
     {
         MachinesDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
+                ipTo, hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         return wrap(context, Machine.class, dto.getCollection());
     }
