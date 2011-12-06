@@ -102,13 +102,13 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public AcceptedRequestDto<String> deploy()
     {
         RESTLink deployLink = target.searchLink("deploy");
-        return context.getApi().getCloudClient().actionVirtualAppliance(deployLink);
+        return context.getApi().getCloudClient().deployAction(deployLink);
     }
 
     public AcceptedRequestDto<String> undeploy()
     {
-        RESTLink deployLink = target.searchLink("undeploy");
-        return context.getApi().getCloudClient().actionVirtualAppliance(deployLink);
+        RESTLink undeployLink = target.searchLink("undeploy");
+        return context.getApi().getCloudClient().deployAction(undeployLink);
     }
 
     // Builder

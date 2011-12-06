@@ -99,6 +99,9 @@ public class CloudResources
         virtualMachine
             .addLink(new RESTLink("edit",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1"));
+        virtualMachine
+            .addLink(new RESTLink("state",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/state"));
         return virtualMachine;
     }
 
@@ -141,7 +144,14 @@ public class CloudResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<virtualMachine>");
+        buffer.append("<cpu>0</cpu>");
+        buffer.append("<hdInBytes>0</hdInBytes>");
+        buffer.append("<highDisponibility>0</highDisponibility>");
+        buffer.append("<idState>0</idState>");
+        buffer.append("<idType>0</idType>");
         buffer.append("<name>VM</name>");
+        buffer.append("<ram>0</ram>");
+        buffer.append("<vdrpPort>0</vdrpPort>");
         buffer.append("</virtualMachine>");
         return buffer.toString();
     }
@@ -202,7 +212,17 @@ public class CloudResources
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "virtualappliance"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1",
             "edit"));
+        buffer.append(link(
+            "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/state", "state"));
+        buffer.append("<cpu>0</cpu>");
+        buffer.append("<hdInBytes>0</hdInBytes>");
+        buffer.append("<highDisponibility>0</highDisponibility>");
+        buffer.append("<id>1</id>");
+        buffer.append("<idState>0</idState>");
+        buffer.append("<idType>0</idType>");
         buffer.append("<name>VM</name>");
+        buffer.append("<ram>0</ram>");
+        buffer.append("<vdrpPort>0</vdrpPort>");
         buffer.append("</virtualMachine>");
         return buffer.toString();
     }

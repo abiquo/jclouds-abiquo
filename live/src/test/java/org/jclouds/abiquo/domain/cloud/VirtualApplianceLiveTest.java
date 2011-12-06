@@ -50,7 +50,7 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest<CloudTest
         env.virtualAppliance.setName("Virtual AppAloha updated");
         env.virtualAppliance.update();
 
-        // Recover the updated virtual datacenter
+        // Recover the updated virtual appliance
         VirtualApplianceDto updated =
             env.cloudClient.getVirtualAppliance(env.virtualDatacenter.unwrap(),
                 env.virtualAppliance.getId());

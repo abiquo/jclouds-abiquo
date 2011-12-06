@@ -305,7 +305,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testDeployVirtualAppliance() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("actionVirtualAppliance", RESTLink.class);
+        Method method = CloudAsyncClient.class.getMethod("deployAction", RESTLink.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
                 .createRequest(
@@ -328,7 +328,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testUndeployVirtualAppliance() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("actionVirtualAppliance", RESTLink.class);
+        Method method = CloudAsyncClient.class.getMethod("deployAction", RESTLink.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
                 .createRequest(
@@ -461,13 +461,61 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         IOException
     {
         Method method =
-            CloudAsyncClient.class.getMethod("getVirtualMachineState", VirtualApplianceDto.class);
+            CloudAsyncClient.class.getMethod("getVirtualMachineState", VirtualMachineDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualAppliancePut());
+            processor.createRequest(method, CloudResources.virtualMachinePut());
 
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/state HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeployVirtualMachine() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method = CloudAsyncClient.class.getMethod("deployAction", RESTLink.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor
+                .createRequest(
+                    method,
+                    new RESTLink("deploy",
+                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy"));
+
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUndeployVirtualMachine() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method = CloudAsyncClient.class.getMethod("deployAction", RESTLink.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor
+                .createRequest(
+                    method,
+                    new RESTLink("undeploy",
+                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy"));
+
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 

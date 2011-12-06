@@ -26,6 +26,7 @@ import static org.testng.Assert.assertNull;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.features.CloudClient;
@@ -45,6 +46,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     public VirtualDatacenter virtualDatacenter;
 
     public VirtualAppliance virtualAppliance;
+
+    public VirtualMachine virtualMachine;
 
     public Network network;
 
@@ -69,11 +72,13 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         findDefaultEnterprise();
         createVirtualDatacenter();
         createVirtualAppliance();
+        createVirtualMachine();
     }
 
     @Override
     public void tearDown() throws Exception
     {
+        deleteVirtualMachine();
         deleteVirtualAppliance();
         deleteVirtualDatacenter();
         deleteMachine();
@@ -109,10 +114,22 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     protected void createVirtualAppliance()
     {
         virtualAppliance =
-            VirtualAppliance.builder(context, virtualDatacenter).name("Virtual AppAloha").build();
+            VirtualAppliance.builder(context, virtualDatacenter).name(PREFIX + "Virtual AppAloha")
+                .build();
 
         virtualAppliance.save();
         assertNotNull(virtualAppliance.getId());
+    }
+
+    protected void createVirtualMachine()
+    {
+        virtualMachine =
+            VirtualMachine.builder(context, virtualAppliance).cpu(2).name(PREFIX + "VM Aloha")
+                .hdInBytes(100).ram(128).build();
+
+        virtualMachine.save();
+        assertNotNull(virtualMachine.getId());
+
     }
 
     // Tear down
@@ -136,5 +153,16 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
             assertNull(cloudClient.getVirtualAppliance(virtualDatacenter.unwrap(),
                 idVirtualAppliance));
         }
+    }
+
+    protected void deleteVirtualMachine()
+    {
+        if (virtualMachine != null && virtualAppliance != null && virtualDatacenter != null)
+        {
+            Integer idVirtualMachine = virtualMachine.getId();
+            virtualMachine.delete();
+            assertNull(cloudClient.getVirtualMachine(virtualAppliance.unwrap(), idVirtualMachine));
+        }
+
     }
 }

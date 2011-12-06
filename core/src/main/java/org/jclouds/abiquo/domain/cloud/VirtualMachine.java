@@ -110,6 +110,17 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     // Children access
 
     // Actions
+    public AcceptedRequestDto<String> deploy()
+    {
+        RESTLink deployLink = target.searchLink("deploy");
+        return context.getApi().getCloudClient().deployAction(deployLink);
+    }
+
+    public AcceptedRequestDto<String> undeploy()
+    {
+        RESTLink undeployLink = target.searchLink("undeploy");
+        return context.getApi().getCloudClient().deployAction(undeployLink);
+    }
 
     // Builder
 

@@ -171,7 +171,7 @@ public interface CloudAsyncClient
      * @see CloudClient#actionVirtualAppliance(VirtualDatacenterDto, VirtualApplianceDto)
      */
     @POST
-    ListenableFuture<AcceptedRequestDto<String>> actionVirtualAppliance(
+    ListenableFuture<AcceptedRequestDto<String>> deployAction(
         @BinderParam(BindLinkToPath.class) RESTLink link);
 
     /*********************** Virtual Machine ***********************/

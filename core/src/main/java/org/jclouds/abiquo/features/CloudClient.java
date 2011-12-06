@@ -43,13 +43,6 @@ import com.abiquo.server.core.cloud.VirtualMachinesDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-/**
- * @author Francesc Montserrat
- *
- */
-/**
- * @author Francesc Montserrat
- */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface CloudClient
 {
@@ -152,12 +145,12 @@ public interface CloudClient
         VirtualApplianceOptions options);
 
     /**
-     * Deploy/Undeploy a virtual appliance.
+     * Deploy/Undeploy a virtual appliance / machine.
      * 
      * @param link The link of the deploy/undeploy action.
      * @return Response message to the deploy request.
      */
-    AcceptedRequestDto<String> actionVirtualAppliance(final RESTLink link);
+    AcceptedRequestDto<String> deployAction(final RESTLink link);
 
     /**
      * Get the given virtual appliance from the virtual appliance link.
