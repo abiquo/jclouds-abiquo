@@ -27,7 +27,7 @@ import org.jclouds.abiquo.features.CloudAsyncClient;
 import org.jclouds.abiquo.features.ConfigAsyncClient;
 import org.jclouds.abiquo.features.EnterpriseAsyncClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
-import org.jclouds.abiquo.features.NetworkAsyncClient;
+import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Delegate;
@@ -65,10 +65,10 @@ public interface AbiquoAsyncClient
     CloudAsyncClient getCloudClient();
 
     /**
-     * Provides asynchronous access to Network features.
+     * Provides asynchronous access to Apps library features.
      */
     @Delegate
-    NetworkAsyncClient getNetworkClient();
+    VirtualMachineTemplateAsyncClient getVirtualMachineTemplateClient();
 
     /**
      * Provides asynchronous access to Enterprise features.

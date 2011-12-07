@@ -19,26 +19,20 @@
 
 package org.jclouds.abiquo.features;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
+import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
-import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.concurrent.Timeout;
 
 /**
- * Provides asynchronous access to Abiquo Network API.
+ * Provides synchronous access to Abiquo Apps library API.
  * 
  * @see http://community.abiquo.com/display/ABI20/API+Reference
- * @see NetworkClient
+ * @see VirtualMachineTemplateAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters(AbiquoAuthentication.class)
-@Consumes(MediaType.APPLICATION_XML)
-@Path("/admin")
-public interface NetworkAsyncClient
+@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
+public interface VirtualMachineTemplateClient
 {
-    /*********************** Network ***********************/
-
+    /*********************** Virtual Machine Template ***********************/
 }

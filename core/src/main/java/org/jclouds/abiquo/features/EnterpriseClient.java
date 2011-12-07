@@ -21,6 +21,8 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.ws.rs.PUT;
+
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
@@ -42,7 +44,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface EnterpriseClient
 {
-    /* ********************** Enterprise ********************** */
+    /*       ********************** Enterprise ********************** */
 
     /**
      * List all enterprises.
@@ -82,7 +84,7 @@ public interface EnterpriseClient
      */
     void deleteEnterprise(EnterpriseDto enterprise);
 
-    /* ********************** Enterprise Limits ********************** */
+    /*       ********************** Enterprise Limits ********************** */
 
     /**
      * Allows the given enterprise to use the given datacenter with the given limits.
@@ -127,7 +129,7 @@ public interface EnterpriseClient
      */
     void deleteLimits(DatacenterLimitsDto limits);
 
-    /* ********************** User ********************** */
+    /*       ********************** User ********************** */
 
     /**
      * Retreives users of the given enterprise.
@@ -169,4 +171,15 @@ public interface EnterpriseClient
      * @param user The user to delete.
      */
     void deleteUser(UserDto user);
+
+    /*********************** Datacenter Repository ***********************/
+
+    /**
+     * Refreshes database with virtual machine templates existing in the repository filesystem.
+     * 
+     * @param enterpriseId Id of the enterprise which information will be refreshed.
+     * @param datacenterRepositoryId Id of the datacenter repository contaning the templates.
+     */
+    @PUT
+    void refreshTemplateRepository(Integer enterpriseId, Integer datacenterRepositoryId);
 }

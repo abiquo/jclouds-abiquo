@@ -234,12 +234,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             return this;
         }
 
-        public Builder uuid(final String uuid)
-        {
-            this.uuid = uuid;
-            return this;
-        }
-
         public Builder virtualAppliance(final VirtualAppliance virtualAppliance)
         {
             checkNotNull(virtualAppliance, ValidationErrors.NULL_RESOURCE + VirtualAppliance.class);
@@ -292,7 +286,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
                 .description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu()).hdInBytes(
                     in.getHdInBytes()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort()).idState(
                     in.getIdState()).highDisponibility(in.getHighDisponibility()).idType(
-                    in.getIdType()).password(in.getPassword()).uuid(in.getUuid());
+                    in.getIdType()).password(in.getPassword());
         }
     }
 
