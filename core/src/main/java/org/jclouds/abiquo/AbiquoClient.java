@@ -26,7 +26,7 @@ import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
-import org.jclouds.abiquo.features.NetworkClient;
+import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
 import org.jclouds.concurrent.Timeout;
 import org.jclouds.rest.annotations.Delegate;
 
@@ -53,16 +53,16 @@ public interface AbiquoClient
     InfrastructureClient getInfrastructureClient();
 
     /**
-     * Provides synchronous access to Network features.
-     */
-    @Delegate
-    NetworkClient getNetworkClient();
-
-    /**
      * Provides synchronous access to Cloud features.
      */
     @Delegate
     CloudClient getCloudClient();
+
+    /**
+     * Provides synchronous access to Apps library features.
+     */
+    @Delegate
+    VirtualMachineTemplateClient getVirtualMachineTemplateClient();
 
     /**
      * Provides synchronous access to Enterprise features.

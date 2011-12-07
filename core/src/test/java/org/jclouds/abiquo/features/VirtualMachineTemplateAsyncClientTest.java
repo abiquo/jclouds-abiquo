@@ -19,21 +19,28 @@
 
 package org.jclouds.abiquo.features;
 
-import java.util.concurrent.TimeUnit;
+import org.jclouds.rest.internal.RestAnnotationProcessor;
+import org.testng.annotations.Test;
 
-import org.jclouds.concurrent.Timeout;
+import com.google.inject.TypeLiteral;
 
 /**
- * Provides synchronous access to Abiquo Network API.
+ * Tests annotation parsing of {@code VirtualMachineTemplateAsyncClient}
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
- * @see NetworkAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface NetworkClient
+@Test(groups = "unit")
+public class VirtualMachineTemplateAsyncClientTest extends
+    BaseAbiquoAsyncClientTest<VirtualMachineTemplateAsyncClient>
 {
-    /*********************** Network ***********************/
+    /*********************** Virtual Machine Template ***********************/
 
+    @Override
+    protected TypeLiteral<RestAnnotationProcessor<VirtualMachineTemplateAsyncClient>> createTypeLiteral()
+    {
+        return new TypeLiteral<RestAnnotationProcessor<VirtualMachineTemplateAsyncClient>>()
+        {
+        };
+    }
 }

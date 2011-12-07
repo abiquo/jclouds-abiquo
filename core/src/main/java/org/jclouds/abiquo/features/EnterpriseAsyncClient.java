@@ -181,4 +181,14 @@ public interface EnterpriseAsyncClient
     @DELETE
     ListenableFuture<Void> deleteUser(
         @EndpointLink("edit") @BinderParam(BindToPath.class) UserDto user);
+
+    /*********************** Datacenter Repository ***********************/
+
+    /**
+     * @see EnterpriseClient#refreshTemplateRepository(EnterpriseDto, DatacenterDto)
+     */
+    @PUT
+    @Path("{enterprise}/datacenterrepositories/{datacenterrepository}/actions/refresh")
+    void refreshTemplateRepository(@PathParam("enterprise") Integer enterpriseId,
+        @PathParam("datacenterrepository") Integer datacenterRepositoryId);
 }
