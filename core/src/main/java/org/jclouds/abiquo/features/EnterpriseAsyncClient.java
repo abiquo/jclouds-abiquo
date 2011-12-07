@@ -32,7 +32,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
-import org.jclouds.abiquo.functions.infrastructure.DatacenterId;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
@@ -109,7 +109,7 @@ public interface EnterpriseAsyncClient
     @POST
     ListenableFuture<DatacenterLimitsDto> createLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
-        @QueryParam("datacenter") @ParamParser(DatacenterId.class) final DatacenterDto datacenter,
+        @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter,
         @BinderParam(BindToXMLPayload.class) DatacenterLimitsDto limits);
 
     /**
@@ -119,7 +119,7 @@ public interface EnterpriseAsyncClient
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<DatacentersLimitsDto> getLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
-        @QueryParam("datacenter") @ParamParser(DatacenterId.class) final DatacenterDto datacenter);
+        @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter);
 
     /**
      * @see EnterpriseClient#updateLimits(DatacenterLimitsDto)

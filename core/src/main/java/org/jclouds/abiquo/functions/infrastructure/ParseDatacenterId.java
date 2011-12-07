@@ -17,31 +17,31 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions.enterprise;
+package org.jclouds.abiquo.functions.infrastructure;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Singleton;
 
-import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.base.Function;
 
 /**
- * Parses a {@link EnterpriseDto} object to extract its id.
+ * Parses a {@link DatacenterDto} object to extract its id.
  * 
  * @author Francesc Montserrat
  */
 @Singleton
-public class EnterpriseId implements Function<Object, String>
+public class ParseDatacenterId implements Function<Object, String>
 {
     @Override
     public String apply(final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof EnterpriseDto,
-            "This parser is only valid for EnterpriseDto objects");
+        checkArgument(checkNotNull(input, "input") instanceof DatacenterDto,
+            "This parser is only valid for DatacenterDto objects");
 
-        return ((EnterpriseDto) input).getId().toString();
+        return ((DatacenterDto) input).getId().toString();
     }
 
 }

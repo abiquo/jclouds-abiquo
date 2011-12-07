@@ -23,6 +23,7 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 
+import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServiceType;
 import org.jclouds.http.HttpRequest;
 import org.testng.annotations.Test;
 
@@ -40,7 +41,8 @@ public class AppendRemoteServiceTypeToPathTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetValueWithInvalidInput()
     {
-        AppendRemoteServiceTypeToPath binder = new AppendRemoteServiceTypeToPath();
+        AppendRemoteServiceTypeToPath binder =
+            new AppendRemoteServiceTypeToPath(new ParseRemoteServiceType());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.getValue(request, new Object());
@@ -48,7 +50,8 @@ public class AppendRemoteServiceTypeToPathTest
 
     public void testGetValue()
     {
-        AppendRemoteServiceTypeToPath binder = new AppendRemoteServiceTypeToPath();
+        AppendRemoteServiceTypeToPath binder =
+            new AppendRemoteServiceTypeToPath(new ParseRemoteServiceType());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
 

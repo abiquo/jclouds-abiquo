@@ -101,6 +101,8 @@ public class InfrastructureResources
     {
         DatacenterDto datacenter = datacenterPost();
         datacenter.setId(1);
+        datacenter.addLink(new RESTLink("checkremoteservice",
+            "http://localhost/api/admin/datacenters/1/action/checkremoteservice"));
         datacenter.addLink(new RESTLink("devices",
             "http://localhost/api/admin/datacenters/1/storage/devices"));
         datacenter.addLink(new RESTLink("discovermultiple",
@@ -275,6 +277,7 @@ public class InfrastructureResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<datacenter>");
+        buffer.append(link("/admin/datacenters/1/action/checkremoteservice", "checkremoteservice"));
         buffer.append(link("/admin/datacenters/1/storage/devices", "devices"));
         buffer.append(link("/admin/datacenters/1/action/discovermultiple", "discovermultiple"));
         buffer.append(link("/admin/datacenters/1/action/discoversingle", "discoversingle"));

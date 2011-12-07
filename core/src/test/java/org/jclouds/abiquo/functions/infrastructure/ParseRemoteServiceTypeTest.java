@@ -17,50 +17,40 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions.enterprise;
+package org.jclouds.abiquo.functions.infrastructure;
 
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.model.enumerator.RemoteServiceType;
 import com.google.common.base.Function;
 
 /**
- * Unit tests for the {@link EnterpriseId} functions.
+ * Unit tests for the {@link ParseRemoteServiceType} functions.
  * 
  * @author Francesc Montserrat
  */
 @Test(groups = "unit")
-public class EnterpriseIdTest
+public class ParseRemoteServiceTypeTest
 {
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        Function<Object, String> parser = new EnterpriseId();
+        Function<Object, String> parser = new ParseRemoteServiceType();
         parser.apply(null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidInputType()
     {
-        Function<Object, String> parser = new EnterpriseId();
+        Function<Object, String> parser = new ParseRemoteServiceType();
         parser.apply(new Object());
-    }
-
-    @Test(expectedExceptions = NullPointerException.class)
-    public void testInvalidId()
-    {
-        Function<Object, String> parser = new EnterpriseId();
-        parser.apply(new EnterpriseDto());
     }
 
     public void testValidId()
     {
-        Function<Object, String> parser = new EnterpriseId();
-
-        EnterpriseDto enterprise = new EnterpriseDto();
-        enterprise.setId(5);
-        assertEquals(parser.apply(enterprise), "5");
+        Function<Object, String> parser = new ParseRemoteServiceType();
+        assertEquals(parser.apply(RemoteServiceType.BPM_SERVICE), "bpmservice");
     }
 }

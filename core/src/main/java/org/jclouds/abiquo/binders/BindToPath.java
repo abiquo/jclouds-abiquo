@@ -125,7 +125,7 @@ public class BindToPath implements Binder
         return ModifyRequest.endpoint(request, path);
     }
 
-    static SingleResourceTransportDto checkValidInput(final Object input)
+    protected static SingleResourceTransportDto checkValidInput(final Object input)
     {
         checkArgument(checkNotNull(input, "input") instanceof SingleResourceTransportDto,
             "this binder is only valid for SingleResourceTransportDto objects");

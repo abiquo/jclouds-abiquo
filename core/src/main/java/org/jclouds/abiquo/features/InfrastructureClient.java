@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.features;
 
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
@@ -172,6 +173,16 @@ public interface InfrastructureClient
      * @return The usage limits for the datacenter on any enterprise.
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
+
+    /**
+     * Check if the remote service in the given URI can be used in the given datacenter.
+     * 
+     * @param datacenter The datacenter where the remote service will be used.
+     * @param type The type of the remote service.
+     * @param url The URI where the remote service is exposed.
+     * @return Boolean indicating if the remote service can be used in the given datacenter.
+     */
+    Boolean canUseRemoteService(DatacenterDto datacenter, RemoteServiceType type, URL url);
 
     /*********************** Rack ********************** */
 

@@ -19,11 +19,11 @@
 
 package org.jclouds.abiquo.binders.infrastructure;
 
-import static com.google.common.base.Preconditions.checkArgument;
-
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.binders.AppendToPath;
+import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServiceType;
 import org.jclouds.http.HttpRequest;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -38,13 +38,19 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 @Singleton
 public class AppendRemoteServiceTypeToPath extends AppendToPath
 {
+    private ParseRemoteServiceType parser;
+
+    @Inject
+    public AppendRemoteServiceTypeToPath(final ParseRemoteServiceType parser)
+    {
+        super();
+        this.parser = parser;
+    }
+
     @Override
     protected <R extends HttpRequest> String getValue(final R request, final Object input)
     {
-        checkArgument(input instanceof RemoteServiceType,
-            "this binder is only valid for RemoteServiceType objects");
-
-        return ((RemoteServiceType) input).name().replaceAll("_", "").toLowerCase();
+        return parser.apply(input);
     }
 
 }

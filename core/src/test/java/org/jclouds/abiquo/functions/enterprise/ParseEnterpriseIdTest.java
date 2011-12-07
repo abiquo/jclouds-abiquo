@@ -17,50 +17,50 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions.infrastructure;
+package org.jclouds.abiquo.functions.enterprise;
 
 import static org.testng.Assert.assertEquals;
 
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.google.common.base.Function;
 
 /**
- * Unit tests for the {@link DatacenterId} functions.
+ * Unit tests for the {@link ParseEnterpriseId} function.
  * 
  * @author Francesc Montserrat
  */
 @Test(groups = "unit")
-public class DatacenterIdTest
+public class ParseEnterpriseIdTest
 {
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        Function<Object, String> parser = new DatacenterId();
+        Function<Object, String> parser = new ParseEnterpriseId();
         parser.apply(null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidInputType()
     {
-        Function<Object, String> parser = new DatacenterId();
+        Function<Object, String> parser = new ParseEnterpriseId();
         parser.apply(new Object());
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidId()
     {
-        Function<Object, String> parser = new DatacenterId();
-        parser.apply(new DatacenterDto());
+        Function<Object, String> parser = new ParseEnterpriseId();
+        parser.apply(new EnterpriseDto());
     }
 
     public void testValidId()
     {
-        Function<Object, String> parser = new DatacenterId();
+        Function<Object, String> parser = new ParseEnterpriseId();
 
-        DatacenterDto datacenter = new DatacenterDto();
-        datacenter.setId(5);
-        assertEquals(parser.apply(datacenter), "5");
+        EnterpriseDto enterprise = new EnterpriseDto();
+        enterprise.setId(5);
+        assertEquals(parser.apply(enterprise), "5");
     }
 }

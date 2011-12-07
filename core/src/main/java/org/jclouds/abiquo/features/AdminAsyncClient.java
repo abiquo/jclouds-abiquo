@@ -32,7 +32,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
-import org.jclouds.abiquo.functions.enterprise.EnterpriseId;
+import org.jclouds.abiquo.functions.enterprise.ParseEnterpriseId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
@@ -87,7 +87,7 @@ public interface AdminAsyncClient
     @GET
     @Path("/admin/roles")
     ListenableFuture<RolesDto> listRoles(
-        @QueryParam("identerprise") @ParamParser(EnterpriseId.class) final EnterpriseDto enterprise);
+        @QueryParam("identerprise") @ParamParser(ParseEnterpriseId.class) final EnterpriseDto enterprise);
 
     /**
      * @see AdminClient#getRole(UserDto)
