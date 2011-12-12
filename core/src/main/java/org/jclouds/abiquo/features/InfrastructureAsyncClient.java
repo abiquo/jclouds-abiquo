@@ -41,6 +41,7 @@ import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
@@ -319,6 +320,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listStorageDevices(DatacenterDto)
      */
+    @EnterpriseEdition
     @GET
     ListenableFuture<StorageDevicesDto> listStorageDevices(
         @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
@@ -326,6 +328,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#getStorageDevice(DatacenterDto, Integer)
      */
+    @EnterpriseEdition
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<StorageDeviceDto> getStorageDevice(
@@ -335,6 +338,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#createStorageDevice(DatacenterDto, StorageDeviceDto)
      */
+    @EnterpriseEdition
     @POST
     ListenableFuture<StorageDeviceDto> createStorageDevice(
         @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter,
@@ -343,6 +347,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#deleteStorageDevice(StorageDeviceDto)
      */
+    @EnterpriseEdition
     @DELETE
     ListenableFuture<Void> deleteStorageDevice(
         @EndpointLink("edit") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice);
@@ -350,6 +355,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#updateStorageDevice(StorageDeviceDto)
      */
+    @EnterpriseEdition
     @PUT
     ListenableFuture<StorageDeviceDto> updateStorageDevice(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StorageDeviceDto storageDevice);
@@ -359,6 +365,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listTiers(DatacenterDto)
      */
+    @EnterpriseEdition
     @GET
     ListenableFuture<TiersDto> listTiers(
         @EndpointLink("tiers") @BinderParam(BindToPath.class) DatacenterDto datacenter);
@@ -366,6 +373,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#updateTier(TierDto)
      */
+    @EnterpriseEdition
     @PUT
     ListenableFuture<TierDto> updateTier(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TierDto tier);
@@ -373,6 +381,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#getTier(DatacenterDto, Integer)
      */
+    @EnterpriseEdition
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<TierDto> getTier(
@@ -384,6 +393,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listStoragePools(StorageDeviceDto, StoragePoolOptions)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLSDTO_XML)
     @JAXBResponseParser
@@ -394,6 +404,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#createStoragePool(StorageDeviceDto, StoragePoolDto)
      */
+    @EnterpriseEdition
     @POST
     @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
     @Produces(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
@@ -405,6 +416,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#updateStoragePool(StoragePoolDto)
      */
+    @EnterpriseEdition
     @PUT
     @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
     @Produces(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
@@ -415,6 +427,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#deleteStoragePool(StoragePoolDto)
      */
+    @EnterpriseEdition
     @DELETE
     ListenableFuture<Void> deleteStoragePool(
         @EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool);
@@ -422,6 +435,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#getStoragePool(StorageDeviceDto, String)
      */
+    @EnterpriseEdition
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)

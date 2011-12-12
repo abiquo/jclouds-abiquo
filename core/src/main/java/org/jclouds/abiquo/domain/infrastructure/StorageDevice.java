@@ -28,6 +28,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.StorageTechnologyType;
@@ -47,6 +48,7 @@ import com.google.common.collect.Lists;
  * @see <a href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource">
  *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource</a>
  */
+@EnterpriseEdition
 public class StorageDevice extends DomainWrapper<StorageDeviceDto>
 {
     /** The datacenter where the storage device is. */

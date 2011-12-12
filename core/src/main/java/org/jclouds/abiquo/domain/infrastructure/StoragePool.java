@@ -25,6 +25,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
@@ -39,6 +40,7 @@ import com.abiquo.server.core.infrastructure.storage.TierDto;
  * @see <a href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource">
  *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource</a>
  */
+@EnterpriseEdition
 public class StoragePool extends DomainWrapper<StoragePoolDto>
 {
     /** The default value for the used space. */

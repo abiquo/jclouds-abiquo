@@ -21,6 +21,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -33,6 +34,7 @@ import com.abiquo.server.core.infrastructure.storage.TierDto;
  * @author Francesc Montserrat
  * @see http://community.abiquo.com/display/ABI20/Tier+Resource
  */
+@EnterpriseEdition
 public class Tier extends DomainWrapper<TierDto>
 {
     /** The datacenter where the tier belongs. */

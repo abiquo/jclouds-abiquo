@@ -22,10 +22,13 @@ package org.jclouds.abiquo.domain;
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.infrastructure.storage.TierDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
  * Cloud domain utilities.
@@ -68,8 +71,12 @@ public class CloudResources
             "http://localhost/api/admin/enterprises/1"));
         virtualDatacenter.addLink(new RESTLink("edit",
             "http://localhost/api/cloud/virtualdatacenters/1"));
+        virtualDatacenter.addLink(new RESTLink("tiers",
+            "http://localhost/api/cloud/virtualdatacenters/1/tiers"));
         virtualDatacenter.addLink(new RESTLink("virtualappliance",
             "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances"));
+        virtualDatacenter.addLink(new RESTLink("volumes",
+            "http://localhost/api/cloud/virtualdatacenters/1/volumes"));
         return virtualDatacenter;
     }
 
@@ -103,6 +110,48 @@ public class CloudResources
             .addLink(new RESTLink("state",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/state"));
         return virtualMachine;
+    }
+
+    public static VolumeManagementDto volumePost()
+    {
+        VolumeManagementDto volume = new VolumeManagementDto();
+        volume.setName("Volume");
+        volume.setSizeInMB(1024);
+        volume.addLink(new RESTLink("tier",
+            "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        return volume;
+    }
+
+    public static VolumeManagementDto volumePut()
+    {
+        VolumeManagementDto volume = volumePost();
+        volume.setId(1);
+        volume.setState(VolumeState.DETACHED.name());
+
+        volume.getLinks().clear();
+
+        RESTLink mappings =
+            new RESTLink("action",
+                "http://localhost/api/cloud/virtualdatacenters/1/volumes/1/action/initiatormappings");
+        mappings.setTitle("initiator mappings");
+        volume.addLink(mappings);
+        volume.addLink(new RESTLink("edit",
+            "http://localhost/api/cloud/virtualdatacenters/1/volumes/1"));
+        volume.addLink(new RESTLink("tier",
+            "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        volume.addLink(new RESTLink("virtualdatacenter",
+            "http://localhost/api/cloud/virtualdatacenters/1"));
+        return volume;
+    }
+
+    public static TierDto cloudTierPut()
+    {
+        TierDto tier = new TierDto();
+        tier.setId(1);
+        tier.setEnabled(true);
+        tier.setName("Tier");
+        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        return tier;
     }
 
     public static String virtualDatacenterPostPayload()
@@ -163,7 +212,9 @@ public class CloudResources
         buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append(link("/admin/enterprises/1", "enterprise"));
         buffer.append(link("/cloud/virtualdatacenters/1", "edit"));
+        buffer.append(link("/cloud/virtualdatacenters/1/tiers", "tiers"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances", "virtualappliance"));
+        buffer.append(link("/cloud/virtualdatacenters/1/volumes", "volumes"));
         buffer.append("<cpuHard>0</cpuHard>");
         buffer.append("<cpuSoft>0</cpuSoft>");
         buffer.append("<hdHard>0</hdHard>");
@@ -224,6 +275,46 @@ public class CloudResources
         buffer.append("<ram>0</ram>");
         buffer.append("<vdrpPort>0</vdrpPort>");
         buffer.append("</virtualMachine>");
+        return buffer.toString();
+    }
+
+    public static String volumePostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<volume>");
+        buffer.append(link("/cloud/virtualdatacenters/1/tiers/1", "tier"));
+        buffer.append("<name>Volume</name>");
+        buffer.append("<sizeInMB>1024</sizeInMB>");
+        buffer.append("</volume>");
+        return buffer.toString();
+    }
+
+    public static String volumePutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<volume>");
+        buffer.append(link("/cloud/virtualdatacenters/1/volumes/1/action/initiatormappings",
+            "action", "initiator mappings"));
+        buffer.append(link("/cloud/virtualdatacenters/1/volumes/1", "edit"));
+        buffer.append(link("/cloud/virtualdatacenters/1/tiers/1", "tier"));
+        buffer.append(link("/cloud/virtualdatacenters/1", "virtualdatacenter"));
+        buffer.append("<id>1</id>");
+        buffer.append("<name>Volume</name>");
+        buffer.append("<state>DETACHED</state>");
+        buffer.append("<sizeInMB>1024</sizeInMB>");
+        buffer.append("</volume>");
+        return buffer.toString();
+    }
+
+    public static String cloudTierPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<tier>");
+        buffer.append(link("/cloud/virtualdatacenters/1/tiers/1", "edit"));
+        buffer.append("<enabled>true</enabled>");
+        buffer.append("<id>1</id>");
+        buffer.append("<name>Tier</name>");
+        buffer.append("</tier>");
         return buffer.toString();
     }
 }

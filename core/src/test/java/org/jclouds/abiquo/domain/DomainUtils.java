@@ -44,4 +44,13 @@ public class DomainUtils
         return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\"/>";
     }
 
+    /**
+     * Builds a link in xml format
+     */
+    public static String link(final String href, final String rel, final String title)
+    {
+        return "<link href=\"http://localhost/api" + href + "\" rel=\"" + rel + "\" title=\""
+            + title + "\"/>";
+    }
+
 }

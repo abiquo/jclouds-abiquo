@@ -36,7 +36,9 @@ import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
@@ -53,6 +55,9 @@ import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.infrastructure.storage.TiersDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -110,6 +115,24 @@ public interface CloudAsyncClient
     @DELETE
     ListenableFuture<Void> deleteVirtualDatacenter(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#listStorageTiers(VirtualDatacenterDto)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<TiersDto> listStorageTiers(
+        @EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#getStorageTier(VirtualDatacenterDto, Integer)
+     */
+    @EnterpriseEdition
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<TiersDto> getStorageTier(
+        @EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendToPath.class) Integer tierId);
 
     /*********************** Virtual Appliance ***********************/
 
@@ -226,7 +249,60 @@ public interface CloudAsyncClient
      * @see CloudClient#getVirtualMachineState(VirtualMachineDto)
      */
     @GET
-    VirtualMachineStateDto getVirtualMachineState(
+    ListenableFuture<VirtualMachineStateDto> getVirtualMachineState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
+    /*********************** Storage ***********************/
+
+    /**
+     * @see CloudClient#listVolumes(VirtualDatacenterDto)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<VolumesManagementDto> listVolumes(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#listVolumes(VirtualDatacenterDto, VolumeOptions)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<VolumesManagementDto> listVolumes(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendOptionsToPath.class) VolumeOptions options);
+
+    /**
+     * @see CloudClient#getVolume(VirtualDatacenterDto, Integer)
+     */
+    @EnterpriseEdition
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<VolumeManagementDto> getVolume(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendToPath.class) Integer volumeId);
+
+    /**
+     * @see CloudClient#createVolume(VirtualDatacenterDto, VolumeManagementDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<VolumeManagementDto> createVolume(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(BindToXMLPayload.class) VolumeManagementDto volume);
+
+    /**
+     * @see CloudClient#updateVolume(VolumeManagementDto)
+     */
+    @EnterpriseEdition
+    @PUT
+    ListenableFuture<VolumeManagementDto> updateVolume(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VolumeManagementDto volume);
+
+    /**
+     * @see CloudClient#updateVolume(VolumeManagementDto)
+     */
+    @EnterpriseEdition
+    @DELETE
+    ListenableFuture<Void> deleteVolume(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) VolumeManagementDto volume);
 }

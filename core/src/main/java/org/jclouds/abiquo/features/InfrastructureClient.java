@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -327,6 +328,7 @@ public interface InfrastructureClient
      * @param datacenter The datacenter.
      * @return The list of storage devices in the datacenter.
      */
+    @EnterpriseEdition
     StorageDevicesDto listStorageDevices(DatacenterDto datacenter);
 
     /**
@@ -335,6 +337,7 @@ public interface InfrastructureClient
      * @param storageDeviceId The id of the storage device.
      * @return The storage device or <code>null</code> if it does not exist.
      */
+    @EnterpriseEdition
     StorageDeviceDto getStorageDevice(DatacenterDto datacenter, Integer storageDeviceId);
 
     /**
@@ -344,6 +347,7 @@ public interface InfrastructureClient
      * @param storageDevice The storage device to be created.
      * @return The created storage device.
      */
+    @EnterpriseEdition
     StorageDeviceDto createStorageDevice(final DatacenterDto datacenter,
         final StorageDeviceDto storageDevice);
 
@@ -352,6 +356,7 @@ public interface InfrastructureClient
      * 
      * @param storageDevice The storage device to delete.
      */
+    @EnterpriseEdition
     void deleteStorageDevice(StorageDeviceDto storageDevice);
 
     /**
@@ -360,6 +365,7 @@ public interface InfrastructureClient
      * @param storageDevice The new attributes for the storage device.
      * @return The updated storage device.
      */
+    @EnterpriseEdition
     StorageDeviceDto updateStorageDevice(StorageDeviceDto storageDevice);
 
     /*********************** Tier ***********************/
@@ -369,6 +375,7 @@ public interface InfrastructureClient
      * @param datacenter The datacenter.
      * @return The list of tiers in the datacenter.
      */
+    @EnterpriseEdition
     TiersDto listTiers(DatacenterDto datacenter);
 
     /**
@@ -377,6 +384,7 @@ public interface InfrastructureClient
      * @param tier The new attributes for the tier.
      * @return The updated tier.
      */
+    @EnterpriseEdition
     TierDto updateTier(TierDto tier);
 
     /**
@@ -385,6 +393,7 @@ public interface InfrastructureClient
      * @param tierId The id of the tier.
      * @return The tier or <code>null</code> if it does not exist.
      */
+    @EnterpriseEdition
     TierDto getTier(DatacenterDto datacenter, Integer tierId);
 
     /*********************** Storage Pool ***********************/
@@ -395,6 +404,7 @@ public interface InfrastructureClient
      * @param storageDevice The storage device.
      * @return The list of storage pools in the storage device.
      */
+    @EnterpriseEdition
     StoragePoolsDto listStoragePools(StorageDeviceDto storageDeviceDto,
         StoragePoolOptions storagePoolOptions);
 
@@ -405,6 +415,7 @@ public interface InfrastructureClient
      * @param storagePool The storage pool to be created.
      * @return The created storage pool.
      */
+    @EnterpriseEdition
     StoragePoolDto createStoragePool(StorageDeviceDto storageDevice, StoragePoolDto storagePool);
 
     /**
@@ -413,6 +424,7 @@ public interface InfrastructureClient
      * @param storagePool The new attributes for the storage pull.
      * @return The updated tier.
      */
+    @EnterpriseEdition
     StoragePoolDto updateStoragePool(StoragePoolDto storagePool);
 
     /**
@@ -420,6 +432,7 @@ public interface InfrastructureClient
      * 
      * @param storagePool The storage pool to delete.
      */
+    @EnterpriseEdition
     void deleteStoragePool(StoragePoolDto storagePool);
 
     /**
@@ -428,5 +441,6 @@ public interface InfrastructureClient
      * @param storagePoolId The id of the storage pool.
      * @return The storage pool or <code>null</code> if it does not exist.
      */
+    @EnterpriseEdition
     StoragePoolDto getStoragePool(StorageDeviceDto storageDevice, String storagePoolId);
 }

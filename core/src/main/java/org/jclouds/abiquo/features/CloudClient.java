@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.rest.RESTLink;
@@ -34,6 +36,10 @@ import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.infrastructure.storage.TierDto;
+import com.abiquo.server.core.infrastructure.storage.TiersDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 
 /**
  * Provides synchronous access to Abiquo Cloud API.
@@ -89,6 +95,25 @@ public interface CloudClient
      * @param virtualDatacenter The virtual datacenter to delete.
      */
     void deleteVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * List the storage tiers available for the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @return The storage tiers available to the given virtual datacenter.
+     */
+    @EnterpriseEdition
+    TiersDto listStorageTiers(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * Get the storage tier from the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param The id of the storage tier.
+     * @return The storage tiers available to the given virtual datacenter.
+     */
+    @EnterpriseEdition
+    TierDto getStorageTier(VirtualDatacenterDto virtualDatacenter, Integer tierId);
 
     /*********************** Virtual Appliance ***********************/
 
@@ -222,4 +247,65 @@ public interface CloudClient
      * @return The state of the given virtual machine.
      */
     VirtualMachineStateDto getVirtualMachineState(VirtualMachineDto virtualMachine);
+
+    /*********************** Storage ***********************/
+
+    /**
+     * List all volumes in the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @return The volumes in the virtual datacenter.
+     */
+    @EnterpriseEdition
+    VolumesManagementDto listVolumes(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * List all volumes in the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param options Optional parameters to filter the volume list.
+     * @return The volumes in the virtual datacenter.
+     */
+    @EnterpriseEdition
+    VolumesManagementDto listVolumes(VirtualDatacenterDto virtualDatacenter, VolumeOptions options);
+
+    /**
+     * Get a volume from the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param volumeId The id of the volume to get.
+     * @return The volume or <code>null</code> if it does not exist.
+     */
+    @EnterpriseEdition
+    VolumeManagementDto getVolume(VirtualDatacenterDto virtualDatacenter, Integer volumeId);
+
+    /**
+     * Creates a volume in the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter where the volume will be created.
+     * @param volume The volume to create. This volume dto must contain a link to the tier where the
+     *            volume should be created.
+     * @return The created volume.
+     */
+    @EnterpriseEdition
+    VolumeManagementDto createVolume(VirtualDatacenterDto virtualDatacenter,
+        VolumeManagementDto volume);
+
+    /**
+     * Modifies the given volume.
+     * 
+     * @param volume The volume to modify.
+     * @return The modified volume.
+     */
+    @EnterpriseEdition
+    VolumeManagementDto updateVolume(VolumeManagementDto volume);
+
+    /**
+     * Delete the given volume.
+     * 
+     * @param volume The volume to delete.
+     */
+    @EnterpriseEdition
+    void deleteVolume(VolumeManagementDto volume);
+
 }

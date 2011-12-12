@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import org.jclouds.abiquo.domain.CloudResources;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -38,6 +39,7 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -174,6 +176,45 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
+    public void testListStorageTiers() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("listStorageTiers", VirtualDatacenterDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/tiers HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetStorageTier() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("getStorageTier", VirtualDatacenterDto.class,
+                Integer.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/tiers/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
     /*********************** Virtual Appliance ***********************/
 
     public void testListVirtualAppliances() throws SecurityException, NoSuchMethodException,
@@ -224,8 +265,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVirtualAppliance", VirtualDatacenterDto.class,
                 VirtualApplianceDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), CloudResources
-                .virtualAppliancePost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                CloudResources.virtualAppliancePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances HTTP/1.1");
@@ -399,8 +440,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVirtualMachine", VirtualApplianceDto.class,
                 VirtualMachineDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualAppliancePut(), CloudResources
-                .virtualMachinePost());
+            processor.createRequest(method, CloudResources.virtualAppliancePut(),
+                CloudResources.virtualMachinePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines HTTP/1.1");
@@ -520,6 +561,127 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Storage ***********************/
+
+    public void testListVolumes() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = CloudAsyncClient.class.getMethod("listVolumes", VirtualDatacenterDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/volumes HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListVolumesWithOptions() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("listVolumes", VirtualDatacenterDto.class,
+                VolumeOptions.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(), VolumeOptions
+                .builder().onlyAvailable(true).build());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/volumes?available=true HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetVolume() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class
+                .getMethod("getVolume", VirtualDatacenterDto.class, Integer.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/volumes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testCreateVolume() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("createVolume", VirtualDatacenterDto.class,
+                VolumeManagementDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                CloudResources.volumePost());
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/cloud/virtualdatacenters/1/volumes HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(CloudResources.volumePostPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateVolume() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = CloudAsyncClient.class.getMethod("updateVolume", VolumeManagementDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.volumePut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/cloud/virtualdatacenters/1/volumes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(CloudResources.volumePutPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteVolume() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = CloudAsyncClient.class.getMethod("deleteVolume", VolumeManagementDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.volumePut());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/cloud/virtualdatacenters/1/volumes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
