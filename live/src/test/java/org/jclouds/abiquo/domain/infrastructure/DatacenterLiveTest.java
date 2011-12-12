@@ -21,13 +21,10 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
@@ -38,10 +35,8 @@ import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
-import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.testng.annotations.Test;
 
-import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
@@ -105,29 +100,4 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureT
         assertTrue(limits.size() < numLimits);
     }
 
-    public void testCanUseRemoteService() throws MalformedURLException
-    {
-        RemoteService bpm =
-            env.datacenter.findRemoteService(RemoteServicePredicates
-                .type(RemoteServiceType.BPM_SERVICE));
-
-        boolean canUseBpm =
-            env.datacenter
-                .canUseRemoteService(RemoteServiceType.BPM_SERVICE, new URL(bpm.getUri()));
-
-        assertTrue(canUseBpm);
-    }
-
-    public void testCanNotUseRemoteService() throws MalformedURLException
-    {
-        RemoteService bpm =
-            env.datacenter.findRemoteService(RemoteServicePredicates
-                .type(RemoteServiceType.BPM_SERVICE));
-
-        boolean canUseBpm =
-            env.datacenter.canUseRemoteService(RemoteServiceType.BPM_SERVICE, new URL(bpm.getUri()
-                + "/unexisting"));
-
-        assertFalse(canUseBpm);
-    }
 }

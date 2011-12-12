@@ -21,7 +21,6 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.collect.Iterables.filter;
 
-import java.net.URL;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -359,18 +358,6 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
                     MachineOptions.builder().port(port).build());
 
         return wrap(context, Machine.class, dto.getCollection());
-    }
-
-    /**
-     * Check if the remote service in the given URI can be used in the current datacenter.
-     * 
-     * @param type The type of the remote service.
-     * @param url The URI where the remote service is exposed.
-     * @return Boolean indicating if the remote service can be used in the current datacenter.
-     */
-    public boolean canUseRemoteService(final RemoteServiceType type, final URL url)
-    {
-        return context.getApi().getInfrastructureClient().canUseRemoteService(target, type, url);
     }
 
     // Builder

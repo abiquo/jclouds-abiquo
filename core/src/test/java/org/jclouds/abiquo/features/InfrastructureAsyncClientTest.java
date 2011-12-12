@@ -23,8 +23,6 @@ import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.net.URL;
-import java.net.URLEncoder;
 
 import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
@@ -166,33 +164,6 @@ public class InfrastructureAsyncClientTest extends
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testCanUseRemoteService() throws SecurityException, NoSuchMethodException,
-        IOException
-    {
-        Method method =
-            InfrastructureAsyncClient.class.getMethod("canUseRemoteService", DatacenterDto.class,
-                RemoteServiceType.class, URL.class);
-        GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, InfrastructureResources.datacenterPut(),
-                RemoteServiceType.BPM_SERVICE, new URL("http://localhost/foo"));
-
-        String baseUrl = "http://localhost/api/admin/datacenters/1/action/checkremoteservice";
-        String query =
-            "url=" + URLEncoder.encode("http://localhost/foo", "UTF-8")
-                + "&remoteservice=bpmservice";
-        String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
-
-        assertRequestLineEquals(request, expectedRequest);
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ReturnTrueIf2xx.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnFalseIfNotAvailable.class);
 
         checkFilters(request);
     }
