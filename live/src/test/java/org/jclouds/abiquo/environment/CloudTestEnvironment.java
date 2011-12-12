@@ -72,6 +72,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         findDefaultEnterprise();
         createVirtualDatacenter();
         createVirtualAppliance();
+        refreshTemplateRepository();
         // createVirtualMachine();
     }
 
@@ -130,6 +131,11 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         virtualMachine.save();
         assertNotNull(virtualMachine.getId());
 
+    }
+
+    protected void refreshTemplateRepository()
+    {
+        defaultEnterprise.refreshTemplateRepository(datacenter);
     }
 
     // Tear down

@@ -189,6 +189,6 @@ public interface EnterpriseAsyncClient
      */
     @PUT
     @Path("{enterprise}/datacenterrepositories/{datacenterrepository}/actions/refresh")
-    void refreshTemplateRepository(@PathParam("enterprise") Integer enterpriseId,
+    ListenableFuture<Void> refreshTemplateRepository(@PathParam("enterprise") Integer enterpriseId,
         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
 }
