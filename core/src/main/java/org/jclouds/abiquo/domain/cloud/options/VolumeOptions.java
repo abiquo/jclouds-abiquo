@@ -22,7 +22,7 @@ package org.jclouds.abiquo.domain.cloud.options;
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
 /**
- * Available options to query virtual appliances.
+ * Available options to query volumes.
  * 
  * @author Ignasi Barrera
  */
