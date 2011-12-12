@@ -20,11 +20,19 @@
 package org.jclouds.abiquo.features;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
+
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
+import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * Provides asynchronous access to Abiquo Abiquo Apps library API.
@@ -36,8 +44,28 @@ import org.jclouds.rest.annotations.RequestFilters;
  */
 @RequestFilters(AbiquoAuthentication.class)
 @Consumes(MediaType.APPLICATION_XML)
-@Path("/cloud")
+@Path("/admin/enterprises/{enterprise}/datacenterrepositories/{datacenterrepository}/")
 public interface VirtualMachineTemplateAsyncClient
 {
     /*********************** Virtual Machine Template ***********************/
+
+    /**
+     * @see VirtualMachineTemplateClient#listVirtualMachineTemplates(EnterpriseDto, DatacenterDto)
+     */
+    @GET
+    @Path("/virtualmachinetemplates")
+    ListenableFuture<VirtualMachineTemplatesDto> listVirtualMachineTemplates(
+        @PathParam("enterprise") Integer enterpriseId,
+        @PathParam("datacenterrepository") Integer datacenterRepositoryId);
+
+    /**
+     * @see VirtualMachineTemplateClient#getVirtualMachineTemplate(Integer, Integer, Integer)
+     */
+    @GET
+    @Path("/virtualmachinetemplates/{virtualmachinetemplate}")
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<VirtualMachineTemplateDto> getVirtualMachineTemplate(
+        @PathParam("enterprise") Integer enterpriseId,
+        @PathParam("datacenterrepository") Integer datacenterRepositoryId,
+        @PathParam("virtualmachinetemplate") Integer virtualMachineTemplateId);
 }
