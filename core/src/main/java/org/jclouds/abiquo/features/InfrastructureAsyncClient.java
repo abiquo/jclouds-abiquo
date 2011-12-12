@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.features;
 
-import java.net.URL;
-
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -42,14 +40,12 @@ import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
-import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServiceType;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.JAXBResponseParser;
-import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -180,16 +176,6 @@ public interface InfrastructureAsyncClient
     @GET
     ListenableFuture<DatacentersLimitsDto> listLimits(
         @EndpointLink("getLimits") @BinderParam(BindToPath.class) DatacenterDto datacenter);
-
-    /**
-     * @see InfrastructureClient#canUseRemoteService(DatacenterDto, RemoteServiceType, URL)
-     */
-    @GET
-    @ExceptionParser(ReturnFalseIfNotAvailable.class)
-    ListenableFuture<Boolean> canUseRemoteService(
-        @EndpointLink("checkremoteservice") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @QueryParam("remoteservice") @ParamParser(ParseRemoteServiceType.class) RemoteServiceType type,
-        @QueryParam("url") URL url);
 
     /*********************** Rack ***********************/
 
