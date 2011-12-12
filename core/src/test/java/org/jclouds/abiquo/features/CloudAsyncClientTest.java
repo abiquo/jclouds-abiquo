@@ -588,6 +588,51 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
+    public void testAttachVolumes() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("attachVolumes", VirtualMachineDto.class,
+                VolumeManagementDto[].class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                new VolumeManagementDto[] {CloudResources.volumePut(), CloudResources.volumePut()});
+
+        String editLink = CloudResources.volumePut().getEditLink().getHref();
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader("<links><link href=\"" + editLink
+            + "\" rel=\"volume\"/><link href=\"" + editLink + "\" rel=\"volume\"/></links>"),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDetachAllVolumes() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("detachAllVolumes", VirtualMachineDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualMachinePut());
+
+        assertRequestLineEquals(
+            request,
+            "DELETE http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     /*********************** Storage ***********************/
 
     public void testListVolumes() throws SecurityException, NoSuchMethodException, IOException

@@ -33,6 +33,7 @@ import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.chef.RunlistElementsDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
  * Adds high level functionality to {@link VirtualMachineDto}.
@@ -121,6 +122,24 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     {
         RESTLink undeployLink = target.searchLink("undeploy");
         return context.getApi().getCloudClient().deployAction(undeployLink);
+    }
+
+    public void attachVolumes(Volume... volumes)
+    {
+        checkNotNull(volumes, "must attach at least one volume");
+
+        VolumeManagementDto[] dtos = new VolumeManagementDto[volumes.length];
+        for (int i = 0; i < volumes.length; i++)
+        {
+            dtos[i] = volumes[i].unwrap();
+        }
+
+        context.getApi().getCloudClient().attachVolumes(target, dtos);
+    }
+
+    public void dettachAllVolumes()
+    {
+        context.getApi().getCloudClient().detachAllVolumes(target);
     }
 
     // Builder

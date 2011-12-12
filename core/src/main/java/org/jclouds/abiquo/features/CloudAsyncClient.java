@@ -269,12 +269,11 @@ public interface CloudAsyncClient
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
     /**
-     * @see CloudClient#detachVolumes(VirtualMachineDto, VolumeManagementDto...)
+     * @see CloudClient#detachAllVolumes(VirtualMachineDto)
      */
     @DELETE
-    ListenableFuture<Void> detachVolumes(
-        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volume);
+    ListenableFuture<Void> detachAllVolumes(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /*********************** Storage ***********************/
 

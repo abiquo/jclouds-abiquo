@@ -257,7 +257,7 @@ public interface CloudClient
     VolumesManagementDto listAttachedVolumes(VirtualMachineDto virtualMachine);
 
     /**
-     * Attach the given volume to the given virtual machine.
+     * Attach the given volumes to the given virtual machine.
      * 
      * @param virtualMachine The virtual machine.
      * @param volumes The volumes to attach.
@@ -265,12 +265,11 @@ public interface CloudClient
     void attachVolumes(VirtualMachineDto virtualMachine, VolumeManagementDto... volumes);
 
     /**
-     * Detach the given volume to the given virtual machine.
+     * Detach all volumes from the given virtual machine.
      * 
      * @param virtualMachine The virtual machine.
-     * @param volumes The volumes to detach.
      */
-    void detachVolumes(VirtualMachineDto virtualMachine, VolumeManagementDto... volume);
+    void detachAllVolumes(VirtualMachineDto virtualMachine);
 
     /*********************** Storage ***********************/
 
