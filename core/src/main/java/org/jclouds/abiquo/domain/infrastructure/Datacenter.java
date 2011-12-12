@@ -28,6 +28,7 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.reference.AbiquoEdition;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -153,6 +154,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices">
      *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices</a>
      */
+    @EnterpriseEdition
     public List<StorageDevice> listStorageDevices()
     {
         StorageDevicesDto devices =
@@ -160,16 +162,19 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, StorageDevice.class, devices.getCollection());
     }
 
+    @EnterpriseEdition
     public List<StorageDevice> listStorageDevices(final Predicate<StorageDevice> filter)
     {
         return Lists.newLinkedList(filter(listStorageDevices(), filter));
     }
 
+    @EnterpriseEdition
     public StorageDevice findStorageDevice(final Predicate<StorageDevice> filter)
     {
         return Iterables.getFirst(filter(listStorageDevices(), filter), null);
     }
 
+    @EnterpriseEdition
     public StorageDevice getStorageDevice(final Integer id)
     {
         StorageDeviceDto device =
@@ -246,17 +251,20 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers">
      *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers</a>
      */
+    @EnterpriseEdition
     public List<Tier> listTiers()
     {
         TiersDto dto = context.getApi().getInfrastructureClient().listTiers(this.unwrap());
         return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
     }
 
+    @EnterpriseEdition
     public List<Tier> listTiers(final Predicate<Tier> filter)
     {
         return Lists.newLinkedList(filter(listTiers(), filter));
     }
 
+    @EnterpriseEdition
     public Tier findTier(final Predicate<Tier> filter)
     {
         return Iterables.getFirst(filter(listTiers(), filter), null);
