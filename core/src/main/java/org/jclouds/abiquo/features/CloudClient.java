@@ -248,6 +248,30 @@ public interface CloudClient
      */
     VirtualMachineStateDto getVirtualMachineState(VirtualMachineDto virtualMachine);
 
+    /**
+     * Get the volumes attached to the given virtual machine.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @return The volumes attached to the given virtual machine.
+     */
+    VolumesManagementDto listAttachedVolumes(VirtualMachineDto virtualMachine);
+
+    /**
+     * Attach the given volume to the given virtual machine.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @param volumes The volumes to attach.
+     */
+    void attachVolumes(VirtualMachineDto virtualMachine, VolumeManagementDto... volumes);
+
+    /**
+     * Detach the given volume to the given virtual machine.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @param volumes The volumes to detach.
+     */
+    void detachVolumes(VirtualMachineDto virtualMachine, VolumeManagementDto... volume);
+
     /*********************** Storage ***********************/
 
     /**

@@ -34,6 +34,7 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
@@ -251,6 +252,29 @@ public interface CloudAsyncClient
     @GET
     ListenableFuture<VirtualMachineStateDto> getVirtualMachineState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+    /**
+     * @see CloudClient#listAttachedVolumes(VirtualMachineDto)
+     */
+    @GET
+    ListenableFuture<VolumesManagementDto> listAttachedVolumes(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+    /**
+     * @see CloudClient#attachVolumes(VirtualMachineDto, VolumeManagementDto...)
+     */
+    @POST
+    ListenableFuture<Void> attachVolumes(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
+
+    /**
+     * @see CloudClient#detachVolumes(VirtualMachineDto, VolumeManagementDto...)
+     */
+    @DELETE
+    ListenableFuture<Void> detachVolumes(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volume);
 
     /*********************** Storage ***********************/
 
