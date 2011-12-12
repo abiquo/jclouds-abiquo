@@ -19,6 +19,12 @@
 
 package org.jclouds.abiquo.features;
 
+import java.io.IOException;
+import java.lang.reflect.Method;
+
+import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
+import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
@@ -35,6 +41,50 @@ public class VirtualMachineTemplateAsyncClientTest extends
     BaseAbiquoAsyncClientTest<VirtualMachineTemplateAsyncClient>
 {
     /*********************** Virtual Machine Template ***********************/
+
+    public void testListVirtualMachineTemplates() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("listVirtualMachineTemplates",
+                Integer.class, Integer.class);
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, 1, 1);
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetVirtualMachineTemplate() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("getVirtualMachineTemplate",
+                Integer.class, Integer.class, Integer.class);
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, 1, 1, 1);
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
 
     @Override
     protected TypeLiteral<RestAnnotationProcessor<VirtualMachineTemplateAsyncClient>> createTypeLiteral()
