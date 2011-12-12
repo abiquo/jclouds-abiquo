@@ -67,8 +67,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
     public void update()
@@ -76,24 +76,26 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         target = context.getApi().getCloudClient().updateVirtualMachine(target);
     }
 
-    public AcceptedRequestDto changeState(final VirtualMachineState state)
+    public void changeState(final VirtualMachineState state)
     {
         VirtualMachineStateDto stateDto = new VirtualMachineStateDto();
         stateDto.setPower(state.toString());
 
-        return context.getApi().getCloudClient().changeVirtualMachineState(target, stateDto);
+        AcceptedRequestDto<VirtualMachineStateDto> result =
+            context.getApi().getCloudClient().changeVirtualMachineState(target, stateDto);
+        VirtualMachineState newState = VirtualMachineState.valueOf(result.getEntity().getPower());
+        target.setState(newState);
     }
 
     public VirtualMachineState getState()
     {
         VirtualMachineStateDto stateDto =
             context.getApi().getCloudClient().getVirtualMachineState(target);
-        VirtualMachineState state = VirtualMachineState.valueOf(stateDto.getPower());
-
-        return state;
+        return VirtualMachineState.valueOf(stateDto.getPower());
     }
 
     // Parent access
+
     /**
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrieveaVirtualAppliance">
@@ -107,9 +109,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return virtualAppliance;
     }
 
-    // Children access
-
     // Actions
+
     public AcceptedRequestDto<String> deploy()
     {
         RESTLink deployLink = target.searchLink("deploy");
@@ -283,10 +284,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
             return VirtualMachine.builder(in.context, in.virtualAppliance).name(in.getName())
-                .description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu()).hdInBytes(
-                    in.getHdInBytes()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort()).idState(
-                    in.getIdState()).highDisponibility(in.getHighDisponibility()).idType(
-                    in.getIdType()).password(in.getPassword());
+                .description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+                .hdInBytes(in.getHdInBytes()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
+                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
+                .idType(in.getIdType()).password(in.getPassword());
         }
     }
 

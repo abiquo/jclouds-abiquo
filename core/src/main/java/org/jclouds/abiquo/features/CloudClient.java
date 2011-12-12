@@ -237,8 +237,8 @@ public interface CloudClient
      * @param state The new state.
      * @return Response message to the state change request.
      */
-    AcceptedRequestDto changeVirtualMachineState(VirtualMachineDto virtualMachine,
-        VirtualMachineStateDto state);
+    AcceptedRequestDto<VirtualMachineStateDto> changeVirtualMachineState(
+        VirtualMachineDto virtualMachine, VirtualMachineStateDto state);
 
     /**
      * Get the state of the given virtual machine.

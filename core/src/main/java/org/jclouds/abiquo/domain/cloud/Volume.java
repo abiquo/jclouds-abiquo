@@ -47,10 +47,12 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     public static final VolumeState DEFAULT_STATE = VolumeState.DETACHED;
 
     /** The virtual datacenter where the volume belongs. */
-    private VirtualDatacenter virtualDatacenter;
+    // Package protected to allow navigation from children
+    VirtualDatacenter virtualDatacenter;
 
     /** The tier where the volume belongs. */
-    private Tier tier;
+    // Package protected to allow navigation from children
+    Tier tier;
 
     /**
      * Constructor to be used only by the builder.
