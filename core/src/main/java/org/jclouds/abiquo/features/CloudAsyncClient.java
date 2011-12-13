@@ -290,6 +290,15 @@ public interface CloudAsyncClient
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(AppendToPath.class) @ParamParser(ParseVolumeId.class) VolumeManagementDto volume);
 
+    /**
+     * @see CloudClient#replaceVolumes(VirtualMachineDto, VolumeManagementDto...)
+     */
+    @PUT
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto< ? >> replaceVolumes(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
+
     /*********************** Storage ***********************/
 
     /**
