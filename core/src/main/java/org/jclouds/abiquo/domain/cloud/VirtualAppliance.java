@@ -20,6 +20,9 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
+
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
@@ -31,6 +34,11 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link VirtualApplianceDto}.
@@ -99,7 +107,35 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     // Children access
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource-RetrievethelistofVirtualMachines.">
+     *      http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource-RetrievethelistofVirtualMachines.</a>
+     */
+    public List<VirtualMachine> listVirtualMachines()
+    {
+        VirtualMachinesDto vms = context.getApi().getCloudClient().listVirtualMachines(target);
+        return wrap(context, VirtualMachine.class, vms.getCollection());
+    }
+
+    public List<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter)
+    {
+        return Lists.newLinkedList(filter(listVirtualMachines(), filter));
+    }
+
+    public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter)
+    {
+        return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
+    }
+
+    public VirtualMachine getVirtualMachine(final Integer id)
+    {
+        VirtualMachineDto vm = context.getApi().getCloudClient().getVirtualMachine(target, id);
+        return wrap(context, VirtualMachine.class, vm);
+    }
+
     // Actions
+
     public AcceptedRequestDto<String> deploy()
     {
         RESTLink deployLink = target.searchLink("deploy");
