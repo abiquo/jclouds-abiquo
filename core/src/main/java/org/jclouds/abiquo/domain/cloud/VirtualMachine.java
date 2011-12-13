@@ -124,7 +124,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return context.getApi().getCloudClient().deployAction(undeployLink);
     }
 
-    public void attachVolumes(final Volume... volumes)
+    public AcceptedRequestDto< ? > attachVolumes(final Volume... volumes)
     {
         checkNotNull(volumes, "must attach at least one volume");
 
@@ -134,18 +134,17 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             dtos[i] = volumes[i].unwrap();
         }
 
-        context.getApi().getCloudClient().attachVolumes(target, dtos);
+        return context.getApi().getCloudClient().attachVolumes(target, dtos);
     }
 
-    public void dettachAllVolumes()
+    public AcceptedRequestDto< ? > dettachAllVolumes()
     {
-        context.getApi().getCloudClient().detachAllVolumes(target);
+        return context.getApi().getCloudClient().detachAllVolumes(target);
     }
 
-    public void dettachVolumes(final Volume... volumes)
+    public AcceptedRequestDto< ? > dettachVolume(final Volume volume)
     {
-        context.getCloudService().detachVolumes(this,
-            checkNotNull(volumes, "must detach at least one volume"));
+        return context.getApi().getCloudClient().detachVolume(target, volume.unwrap());
     }
 
     // Builder
