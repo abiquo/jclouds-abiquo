@@ -27,10 +27,13 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.features.CloudClient;
+import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
+import org.jclouds.abiquo.util.Config;
 
 /**
  * Test environment for cloud live tests.
@@ -48,6 +51,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     public VirtualAppliance virtualAppliance;
 
     public VirtualMachine virtualMachine;
+
+    public VirtualMachineTemplate template;
 
     public Network network;
 
@@ -73,13 +78,13 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         createVirtualDatacenter();
         createVirtualAppliance();
         refreshTemplateRepository();
-        // createVirtualMachine();
+        createVirtualMachine();
     }
 
     @Override
     public void tearDown() throws Exception
     {
-        // deleteVirtualMachine();
+        deleteVirtualMachine();
         deleteVirtualAppliance();
         deleteVirtualDatacenter();
         deleteMachine();
@@ -124,9 +129,16 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     protected void createVirtualMachine()
     {
+        String templatename = Config.get("abiquo.template.name");
+
+        template =
+            defaultEnterprise.findTemplateFromRepository(datacenter,
+                VirtualMachineTemplatePredicates.name(templatename));
+        assertNotNull(template);
+
         virtualMachine =
-            VirtualMachine.builder(context, virtualAppliance).cpu(2).name(PREFIX + "VM Aloha")
-                .hdInBytes(100).ram(128).build();
+            VirtualMachine.builder(context, virtualAppliance, template).cpu(2).name(
+                PREFIX + "VM Aloha").hdInBytes(100).ram(128).build();
 
         virtualMachine.save();
         assertNotNull(virtualMachine.getId());

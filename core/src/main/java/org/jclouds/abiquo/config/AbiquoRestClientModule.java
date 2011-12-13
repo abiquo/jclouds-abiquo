@@ -33,6 +33,7 @@ import org.jclouds.abiquo.features.EnterpriseAsyncClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
 import org.jclouds.http.HttpErrorHandler;
@@ -61,7 +62,7 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
             .put(AdminClient.class, AdminAsyncClient.class) //
             .put(ConfigClient.class, ConfigAsyncClient.class) //
             .put(CloudClient.class, CloudAsyncClient.class) //
-            .put(VirtualMachineTemplateClient.class, VirtualMachineTemplateClient.class) //
+            .put(VirtualMachineTemplateClient.class, VirtualMachineTemplateAsyncClient.class) //
             .build();
 
     public AbiquoRestClientModule()

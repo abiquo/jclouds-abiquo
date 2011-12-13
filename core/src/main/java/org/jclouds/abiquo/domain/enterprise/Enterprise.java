@@ -26,8 +26,10 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
+import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -161,6 +163,26 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public Role findRole(final Predicate<Role> filter)
     {
         return Iterables.getFirst(filter(listRoles(), filter), null);
+    }
+
+    public List<VirtualMachineTemplate> listTemplatesFromRepository(final Datacenter datacenter)
+    {
+        VirtualMachineTemplatesDto dto =
+            context.getApi().getVirtualMachineTemplateClient().listVirtualMachineTemplates(
+                target.getId(), datacenter.getId());
+        return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
+    }
+
+    public List<VirtualMachineTemplate> listTemplatesFromRepository(final Datacenter datacenter,
+        final Predicate<VirtualMachineTemplate> filter)
+    {
+        return Lists.newLinkedList(filter(listTemplatesFromRepository(datacenter), filter));
+    }
+
+    public VirtualMachineTemplate findTemplateFromRepository(final Datacenter datacenter,
+        final Predicate<VirtualMachineTemplate> filter)
+    {
+        return Iterables.getFirst(filter(listTemplatesFromRepository(datacenter), filter), null);
     }
 
     // Actions

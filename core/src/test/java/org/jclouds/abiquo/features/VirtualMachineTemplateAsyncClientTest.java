@@ -19,15 +19,20 @@
 
 package org.jclouds.abiquo.features;
 
+import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
+
 import java.io.IOException;
 import java.lang.reflect.Method;
 
+import org.jclouds.abiquo.domain.TemplateResources;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -82,6 +87,50 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateVirtualMachineTemplate() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("updateVirtualMachineTemplate",
+                VirtualMachineTemplateDto.class);
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
+
+        assertRequestLineEquals(
+            request,
+            "PUT http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(TemplateResources
+            .virtualMachineTemplatePutPayload()), "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteVirtualMachineTemplate() throws SecurityException, NoSuchMethodException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("deleteVirtualMachineTemplate",
+                VirtualMachineTemplateDto.class);
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
+
+        assertRequestLineEquals(
+            request,
+            "DELETE http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }

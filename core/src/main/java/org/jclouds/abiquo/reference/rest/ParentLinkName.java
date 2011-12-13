@@ -42,5 +42,7 @@ public class ParentLinkName
 
     public final static String VIRTUAL_APPLIANCE = "virtualappliance";
 
+    public final static String VIRTUAL_MACHINE_TEMPLATE = "virtualmachinetemplate";
+
     public final static String COST_CODE = "costcode";
 }

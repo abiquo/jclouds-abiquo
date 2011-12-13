@@ -20,12 +20,18 @@
 package org.jclouds.abiquo.features;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -44,16 +50,16 @@ import com.google.common.util.concurrent.ListenableFuture;
  */
 @RequestFilters(AbiquoAuthentication.class)
 @Consumes(MediaType.APPLICATION_XML)
-@Path("/admin/enterprises/{enterprise}/datacenterrepositories/{datacenterrepository}/")
+@Path("/admin/enterprises")
 public interface VirtualMachineTemplateAsyncClient
 {
     /*********************** Virtual Machine Template ***********************/
 
     /**
-     * @see VirtualMachineTemplateClient#listVirtualMachineTemplates(EnterpriseDto, DatacenterDto)
+     * @see VirtualMachineTemplateClient#listVirtualMachineTemplates(Integer, Integer)
      */
     @GET
-    @Path("/virtualmachinetemplates")
+    @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
     ListenableFuture<VirtualMachineTemplatesDto> listVirtualMachineTemplates(
         @PathParam("enterprise") Integer enterpriseId,
         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
@@ -62,10 +68,24 @@ public interface VirtualMachineTemplateAsyncClient
      * @see VirtualMachineTemplateClient#getVirtualMachineTemplate(Integer, Integer, Integer)
      */
     @GET
-    @Path("/virtualmachinetemplates/{virtualmachinetemplate}")
+    @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates/{virtualmachinetemplate}")
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<VirtualMachineTemplateDto> getVirtualMachineTemplate(
         @PathParam("enterprise") Integer enterpriseId,
         @PathParam("datacenterrepository") Integer datacenterRepositoryId,
         @PathParam("virtualmachinetemplate") Integer virtualMachineTemplateId);
+
+    /**
+     * @see VirtualMachineTemplateClient#updateVirtualMachineTemplate(VirtualMachineTemplateDto)
+     */
+    @PUT
+    ListenableFuture<VirtualMachineTemplateDto> updateVirtualMachineTemplate(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineTemplateDto template);
+
+    /**
+     * @see VirtualMachineTemplateClient#deleteVirtualMachineTemplate(VirtualMachineTemplateDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteVirtualMachineTemplate(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 }

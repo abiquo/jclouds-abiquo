@@ -25,7 +25,6 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
-import com.abiquo.server.core.enterprise.EnterpriseDto;
 
 /**
  * Provides synchronous access to Abiquo Apps library API.
@@ -35,7 +34,7 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
+@Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
 public interface VirtualMachineTemplateClient
 {
     /*********************** Virtual Machine Template ***********************/
@@ -46,7 +45,8 @@ public interface VirtualMachineTemplateClient
      * @param enterpriseId Id of the enterprise.
      * @param datacenterRepositoryId Id of the datacenter repository contaning the templates.
      */
-    VirtualMachineTemplatesDto listVirtualMachineTemplates(EnterpriseDto enterprise);
+    VirtualMachineTemplatesDto listVirtualMachineTemplates(Integer enterpriseId,
+        Integer datacenterRepositoryId);
 
     /**
      * Get the given virtual machine template.
@@ -56,5 +56,21 @@ public interface VirtualMachineTemplateClient
      * @param enterpriseId The id of the virtual machine template.
      * @return The virtual machine template or <code>null</code> if it does not exist.
      */
-    VirtualMachineTemplateDto getVirtualMachineTemplate(Integer virtualMachineTemplateId);
+    VirtualMachineTemplateDto getVirtualMachineTemplate(Integer entepriseId,
+        Integer datacenterRepositoryId, Integer virtualMachineTemplateId);
+
+    /**
+     * Updates an existing virtual machine template.
+     * 
+     * @param template The new attributes for the template.
+     * @return The updated template.
+     */
+    VirtualMachineTemplateDto updateVirtualMachineTemplate(VirtualMachineTemplateDto template);
+
+    /**
+     * Deletes an existing virtual machine template.
+     * 
+     * @param template The virtual machine template to delete.
+     */
+    void deleteVirtualMachineTemplate(VirtualMachineTemplateDto template);
 }

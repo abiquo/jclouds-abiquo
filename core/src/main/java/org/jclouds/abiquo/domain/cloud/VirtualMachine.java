@@ -49,6 +49,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     // Package protected to allow navigation from children
     VirtualAppliance virtualAppliance;
 
+    VirtualMachineTemplate template;
+
     /**
      * Constructor to be used only by the builder.
      */
@@ -67,9 +69,15 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     public void save()
     {
+        checkNotNull(template, ValidationErrors.NULL_RESOURCE + VirtualMachineTemplate.class);
+        checkNotNull(template.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
+            + VirtualMachineTemplate.class);
+
+        this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
+
         target =
-            context.getApi().getCloudClient()
-                .createVirtualMachine(virtualAppliance.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
+                target);
     }
 
     public void update()
@@ -151,9 +159,9 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     // Builder
 
     public static Builder builder(final AbiquoContext context,
-        final VirtualAppliance virtualAppliance)
+        final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template)
     {
-        return new Builder(context, virtualAppliance);
+        return new Builder(context, virtualAppliance, template);
     }
 
     public static class Builder
@@ -161,6 +169,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         private AbiquoContext context;
 
         private VirtualAppliance virtualAppliance;
+
+        private VirtualMachineTemplate template;
 
         private String name;
 
@@ -186,11 +196,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         private String uuid;
 
-        public Builder(final AbiquoContext context, final VirtualAppliance virtualAppliance)
+        public Builder(final AbiquoContext context, final VirtualAppliance virtualAppliance,
+            final VirtualMachineTemplate template)
         {
             super();
             checkNotNull(virtualAppliance, ValidationErrors.NULL_RESOURCE + VirtualAppliance.class);
             this.virtualAppliance = virtualAppliance;
+            this.template = template;
             this.context = context;
         }
 
@@ -302,17 +314,18 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
             VirtualMachine virtualMachine = new VirtualMachine(context, dto);
             virtualMachine.virtualAppliance = virtualAppliance;
+            virtualMachine.template = template;
 
             return virtualMachine;
         }
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance).name(in.getName())
-                .description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
+                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
                 .hdInBytes(in.getHdInBytes()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
-                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
-                .idType(in.getIdType()).password(in.getPassword());
+                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility()).idType(
+                    in.getIdType()).password(in.getPassword());
         }
     }
 
