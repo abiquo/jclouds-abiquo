@@ -20,8 +20,11 @@
 package org.jclouds.abiquo.internal;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.features.services.CloudService;
+import org.jclouds.abiquo.strategy.cloud.internal.DetachVolumesImpl;
+import org.jclouds.abiquo.strategy.cloud.internal.ListVirtualDatacentersImpl;
 import org.testng.annotations.Test;
 
 /**
@@ -39,5 +42,10 @@ public class BaseCloudServiceTest extends BaseInjectionTest
 
         assertNotNull(service.context);
         assertNotNull(service.listVirtualDatacenters);
+        assertNotNull(service.detachVolumes);
+
+        assertTrue(service.context instanceof AbiquoContextImpl);
+        assertTrue(service.detachVolumes instanceof DetachVolumesImpl);
+        assertTrue(service.listVirtualDatacenters instanceof ListVirtualDatacentersImpl);
     }
 }

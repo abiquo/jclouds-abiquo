@@ -633,6 +633,28 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
+    public void testDetachVolume() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("detachVolume", VirtualMachineDto.class,
+                VolumeManagementDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                CloudResources.volumePut());
+
+        assertRequestLineEquals(
+            request,
+            "DELETE http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     /*********************** Storage ***********************/
 
     public void testListVolumes() throws SecurityException, NoSuchMethodException, IOException

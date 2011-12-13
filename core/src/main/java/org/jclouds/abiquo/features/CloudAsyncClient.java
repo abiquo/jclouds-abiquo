@@ -38,11 +38,13 @@ import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.functions.cloud.ParseVolumeId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
+import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -274,6 +276,14 @@ public interface CloudAsyncClient
     @DELETE
     ListenableFuture<Void> detachAllVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+    /**
+     * @see CloudClient#detachVolume(VirtualMachineDto, VolumeManagementDto)
+     */
+    @DELETE
+    ListenableFuture<Void> detachVolume(
+        @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(AppendToPath.class) @ParamParser(ParseVolumeId.class) VolumeManagementDto volume);
 
     /*********************** Storage ***********************/
 

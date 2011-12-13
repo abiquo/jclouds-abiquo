@@ -22,15 +22,20 @@ package org.jclouds.abiquo.internal;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
+import java.util.Arrays;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.strategy.cloud.DetachVolumes;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -53,13 +58,17 @@ public class BaseCloudService implements CloudService
     @VisibleForTesting
     protected final ListVirtualDatacenters listVirtualDatacenters;
 
+    @VisibleForTesting
+    protected final DetachVolumes detachVolumes;
+
     @Inject
     protected BaseCloudService(final AbiquoContext context,
-        final ListVirtualDatacenters listVirtualDatacenters)
+        final ListVirtualDatacenters listVirtualDatacenters, final DetachVolumes detachVolumes)
     {
         this.context = checkNotNull(context, "context");
         this.listVirtualDatacenters =
             checkNotNull(listVirtualDatacenters, "listVirtualDatacenters");
+        this.detachVolumes = checkNotNull(detachVolumes, "detachVolumes");
     }
 
     /*********************** Virtual Datacenter ********************** */
@@ -102,6 +111,12 @@ public class BaseCloudService implements CloudService
     public VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter)
     {
         return Iterables.getFirst(listVirtualDatacenters(filter), null);
+    }
+
+    @Override
+    public void detachVolumes(final VirtualMachine virtualMachine, final Volume... volumes)
+    {
+        detachVolumes.execute(virtualMachine, Arrays.asList(volumes));
     }
 
 }

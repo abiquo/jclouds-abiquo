@@ -33,7 +33,6 @@ import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.services.AdministrationService;
-import org.jclouds.abiquo.strategy.SingletonResources;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
 import org.jclouds.abiquo.strategy.config.ListLicenses;
 import org.jclouds.abiquo.strategy.config.ListPrivileges;
@@ -42,6 +41,7 @@ import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.RoleDto;
+import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
@@ -74,14 +74,11 @@ public class BaseAdministrationService implements AdministrationService
     @VisibleForTesting
     protected final ListPrivileges listPrivileges;
 
-    @VisibleForTesting
-    protected final SingletonResources singletonResources;
-
     @Inject
     protected BaseAdministrationService(final AbiquoContext context,
         final ListDatacenters listDatacenters, final ListEnterprises listEnterprises,
         final ListRoles listRoles, final ListLicenses listLicenses,
-        final ListPrivileges listPrivileges, final SingletonResources globalResources)
+        final ListPrivileges listPrivileges)
     {
         this.context = checkNotNull(context, "context");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
@@ -89,7 +86,6 @@ public class BaseAdministrationService implements AdministrationService
         this.listRoles = checkNotNull(listRoles, "listRoles");
         this.listLicenses = checkNotNull(listLicenses, "listLicenses");
         this.listPrivileges = checkNotNull(listPrivileges, "listPrivileges");
-        this.singletonResources = checkNotNull(globalResources, "globalResources");
     }
 
     /*********************** Datacenter ********************** */
@@ -200,7 +196,8 @@ public class BaseAdministrationService implements AdministrationService
     @Override
     public User getCurrentUserInfo()
     {
-        return singletonResources.getLogin();
+        UserDto result = context.getApi().getAdminClient().getCurrentUser();
+        return wrap(context, User.class, result);
     }
 
     /*********************** License ***********************/

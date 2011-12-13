@@ -17,38 +17,31 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.strategy;
+package org.jclouds.abiquo.functions.cloud;
 
-import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.domain.enterprise.User;
-
-import com.abiquo.server.core.enterprise.UserDto;
-import com.google.inject.Inject;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.google.common.base.Function;
 
 /**
- * Get logged user.
+ * Parses a {@link VolumeManagementDto} object to extract its id.
  * 
  * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
 @Singleton
-public class SingletonResources
+public class ParseVolumeId implements Function<Object, String>
 {
-    protected final AbiquoContext context;
-
-    @Inject
-    SingletonResources(final AbiquoContext context)
+    @Override
+    public String apply(final Object input)
     {
-        this.context = context;
+        checkArgument(checkNotNull(input, "input") instanceof VolumeManagementDto,
+            "This parser is only valid for VolumeManagementDto objects");
+
+        return ((VolumeManagementDto) input).getId().toString();
     }
 
-    public User getLogin()
-    {
-        UserDto result = context.getApi().getAdminClient().getCurrentUser();
-        return wrap(context, User.class, result);
-    }
 }

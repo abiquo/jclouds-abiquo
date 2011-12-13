@@ -271,6 +271,14 @@ public interface CloudClient
      */
     void detachAllVolumes(VirtualMachineDto virtualMachine);
 
+    /**
+     * Detach a volume from the given virtual machine.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @param volume The volume to detach.
+     */
+    void detachVolume(VirtualMachineDto virtualMachine, VolumeManagementDto volume);
+
     /*********************** Storage ***********************/
 
     /**
