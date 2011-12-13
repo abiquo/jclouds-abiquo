@@ -120,6 +120,9 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     // Actions
 
+    // TODO: Replace the AcceptedRequestDto with a domain object that gives high level access to
+    // Task and Job functionality
+
     public AcceptedRequestDto<String> deploy()
     {
         RESTLink deployLink = target.searchLink("deploy");
@@ -132,28 +135,24 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return context.getApi().getCloudClient().deployAction(undeployLink);
     }
 
-    public void attachVolumes(final Volume... volumes)
+    public AcceptedRequestDto< ? > attachVolumes(final Volume... volumes)
     {
-        checkNotNull(volumes, "must attach at least one volume");
-
-        VolumeManagementDto[] dtos = new VolumeManagementDto[volumes.length];
-        for (int i = 0; i < volumes.length; i++)
-        {
-            dtos[i] = volumes[i].unwrap();
-        }
-
-        context.getApi().getCloudClient().attachVolumes(target, dtos);
+        return context.getApi().getCloudClient().attachVolumes(target, toVolumeDto(volumes));
     }
 
-    public void dettachAllVolumes()
+    public AcceptedRequestDto< ? > dettachAllVolumes()
     {
-        context.getApi().getCloudClient().detachAllVolumes(target);
+        return context.getApi().getCloudClient().detachAllVolumes(target);
     }
 
-    public void dettachVolumes(final Volume... volumes)
+    public AcceptedRequestDto< ? > dettachVolume(final Volume volume)
     {
-        context.getCloudService().detachVolumes(this,
-            checkNotNull(volumes, "must detach at least one volume"));
+        return context.getApi().getCloudClient().detachVolume(target, volume.unwrap());
+    }
+
+    public AcceptedRequestDto< ? > replaceVolumes(final Volume... volumes)
+    {
+        return context.getApi().getCloudClient().replaceVolumes(target, toVolumeDto(volumes));
     }
 
     // Builder
@@ -459,5 +458,18 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public void setVdrpPort(final int vdrpPort)
     {
         target.setVdrpPort(vdrpPort);
+    }
+
+    private static VolumeManagementDto[] toVolumeDto(final Volume... volumes)
+    {
+        checkNotNull(volumes, "must provide at least one volume");
+
+        VolumeManagementDto[] dtos = new VolumeManagementDto[volumes.length];
+        for (int i = 0; i < volumes.length; i++)
+        {
+            dtos[i] = volumes[i].unwrap();
+        }
+
+        return dtos;
     }
 }

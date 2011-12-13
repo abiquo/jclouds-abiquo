@@ -290,6 +290,18 @@ public interface CloudClient
     AcceptedRequestDto< ? > detachVolume(VirtualMachineDto virtualMachine,
         VolumeManagementDto volume);
 
+    /**
+     * Replaces the current volumes attached to the virtual machine with the given ones.
+     * <p>
+     * If the virtual machine is deployed, the operation will be executed asynchronously.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @param volumes The new volumes for the virtual machine.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
+    AcceptedRequestDto< ? > replaceVolumes(VirtualMachineDto virtualMachine,
+        VolumeManagementDto... volumes);
+
     /*********************** Storage ***********************/
 
     /**

@@ -20,8 +20,6 @@
 package org.jclouds.abiquo.features.services;
 
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.internal.BaseCloudService;
 
@@ -67,12 +65,4 @@ public interface CloudService
      * Get the virtual datacenter with the given id.
      */
     VirtualDatacenter getVirtualDatacenter(Integer virtualDatacenterId);
-
-    /**
-     * Detach the given volumes from the given virtual machine.
-     * 
-     * @param virtualMachine The virtual machine.
-     * @param volumes The volumes to detach.
-     */
-    void detachVolumes(VirtualMachine virtualMachine, Volume... volumes);
 }

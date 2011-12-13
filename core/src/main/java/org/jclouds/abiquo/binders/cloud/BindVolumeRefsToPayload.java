@@ -43,13 +43,13 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 public class BindVolumeRefsToPayload extends BindToXMLPayload
 {
     @Inject
-    public BindVolumeRefsToPayload(XMLParser xmlParser)
+    public BindVolumeRefsToPayload(final XMLParser xmlParser)
     {
         super(xmlParser);
     }
 
     @Override
-    public <R extends HttpRequest> R bindToRequest(R request, Object input)
+    public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
         checkArgument(checkNotNull(input, "input") instanceof VolumeManagementDto[],
             "this binder is only valid for VolumeManagementDto arrays");
@@ -59,7 +59,9 @@ public class BindVolumeRefsToPayload extends BindToXMLPayload
 
         for (VolumeManagementDto volume : volumes)
         {
-            refs.addLink(new RESTLink("volume", volume.getEditLink().getHref()));
+            RESTLink editLink =
+                checkNotNull(volume.getEditLink(), "VolumeManagementDto must have an edit link");
+            refs.addLink(new RESTLink("volume", editLink.getHref()));
         }
 
         return super.bindToRequest(request, refs);
