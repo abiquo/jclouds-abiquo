@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
 import com.google.common.base.Function;
 
 /**
- * unit tests for the {@link ReturnFalseIfNotAvailable} function.
+ * Unit tests for the {@link ReturnFalseIfNotAvailable} function.
  * 
  * @author Ignasi Barrera
  */

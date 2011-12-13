@@ -38,6 +38,7 @@ import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.functions.cloud.ParseVolumeId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -46,6 +47,7 @@ import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
@@ -266,7 +268,8 @@ public interface CloudAsyncClient
      * @see CloudClient#attachVolumes(VirtualMachineDto, VolumeManagementDto...)
      */
     @POST
-    ListenableFuture<Void> attachVolumes(
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto< ? >> attachVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
@@ -274,14 +277,16 @@ public interface CloudAsyncClient
      * @see CloudClient#detachAllVolumes(VirtualMachineDto)
      */
     @DELETE
-    ListenableFuture<Void> detachAllVolumes(
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto< ? >> detachAllVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
      * @see CloudClient#detachVolume(VirtualMachineDto, VolumeManagementDto)
      */
     @DELETE
-    ListenableFuture<Void> detachVolume(
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto< ? >> detachVolume(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(AppendToPath.class) @ParamParser(ParseVolumeId.class) VolumeManagementDto volume);
 

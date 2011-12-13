@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
 import com.google.common.base.Function;
 
 /**
- * unit tests for the {@link ReturnFalseOn5xx} function.
+ * Unit tests for the {@link ReturnFalseOn5xx} function.
  * 
  * @author Ignasi Barrera
  */
