@@ -17,31 +17,30 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.binders.infrastructure;
+package org.jclouds.abiquo.binders.cloud;
 
 import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 
-import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServiceType;
+import org.jclouds.abiquo.functions.cloud.ParseVolumeId;
 import org.jclouds.http.HttpRequest;
 import org.testng.annotations.Test;
 
-import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
- * Unit tests for the {@link AppendRemoteServiceTypeToPath} binder.
+ * Unit tests for the {@link AppendVolumeIdToPath} binder.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class AppendRemoteServiceTypeToPathTest
+public class AppendVolumeIdToPathTest
 {
     @Test(expectedExceptions = NullPointerException.class)
     public void testGetValueWithNullInput()
     {
-        AppendRemoteServiceTypeToPath binder =
-            new AppendRemoteServiceTypeToPath(new ParseRemoteServiceType());
+        AppendVolumeIdToPath binder = new AppendVolumeIdToPath(new ParseVolumeId());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.getValue(request, null);
@@ -50,8 +49,7 @@ public class AppendRemoteServiceTypeToPathTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testGetValueWithInvalidInput()
     {
-        AppendRemoteServiceTypeToPath binder =
-            new AppendRemoteServiceTypeToPath(new ParseRemoteServiceType());
+        AppendVolumeIdToPath binder = new AppendVolumeIdToPath(new ParseVolumeId());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.getValue(request, new Object());
@@ -59,12 +57,13 @@ public class AppendRemoteServiceTypeToPathTest
 
     public void testGetValue()
     {
-        AppendRemoteServiceTypeToPath binder =
-            new AppendRemoteServiceTypeToPath(new ParseRemoteServiceType());
+        AppendVolumeIdToPath binder = new AppendVolumeIdToPath(new ParseVolumeId());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
 
-        assertEquals(binder.getValue(request, RemoteServiceType.VIRTUAL_SYSTEM_MONITOR),
-            "virtualsystemmonitor");
+        VolumeManagementDto dto = new VolumeManagementDto();
+        dto.setId(5);
+
+        assertEquals(binder.getValue(request, dto), "5");
     }
 }
