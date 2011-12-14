@@ -196,12 +196,11 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualApplianceOptions options);
 
     /**
-     * @see CloudClient#deployVirtualApplianceAction(RESTLink, VirtualApplianceDto)
+     * @see CloudClient#deployVirtualApplianceAction(RESTLink)
      */
     @POST
     ListenableFuture<AcceptedRequestDto<String>> deployVirtualApplianceAction(
-        @BinderParam(BindLinkToPath.class) RESTLink link,
-        @BinderParam(BindToXMLPayload.class) VirtualApplianceDto virtualAppliance);
+        @BinderParam(BindLinkToPath.class) RESTLink link);
 
     /*********************** Virtual Machine ***********************/
 

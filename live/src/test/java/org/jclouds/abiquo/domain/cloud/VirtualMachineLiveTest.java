@@ -44,7 +44,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         return new CloudTestEnvironment(context);
     }
 
-    @Test(enabled = false)
+    // @Test(enabled = false)
     public void testDeploy()
     {
         AcceptedRequestDto<String> accept = env.virtualMachine.deploy();

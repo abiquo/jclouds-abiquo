@@ -174,11 +174,9 @@ public interface CloudClient
      * Deploy/Undeploy a virtual appliance.
      * 
      * @param link The link of the deploy/undeploy action.
-     * @param virtualAppliance The virtual appliance.
      * @return Response message to the deploy request.
      */
-    AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link,
-        final VirtualApplianceDto virtualAppliance);
+    AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link);
 
     /**
      * Get the given virtual appliance from the virtual appliance link.
