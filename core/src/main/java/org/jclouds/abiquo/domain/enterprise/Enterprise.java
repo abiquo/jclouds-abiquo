@@ -165,27 +165,39 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return Iterables.getFirst(filter(listRoles(), filter), null);
     }
 
-    public List<VirtualMachineTemplate> listTemplatesFromRepository(final Datacenter datacenter)
+    public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter)
     {
         VirtualMachineTemplatesDto dto =
-            context.getApi().getVirtualMachineTemplateClient().listVirtualMachineTemplates(
-                target.getId(), datacenter.getId());
+            context.getApi().getVirtualMachineTemplateClient()
+                .listVirtualMachineTemplates(target.getId(), datacenter.getId());
         return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
     }
 
-    public List<VirtualMachineTemplate> listTemplatesFromRepository(final Datacenter datacenter,
+    public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter,
         final Predicate<VirtualMachineTemplate> filter)
     {
-        return Lists.newLinkedList(filter(listTemplatesFromRepository(datacenter), filter));
+        return Lists.newLinkedList(filter(listTemplatesInRepository(datacenter), filter));
     }
 
-    public VirtualMachineTemplate findTemplateFromRepository(final Datacenter datacenter,
+    public VirtualMachineTemplate findTemplateInRepository(final Datacenter datacenter,
         final Predicate<VirtualMachineTemplate> filter)
     {
-        return Iterables.getFirst(filter(listTemplatesFromRepository(datacenter), filter), null);
+        return Iterables.getFirst(filter(listTemplatesInRepository(datacenter), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository</a>
+     */
+    public void refreshTemplateRepository(final Datacenter datacenter)
+    {
+        context.getApi().getEnterpriseClient()
+            .refreshTemplateRepository(target.getId(), datacenter.getId());
     }
 
     // Actions
+
     /**
      * Allows the given datacenter to be used by this enterprise. Creates a {@link DatacenterLimits}
      * object.
@@ -203,8 +215,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         // Save new limits
         DatacenterLimitsDto dto =
-            context.getApi().getEnterpriseClient().createLimits(this.unwrap(), datacenter.unwrap(),
-                limits.unwrap());
+            context.getApi().getEnterpriseClient()
+                .createLimits(this.unwrap(), datacenter.unwrap(), limits.unwrap());
 
         return wrap(context, Limits.class, dto);
     }
@@ -231,17 +243,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
             // Should be only one limit
             context.getApi().getEnterpriseClient().deleteLimits(dto.getCollection().get(0));
         }
-    }
-
-    /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository</a>
-     */
-    public void refreshTemplateRepository(final Datacenter datacenter)
-    {
-        context.getApi().getEnterpriseClient().refreshTemplateRepository(target.getId(),
-            datacenter.getId());
     }
 
     // Builder
@@ -306,12 +307,13 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return Enterprise.builder(in.context).name(in.getName()).ramLimits(
-                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
-                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+            return Enterprise.builder(in.context).name(in.getName())
+                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
                 .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
                 .isReservationRestricted(in.getIsReservationRestricted());
         }

@@ -76,8 +76,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
     public void update()
@@ -179,8 +179,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         private Integer cpu;
 
-        private Long hdInBytes;
-
         private Integer vdrpPort;
 
         private String vdrpIP;
@@ -226,12 +224,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         public Builder cpu(final int cpu)
         {
             this.cpu = cpu;
-            return this;
-        }
-
-        public Builder hdInBytes(final long hdInBytes)
-        {
-            this.hdInBytes = hdInBytes;
             return this;
         }
 
@@ -285,7 +277,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             dto.setDescription(description);
             dto.setRam(ram);
             dto.setCpu(cpu);
-            dto.setHdInBytes(hdInBytes);
+            dto.setHdInBytes(template.getHdRequired());
             dto.setVdrpIP(vdrpIP);
 
             if (vdrpPort != null)
@@ -320,11 +312,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
-                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
-                .hdInBytes(in.getHdInBytes()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
-                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility()).idType(
-                    in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
+                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
+                .cpu(in.getCpu()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
+                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
+                .idType(in.getIdType()).password(in.getPassword());
         }
     }
 
@@ -340,6 +332,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return target.getDescription();
     }
 
+    // Read-only field. This value is computed from the size of the Template
     public long getHdInBytes()
     {
         return target.getHdInBytes();
@@ -408,11 +401,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public void setDescription(final String description)
     {
         target.setDescription(description);
-    }
-
-    public void setHdInBytes(final long hdInBytes)
-    {
-        target.setHdInBytes(hdInBytes);
     }
 
     public void setHighDisponibility(final int highDisponibility)
