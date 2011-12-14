@@ -57,6 +57,7 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
+import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
@@ -196,11 +197,12 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualApplianceOptions options);
 
     /**
-     * @see CloudClient#actionVirtualAppliance(VirtualDatacenterDto, VirtualApplianceDto)
+     * @see CloudClient#deployVirtualApplianceAction(RESTLink, VirtualApplianceDto)
      */
     @POST
-    ListenableFuture<AcceptedRequestDto<String>> deployAction(
-        @BinderParam(BindLinkToPath.class) RESTLink link);
+    ListenableFuture<AcceptedRequestDto<String>> deployVirtualApplianceAction(
+        @BinderParam(BindLinkToPath.class) RESTLink link,
+        @BinderParam(BindToXMLPayload.class) VirtualApplianceDto virtualAppliance);
 
     /*********************** Virtual Machine ***********************/
 
@@ -298,6 +300,21 @@ public interface CloudAsyncClient
     ListenableFuture<AcceptedRequestDto< ? >> replaceVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
+
+    /**
+     * @see CloudClient#deployVirtualMachine(RESTLink, VirtualMachineDeployDto)
+     */
+    @POST
+    ListenableFuture<AcceptedRequestDto<String>> deployVirtualMachine(
+        @BinderParam(BindLinkToPath.class) RESTLink link,
+        @BinderParam(BindToXMLPayload.class) VirtualMachineDeployDto deploy);
+
+    /**
+     * @see CloudClient#undeployVirtualMachine(RESTLink)
+     */
+    @POST
+    ListenableFuture<AcceptedRequestDto<String>> undeployVirtualMachine(
+        @BinderParam(BindLinkToPath.class) RESTLink link);
 
     /*********************** Storage ***********************/
 

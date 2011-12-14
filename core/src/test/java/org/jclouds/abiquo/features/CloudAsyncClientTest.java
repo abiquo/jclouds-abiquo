@@ -39,6 +39,7 @@ import org.testng.annotations.Test;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.inject.TypeLiteral;
@@ -347,19 +348,22 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testDeployVirtualAppliance() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("deployAction", RESTLink.class);
+        Method method =
+            CloudAsyncClient.class.getMethod("deployVirtualApplianceAction", RESTLink.class,
+                VirtualApplianceDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
                 .createRequest(
                     method,
                     new RESTLink("deploy",
-                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/deploy"));
+                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/deploy"),
+                    CloudResources.virtualAppliancePut());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/deploy HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
-
+        assertPayloadEquals(request, withHeader(CloudResources.virtualAppliancePutPayload()),
+            "application/xml", false);
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
@@ -370,18 +374,22 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testUndeployVirtualAppliance() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("deployAction", RESTLink.class);
+        Method method =
+            CloudAsyncClient.class.getMethod("deployVirtualApplianceAction", RESTLink.class,
+                VirtualApplianceDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
                 .createRequest(
                     method,
                     new RESTLink("undeploy",
-                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/undeploy"));
+                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/undeploy"),
+                    CloudResources.virtualAppliancePut());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/undeploy HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
+        assertPayloadEquals(request, withHeader(CloudResources.virtualAppliancePutPayload()),
+            "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -523,19 +531,23 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testDeployVirtualMachine() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("deployAction", RESTLink.class);
+        Method method =
+            CloudAsyncClient.class.getMethod("deployVirtualMachine", RESTLink.class,
+                VirtualMachineDeployDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
                 .createRequest(
                     method,
                     new RESTLink("deploy",
-                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy"));
+                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy"),
+                    CloudResources.virtualMachineDeploy());
 
         assertRequestLineEquals(
             request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
+        assertPayloadEquals(request, withHeader(CloudResources.virtualMachineDeployPayload()),
+            "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -547,7 +559,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testUndeployVirtualMachine() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("deployAction", RESTLink.class);
+        Method method = CloudAsyncClient.class.getMethod("undeployVirtualMachine", RESTLink.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
                 .createRequest(

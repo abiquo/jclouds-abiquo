@@ -33,6 +33,7 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
+import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
@@ -170,12 +171,14 @@ public interface CloudClient
         VirtualApplianceOptions options);
 
     /**
-     * Deploy/Undeploy a virtual appliance / machine.
+     * Deploy/Undeploy a virtual appliance.
      * 
      * @param link The link of the deploy/undeploy action.
+     * @param virtualAppliance The virtual appliance.
      * @return Response message to the deploy request.
      */
-    AcceptedRequestDto<String> deployAction(final RESTLink link);
+    AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link,
+        final VirtualApplianceDto virtualAppliance);
 
     /**
      * Get the given virtual appliance from the virtual appliance link.
@@ -247,6 +250,26 @@ public interface CloudClient
      * @return The state of the given virtual machine.
      */
     VirtualMachineStateDto getVirtualMachineState(VirtualMachineDto virtualMachine);
+
+    /**
+     * Deploy a virtual machine.
+     * 
+     * @param link The link of the deploy action.
+     * @param deploy Deploy options.
+     * @return Response message to the deploy request.
+     */
+    AcceptedRequestDto<String> deployVirtualMachine(final RESTLink link,
+        final VirtualMachineDeployDto deploy);
+
+    /**
+     * Undeploy a virtual machine.
+     * 
+     * @param link The link of the undeploy action.
+     * @return Response message to the undeploy request.
+     */
+    AcceptedRequestDto<String> undeployVirtualMachine(final RESTLink link);
+
+    /*********************** Volume ***********************/
 
     /**
      * Get the volumes attached to the given virtual machine.

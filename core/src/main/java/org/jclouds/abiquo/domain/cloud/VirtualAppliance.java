@@ -72,16 +72,16 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public void delete(final boolean force)
     {
-        context.getApi().getCloudClient()
-            .deleteVirtualAppliance(target, VirtualApplianceOptions.builder().force(true).build());
+        context.getApi().getCloudClient().deleteVirtualAppliance(target,
+            VirtualApplianceOptions.builder().force(true).build());
         target = null;
     }
 
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
-                .createVirtualAppliance(virtualDatacenter.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualAppliance(virtualDatacenter.unwrap(),
+                target);
     }
 
     public void update()
@@ -139,13 +139,13 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public AcceptedRequestDto<String> deploy()
     {
         RESTLink deployLink = target.searchLink("deploy");
-        return context.getApi().getCloudClient().deployAction(deployLink);
+        return context.getApi().getCloudClient().deployVirtualApplianceAction(deployLink, target);
     }
 
     public AcceptedRequestDto<String> undeploy()
     {
         RESTLink undeployLink = target.searchLink("undeploy");
-        return context.getApi().getCloudClient().deployAction(undeployLink);
+        return context.getApi().getCloudClient().deployVirtualApplianceAction(undeployLink, target);
     }
 
     // Builder
