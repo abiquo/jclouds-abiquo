@@ -20,14 +20,18 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter.Builder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.cloud.VolumePredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -75,5 +79,42 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         assertEquals(virtualDatacenters.size(), 2);
         assertEquals(virtualDatacenters.get(0).getName(), virtualDatacenters.get(1).getName());
         repeated.delete();
+    }
+
+    @Test(enabled = false)
+    public void testCreateVolume()
+    {
+        Tier tier = env.virtualDatacenter.listStorageTiers().get(0);
+        Volume volume =
+            Volume.builder(context, env.virtualDatacenter, tier).name("Hawaian volume")
+                .sizeInMb(128).build();
+        volume.save();
+
+        assertNotNull(volume.getId());
+        assertNotNull(env.virtualDatacenter.getVolume(volume.getId()));
+    }
+
+    @Test(dependsOnMethods = "testCreateVolume", enabled = false)
+    public void testUpdateVolume()
+    {
+        Volume volume = env.virtualDatacenter.findVolume(VolumePredicates.name("Hawaian volume"));
+        assertNotNull(volume);
+
+        volume.setName("Hawaian volume updated");
+        volume.update();
+
+        // Reload the volume to check
+        Volume updated = env.virtualDatacenter.getVolume(volume.getId());
+        assertEquals(updated.getName(), "Hawaian volume updated");
+    }
+
+    @Test(dependsOnMethods = "testUpdateVolume", enabled = false)
+    public void testDeleteVolume()
+    {
+        Volume volume =
+            env.virtualDatacenter.findVolume(VolumePredicates.name("Hawaian volume updated"));
+        volume.delete();
+
+        assertNull(env.virtualDatacenter.getVolume(volume.getId()));
     }
 }

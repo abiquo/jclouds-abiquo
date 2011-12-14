@@ -29,6 +29,7 @@ import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
@@ -36,6 +37,9 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.infrastructure.storage.TiersDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -135,7 +139,50 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, VirtualAppliance.class, vapp);
     }
 
-    // Actions
+    // TODO: Wiki link
+
+    public List<Tier> listStorageTiers()
+    {
+        TiersDto tiers = context.getApi().getCloudClient().listStorageTiers(target);
+        return wrap(context, Tier.class, tiers.getCollection());
+    }
+
+    public List<Tier> listStorageTiers(final Predicate<Tier> filter)
+    {
+        return Lists.newLinkedList(filter(listStorageTiers(), filter));
+    }
+
+    public Tier findTier(final Predicate<Tier> filter)
+    {
+        return Iterables.getFirst(filter(listStorageTiers(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes">
+     *      http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes</a>
+     */
+    public List<Volume> listVolumes()
+    {
+        VolumesManagementDto volumes = context.getApi().getCloudClient().listVolumes(target);
+        return wrap(context, Volume.class, volumes.getCollection());
+    }
+
+    public List<Volume> listVolumes(final Predicate<Volume> filter)
+    {
+        return Lists.newLinkedList(filter(listVolumes(), filter));
+    }
+
+    public Volume findVolume(final Predicate<Volume> filter)
+    {
+        return Iterables.getFirst(filter(listVolumes(), filter), null);
+    }
+
+    public Volume getVolume(final Integer id)
+    {
+        VolumeManagementDto volume = context.getApi().getCloudClient().getVolume(target, id);
+        return wrap(context, Volume.class, volume);
+    }
 
     // Builder
 

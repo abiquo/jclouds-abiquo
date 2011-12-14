@@ -116,8 +116,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String remoteServicesAddress = Config.get("abiquo.remoteservices.address");
 
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
-                remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu")
+                .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -161,8 +161,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.storage.pass");
 
         storageDevice =
-            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip).name(
-                PREFIX + "Storage Device").username(user).password(pass).type(type).build();
+            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip)
+                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());

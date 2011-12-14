@@ -70,10 +70,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     @Override
     public void setup() throws Exception
     {
-        createDatacenter();
-        createRack();
-        createMachine();
-        createEnterprise();
+        // Create base infrastructure
+        super.setup();
         findDefaultEnterprise();
         createVirtualDatacenter();
         createVirtualAppliance();
@@ -87,10 +85,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         deleteVirtualMachine();
         deleteVirtualAppliance();
         deleteVirtualDatacenter();
-        deleteMachine();
-        deleteRack();
-        deleteDatacenter();
-        deleteEnterprise();
+        // Delete base infrastructure
+        super.tearDown();
     }
 
     // Setup
