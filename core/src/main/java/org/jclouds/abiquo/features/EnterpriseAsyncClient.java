@@ -34,6 +34,7 @@ import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.functions.infrastructure.DatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
@@ -45,6 +46,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.EnterprisesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
@@ -100,6 +102,25 @@ public interface EnterpriseAsyncClient
     @DELETE
     ListenableFuture<Void> deleteEnterprise(
         @EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /*********************** Enterprise Properties ***********************/
+
+    /**
+     * @see EnterpriseClient#getEnterpriseProperties(EnterpriseDto)
+     */
+    @GET
+    @Path("{enterprise}/properties")
+    @EnterpriseEdition
+    ListenableFuture<EnterprisePropertiesDto> getEnterpriseProperties(
+        @PathParam("enterprise") Integer enterpriseId);
+
+    /**
+     * @see EnterpriseClient#updateEnterpriseProperties(EnterprisePropertiesDto)
+     */
+    @PUT
+    @EnterpriseEdition
+    ListenableFuture<EnterprisePropertiesDto> updateEnterpriseProperties(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) EnterprisePropertiesDto properties);
 
     /*********************** Enterprise Limits ***********************/
 

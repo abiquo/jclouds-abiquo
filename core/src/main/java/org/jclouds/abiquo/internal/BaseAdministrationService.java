@@ -29,10 +29,12 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.enterprise.EnterpriseProperties;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.services.AdministrationService;
+import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.SingletonResources;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
 import org.jclouds.abiquo.strategy.config.ListLicenses;
@@ -41,6 +43,7 @@ import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.base.Predicate;
@@ -138,6 +141,19 @@ public class BaseAdministrationService implements AdministrationService
         EnterpriseDto enterprise =
             context.getApi().getEnterpriseClient().getEnterprise(enterpriseId);
         return wrap(context, Enterprise.class, enterprise);
+    }
+
+    /*********************** Enterprise Properties ***********************/
+
+    @Override
+    public EnterpriseProperties getEnterpriseProperties(final Enterprise enterprise)
+    {
+        checkNotNull(enterprise.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
+            + Enterprise.class);
+
+        EnterprisePropertiesDto properties =
+            context.getApi().getEnterpriseClient().getEnterpriseProperties(enterprise.getId());
+        return wrap(context, EnterpriseProperties.class, properties);
     }
 
     /*********************** Role ********************** */

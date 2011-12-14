@@ -28,6 +28,7 @@ import org.jclouds.abiquo.domain.EnterpriseResources;
 import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
+import org.jclouds.rest.functions.MapHttp4xxCodesToExceptions;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
@@ -48,7 +49,7 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<EnterpriseAsyncClient>
 {
-    /* ********************** Enterprise ********************** */
+    /*********************** Enterprise ********************** */
 
     public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -137,7 +138,28 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    /* ********************** Enterprise Limits ********************** */
+    /*********************** Enterprise Properties ********************** */
+
+    public void testGetEnterpriseProperties() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("getEnterpriseProperties", Integer.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/properties HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, MapHttp4xxCodesToExceptions.class);
+
+        checkFilters(request);
+    }
+
+    /*********************** Enterprise Limits ********************** */
 
     public void testCreateEnterpriseLimits() throws SecurityException, NoSuchMethodException,
         IOException
@@ -203,9 +225,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request,
-            withHeader(EnterpriseResources.datacenterLimitsPutPayload(enterprise)),
-            "application/xml", false);
+        assertPayloadEquals(request, withHeader(EnterpriseResources
+            .datacenterLimitsPutPayload(enterprise)), "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -254,7 +275,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    /* ********************** User ********************** */
+    /*           ********************** User ********************** */
 
     public void testListUsers() throws SecurityException, NoSuchMethodException, IOException
     {
