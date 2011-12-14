@@ -26,6 +26,7 @@ import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -153,8 +154,16 @@ public class CloudResources
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier
+            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
+    }
+
+    public static VirtualMachineDeployDto virtualMachineDeploy()
+    {
+        VirtualMachineDeployDto deploy = new VirtualMachineDeployDto();
+        deploy.setForceEnterpriseSoftLimits(false);
+        return deploy;
     }
 
     public static String virtualDatacenterPostPayload()
@@ -322,5 +331,15 @@ public class CloudResources
         buffer.append("<name>Tier</name>");
         buffer.append("</tier>");
         return buffer.toString();
+    }
+
+    public static String virtualMachineDeployPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualMachineDeploy>");
+        buffer.append("<forceEnterpriseSoftLimits>false</forceEnterpriseSoftLimits>");
+        buffer.append("</virtualMachineDeploy>");
+        return buffer.toString();
+
     }
 }

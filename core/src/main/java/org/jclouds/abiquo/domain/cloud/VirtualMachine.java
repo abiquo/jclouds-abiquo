@@ -29,6 +29,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
+import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
@@ -126,13 +127,16 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public AcceptedRequestDto<String> deploy()
     {
         RESTLink deployLink = target.searchLink("deploy");
-        return context.getApi().getCloudClient().deployAction(deployLink);
+        VirtualMachineDeployDto deploy = new VirtualMachineDeployDto();
+        deploy.setForceEnterpriseSoftLimits(false);
+
+        return context.getApi().getCloudClient().deployVirtualMachine(deployLink, deploy);
     }
 
     public AcceptedRequestDto<String> undeploy()
     {
         RESTLink undeployLink = target.searchLink("undeploy");
-        return context.getApi().getCloudClient().deployAction(undeployLink);
+        return context.getApi().getCloudClient().undeployVirtualMachine(undeployLink);
     }
 
     public AcceptedRequestDto< ? > attachVolumes(final Volume... volumes)
