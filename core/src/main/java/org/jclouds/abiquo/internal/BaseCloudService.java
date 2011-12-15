@@ -31,7 +31,6 @@ import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.reference.ValidationErrors;
-import org.jclouds.abiquo.strategy.cloud.DetachVolumes;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -56,7 +55,7 @@ public class BaseCloudService implements CloudService
 
     @Inject
     protected BaseCloudService(final AbiquoContext context,
-        final ListVirtualDatacenters listVirtualDatacenters, final DetachVolumes detachVolumes)
+        final ListVirtualDatacenters listVirtualDatacenters)
     {
         this.context = checkNotNull(context, "context");
         this.listVirtualDatacenters =

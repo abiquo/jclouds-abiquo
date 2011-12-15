@@ -61,7 +61,12 @@ public class BindVolumeRefsToPayload extends BindToXMLPayload
         {
             RESTLink editLink =
                 checkNotNull(volume.getEditLink(), "VolumeManagementDto must have an edit link");
-            refs.addLink(new RESTLink("volume", editLink.getHref()));
+
+            // Do not add repeated volumes
+            if (refs.searchLinkByHref(editLink.getHref()) == null)
+            {
+                refs.addLink(new RESTLink("volume", editLink.getHref()));
+            }
         }
 
         return super.bindToRequest(request, refs);

@@ -41,6 +41,7 @@ import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
+import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.util.Config;
 
@@ -116,8 +117,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String remoteServicesAddress = Config.get("abiquo.remoteservices.address");
 
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
-                remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu")
+                .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -161,8 +162,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.storage.pass");
 
         storageDevice =
-            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip).name(
-                PREFIX + "Storage Device").username(user).password(pass).type(type).build();
+            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip)
+                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
@@ -170,14 +171,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createStoragePool()
     {
-        storagePool =
-            StoragePool.builder(context, storageDevice).name(randomName()).totalSizeInMb(100)
-                .build();
+        String pool = Config.get("abiquo.storage.pool");
 
+        storagePool = storageDevice.findRemoteStoragePool(StoragePoolPredicates.name(pool));
         tier = datacenter.listTiers().get(0);
 
         storagePool.setTier(tier);
         storagePool.save();
+
         assertNotNull(storagePool.getUUID());
     }
 

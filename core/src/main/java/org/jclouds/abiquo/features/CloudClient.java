@@ -278,18 +278,6 @@ public interface CloudClient
     VolumesManagementDto listAttachedVolumes(VirtualMachineDto virtualMachine);
 
     /**
-     * Attach the given volumes to the given virtual machine.
-     * <p>
-     * If the virtual machine is deployed, the operation will be executed asynchronously.
-     * 
-     * @param virtualMachine The virtual machine.
-     * @param volumes The volumes to attach.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
-     */
-    AcceptedRequestDto< ? > attachVolumes(VirtualMachineDto virtualMachine,
-        VolumeManagementDto... volumes);
-
-    /**
      * Detach all volumes from the given virtual machine.
      * <p>
      * If the virtual machine is deployed, the operation will be executed asynchronously.
@@ -298,18 +286,6 @@ public interface CloudClient
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
     AcceptedRequestDto< ? > detachAllVolumes(VirtualMachineDto virtualMachine);
-
-    /**
-     * Detach a volume from the given virtual machine.
-     * <p>
-     * If the virtual machine is deployed, the operation will be executed asynchronously.
-     * 
-     * @param virtualMachine The virtual machine.
-     * @param volume The volume to detach.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
-     */
-    AcceptedRequestDto< ? > detachVolume(VirtualMachineDto virtualMachine,
-        VolumeManagementDto volume);
 
     /**
      * Replaces the current volumes attached to the virtual machine with the given ones.

@@ -57,50 +57,32 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<Infrastructure
         assertEquals(env.storagePool.getTier().getName(), "Default Tier 3");
     }
 
-    public void testCreateFromRemote()
-    {
-        StoragePool storagePool = env.storageDevice.discoverStoragePools().get(0);
-        assertNotNull(storagePool);
-
-        storagePool.setTier(env.tier);
-
-        storagePool.save();
-
-        StoragePool storagePoolRecovered =
-            env.storageDevice.findStoragePool(StoragePoolPredicates.name(storagePool
-                .getName()));
-
-        assertNotNull(storagePoolRecovered);
-
-        storagePool.delete();
-    }
-
     public void testListStoragePool()
     {
         Iterable<StoragePool> storagePools = env.storageDevice.listStoragePools();
         assertEquals(Iterables.size(storagePools), 1);
 
         storagePools =
-            env.storageDevice.listStoragePools(StoragePoolPredicates
-                .name(env.storagePool.getName()));
+            env.storageDevice
+                .listStoragePools(StoragePoolPredicates.name(env.storagePool.getName()));
         assertEquals(Iterables.size(storagePools), 1);
 
         storagePools =
-            env.storageDevice.listStoragePools(StoragePoolPredicates
-                .name(env.storagePool.getName() + "FAIL"));
+            env.storageDevice.listStoragePools(StoragePoolPredicates.name(env.storagePool.getName()
+                + "FAIL"));
         assertEquals(Iterables.size(storagePools), 0);
     }
 
     public void testFindStoragePool()
     {
         StoragePool storagePool =
-            env.storageDevice.findStoragePool(StoragePoolPredicates
-                .names(env.storagePool.getName()));
+            env.storageDevice
+                .findStoragePool(StoragePoolPredicates.names(env.storagePool.getName()));
         assertNotNull(storagePool);
 
         storagePool =
-            env.storageDevice.findStoragePool(StoragePoolPredicates
-                .names(env.storagePool.getName() + "FAIL"));
+            env.storageDevice.findStoragePool(StoragePoolPredicates.names(env.storagePool.getName()
+                + "FAIL"));
         assertNull(storagePool);
     }
 

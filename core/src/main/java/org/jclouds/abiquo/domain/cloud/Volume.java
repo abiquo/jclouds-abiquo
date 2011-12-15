@@ -29,6 +29,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.VolumeState;
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -136,9 +137,10 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
             super();
             checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE
                 + VirtualDatacenter.class);
-            checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE + Tier.class);
-            this.virtualDatacenter = virtualDatacenter;
+            checkNotNull(tier, ValidationErrors.NULL_RESOURCE + Tier.class);
             this.context = context;
+            this.virtualDatacenter = virtualDatacenter;
+            this.tier = tier;
         }
 
         public Builder name(final String name)
@@ -166,6 +168,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
             dto.setDescription(description);
             dto.setSizeInMB(sizeInMb);
             dto.setState(DEFAULT_STATE.name());
+            dto.addLink(new RESTLink("tier", tier.unwrap().searchLink("self").getHref()));
 
             Volume volume = new Volume(context, dto);
             volume.virtualDatacenter = virtualDatacenter;

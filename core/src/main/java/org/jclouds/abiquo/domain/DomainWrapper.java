@@ -80,6 +80,11 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> W wrap(
         final AbiquoContext context, final Class<W> wrapperClass, final T target)
     {
+        if (target == null)
+        {
+            return null;
+        }
+
         try
         {
             Constructor<W> cons =
@@ -102,6 +107,11 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<W> wrap(
         final AbiquoContext context, final Class<W> wrapperClass, final Iterable<T> targets)
     {
+        if (targets == null)
+        {
+            return null;
+        }
+
         return Lists.newLinkedList(transform(targets, new Function<T, W>()
         {
             @Override
@@ -134,7 +144,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     protected <T1 extends SingleResourceTransportDto, T2 extends SingleResourceTransportDto> void updateLink(
         final T1 target, final String targetLinkRel, final T2 source, final String sourceLinkRel)
     {
-        RESTLink parent;
+        RESTLink parent = null;
 
         checkNotNull(source.searchLink(sourceLinkRel), ValidationErrors.MISSING_REQUIRED_LINK);
 

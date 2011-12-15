@@ -89,7 +89,6 @@ public class BindVolumeRefsToPayloadTest
         request = binder.bindToRequest(request, new VolumeManagementDto[] {volume, volume});
         assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
             + "<links><link href=\"" + volume.getEditLink().getHref()
-            + "\" rel=\"volume\"/><link href=\"" + volume.getEditLink().getHref()
             + "\" rel=\"volume\"/></links>");
     }
 }
