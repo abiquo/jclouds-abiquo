@@ -179,7 +179,19 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
      */
     public List<Tier> listTiersFromDatacenter()
     {
-        TiersDto dto = context.getApi().getInfrastructureClient().listTiers(datacenter.unwrap());
+        DatacenterDto datacenter;
+
+        if (this.datacenter == null)
+        {
+            datacenter = new DatacenterDto();
+            datacenter.setId(target.getIdFromLink(ParentLinkName.DATACENTER));
+        }
+        else
+        {
+            datacenter = this.getDatacenter().unwrap();
+        }
+
+        TiersDto dto = context.getApi().getInfrastructureClient().listTiers(datacenter);
         return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
     }
 
