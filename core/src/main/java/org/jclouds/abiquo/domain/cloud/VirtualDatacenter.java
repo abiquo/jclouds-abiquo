@@ -139,7 +139,11 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, VirtualAppliance.class, vapp);
     }
 
-    // TODO: Wiki link
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers</a>
+     */
 
     public List<Tier> listStorageTiers()
     {
@@ -152,7 +156,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return Lists.newLinkedList(filter(listStorageTiers(), filter));
     }
 
-    public Tier findTier(final Predicate<Tier> filter)
+    public Tier findStorageTier(final Predicate<Tier> filter)
     {
         return Iterables.getFirst(filter(listStorageTiers(), filter), null);
     }

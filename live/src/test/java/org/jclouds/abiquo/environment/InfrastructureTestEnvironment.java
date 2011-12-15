@@ -41,6 +41,7 @@ import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
+import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.util.Config;
 
@@ -170,14 +171,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createStoragePool()
     {
-        storagePool =
-            StoragePool.builder(context, storageDevice).name(randomName()).totalSizeInMb(100)
-                .build();
+        String pool = Config.get("abiquo.storage.pool");
 
+        storagePool = storageDevice.findRemoteStoragePool(StoragePoolPredicates.name(pool));
         tier = datacenter.listTiers().get(0);
 
         storagePool.setTier(tier);
         storagePool.save();
+
         assertNotNull(storagePool.getUUID());
     }
 

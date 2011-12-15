@@ -168,7 +168,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
             dto.setDescription(description);
             dto.setSizeInMB(sizeInMb);
             dto.setState(DEFAULT_STATE.name());
-            dto.addLink(new RESTLink("tier", tier.unwrap().searchLink("tier").getHref()));
+            dto.addLink(new RESTLink("tier", tier.unwrap().searchLink("self").getHref()));
 
             Volume volume = new Volume(context, dto);
             volume.virtualDatacenter = virtualDatacenter;

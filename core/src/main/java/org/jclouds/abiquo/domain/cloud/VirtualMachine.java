@@ -21,10 +21,14 @@ package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.strategy.cloud.DetachVolumes;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -35,6 +39,8 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.chef.RunlistElementsDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.google.common.annotations.Beta;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link VirtualMachineDto}.
@@ -152,6 +158,14 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public AcceptedRequestDto< ? > dettachVolume(final Volume volume)
     {
         return context.getApi().getCloudClient().detachVolume(target, volume.unwrap());
+    }
+
+    // TODO: Check and test this method
+    @Beta
+    public List<AcceptedRequestDto< ? >> detachVolumes(final Volume... volumes)
+    {
+        DetachVolumes strategy = context.utils().getInjector().getInstance(DetachVolumes.class);
+        return Lists.newLinkedList(strategy.execute(this, Arrays.asList(volumes)));
     }
 
     public AcceptedRequestDto< ? > replaceVolumes(final Volume... volumes)

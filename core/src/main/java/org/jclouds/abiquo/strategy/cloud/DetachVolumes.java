@@ -23,6 +23,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.strategy.cloud.internal.DetachVolumesImpl;
 
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.google.inject.ImplementedBy;
 
 /**
@@ -33,5 +34,6 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(DetachVolumesImpl.class)
 public interface DetachVolumes
 {
-    public void execute(final VirtualMachine virtualMachine, Iterable<Volume> volumes);
+    public Iterable<AcceptedRequestDto< ? >> execute(final VirtualMachine virtualMachine,
+        Iterable<Volume> volumes);
 }

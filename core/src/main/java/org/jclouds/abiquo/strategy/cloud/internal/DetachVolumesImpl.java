@@ -19,10 +19,8 @@
 
 package org.jclouds.abiquo.strategy.cloud.internal;
 
-import static com.google.common.collect.Maps.newHashMap;
-import static org.jclouds.concurrent.FutureIterables.awaitCompletion;
+import static org.jclouds.concurrent.FutureIterables.transformParallel;
 
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -34,13 +32,12 @@ import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.Volume;
-import org.jclouds.abiquo.features.CloudAsyncClient;
 import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.abiquo.strategy.cloud.DetachVolumes;
 import org.jclouds.logging.Logger;
 
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.google.common.base.Function;
-import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
 /**
@@ -70,35 +67,17 @@ public class DetachVolumesImpl implements DetachVolumes
     }
 
     @Override
-    public void execute(final VirtualMachine virtualMachine, final Iterable<Volume> volumes)
+    public Iterable<AcceptedRequestDto< ? >> execute(final VirtualMachine virtualMachine,
+        final Iterable<Volume> volumes)
     {
-        Map<String, Exception> exceptions = newHashMap();
-        Map<String, Future< ? >> responses = newHashMap();
-        CloudAsyncClient asyncClient = context.getAsyncApi().getCloudClient();
-
-        Iterable<String> names = Iterables.transform(volumes, new Function<Volume, String>()
+        return transformParallel(volumes, new Function<Volume, Future<AcceptedRequestDto< ? >>>()
         {
             @Override
-            public String apply(final Volume input)
+            public Future<AcceptedRequestDto< ? >> apply(final Volume input)
             {
-                return input.getName();
+                return context.getAsyncApi().getCloudClient()
+                    .detachVolume(virtualMachine.unwrap(), input.unwrap());
             }
-        });
-
-        for (Volume volume : volumes)
-        {
-            responses.put(volume.getName(),
-                asyncClient.detachVolume(virtualMachine.unwrap(), volume.unwrap()));
-        }
-
-        exceptions =
-            awaitCompletion(responses, userExecutor, maxTime, logger,
-                String.format("Detaching volumes from VM %s: %s", virtualMachine.getName(), names));
-
-        if (exceptions.size() > 0)
-        {
-            throw new RuntimeException(String.format("Errors detaching volumes from VM %s: %s: %s",
-                virtualMachine.getName(), names, exceptions));
-        }
+        }, userExecutor, maxTime, logger, "Detaching volumes");
     }
 }

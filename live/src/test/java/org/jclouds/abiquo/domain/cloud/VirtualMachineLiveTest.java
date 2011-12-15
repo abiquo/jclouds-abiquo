@@ -34,7 +34,7 @@ import com.abiquo.model.transport.AcceptedRequestDto;
  * 
  * @author Francesc Montserrat
  */
-@Test(groups = "live")
+@Test(groups = "live", enabled = false)
 public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
 
@@ -44,7 +44,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         return new CloudTestEnvironment(context);
     }
 
-    // @Test(enabled = false)
+    @Test(enabled = false)
     public void testDeploy()
     {
         AcceptedRequestDto<String> accept = env.virtualMachine.deploy();
