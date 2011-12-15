@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,6 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.strategy.cloud.DetachVolumes;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -39,7 +39,10 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.chef.RunlistElementsDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
-import com.google.common.annotations.Beta;
+import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
@@ -125,6 +128,30 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return virtualAppliance;
     }
 
+    // Children access
+
+    public List<Volume> listAttachedVolumes()
+    {
+        VolumesManagementDto volumes =
+            context.getApi().getCloudClient().listAttachedVolumes(target);
+        return wrap(context, Volume.class, volumes.getCollection());
+    }
+
+    public List<Volume> listAttachedVolumes(final Predicate<Volume> filter)
+    {
+        return Lists.newLinkedList(filter(listAttachedVolumes(), filter));
+    }
+
+    public Volume findAttachedVolume(final Predicate<Volume> filter)
+    {
+        return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
+    }
+
+    public Volume getAttachedVolume(final Predicate<Volume> filter)
+    {
+        return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
+    }
+
     // Actions
 
     // TODO: Replace the AcceptedRequestDto with a domain object that gives high level access to
@@ -147,7 +174,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     public AcceptedRequestDto< ? > attachVolumes(final Volume... volumes)
     {
-        return context.getApi().getCloudClient().attachVolumes(target, toVolumeDto(volumes));
+        List<Volume> expected = listAttachedVolumes();
+        expected.addAll(Arrays.asList(volumes));
+
+        Volume[] vols = new Volume[expected.size()];
+        return replaceVolumes(expected.toArray(vols));
     }
 
     public AcceptedRequestDto< ? > dettachAllVolumes()
@@ -155,17 +186,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return context.getApi().getCloudClient().detachAllVolumes(target);
     }
 
-    public AcceptedRequestDto< ? > dettachVolume(final Volume volume)
+    public AcceptedRequestDto< ? > detachVolumes(final Volume... volumes)
     {
-        return context.getApi().getCloudClient().detachVolume(target, volume.unwrap());
-    }
+        List<Volume> expected = listAttachedVolumes();
+        Iterables.removeIf(expected, idIn(volumes));
 
-    // TODO: Check and test this method
-    @Beta
-    public List<AcceptedRequestDto< ? >> detachVolumes(final Volume... volumes)
-    {
-        DetachVolumes strategy = context.utils().getInjector().getInstance(DetachVolumes.class);
-        return Lists.newLinkedList(strategy.execute(this, Arrays.asList(volumes)));
+        Volume[] vols = new Volume[expected.size()];
+        return replaceVolumes(expected.toArray(vols));
     }
 
     public AcceptedRequestDto< ? > replaceVolumes(final Volume... volumes)
@@ -477,5 +504,31 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         }
 
         return dtos;
+    }
+
+    private static Predicate<Volume> idIn(final Volume... volumes)
+    {
+        return new Predicate<Volume>()
+        {
+            List<Integer> ids = ids(Arrays.asList(volumes));
+
+            @Override
+            public boolean apply(final Volume input)
+            {
+                return ids.contains(input.getId());
+            }
+        };
+    }
+
+    private static List<Integer> ids(final List<Volume> volumes)
+    {
+        return Lists.transform(volumes, new Function<Volume, Integer>()
+        {
+            @Override
+            public Integer apply(final Volume input)
+            {
+                return input.getId();
+            }
+        });
     }
 }
