@@ -37,6 +37,7 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
@@ -159,6 +160,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public Tier findStorageTier(final Predicate<Tier> filter)
     {
         return Iterables.getFirst(filter(listStorageTiers(), filter), null);
+    }
+
+    public Tier getStorageTier(final Integer id)
+    {
+        TierDto tier = context.getApi().getCloudClient().getStorageTier(target, id);
+        return wrap(context, Tier.class, tier);
     }
 
     /**
