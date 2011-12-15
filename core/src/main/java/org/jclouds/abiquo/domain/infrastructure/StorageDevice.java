@@ -34,6 +34,7 @@ import com.abiquo.model.enumerator.StorageTechnologyType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
+import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -79,8 +80,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient()
-                .createStorageDevice(datacenter.unwrap(), target);
+            context.getApi().getInfrastructureClient().createStorageDevice(datacenter.unwrap(),
+                target);
     }
 
     /**
@@ -121,8 +122,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public List<StoragePool> discoverStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient()
-                .listStoragePools(target, StoragePoolOptions.builder().sync(true).build());
+            context.getApi().getInfrastructureClient().listStoragePools(target,
+                StoragePoolOptions.builder().sync(true).build());
 
         List<StoragePool> storagePoolList =
             wrap(context, StoragePool.class, storagePools.getCollection());
@@ -156,8 +157,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public List<StoragePool> listStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient()
-                .listStoragePools(target, StoragePoolOptions.builder().sync(false).build());
+            context.getApi().getInfrastructureClient().listStoragePools(target,
+                StoragePoolOptions.builder().sync(false).build());
         return wrap(context, StoragePool.class, storagePools.getCollection());
     }
 
@@ -169,6 +170,27 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public StoragePool findStoragePool(final Predicate<StoragePool> filter)
     {
         return Iterables.getFirst(filter(listStoragePools(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers">
+     *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers</a>
+     */
+    public List<Tier> listTiersFromDatacenter()
+    {
+        TiersDto dto = context.getApi().getInfrastructureClient().listTiers(datacenter.unwrap());
+        return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
+    }
+
+    public List<Tier> listTiersFromDatacenter(final Predicate<Tier> filter)
+    {
+        return Lists.newLinkedList(filter(listTiersFromDatacenter(), filter));
+    }
+
+    public Tier findTierInDatacenter(final Predicate<Tier> filter)
+    {
+        return Iterables.getFirst(filter(listTiersFromDatacenter(), filter), null);
     }
 
     public static Builder builder(final AbiquoContext context, final Datacenter datacenter)
@@ -293,8 +315,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
             Builder builder =
                 StorageDevice.builder(in.context, in.getDatacenter()).iscsiIp(in.getIscsiIp())
                     .iscsiPort(in.getIscsiPort()).managementIp(in.getManagementIp())
-                    .managementPort(in.getManagementPort()).name(in.getName())
-                    .password(in.getPassword()).type(in.getType()).username(in.getUsername());
+                    .managementPort(in.getManagementPort()).name(in.getName()).password(
+                        in.getPassword()).type(in.getType()).username(in.getUsername());
 
             return builder;
         }
