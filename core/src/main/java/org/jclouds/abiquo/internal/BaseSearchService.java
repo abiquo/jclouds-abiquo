@@ -31,8 +31,12 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.network.PrivateNic;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.services.SearchService;
 
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -65,5 +69,18 @@ public class BaseSearchService implements SearchService
                 .getCollection();
 
         return wrap(context, Volume.class, volumes);
+    }
+
+    /*********************** Private Network ***********************/
+
+    @Override
+    public Iterable<PrivateNic> searchPrivateNics(final PrivateNetwork network,
+        final IpOptions options)
+    {
+        List<IpPoolManagementDto> nics =
+            context.getApi().getCloudClient().listPrivateNetworkIps(network.unwrap(), options)
+                .getCollection();
+
+        return wrap(context, PrivateNic.class, nics);
     }
 }

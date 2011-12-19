@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
@@ -37,6 +38,7 @@ import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -162,6 +164,25 @@ public interface CloudClient
      * @param privateNetwork The private network to delete.
      */
     void deletePrivateNetwork(VLANNetworkDto privateNetwork);
+
+    /*********************** Private Network IPs ***********************/
+
+    /**
+     * List all ips for a private network.
+     * 
+     * @param network The private network.
+     * @return The list of ips for the private network.
+     */
+    IpsPoolManagementDto listPrivateNetworkIps(VLANNetworkDto network);
+
+    /**
+     * List all ips for a private network with options.
+     * 
+     * @param network The private network.
+     * @param options Filtering options.
+     * @return The list of ips for the private network.
+     */
+    IpsPoolManagementDto listPrivateNetworkIps(VLANNetworkDto network, IpOptions options);
 
     /*********************** Virtual Appliance ***********************/
 

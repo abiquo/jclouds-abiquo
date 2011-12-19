@@ -19,10 +19,18 @@
 
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.collect.Iterables.filter;
+
+import java.util.List;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to private {@link VLANNetworkDto}.
@@ -79,6 +87,27 @@ public class PrivateNetwork extends Network
     public void update()
     {
         target = context.getApi().getCloudClient().updatePrivateNetwork(target);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork">
+     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork</a>
+     */
+    public List<PrivateNic> listNics()
+    {
+        IpsPoolManagementDto nics = context.getApi().getCloudClient().listPrivateNetworkIps(target);
+        return wrap(context, PrivateNic.class, nics.getCollection());
+    }
+
+    public List<PrivateNic> listNics(final Predicate<Nic> filter)
+    {
+        return Lists.newLinkedList(filter(listNics(), filter));
+    }
+
+    public PrivateNic findNic(final Predicate<Nic> filter)
+    {
+        return Iterables.getFirst(filter(listNics(), filter), null);
     }
 
     // Builder

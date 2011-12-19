@@ -17,26 +17,25 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain.options;
+package org.jclouds.abiquo.domain.network;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
+import org.jclouds.abiquo.AbiquoContext;
+
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
- * Base class for all query parameter based options.
+ * Adds generic high level functionality to {IpPoolManagementDto}.
  * 
+ * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public abstract class QueryOptions
+public abstract class PrivateNic extends Nic
 {
-    /** The option map. */
-    public Multimap<String, String> map = LinkedListMultimap.create();
-
     /**
-     * Gets the option map.
+     * Constructor to be used only by the builder.
      */
-    public Multimap<String, String> getOptions()
+    protected PrivateNic(final AbiquoContext context, final IpPoolManagementDto target)
     {
-        return map;
+        super(context, target);
     }
 }

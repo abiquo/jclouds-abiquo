@@ -17,26 +17,39 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain.options;
+package org.jclouds.abiquo.predicates.network;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Arrays;
+
+import org.jclouds.abiquo.domain.network.Nic;
+
+import com.google.common.base.Predicate;
 
 /**
- * Base class for all query parameter based options.
+ * Container for {@link Network} filters.
  * 
  * @author Francesc Montserrat
  */
-public abstract class QueryOptions
+public class NicPredicates
 {
-    /** The option map. */
-    public Multimap<String, String> map = LinkedListMultimap.create();
-
-    /**
-     * Gets the option map.
-     */
-    public Multimap<String, String> getOptions()
+    public static Predicate<Nic> name(final String name)
     {
-        return map;
+        return names(checkNotNull(name, "name must be defined"));
+    }
+
+    public static Predicate<Nic> names(final String... names)
+    {
+        checkNotNull(names, "names must be defined");
+
+        return new Predicate<Nic>()
+        {
+            @Override
+            public boolean apply(final Nic nic)
+            {
+                return Arrays.asList(names).contains(nic.getName());
+            }
+        };
     }
 }

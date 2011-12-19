@@ -38,6 +38,7 @@ import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -59,6 +60,7 @@ import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
@@ -179,6 +181,23 @@ public interface CloudAsyncClient
     @DELETE
     ListenableFuture<Void> deletePrivateNetwork(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto privateNetwork);
+
+    /*********************** Private Network IPs ***********************/
+
+    /**
+     * @see CloudClient#listPrivateNetworkIps(VLANNetworkDto)
+     */
+    @GET
+    ListenableFuture<IpsPoolManagementDto> listPrivateNetworkIps(
+        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
+
+    /**
+     * @see CloudClient#listPrivateNetworkIps(VLANNetworkDto, IpOptions)
+     */
+    @GET
+    ListenableFuture<IpsPoolManagementDto> listPrivateNetworkIps(
+        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+        @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /*********************** Virtual Appliance ***********************/
 

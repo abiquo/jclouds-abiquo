@@ -22,6 +22,9 @@ package org.jclouds.abiquo.features.services;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.network.PrivateNic;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.internal.BaseSearchService;
 
 import com.google.inject.ImplementedBy;
@@ -45,4 +48,16 @@ public interface SearchService
      */
     public Iterable<Volume> searchVolumes(final VirtualDatacenter virtualDatacenter,
         final VolumeOptions options);
+
+    /*********************** Private Network ***********************/
+
+    /**
+     * Get the list of filtered nics for a private network.
+     * 
+     * @param network The given private network.
+     * @param options The set of filtering and pagination options of the search.
+     */
+    public Iterable<PrivateNic> searchPrivateNics(final PrivateNetwork network,
+        final IpOptions options);
+
 }
