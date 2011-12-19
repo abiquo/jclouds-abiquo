@@ -26,14 +26,12 @@ import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
- * Adds high level functionality to {@link VLANNetworkDto}.
+ * Adds generic high level functionality to {@link VLANNetworkDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Private+Network+Resource">
- *      http://community.abiquo.com/display/ABI20/Private+Network+Resource</a>
  */
-public class Network extends DomainWrapper<VLANNetworkDto>
+public abstract class Network extends DomainWrapper<VLANNetworkDto>
 {
     /**
      * Constructor to be used only by the builder.
@@ -43,140 +41,115 @@ public class Network extends DomainWrapper<VLANNetworkDto>
         super(context, target);
     }
 
-    // Domain operations
-
-    // Children access
-
     // Builder
 
-    public static Builder builder(final AbiquoContext context)
+    public static class NetworkBuilder<T extends NetworkBuilder<T>>
     {
-        return new Builder(context);
-    }
+        protected AbiquoContext context;
 
-    public static class Builder
-    {
-        private AbiquoContext context;
+        protected String name;
 
-        private String name;
+        protected Integer tag;
 
-        private Integer tag;
+        protected String gateway;
 
-        private String gateway;
+        protected String address;
 
-        private String address;
+        protected Integer mask;
 
-        private Integer mask;
+        protected String primaryDNS;
 
-        private String primaryDNS;
+        protected String secondaryDNS;
 
-        private String secondaryDNS;
+        protected String sufixDNS;
 
-        private String sufixDNS;
+        protected Boolean defaultNetwork;
 
-        private Boolean defaultNetwork;
+        protected Boolean unmanaged;
 
-        private Boolean unmanaged;
+        protected NetworkType type;
 
-        private NetworkType type;
-
-        public Builder(final AbiquoContext context)
+        public NetworkBuilder(final AbiquoContext context)
         {
             super();
             this.context = context;
         }
 
-        public Builder name(final String name)
+        @SuppressWarnings("unchecked")
+        public T name(final String name)
         {
             this.name = name;
-            return this;
+            return (T) this;
         }
 
-        public Builder tag(final int tag)
+        @SuppressWarnings("unchecked")
+        public T tag(final int tag)
         {
             this.tag = tag;
-            return this;
+            return (T) this;
         }
 
-        public Builder gateway(final String gateway)
+        @SuppressWarnings("unchecked")
+        public T gateway(final String gateway)
         {
             this.gateway = gateway;
-            return this;
+            return (T) this;
         }
 
-        public Builder address(final String address)
+        @SuppressWarnings("unchecked")
+        public T address(final String address)
         {
             this.address = address;
-            return this;
+            return (T) this;
         }
 
-        public Builder mask(final int mask)
+        @SuppressWarnings("unchecked")
+        public T mask(final int mask)
         {
             this.mask = mask;
-            return this;
+            return (T) this;
         }
 
-        public Builder primaryDNS(final String primaryDNS)
+        @SuppressWarnings("unchecked")
+        public T primaryDNS(final String primaryDNS)
         {
             this.primaryDNS = primaryDNS;
-            return this;
+            return (T) this;
         }
 
-        public Builder secondaryDNS(final String secondaryDNS)
+        @SuppressWarnings("unchecked")
+        public T secondaryDNS(final String secondaryDNS)
         {
             this.secondaryDNS = secondaryDNS;
-            return this;
+            return (T) this;
         }
 
-        public Builder sufixDNS(final String sufixDNS)
+        @SuppressWarnings("unchecked")
+        public T sufixDNS(final String sufixDNS)
         {
             this.sufixDNS = sufixDNS;
-            return this;
+            return (T) this;
         }
 
-        public Builder defaultNetwork(final boolean defaultNetwork)
+        @SuppressWarnings("unchecked")
+        public T defaultNetwork(final boolean defaultNetwork)
         {
             this.defaultNetwork = defaultNetwork;
-            return this;
+            return (T) this;
         }
 
-        public Builder unmanaged(final boolean unmanaged)
+        @SuppressWarnings("unchecked")
+        public T unmanaged(final boolean unmanaged)
         {
             this.unmanaged = unmanaged;
-            return this;
+            return (T) this;
         }
 
-        public Builder type(final NetworkType type)
+        @SuppressWarnings("unchecked")
+        public T type(final NetworkType type)
         {
             this.type = type;
-            return this;
-        }
-
-        public Network build()
-        {
-            VLANNetworkDto dto = new VLANNetworkDto();
-            dto.setName(name);
-            dto.setTag(tag);
-            dto.setGateway(gateway);
-            dto.setAddress(address);
-            dto.setMask(mask);
-            dto.setPrimaryDNS(primaryDNS);
-            dto.setSecondaryDNS(secondaryDNS);
-            dto.setSufixDNS(sufixDNS);
-            dto.setDefaultNetwork(defaultNetwork);
-            dto.setUnmanaged(unmanaged);
-            dto.setType(type);
-
-            return new Network(context, dto);
-        }
-
-        public static Builder fromNetwork(final Network in)
-        {
-            return Network.builder(in.context).name(in.getName()).tag(in.getTag()).gateway(
-                in.getGateway()).address(in.getAddress()).mask(in.getMask()).primaryDNS(
-                in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(in.getSufixDNS())
-                .defaultNetwork(in.getDefaultNetwork()).unmanaged(in.getUnmanaged()).type(
-                    in.getType());
+            return (T) this;
         }
     }
 

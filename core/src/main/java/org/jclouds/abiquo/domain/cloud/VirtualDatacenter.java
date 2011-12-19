@@ -31,12 +31,15 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -95,8 +98,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         Integer enterpriseId = enterprise.unwrap().getIdFromLink("edit");
 
         target =
-            context.getApi().getCloudClient()
-                .createVirtualDatacenter(target, datacenterId, enterpriseId);
+            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenterId,
+                enterpriseId);
     }
 
     /**
@@ -195,6 +198,33 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, Volume.class, volume);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievealistofPrivateNetworks">
+     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievealistofPrivateNetworks</a>
+     */
+    public List<PrivateNetwork> listPrivateNetworks()
+    {
+        VLANNetworksDto networks = context.getApi().getCloudClient().listPrivateNetworks(target);
+        return wrap(context, PrivateNetwork.class, networks.getCollection());
+    }
+
+    public List<PrivateNetwork> listPrivateNetworks(final Predicate<Network> filter)
+    {
+        return Lists.newLinkedList(filter(listPrivateNetworks(), filter));
+    }
+
+    public PrivateNetwork findNetwork(final Predicate<Network> filter)
+    {
+        return Iterables.getFirst(filter(listPrivateNetworks(), filter), null);
+    }
+
+    public PrivateNetwork getNetwork(final Integer id)
+    {
+        VLANNetworkDto network = context.getApi().getCloudClient().getPrivateNetwork(target, id);
+        return wrap(context, PrivateNetwork.class, network);
+    }
+
     // Builder
 
     public static Builder builder(final AbiquoContext context, final Datacenter datacenter,
@@ -215,7 +245,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         private Datacenter datacenter;
 
-        private Network network;
+        private PrivateNetwork network;
 
         public Builder(final AbiquoContext context, final Datacenter datacenter,
             final Enterprise enterprise)
@@ -254,9 +284,9 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
             return this;
         }
 
-        public Builder network(final Network network)
+        public Builder defaultNetwork(final PrivateNetwork network)
         {
-            checkNotNull(network, ValidationErrors.NULL_RESOURCE + Network.class);
+            checkNotNull(network, ValidationErrors.NULL_RESOURCE + PrivateNetwork.class);
             this.network = network;
             return this;
         }
@@ -284,14 +314,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         public static Builder fromVirtualDatacenter(final VirtualDatacenter in)
         {
-            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise)
-                .name(in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
-                .storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
-                .network(in.getNetwork()).hypervisorType(in.getHypervisorType());
+            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise).name(
+                in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
+                    in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
+                    in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
+                    in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).defaultNetwork(
+                    in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }
 
@@ -322,12 +352,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         target.setName(name);
     }
 
-    public Network getNetwork()
+    public PrivateNetwork getNetwork()
     {
-        return wrap(context, Network.class, target.getVlan());
+        return wrap(context, PrivateNetwork.class, target.getVlan());
     }
 
-    public void setNetwork(final Network network)
+    public void setNetwork(final PrivateNetwork network)
     {
         target.setVlan(network.unwrap());
     }

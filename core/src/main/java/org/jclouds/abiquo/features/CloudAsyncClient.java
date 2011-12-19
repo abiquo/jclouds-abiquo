@@ -59,6 +59,8 @@ import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
@@ -138,6 +140,46 @@ public interface CloudAsyncClient
         @EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer tierId);
 
+    /*********************** Private Network ***********************/
+
+    /**
+     * @see CloudClient#listPrivateNetworks(VirtualDatacenter)
+     */
+    @GET
+    ListenableFuture<VLANNetworksDto> listPrivateNetworks(
+        @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#getPrivateNetwork(VirtualDatacenterDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<VLANNetworkDto> getPrivateNetwork(
+        @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendToPath.class) Integer privateNetworkId);
+
+    /**
+     * @see CloudClient#createPrivateNetwork(VirtualDatacenterDto, VLANNetworkDto)
+     */
+    @POST
+    ListenableFuture<VLANNetworkDto> createPrivateNetwork(
+        @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(BindToXMLPayload.class) VLANNetworkDto privateNetwork);
+
+    /**
+     * @see CloudClient#updatePrivateNetwork(VLANNetworkDto)
+     */
+    @PUT
+    ListenableFuture<VLANNetworkDto> updatePrivateNetwork(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VLANNetworkDto privateNetwork);
+
+    /**
+     * @see CloudClient#deletePrivateNetwork(VLANNetworkDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deletePrivateNetwork(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto privateNetwork);
+
     /*********************** Virtual Appliance ***********************/
 
     /**
@@ -154,7 +196,7 @@ public interface CloudAsyncClient
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<VirtualApplianceDto> getVirtualAppliance(
         @EndpointLink("virtualappliance") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
-        @BinderParam(AppendToPath.class) Integer virtualDatacenterId);
+        @BinderParam(AppendToPath.class) Integer virtualApplianceId);
 
     /**
      * @see CloudClient#getVirtualAppliance(RESTLink)

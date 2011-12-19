@@ -78,6 +78,8 @@ public class CloudResources
             "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances"));
         virtualDatacenter.addLink(new RESTLink("volumes",
             "http://localhost/api/cloud/virtualdatacenters/1/volumes"));
+        virtualDatacenter.addLink(new RESTLink("privatenetworks",
+            "http://localhost/api/cloud/virtualdatacenters/1/privatenetworks"));
         return virtualDatacenter;
     }
 
@@ -184,7 +186,7 @@ public class CloudResources
         buffer.append("<vlansSoft>0</vlansSoft>");
         buffer.append("<hypervisorType>KVM</hypervisorType>");
         buffer.append("<name>VDC</name>");
-        buffer.append(NetworkResources.VLANNetworkPostPayload());
+        buffer.append(NetworkResources.vlanNetworkPostPayload());
         buffer.append("</virtualDatacenter>");
         return buffer.toString();
     }
@@ -227,6 +229,7 @@ public class CloudResources
         buffer.append(link("/cloud/virtualdatacenters/1/tiers", "tiers"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances", "virtualappliance"));
         buffer.append(link("/cloud/virtualdatacenters/1/volumes", "volumes"));
+        buffer.append(link("/cloud/virtualdatacenters/1/privatenetworks", "privatenetworks"));
         buffer.append("<cpuHard>0</cpuHard>");
         buffer.append("<cpuSoft>0</cpuSoft>");
         buffer.append("<hdHard>0</hdHard>");
@@ -242,7 +245,7 @@ public class CloudResources
         buffer.append("<hypervisorType>KVM</hypervisorType>");
         buffer.append("<id>1</id>");
         buffer.append("<name>VDC</name>");
-        buffer.append(NetworkResources.VLANNetworkPostPayload());
+        buffer.append(NetworkResources.vlanNetworkPostPayload());
         buffer.append("</virtualDatacenter>");
         return buffer.toString();
     }

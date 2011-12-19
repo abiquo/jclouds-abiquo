@@ -37,6 +37,8 @@ import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -115,6 +117,51 @@ public interface CloudClient
      */
     @EnterpriseEdition
     TierDto getStorageTier(VirtualDatacenterDto virtualDatacenter, Integer tierId);
+
+    /*********************** Private Network ***********************/
+
+    /**
+     * List all private networks for a virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @return The list of private networks for the virtual datacenter.
+     */
+    VLANNetworksDto listPrivateNetworks(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * Get the given private network from the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param virtualApplianceId The id of the private network.
+     * @return The private network or <code>null</code> if it does not exist.
+     */
+    VLANNetworkDto getPrivateNetwork(VirtualDatacenterDto virtualDatacenter,
+        Integer privateNetworkId);
+
+    /**
+     * Create a new private network in a virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param privateNetwork The private network to be created.
+     * @return The created private network.
+     */
+    VLANNetworkDto createPrivateNetwork(final VirtualDatacenterDto virtualDatacenter,
+        final VLANNetworkDto privateNetwork);
+
+    /**
+     * Updates an existing private network from the given virtual datacenter.
+     * 
+     * @param privateNetwork The new attributes for the private network.
+     * @return The updated private network.
+     */
+    VLANNetworkDto updatePrivateNetwork(VLANNetworkDto privateNetwork);
+
+    /**
+     * Deletes an existing private network.
+     * 
+     * @param privateNetwork The private network to delete.
+     */
+    void deletePrivateNetwork(VLANNetworkDto privateNetwork);
 
     /*********************** Virtual Appliance ***********************/
 

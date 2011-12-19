@@ -19,6 +19,9 @@
 
 package org.jclouds.abiquo.domain;
 
+import static org.jclouds.abiquo.domain.DomainUtils.link;
+
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
@@ -41,10 +44,38 @@ public class NetworkResources
         return vlan;
     }
 
-    public static String VLANNetworkPostPayload()
+    public static VLANNetworkDto privateNetworkPut()
+    {
+        VLANNetworkDto vlan = new VLANNetworkDto();
+        vlan.setAddress("192.168.1.0");
+        vlan.setDefaultNetwork(true);
+        vlan.setName("DefaultNetwork");
+        vlan.setGateway("192.168.1.1");
+        vlan.setMask(24);
+        vlan.addLink(new RESTLink("edit",
+            "http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1"));
+
+        return vlan;
+    }
+
+    public static String vlanNetworkPostPayload()
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<network>");
+        buffer.append("<address>192.168.1.0</address>");
+        buffer.append("<defaultNetwork>true</defaultNetwork>");
+        buffer.append("<gateway>192.168.1.1</gateway>");
+        buffer.append("<mask>24</mask>");
+        buffer.append("<name>DefaultNetwork</name>");
+        buffer.append("</network>");
+        return buffer.toString();
+    }
+
+    public static String privateNetworkPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<network>");
+        buffer.append(link("/cloud/virtualdatacenters/1/privatenetworks/1", "edit"));
         buffer.append("<address>192.168.1.0</address>");
         buffer.append("<defaultNetwork>true</defaultNetwork>");
         buffer.append("<gateway>192.168.1.1</gateway>");
