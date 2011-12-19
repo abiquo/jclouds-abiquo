@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.cloud.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 
 /**
  * Available options to query volumes.
  * 
  * @author Ignasi Barrera
  */
-public class VolumeOptions extends QueryOptions
+public class VolumeOptions extends FilterOptions
 {
     public static Builder builder()
     {
@@ -47,9 +47,9 @@ public class VolumeOptions extends QueryOptions
         return this.map.toString();
     }
 
-    public static class Builder
+    public static class Builder extends FilterOptionsBuilder<Builder>
     {
-        private boolean onlyAvailable = false;
+        private Boolean onlyAvailable = false;
 
         public Builder onlyAvailable(final boolean onlyAvailable)
         {
@@ -57,10 +57,41 @@ public class VolumeOptions extends QueryOptions
             return this;
         }
 
+        @Override
         public VolumeOptions build()
         {
             VolumeOptions options = new VolumeOptions();
-            options.map.put("available", String.valueOf(onlyAvailable));
+
+            if (onlyAvailable != null)
+            {
+                options.map.put("available", String.valueOf(onlyAvailable));
+            }
+
+            if (startWith != null)
+            {
+                options.map.put("startwith", startWith.toString());
+            }
+
+            if (limit != null)
+            {
+                options.map.put("limit", limit.toString());
+            }
+
+            if (has != null)
+            {
+                options.map.put("has", has);
+            }
+
+            if (by != null)
+            {
+                options.map.put("by", by.getValue());
+            }
+
+            if (asc != null)
+            {
+                options.map.put("asc", asc.toString());
+            }
+
             return options;
         }
     }
