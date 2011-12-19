@@ -49,7 +49,7 @@ public class VolumeOptions extends FilterOptions
 
     public static class Builder extends FilterOptionsBuilder<Builder>
     {
-        private Boolean onlyAvailable = false;
+        private Boolean onlyAvailable;
 
         public Builder onlyAvailable(final boolean onlyAvailable)
         {
