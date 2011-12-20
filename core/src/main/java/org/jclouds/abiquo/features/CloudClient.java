@@ -295,16 +295,16 @@ public interface CloudClient
      * Updates an existing virtual machine from the given virtual appliance.
      * 
      * @param virtualMachine The new attributes for the virtual machine.
-     * @return The updated virtual machine.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    VirtualMachineDto updateVirtualMachine(VirtualMachineDto virtualMachine);
+    AcceptedRequestDto<String> updateVirtualMachine(VirtualMachineDto virtualMachine);
 
     /**
      * Changes the state an existing virtual machine.
      * 
      * @param virtualMachine The given virtual machine.
      * @param state The new state.
-     * @return Response message to the state change request.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
     AcceptedRequestDto<VirtualMachineStateDto> changeVirtualMachineState(
         VirtualMachineDto virtualMachine, VirtualMachineStateDto state);
@@ -322,7 +322,7 @@ public interface CloudClient
      * 
      * @param link The link of the deploy action.
      * @param deploy Deploy options.
-     * @return Response message to the deploy request.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
     AcceptedRequestDto<String> deployVirtualMachine(final RESTLink link,
         final VirtualMachineDeployDto deploy);
@@ -331,7 +331,7 @@ public interface CloudClient
      * Undeploy a virtual machine.
      * 
      * @param link The link of the undeploy action.
-     * @return Response message to the undeploy request.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
     AcceptedRequestDto<String> undeployVirtualMachine(final RESTLink link);
 
