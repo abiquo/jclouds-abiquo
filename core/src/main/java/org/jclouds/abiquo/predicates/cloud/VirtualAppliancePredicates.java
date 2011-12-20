@@ -32,7 +32,7 @@ import com.google.common.base.Predicate;
  * 
  * @author Serafín Sedano
  */
-public class VirtualAppliancesPredicates
+public class VirtualAppliancePredicates
 {
     public static Predicate<VirtualAppliance> name(final String name)
     {
