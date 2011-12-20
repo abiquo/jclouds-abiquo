@@ -80,13 +80,13 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         createVirtualDatacenter();
         createVirtualAppliance();
         refreshTemplateRepository();
-        // createVirtualMachine();
+        createVirtualMachine();
     }
 
     @Override
     public void tearDown() throws Exception
     {
-        // deleteVirtualMachine();
+        deleteVirtualMachine();
         deleteVirtualAppliance();
         deleteVirtualDatacenter();
         // Delete base infrastructure
