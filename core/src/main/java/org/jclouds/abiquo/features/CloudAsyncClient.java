@@ -306,6 +306,7 @@ public interface CloudAsyncClient
      * @see CloudClient#updateVirtualMachine(VirtualMachineDto)
      */
     @PUT
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
     ListenableFuture<AcceptedRequestDto<String>> updateVirtualMachine(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine);
 
