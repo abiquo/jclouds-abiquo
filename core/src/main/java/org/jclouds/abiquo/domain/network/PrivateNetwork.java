@@ -75,8 +75,8 @@ public class PrivateNetwork extends Network
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createPrivateNetwork(virtualDatacenter.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createPrivateNetwork(virtualDatacenter.unwrap(), target);
     }
 
     /**
@@ -112,21 +112,25 @@ public class PrivateNetwork extends Network
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context,
-        final VirtualDatacenter virtualDatacenter)
+    public static Builder builder(final AbiquoContext context)
     {
-        return new Builder(context, virtualDatacenter);
+        return new Builder(context);
     }
 
     public static class Builder extends NetworkBuilder<Builder>
     {
-        VirtualDatacenter virtualDatacenter;
+        private VirtualDatacenter virtualDatacenter;
 
-        public Builder(final AbiquoContext context, final VirtualDatacenter virtualDatacenter)
+        public Builder(final AbiquoContext context)
         {
             super(context);
             this.context = context;
+        }
+
+        public Builder virtualDatacenter(final VirtualDatacenter virtualDatacenter)
+        {
             this.virtualDatacenter = virtualDatacenter;
+            return this;
         }
 
         public PrivateNetwork build()
@@ -152,11 +156,12 @@ public class PrivateNetwork extends Network
 
         public static Builder fromPrivateNetwork(final PrivateNetwork in)
         {
-            return PrivateNetwork.builder(in.context, in.virtualDatacenter).name(in.getName()).tag(
-                in.getTag()).gateway(in.getGateway()).address(in.getAddress()).mask(in.getMask())
-                .primaryDNS(in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(
-                    in.getSufixDNS()).defaultNetwork(in.getDefaultNetwork()).unmanaged(
-                    in.getUnmanaged()).type(in.getType());
+            return PrivateNetwork.builder(in.context).name(in.getName()).tag(in.getTag())
+                .gateway(in.getGateway()).address(in.getAddress()).mask(in.getMask())
+                .primaryDNS(in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS())
+                .sufixDNS(in.getSufixDNS()).defaultNetwork(in.getDefaultNetwork())
+                .unmanaged(in.getUnmanaged()).virtualDatacenter(in.virtualDatacenter)
+                .type(in.getType());
         }
     }
 }

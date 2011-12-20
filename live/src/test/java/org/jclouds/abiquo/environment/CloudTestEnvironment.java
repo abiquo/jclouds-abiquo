@@ -104,8 +104,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     protected void createVirtualDatacenter()
     {
         PrivateNetwork network =
-            PrivateNetwork.builder(context, virtualDatacenter).name("DefaultNetwork").gateway(
-                "192.168.1.1").address("192.168.1.0").mask(24).build();
+            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1").address(
+                "192.168.1.0").mask(24).build();
 
         virtualDatacenter =
             VirtualDatacenter.builder(context, datacenter, defaultEnterprise).name(

@@ -29,6 +29,7 @@ import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
@@ -185,6 +186,15 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return Iterables.getFirst(filter(listTemplatesInRepository(datacenter), filter), null);
     }
 
+    public VirtualMachineTemplate getTemplateInRepository(final Datacenter datacenter,
+        final Integer id)
+    {
+        VirtualMachineTemplateDto template =
+            context.getApi().getVirtualMachineTemplateClient()
+                .getVirtualMachineTemplate(target.getId(), datacenter.getId(), id);
+        return wrap(context, VirtualMachineTemplate.class, template);
+    }
+    
     /**
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository">
@@ -222,8 +232,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * Prohibe the given datacenter to be used by this enterprise. Deletes a
-     * {@link DatacenterLimits} object.
+     * Prohibe the given datacenter to be used by this enterprise. Deletes a {@link Limits} object.
      * 
      * @param datacenter The datacenter.
      * @return Default datacenter limits of the enterprise for the given datacenter.
