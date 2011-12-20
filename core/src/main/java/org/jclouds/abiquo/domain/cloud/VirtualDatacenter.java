@@ -198,16 +198,18 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, Volume.class, volume);
     }
 
-    /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
-     */
-    public <T extends Network> T getDefaultNetwork()
-    {
-        VLANNetworkDto network =
-            context.getApi().getCloudClient.getDefaultNetworkByVirtualDatacenter(target);
-    }
+    // /**
+    // * @see <a
+    // *
+    // href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter">
+    // *
+    // http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
+    // */
+    // public <T extends Network> T getDefaultNetwork()
+    // {
+    // VLANNetworkDto network =
+    // context.getApi().getCloudClient().getDefaultNetworkByVirtualDatacenter(target);
+    // }
 
     /**
      * @see <a

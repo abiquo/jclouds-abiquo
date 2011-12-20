@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -84,20 +85,19 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         repeated.delete();
     }
 
-    @Test
-    public void testCreateVolume()
+    public void createVolume()
     {
         Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name(env.tier.getName()));
         Volume volume =
-            Volume.builder(context, env.virtualDatacenter, tier).name("Hawaian volume").sizeInMb(
-                128).build();
+            Volume.builder(context, env.virtualDatacenter, tier).name(PREFIX + "Hawaian volume")
+                .sizeInMb(128).build();
         volume.save();
 
         assertNotNull(volume.getId());
         assertNotNull(env.virtualDatacenter.getVolume(volume.getId()));
     }
 
-    @Test
+    @Test(dependsOnMethods = "createVolume")
     public void testFilterVolumes()
     {
         VolumeOptions validOptions = VolumeOptions.builder().has("hawa").build();
@@ -116,10 +116,11 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         assertEquals(volumes.size(), 0);
     }
 
-    @Test(dependsOnMethods = {"testCreateVolume", "testFilterVolumes"})
+    @Test(dependsOnMethods = {"createVolume", "testFilterVolumes"})
     public void testUpdateVolume()
     {
-        Volume volume = env.virtualDatacenter.findVolume(VolumePredicates.name("Hawaian volume"));
+        Volume volume =
+            env.virtualDatacenter.findVolume(VolumePredicates.name(PREFIX + "Hawaian volume"));
         assertNotNull(volume);
 
         volume.setName("Hawaian volume updated");
@@ -130,16 +131,14 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         assertEquals(updated.getName(), "Hawaian volume updated");
     }
 
-    @Test(dependsOnMethods = {"testCreateVolume", "testUpdateVolume", "testFilterVolumes"})
-    public void testDeleteVolume()
+    @Test(dependsOnMethods = {"createVolume", "testFilterVolumes", "testUpdateVolume"})
+    public void deleteVolume()
     {
         Volume volume =
             env.virtualDatacenter.findVolume(VolumePredicates.name("Hawaian volume updated"));
         assertNotNull(volume);
-
         Integer id = volume.getId();
         volume.delete();
-
         assertNull(env.virtualDatacenter.getVolume(id));
     }
 }
