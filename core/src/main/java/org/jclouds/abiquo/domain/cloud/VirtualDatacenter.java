@@ -33,6 +33,7 @@ import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -110,6 +111,18 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public void update()
     {
         target = context.getApi().getCloudClient().updateVirtualDatacenter(target);
+    }
+
+    // PARENT ACCESS
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     */
+    public Datacenter getDatacenter()
+    {
+        Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
+        return context.getAdministrationService().getDatacenter(datacenterId);
     }
 
     // Children access
