@@ -26,8 +26,6 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.functions.infrastructure.ParseRemoteServiceType;
 import org.jclouds.http.HttpRequest;
 
-import com.abiquo.model.enumerator.RemoteServiceType;
-
 /**
  * Append the {@link RemoteServiceType} service to the request URI.
  * <p>

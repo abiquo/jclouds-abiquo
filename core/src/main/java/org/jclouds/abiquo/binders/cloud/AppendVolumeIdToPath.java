@@ -26,8 +26,6 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.functions.cloud.ParseVolumeId;
 import org.jclouds.http.HttpRequest;
 
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
-
 /**
  * Append the id of a {@link VolumeManagementDto} to the request URI.
  * <p>
