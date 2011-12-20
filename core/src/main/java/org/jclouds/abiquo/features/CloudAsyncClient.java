@@ -182,6 +182,13 @@ public interface CloudAsyncClient
     ListenableFuture<Void> deletePrivateNetwork(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto privateNetwork);
 
+    /**
+     * @see CloudClient#getDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto)
+     */
+    @GET
+    ListenableFuture<VLANNetworkDto> getDefaultNetworkByVirtualDatacenter(
+        @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
     /*********************** Private Network IPs ***********************/
 
     /**

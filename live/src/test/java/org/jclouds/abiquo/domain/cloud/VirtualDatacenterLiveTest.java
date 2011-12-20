@@ -28,6 +28,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter.Builder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -36,6 +37,7 @@ import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
  * Live integration tests for the {@link VirtualDatacenter} domain class.
@@ -87,15 +89,34 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
     {
         Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name(env.tier.getName()));
         Volume volume =
-            Volume.builder(context, env.virtualDatacenter, tier).name("Hawaian volume")
-                .sizeInMb(128).build();
+            Volume.builder(context, env.virtualDatacenter, tier).name("Hawaian volume").sizeInMb(
+                128).build();
         volume.save();
 
         assertNotNull(volume.getId());
         assertNotNull(env.virtualDatacenter.getVolume(volume.getId()));
     }
 
-    @Test(dependsOnMethods = "testCreateVolume")
+    @Test
+    public void testFilterVolumes()
+    {
+        VolumeOptions validOptions = VolumeOptions.builder().has("hawa").build();
+        VolumeOptions invalidOptions = VolumeOptions.builder().has("cacatua").build();
+
+        List<VolumeManagementDto> volumes =
+            env.cloudClient.listVolumes(env.virtualDatacenter.unwrap(), validOptions)
+                .getCollection();
+
+        assertEquals(volumes.size(), 1);
+
+        volumes =
+            env.cloudClient.listVolumes(env.virtualDatacenter.unwrap(), invalidOptions)
+                .getCollection();
+
+        assertEquals(volumes.size(), 0);
+    }
+
+    @Test(dependsOnMethods = {"testCreateVolume", "testFilterVolumes"})
     public void testUpdateVolume()
     {
         Volume volume = env.virtualDatacenter.findVolume(VolumePredicates.name("Hawaian volume"));
@@ -109,7 +130,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         assertEquals(updated.getName(), "Hawaian volume updated");
     }
 
-    @Test(dependsOnMethods = {"testCreateVolume", "testUpdateVolume"})
+    @Test(dependsOnMethods = {"testCreateVolume", "testUpdateVolume", "testFilterVolumes"})
     public void testDeleteVolume()
     {
         Volume volume =

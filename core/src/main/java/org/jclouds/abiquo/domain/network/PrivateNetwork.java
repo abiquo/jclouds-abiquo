@@ -33,7 +33,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * Adds high level functionality to private {@link IpPoolManagementDto}.
+ * Adds high level functionality to private {@link VLANNetworkDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
