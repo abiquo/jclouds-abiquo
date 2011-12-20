@@ -90,9 +90,9 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
                 target);
     }
 
-    public void update()
+    public AcceptedRequestDto<String> update()
     {
-        target = context.getApi().getCloudClient().updateVirtualMachine(target);
+        return context.getApi().getCloudClient().updateVirtualMachine(target);
     }
 
     public void changeState(final VirtualMachineState state)
