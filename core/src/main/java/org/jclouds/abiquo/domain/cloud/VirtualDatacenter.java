@@ -94,12 +94,9 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public void save()
     {
-        Integer datacenterId = datacenter.unwrap().getIdFromLink("edit");
-        Integer enterpriseId = enterprise.unwrap().getIdFromLink("edit");
-
         target =
-            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenterId,
-                enterpriseId);
+            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenter.unwrap(),
+                enterprise.unwrap());
     }
 
     /**
@@ -297,7 +294,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
             return this;
         }
 
-        public Builder defaultNetwork(final PrivateNetwork network)
+        public Builder network(final PrivateNetwork network)
         {
             checkNotNull(network, ValidationErrors.NULL_RESOURCE + PrivateNetwork.class);
             this.network = network;
@@ -333,7 +330,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
                     in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
                     in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
                     in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).defaultNetwork(
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).network(
                     in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }

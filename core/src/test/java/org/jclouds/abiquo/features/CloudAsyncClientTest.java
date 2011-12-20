@@ -25,6 +25,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.CloudResources;
+import org.jclouds.abiquo.domain.EnterpriseResources;
+import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
@@ -44,6 +46,8 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.inject.TypeLiteral;
@@ -107,9 +111,10 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     {
         Method method =
             CloudAsyncClient.class.getMethod("createVirtualDatacenter", VirtualDatacenterDto.class,
-                Integer.class, Integer.class);
+                DatacenterDto.class, EnterpriseDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPost(), 1, 1);
+            processor.createRequest(method, CloudResources.virtualDatacenterPost(),
+                InfrastructureResources.datacenterPut(), EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters?enterprise=1&datacenter=1 HTTP/1.1");

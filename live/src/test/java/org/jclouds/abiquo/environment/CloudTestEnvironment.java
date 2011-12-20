@@ -105,14 +105,13 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     {
         PrivateNetwork network =
             PrivateNetwork.builder(context, virtualDatacenter).name("DefaultNetwork").gateway(
-                "192.168.1.1").address("192.168.1.0").mask(24).defaultNetwork(true).build();
+                "192.168.1.1").address("192.168.1.0").mask(24).build();
 
         virtualDatacenter =
             VirtualDatacenter.builder(context, datacenter, defaultEnterprise).name(
                 PREFIX + "Virtual Aloha").cpuCountLimits(18, 20).hdLimitsInMb(279172872, 279172872)
                 .publicIpsLimits(2, 2).ramLimits(19456, 20480).storageLimits(289910292, 322122547)
-                .vlansLimits(1, 2).hypervisorType(machine.getType()).defaultNetwork(network)
-                .build();
+                .vlansLimits(1, 2).hypervisorType(machine.getType()).network(network).build();
 
         virtualDatacenter.save();
         assertNotNull(virtualDatacenter.getId());

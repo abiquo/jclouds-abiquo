@@ -40,11 +40,14 @@ import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
+import org.jclouds.abiquo.functions.enterprise.ParseEnterpriseId;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
+import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.binders.BindToXMLPayload;
@@ -60,6 +63,8 @@ import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -101,14 +106,14 @@ public interface CloudAsyncClient
         @PathParam("virtualdatacenter") Integer virtualDatacenterId);
 
     /**
-     * @see CloudClient#createVirtualDatacenter(VirtualDatacenterDto, Integer, Integer)
+     * @see CloudClient#createVirtualDatacenter(VirtualDatacenterDto, Datacenter, Enterprise)
      */
     @POST
     @Path("/virtualdatacenters")
     ListenableFuture<VirtualDatacenterDto> createVirtualDatacenter(
         @BinderParam(BindToXMLPayload.class) final VirtualDatacenterDto virtualDatacenter,
-        @QueryParam("datacenter") Integer datacenterId,
-        @QueryParam("enterprise") Integer enterpriseId);
+        @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter,
+        @QueryParam("enterprise") @ParamParser(ParseEnterpriseId.class) final EnterpriseDto enterprise);
 
     /**
      * @see CloudClient#updateVirtualDatacenter(VirtualDatacenterDto)

@@ -38,6 +38,8 @@ import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -79,12 +81,12 @@ public interface CloudClient
      * Create a new virtual datacenter.
      * 
      * @param virtualDatacenter The virtual datacenter to be created.
-     * @param datacenterId Datacenter where the virtualdatacenter will be deployed.
-     * @param datacenterId Enterprise of the virtual datacenter.
+     * @param datacenter Datacenter where the virtualdatacenter will be deployed.
+     * @param datacenter Enterprise of the virtual datacenter.
      * @return The created virtual datacenter.
      */
     VirtualDatacenterDto createVirtualDatacenter(VirtualDatacenterDto virtualDatacenter,
-        Integer datacenterId, Integer enterpriseId);
+        DatacenterDto datacenter, EnterpriseDto enterprise);
 
     /**
      * Updates an existing virtual datacenter.
