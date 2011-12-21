@@ -164,4 +164,11 @@ public class PrivateNetwork extends Network
                 .type(in.getType());
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return super.toString();
+    }
+
 }

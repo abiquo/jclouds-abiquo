@@ -31,6 +31,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
+import com.abiquo.server.core.enterprise.DatacenterLimits;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -194,7 +195,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
                 .getVirtualMachineTemplate(target.getId(), datacenter.getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
     }
-    
+
     /**
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository">
@@ -378,6 +379,13 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public void setRepositorySoft(final long repositorySoft)
     {
         target.setRepositorySoft(repositorySoft);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Enterprise [id=" + getId() + ", isReservationRestricted="
+            + getIsReservationRestricted() + ", name=" + getName() + "]";
     }
 
 }

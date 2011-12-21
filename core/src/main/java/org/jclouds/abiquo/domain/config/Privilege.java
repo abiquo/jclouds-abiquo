@@ -54,4 +54,10 @@ public class Privilege extends DomainWrapper<PrivilegeDto>
         return target.getName();
     }
 
+    @Override
+    public String toString()
+    {
+        return "Privilege [id=" + getId() + ", name=" + getName() + "]";
+    }
+
 }

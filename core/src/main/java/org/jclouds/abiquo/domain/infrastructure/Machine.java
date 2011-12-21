@@ -614,4 +614,20 @@ public class Machine extends DomainWrapper<MachineDto>
     {
         return find(virtualSwitches, Predicates.equalTo(vswitch));
     }
+
+    @Override
+    public String toString()
+    {
+        return "Machine [id=" + getId() + ", ip=" + getIp() + ", ipmiIp=" + getIpmiIp()
+            + ", ipmiPassword=" + getIpmiPassword() + ", ipmiPort=" + getIpmiPort() + ", ipmiUser="
+            + getIpmiUser() + ", ipService=" + getIpService() + ", name=" + getName()
+            + ", password=" + getPassword() + ", port=" + getPort() + ", state=" + getState()
+            + ", type=" + getType() + ", user=" + getUser() + ", virtualCpuCores="
+            + getVirtualCpuCores() + ", virtualCpusPerCore=" + getVirtualCpusPerCore()
+            + ", virtualCpusUsed=" + getVirtualCpusUsed() + ", getVirtualRamInMb()="
+            + getVirtualRamInMb() + ", virtualRamUsedInMb=" + getVirtualRamUsedInMb()
+            + ", virtualSwitch=" + getVirtualSwitch() + ", description=" + getDescription()
+            + ", availableVirtualSwitches=" + getAvailableVirtualSwitches() + "]";
+    }
+
 }

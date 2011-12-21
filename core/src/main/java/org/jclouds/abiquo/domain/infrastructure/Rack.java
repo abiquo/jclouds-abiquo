@@ -247,10 +247,10 @@ public class Rack extends DomainWrapper<RackDto>
         public static Builder fromRack(final Rack in)
         {
             return Rack.builder(in.context, in.datacenter).id(in.getId()).name(in.getName())
-                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(
-                    in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
-                .vlanPerVdcReserved(in.getVlanPerVdcReserved()).VlansIdAvoided(
-                    in.getVlansIdAvoided());
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
+                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcReserved(in.getVlanPerVdcReserved())
+                .VlansIdAvoided(in.getVlansIdAvoided());
         }
     }
 
@@ -340,4 +340,15 @@ public class Rack extends DomainWrapper<RackDto>
     {
         target.setVlansIdAvoided(vlansIdAvoided);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Rack [id=" + getId() + ", name=" + getName() + ", description="
+            + getShortDescription() + ", haEnabled=" + isHaEnabled() + ", nrsq=" + getNrsq()
+            + ", vlanIdMax=" + getVlanIdMax() + ", vlanIdMin=" + getVlanIdMin()
+            + ", vlanPerVdcReserved=" + getVlanPerVdcReserved() + ", vlansIdAvoided="
+            + getVlansIdAvoided() + "]";
+    }
+
 }

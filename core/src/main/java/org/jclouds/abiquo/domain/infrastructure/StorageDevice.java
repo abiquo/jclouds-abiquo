@@ -396,4 +396,14 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     {
         target.setUsername(username);
     }
+
+    @Override
+    public String toString()
+    {
+        return "StorageDevice [id=" + getId() + ", iscsiIp=" + getIscsiIp() + ", iscsiPort="
+            + getIscsiPort() + ", managementIp=" + getManagementIp() + ", managementPort="
+            + getManagementPort() + ", name=" + getName() + ", password=" + getPassword()
+            + ", type=" + getType() + ", user=" + getUsername() + "]";
+    }
+
 }

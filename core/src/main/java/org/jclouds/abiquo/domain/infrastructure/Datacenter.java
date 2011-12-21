@@ -461,4 +461,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return target.getUuid();
     }
 
+    @Override
+    public String toString()
+    {
+        return "Datacenter [id=" + getId() + ", location=" + getLocation() + ", name=" + getName()
+            + ", uuid=" + getUUID() + "]";
+    }
+
 }

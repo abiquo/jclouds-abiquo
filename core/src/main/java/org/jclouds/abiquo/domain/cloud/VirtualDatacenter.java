@@ -96,8 +96,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenter.unwrap(),
-                enterprise.unwrap());
+            context.getApi().getCloudClient()
+                .createVirtualDatacenter(target, datacenter.unwrap(), enterprise.unwrap());
     }
 
     /**
@@ -337,14 +337,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         public static Builder fromVirtualDatacenter(final VirtualDatacenter in)
         {
-            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise).name(
-                in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                    in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                    in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                    in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).network(
-                    in.getNetwork()).hypervisorType(in.getHypervisorType());
+            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise)
+                .name(in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+                .network(in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }
 
@@ -384,4 +384,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         target.setVlan(network.unwrap());
     }
+
+    @Override
+    public String toString()
+    {
+        return "VirtualDatacenter [id=" + getId() + ", type=" + getHypervisorType() + ", name="
+            + getName() + "]";
+    }
+
 }

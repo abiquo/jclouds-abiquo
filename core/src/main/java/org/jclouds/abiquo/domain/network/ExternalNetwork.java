@@ -39,7 +39,9 @@ public class ExternalNetwork extends Network
         super(context, target);
     }
 
-    // Domain operations
-
-    // Builder
+    @Override
+    public String toString()
+    {
+        return super.toString();
+    }
 }

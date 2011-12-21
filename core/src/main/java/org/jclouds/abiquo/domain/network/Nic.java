@@ -99,4 +99,14 @@ public abstract class Nic extends DomainWrapper<IpPoolManagementDto>
     {
         target.setName(name);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Nic [id=" + getId() + ", available=" + getAvailable() + ", configureGateway="
+            + getConfigureGateway() + ", ip=" + getIp() + ", mac=" + getMac() + ", name="
+            + getName() + ", networkName=" + getNetworkName() + ", quarantine=" + getQuarantine()
+            + "]";
+    }
+
 }

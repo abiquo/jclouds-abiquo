@@ -72,16 +72,16 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public void delete(final boolean force)
     {
-        context.getApi().getCloudClient().deleteVirtualAppliance(target,
-            VirtualApplianceOptions.builder().force(true).build());
+        context.getApi().getCloudClient()
+            .deleteVirtualAppliance(target, VirtualApplianceOptions.builder().force(true).build());
         target = null;
     }
 
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createVirtualAppliance(virtualDatacenter.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualAppliance(virtualDatacenter.unwrap(), target);
     }
 
     public void update()
@@ -245,4 +245,11 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     {
         target.setPublicApp(publicApp);
     }
+
+    @Override
+    public String toString()
+    {
+        return "VirtualAppliance [id=" + getId() + ", name=" + getName() + "]";
+    }
+
 }

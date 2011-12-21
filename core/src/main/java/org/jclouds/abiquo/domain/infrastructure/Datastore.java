@@ -87,4 +87,12 @@ public class Datastore extends DomainWrapper<DatastoreDto>
         target.setEnabled(enabled);
     }
 
+    @Override
+    public String toString()
+    {
+        return "Datastore [id=" + getId() + ", uuid=" + getDatastoreUUID() + ", directory="
+            + getDirectory() + ", name=" + getName() + ", rootPath=" + getRootPath() + ", size="
+            + getSize() + ", usedSize=" + getUsedSize() + ", enabled=" + isEnabled() + "]";
+    }
+
 }

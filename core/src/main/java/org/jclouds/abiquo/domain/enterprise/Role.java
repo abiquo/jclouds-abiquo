@@ -231,4 +231,11 @@ public class Role extends DomainWrapper<RoleDto>
     {
         target.setName(name);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Role [id=" + getId() + ", name=" + getName() + ", blocked=" + isBlocked() + "]";
+    }
+
 }
