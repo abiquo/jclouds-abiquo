@@ -316,4 +316,11 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
         return target.getIdStorage();
     }
 
+    @Override
+    public String toString()
+    {
+        return "StoragePool [name=" + getName() + ", totalSizeInMb=" + getTotalSizeInMb()
+            + ", uuid=" + getUUID() + "]";
+    }
+
 }

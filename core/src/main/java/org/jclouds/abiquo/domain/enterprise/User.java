@@ -240,10 +240,10 @@ public class User extends DomainWrapper<UserDto>
 
         public static Builder fromUser(final User in)
         {
-            return User.builder(in.context, in.enterprise, in.role).active(in.isActive()).authType(
-                in.getAuthType()).description(in.getDescription()).email(in.getEmail()).locale(
-                in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick()).password(
-                in.getPassword());
+            return User.builder(in.context, in.enterprise, in.role).active(in.isActive())
+                .authType(in.getAuthType()).description(in.getDescription()).email(in.getEmail())
+                .locale(in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick())
+                .password(in.getPassword());
         }
     }
 
@@ -348,4 +348,14 @@ public class User extends DomainWrapper<UserDto>
     {
         this.role = role;
     }
+
+    @Override
+    public String toString()
+    {
+        return "User [id=" + getId() + ", role=" + getRole() + ", authType=" + getAuthType()
+            + ", description=" + getDescription() + ", email=" + getEmail() + ", locale="
+            + getLocale() + ", name=" + getName() + ", nick=" + getNick() + ", password="
+            + getPassword() + ", surname=" + getSurname() + ", active=" + isActive() + "]";
+    }
+
 }

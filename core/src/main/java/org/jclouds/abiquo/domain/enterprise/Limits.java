@@ -102,13 +102,14 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
 
         public static Builder fromEnterprise(final Limits in)
         {
-            return Limits.builder(in.context).ramLimits(in.getRamSoftLimitInMb(),
-                in.getRamHardLimitInMb()).cpuCountLimits(in.getCpuCountSoftLimit(),
-                in.getCpuCountHardLimit()).hdLimitsInMb(in.getHdSoftLimitInMb(),
-                in.getHdHardLimitInMb()).storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard()).publicIpsLimits(
-                    in.getPublicIpsSoft(), in.getPublicIpsHard()).repositoryLimits(
-                    in.getRepositorySoft(), in.getRepositoryHard());
+            return Limits.builder(in.context)
+                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+                .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard());
         }
     }
 
@@ -143,6 +144,19 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
     public void setRepositorySoft(final long repositorySoft)
     {
         target.setRepositorySoftLimitsInMb(repositorySoft);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "Limits [id=" + getId() + ", repositoryHard=" + getRepositoryHard()
+            + ", repositorySoft=" + getRepositorySoft() + ", cpuCounthard="
+            + getCpuCountHardLimit() + ", cpuCountSoft=" + getCpuCountSoftLimit() + ", hdHardInMB="
+            + getHdHardLimitInMb() + ", hdSoftInMB=" + getHdSoftLimitInMb() + ", publicIPsHard="
+            + getPublicIpsHard() + ", publicIpsSoft=" + getPublicIpsSoft() + ", ramHardInMB="
+            + getRamHardLimitInMb() + ", ramSoftInMB=" + getRamSoftLimitInMb() + ", storageHard="
+            + getStorageHard() + ", storageSoft=" + getStorageSoft() + ", vlansHard="
+            + getVlansHard() + ", vlansSoft=" + getVlansSoft() + "]";
     }
 
 }

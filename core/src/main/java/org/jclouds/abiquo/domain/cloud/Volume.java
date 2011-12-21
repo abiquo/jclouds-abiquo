@@ -220,4 +220,11 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
         target.setDescription(description);
     }
 
+    @Override
+    public String toString()
+    {
+        return "Volume [id=" + getId() + ", state=" + getState() + ", name=" + getName()
+            + ", sizeInMB=" + getSizeInMB() + ", description=" + getDescription() + "]";
+    }
+
 }

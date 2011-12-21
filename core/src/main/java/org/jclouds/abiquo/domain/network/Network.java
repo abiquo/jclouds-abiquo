@@ -255,4 +255,15 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
     {
         target.setUnmanaged(unmanaged);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Network [id=" + getId() + ", address=" + getAddress() + ", defaultNetwork="
+            + getDefaultNetwork() + ", gateway=" + getGateway() + ", mask=" + getMask() + ", name="
+            + getName() + ", primaryDNS=" + getPrimaryDNS() + ", secondaryDNS=" + getSecondaryDNS()
+            + ", suffixDNS=" + getSufixDNS() + ", tag=" + getTag() + ", type=" + getType()
+            + ", unmanaged=" + getUnmanaged() + "]";
+    }
+
 }

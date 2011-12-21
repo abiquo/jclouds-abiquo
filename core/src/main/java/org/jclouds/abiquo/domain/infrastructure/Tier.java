@@ -112,4 +112,12 @@ public class Tier extends DomainWrapper<TierDto>
     {
         target.setName(name);
     }
+
+    @Override
+    public String toString()
+    {
+        return "Tier [id=" + getId() + ", description=" + getDescription() + ", enabled="
+            + getEnabled() + ", name=" + getName() + "]";
+    }
+
 }

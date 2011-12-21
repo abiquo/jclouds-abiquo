@@ -38,4 +38,10 @@ public abstract class PrivateNic extends Nic
     {
         super(context, target);
     }
+
+    @Override
+    public String toString()
+    {
+        return super.toString();
+    }
 }

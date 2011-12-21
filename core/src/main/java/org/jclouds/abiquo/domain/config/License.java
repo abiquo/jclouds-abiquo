@@ -127,4 +127,13 @@ public class License extends DomainWrapper<LicenseDto>
     {
         return target.getNumcores();
     }
+
+    @Override
+    public String toString()
+    {
+        return "License [id=" + getId() + ", code=" + getCode() + ", customerId=" + getCustomerId()
+            + ", enabledIp=" + getEnabledIp() + ", expiration=" + getExpiration() + ", numCores="
+            + getNumCores() + "]";
+    }
+
 }

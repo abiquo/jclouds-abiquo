@@ -73,8 +73,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient().createRemoteService(datacenter.unwrap(),
-                target);
+            context.getApi().getInfrastructureClient()
+                .createRemoteService(datacenter.unwrap(), target);
     }
 
     /**
@@ -205,8 +205,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         public static Builder fromRemoteService(final RemoteService in)
         {
             Builder builder =
-                RemoteService.builder(in.context, in.getDatacenter()).status(in.getStatus()).type(
-                    in.getType());
+                RemoteService.builder(in.context, in.getDatacenter()).status(in.getStatus())
+                    .type(in.getType());
             builder.uri = in.getUri();
             return builder;
         }
@@ -248,4 +248,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     {
         target.setUri(uri);
     }
+
+    @Override
+    public String toString()
+    {
+        return "RemoteService [id=" + getId() + ", available=" + isAvailable() + ", type="
+            + getType() + ", status=" + getStatus() + ", uri" + getUri() + "]";
+    }
+
 }

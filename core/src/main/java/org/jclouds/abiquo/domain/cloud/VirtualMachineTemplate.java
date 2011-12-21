@@ -129,4 +129,16 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     {
         return target.getId();
     }
+
+    @Override
+    public String toString()
+    {
+        return "VirtualMachineTemplate [id=" + getId() + ", cpuRequired=" + getCpuRequired()
+            + ", creationDate=" + getCreationDate() + ", creationUser=" + getCreationUser()
+            + ", description=" + getDescription() + ", diskFileSize=" + getDiskFileSize()
+            + ", diskFormatType=" + getDiskFormatType() + ", hdRequired=" + getHdRequired()
+            + ", name=" + getName() + ", path=" + getPath() + ", ramRequired=" + getRamRequired()
+            + ", chefEnabled=" + isChefEnabled() + "]";
+    }
+
 }

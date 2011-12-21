@@ -164,4 +164,11 @@ public class PrivateNetwork extends Network
                 .virtualDatacenter(in.virtualDatacenter);
         }
     }
+
+    @Override
+    public String toString()
+    {
+        return super.toString();
+    }
+
 }
