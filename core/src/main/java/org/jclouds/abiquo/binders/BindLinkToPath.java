@@ -23,7 +23,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Singleton;
-import javax.ws.rs.GET;
 
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 

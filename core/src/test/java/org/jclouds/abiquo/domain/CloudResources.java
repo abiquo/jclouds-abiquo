@@ -74,7 +74,7 @@ public class CloudResources
             "http://localhost/api/cloud/virtualdatacenters/1"));
         virtualDatacenter.addLink(new RESTLink("tiers",
             "http://localhost/api/cloud/virtualdatacenters/1/tiers"));
-        virtualDatacenter.addLink(new RESTLink("virtualappliance",
+        virtualDatacenter.addLink(new RESTLink("virtualappliances",
             "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances"));
         virtualDatacenter.addLink(new RESTLink("volumes",
             "http://localhost/api/cloud/virtualdatacenters/1/volumes"));
@@ -227,7 +227,7 @@ public class CloudResources
         buffer.append(link("/admin/enterprises/1", "enterprise"));
         buffer.append(link("/cloud/virtualdatacenters/1", "edit"));
         buffer.append(link("/cloud/virtualdatacenters/1/tiers", "tiers"));
-        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances", "virtualappliance"));
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances", "virtualappliances"));
         buffer.append(link("/cloud/virtualdatacenters/1/volumes", "volumes"));
         buffer.append(link("/cloud/virtualdatacenters/1/privatenetworks", "privatenetworks"));
         buffer.append("<cpuHard>0</cpuHard>");

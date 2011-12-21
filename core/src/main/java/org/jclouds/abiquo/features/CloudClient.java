@@ -122,6 +122,14 @@ public interface CloudClient
     @EnterpriseEdition
     TierDto getStorageTier(VirtualDatacenterDto virtualDatacenter, Integer tierId);
 
+    /**
+     * Get the default network of the virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @return The default network of the virtual datacenter.
+     */
+    VLANNetworkDto getDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+
     /*********************** Private Network ***********************/
 
     /**
