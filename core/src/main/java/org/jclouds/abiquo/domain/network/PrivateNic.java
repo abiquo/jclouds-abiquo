@@ -24,7 +24,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
- * Adds generic high level functionality to {IpPoolManagementDto}.
+ * Adds generic high level functionality to {IpPoolManagementDto} for private networks.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
