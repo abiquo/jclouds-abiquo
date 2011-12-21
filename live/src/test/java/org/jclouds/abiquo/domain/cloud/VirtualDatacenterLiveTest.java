@@ -31,6 +31,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualDatacenter.Builder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
+import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.cloud.VolumePredicates;
@@ -140,5 +141,15 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         Integer id = volume.getId();
         volume.delete();
         assertNull(env.virtualDatacenter.getVolume(id));
+    }
+
+    @Test
+    public void testGetDefaultNetwork()
+    {
+        PrivateNetwork network = env.virtualDatacenter.getDefaultNetwork();
+
+        assertNotNull(network);
+        assertEquals(network.getName(), env.network.getName());
+        assertEquals(network.getType(), env.network.getType());
     }
 }

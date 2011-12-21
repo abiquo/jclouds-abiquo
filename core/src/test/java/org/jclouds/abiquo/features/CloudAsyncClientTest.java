@@ -229,17 +229,20 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testGetDefaultNetworkVirtualDatacenter() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("getVirtualDatacenter", Integer.class);
-        GeneratedHttpRequest<CloudAsyncClient> request = processor.createRequest(method, 1);
+        Method method =
+            CloudAsyncClient.class.getMethod("getDefaultNetworkByVirtualDatacenter",
+                VirtualDatacenterDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut());
 
         assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1 HTTP/1.1");
+            "GET http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }

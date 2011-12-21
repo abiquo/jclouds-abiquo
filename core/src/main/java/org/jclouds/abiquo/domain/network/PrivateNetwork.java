@@ -26,6 +26,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 
+import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.google.common.base.Predicate;
@@ -75,8 +76,8 @@ public class PrivateNetwork extends Network
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
-                .createPrivateNetwork(virtualDatacenter.unwrap(), target);
+            context.getApi().getCloudClient().createPrivateNetwork(virtualDatacenter.unwrap(),
+                target);
     }
 
     /**
@@ -146,7 +147,7 @@ public class PrivateNetwork extends Network
             dto.setSufixDNS(sufixDNS);
             dto.setDefaultNetwork(defaultNetwork);
             dto.setUnmanaged(unmanaged);
-            dto.setType(type);
+            dto.setType(NetworkType.INTERNAL);
 
             PrivateNetwork network = new PrivateNetwork(context, dto);
             network.virtualDatacenter = virtualDatacenter;
@@ -156,12 +157,11 @@ public class PrivateNetwork extends Network
 
         public static Builder fromPrivateNetwork(final PrivateNetwork in)
         {
-            return PrivateNetwork.builder(in.context).name(in.getName()).tag(in.getTag())
-                .gateway(in.getGateway()).address(in.getAddress()).mask(in.getMask())
-                .primaryDNS(in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS())
-                .sufixDNS(in.getSufixDNS()).defaultNetwork(in.getDefaultNetwork())
-                .unmanaged(in.getUnmanaged()).virtualDatacenter(in.virtualDatacenter)
-                .type(in.getType());
+            return PrivateNetwork.builder(in.context).name(in.getName()).tag(in.getTag()).gateway(
+                in.getGateway()).address(in.getAddress()).mask(in.getMask()).primaryDNS(
+                in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(in.getSufixDNS())
+                .defaultNetwork(in.getDefaultNetwork()).unmanaged(in.getUnmanaged())
+                .virtualDatacenter(in.virtualDatacenter);
         }
     }
 }

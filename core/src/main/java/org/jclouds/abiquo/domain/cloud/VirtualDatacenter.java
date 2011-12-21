@@ -30,6 +30,7 @@ import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
+import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -213,10 +214,21 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
      */
+    @SuppressWarnings("unchecked")
     public <T extends Network> T getDefaultNetwork()
     {
         VLANNetworkDto network =
             context.getApi().getCloudClient().getDefaultNetworkByVirtualDatacenter(target);
+
+        switch (network.getType())
+        {
+            case INTERNAL:
+                return (T) wrap(context, PrivateNetwork.class, network);
+
+            case EXTERNAL:
+                return (T) wrap(context, ExternalNetwork.class, network);
+        }
+
         return null;
     }
 

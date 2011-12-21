@@ -30,7 +30,6 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
@@ -58,7 +57,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     public Volume volume;
 
-    public Network network;
+    public PrivateNetwork network;
 
     public Enterprise defaultEnterprise;
 
@@ -103,7 +102,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     protected void createVirtualDatacenter()
     {
-        PrivateNetwork network =
+        network =
             PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1").address(
                 "192.168.1.0").mask(24).build();
 

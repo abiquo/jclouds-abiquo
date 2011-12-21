@@ -192,7 +192,7 @@ public interface CloudAsyncClient
      */
     @GET
     ListenableFuture<VLANNetworkDto> getDefaultNetworkByVirtualDatacenter(
-        @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+        @EndpointLink("defaultnetwork") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /*********************** Private Network IPs ***********************/
 
