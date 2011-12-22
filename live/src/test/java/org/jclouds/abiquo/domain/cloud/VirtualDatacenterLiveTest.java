@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import java.util.List;
 
