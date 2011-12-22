@@ -30,12 +30,14 @@ import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
+import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -213,11 +215,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
      */
-    public <T extends Network> T getDefaultNetwork()
+    public Network getDefaultNetwork()
     {
         VLANNetworkDto network =
             context.getApi().getCloudClient().getDefaultNetworkByVirtualDatacenter(target);
-        return null;
+        return wrap(context, network.getType() == NetworkType.INTERNAL ? PrivateNetwork.class
+            : ExternalNetwork.class, network);
     }
 
     /**
