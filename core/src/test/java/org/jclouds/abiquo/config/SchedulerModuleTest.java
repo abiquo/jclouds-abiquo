@@ -17,16 +17,25 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.reference;
+package org.jclouds.abiquo.config;
+
+import static org.testng.Assert.assertNotNull;
+
+import java.util.concurrent.ScheduledExecutorService;
+
+import org.jclouds.abiquo.internal.BaseInjectionTest;
+import org.testng.annotations.Test;
 
 /**
- * Configuration constants and properties used in Abiquo connections.
+ * Unit tests for the {@link SchedulerModule} class.
  * 
  * @author Ignasi Barrera
  */
-public interface AbiquoConstants
+@Test(groups = "unit")
+public class SchedulerModuleTest extends BaseInjectionTest
 {
-    /** The Abiquo logger. */
-    public static final String ABIQUO_LOGGER = "jclouds.abiquo";
-
+    public void testScheduledExecutorIsProvided()
+    {
+        assertNotNull(injector.getInstance(ScheduledExecutorService.class));
+    }
 }

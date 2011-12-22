@@ -23,8 +23,12 @@ import java.util.List;
 import java.util.Properties;
 
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
+import org.jclouds.abiquo.config.ConfiguresScheduler;
+import org.jclouds.abiquo.config.SchedulerModule;
 import org.jclouds.rest.RestContextBuilder;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.inject.Injector;
 import com.google.inject.Module;
 
@@ -52,12 +56,42 @@ public class AbiquoContextBuilder extends RestContextBuilder<AbiquoClient, Abiqu
         return (AbiquoContextBuilder) super.withModules(modules);
     }
 
+    @Override
+    public Injector buildInjector()
+    {
+        addSchedulerModuleIfNotPresent();
+        return super.buildInjector();
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public AbiquoContext buildContext()
     {
         Injector injector = buildInjector();
         return injector.getInstance(AbiquoContext.class);
+    }
+
+    private void addSchedulerModuleIfNotPresent()
+    {
+        boolean isSchedulerModule = Iterables.any(modules, new Predicate<Module>()
+        {
+            @Override
+            public boolean apply(final Module input)
+            {
+                return input.getClass().isAnnotationPresent(ConfiguresScheduler.class);
+            }
+
+        });
+
+        if (!isSchedulerModule)
+        {
+            addSchedulerModule();
+        }
+    }
+
+    private void addSchedulerModule()
+    {
+        modules.add(new SchedulerModule());
     }
 
 }

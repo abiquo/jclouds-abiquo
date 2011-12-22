@@ -37,6 +37,7 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -97,8 +98,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
-                .createVirtualDatacenter(target, datacenter.unwrap(), enterprise.unwrap());
+            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenter.unwrap(),
+                enterprise.unwrap());
     }
 
     /**
@@ -214,22 +215,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
      */
-    @SuppressWarnings("unchecked")
-    public <T extends Network> T getDefaultNetwork()
+    public Network getDefaultNetwork()
     {
         VLANNetworkDto network =
             context.getApi().getCloudClient().getDefaultNetworkByVirtualDatacenter(target);
-
-        switch (network.getType())
-        {
-            case INTERNAL:
-                return (T) wrap(context, PrivateNetwork.class, network);
-
-            case EXTERNAL:
-                return (T) wrap(context, ExternalNetwork.class, network);
-        }
-
-        return null;
+        return wrap(context, network.getType() == NetworkType.INTERNAL ? PrivateNetwork.class
+            : ExternalNetwork.class, network);
     }
 
     /**
@@ -348,14 +339,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         public static Builder fromVirtualDatacenter(final VirtualDatacenter in)
         {
-            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise)
-                .name(in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
-                .storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
-                .network(in.getNetwork()).hypervisorType(in.getHypervisorType());
+            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise).name(
+                in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
+                    in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
+                    in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
+                    in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).network(
+                    in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }
 
