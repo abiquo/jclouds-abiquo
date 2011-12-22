@@ -22,9 +22,9 @@ package org.jclouds.abiquo.domain.task;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 
-import com.abiquo.server.core.task.JobDto;
 import com.abiquo.server.core.task.Job.JobState;
 import com.abiquo.server.core.task.Job.JobType;
+import com.abiquo.server.core.task.JobDto;
 
 /**
  * Adds generic high level functionality to {JobDto}.
@@ -76,9 +76,9 @@ public class AsyncJob extends DomainWrapper<JobDto>
     @Override
     public String toString()
     {
-        return "AsyncJob [Id=" + getId() + ", getDescription=" + getDescription()
-            + ", RollbackState=" + getRollbackState() + ", State=" + getState() + ", Timestamp="
-            + getTimestamp() + ", Type=" + getType() + "]";
+        return "AsyncJob [id=" + getId() + ", description=" + getDescription() + ", rollbackState="
+            + getRollbackState() + ", state=" + getState() + ", timestamp=" + getTimestamp()
+            + ", type=" + getType() + "]";
     }
 
 }
