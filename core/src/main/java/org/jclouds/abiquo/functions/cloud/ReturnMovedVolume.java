@@ -17,36 +17,36 @@
  * under the License.
  */
 
-package org.jclouds.abiquo;
+package org.jclouds.abiquo.functions.cloud;
 
-import static org.jclouds.Constants.PROPERTY_API_VERSION;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
-import java.util.Properties;
+import org.jclouds.abiquo.functions.ReturnMovedResource;
+import org.jclouds.http.HttpResponse;
 
-import org.jclouds.Constants;
-import org.jclouds.PropertiesBuilder;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
- * Builds properties used in Abiquo clients.
+ * Return false on service error exceptions.
  * 
  * @author Ignasi Barrera
  */
-public class AbiquoPropertiesBuilder extends PropertiesBuilder
+@Singleton
+public class ReturnMovedVolume extends ReturnMovedResource<VolumeManagementDto>
 {
-    public AbiquoPropertiesBuilder(final Properties properties)
+    private ReturnMoveVolumeReference parser;
+
+    @Inject
+    public ReturnMovedVolume(final ReturnMoveVolumeReference parser)
     {
-        super(properties);
+        super();
+        this.parser = parser;
     }
 
     @Override
-    protected Properties defaultProperties()
+    protected VolumeManagementDto getMovedEntity(final HttpResponse response)
     {
-        Properties properties = super.defaultProperties();
-        properties.setProperty(PROPERTY_API_VERSION, AbiquoAsyncClient.API_VERSION);
-
-        // By default redirects will be handled in the domain objects
-        properties.setProperty(Constants.PROPERTY_MAX_REDIRECTS, "0");
-        return properties;
+        return parser.apply(response).getVolume();
     }
-
 }

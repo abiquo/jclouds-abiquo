@@ -437,4 +437,17 @@ public interface CloudClient
     @EnterpriseEdition
     void deleteVolume(VolumeManagementDto volume);
 
+    /**
+     * Moves the given volume to a new virtual datacenter.
+     * <p>
+     * The Abiquo API will return a 301 (Moved Permanently), so redirects must be enabled to make
+     * this method succeed.
+     * 
+     * @param volume The volume to move.
+     * @param newVirtualDatacenter The destination virtual datacenter.
+     * @return The reference to the volume in the new virtual datacenter.
+     */
+    @EnterpriseEdition
+    VolumeManagementDto moveVolume(VolumeManagementDto volume,
+        VirtualDatacenterDto newVirtualDatacenter);
 }

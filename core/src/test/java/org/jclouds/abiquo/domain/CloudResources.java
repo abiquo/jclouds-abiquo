@@ -156,8 +156,7 @@ public class CloudResources
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier
-            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
     }
 
@@ -247,6 +246,15 @@ public class CloudResources
         buffer.append("<name>VDC</name>");
         buffer.append(NetworkResources.vlanNetworkPostPayload());
         buffer.append("</virtualDatacenter>");
+        return buffer.toString();
+    }
+
+    public static String virtualDatacenterRefPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<links>");
+        buffer.append(link("/cloud/virtualdatacenters/1", "virtualdatacenter"));
+        buffer.append("</links>");
         return buffer.toString();
     }
 

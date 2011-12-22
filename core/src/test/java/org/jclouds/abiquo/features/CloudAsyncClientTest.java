@@ -34,6 +34,7 @@ import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
+import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -294,8 +295,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createPrivateNetwork", VirtualDatacenterDto.class,
                 VLANNetworkDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), NetworkResources
-                .vlanPost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                NetworkResources.vlanPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/privatenetworks HTTP/1.1");
@@ -444,8 +445,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVirtualAppliance", VirtualDatacenterDto.class,
                 VirtualApplianceDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), CloudResources
-                .virtualAppliancePost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                CloudResources.virtualAppliancePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances HTTP/1.1");
@@ -620,8 +621,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVirtualMachine", VirtualApplianceDto.class,
                 VirtualMachineDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualAppliancePut(), CloudResources
-                .virtualMachinePost());
+            processor.createRequest(method, CloudResources.virtualAppliancePut(),
+                CloudResources.virtualMachinePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines HTTP/1.1");
@@ -912,8 +913,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVolume", VirtualDatacenterDto.class,
                 VolumeManagementDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), CloudResources
-                .volumePost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                CloudResources.volumePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/volumes HTTP/1.1");
@@ -961,6 +962,28 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testMoveVolume() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("moveVolume", VolumeManagementDto.class,
+                VirtualDatacenterDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.volumePut(),
+                CloudResources.virtualDatacenterPut());
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/cloud/virtualdatacenters/1/volumes/1/action/move HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(CloudResources.virtualDatacenterRefPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnMovedVolume.class);
 
         checkFilters(request);
     }

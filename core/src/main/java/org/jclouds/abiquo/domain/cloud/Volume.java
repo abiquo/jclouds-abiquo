@@ -109,6 +109,19 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
         return tier;
     }
 
+    // Actions
+
+    /**
+     * Move the volume to the given virtual datacenter.
+     * 
+     * @param newVirtualDatacenter The destination virtual datacenter.
+     */
+    public void moveTo(final VirtualDatacenter newVirtualDatacenter)
+    {
+        target =
+            context.getApi().getCloudClient().moveVolume(unwrap(), newVirtualDatacenter.unwrap());
+    }
+
     // Builder
 
     public static Builder builder(final AbiquoContext context,

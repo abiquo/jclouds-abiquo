@@ -30,6 +30,7 @@ import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Datastore;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
@@ -187,6 +188,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         enterprise = Enterprise.builder(context).name(randomName()).build();
         enterprise.save();
         assertNotNull(enterprise.getId());
+        Limits limits = enterprise.allowDatacenter(datacenter);
+        assertNotNull(limits);
     }
 
     // Tear down
@@ -236,6 +239,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     {
         if (datacenter != null)
         {
+            // Remove limits first
+            enterprise.prohibitDatacenter(datacenter);
+
             Integer idDatacenter = datacenter.getId();
             datacenter.delete(); // Abiquo API will delete remote services too
             assertNull(infrastructureClient.getDatacenter(idDatacenter));

@@ -33,7 +33,7 @@ import com.google.inject.Injector;
 import com.google.inject.Module;
 
 /**
- * Builds the Abiquo context
+ * Builds the Abiquo context.
  * 
  * @author Ignasi Barrera
  */

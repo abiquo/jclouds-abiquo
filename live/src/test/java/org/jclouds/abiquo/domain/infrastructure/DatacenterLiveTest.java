@@ -82,22 +82,9 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureT
 
     public void testListLimits()
     {
-        Limits enterpriseLimits = env.enterprise.allowDatacenter(env.datacenter);
-        assertNotNull(enterpriseLimits);
-
-        List<Limits> allLimits = env.datacenter.listLimits();
-        assertNotNull(allLimits);
-
-        // Maybe datacenter already has limits for other enterprises
-        int numLimits = allLimits.size();
-        assertTrue(numLimits > 0);
-
-        // Cleanup with the prohibe method
-        env.enterprise.prohibitDatacenter(env.datacenter);
-
         List<Limits> limits = env.datacenter.listLimits();
         assertNotNull(limits);
-        assertTrue(limits.size() < numLimits);
+        assertTrue(limits.size() > 0);
     }
 
 }
