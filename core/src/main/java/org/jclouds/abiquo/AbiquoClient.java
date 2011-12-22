@@ -26,6 +26,7 @@ import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.features.TaskClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
 import org.jclouds.concurrent.Timeout;
 import org.jclouds.rest.annotations.Delegate;
@@ -75,4 +76,10 @@ public interface AbiquoClient
      */
     @Delegate
     ConfigClient getConfigClient();
+
+    /**
+     * Provides synchronous access to task asynchronous features.
+     */
+    @Delegate
+    TaskClient getTaskClient();
 }

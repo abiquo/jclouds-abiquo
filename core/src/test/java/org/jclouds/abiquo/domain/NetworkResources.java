@@ -87,4 +87,13 @@ public class NetworkResources
         buffer.append("</network>");
         return buffer.toString();
     }
+
+    public static String linksDtoPayload(final RESTLink link)
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<links>");
+        buffer.append(link(link));
+        buffer.append("</links>");
+        return buffer.toString();
+    }
 }

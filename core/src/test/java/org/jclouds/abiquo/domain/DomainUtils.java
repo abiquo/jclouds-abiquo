@@ -21,6 +21,8 @@ package org.jclouds.abiquo.domain;
 
 import org.jclouds.xml.XMLParser;
 
+import com.abiquo.model.rest.RESTLink;
+
 /**
  * Utility class to build domain objects used in tests.
  * 
@@ -53,4 +55,12 @@ public class DomainUtils
             + title + "\"/>";
     }
 
+    /**
+     * Builds a link in xml format
+     */
+    public static String link(final RESTLink link)
+    {
+        return "<link href=\"" + link.getHref() + "\" rel=\"" + link.getRel() + "\""
+            + (link.getTitle() == null ? "" : " title=\"" + link.getTitle() + "\"") + "/>";
+    }
 }

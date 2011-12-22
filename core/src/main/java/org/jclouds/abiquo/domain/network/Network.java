@@ -67,8 +67,6 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
 
         protected Boolean unmanaged;
 
-        protected NetworkType type;
-
         public NetworkBuilder(final AbiquoContext context)
         {
             super();
@@ -142,13 +140,6 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
         public T unmanaged(final boolean unmanaged)
         {
             this.unmanaged = unmanaged;
-            return (T) this;
-        }
-
-        @SuppressWarnings("unchecked")
-        public T type(final NetworkType type)
-        {
-            this.type = type;
             return (T) this;
         }
     }
@@ -258,11 +249,6 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
     public void setTag(final Integer tag)
     {
         target.setTag(tag);
-    }
-
-    public void setType(final NetworkType type)
-    {
-        target.setType(type);
     }
 
     public void setUnmanaged(final Boolean unmanaged)

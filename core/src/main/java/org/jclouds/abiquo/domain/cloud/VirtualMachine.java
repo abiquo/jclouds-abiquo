@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
@@ -40,6 +41,7 @@ import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.chef.RunlistElementsDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
+import com.abiquo.server.core.task.TaskDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -86,8 +88,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient()
-                .createVirtualMachine(virtualAppliance.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
+                target);
     }
 
     public AcceptedRequestDto<String> update()
@@ -154,22 +156,27 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     // Actions
 
-    // TODO: Replace the AcceptedRequestDto with a domain object that gives high level access to
-    // Task and Job functionality
-
-    public AcceptedRequestDto<String> deploy()
+    public AsyncTask deploy()
     {
+        // call deploy
         RESTLink deployLink = target.searchLink("deploy");
         VirtualMachineDeployDto deploy = new VirtualMachineDeployDto();
         deploy.setForceEnterpriseSoftLimits(false);
 
-        return context.getApi().getCloudClient().deployVirtualMachine(deployLink, deploy);
+        // get async task
+        AcceptedRequestDto<String> response =
+            context.getApi().getCloudClient().deployVirtualMachine(deployLink, deploy);
+
+        return this.getTask(response);
     }
 
-    public AcceptedRequestDto<String> undeploy()
+    public AsyncTask undeploy()
     {
         RESTLink undeployLink = target.searchLink("undeploy");
-        return context.getApi().getCloudClient().undeployVirtualMachine(undeployLink);
+        AcceptedRequestDto<String> response =
+            context.getApi().getCloudClient().undeployVirtualMachine(undeployLink);
+
+        return this.getTask(response);
     }
 
     public AcceptedRequestDto< ? > attachVolumes(final Volume... volumes)
@@ -198,6 +205,16 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public AcceptedRequestDto< ? > replaceVolumes(final Volume... volumes)
     {
         return context.getApi().getCloudClient().replaceVolumes(target, toVolumeDto(volumes));
+    }
+
+    private AsyncTask getTask(final AcceptedRequestDto<String> acceptedRequest)
+    {
+        RESTLink taskLink = acceptedRequest.getLinks().get(0);
+        checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
+
+        TaskDto task = context.getApi().getTaskClient().getTask(taskLink);
+
+        return wrap(context, AsyncTask.class, task);
     }
 
     // Builder
@@ -357,11 +374,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
-                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
-                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
-                .idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
+                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+                .vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort()).idState(in.getIdState())
+                .highDisponibility(in.getHighDisponibility()).idType(in.getIdType()).password(
+                    in.getPassword());
         }
     }
 

@@ -20,21 +20,19 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
-
-import com.abiquo.model.transport.AcceptedRequestDto;
 
 /**
  * Live integration tests for the {@link VirtualMachine} domain class.
  * 
  * @author Francesc Montserrat
  */
-@Test(groups = "live", enabled = false)
+@Test(groups = "live")
 public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
 
@@ -44,12 +42,12 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         return new CloudTestEnvironment(context);
     }
 
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void testDeploy()
     {
-        AcceptedRequestDto<String> accept = env.virtualMachine.deploy();
-
-        assertNotNull(accept.getLinks());
-        assertTrue(accept.getLinks().size() > 0);
+        AsyncTask task = env.virtualMachine.deploy();
+        System.out.println(task);
+        System.out.println(task.getJobs());
+        assertNotNull(task);
     }
 }

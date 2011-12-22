@@ -46,7 +46,7 @@ import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * Provides asynchronous access to Abiquo Infrastructure API.
+ * Provides asynchronous access to Abiquo Config API.
  * 
  * @see http://community.abiquo.com/display/ABI18/API+Reference
  * @see AdminClient

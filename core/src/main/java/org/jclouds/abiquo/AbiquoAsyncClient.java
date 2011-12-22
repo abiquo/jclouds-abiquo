@@ -19,21 +19,14 @@
 
 package org.jclouds.abiquo;
 
-import javax.ws.rs.DELETE;
-
-import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.features.AdminAsyncClient;
 import org.jclouds.abiquo.features.CloudAsyncClient;
 import org.jclouds.abiquo.features.ConfigAsyncClient;
 import org.jclouds.abiquo.features.EnterpriseAsyncClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
+import org.jclouds.abiquo.features.TaskAsyncClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
-import org.jclouds.abiquo.rest.annotations.EndpointLink;
-import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.Delegate;
-
-import com.abiquo.model.transport.SingleResourceTransportDto;
-import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * Provides asynchronous access to Abiquo via their REST API.
@@ -83,9 +76,8 @@ public interface AbiquoAsyncClient
     ConfigAsyncClient getConfigClient();
 
     /**
-     * @see AbiquoClient#getResource(SingleResourceTransportDto)
+     * Provides asynchronous access to task asynchronous features.
      */
-    @DELETE
-    ListenableFuture<Void> getResource(
-        @EndpointLink("edit") @BinderParam(BindToPath.class) SingleResourceTransportDto resource);
+    @Delegate
+    TaskAsyncClient getTaskClient();
 }

@@ -26,6 +26,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter.Builder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
@@ -75,6 +76,15 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         assertEquals(virtualDatacenters.size(), 2);
         assertEquals(virtualDatacenters.get(0).getName(), virtualDatacenters.get(1).getName());
         repeated.delete();
+    }
+
+    public void testGetDefaultNetwork()
+    {
+        PrivateNetwork network = (PrivateNetwork) env.virtualDatacenter.getDefaultNetwork();
+
+        assertNotNull(network);
+        assertEquals(network.getName(), env.network.getName());
+        assertEquals(network.getType(), env.network.getType());
     }
 
 }

@@ -30,6 +30,7 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -129,6 +130,14 @@ public interface CloudClient
      * @return The default network of the virtual datacenter.
      */
     VLANNetworkDto getDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * Set the default network of the virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param links Link to the network.
+     */
+    void setDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto virtualDatacenter, LinksDto links);
 
     /*********************** Private Network ***********************/
 
@@ -254,6 +263,7 @@ public interface CloudClient
      * @param link The link of the deploy/undeploy action.
      * @return Response message to the deploy request.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link);
 
     /**
@@ -334,6 +344,7 @@ public interface CloudClient
      * @param deploy Deploy options.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> deployVirtualMachine(final RESTLink link,
         final VirtualMachineDeployDto deploy);
 
@@ -343,6 +354,7 @@ public interface CloudClient
      * @param link The link of the undeploy action.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> undeployVirtualMachine(final RESTLink link);
 
     /*********************** Volume ***********************/

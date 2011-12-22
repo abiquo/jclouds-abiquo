@@ -43,6 +43,7 @@ import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
@@ -230,17 +231,76 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testGetDefaultNetworkVirtualDatacenter() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("getVirtualDatacenter", Integer.class);
-        GeneratedHttpRequest<CloudAsyncClient> request = processor.createRequest(method, 1);
+        Method method =
+            CloudAsyncClient.class.getMethod("getDefaultNetworkByVirtualDatacenter",
+                VirtualDatacenterDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut());
 
         assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1 HTTP/1.1");
+            "GET http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testSetDefaultNetworkVirtualDatacenterInternal() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        RESTLink link =
+            new RESTLink("externalnetwork",
+                "http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1");
+        LinksDto links = new LinksDto();
+        links.addLink(link);
+
+        Method method =
+            CloudAsyncClient.class.getMethod("setDefaultNetworkByVirtualDatacenter",
+                VirtualDatacenterDto.class, LinksDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(), links);
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/cloud/virtualdatacenters/1/action/defaultvlan HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(NetworkResources.linksDtoPayload(link)),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testSetDefaultNetworkVirtualDatacenterExternal() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        RESTLink link =
+            new RESTLink("externalnetwork",
+                "http://localhost/api/admin/enterprises/1/action/externalnetworks/3");
+        LinksDto links = new LinksDto();
+        links.addLink(link);
+
+        Method method =
+            CloudAsyncClient.class.getMethod("setDefaultNetworkByVirtualDatacenter",
+                VirtualDatacenterDto.class, LinksDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(), links);
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/cloud/virtualdatacenters/1/action/defaultvlan HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(NetworkResources.linksDtoPayload(link)),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }
