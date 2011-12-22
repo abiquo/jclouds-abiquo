@@ -45,18 +45,18 @@ import com.google.inject.TypeLiteral;
  * 
  * @author Ignasi Barrera
  */
-@SuppressWarnings("rawtypes")
 @Singleton
-public class ReturnTaskReferenceOrNull extends ParseXMLWithJAXB<AcceptedRequestDto>
+public class ReturnTaskReferenceOrNull extends ParseXMLWithJAXB<AcceptedRequestDto<String>>
 {
     @Inject
-    public ReturnTaskReferenceOrNull(final XMLParser xml, final TypeLiteral<AcceptedRequestDto> type)
+    public ReturnTaskReferenceOrNull(final XMLParser xml,
+        final TypeLiteral<AcceptedRequestDto<String>> type)
     {
         super(xml, type);
     }
 
     @Override
-    public AcceptedRequestDto< ? > apply(final HttpResponse from)
+    public AcceptedRequestDto<String> apply(final HttpResponse from)
     {
         if (from.getStatusCode() == Status.NO_CONTENT.getStatusCode())
         {
