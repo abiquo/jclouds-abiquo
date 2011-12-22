@@ -254,6 +254,7 @@ public interface CloudClient
      * @param link The link of the deploy/undeploy action.
      * @return Response message to the deploy request.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link);
 
     /**
@@ -334,6 +335,7 @@ public interface CloudClient
      * @param deploy Deploy options.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> deployVirtualMachine(final RESTLink link,
         final VirtualMachineDeployDto deploy);
 
@@ -343,6 +345,7 @@ public interface CloudClient
      * @param link The link of the undeploy action.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> undeployVirtualMachine(final RESTLink link);
 
     /*********************** Volume ***********************/

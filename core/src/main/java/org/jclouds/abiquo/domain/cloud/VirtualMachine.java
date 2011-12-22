@@ -88,8 +88,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient()
-                .createVirtualMachine(virtualAppliance.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
+                target);
     }
 
     public AcceptedRequestDto<String> update()
@@ -167,18 +167,16 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         AcceptedRequestDto<String> response =
             context.getApi().getCloudClient().deployVirtualMachine(deployLink, deploy);
 
-        RESTLink taskLink = response.getLinks().get(0);
-        checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
-
-        TaskDto task = context.getApi().getTaskClient().getTask(taskLink);
-
-        return wrap(context, AsyncTask.class, task);
+        return this.getTask(response);
     }
 
-    public AcceptedRequestDto<String> undeploy()
+    public AsyncTask undeploy()
     {
         RESTLink undeployLink = target.searchLink("undeploy");
-        return context.getApi().getCloudClient().undeployVirtualMachine(undeployLink);
+        AcceptedRequestDto<String> response =
+            context.getApi().getCloudClient().undeployVirtualMachine(undeployLink);
+
+        return this.getTask(response);
     }
 
     public AcceptedRequestDto< ? > attachVolumes(final Volume... volumes)
@@ -207,6 +205,16 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public AcceptedRequestDto< ? > replaceVolumes(final Volume... volumes)
     {
         return context.getApi().getCloudClient().replaceVolumes(target, toVolumeDto(volumes));
+    }
+
+    private AsyncTask getTask(final AcceptedRequestDto<String> acceptedRequest)
+    {
+        RESTLink taskLink = acceptedRequest.getLinks().get(0);
+        checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
+
+        TaskDto task = context.getApi().getTaskClient().getTask(taskLink);
+
+        return wrap(context, AsyncTask.class, task);
     }
 
     // Builder
@@ -366,11 +374,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
-                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
-                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
-                .idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
+                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+                .vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort()).idState(in.getIdState())
+                .highDisponibility(in.getHighDisponibility()).idType(in.getIdType()).password(
+                    in.getPassword());
         }
     }
 

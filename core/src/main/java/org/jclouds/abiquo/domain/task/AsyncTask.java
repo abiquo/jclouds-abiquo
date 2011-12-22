@@ -68,4 +68,10 @@ public class AsyncTask extends DomainWrapper<TaskDto>
         return target.getUserId();
     }
 
+    @Override
+    public String toString()
+    {
+        return "AsyncTask [TaskId=" + getTaskId() + ", OwnerId=" + getOwnerId() + ", Timestamp="
+            + getTimestamp() + ", UserId()=" + getUserId() + "]";
+    }
 }

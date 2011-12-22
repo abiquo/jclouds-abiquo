@@ -20,10 +20,17 @@
 package org.jclouds.abiquo.features;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.RequestFilters;
+
+import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.task.TaskDto;
+import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * Provides asynchronous access to Abiquo Task API.
@@ -38,4 +45,10 @@ import org.jclouds.rest.annotations.RequestFilters;
 public interface TaskAsyncClient
 {
     /*********************** Task ***********************/
+
+    /**
+     * @see TaskClient#getTask(RESTLink)
+     */
+    @GET
+    ListenableFuture<TaskDto> getTask(@BinderParam(BindLinkToPath.class) RESTLink link);
 }

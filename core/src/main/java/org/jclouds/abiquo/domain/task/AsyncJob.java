@@ -73,4 +73,12 @@ public class AsyncJob extends DomainWrapper<JobDto>
         return target.getType();
     }
 
+    @Override
+    public String toString()
+    {
+        return "AsyncJob [Id=" + getId() + ", getDescription=" + getDescription()
+            + ", RollbackState=" + getRollbackState() + ", State=" + getState() + ", Timestamp="
+            + getTimestamp() + ", Type=" + getType() + "]";
+    }
+
 }
