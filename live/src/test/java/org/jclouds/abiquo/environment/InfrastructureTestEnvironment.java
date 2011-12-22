@@ -136,6 +136,10 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
         machine = datacenter.discoverSingleMachine(ip, type, user, pass);
 
+        // Credentials are not returned by default by the API; must be set explicitly
+        machine.setUser(user);
+        machine.setPassword(pass);
+
         String vswitch =
             machine.findAvailableVirtualSwitch(Config.get("abiquo.hypervisor.vswitch"));
         machine.setVirtualSwitch(vswitch);

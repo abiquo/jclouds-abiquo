@@ -37,7 +37,7 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class BindVVirtualdatacenterRefToPayloadTest
+public class BindVirtualDatacenterRefToPayloadTest
 {
 
     @Test(expectedExceptions = NullPointerException.class)
