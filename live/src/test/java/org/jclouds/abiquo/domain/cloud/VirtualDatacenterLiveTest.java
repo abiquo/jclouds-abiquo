@@ -146,7 +146,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
     @Test
     public void testGetDefaultNetwork()
     {
-        PrivateNetwork network = env.virtualDatacenter.getDefaultNetwork();
+        PrivateNetwork network = (PrivateNetwork) env.virtualDatacenter.getDefaultNetwork();
 
         assertNotNull(network);
         assertEquals(network.getName(), env.network.getName());

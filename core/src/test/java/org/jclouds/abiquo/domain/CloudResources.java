@@ -82,6 +82,8 @@ public class CloudResources
             "http://localhost/api/cloud/virtualdatacenters/1/privatenetworks"));
         virtualDatacenter.addLink(new RESTLink("defaultnetwork",
             "http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1"));
+        virtualDatacenter.addLink(new RESTLink("defaultvlan",
+            "http://localhost/api/cloud/virtualdatacenters/1/action/defaultvlan"));
         return virtualDatacenter;
 
     }
@@ -234,6 +236,7 @@ public class CloudResources
         buffer.append(link("/cloud/virtualdatacenters/1/volumes", "volumes"));
         buffer.append(link("/cloud/virtualdatacenters/1/privatenetworks", "privatenetworks"));
         buffer.append(link("/cloud/virtualdatacenters/1/privatenetworks/1", "defaultnetwork"));
+        buffer.append(link("/cloud/virtualdatacenters/1/action/defaultvlan", "defaultvlan"));
         buffer.append("<cpuHard>0</cpuHard>");
         buffer.append("<cpuSoft>0</cpuSoft>");
         buffer.append("<hdHard>0</hdHard>");

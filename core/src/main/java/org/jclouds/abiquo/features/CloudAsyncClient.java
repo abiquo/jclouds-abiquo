@@ -55,6 +55,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -193,6 +194,14 @@ public interface CloudAsyncClient
     @GET
     ListenableFuture<VLANNetworkDto> getDefaultNetworkByVirtualDatacenter(
         @EndpointLink("defaultnetwork") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#setDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto, LinksDto)
+     */
+    @PUT
+    ListenableFuture<Void> setDefaultNetworkByVirtualDatacenter(
+        @EndpointLink("defaultvlan") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(BindToXMLPayload.class) LinksDto links);
 
     /*********************** Private Network IPs ***********************/
 

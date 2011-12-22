@@ -38,6 +38,8 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
+import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -221,6 +223,28 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
             context.getApi().getCloudClient().getDefaultNetworkByVirtualDatacenter(target);
         return wrap(context, network.getType() == NetworkType.INTERNAL ? PrivateNetwork.class
             : ExternalNetwork.class, network);
+    }
+
+    public void setDefaultNetwork(final Network network)
+    {
+        RESTLink link = null;
+        RESTLink netlink = network.unwrap().searchLink("edit");
+        checkNotNull(netlink, ValidationErrors.MISSING_REQUIRED_LINK);
+
+        switch (network.getType())
+        {
+            case INTERNAL:
+                link = new RESTLink("internalnetwork", netlink.getHref());
+                break;
+            case EXTERNAL:
+                link = new RESTLink("externalnetwork", netlink.getHref());
+                break;
+        }
+
+        LinksDto dto = new LinksDto();
+        dto.addLink(link);
+        context.getApi().getCloudClient().setDefaultNetworkByVirtualDatacenter(target, dto);
+
     }
 
     /**

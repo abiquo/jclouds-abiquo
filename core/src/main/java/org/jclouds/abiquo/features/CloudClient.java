@@ -30,6 +30,7 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -129,6 +130,14 @@ public interface CloudClient
      * @return The default network of the virtual datacenter.
      */
     VLANNetworkDto getDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * Set the default network of the virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param links Link to the network.
+     */
+    void setDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto virtualDatacenter, LinksDto links);
 
     /*********************** Private Network ***********************/
 
