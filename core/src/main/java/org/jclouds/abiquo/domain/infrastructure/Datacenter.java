@@ -315,6 +315,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
                 .discoverSingleMachine(target, ip, hypervisorType, user, password,
                     MachineOptions.builder().port(port).build());
 
+        // Credentials are not returned by the API
+        dto.setUser(user);
+        dto.setPassword(password);
+
         return wrap(context, Machine.class, dto);
     }
 
@@ -364,6 +368,13 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
                 .getInfrastructureClient()
                 .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
                     MachineOptions.builder().port(port).build());
+
+        // Credentials are not returned by the API
+        for (MachineDto machine : dto.getCollection())
+        {
+            machine.setUser(user);
+            machine.setPassword(password);
+        }
 
         return wrap(context, Machine.class, dto.getCollection());
     }
