@@ -39,6 +39,7 @@ import com.google.common.collect.Iterables;
 public abstract class ReturnMovedResource<T> implements Function<Exception, T>
 {
 
+    @SuppressWarnings("unchecked")
     @Override
     public T apply(final Exception from)
     {
@@ -53,7 +54,7 @@ public abstract class ReturnMovedResource<T> implements Function<Exception, T>
             return getMovedEntity(response);
         }
 
-        return propagateOrNull(from);
+        return (T) propagateOrNull(from);
     }
 
     protected abstract T getMovedEntity(HttpResponse response);
