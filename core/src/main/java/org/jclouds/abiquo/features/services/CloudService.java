@@ -48,7 +48,7 @@ public interface CloudService
      * @param enterprise The given enterprise.
      * @param datacenter The given datacenter.
      */
-    Iterable<VirtualDatacenter> listVirtualDatacenters(Enterprise enterprise);
+    Iterable<VirtualDatacenter> listVirtualDatacenters(final Enterprise enterprise);
 
     /**
      * Get the list of virtual datacenters matching the given filter.
@@ -64,5 +64,5 @@ public interface CloudService
     /**
      * Get the virtual datacenter with the given id.
      */
-    VirtualDatacenter getVirtualDatacenter(Integer virtualDatacenterId);
+    VirtualDatacenter getVirtualDatacenter(final Integer virtualDatacenterId);
 }

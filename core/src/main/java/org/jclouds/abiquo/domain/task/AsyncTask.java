@@ -25,6 +25,8 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 
 import com.abiquo.server.core.task.TaskDto;
+import com.abiquo.server.core.task.enums.TaskState;
+import com.abiquo.server.core.task.enums.TaskType;
 
 /**
  * Adds generic high level functionality to {TaskDto}.
@@ -41,16 +43,36 @@ public class AsyncTask extends DomainWrapper<TaskDto>
         super(context, target);
     }
 
-    // Delegate methods
+    // Domain operations
 
+    /**
+     * Refresh the state of the task.
+     */
+    public void refresh()
+    {
+        target = context.getApi().getTaskClient().getTask(target.getEditLink());
+    }
+
+    // Children access
+
+    /**
+     * Get the individual jobs that compose the current task.
+     */
     public List<AsyncJob> getJobs()
     {
         return wrap(context, AsyncJob.class, target.getJobs().getCollection());
     }
 
+    // Delegate methods
+
     public String getOwnerId()
     {
         return target.getOwnerId();
+    }
+
+    public TaskState getState()
+    {
+        return target.getState();
     }
 
     public String getTaskId()
@@ -63,6 +85,11 @@ public class AsyncTask extends DomainWrapper<TaskDto>
         return target.getTimestamp();
     }
 
+    public TaskType getType()
+    {
+        return target.getType();
+    }
+
     public String getUserId()
     {
         return target.getUserId();
@@ -72,6 +99,7 @@ public class AsyncTask extends DomainWrapper<TaskDto>
     public String toString()
     {
         return "AsyncTask [taskId=" + getTaskId() + ", ownerId=" + getOwnerId() + ", timestamp="
-            + getTimestamp() + ", userId()=" + getUserId() + "]";
+            + getTimestamp() + ", userId=" + getUserId() + ", state=" + getState() + ", type="
+            + getType() + "]";
     }
 }

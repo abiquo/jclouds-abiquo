@@ -21,6 +21,8 @@ package org.jclouds.abiquo;
 
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
+import org.jclouds.abiquo.features.services.MonitoringService;
+import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.abiquo.internal.AbiquoContextImpl;
 import org.jclouds.rest.RestContext;
 
@@ -34,7 +36,31 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(AbiquoContextImpl.class)
 public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClient>
 {
+    /**
+     * Returns the administration service.
+     * <p>
+     * This service provides an entry point to infrastructure administration tasks.
+     */
     AdministrationService getAdministrationService();
 
+    /**
+     * Returns the cloud service.
+     * <p>
+     * This service provides an entry point to cloud management tasks.
+     */
     CloudService getCloudService();
+
+    /**
+     * Returns the search service.
+     * <p>
+     * This service provides an entry point to listing and filtering tasks.
+     */
+    SearchService getSearchService();
+
+    /**
+     * Returns the monitoring service.
+     * <p>
+     * This service provides an entry point to asyncohonous task monitoring tasks.
+     */
+    MonitoringService getMonitoringService();
 }

@@ -46,7 +46,7 @@ public interface SearchService
      * @param virtualDatacenter The given virtual datacenter.
      * @param options The set of filtering and pagination options of the search.
      */
-    public Iterable<Volume> searchVolumes(final VirtualDatacenter virtualDatacenter,
+    Iterable<Volume> searchVolumes(final VirtualDatacenter virtualDatacenter,
         final VolumeOptions options);
 
     /*********************** Private Network ***********************/
@@ -57,7 +57,6 @@ public interface SearchService
      * @param network The given private network.
      * @param options The set of filtering and pagination options of the search.
      */
-    public Iterable<PrivateNic> searchPrivateNics(final PrivateNetwork network,
-        final IpOptions options);
+    Iterable<PrivateNic> searchPrivateNics(final PrivateNetwork network, final IpOptions options);
 
 }

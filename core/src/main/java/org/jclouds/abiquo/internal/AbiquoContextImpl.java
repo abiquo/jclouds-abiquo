@@ -30,6 +30,8 @@ import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
+import org.jclouds.abiquo.features.services.MonitoringService;
+import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.domain.Credentials;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.location.Provider;
@@ -54,18 +56,25 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
 
     private final CloudService cloudService;
 
+    private final SearchService searchService;
+
+    private final MonitoringService monitoringService;
+
     @Inject
     protected AbiquoContextImpl(final Closer closer,
         final Map<String, Credentials> credentialStore, final Utils utils, final Injector injector,
         final TypeLiteral<AbiquoClient> syncApi, final TypeLiteral<AbiquoAsyncClient> asyncApi,
         @Provider final URI endpoint, @Provider final String provider,
         @Identity final String identity, @ApiVersion final String apiVersion,
-        final CloudService cloudService, final AdministrationService administrationService)
+        final AdministrationService administrationService, final CloudService cloudService,
+        final SearchService searchService, final MonitoringService monitoringService)
     {
         super(closer, credentialStore, utils, injector, syncApi, asyncApi, endpoint, provider,
             identity, apiVersion, null);
         this.administrationService = administrationService;
         this.cloudService = cloudService;
+        this.searchService = searchService;
+        this.monitoringService = monitoringService;
     }
 
     @Override
@@ -78,6 +87,18 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
     public CloudService getCloudService()
     {
         return cloudService;
+    }
+
+    @Override
+    public SearchService getSearchService()
+    {
+        return searchService;
+    }
+
+    @Override
+    public MonitoringService getMonitoringService()
+    {
+        return monitoringService;
     }
 
 }

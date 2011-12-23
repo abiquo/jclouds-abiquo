@@ -54,16 +54,22 @@ public class BaseInjectionTest
             checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
         String credential =
             checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
+
+        injector =
+            new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
+                AbiquoContextFactory.PROVIDER_NAME, identity, credential,
+                ImmutableSet.<Module> of(new Log4JLoggingModule()), buildProperties())
+                .buildInjector();
+    }
+
+    protected Properties buildProperties()
+    {
         String endpoint =
             checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
 
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
-
-        injector =
-            new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
-                AbiquoContextFactory.PROVIDER_NAME, identity, credential,
-                ImmutableSet.<Module> of(new Log4JLoggingModule()), props).buildInjector();
+        return props;
     }
 
     @AfterMethod
