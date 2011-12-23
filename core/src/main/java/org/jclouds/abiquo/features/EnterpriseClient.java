@@ -21,11 +21,13 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.EnterprisesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
@@ -39,10 +41,22 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
+/**
+ * @author Francesc Montserrat
+ *
+ */
+/**
+ * @author Francesc Montserrat
+ *
+ */
+/**
+ * @author Francesc Montserrat
+ */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface EnterpriseClient
 {
-    /*         ********************** Enterprise ********************** */
+
+    /*********************** Enterprise ********************** */
 
     /**
      * List all enterprises.
@@ -82,7 +96,27 @@ public interface EnterpriseClient
      */
     void deleteEnterprise(EnterpriseDto enterprise);
 
-    /*         ********************** Enterprise Limits ********************** */
+    /*********************** Enterprise Properties ***********************/
+
+    /**
+     * Get defined properties of the given enterprise.
+     * 
+     * @param enterpriseId The enterprise id.
+     * @return Set of enterprise properties.
+     */
+    @EnterpriseEdition
+    EnterprisePropertiesDto getEnterpriseProperties(Integer enterpriseId);
+
+    /**
+     * Updates the given enterprise properties set.
+     * 
+     * @param properties The properties set.
+     * @return The updated properties.
+     */
+    @EnterpriseEdition
+    EnterprisePropertiesDto updateEnterpriseProperties(EnterprisePropertiesDto properties);
+
+    /*********************** Enterprise Limits ***********************/
 
     /**
      * Allows the given enterprise to use the given datacenter with the given limits.
@@ -92,8 +126,8 @@ public interface EnterpriseClient
      * @param limits The usage limits for the enterprise in the given datacenter.
      * @return The usage limits for the enterprise in the given datacenter.
      */
-    DatacenterLimitsDto createLimits(EnterpriseDto enterprise, DatacenterDto datacenter,
-        DatacenterLimitsDto limits);
+    DatacenterLimitsDto createLimits(final EnterpriseDto enterprise,
+        final DatacenterDto datacenter, final DatacenterLimitsDto limits);
 
     /**
      * Retreives the limits for the given enterprise and datacenter.
@@ -127,7 +161,7 @@ public interface EnterpriseClient
      */
     void deleteLimits(DatacenterLimitsDto limits);
 
-    /*         ********************** User ********************** */
+    /*********************** User ********************** */
 
     /**
      * Retreives users of the given enterprise.
@@ -135,7 +169,7 @@ public interface EnterpriseClient
      * @param enterprise The enterprise.
      * @return The users of the enterprise.
      */
-    UsersDto listUsers(EnterpriseDto enterprise);
+    UsersDto listUsers(final EnterpriseDto enterprise);
 
     /**
      * Create a new user in the given enterprise.

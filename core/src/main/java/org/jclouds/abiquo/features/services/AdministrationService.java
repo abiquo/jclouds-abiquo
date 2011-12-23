@@ -22,6 +22,7 @@ package org.jclouds.abiquo.features.services;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.enterprise.EnterpriseProperties;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
@@ -83,6 +84,12 @@ public interface AdministrationService
      * Get the enterprise with the given id.
      */
     Enterprise getEnterprise(final Integer enterpriseId);
+
+    /*********************** Enterprise Properties ***********************/
+    /**
+     * Get the properties of an enterprise.
+     */
+    EnterpriseProperties getEnterpriseProperties(final Enterprise enterprise);
 
     /*********************** Role ***********************/
 
