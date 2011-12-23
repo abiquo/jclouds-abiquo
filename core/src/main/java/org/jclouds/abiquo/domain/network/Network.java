@@ -19,8 +19,11 @@
 
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.base.Preconditions.checkArgument;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
@@ -142,6 +145,33 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
             this.unmanaged = unmanaged;
             return (T) this;
         }
+    }
+
+    public PrivateNetwork toPrivateNetwork()
+    {
+        checkArgument(target.getType().equals(NetworkType.INTERNAL),
+            (ValidationErrors.INVALID_NETWORK_TYPE + target.getType()));
+
+        return wrap(context, PrivateNetwork.class, target);
+
+    }
+
+    public ExternalNetwork toExternalNetwork()
+    {
+        checkArgument(target.getType().equals(NetworkType.EXTERNAL),
+            (ValidationErrors.INVALID_NETWORK_TYPE + target.getType()));
+
+        return wrap(context, ExternalNetwork.class, target);
+
+    }
+
+    public PublicNetwork toPublicNetwork()
+    {
+        checkArgument(target.getType().equals(NetworkType.PUBLIC),
+            (ValidationErrors.INVALID_NETWORK_TYPE + target.getType()));
+
+        return wrap(context, PublicNetwork.class, target);
+
     }
 
     // Delegate methods

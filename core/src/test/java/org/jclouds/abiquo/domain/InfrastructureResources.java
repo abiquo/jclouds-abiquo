@@ -117,6 +117,8 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/remoteservices"));
         datacenter.addLink(new RESTLink("tiers",
             "http://localhost/api/admin/datacenters/1/storage/tiers"));
+        datacenter.addLink(new RESTLink("network",
+            "http://localhost/api/admin/datacenters/1/network"));
         return datacenter;
     }
 
@@ -286,6 +288,7 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks", "racks"));
         buffer.append(link("/admin/datacenters/1/remoteservices", "remoteservices"));
         buffer.append(link("/admin/datacenters/1/storage/tiers", "tiers"));
+        buffer.append(link("/admin/datacenters/1/network", "network"));
         buffer.append("<id>1</id>");
         buffer.append("<location>Honolulu</location>");
         buffer.append("<name>DC</name>");

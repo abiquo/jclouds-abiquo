@@ -32,4 +32,6 @@ public class ValidationErrors
 
     public static final String MISSING_REQUIRED_LINK = "Missing required link";
 
+    public static final String INVALID_NETWORK_TYPE = "Invalid network type ";
+
 }

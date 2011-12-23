@@ -27,6 +27,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
@@ -39,6 +40,8 @@ import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
@@ -270,6 +273,33 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return Iterables.getFirst(filter(listTiers(), filter), null);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks">
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks</a>
+     */
+    public List<Network> listNetworks()
+    {
+        VLANNetworksDto networks = context.getApi().getInfrastructureClient().listNetworks(target);
+        return wrap(context, Network.class, networks.getCollection());
+    }
+
+    public List<Network> listNetworks(final Predicate<Network> filter)
+    {
+        return Lists.newLinkedList(filter(listNetworks(), filter));
+    }
+
+    public Network findNetwork(final Predicate<Network> filter)
+    {
+        return Iterables.getFirst(filter(listNetworks(), filter), null);
+    }
+
+    public Network getNetwork(final Integer id)
+    {
+        VLANNetworkDto network = context.getApi().getInfrastructureClient().getNetwork(target, id);
+        return wrap(context, Network.class, network);
+    }
+
     // Actions
 
     /**
@@ -309,11 +339,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final String user, final String password, final int port)
     {
         MachineDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverSingleMachine(target, ip, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
+                hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         // Credentials are not returned by the API
         dto.setUser(user);
@@ -363,11 +390,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final int port)
     {
         MachinesDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
+                ipTo, hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         // Credentials are not returned by the API
         for (MachineDto machine : dto.getCollection())

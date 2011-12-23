@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import org.jclouds.abiquo.domain.network.Network;
 
+import com.abiquo.model.enumerator.NetworkType;
 import com.google.common.base.Predicate;
 
 /**
@@ -49,6 +50,25 @@ public class NetworkPredicates
             public boolean apply(final Network network)
             {
                 return Arrays.asList(names).contains(network.getName());
+            }
+        };
+    }
+
+    public static Predicate<Network> type(final NetworkType type)
+    {
+        return types(checkNotNull(type, "type must be defined"));
+    }
+
+    public static Predicate<Network> types(final NetworkType... types)
+    {
+        checkNotNull(types, "types must be defined");
+
+        return new Predicate<Network>()
+        {
+            @Override
+            public boolean apply(final Network network)
+            {
+                return Arrays.asList(types).contains(network.getType());
             }
         };
     }

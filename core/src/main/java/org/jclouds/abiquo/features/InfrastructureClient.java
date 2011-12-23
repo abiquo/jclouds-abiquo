@@ -38,6 +38,8 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
@@ -421,7 +423,7 @@ public interface InfrastructureClient
     /**
      * Updates a storage pool.
      * 
-     * @param storagePool The new attributes for the storage pull.
+     * @param storagePool The new attributes for the storage pool.
      * @return The updated tier.
      */
     @EnterpriseEdition
@@ -443,4 +445,49 @@ public interface InfrastructureClient
      */
     @EnterpriseEdition
     StoragePoolDto getStoragePool(StorageDeviceDto storageDevice, String storagePoolId);
+
+    /**
+     * List all public, external and not managed networks of a datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @return The list of not public, external and not managed for the datacenter.
+     */
+    @EnterpriseEdition
+    VLANNetworksDto listNetworks(DatacenterDto datacenter);
+
+    /**
+     * Get the given network from the given datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @param networkId The id of the network.
+     * @return The rack or <code>null</code> if it does not exist.
+     */
+    VLANNetworkDto getNetwork(DatacenterDto datacenter, Integer networkId);
+
+    /**
+     * Create a new public network.
+     * 
+     * @param storageDevice The storage device.
+     * @param storagePool The storage pool to be created.
+     * @return The created storage pool.
+     */
+    @EnterpriseEdition
+    VLANNetworkDto createNetwork(DatacenterDto datacenter, VLANNetworkDto network);
+
+    /**
+     * Updates a network.
+     * 
+     * @param network The new attributes for the network.
+     * @return The updated tier.
+     */
+    @EnterpriseEdition
+    VLANNetworkDto updateNetwork(VLANNetworkDto network);
+
+    /**
+     * Deletes an existing network.
+     * 
+     * @param network The network to delete.
+     */
+    @EnterpriseEdition
+    void deleteNetwork(VLANNetworkDto network);
 }

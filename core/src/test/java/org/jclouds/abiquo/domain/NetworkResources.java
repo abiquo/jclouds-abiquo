@@ -60,6 +60,19 @@ public class NetworkResources
         return vlan;
     }
 
+    public static VLANNetworkDto publicNetworkPut()
+    {
+        VLANNetworkDto vlan = new VLANNetworkDto();
+        vlan.setAddress("192.168.1.0");
+        vlan.setDefaultNetwork(true);
+        vlan.setName("PublicNetwork");
+        vlan.setGateway("192.168.1.1");
+        vlan.setMask(24);
+        vlan.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/network/1"));
+
+        return vlan;
+    }
+
     public static String vlanNetworkPostPayload()
     {
         StringBuffer buffer = new StringBuffer();
@@ -84,6 +97,20 @@ public class NetworkResources
         buffer.append("<gateway>192.168.1.1</gateway>");
         buffer.append("<mask>24</mask>");
         buffer.append("<name>DefaultNetwork</name>");
+        buffer.append("</network>");
+        return buffer.toString();
+    }
+
+    public static String publicNetworkPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<network>");
+        buffer.append(link("/admin/datacenters/1/network/1", "edit"));
+        buffer.append("<address>192.168.1.0</address>");
+        buffer.append("<defaultNetwork>true</defaultNetwork>");
+        buffer.append("<gateway>192.168.1.1</gateway>");
+        buffer.append("<mask>24</mask>");
+        buffer.append("<name>PublicNetwork</name>");
         buffer.append("</network>");
         return buffer.toString();
     }

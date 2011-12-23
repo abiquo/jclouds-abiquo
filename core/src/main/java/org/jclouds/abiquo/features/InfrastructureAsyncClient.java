@@ -63,6 +63,8 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
@@ -443,4 +445,49 @@ public interface InfrastructureAsyncClient
     ListenableFuture<StoragePoolDto> getStoragePool(
         @EndpointLink("pools") @BinderParam(BindToPath.class) final StorageDeviceDto storageDevice,
         @BinderParam(AppendToPath.class) final String machineId);
+
+    /*********************** Network ***********************/
+
+    /**
+     * @see InfrastructureClient#listNetwork(DatacenterDto)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<VLANNetworksDto> listNetworks(
+        @EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#getNetwork(DatacenterDto, Integer)
+     */
+    @EnterpriseEdition
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<VLANNetworkDto> getNetwork(
+        @EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendToPath.class) Integer networkId);
+
+    /**
+     * @see InfrastructureClient#createNetwork(DatacenterDto, VLANNetworkDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<VLANNetworkDto> createNetwork(
+        @EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(BindToXMLPayload.class) VLANNetworkDto network);
+
+    /**
+     * @see InfrastructureClient#updateNetwork(VLANNetworkDto)
+     */
+    @EnterpriseEdition
+    @PUT
+    ListenableFuture<VLANNetworkDto> updateNetwork(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VLANNetworkDto network);
+
+    /**
+     * @see InfrastructureClient#deleteNetwork(VLANNetworkDto)
+     */
+    @EnterpriseEdition
+    @DELETE
+    ListenableFuture<Void> deleteNetwork(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto network);
 }
