@@ -225,6 +225,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
             : ExternalNetwork.class, network);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter</a>
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter</a>
+     */
     public void setDefaultNetwork(final Network network)
     {
         RESTLink link = null;
@@ -244,7 +252,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         LinksDto dto = new LinksDto();
         dto.addLink(link);
         context.getApi().getCloudClient().setDefaultNetworkByVirtualDatacenter(target, dto);
-
     }
 
     /**
