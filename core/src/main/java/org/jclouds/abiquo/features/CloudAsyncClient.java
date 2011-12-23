@@ -34,12 +34,18 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
+import org.jclouds.abiquo.binders.cloud.BindVirtualDatacenterRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
+import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
 import org.jclouds.abiquo.functions.enterprise.ParseEnterpriseId;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
@@ -431,4 +437,14 @@ public interface CloudAsyncClient
     @DELETE
     ListenableFuture<Void> deleteVolume(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VolumeManagementDto volume);
+
+    /**
+     * @see CloudClient#moveVolume(VolumeManagementDto, VirtualDatacenterDto)
+     */
+    @EnterpriseEdition
+    @POST
+    @ExceptionParser(ReturnMovedVolume.class)
+    ListenableFuture<VolumeManagementDto> moveVolume(
+        @BinderParam(BindMoveVolumeToPath.class) VolumeManagementDto volume,
+        @BinderParam(BindVirtualDatacenterRefToPayload.class) VirtualDatacenterDto newVirtualDatacenter);
 }

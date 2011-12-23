@@ -77,6 +77,11 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTest
             Builder.fromMachine(env.machine).hypervisorType(HypervisorType.XEN_3).ip("10.60.1.98")
                 .ipService("10.60.1.98").build();
 
+        // Credentials are not returned by the api, so they may not present in the domain object
+        // if it was retrieved with a GET operation
+        newmachine.setUser("dummy");
+        newmachine.setPassword("dummy");
+
         newmachine.save();
         assertNotNull(newmachine.getId());
 

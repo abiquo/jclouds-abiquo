@@ -33,6 +33,8 @@ import org.jclouds.abiquo.features.EnterpriseAsyncClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureAsyncClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.features.TaskAsyncClient;
+import org.jclouds.abiquo.features.TaskClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
@@ -55,15 +57,16 @@ import com.google.common.collect.ImmutableMap;
 @ConfiguresRestClient
 public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, AbiquoAsyncClient>
 {
-    public static final Map<Class< ? >, Class< ? >> DELEGATE_MAP =
-        ImmutableMap.<Class< ? >, Class< ? >> builder() //
-            .put(InfrastructureClient.class, InfrastructureAsyncClient.class) //
-            .put(EnterpriseClient.class, EnterpriseAsyncClient.class) //
-            .put(AdminClient.class, AdminAsyncClient.class) //
-            .put(ConfigClient.class, ConfigAsyncClient.class) //
-            .put(CloudClient.class, CloudAsyncClient.class) //
-            .put(VirtualMachineTemplateClient.class, VirtualMachineTemplateAsyncClient.class) //
-            .build();
+    public static final Map<Class< ? >, Class< ? >> DELEGATE_MAP = ImmutableMap
+        .<Class< ? >, Class< ? >> builder() //
+        .put(InfrastructureClient.class, InfrastructureAsyncClient.class) //
+        .put(EnterpriseClient.class, EnterpriseAsyncClient.class) //
+        .put(AdminClient.class, AdminAsyncClient.class) //
+        .put(ConfigClient.class, ConfigAsyncClient.class) //
+        .put(CloudClient.class, CloudAsyncClient.class) //
+        .put(VirtualMachineTemplateClient.class, VirtualMachineTemplateAsyncClient.class) //
+        .put(TaskClient.class, TaskAsyncClient.class) //
+        .build();
 
     public AbiquoRestClientModule()
     {

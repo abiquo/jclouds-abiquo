@@ -42,7 +42,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         return new CloudTestEnvironment(context);
     }
 
-    @Test(enabled = true)
+    @Test(enabled = false)
     public void testDeploy()
     {
         AsyncTask task = env.virtualMachine.deploy();

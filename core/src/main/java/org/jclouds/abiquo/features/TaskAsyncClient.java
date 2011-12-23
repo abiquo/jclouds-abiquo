@@ -35,7 +35,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 /**
  * Provides asynchronous access to Abiquo Task API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see TaskClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

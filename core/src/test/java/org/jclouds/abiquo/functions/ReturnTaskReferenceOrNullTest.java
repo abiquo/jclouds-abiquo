@@ -48,12 +48,10 @@ import com.google.inject.TypeLiteral;
 @Test(groups = "unit")
 public class ReturnTaskReferenceOrNullTest
 {
-    @SuppressWarnings("rawtypes")
     public void testReturnNullIfNoContent()
     {
-        Function<HttpResponse, AcceptedRequestDto> function =
-            new ReturnTaskReferenceOrNull(new JAXBParser(),
-                TypeLiteral.get(AcceptedRequestDto.class));
+        Function<HttpResponse, AcceptedRequestDto<String>> function =
+            new ReturnTaskReferenceOrNull(new JAXBParser(), createTypeLiteral());
 
         HttpResponse response = createMock(HttpResponse.class);
 
@@ -67,15 +65,14 @@ public class ReturnTaskReferenceOrNullTest
         verify(response);
     }
 
-    @SuppressWarnings("rawtypes")
     public void testReturnTaskIfAccepted() throws IOException
     {
         JAXBParser parser = new JAXBParser();
         AcceptedRequestDto< ? > task = new AcceptedRequestDto<String>();
         Payload payload = Payloads.newPayload(parser.toXML(task));
 
-        Function<HttpResponse, AcceptedRequestDto> function =
-            new ReturnTaskReferenceOrNull(parser, TypeLiteral.get(AcceptedRequestDto.class));
+        Function<HttpResponse, AcceptedRequestDto<String>> function =
+            new ReturnTaskReferenceOrNull(parser, createTypeLiteral());
 
         HttpResponse response = createMock(HttpResponse.class);
 
@@ -90,5 +87,12 @@ public class ReturnTaskReferenceOrNullTest
         assertTrue(function.apply(response) instanceof AcceptedRequestDto);
 
         verify(response);
+    }
+
+    private static TypeLiteral<AcceptedRequestDto<String>> createTypeLiteral()
+    {
+        return new TypeLiteral<AcceptedRequestDto<String>>()
+        {
+        };
     }
 }
