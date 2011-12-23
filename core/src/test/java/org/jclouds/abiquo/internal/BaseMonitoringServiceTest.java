@@ -49,7 +49,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
     @Override
     protected Properties buildProperties()
     {
-        // USe one second monitor delay in the tests
+        // Use one second monitor delay in the tests
         Properties props = super.buildProperties();
         props.put(AbiquoConstants.ASYNC_TASK_MONITOR_DELAY, "1000");
         return props;
@@ -121,7 +121,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         }
 
         @Override
-        public synchronized void refresh()
+        public void refresh()
         {
             if (finishAfterCount-- <= 0)
             {

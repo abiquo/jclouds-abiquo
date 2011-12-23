@@ -64,7 +64,6 @@ public class BaseMonitoringService implements MonitoringService
         final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay)
     {
-        super();
         this.context = checkNotNull(context, "context");
         this.scheduler = checkNotNull(scheduler, "scheduler");
         this.pollingDelay = checkNotNull(pollingDelay, "pollingDelay");
@@ -107,11 +106,11 @@ public class BaseMonitoringService implements MonitoringService
             {
                 case FINISHED_SUCCESSFULLY:
                     callback.onTaskCompleted(task);
-                    scheduler.shutdown();
+                    scheduler.shutdown(); // Stop monitoring the task
                     break;
                 case FINISHED_UNSUCCESSFULLY:
                     callback.onTaskFailed(task);
-                    scheduler.shutdown();
+                    scheduler.shutdown(); // Stop monitoring the task
                     break;
                 default:
                     // Task has not finished, continue monitoring it
