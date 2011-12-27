@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.domain.task;
 
-import org.jclouds.abiquo.features.services.MonitoringService;
-
 /**
  * Callback that will be executed when a monitored {@link AsyncTask} detects that the task has
  * completed (or failed).

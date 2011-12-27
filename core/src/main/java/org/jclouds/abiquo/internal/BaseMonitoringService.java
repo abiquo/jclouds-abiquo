@@ -34,8 +34,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.config.SchedulerModule;
-import org.jclouds.abiquo.domain.task.AsyncJob;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.task.AsyncTaskCallback;
 import org.jclouds.abiquo.features.services.MonitoringService;
@@ -124,7 +122,7 @@ public class BaseMonitoringService implements MonitoringService
             this.callback = callback;
         }
 
-        private void stopMonitoring(AsyncTask task)
+        private void stopMonitoring(final AsyncTask task)
         {
             ScheduledFuture< ? > future = runningMonitors.get(task.getTaskId());
             if (!future.isCancelled() && !future.isDone())
@@ -171,7 +169,7 @@ public class BaseMonitoringService implements MonitoringService
     {
         private CountDownLatch completeSignal;
 
-        public BlockingCallback(int countDownToCompletion)
+        public BlockingCallback(final int countDownToCompletion)
         {
             super();
             checkArgument(countDownToCompletion > 0, "countDownToCompletion must be greater than 0");

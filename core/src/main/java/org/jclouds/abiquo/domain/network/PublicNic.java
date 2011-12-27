@@ -17,39 +17,33 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.network;
+package org.jclouds.abiquo.domain.network;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import org.jclouds.abiquo.AbiquoContext;
 
-import java.util.Arrays;
-
-import org.jclouds.abiquo.domain.network.Network;
-
-import com.google.common.base.Predicate;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
- * Container for {@link Network} filters.
+ * Adds generic high level functionality to {IpPoolManagementDto} for public networks.
  * 
+ * @author Ignasi Barrera
  * @author Francesc Montserrat
+ * @see <a href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource">
+ *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource</a>
  */
-public class NetworkPredicates
+public abstract class PublicNic extends Nic
 {
-    public static Predicate<Network> name(final String name)
+    /**
+     * Constructor to be used only by the builder.
+     */
+    protected PublicNic(final AbiquoContext context, final IpPoolManagementDto target)
     {
-        return names(checkNotNull(name, "name must be defined"));
+        super(context, target);
     }
 
-    public static Predicate<Network> names(final String... names)
+    @Override
+    public String toString()
     {
-        checkNotNull(names, "names must be defined");
-
-        return new Predicate<Network>()
-        {
-            @Override
-            public boolean apply(final Network network)
-            {
-                return Arrays.asList(names).contains(network.getName());
-            }
-        };
+        return super.toString();
     }
 }

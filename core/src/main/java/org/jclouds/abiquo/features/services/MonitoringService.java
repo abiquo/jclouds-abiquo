@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo.features.services;
 
-import org.jclouds.abiquo.domain.task.AsyncJob;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.task.AsyncTaskCallback;
 import org.jclouds.abiquo.internal.BaseMonitoringService;

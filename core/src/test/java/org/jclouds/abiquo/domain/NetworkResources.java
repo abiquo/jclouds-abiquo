@@ -69,6 +69,7 @@ public class NetworkResources
         vlan.setGateway("192.168.1.1");
         vlan.setMask(24);
         vlan.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/network/1"));
+        vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/datacenters/1/network/1/ips"));
 
         return vlan;
     }
@@ -106,6 +107,7 @@ public class NetworkResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<network>");
         buffer.append(link("/admin/datacenters/1/network/1", "edit"));
+        buffer.append(link("/admin/datacenters/1/network/1/ips", "ips"));
         buffer.append("<address>192.168.1.0</address>");
         buffer.append("<defaultNetwork>true</defaultNetwork>");
         buffer.append("<gateway>192.168.1.1</gateway>");

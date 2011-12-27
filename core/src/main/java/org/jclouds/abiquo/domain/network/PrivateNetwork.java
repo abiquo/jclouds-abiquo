@@ -146,7 +146,7 @@ public class PrivateNetwork extends Network
             dto.setSecondaryDNS(secondaryDNS);
             dto.setSufixDNS(sufixDNS);
             dto.setDefaultNetwork(defaultNetwork);
-            dto.setUnmanaged(unmanaged);
+            dto.setUnmanaged(false);
             dto.setType(NetworkType.INTERNAL);
 
             PrivateNetwork network = new PrivateNetwork(context, dto);
@@ -160,8 +160,7 @@ public class PrivateNetwork extends Network
             return PrivateNetwork.builder(in.context).name(in.getName()).tag(in.getTag()).gateway(
                 in.getGateway()).address(in.getAddress()).mask(in.getMask()).primaryDNS(
                 in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(in.getSufixDNS())
-                .defaultNetwork(in.getDefaultNetwork()).unmanaged(in.getUnmanaged())
-                .virtualDatacenter(in.virtualDatacenter);
+                .defaultNetwork(in.getDefaultNetwork()).virtualDatacenter(in.virtualDatacenter);
         }
     }
 

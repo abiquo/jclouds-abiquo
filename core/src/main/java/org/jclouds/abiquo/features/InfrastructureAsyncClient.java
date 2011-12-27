@@ -38,8 +38,11 @@ import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
+import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
@@ -47,6 +50,7 @@ import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.JAXBResponseParser;
+import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -63,8 +67,10 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
@@ -457,6 +463,15 @@ public interface InfrastructureAsyncClient
         @EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
+     * @see InfrastructureClient#listNetwork(DatacenterDto, NetworkOptions)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<VLANNetworksDto> listNetworks(
+        @EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendOptionsToPath.class) NetworkOptions options);
+
+    /**
      * @see InfrastructureClient#getNetwork(DatacenterDto, Integer)
      */
     @EnterpriseEdition
@@ -490,4 +505,31 @@ public interface InfrastructureAsyncClient
     @DELETE
     ListenableFuture<Void> deleteNetwork(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto network);
+
+    /**
+     * @see InfrastructureClient#checkTagAvailability(DatacenterDto, Integer)
+     */
+    @EnterpriseEdition
+    @GET
+    @Path("/datacenters/{datacenter}/network/action/checkavailability")
+    ListenableFuture<VlanTagAvailabilityDto> checkTagAvailability(
+        @PathParam("datacenter") @ParamParser(ParseDatacenterId.class) DatacenterDto datacenter,
+        @QueryParam("tag") Integer tag);
+
+    /*********************** Public Network IPs ***********************/
+
+    /**
+     * @see CloudClient#listNetworkIps(VLANNetworkDto)
+     */
+    @GET
+    ListenableFuture<IpsPoolManagementDto> listNetworkIps(
+        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
+
+    /**
+     * @see CloudClient#listNetworkIps(VLANNetworkDto, IpOptions)
+     */
+    @GET
+    ListenableFuture<IpsPoolManagementDto> listNetworkIps(
+        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+        @BinderParam(AppendOptionsToPath.class) IpOptions options);
 }
