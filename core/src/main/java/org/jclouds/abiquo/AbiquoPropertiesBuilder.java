@@ -22,6 +22,7 @@ package org.jclouds.abiquo;
 import static org.jclouds.Constants.PROPERTY_API_VERSION;
 import static org.jclouds.Constants.PROPERTY_MAX_REDIRECTS;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
+import static org.jclouds.abiquo.reference.AbiquoConstants.MAX_SCHEDULER_THREADS;
 
 import java.util.Properties;
 
@@ -48,6 +49,8 @@ public class AbiquoPropertiesBuilder extends PropertiesBuilder
         properties.setProperty(PROPERTY_MAX_REDIRECTS, "0");
         // The default polling delay between AsyncTask monitor requests
         properties.setProperty(ASYNC_TASK_MONITOR_DELAY, "5000");
+        // The default number of concurrent scheduler threads to be used
+        properties.setProperty(MAX_SCHEDULER_THREADS, "5");
         return properties;
     }
 

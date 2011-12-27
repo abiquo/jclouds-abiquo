@@ -35,4 +35,12 @@ public interface AbiquoConstants
      * Default value: 5000 ms
      */
     public static final String ASYNC_TASK_MONITOR_DELAY = "abiquo.monitor-delay";
+
+    /**
+     * The maximum number of scheduler threads used to perform periodical tasks.
+     * <p>
+     * Default value: 5 (a 0 value will configure a single threaded executor service that will not
+     * be able to execute tasks concurrently).
+     */
+    public static final String MAX_SCHEDULER_THREADS = "abiquo.scheduler-max-threads";
 }

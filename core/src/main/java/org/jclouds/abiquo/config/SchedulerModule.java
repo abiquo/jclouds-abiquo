@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.config;
 
+import static org.jclouds.abiquo.reference.AbiquoConstants.MAX_SCHEDULER_THREADS;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
@@ -31,7 +33,6 @@ import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.Constants;
 import org.jclouds.concurrent.config.ExecutorServiceModule;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.Logger;
@@ -54,8 +55,8 @@ public class SchedulerModule extends AbstractModule
 {
     @Provides
     @Singleton
-    ScheduledExecutorService provideScheduler(
-        @Named(Constants.PROPERTY_USER_THREADS) final int count, final Closer closer)
+    ScheduledExecutorService provideScheduler(@Named(MAX_SCHEDULER_THREADS) final int count,
+        final Closer closer)
     {
         ThreadFactory factory =
             new ThreadFactoryBuilder().setNameFormat("scheduled thread %d")
