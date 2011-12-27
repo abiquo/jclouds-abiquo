@@ -69,7 +69,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertTrue(service.scheduler instanceof ScheduledExecutorService);
     }
 
-    public void testAwaitCompletionNoTasks()
+    public void testAwaitCompletionWithoutTasks()
     {
         BaseMonitoringService service =
             (BaseMonitoringService) injector.getInstance(MonitoringService.class);
@@ -118,6 +118,22 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
         AsyncTask task = new MockTask(service.context, TaskState.FINISHED_SUCCESSFULLY);
         service.monitor(null, task);
+    }
+
+    public void testMonitorWithoutTasks()
+    {
+        BaseMonitoringService service =
+            (BaseMonitoringService) injector.getInstance(MonitoringService.class);
+        BlockingCallback callback = new BlockingCallback(1);
+
+        service.monitor(callback);
+        assertTrue(service.runningMonitors.isEmpty());
+
+        service.monitor(callback, (AsyncTask[]) null);
+        assertTrue(service.runningMonitors.isEmpty());
+
+        service.monitor(callback, new AsyncTask[] {});
+        assertTrue(service.runningMonitors.isEmpty());
     }
 
     public void testMonitorWhenTaskSucceeds()
