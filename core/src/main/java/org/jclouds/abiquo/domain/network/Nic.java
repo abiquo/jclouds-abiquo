@@ -80,24 +80,14 @@ public abstract class Nic extends DomainWrapper<IpPoolManagementDto>
         return target.getQuarantine();
     }
 
-    public void setConfigureGateway(final boolean configureGateway)
+    public void setAvailable(final boolean available)
     {
-        target.setConfigureGateway(configureGateway);
+        target.setAvailable(available);
     }
 
-    public void setIp(final String ip)
+    public void setQuarantine(final boolean quarantine)
     {
-        target.setIp(ip);
-    }
-
-    public void setMac(final String mac)
-    {
-        target.setMac(mac);
-    }
-
-    public void setName(final String name)
-    {
-        target.setName(name);
+        target.setQuarantine(quarantine);
     }
 
     @Override
@@ -108,5 +98,4 @@ public abstract class Nic extends DomainWrapper<IpPoolManagementDto>
             + getName() + ", networkName=" + getNetworkName() + ", quarantine=" + getQuarantine()
             + "]";
     }
-
 }
