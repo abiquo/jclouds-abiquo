@@ -37,6 +37,7 @@ import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.task.TaskDto;
 import com.google.common.base.Predicate;
@@ -150,9 +151,17 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public List<AsyncTask> undeploy()
     {
+        return undeploy(false);
+    }
+
+    public List<AsyncTask> undeploy(final boolean forceUndeploy)
+    {
         RESTLink undeployLink = target.searchLink("undeploy");
+        VirtualMachineTaskDto task = new VirtualMachineTaskDto();
+        task.setForceUndeploy(false);
+
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualApplianceAction(undeployLink);
+            context.getApi().getCloudClient().deployVirtualApplianceAction(undeployLink, task);
 
         return this.getTasks(response);
     }

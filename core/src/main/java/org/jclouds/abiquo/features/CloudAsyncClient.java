@@ -1,4 +1,5 @@
 /**
+ * Licensed to jclouds, Inc. (jclouds) under one or more
  * contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  jclouds licenses this file
@@ -15,7 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.jclouds.abiquo.features;
 
 import javax.ws.rs.Consumes;
@@ -285,6 +285,14 @@ public interface CloudAsyncClient
     ListenableFuture<AcceptedRequestDto<String>> deployVirtualApplianceAction(
         @BinderParam(BindLinkToPath.class) RESTLink link);
 
+    /**
+     * @see CloudClient#deployVirtualApplianceAction(RESTLink)
+     */
+    @POST
+    ListenableFuture<AcceptedRequestDto<String>> deployVirtualApplianceAction(
+        @BinderParam(BindLinkToPath.class) RESTLink link,
+        @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
+
     /*********************** Virtual Machine ***********************/
 
     /**
@@ -371,7 +379,7 @@ public interface CloudAsyncClient
     @POST
     ListenableFuture<AcceptedRequestDto<String>> deployVirtualMachine(
         @BinderParam(BindLinkToPath.class) RESTLink link,
-        @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto deploy);
+        @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
     /**
      * @see CloudClient#undeployVirtualMachine(RESTLink)

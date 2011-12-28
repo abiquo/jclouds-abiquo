@@ -163,14 +163,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     public AsyncTask deploy(final boolean forceEnterpriseSoftLimits)
     {
-        // call deploy
         RESTLink deployLink = target.searchLink("deploy");
-        VirtualMachineTaskDto deploy = new VirtualMachineTaskDto();
-        deploy.setForceEnterpriseSoftLimits(false);
+        VirtualMachineTaskDto task = new VirtualMachineTaskDto();
+        task.setForceEnterpriseSoftLimits(false);
 
         // get async task
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualMachine(deployLink, deploy);
+            context.getApi().getCloudClient().deployVirtualMachine(deployLink, task);
 
         return this.getTask(response);
     }

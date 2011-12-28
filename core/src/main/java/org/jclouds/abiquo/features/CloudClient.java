@@ -35,9 +35,9 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
-import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
+import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -265,6 +265,17 @@ public interface CloudClient
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link);
+
+    /**
+     * Deploy/Undeploy a virtual appliance with task options.
+     * 
+     * @param link The link of the deploy/undeploy action.
+     * @param task extra deploy options.
+     * @return Response message to the deploy request.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link,
+        VirtualMachineTaskDto task);
 
     /**
      * Get the given virtual appliance from the virtual appliance link.
