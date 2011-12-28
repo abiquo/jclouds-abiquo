@@ -34,7 +34,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
-import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
+import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
@@ -160,7 +160,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     {
         // call deploy
         RESTLink deployLink = target.searchLink("deploy");
-        VirtualMachineDeployDto deploy = new VirtualMachineDeployDto();
+        VirtualMachineTaskDto deploy = new VirtualMachineTaskDto();
         deploy.setForceEnterpriseSoftLimits(false);
 
         // get async task

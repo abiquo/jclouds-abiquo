@@ -66,7 +66,7 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
-import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
+import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
@@ -370,12 +370,12 @@ public interface CloudAsyncClient
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
     /**
-     * @see CloudClient#deployVirtualMachine(RESTLink, VirtualMachineDeployDto)
+     * @see CloudClient#deployVirtualMachine(RESTLink, VirtualMachineTaskDto)
      */
     @POST
     ListenableFuture<AcceptedRequestDto<String>> deployVirtualMachine(
         @BinderParam(BindLinkToPath.class) RESTLink link,
-        @BinderParam(BindToXMLPayload.class) VirtualMachineDeployDto deploy);
+        @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto deploy);
 
     /**
      * @see CloudClient#undeployVirtualMachine(RESTLink)

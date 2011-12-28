@@ -26,7 +26,7 @@ import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
+import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -165,9 +165,9 @@ public class CloudResources
         return tier;
     }
 
-    public static VirtualMachineDeployDto virtualMachineDeploy()
+    public static VirtualMachineTaskDto virtualMachineDeploy()
     {
-        VirtualMachineDeployDto deploy = new VirtualMachineDeployDto();
+        VirtualMachineTaskDto deploy = new VirtualMachineTaskDto();
         deploy.setForceEnterpriseSoftLimits(false);
         return deploy;
     }
