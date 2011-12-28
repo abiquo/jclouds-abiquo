@@ -46,7 +46,7 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.cloud.VirtualMachineDeployDto;
+import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -765,7 +765,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     {
         Method method =
             CloudAsyncClient.class.getMethod("deployVirtualMachine", RESTLink.class,
-                VirtualMachineDeployDto.class);
+                VirtualMachineTaskDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
                 .createRequest(
