@@ -38,7 +38,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  * @see <a href="http://community.abiquo.com/display/ABI20/Public+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
-public class ExternalNetwork extends Network
+public class UnmanagedNetwork extends Network
 {
     /** The datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -50,15 +50,15 @@ public class ExternalNetwork extends Network
     /**
      * Constructor to be used only by the builder.
      */
-    protected ExternalNetwork(final AbiquoContext context, final VLANNetworkDto target)
+    protected UnmanagedNetwork(final AbiquoContext context, final VLANNetworkDto target)
     {
         super(context, target);
     }
 
     /**
      * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanExternalNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanExternalNetwork</a>
+     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanUnmanagedNetwork">
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanUnmanagedNetwork</a>
      */
     public void delete()
     {
@@ -68,8 +68,8 @@ public class ExternalNetwork extends Network
 
     /**
      * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewExternalNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewExternalNetwork</a>
+     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewUnmanagedNetwork">
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewUnmanagedNetwork</a>
      */
     public void save()
     {
@@ -80,8 +80,8 @@ public class ExternalNetwork extends Network
 
     /**
      * @see <a
-     *      href=" http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanExternalNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanExternalNetwork</a>
+     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanUnmanagedNetwork">
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanUnmanagedNetwork</a>
      */
     public void update()
     {
@@ -138,7 +138,7 @@ public class ExternalNetwork extends Network
             return this;
         }
 
-        public ExternalNetwork build()
+        public UnmanagedNetwork build()
         {
             VLANNetworkDto dto = new VLANNetworkDto();
             dto.setName(name);
@@ -150,19 +150,19 @@ public class ExternalNetwork extends Network
             dto.setSecondaryDNS(secondaryDNS);
             dto.setSufixDNS(sufixDNS);
             dto.setDefaultNetwork(defaultNetwork);
-            dto.setUnmanaged(false);
-            dto.setType(NetworkType.EXTERNAL);
+            dto.setUnmanaged(true);
+            dto.setType(NetworkType.UNMANAGED);
 
-            ExternalNetwork network = new ExternalNetwork(context, dto);
+            UnmanagedNetwork network = new UnmanagedNetwork(context, dto);
             network.datacenter = datacenter;
             network.enterprise = enterprise;
 
             return network;
         }
 
-        public static Builder fromExternalNetwork(final ExternalNetwork in)
+        public static Builder fromUnmanagedNetwork(final UnmanagedNetwork in)
         {
-            return ExternalNetwork.builder(in.context, in.datacenter, in.enterprise).name(
+            return UnmanagedNetwork.builder(in.context, in.datacenter, in.enterprise).name(
                 in.getName()).tag(in.getTag()).gateway(in.getGateway()).address(in.getAddress())
                 .mask(in.getMask()).primaryDNS(in.getPrimaryDNS()).secondaryDNS(
                     in.getSecondaryDNS()).sufixDNS(in.getSufixDNS()).defaultNetwork(

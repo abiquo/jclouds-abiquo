@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo.features.services;
 
-import org.jclouds.abiquo.domain.task.AsyncJob;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.task.AsyncTaskCallback;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
@@ -36,17 +35,17 @@ import com.google.inject.ImplementedBy;
 public interface MonitoringService
 {
     /**
-     * Monitors the given task and blocks until it completes.
+     * Monitors the given tasks and blocks until all of them complete.
      * 
-     * @param task The task to monitor.
+     * @param tasks The tasks to monitor.
      */
-    void awaitCompletion(final AsyncTask task);
+    void awaitCompletion(final AsyncTask... tasks);
 
     /**
-     * Monitors the given task.
+     * Monitors the given tasks.
      * 
-     * @param task The task to monitor.
-     * @param callback The callback to execute when the task completes (with or without errors).
+     * @param tasks The tasks to monitor.
+     * @param callback The callback to execute when the tasks complete (with or without errors).
      */
-    void monitor(final AsyncTask task, final AsyncTaskCallback callback);
+    void monitor(final AsyncTaskCallback callback, final AsyncTask... tasks);
 }

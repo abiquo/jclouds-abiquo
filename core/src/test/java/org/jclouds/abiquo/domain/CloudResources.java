@@ -354,9 +354,9 @@ public class CloudResources
     public static String virtualMachineDeployPayload()
     {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<virtualMachineDeploy>");
+        buffer.append("<virtualMachineTask>");
         buffer.append("<forceEnterpriseSoftLimits>false</forceEnterpriseSoftLimits>");
-        buffer.append("</virtualMachineDeploy>");
+        buffer.append("</virtualMachineTask>");
         return buffer.toString();
 
     }

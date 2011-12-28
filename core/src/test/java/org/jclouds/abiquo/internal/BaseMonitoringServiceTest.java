@@ -24,6 +24,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Properties;
+import java.util.UUID;
 import java.util.concurrent.ScheduledExecutorService;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -49,9 +50,9 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
     @Override
     protected Properties buildProperties()
     {
-        // USe one second monitor delay in the tests
+        // Use small scheduler delays in tests
         Properties props = super.buildProperties();
-        props.put(AbiquoConstants.ASYNC_TASK_MONITOR_DELAY, "1000");
+        props.put(AbiquoConstants.ASYNC_TASK_MONITOR_DELAY, "100");
         return props;
     }
 
@@ -68,6 +69,21 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertTrue(service.scheduler instanceof ScheduledExecutorService);
     }
 
+    public void testAwaitCompletionWithoutTasks()
+    {
+        BaseMonitoringService service =
+            (BaseMonitoringService) injector.getInstance(MonitoringService.class);
+
+        service.awaitCompletion();
+        assertTrue(service.runningMonitors.isEmpty());
+
+        service.awaitCompletion((AsyncTask[]) null);
+        assertTrue(service.runningMonitors.isEmpty());
+
+        service.awaitCompletion(new AsyncTask[] {});
+        assertTrue(service.runningMonitors.isEmpty());
+    }
+
     public void testAwaitCompletion()
     {
         BaseMonitoringService service =
@@ -77,6 +93,47 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         service.awaitCompletion(task);
 
         assertEquals(task.getState(), TaskState.FINISHED_SUCCESSFULLY);
+        assertTrue(service.runningMonitors.isEmpty());
+    }
+
+    public void testAwaitCompletionMultipleTasks()
+    {
+        BaseMonitoringService service =
+            (BaseMonitoringService) injector.getInstance(MonitoringService.class);
+
+        AsyncTask task1 = new MockTask(service.context, TaskState.FINISHED_SUCCESSFULLY);
+        AsyncTask task2 = new MockTask(service.context, TaskState.FINISHED_UNSUCCESSFULLY);
+        service.awaitCompletion(task1, task2);
+
+        assertEquals(task1.getState(), TaskState.FINISHED_SUCCESSFULLY);
+        assertEquals(task2.getState(), TaskState.FINISHED_UNSUCCESSFULLY);
+        assertTrue(service.runningMonitors.isEmpty());
+    }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testMonitorWithNullCallback()
+    {
+        BaseMonitoringService service =
+            (BaseMonitoringService) injector.getInstance(MonitoringService.class);
+
+        AsyncTask task = new MockTask(service.context, TaskState.FINISHED_SUCCESSFULLY);
+        service.monitor(null, task);
+    }
+
+    public void testMonitorWithoutTasks()
+    {
+        BaseMonitoringService service =
+            (BaseMonitoringService) injector.getInstance(MonitoringService.class);
+        BlockingCallback callback = new BlockingCallback(1);
+
+        service.monitor(callback);
+        assertTrue(service.runningMonitors.isEmpty());
+
+        service.monitor(callback, (AsyncTask[]) null);
+        assertTrue(service.runningMonitors.isEmpty());
+
+        service.monitor(callback, new AsyncTask[] {});
+        assertTrue(service.runningMonitors.isEmpty());
     }
 
     public void testMonitorWhenTaskSucceeds()
@@ -86,11 +143,12 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
         AsyncTask task = new MockTask(service.context, TaskState.FINISHED_SUCCESSFULLY);
 
-        BlockingCallback callback = new BlockingCallback();
-        service.monitor(task, callback);
+        BlockingCallback callback = new BlockingCallback(1);
+        service.monitor(callback, task);
         callback.lock();
 
         assertEquals(task.getState(), TaskState.FINISHED_SUCCESSFULLY);
+        assertTrue(service.runningMonitors.isEmpty());
     }
 
     public void testMonitorWhenTaskFails()
@@ -100,28 +158,37 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
         AsyncTask task = new MockTask(service.context, TaskState.FINISHED_UNSUCCESSFULLY);
 
-        BlockingCallback callback = new BlockingCallback();
-        service.monitor(task, callback);
+        BlockingCallback callback = new BlockingCallback(1);
+        service.monitor(callback, task);
         callback.lock();
 
         assertEquals(task.getState(), TaskState.FINISHED_UNSUCCESSFULLY);
+        assertTrue(service.runningMonitors.isEmpty());
+    }
+
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testBlockingCallbackWithInvalidValues()
+    {
+        new BlockingCallback(0);
     }
 
     private static class MockTask extends AsyncTask
     {
-        public int finishAfterCount = 1;
+        private int finishAfterCount;
 
         private TaskState completionState;
 
         public MockTask(final AbiquoContext context, final TaskState completionState)
         {
             super(context, new TaskDto());
-            this.target.setState(TaskState.STARTED);
+            this.finishAfterCount = 1; // Simulate task completion after one refresh
             this.completionState = completionState;
+            this.target.setTaskId(UUID.randomUUID().toString());
+            this.target.setState(TaskState.STARTED);
         }
 
         @Override
-        public synchronized void refresh()
+        public void refresh()
         {
             if (finishAfterCount-- <= 0)
             {

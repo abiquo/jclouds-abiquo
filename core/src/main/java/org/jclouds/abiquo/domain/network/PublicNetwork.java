@@ -19,17 +19,30 @@
 
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
+
+import java.util.List;
+
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.enumerator.NetworkType;
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to public {@link VLANNetworkDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
+ * @see <a href="http://community.abiquo.com/display/ABI20/Public+Network+Resource">
+ *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 public class PublicNetwork extends Network
 {
@@ -48,7 +61,7 @@ public class PublicNetwork extends Network
     /**
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteaPublicNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteaPublicNetworkk</a>
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteaPublicNetwork</a>
      */
     public void delete()
     {
@@ -77,20 +90,45 @@ public class PublicNetwork extends Network
         target = context.getApi().getInfrastructureClient().updateNetwork(target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork">
+     *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
+     */
+    public List<PublicNic> listNics()
+    {
+        IpsPoolManagementDto nics =
+            context.getApi().getInfrastructureClient().listNetworkIps(target);
+        return wrap(context, PublicNic.class, nics.getCollection());
+    }
+
+    public List<PublicNic> listNics(final Predicate<Nic> filter)
+    {
+        return Lists.newLinkedList(filter(listNics(), filter));
+    }
+
+    public PublicNic findNic(final Predicate<Nic> filter)
+    {
+        return Iterables.getFirst(filter(listNics(), filter), null);
+    }
+
     // Builder
 
-    public static Builder builder(final AbiquoContext context)
+    public static Builder builder(final AbiquoContext context, final Datacenter datacenter)
     {
-        return new Builder(context);
+        return new Builder(context, datacenter);
     }
 
     public static class Builder extends NetworkBuilder<Builder>
     {
         private Datacenter datacenter;
 
-        public Builder(final AbiquoContext context)
+        public Builder(final AbiquoContext context, final Datacenter datacenter)
         {
             super(context);
+            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Enterprise.class);
+            this.datacenter = datacenter;
             this.context = context;
         }
 
@@ -112,7 +150,7 @@ public class PublicNetwork extends Network
             dto.setSecondaryDNS(secondaryDNS);
             dto.setSufixDNS(sufixDNS);
             dto.setDefaultNetwork(defaultNetwork);
-            dto.setUnmanaged(unmanaged);
+            dto.setUnmanaged(false);
             dto.setType(NetworkType.PUBLIC);
 
             PublicNetwork network = new PublicNetwork(context, dto);
@@ -121,13 +159,12 @@ public class PublicNetwork extends Network
             return network;
         }
 
-        public static Builder fromPrivateNetwork(final PublicNetwork in)
+        public static Builder fromPublicNetwork(final PublicNetwork in)
         {
-            return PublicNetwork.builder(in.context).name(in.getName()).tag(in.getTag()).gateway(
-                in.getGateway()).address(in.getAddress()).mask(in.getMask()).primaryDNS(
-                in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(in.getSufixDNS())
-                .defaultNetwork(in.getDefaultNetwork()).unmanaged(in.getUnmanaged()).datacenter(
-                    in.datacenter);
+            return PublicNetwork.builder(in.context, in.datacenter).name(in.getName()).tag(
+                in.getTag()).gateway(in.getGateway()).address(in.getAddress()).mask(in.getMask())
+                .primaryDNS(in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(
+                    in.getSufixDNS()).defaultNetwork(in.getDefaultNetwork());
         }
     }
 

@@ -23,6 +23,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
@@ -38,8 +40,10 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
@@ -456,6 +460,16 @@ public interface InfrastructureClient
     VLANNetworksDto listNetworks(DatacenterDto datacenter);
 
     /**
+     * List networks of a datacenter with options.
+     * 
+     * @param datacenter The datacenter.
+     * @param options Optional query params.
+     * @return The list of not public, external and not managed for the datacenter.
+     */
+    @EnterpriseEdition
+    VLANNetworksDto listNetworks(DatacenterDto datacenter, NetworkOptions options);
+
+    /**
      * Get the given network from the given datacenter.
      * 
      * @param datacenter The datacenter.
@@ -490,4 +504,33 @@ public interface InfrastructureClient
      */
     @EnterpriseEdition
     void deleteNetwork(VLANNetworkDto network);
+
+    /**
+     * Check the availability of a tag.
+     * 
+     * @param datacenter The datacenter.
+     * @param tag Tag to check.
+     * @return A tag availability object.
+     */
+    @EnterpriseEdition
+    VlanTagAvailabilityDto checkTagAvailability(DatacenterDto datacenter, Integer tag);
+
+    /*********************** Network IPs ***********************/
+
+    /**
+     * List all ips for a network.
+     * 
+     * @param network The network.
+     * @return The list of ips for the network.
+     */
+    IpsPoolManagementDto listNetworkIps(VLANNetworkDto network);
+
+    /**
+     * List all ips for a network with options.
+     * 
+     * @param network The network.
+     * @param options Filtering options.
+     * @return The list of ips for the network.
+     */
+    IpsPoolManagementDto listNetworkIps(VLANNetworkDto network, IpOptions options);
 }

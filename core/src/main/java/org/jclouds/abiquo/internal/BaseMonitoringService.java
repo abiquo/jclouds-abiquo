@@ -19,19 +19,21 @@
 
 package org.jclouds.abiquo.internal;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.config.SchedulerModule;
-import org.jclouds.abiquo.domain.task.AsyncJob;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.task.AsyncTaskCallback;
 import org.jclouds.abiquo.features.services.MonitoringService;
@@ -59,30 +61,52 @@ public class BaseMonitoringService implements MonitoringService
     @VisibleForTesting
     protected Long pollingDelay;
 
+    /**
+     * A map containing all running monitors indexed by task id.
+     * <p>
+     * This map will be used to cancel concrete tasks when they are completed.
+     */
+    @VisibleForTesting
+    protected Map<String, ScheduledFuture< ? >> runningMonitors;
+
     @Inject
     public BaseMonitoringService(final AbiquoContext context,
         final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay)
     {
-        super();
         this.context = checkNotNull(context, "context");
         this.scheduler = checkNotNull(scheduler, "scheduler");
         this.pollingDelay = checkNotNull(pollingDelay, "pollingDelay");
+        this.runningMonitors = new HashMap<String, ScheduledFuture< ? >>();
     }
 
     @Override
-    public void awaitCompletion(final AsyncTask task)
+    public void awaitCompletion(final AsyncTask... tasks)
     {
-        BlockingCallback monitorLock = new BlockingCallback();
-        monitor(task, monitorLock);
-        monitorLock.lock();
+        if (tasks != null && tasks.length > 0)
+        {
+            BlockingCallback monitorLock = new BlockingCallback(tasks.length);
+            monitor(monitorLock, tasks);
+            monitorLock.lock();
+        }
     }
 
     @Override
-    public void monitor(final AsyncTask task, final AsyncTaskCallback callback)
+    public void monitor(final AsyncTaskCallback callback, final AsyncTask... tasks)
     {
-        scheduler.scheduleWithFixedDelay(new AsyncTaskMonitor(task, callback), 0, pollingDelay,
-            TimeUnit.MILLISECONDS);
+        checkNotNull(callback, "callback");
+
+        if (tasks != null && tasks.length > 0)
+        {
+            for (AsyncTask task : tasks)
+            {
+                ScheduledFuture< ? > future =
+                    scheduler.scheduleWithFixedDelay(new AsyncTaskMonitor(task, callback), 0,
+                        pollingDelay, TimeUnit.MILLISECONDS);
+                // Store the future in the monitors map so we can cancel it when the task completes
+                runningMonitors.put(task.getTaskId(), future);
+            }
+        }
     }
 
     private class AsyncTaskMonitor implements Runnable
@@ -98,20 +122,41 @@ public class BaseMonitoringService implements MonitoringService
             this.callback = callback;
         }
 
+        private void stopMonitoring(final AsyncTask task)
+        {
+            ScheduledFuture< ? > future = runningMonitors.get(task.getTaskId());
+            if (!future.isCancelled() && !future.isDone())
+            {
+                // Do not force future cancel. Let it finish gracefully
+                future.cancel(false);
+            }
+            runningMonitors.remove(task.getTaskId());
+        }
+
         @Override
         public void run()
         {
+            // Do not use Thread.interrupted() since it will clear the interrupted flag
+            // and subsequent calls to it may not return the appropriate value
+            if (Thread.currentThread().isInterrupted())
+            {
+                // If the thread as already been interrupted, just stop monitoring the task and
+                // return
+                stopMonitoring(task);
+                return;
+            }
+
             task.refresh();
 
             switch (task.getState())
             {
                 case FINISHED_SUCCESSFULLY:
                     callback.onTaskCompleted(task);
-                    scheduler.shutdown();
+                    stopMonitoring(task);
                     break;
                 case FINISHED_UNSUCCESSFULLY:
                     callback.onTaskFailed(task);
-                    scheduler.shutdown();
+                    stopMonitoring(task);
                     break;
                 default:
                     // Task has not finished, continue monitoring it
@@ -122,7 +167,14 @@ public class BaseMonitoringService implements MonitoringService
 
     public static class BlockingCallback implements AsyncTaskCallback
     {
-        private CountDownLatch completeSignal = new CountDownLatch(1);
+        private CountDownLatch completeSignal;
+
+        public BlockingCallback(final int countDownToCompletion)
+        {
+            super();
+            checkArgument(countDownToCompletion > 0, "countDownToCompletion must be greater than 0");
+            completeSignal = new CountDownLatch(countDownToCompletion);
+        }
 
         public void lock()
         {

@@ -27,12 +27,18 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
+import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.domain.network.PublicNetwork;
+import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
+import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.model.enumerator.VlanTagAvailabilityType;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -42,6 +48,7 @@ import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
@@ -121,6 +128,19 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateDatacenter(target);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-ChecktheTagavailability">
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-ChecktheTagavailability</a>
+     */
+    public VlanTagAvailabilityType checkTagAvailability(final int tag)
+    {
+        VlanTagAvailabilityDto availability =
+            context.getApi().getInfrastructureClient().checkTagAvailability(target, tag);
+
+        return availability.getAvailable();
     }
 
     // Children access
@@ -292,6 +312,78 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public Network findNetwork(final Predicate<Network> filter)
     {
         return Iterables.getFirst(filter(listNetworks(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofPublicNetworks">
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofPublicNetworks</a>
+     */
+    public List<PublicNetwork> listPublicNetworks()
+    {
+        NetworkOptions options = NetworkOptions.builder().type(NetworkType.PUBLIC).build();
+
+        VLANNetworksDto networks =
+            context.getApi().getInfrastructureClient().listNetworks(target, options);
+        return wrap(context, PublicNetwork.class, networks.getCollection());
+    }
+
+    public List<PublicNetwork> listPublicNetworks(final Predicate<Network> filter)
+    {
+        return Lists.newLinkedList(filter(listPublicNetworks(), filter));
+    }
+
+    public PublicNetwork findPublicNetwork(final Predicate<Network> filter)
+    {
+        return Iterables.getFirst(filter(listPublicNetworks(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofExternalNetworks">
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofExternalNetworks</a>
+     */
+    public List<ExternalNetwork> listExternalNetworks()
+    {
+        NetworkOptions options = NetworkOptions.builder().type(NetworkType.EXTERNAL).build();
+
+        VLANNetworksDto networks =
+            context.getApi().getInfrastructureClient().listNetworks(target, options);
+        return wrap(context, ExternalNetwork.class, networks.getCollection());
+    }
+
+    public List<ExternalNetwork> listExternalNetworks(final Predicate<Network> filter)
+    {
+        return Lists.newLinkedList(filter(listExternalNetworks(), filter));
+    }
+
+    public ExternalNetwork findExternalNetwork(final Predicate<Network> filter)
+    {
+        return Iterables.getFirst(filter(listExternalNetworks(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofUnmanagedNetworks">
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofUnmanagedNetworks</a>
+     */
+    public List<UnmanagedNetwork> listUnmanagedNetworks()
+    {
+        NetworkOptions options = NetworkOptions.builder().type(NetworkType.EXTERNAL).build();
+
+        VLANNetworksDto networks =
+            context.getApi().getInfrastructureClient().listNetworks(target, options);
+        return wrap(context, UnmanagedNetwork.class, networks.getCollection());
+    }
+
+    public List<UnmanagedNetwork> listUnmanagedNetworks(final Predicate<UnmanagedNetwork> filter)
+    {
+        return Lists.newLinkedList(filter(listUnmanagedNetworks(), filter));
+    }
+
+    public UnmanagedNetwork findUnmanagedNetwork(final Predicate<Network> filter)
+    {
+        return Iterables.getFirst(filter(listUnmanagedNetworks(), filter), null);
     }
 
     public Network getNetwork(final Integer id)
