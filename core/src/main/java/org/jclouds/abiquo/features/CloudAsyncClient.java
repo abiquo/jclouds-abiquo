@@ -1,5 +1,4 @@
 /**
- * Licensed to jclouds, Inc. (jclouds) under one or more
  * contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  jclouds licenses this file
@@ -63,9 +62,9 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
-import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
+import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;

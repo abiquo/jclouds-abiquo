@@ -50,7 +50,9 @@ public class VirtualApplianceOptions extends QueryOptions
 
     public static class Builder
     {
-        private boolean force = false;
+        private Boolean force;
+
+        private Boolean available;
 
         public Builder force(final boolean force)
         {
@@ -58,10 +60,26 @@ public class VirtualApplianceOptions extends QueryOptions
             return this;
         }
 
+        public Builder available(final boolean available)
+        {
+            this.available = available;
+            return this;
+        }
+
         public VirtualApplianceOptions build()
         {
             VirtualApplianceOptions options = new VirtualApplianceOptions();
-            options.map.put("force", String.valueOf(force));
+
+            if (force != null)
+            {
+                options.map.put("force", String.valueOf(force));
+            }
+
+            if (available != null)
+            {
+                options.map.put("available", String.valueOf(available));
+            }
+
             return options;
         }
     }
