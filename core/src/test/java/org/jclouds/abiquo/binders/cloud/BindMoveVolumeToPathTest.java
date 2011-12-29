@@ -72,13 +72,10 @@ public class BindMoveVolumeToPathTest
         Method withEndpointLink =
             CloudAsyncClient.class.getMethod("moveVolume", VolumeManagementDto.class,
                 VirtualDatacenterDto.class);
-        return GeneratedHttpRequest
-            .<CloudAsyncClient> builder()
-            .declaring(CloudAsyncClient.class)
-            .javaMethod(withEndpointLink)
-            .args(
-                ImmutableList.<Object> of(CloudResources.volumePut(),
-                    CloudResources.virtualDatacenterPut())).method(HttpMethod.POST)
-            .endpoint(URI.create("http://localhost")).build();
+        return GeneratedHttpRequest.<CloudAsyncClient> requestBuilder().declaring(
+            CloudAsyncClient.class).javaMethod(withEndpointLink).args(
+            ImmutableList.<Object> of(CloudResources.volumePut(), CloudResources
+                .virtualDatacenterPut())).method(HttpMethod.POST).endpoint(
+            URI.create("http://localhost")).build();
     }
 }

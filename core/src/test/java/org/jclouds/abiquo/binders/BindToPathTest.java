@@ -65,9 +65,10 @@ public class BindToPathTest
         Method withEndpointLink =
             TestEndpointLink.class.getMethod("withEndpointLink", TestDto.class);
         GeneratedHttpRequest<TestEndpointLink> request =
-            GeneratedHttpRequest.<TestEndpointLink> builder().declaring(TestEndpointLink.class)
-                .javaMethod(withEndpointLink).args(ImmutableList.<Object> of(new TestDto()))
-                .method(HttpMethod.GET).endpoint(URI.create("http://localhost")).build();
+            GeneratedHttpRequest.<TestEndpointLink> requestBuilder().declaring(
+                TestEndpointLink.class).javaMethod(withEndpointLink).args(
+                ImmutableList.<Object> of(new TestDto())).method(HttpMethod.GET).endpoint(
+                URI.create("http://localhost")).build();
 
         BindToPath binder = new BindToPath();
         binder.bindToRequest(request, null);
@@ -79,9 +80,10 @@ public class BindToPathTest
         Method withEndpointLink =
             TestEndpointLink.class.getMethod("withEndpointLink", TestDto.class);
         GeneratedHttpRequest<TestEndpointLink> request =
-            GeneratedHttpRequest.<TestEndpointLink> builder().declaring(TestEndpointLink.class)
-                .javaMethod(withEndpointLink).args(ImmutableList.<Object> of(new TestDto()))
-                .method(HttpMethod.GET).endpoint(URI.create("http://localhost")).build();
+            GeneratedHttpRequest.<TestEndpointLink> requestBuilder().declaring(
+                TestEndpointLink.class).javaMethod(withEndpointLink).args(
+                ImmutableList.<Object> of(new TestDto())).method(HttpMethod.GET).endpoint(
+                URI.create("http://localhost")).build();
 
         BindToPath binder = new BindToPath();
         binder.bindToRequest(request, new Object());
@@ -94,9 +96,10 @@ public class BindToPathTest
         Method withoutEndpointLink =
             TestEndpointLink.class.getMethod("withoutEndpointLink", TestDto.class);
         GeneratedHttpRequest<TestEndpointLink> request =
-            GeneratedHttpRequest.<TestEndpointLink> builder().declaring(TestEndpointLink.class)
-                .javaMethod(withoutEndpointLink).args(ImmutableList.<Object> of(dto))
-                .method(HttpMethod.GET).endpoint(URI.create("http://localhost")).build();
+            GeneratedHttpRequest.<TestEndpointLink> requestBuilder().declaring(
+                TestEndpointLink.class).javaMethod(withoutEndpointLink).args(
+                ImmutableList.<Object> of(dto)).method(HttpMethod.GET).endpoint(
+                URI.create("http://localhost")).build();
 
         BindToPath binder = new BindToPath();
         binder.bindToRequest(request, dto);
@@ -109,9 +112,10 @@ public class BindToPathTest
         Method withUnexistingLink =
             TestEndpointLink.class.getMethod("withUnexistingLink", TestDto.class);
         GeneratedHttpRequest<TestEndpointLink> request =
-            GeneratedHttpRequest.<TestEndpointLink> builder().declaring(TestEndpointLink.class)
-                .javaMethod(withUnexistingLink).args(ImmutableList.<Object> of(dto))
-                .method(HttpMethod.GET).endpoint(URI.create("http://localhost")).build();
+            GeneratedHttpRequest.<TestEndpointLink> requestBuilder().declaring(
+                TestEndpointLink.class).javaMethod(withUnexistingLink).args(
+                ImmutableList.<Object> of(dto)).method(HttpMethod.GET).endpoint(
+                URI.create("http://localhost")).build();
 
         BindToPath binder = new BindToPath();
         binder.bindToRequest(request, dto);
@@ -123,9 +127,10 @@ public class BindToPathTest
         Method withEndpointLink =
             TestEndpointLink.class.getMethod("withEndpointLink", TestDto.class);
         GeneratedHttpRequest<TestEndpointLink> request =
-            GeneratedHttpRequest.<TestEndpointLink> builder().declaring(TestEndpointLink.class)
-                .javaMethod(withEndpointLink).args(ImmutableList.<Object> of(dto))
-                .method(HttpMethod.GET).endpoint(URI.create("http://localhost")).build();
+            GeneratedHttpRequest.<TestEndpointLink> requestBuilder().declaring(
+                TestEndpointLink.class).javaMethod(withEndpointLink).args(
+                ImmutableList.<Object> of(dto)).method(HttpMethod.GET).endpoint(
+                URI.create("http://localhost")).build();
 
         BindToPath binder = new BindToPath();
         GeneratedHttpRequest<TestEndpointLink> newRequest = binder.bindToRequest(request, dto);
@@ -138,10 +143,10 @@ public class BindToPathTest
         Method withEndpointLink =
             TestEndpointLink.class.getMethod("withEndpointLink", TestDto.class);
         GeneratedHttpRequest<TestEndpointLink> request =
-            GeneratedHttpRequest.<TestEndpointLink> builder().declaring(TestEndpointLink.class)
-                .javaMethod(withEndpointLink).args(ImmutableList.<Object> of(dto))
-                .method(HttpMethod.GET).endpoint(URI.create("http://localhost?param=value"))
-                .build();
+            GeneratedHttpRequest.<TestEndpointLink> requestBuilder().declaring(
+                TestEndpointLink.class).javaMethod(withEndpointLink).args(
+                ImmutableList.<Object> of(dto)).method(HttpMethod.GET).endpoint(
+                URI.create("http://localhost?param=value")).build();
 
         BindToPath binder = new BindToPath();
         GeneratedHttpRequest<TestEndpointLink> newRequest = binder.bindToRequest(request, dto);
@@ -155,10 +160,10 @@ public class BindToPathTest
         Method withEndpointLink =
             TestEndpointLink.class.getMethod("withEndpointLink", TestDto.class);
         GeneratedHttpRequest<TestEndpointLink> request =
-            GeneratedHttpRequest.<TestEndpointLink> builder().declaring(TestEndpointLink.class)
-                .javaMethod(withEndpointLink).args(ImmutableList.<Object> of(dto))
-                .method(HttpMethod.GET)
-                .endpoint(URI.create("http://localhost?param=value;matrix=value2")).build();
+            GeneratedHttpRequest.<TestEndpointLink> requestBuilder().declaring(
+                TestEndpointLink.class).javaMethod(withEndpointLink).args(
+                ImmutableList.<Object> of(dto)).method(HttpMethod.GET).endpoint(
+                URI.create("http://localhost?param=value;matrix=value2")).build();
 
         BindToPath binder = new BindToPath();
         GeneratedHttpRequest<TestEndpointLink> newRequest = binder.bindToRequest(request, dto);
