@@ -341,10 +341,14 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             VirtualMachineDto dto = new VirtualMachineDto();
             dto.setName(name);
             dto.setDescription(description);
-            dto.setRam(ram);
             dto.setCpu(cpu);
             dto.setHdInBytes(template.getHdRequired());
             dto.setVdrpIP(vdrpIP);
+
+            if (ram != null)
+            {
+                dto.setRam(ram);
+            }
 
             if (vdrpPort != null)
             {
