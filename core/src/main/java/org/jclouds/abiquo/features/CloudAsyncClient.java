@@ -300,7 +300,7 @@ public interface CloudAsyncClient
      */
     @GET
     ListenableFuture<VirtualMachinesDto> listVirtualMachines(
-        @EndpointLink("virtualmachine") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
+        @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
      * @see CloudClient#getVirtualMachine(VirtualApplianceDto, Integer)
@@ -308,7 +308,7 @@ public interface CloudAsyncClient
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<VirtualMachineDto> getVirtualMachine(
-        @EndpointLink("virtualmachine") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+        @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(AppendToPath.class) Integer virtualMachineId);
 
     /**
@@ -316,7 +316,7 @@ public interface CloudAsyncClient
      */
     @POST
     ListenableFuture<VirtualMachineDto> createVirtualMachine(
-        @EndpointLink("virtualmachine") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+        @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(BindToXMLPayload.class) VirtualMachineDto virtualMachine);
 
     /**
