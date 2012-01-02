@@ -19,6 +19,12 @@
 
 package org.jclouds.abiquo.domain.options.search.reference;
 
+/**
+ * Available fields to order search results.
+ * 
+ * @author Francesc Montserrat
+ * @author Ignasi Barrera
+ */
 public enum OrderBy
 {
     NAME("name"), ID("id"), VIRTUALDATACENTER("virtualdatacenter"), VIRTUALMACHINE("virtualmachine"), VIRTUALAPPLIANCE(
