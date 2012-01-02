@@ -19,8 +19,11 @@
 
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
@@ -39,6 +42,32 @@ public abstract class Nic extends DomainWrapper<IpPoolManagementDto>
     {
         super(context, target);
     }
+
+    // Domain operations
+
+    public PublicNic toPublicNic()
+    {
+        checkNotNull(target.searchLink("publicnetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
+
+        return wrap(context, PublicNic.class, target);
+    }
+
+    public PrivateNic toPrivateNic()
+    {
+        checkNotNull(target.searchLink("privatenetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
+
+        return wrap(context, PrivateNic.class, target);
+    }
+
+    public ExternalNic toExternalNic()
+    {
+        // FIXME Not supperted yet. Rel in API link is "publicnetwork" should be specialized.
+        checkNotNull(target.searchLink("externalnetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
+
+        return wrap(context, ExternalNic.class, target);
+    }
+
+    // Delegate methods
 
     public boolean getAvailable()
     {

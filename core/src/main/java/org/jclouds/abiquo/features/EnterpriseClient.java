@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
@@ -41,17 +42,6 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-/**
- * @author Francesc Montserrat
- *
- */
-/**
- * @author Francesc Montserrat
- *
- */
-/**
- * @author Francesc Montserrat
- */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface EnterpriseClient
 {
@@ -64,6 +54,14 @@ public interface EnterpriseClient
      * @return The list of Enterprises.
      */
     EnterprisesDto listEnterprises();
+
+    /**
+     * List enterprises with options.
+     * 
+     * @param options Filtering options.
+     * @return The list of Enterprises.
+     */
+    EnterprisesDto listEnterprises(EnterpriseOptions options);
 
     /**
      * Create a new enterprise.

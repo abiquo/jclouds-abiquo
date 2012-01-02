@@ -26,6 +26,8 @@ import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.EnterpriseResources;
 import org.jclouds.abiquo.domain.InfrastructureResources;
+import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
+import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.MapHttp4xxCodesToExceptions;
@@ -57,6 +59,29 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         GeneratedHttpRequest<EnterpriseAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListEnterprisesWithOptions() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        EnterpriseOptions options =
+            EnterpriseOptions.builder().has("abi").orderBy(OrderBy.NAME).ascendant(true).build();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listEnterprises", EnterpriseOptions.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, options);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises?has=abi&by=name&asc=true HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 

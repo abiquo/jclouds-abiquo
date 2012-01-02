@@ -22,6 +22,8 @@ package org.jclouds.abiquo.features.services;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PrivateNic;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -38,6 +40,15 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseSearchService.class)
 public interface SearchService
 {
+    /*********************** Enterprise ***********************/
+
+    /**
+     * Get the list of filtered enterprises.
+     * 
+     * @param options The set of filtering and pagination options of the search.
+     */
+    Iterable<Enterprise> searchEnterprises(final EnterpriseOptions options);
+
     /*********************** Volume ***********************/
 
     /**
@@ -58,5 +69,4 @@ public interface SearchService
      * @param options The set of filtering and pagination options of the search.
      */
     Iterable<PrivateNic> searchPrivateNics(final PrivateNetwork network, final IpOptions options);
-
 }

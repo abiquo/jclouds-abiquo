@@ -29,9 +29,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -73,6 +75,13 @@ public interface EnterpriseAsyncClient
      */
     @GET
     ListenableFuture<EnterprisesDto> listEnterprises();
+
+    /**
+     * @see EnterpriseClient#listEnterprises(EnterpriseOptions)
+     */
+    @GET
+    ListenableFuture<EnterprisesDto> listEnterprises(
+        @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
 
     /**
      * @see EnterpriseClient#createEnterprise(EnterpriseDto)
