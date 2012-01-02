@@ -22,7 +22,6 @@ package org.jclouds.abiquo.domain.cloud;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -41,7 +40,6 @@ import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
-import com.abiquo.server.core.task.TaskDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -78,16 +76,16 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public void delete(final boolean force)
     {
-        context.getApi().getCloudClient().deleteVirtualAppliance(target,
-            VirtualApplianceOptions.builder().force(true).build());
+        context.getApi().getCloudClient()
+            .deleteVirtualAppliance(target, VirtualApplianceOptions.builder().force(true).build());
         target = null;
     }
 
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createVirtualAppliance(virtualDatacenter.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualAppliance(virtualDatacenter.unwrap(), target);
     }
 
     public void update()
@@ -154,21 +152,21 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     // Actions
 
-    public List<AsyncTask> deploy()
+    public AsyncTask[] deploy()
     {
         RESTLink deployLink = target.searchLink("deploy");
         AcceptedRequestDto<String> response =
             context.getApi().getCloudClient().deployVirtualApplianceAction(deployLink);
 
-        return this.getTasks(response);
+        return getTasks(response);
     }
 
-    public List<AsyncTask> undeploy()
+    public AsyncTask[] undeploy()
     {
         return undeploy(false);
     }
 
-    public List<AsyncTask> undeploy(final boolean forceUndeploy)
+    public AsyncTask[] undeploy(final boolean forceUndeploy)
     {
         RESTLink undeployLink = target.searchLink("undeploy");
         VirtualMachineTaskDto task = new VirtualMachineTaskDto();
@@ -177,20 +175,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         AcceptedRequestDto<String> response =
             context.getApi().getCloudClient().deployVirtualApplianceAction(undeployLink, task);
 
-        return this.getTasks(response);
-    }
-
-    private List<AsyncTask> getTasks(final AcceptedRequestDto<String> acceptedRequest)
-    {
-        List<AsyncTask> tasks = new ArrayList<AsyncTask>();
-
-        for (RESTLink link : acceptedRequest.getLinks())
-        {
-            TaskDto task = context.getApi().getTaskClient().getTask(link);
-            tasks.add(wrap(context, AsyncTask.class, task));
-        }
-
-        return tasks;
+        return getTasks(response);
     }
 
     // Builder

@@ -175,7 +175,26 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
 
         TaskDto task = context.getApi().getTaskClient().getTask(taskLink);
-
         return wrap(context, AsyncTask.class, task);
+    }
+
+    /**
+     * Utility method to get all {@link AsyncTask} related to an {@link AcceptedRequestDto}.
+     * 
+     * @param acceptedRequest The accepted request dto.
+     * @return The async task array.
+     */
+    protected AsyncTask[] getTasks(final AcceptedRequestDto<String> acceptedRequest)
+    {
+        AsyncTask[] tasks = new AsyncTask[acceptedRequest.getLinks().size()];
+
+        for (int i = 0; i < acceptedRequest.getLinks().size(); i++)
+        {
+            RESTLink link = acceptedRequest.getLinks().get(i);
+            TaskDto task = context.getApi().getTaskClient().getTask(link);
+            tasks[i] = wrap(context, AsyncTask.class, task);
+        }
+
+        return tasks;
     }
 }
