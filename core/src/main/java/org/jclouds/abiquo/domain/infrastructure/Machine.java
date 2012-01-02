@@ -22,7 +22,6 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.find;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -39,6 +38,7 @@ import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link MachineDto}.
@@ -351,16 +351,17 @@ public class Machine extends DomainWrapper<MachineDto>
         public static Builder fromMachine(final Machine in)
         {
             Builder builder =
-                Machine.builder(in.context, in.rack).name(in.getName()).description(
-                    in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
-                    .virtualCpusPerCore(in.getVirtualCpusPerCore()).virtualCpusUsed(
-                        in.getVirtualCpusUsed()).virtualRamInMb(in.getVirtualRamInMb())
-                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb()).virtualSwitch(
-                        in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp()).ipService(
-                        in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
-                    .password(in.getPassword()).ipmiIp(in.getIpmiIp()).ipmiPassword(
-                        in.getIpmiPassword()).ipmiUser(in.getIpmiUser()).state(in.getState())
-                    .datastores(in.getDatastores());
+                Machine.builder(in.context, in.rack).name(in.getName())
+                    .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
+                    .virtualCpusPerCore(in.getVirtualCpusPerCore())
+                    .virtualCpusUsed(in.getVirtualCpusUsed())
+                    .virtualRamInMb(in.getVirtualRamInMb())
+                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
+                    .virtualSwitch(in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp())
+                    .ipService(in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
+                    .password(in.getPassword()).ipmiIp(in.getIpmiIp())
+                    .ipmiPassword(in.getIpmiPassword()).ipmiUser(in.getIpmiUser())
+                    .state(in.getState()).datastores(in.getDatastores());
 
             // Parameters that can be null
             if (in.getIpmiPort() != null)
@@ -588,7 +589,7 @@ public class Machine extends DomainWrapper<MachineDto>
     private void extractVirtualSwitches()
     {
         StringTokenizer st = new StringTokenizer(getVirtualSwitch(), "/");
-        this.virtualSwitches = new ArrayList<String>();
+        this.virtualSwitches = Lists.newArrayList();
 
         while (st.hasMoreTokens())
         {

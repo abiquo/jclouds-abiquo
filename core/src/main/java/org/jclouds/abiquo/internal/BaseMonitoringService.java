@@ -23,7 +23,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledExecutorService;
@@ -34,12 +33,15 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.config.SchedulerModule;
+import org.jclouds.abiquo.domain.task.AsyncJob;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.task.AsyncTaskCallback;
 import org.jclouds.abiquo.features.services.MonitoringService;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
+import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 
 /**
@@ -77,7 +79,7 @@ public class BaseMonitoringService implements MonitoringService
         this.context = checkNotNull(context, "context");
         this.scheduler = checkNotNull(scheduler, "scheduler");
         this.pollingDelay = checkNotNull(pollingDelay, "pollingDelay");
-        this.runningMonitors = new HashMap<String, ScheduledFuture< ? >>();
+        this.runningMonitors = Maps.newHashMap();
     }
 
     @Override
