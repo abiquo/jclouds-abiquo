@@ -100,8 +100,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenter.unwrap(),
-                enterprise.unwrap());
+            context.getApi().getCloudClient()
+                .createVirtualDatacenter(target, datacenter.unwrap(), enterprise.unwrap());
     }
 
     /**
@@ -217,7 +217,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
      */
-    public Network getDefaultNetwork()
+    public Network< ? > getDefaultNetwork()
     {
         VLANNetworkDto network =
             context.getApi().getCloudClient().getDefaultNetworkByVirtualDatacenter(target);
@@ -233,7 +233,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter</a>
      */
-    public void setDefaultNetwork(final Network network)
+    public void setDefaultNetwork(final Network< ? > network)
     {
         RESTLink link = null;
         RESTLink netlink = network.unwrap().searchLink("edit");
@@ -265,12 +265,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, PrivateNetwork.class, networks.getCollection());
     }
 
-    public List<PrivateNetwork> listPrivateNetworks(final Predicate<Network> filter)
+    public List<PrivateNetwork> listPrivateNetworks(final Predicate<Network< ? >> filter)
     {
         return Lists.newLinkedList(filter(listPrivateNetworks(), filter));
     }
 
-    public PrivateNetwork findNetwork(final Predicate<Network> filter)
+    public PrivateNetwork findNetwork(final Predicate<Network< ? >> filter)
     {
         return Iterables.getFirst(filter(listPrivateNetworks(), filter), null);
     }
@@ -370,14 +370,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         public static Builder fromVirtualDatacenter(final VirtualDatacenter in)
         {
-            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise).name(
-                in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                    in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                    in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                    in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).network(
-                    in.getNetwork()).hypervisorType(in.getHypervisorType());
+            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise)
+                .name(in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+                .network(in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }
 

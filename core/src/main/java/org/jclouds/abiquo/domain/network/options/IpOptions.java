@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo.domain.network.options;
 
-import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.options.search.FilterOptions;
 
 /**
@@ -37,7 +36,7 @@ public class IpOptions extends FilterOptions
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
-        VolumeOptions options = new VolumeOptions();
+        IpOptions options = new IpOptions();
         options.map.putAll(map);
         return options;
     }
@@ -68,30 +67,8 @@ public class IpOptions extends FilterOptions
                 options.map.put("free", String.valueOf(free));
             }
 
-            if (startWith != null)
-            {
-                options.map.put("startwith", startWith.toString());
-            }
-
-            if (limit != null)
-            {
-                options.map.put("limit", limit.toString());
-            }
-
-            if (has != null)
-            {
-                options.map.put("has", has);
-            }
-
-            if (by != null)
-            {
-                options.map.put("by", by.getValue());
-            }
-
-            if (asc != null)
-            {
-                options.map.put("asc", asc.toString());
-            }
+            // Add FilterOptions options
+            options.map.putAll(super.build().getOptions());
 
             return options;
         }

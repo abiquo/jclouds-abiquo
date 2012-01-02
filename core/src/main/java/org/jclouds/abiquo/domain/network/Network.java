@@ -20,6 +20,9 @@
 package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.collect.Iterables.filter;
+
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
@@ -27,6 +30,9 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds generic high level functionality to {@link VLANNetworkDto}.
@@ -34,7 +40,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public abstract class Network extends DomainWrapper<VLANNetworkDto>
+public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDto>
 {
     /**
      * Constructor to be used only by the builder.
@@ -42,6 +48,20 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
     protected Network(final AbiquoContext context, final VLANNetworkDto target)
     {
         super(context, target);
+    }
+
+    // Domain operations
+
+    public abstract List<T> listNics();
+
+    public List<T> listNics(final Predicate<Nic> filter)
+    {
+        return Lists.newLinkedList(filter(listNics(), filter));
+    }
+
+    public T findNic(final Predicate<Nic> filter)
+    {
+        return Iterables.getFirst(filter(listNics(), filter), null);
     }
 
     // Builder
@@ -291,4 +311,35 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
             + ", unmanaged=" + getUnmanaged() + "]";
     }
 
+    public static Network< ? > wrapNetwork(AbiquoContext context, VLANNetworkDto dto)
+    {
+        Network< ? > network = null;
+
+        switch (dto.getType())
+        {
+            case EXTERNAL:
+                network = wrap(context, ExternalNetwork.class, dto);
+            case EXTERNAL_UNMANAGED:
+                // TODO: How do we manage External && unmanaged networks ?
+                throw new UnsupportedOperationException("EXTERNAL_UNMANAGED networks not supported yet");
+            case INTERNAL:
+                network = wrap(context, PrivateNetwork.class, dto);
+            case PUBLIC:
+                network = wrap(context, PublicNetwork.class, dto);
+            case UNMANAGED:
+                network = wrap(context, UnmanagedNetwork.class, dto);
+        }
+
+        return network;
+    }
+
+    public static List<Network< ? >> wrapNetworks(AbiquoContext context, List<VLANNetworkDto> dtos)
+    {
+        List<Network< ? >> networks = Lists.newLinkedList();
+        for (VLANNetworkDto dto : dtos)
+        {
+            networks.add(wrapNetwork(context, dto));
+        }
+        return networks;
+    }
 }

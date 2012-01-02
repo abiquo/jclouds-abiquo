@@ -67,30 +67,8 @@ public class VolumeOptions extends FilterOptions
                 options.map.put("available", String.valueOf(onlyAvailable));
             }
 
-            if (startWith != null)
-            {
-                options.map.put("startwith", startWith.toString());
-            }
-
-            if (limit != null)
-            {
-                options.map.put("limit", limit.toString());
-            }
-
-            if (has != null)
-            {
-                options.map.put("has", has);
-            }
-
-            if (by != null)
-            {
-                options.map.put("by", by.getValue());
-            }
-
-            if (asc != null)
-            {
-                options.map.put("asc", asc.toString());
-            }
+            // Add FilterOptions options
+            options.map.putAll(super.build().getOptions());
 
             return options;
         }

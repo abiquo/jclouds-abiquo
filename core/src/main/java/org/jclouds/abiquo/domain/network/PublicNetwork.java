@@ -20,7 +20,6 @@
 package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
@@ -28,13 +27,11 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to public {@link VLANNetworkDto}.
@@ -44,7 +41,8 @@ import com.google.common.collect.Lists;
  * @see <a href="http://community.abiquo.com/display/ABI20/Public+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
-public class PublicNetwork extends Network
+@EnterpriseEdition
+public class PublicNetwork extends Network<PublicNic>
 {
     /** The datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -95,21 +93,12 @@ public class PublicNetwork extends Network
      *      href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork">
      *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
      */
+    @Override
     public List<PublicNic> listNics()
     {
         IpsPoolManagementDto nics =
             context.getApi().getInfrastructureClient().listNetworkIps(target);
         return wrap(context, PublicNic.class, nics.getCollection());
-    }
-
-    public List<PublicNic> listNics(final Predicate<Nic> filter)
-    {
-        return Lists.newLinkedList(filter(listNics(), filter));
-    }
-
-    public PublicNic findNic(final Predicate<Nic> filter)
-    {
-        return Iterables.getFirst(filter(listNics(), filter), null);
     }
 
     // Builder
@@ -161,16 +150,17 @@ public class PublicNetwork extends Network
 
         public static Builder fromPublicNetwork(final PublicNetwork in)
         {
-            return PublicNetwork.builder(in.context, in.datacenter).name(in.getName()).tag(
-                in.getTag()).gateway(in.getGateway()).address(in.getAddress()).mask(in.getMask())
-                .primaryDNS(in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(
-                    in.getSufixDNS()).defaultNetwork(in.getDefaultNetwork());
+            return PublicNetwork.builder(in.context, in.datacenter).name(in.getName())
+                .tag(in.getTag()).gateway(in.getGateway()).address(in.getAddress())
+                .mask(in.getMask()).primaryDNS(in.getPrimaryDNS())
+                .secondaryDNS(in.getSecondaryDNS()).sufixDNS(in.getSufixDNS())
+                .defaultNetwork(in.getDefaultNetwork());
         }
     }
 
     @Override
     public String toString()
     {
-        return super.toString();
+        return "Public " + super.toString();
     }
 }

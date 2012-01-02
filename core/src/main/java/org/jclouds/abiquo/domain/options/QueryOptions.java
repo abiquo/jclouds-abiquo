@@ -30,7 +30,7 @@ import com.google.common.collect.Multimap;
 public abstract class QueryOptions
 {
     /** The option map. */
-    public Multimap<String, String> map = LinkedListMultimap.create();
+    protected Multimap<String, String> map = LinkedListMultimap.create();
 
     /**
      * Gets the option map.

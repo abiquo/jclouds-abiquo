@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo.domain.network.options;
 
-import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
 import com.abiquo.model.enumerator.NetworkType;
@@ -39,7 +38,7 @@ public class NetworkOptions extends QueryOptions
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
-        VolumeOptions options = new VolumeOptions();
+        NetworkOptions options = new NetworkOptions();
         options.map.putAll(map);
         return options;
     }

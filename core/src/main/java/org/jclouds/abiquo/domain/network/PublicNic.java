@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.network;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
@@ -31,7 +32,8 @@ import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
  * @see <a href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource">
  *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource</a>
  */
-public abstract class PublicNic extends Nic
+@EnterpriseEdition
+public class PublicNic extends Nic
 {
     /**
      * Constructor to be used only by the builder.
@@ -44,6 +46,6 @@ public abstract class PublicNic extends Nic
     @Override
     public String toString()
     {
-        return super.toString();
+        return "Public " + super.toString();
     }
 }

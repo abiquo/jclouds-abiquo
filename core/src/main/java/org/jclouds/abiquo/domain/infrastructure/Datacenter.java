@@ -298,20 +298,26 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks</a>
      */
-    public List<Network> listNetworks()
+    public List<Network< ? >> listNetworks()
     {
         VLANNetworksDto networks = context.getApi().getInfrastructureClient().listNetworks(target);
-        return wrap(context, Network.class, networks.getCollection());
+        return Network.wrapNetworks(context, networks.getCollection());
     }
 
-    public List<Network> listNetworks(final Predicate<Network> filter)
+    public List<Network< ? >> listNetworks(final Predicate<Network< ? >> filter)
     {
         return Lists.newLinkedList(filter(listNetworks(), filter));
     }
 
-    public Network findNetwork(final Predicate<Network> filter)
+    public Network< ? > findNetwork(final Predicate<Network< ? >> filter)
     {
         return Iterables.getFirst(filter(listNetworks(), filter), null);
+    }
+
+    public Network< ? > getNetwork(final Integer id)
+    {
+        VLANNetworkDto network = context.getApi().getInfrastructureClient().getNetwork(target, id);
+        return Network.wrapNetwork(context, network);
     }
 
     /**
@@ -319,6 +325,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofPublicNetworks">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofPublicNetworks</a>
      */
+    @EnterpriseEdition
     public List<PublicNetwork> listPublicNetworks()
     {
         NetworkOptions options = NetworkOptions.builder().type(NetworkType.PUBLIC).build();
@@ -328,12 +335,14 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, PublicNetwork.class, networks.getCollection());
     }
 
-    public List<PublicNetwork> listPublicNetworks(final Predicate<Network> filter)
+    @EnterpriseEdition
+    public List<PublicNetwork> listPublicNetworks(final Predicate<Network< ? >> filter)
     {
         return Lists.newLinkedList(filter(listPublicNetworks(), filter));
     }
 
-    public PublicNetwork findPublicNetwork(final Predicate<Network> filter)
+    @EnterpriseEdition
+    public PublicNetwork findPublicNetwork(final Predicate<Network< ? >> filter)
     {
         return Iterables.getFirst(filter(listPublicNetworks(), filter), null);
     }
@@ -343,6 +352,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofExternalNetworks">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofExternalNetworks</a>
      */
+    @EnterpriseEdition
     public List<ExternalNetwork> listExternalNetworks()
     {
         NetworkOptions options = NetworkOptions.builder().type(NetworkType.EXTERNAL).build();
@@ -352,12 +362,14 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, ExternalNetwork.class, networks.getCollection());
     }
 
-    public List<ExternalNetwork> listExternalNetworks(final Predicate<Network> filter)
+    @EnterpriseEdition
+    public List<ExternalNetwork> listExternalNetworks(final Predicate<Network< ? >> filter)
     {
         return Lists.newLinkedList(filter(listExternalNetworks(), filter));
     }
 
-    public ExternalNetwork findExternalNetwork(final Predicate<Network> filter)
+    @EnterpriseEdition
+    public ExternalNetwork findExternalNetwork(final Predicate<Network< ? >> filter)
     {
         return Iterables.getFirst(filter(listExternalNetworks(), filter), null);
     }
@@ -367,6 +379,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofUnmanagedNetworks">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofUnmanagedNetworks</a>
      */
+    @EnterpriseEdition
     public List<UnmanagedNetwork> listUnmanagedNetworks()
     {
         NetworkOptions options = NetworkOptions.builder().type(NetworkType.EXTERNAL).build();
@@ -376,20 +389,16 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, UnmanagedNetwork.class, networks.getCollection());
     }
 
-    public List<UnmanagedNetwork> listUnmanagedNetworks(final Predicate<UnmanagedNetwork> filter)
+    @EnterpriseEdition
+    public List<UnmanagedNetwork> listUnmanagedNetworks(final Predicate<Network< ? >> filter)
     {
         return Lists.newLinkedList(filter(listUnmanagedNetworks(), filter));
     }
 
-    public UnmanagedNetwork findUnmanagedNetwork(final Predicate<Network> filter)
+    @EnterpriseEdition
+    public UnmanagedNetwork findUnmanagedNetwork(final Predicate<Network< ? >> filter)
     {
         return Iterables.getFirst(filter(listUnmanagedNetworks(), filter), null);
-    }
-
-    public Network getNetwork(final Integer id)
-    {
-        VLANNetworkDto network = context.getApi().getInfrastructureClient().getNetwork(target, id);
-        return wrap(context, Network.class, network);
     }
 
     // Actions
@@ -431,8 +440,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final String user, final String password, final int port)
     {
         MachineDto dto =
-            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
-                hypervisorType, user, password, MachineOptions.builder().port(port).build());
+            context
+                .getApi()
+                .getInfrastructureClient()
+                .discoverSingleMachine(target, ip, hypervisorType, user, password,
+                    MachineOptions.builder().port(port).build());
 
         // Credentials are not returned by the API
         dto.setUser(user);
@@ -482,8 +494,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final int port)
     {
         MachinesDto dto =
-            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
-                ipTo, hypervisorType, user, password, MachineOptions.builder().port(port).build());
+            context
+                .getApi()
+                .getInfrastructureClient()
+                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
+                    MachineOptions.builder().port(port).build());
 
         // Credentials are not returned by the API
         for (MachineDto machine : dto.getCollection())

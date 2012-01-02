@@ -21,13 +21,17 @@ package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
@@ -38,7 +42,8 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  * @see <a href="http://community.abiquo.com/display/ABI20/Public+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
-public class ExternalNetwork extends Network
+@EnterpriseEdition
+public class ExternalNetwork extends Network<ExternalNic>
 {
     /** The datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -86,6 +91,19 @@ public class ExternalNetwork extends Network
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateNetwork(target);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork">
+     *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
+     */
+    @Override
+    public List<ExternalNic> listNics()
+    {
+        IpsPoolManagementDto nics =
+            context.getApi().getInfrastructureClient().listNetworkIps(target);
+        return wrap(context, ExternalNic.class, nics.getCollection());
     }
 
     private void addEnterpriseLink()
@@ -162,17 +180,17 @@ public class ExternalNetwork extends Network
 
         public static Builder fromExternalNetwork(final ExternalNetwork in)
         {
-            return ExternalNetwork.builder(in.context, in.datacenter, in.enterprise).name(
-                in.getName()).tag(in.getTag()).gateway(in.getGateway()).address(in.getAddress())
-                .mask(in.getMask()).primaryDNS(in.getPrimaryDNS()).secondaryDNS(
-                    in.getSecondaryDNS()).sufixDNS(in.getSufixDNS()).defaultNetwork(
-                    in.getDefaultNetwork());
+            return ExternalNetwork.builder(in.context, in.datacenter, in.enterprise)
+                .name(in.getName()).tag(in.getTag()).gateway(in.getGateway())
+                .address(in.getAddress()).mask(in.getMask()).primaryDNS(in.getPrimaryDNS())
+                .secondaryDNS(in.getSecondaryDNS()).sufixDNS(in.getSufixDNS())
+                .defaultNetwork(in.getDefaultNetwork());
         }
     }
 
     @Override
     public String toString()
     {
-        return super.toString();
+        return "External " + super.toString();
     }
 }

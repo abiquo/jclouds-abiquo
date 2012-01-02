@@ -29,7 +29,7 @@ import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public abstract class PrivateNic extends Nic
+public class PrivateNic extends Nic
 {
     /**
      * Constructor to be used only by the builder.
@@ -42,6 +42,6 @@ public abstract class PrivateNic extends Nic
     @Override
     public String toString()
     {
-        return super.toString();
+        return "Private " + super.toString();
     }
 }
