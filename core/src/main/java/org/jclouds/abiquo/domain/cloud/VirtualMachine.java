@@ -91,8 +91,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
     public AcceptedRequestDto<String> update()
@@ -369,9 +369,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             VirtualMachineDto dto = new VirtualMachineDto();
             dto.setName(name);
             dto.setDescription(description);
-            dto.setCpu(cpu);
             dto.setHdInBytes(template.getHdRequired());
             dto.setVdrpIP(vdrpIP);
+
+            if (cpu != null)
+            {
+                dto.setCpu(cpu);
+            }
 
             if (ram != null)
             {
@@ -410,11 +414,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
-                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
-                .vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort()).idState(in.getIdState())
-                .highDisponibility(in.getHighDisponibility()).idType(in.getIdType()).password(
-                    in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
+                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
+                .cpu(in.getCpu()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
+                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
+                .idType(in.getIdType()).password(in.getPassword());
         }
     }
 
