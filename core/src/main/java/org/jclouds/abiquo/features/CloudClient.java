@@ -386,7 +386,7 @@ public interface CloudClient
      * @param virtualMachine The virtual machine.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    AcceptedRequestDto< ? > detachAllVolumes(VirtualMachineDto virtualMachine);
+    AcceptedRequestDto<String> detachAllVolumes(VirtualMachineDto virtualMachine);
 
     /**
      * Replaces the current volumes attached to the virtual machine with the given ones.
@@ -397,7 +397,7 @@ public interface CloudClient
      * @param volumes The new volumes for the virtual machine.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    AcceptedRequestDto< ? > replaceVolumes(VirtualMachineDto virtualMachine,
+    AcceptedRequestDto<String> replaceVolumes(VirtualMachineDto virtualMachine,
         VolumeManagementDto... volumes);
 
     /*********************** Storage ***********************/

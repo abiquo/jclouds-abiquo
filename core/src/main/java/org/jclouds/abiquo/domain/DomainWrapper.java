@@ -27,10 +27,13 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.WrapperException;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.SingleResourceTransportDto;
+import com.abiquo.server.core.task.TaskDto;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
@@ -158,5 +161,21 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         {
             parent.setHref(source.searchLink(sourceLinkRel).getHref());
         }
+    }
+
+    /**
+     * Utility method to get an {@link AsyncTask} given an {@link AcceptedRequestDto}.
+     * 
+     * @param acceptedRequest The accepted request dto.
+     * @return The async task.
+     */
+    protected AsyncTask getTask(final AcceptedRequestDto<String> acceptedRequest)
+    {
+        RESTLink taskLink = acceptedRequest.getLinks().get(0);
+        checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
+
+        TaskDto task = context.getApi().getTaskClient().getTask(taskLink);
+
+        return wrap(context, AsyncTask.class, task);
     }
 }

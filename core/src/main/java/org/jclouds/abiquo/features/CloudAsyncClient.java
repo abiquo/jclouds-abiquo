@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.features;
 
 import javax.ws.rs.Consumes;
@@ -36,9 +37,12 @@ import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
 import org.jclouds.abiquo.binders.cloud.BindVirtualDatacenterRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
@@ -361,7 +365,7 @@ public interface CloudAsyncClient
      */
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
-    ListenableFuture<AcceptedRequestDto< ? >> detachAllVolumes(
+    ListenableFuture<AcceptedRequestDto<String>> detachAllVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
@@ -369,7 +373,7 @@ public interface CloudAsyncClient
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
-    ListenableFuture<AcceptedRequestDto< ? >> replaceVolumes(
+    ListenableFuture<AcceptedRequestDto<String>> replaceVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 

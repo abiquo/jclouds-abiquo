@@ -44,7 +44,6 @@ import com.abiquo.server.core.cloud.chef.RunlistElementsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
-import com.abiquo.server.core.task.TaskDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -199,7 +198,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         AcceptedRequestDto<String> response =
             context.getApi().getCloudClient().deployVirtualMachine(deployLink, task);
 
-        return this.getTask(response);
+        return getTask(response);
     }
 
     public AsyncTask undeploy()
@@ -208,10 +207,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         AcceptedRequestDto<String> response =
             context.getApi().getCloudClient().undeployVirtualMachine(undeployLink);
 
-        return this.getTask(response);
+        return getTask(response);
     }
 
-    public AcceptedRequestDto< ? > attachVolumes(final Volume... volumes)
+    public AsyncTask attachVolumes(final Volume... volumes)
     {
         List<Volume> expected = listAttachedVolumes();
         expected.addAll(Arrays.asList(volumes));
@@ -220,12 +219,14 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return replaceVolumes(expected.toArray(vols));
     }
 
-    public AcceptedRequestDto< ? > dettachAllVolumes()
+    public AsyncTask dettachAllVolumes()
     {
-        return context.getApi().getCloudClient().detachAllVolumes(target);
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().detachAllVolumes(target);
+        return taskRef == null ? null : getTask(taskRef);
     }
 
-    public AcceptedRequestDto< ? > detachVolumes(final Volume... volumes)
+    public AsyncTask detachVolumes(final Volume... volumes)
     {
         List<Volume> expected = listAttachedVolumes();
         Iterables.removeIf(expected, idIn(volumes));
@@ -234,19 +235,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return replaceVolumes(expected.toArray(vols));
     }
 
-    public AcceptedRequestDto< ? > replaceVolumes(final Volume... volumes)
+    public AsyncTask replaceVolumes(final Volume... volumes)
     {
-        return context.getApi().getCloudClient().replaceVolumes(target, toVolumeDto(volumes));
-    }
-
-    private AsyncTask getTask(final AcceptedRequestDto<String> acceptedRequest)
-    {
-        RESTLink taskLink = acceptedRequest.getLinks().get(0);
-        checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
-
-        TaskDto task = context.getApi().getTaskClient().getTask(taskLink);
-
-        return wrap(context, AsyncTask.class, task);
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().replaceVolumes(target, toVolumeDto(volumes));
+        return taskRef == null ? null : getTask(taskRef);
     }
 
     // Builder
