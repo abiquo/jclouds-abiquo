@@ -33,14 +33,17 @@ import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
+import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
+import org.jclouds.abiquo.domain.infrastructure.StoragePool;
+import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PrivateNic;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.features.services.SearchService;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.common.annotations.VisibleForTesting;
 
@@ -84,6 +87,19 @@ public class BaseSearchService implements SearchService
                 .getCollection();
 
         return wrap(context, Volume.class, volumes);
+    }
+
+    /*********************** Storage Pool ***********************/
+
+    @Override
+    public List<StoragePool> searchStoragePools(final StorageDevice device,
+        final StoragePoolOptions options)
+    {
+        List<StoragePoolDto> pools =
+            context.getApi().getInfrastructureClient().listStoragePools(device.unwrap(), options)
+                .getCollection();
+
+        return wrap(context, StoragePool.class, pools);
     }
 
     /*********************** Private Network ***********************/

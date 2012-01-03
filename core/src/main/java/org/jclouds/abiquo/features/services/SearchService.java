@@ -24,6 +24,9 @@ import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
+import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
+import org.jclouds.abiquo.domain.infrastructure.StoragePool;
+import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PrivateNic;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -59,6 +62,17 @@ public interface SearchService
      */
     Iterable<Volume> searchVolumes(final VirtualDatacenter virtualDatacenter,
         final VolumeOptions options);
+
+    /*********************** Storage Pool ***********************/
+
+    /**
+     * Get the list of filtered storage pools for a storage device.
+     * 
+     * @param device The given storage device.
+     * @param options The set of filtering and pagination options of the search.
+     */
+    Iterable<StoragePool> searchStoragePools(final StorageDevice device,
+        final StoragePoolOptions options);
 
     /*********************** Private Network ***********************/
 

@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.infrastructure.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 
 /**
  * Available options to query storage pools.
  * 
  * @author Francesc Montserrat
  */
-public class StoragePoolOptions extends QueryOptions
+public class StoragePoolOptions extends FilterOptions
 {
     public static Builder builder()
     {
@@ -47,7 +47,7 @@ public class StoragePoolOptions extends QueryOptions
         return this.map.toString();
     }
 
-    public static class Builder
+    public static class Builder extends FilterOptionsBuilder<Builder>
     {
         private Boolean sync;
 
@@ -60,6 +60,7 @@ public class StoragePoolOptions extends QueryOptions
             return this;
         }
 
+        @Override
         public StoragePoolOptions build()
         {
             StoragePoolOptions options = new StoragePoolOptions();
@@ -67,6 +68,7 @@ public class StoragePoolOptions extends QueryOptions
             {
                 options.map.put("sync", sync.toString());
             }
+
             return options;
         }
     }
