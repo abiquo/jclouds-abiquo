@@ -59,6 +59,8 @@ public class EnterpriseOptions extends FilterOptions
 
         private Integer results;
 
+        private Boolean network;
+
         public Builder pricingTemplate(final String idPricingTemplate)
         {
             this.idPricingTemplate = idPricingTemplate;
@@ -74,6 +76,12 @@ public class EnterpriseOptions extends FilterOptions
         public Builder filter(final String filter)
         {
             this.filter = filter;
+            return this;
+        }
+
+        public Builder network(final boolean network)
+        {
+            this.network = network;
             return this;
         }
 
@@ -109,7 +117,7 @@ public class EnterpriseOptions extends FilterOptions
                 options.map.put("filter", String.valueOf(filter));
             }
 
-            if (filter != null)
+            if (page != null)
             {
                 options.map.put("page", String.valueOf(page));
             }
@@ -117,6 +125,11 @@ public class EnterpriseOptions extends FilterOptions
             if (results != null)
             {
                 options.map.put("numResults", String.valueOf(results));
+            }
+
+            if (network != null)
+            {
+                options.map.put("network", String.valueOf(network));
             }
 
             // Add FilterOptions options

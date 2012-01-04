@@ -36,6 +36,7 @@ import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
+import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -47,17 +48,20 @@ import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.http.functions.ReturnStringIf2xx;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
@@ -185,6 +189,24 @@ public interface InfrastructureAsyncClient
     @GET
     ListenableFuture<DatacentersLimitsDto> listLimits(
         @EndpointLink("getLimits") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /*********************** Hypervisor ***********************/
+
+    /**
+     * @see InfrastructureClient#getHypervisorTypeFromMachine(DatacenterDto, DatacenterOptions)
+     */
+    @GET
+    @ResponseParser(ReturnStringIf2xx.class)
+    ListenableFuture<String> getHypervisorTypeFromMachine(
+        @EndpointLink("hypervisor") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendOptionsToPath.class) DatacenterOptions options);
+
+    /**
+     * @see InfrastructureClient#getHypervisorTypes(DatacenterDto)
+     */
+    @GET
+    ListenableFuture<HypervisorTypesDto> getHypervisorTypes(
+        @EndpointLink("hypervisors") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /*********************** Rack ***********************/
 
@@ -408,6 +430,16 @@ public interface InfrastructureAsyncClient
     ListenableFuture<StoragePoolsDto> listStoragePools(
         @EndpointLink("pools") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice,
         @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
+
+    /**
+     * @see InfrastructureClient#listStoragePools(TierDto)
+     */
+    @EnterpriseEdition
+    @GET
+    @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLSDTO_XML)
+    @JAXBResponseParser
+    ListenableFuture<StoragePoolsDto> listStoragePools(
+        @EndpointLink("pools") @BinderParam(BindToPath.class) TierDto tier);
 
     /**
      * @see InfrastructureClient#createStoragePool(StorageDeviceDto, StoragePoolDto)

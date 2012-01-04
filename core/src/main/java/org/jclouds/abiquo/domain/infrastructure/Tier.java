@@ -19,13 +19,21 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
+import static com.google.common.collect.Iterables.filter;
+
+import java.util.List;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link TierDto}.
@@ -59,6 +67,23 @@ public class Tier extends DomainWrapper<TierDto>
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateTier(target);
+    }
+
+    public List<StoragePool> listStoragePools()
+    {
+        StoragePoolsDto storagePools =
+            context.getApi().getInfrastructureClient().listStoragePools(target);
+        return wrap(context, StoragePool.class, storagePools.getCollection());
+    }
+
+    public List<StoragePool> listStoragePools(final Predicate<StoragePool> filter)
+    {
+        return Lists.newLinkedList(filter(listStoragePools(), filter));
+    }
+
+    public StoragePool findStoragePool(final Predicate<StoragePool> filter)
+    {
+        return Iterables.getFirst(filter(listStoragePools(), filter), null);
     }
 
     // Parent access

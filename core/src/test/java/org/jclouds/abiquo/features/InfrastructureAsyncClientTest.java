@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
+import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -34,6 +35,7 @@ import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
+import org.jclouds.http.functions.ReturnStringIf2xx;
 import org.jclouds.http.functions.ReturnTrueIf2xx;
 import org.jclouds.rest.functions.MapHttp4xxCodesToExceptions;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -164,6 +166,50 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/action/getLimits HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Hypervisor ***********************/
+
+    public void testGetHypervisorFromRemoteMachine() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getHypervisorTypeFromMachine",
+                DatacenterDto.class, DatacenterOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(),
+                DatacenterOptions.builder().ip("10.60.1.120").build());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/action/hypervisor?ip=10.60.1.120 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReturnStringIf2xx.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetHypervisorTypesFromDatacenter() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getHypervisorTypes", DatacenterDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/hypervisors HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -815,6 +861,27 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/storage/devices/1/pools?sync=true HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/storagepoolsdto+xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListStoragePoolsFromTier() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listStoragePools", TierDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.tierPut(), StoragePoolOptions
+                .builder().sync(true).build());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/storage/tiers/1/pools HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/storagepoolsdto+xml\n");
         assertPayloadEquals(request, null, null, false);
 

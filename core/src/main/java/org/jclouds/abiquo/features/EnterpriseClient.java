@@ -64,6 +64,15 @@ public interface EnterpriseClient
     EnterprisesDto listEnterprises(EnterpriseOptions options);
 
     /**
+     * List filtered enterprises by datacenter.
+     * 
+     * @param datacenter The given datacenter.
+     * @param options Filtering options.
+     * @return The list of Enterprises.
+     */
+    EnterprisesDto listEnterprises(DatacenterDto datacenter, EnterpriseOptions options);
+
+    /**
      * Create a new enterprise.
      * 
      * @param enterprise The enterprise to be created.

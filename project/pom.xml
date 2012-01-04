@@ -91,13 +91,13 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>2.10</version>
                 </plugin>
-                <plugin>
+            	<plugin>
                     <groupId>org.apache.felix</groupId>
                     <artifactId>maven-bundle-plugin</artifactId>
                     <version>2.3.4</version>
                     <extensions>true</extensions>
                     <configuration>
-                        <classifier>api-deploy</classifier>
+                        <!-- <classifier>api-deploy</classifier> -->
                         <instructions>
                             <_nouses>true</_nouses>
                         </instructions>

@@ -26,6 +26,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Limits;
+import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
@@ -39,6 +40,8 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.enumerator.VlanTagAvailabilityType;
+import com.abiquo.server.core.cloud.HypervisorTypeDto;
+import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -404,6 +407,47 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     // Actions
 
     /**
+     * Retrieve the hypervisor type from remote machine.
+     * 
+     * @see <a href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievethehypervisortypefromremotemachine"
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      Retrievethehypervisortypefromremotemachine/a>
+     */
+    HypervisorType getHypervisorType(final String ip)
+    {
+        DatacenterOptions options = DatacenterOptions.builder().ip(ip).build();
+
+        String type =
+            context.getApi().getInfrastructureClient()
+                .getHypervisorTypeFromMachine(target, options);
+
+        return HypervisorType.valueOf(type);
+    }
+
+    /**
+     * Retrieve the the list of hypervisor types in the datacenter.
+     */
+    List<HypervisorType> getAvailableHypervisors()
+    {
+        HypervisorTypesDto types =
+            context.getApi().getInfrastructureClient().getHypervisorTypes(target);
+
+        return getHypervisorTypes(types);
+    }
+
+    private List<HypervisorType> getHypervisorTypes(final HypervisorTypesDto dtos)
+    {
+        List<HypervisorType> types = Lists.newArrayList();
+
+        for (HypervisorTypeDto dto : dtos.getCollection())
+        {
+            types.add(HypervisorType.fromId(dto.getId()));
+        }
+
+        return types;
+    }
+
+    /**
      * Searches a remote machine and retrieves an Machine object with its information.
      * 
      * @param ip IP address of the remote hypervisor to connect.
@@ -440,11 +484,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final String user, final String password, final int port)
     {
         MachineDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverSingleMachine(target, ip, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
+                hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         // Credentials are not returned by the API
         dto.setUser(user);
@@ -494,11 +535,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final int port)
     {
         MachinesDto dto =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
+                ipTo, hypervisorType, user, password, MachineOptions.builder().port(port).build());
 
         // Credentials are not returned by the API
         for (MachineDto machine : dto.getCollection())

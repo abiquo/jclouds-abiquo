@@ -84,6 +84,14 @@ public interface EnterpriseAsyncClient
         @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
 
     /**
+     * @see EnterpriseClient#listEnterprises(DatacenterDto, EnterpriseOptions)
+     */
+    @GET
+    ListenableFuture<EnterprisesDto> listEnterprises(
+        @EndpointLink("enterprises") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
+
+    /**
      * @see EnterpriseClient#createEnterprise(EnterpriseDto)
      */
     @POST

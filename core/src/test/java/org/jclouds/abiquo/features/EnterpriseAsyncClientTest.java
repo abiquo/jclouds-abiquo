@@ -92,6 +92,31 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
+    public void testListEnterprisesByDatacenter() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        EnterpriseOptions options =
+            EnterpriseOptions.builder().startWith(0).limit(25).network(true).build();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listEnterprises", DatacenterDto.class,
+                EnterpriseOptions.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), options);
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/datacenters/1/action/enterprises?network=true&startwith=0&limit=25 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testCreateEnterprise() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =

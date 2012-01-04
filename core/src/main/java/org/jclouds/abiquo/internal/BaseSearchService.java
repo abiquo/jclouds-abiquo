@@ -33,6 +33,7 @@ import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
@@ -72,6 +73,17 @@ public class BaseSearchService implements SearchService
     {
         List<EnterpriseDto> enterprises =
             context.getApi().getEnterpriseClient().listEnterprises(options).getCollection();
+
+        return wrap(context, Enterprise.class, enterprises);
+    }
+
+    @Override
+    public Iterable<Enterprise> searchEnterprisesUsingDatacenter(final Datacenter datacenter,
+        final EnterpriseOptions options)
+    {
+        List<EnterpriseDto> enterprises =
+            context.getApi().getEnterpriseClient().listEnterprises(datacenter.unwrap(), options)
+                .getCollection();
 
         return wrap(context, Enterprise.class, enterprises);
     }

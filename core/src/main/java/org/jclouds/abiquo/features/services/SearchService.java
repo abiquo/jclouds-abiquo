@@ -24,6 +24,7 @@ import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
@@ -51,6 +52,18 @@ public interface SearchService
      * @param options The set of filtering and pagination options of the search.
      */
     Iterable<Enterprise> searchEnterprises(final EnterpriseOptions options);
+
+    /**
+     * Get the list of filtered enterprises for a datacenter.
+     * 
+     * @param datacenter The given datacenter.
+     * @param options The set of filtering and pagination options of the search.
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofenterprisesusingdatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofenterprisesusingdatacenter</a>
+     */
+    Iterable<Enterprise> searchEnterprisesUsingDatacenter(final Datacenter datacenter,
+        final EnterpriseOptions options);
 
     /*********************** Volume ***********************/
 

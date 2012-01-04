@@ -37,6 +37,7 @@ import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 
 /**
@@ -63,6 +64,14 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureT
         DatacenterDto updated = env.infrastructureClient.getDatacenter(env.datacenter.getId());
 
         assertEquals(updated.getLocation(), "New York");
+    }
+
+    @Test(enabled = false)
+    public void testCheckHypervisorType()
+    {
+        HypervisorType type = env.datacenter.getHypervisorType(env.machine.getIp());
+
+        assertEquals(env.machine.getType(), type);
     }
 
     public void testCreateRepeated()

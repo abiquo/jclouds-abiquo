@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -31,6 +32,7 @@ import org.jclouds.concurrent.Timeout;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
@@ -179,6 +181,25 @@ public interface InfrastructureClient
      * @return The usage limits for the datacenter on any enterprise.
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
+
+    /*********************** Hypervisor ***********************/
+
+    /**
+     * Retreives the hypervisor type of a remote a machine.
+     * 
+     * @param datacenter The datacenter.
+     * @param options Optional query params.
+     * @return The hypervisor type.
+     */
+    String getHypervisorTypeFromMachine(DatacenterDto datacenter, DatacenterOptions options);
+
+    /**
+     * Retreives the hypervisor types in the datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @return The hypervisor types.
+     */
+    HypervisorTypesDto getHypervisorTypes(DatacenterDto datacenter);
 
     /*********************** Rack ********************** */
 
@@ -408,11 +429,21 @@ public interface InfrastructureClient
      * List storage pools on a storage device.
      * 
      * @param storageDevice The storage device.
+     * @param options Optional query params.
      * @return The list of storage pools in the storage device.
      */
     @EnterpriseEdition
     StoragePoolsDto listStoragePools(StorageDeviceDto storageDeviceDto,
         StoragePoolOptions storagePoolOptions);
+
+    /**
+     * List storage pools on a tier.
+     * 
+     * @param tier The tier device.
+     * @return The list of storage pools in the tier.
+     */
+    @EnterpriseEdition
+    StoragePoolsDto listStoragePools(TierDto tier);
 
     /**
      * Create a new storage pool in a storage device.
