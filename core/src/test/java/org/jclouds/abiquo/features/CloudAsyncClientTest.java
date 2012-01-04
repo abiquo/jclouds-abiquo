@@ -790,7 +790,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         IOException
     {
         Method method =
-            CloudAsyncClient.class.getMethod("deployVirtualMachine", RESTLink.class,
+            CloudAsyncClient.class.getMethod("deployVirtualMachineAction", RESTLink.class,
                 VirtualMachineTaskDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
@@ -817,20 +817,23 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testUndeployVirtualMachine() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = CloudAsyncClient.class.getMethod("undeployVirtualMachine", RESTLink.class);
+        Method method =
+            CloudAsyncClient.class.getMethod("deployVirtualMachineAction", RESTLink.class,
+                VirtualMachineTaskDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor
                 .createRequest(
                     method,
                     new RESTLink("undeploy",
-                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy"));
+                        "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy"),
+                    CloudResources.virtualMachineUndeploy());
 
         assertRequestLineEquals(
             request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
-
+        assertPayloadEquals(request, withHeader(CloudResources.virtualApplianceUndeployPayload()),
+            "application/xml", false);
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);

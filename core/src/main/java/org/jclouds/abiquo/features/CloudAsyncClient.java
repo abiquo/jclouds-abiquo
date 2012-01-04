@@ -375,19 +375,12 @@ public interface CloudAsyncClient
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
     /**
-     * @see CloudClient#deployVirtualMachine(RESTLink, VirtualMachineTaskDto)
+     * @see CloudClient#deployVirtualMachineAction(RESTLink, VirtualMachineTaskDto)
      */
     @POST
-    ListenableFuture<AcceptedRequestDto<String>> deployVirtualMachine(
+    ListenableFuture<AcceptedRequestDto<String>> deployVirtualMachineAction(
         @BinderParam(BindLinkToPath.class) RESTLink link,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
-
-    /**
-     * @see CloudClient#undeployVirtualMachine(RESTLink)
-     */
-    @POST
-    ListenableFuture<AcceptedRequestDto<String>> undeployVirtualMachine(
-        @BinderParam(BindLinkToPath.class) RESTLink link);
 
     /*********************** Storage ***********************/
 

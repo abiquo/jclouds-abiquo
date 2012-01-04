@@ -90,8 +90,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient()
-                .createVirtualMachine(virtualAppliance.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
+                target);
     }
 
     public AcceptedRequestDto<String> update()
@@ -196,16 +196,24 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         // get async task
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualMachine(deployLink, task);
+            context.getApi().getCloudClient().deployVirtualMachineAction(deployLink, task);
 
         return getTask(response);
     }
 
     public AsyncTask undeploy()
     {
+        return undeploy(false);
+    }
+
+    public AsyncTask undeploy(final boolean forceUndeploy)
+    {
         RESTLink undeployLink = target.searchLink("undeploy");
+        VirtualMachineTaskDto task = new VirtualMachineTaskDto();
+        task.setForceUndeploy(false);
+
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().undeployVirtualMachine(undeployLink);
+            context.getApi().getCloudClient().deployVirtualMachineAction(undeployLink, task);
 
         return getTask(response);
     }
@@ -407,11 +415,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
-                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
-                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
-                .idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
+                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+                .vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort()).idState(in.getIdState())
+                .highDisponibility(in.getHighDisponibility()).idType(in.getIdType()).password(
+                    in.getPassword());
         }
     }
 

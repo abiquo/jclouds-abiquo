@@ -349,24 +349,15 @@ public interface CloudClient
     VirtualMachineStateDto getVirtualMachineState(VirtualMachineDto virtualMachine);
 
     /**
-     * Deploy a virtual machine.
+     * Deploy/Undeploy a virtual machine with task options.
      * 
-     * @param link The link of the deploy action.
-     * @param deploy Deploy options.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     * @param link The link of the deploy/undeploy action.
+     * @param task extra deploy options.
+     * @return Response message to the deploy request.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
-    AcceptedRequestDto<String> deployVirtualMachine(final RESTLink link,
-        final VirtualMachineTaskDto deploy);
-
-    /**
-     * Undeploy a virtual machine.
-     * 
-     * @param link The link of the undeploy action.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
-     */
-    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
-    AcceptedRequestDto<String> undeployVirtualMachine(final RESTLink link);
+    AcceptedRequestDto<String> deployVirtualMachineAction(final RESTLink link,
+        VirtualMachineTaskDto task);
 
     /*********************** Volume ***********************/
 

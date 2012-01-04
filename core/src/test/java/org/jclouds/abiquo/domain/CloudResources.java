@@ -171,6 +171,14 @@ public class CloudResources
         VirtualMachineTaskDto deploy = new VirtualMachineTaskDto();
         deploy.setForceEnterpriseSoftLimits(false);
         return deploy;
+
+    }
+
+    public static VirtualMachineTaskDto virtualMachineUndeploy()
+    {
+        VirtualMachineTaskDto deploy = new VirtualMachineTaskDto();
+        deploy.setForceUndeploy(true);
+        return deploy;
     }
 
     public static VirtualMachineTaskDto virtualApplianceUndeploy()
