@@ -66,7 +66,6 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureT
         assertEquals(updated.getLocation(), "New York");
     }
 
-    @Test(enabled = false)
     public void testCheckHypervisorType()
     {
         HypervisorType type = env.datacenter.getHypervisorType(env.machine.getIp());
