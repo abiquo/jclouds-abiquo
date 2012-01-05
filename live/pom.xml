@@ -20,7 +20,6 @@
             <groupId>org.jclouds.provider</groupId>
             <artifactId>jclouds-abiquo</artifactId>
             <version>${project.version}</version>
-            <classifier>api-deploy</classifier>
             <scope>test</scope>
         </dependency>
         <dependency>
