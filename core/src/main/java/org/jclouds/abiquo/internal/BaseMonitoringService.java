@@ -153,12 +153,12 @@ public class BaseMonitoringService implements MonitoringService
             switch (task.getState())
             {
                 case FINISHED_SUCCESSFULLY:
-                    callback.onTaskCompleted(task);
                     stopMonitoring(task);
+                    callback.onTaskCompleted(task);
                     break;
                 case FINISHED_UNSUCCESSFULLY:
-                    callback.onTaskFailed(task);
                     stopMonitoring(task);
+                    callback.onTaskFailed(task);
                     break;
                 default:
                     // Task has not finished, continue monitoring it
