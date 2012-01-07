@@ -161,8 +161,7 @@ public class CloudResources
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier
-            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
     }
 
@@ -370,21 +369,19 @@ public class CloudResources
     public static String virtualMachineDeployPayload()
     {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<virtualMachineTask>");
+        buffer.append("<virtualmachinetask>");
         buffer.append("<forceEnterpriseSoftLimits>false</forceEnterpriseSoftLimits>");
-        buffer.append("</virtualMachineTask>");
+        buffer.append("</virtualmachinetask>");
         return buffer.toString();
-
     }
 
     public static String virtualApplianceUndeployPayload()
     {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<virtualMachineTask>");
+        buffer.append("<virtualmachinetask>");
         buffer.append("<forceEnterpriseSoftLimits>false</forceEnterpriseSoftLimits>");
         buffer.append("<forceUndeploy>true</forceUndeploy>");
-        buffer.append("</virtualMachineTask>");
+        buffer.append("</virtualmachinetask>");
         return buffer.toString();
-
     }
 }
