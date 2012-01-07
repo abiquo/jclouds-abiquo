@@ -19,12 +19,13 @@
 
 package org.jclouds.abiquo.features;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.environment.TestEnvironment;
-import org.jclouds.abiquo.util.Config;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -48,9 +49,12 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
     @BeforeClass(groups = "live")
     protected void setupClient() throws Exception
     {
-        String identity = Config.get("abiquo.api.user");
-        String credential = Config.get("abiquo.api.pass");
-        String endpoint = Config.get("abiquo.api.endpoint");
+        String identity =
+            checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
+        String credential =
+            checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
+        String endpoint =
+            checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
 
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);

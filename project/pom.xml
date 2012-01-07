@@ -21,11 +21,13 @@
         <maven.compile.target>1.6</maven.compile.target>
         <jclouds.version>1.3.0-SNAPSHOT</jclouds.version>
         <abiquo.version>2.0-SNAPSHOT</abiquo.version>
+        <abiquo.build>700d56a-297f43b</abiquo.build>
         <easymock.version>3.1</easymock.version>
         <testng.version>6.0.1</testng.version>
         <test.abiquo.identity>admin</test.abiquo.identity>
         <test.abiquo.credential>xabiquo</test.abiquo.credential>
-        <test.abiquo.apiversion>${abiquo.version}</test.abiquo.apiversion>
+        <test.abiquo.api-version>${abiquo.version}</test.abiquo.api-version>
+        <test.abiquo.build-version>${abiquo.build}</test.abiquo.build-version>
         <test.abiquo.endpoint>http://localhost/api</test.abiquo.endpoint>
     </properties>
     
@@ -97,7 +99,6 @@
                     <version>2.3.4</version>
                     <extensions>true</extensions>
                     <configuration>
-                        <!-- <classifier>api-deploy</classifier> -->
                         <instructions>
                             <_nouses>true</_nouses>
                         </instructions>
@@ -168,6 +169,13 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <systemPropertyVariables>
+                        <test.abiquo.identity>${test.abiquo.identity}</test.abiquo.identity>
+                        <test.abiquo.credential>${test.abiquo.credential}</test.abiquo.credential>
+                        <test.abiquo.endpoint>${test.abiquo.endpoint}</test.abiquo.endpoint>
+                        <test.abiquo.api-version>${test.abiquo.api-version}</test.abiquo.api-version>
+                        <test.abiquo.build-version>${test.abiquo.build-version}</test.abiquo.build-version>
+                    </systemPropertyVariables>
                     <parallel>methods</parallel>
                     <threadCount>5</threadCount>
                     <groups>unit,performance</groups>

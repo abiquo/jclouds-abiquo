@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.http.filters;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.http.HttpUtils.releasePayload;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -36,7 +37,6 @@ import javax.ws.rs.core.HttpHeaders;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
-import org.jclouds.abiquo.util.Config;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.utils.ModifyRequest;
@@ -66,9 +66,10 @@ public class AbiquoAuthenticationLiveTest
     @BeforeMethod
     public void setupToken()
     {
-        identity = Config.get("abiquo.api.user");
-        credential = Config.get("abiquo.api.pass");
-        endpoint = Config.get("abiquo.api.endpoint");
+        identity = checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
+        credential =
+            checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
+        endpoint = checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
     }
 
     @Test
