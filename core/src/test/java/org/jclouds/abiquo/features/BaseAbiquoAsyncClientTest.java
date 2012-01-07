@@ -19,22 +19,23 @@
 
 package org.jclouds.abiquo.features;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.testng.Assert.assertEquals;
+
+import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.RestClientTest;
+import org.jclouds.rest.RestContextFactory;
 import org.jclouds.rest.RestContextSpec;
 
 import com.google.inject.Module;
 
 /**
- * Tests annotation parsing of {@code AbiquoAsyncClient}
+ * Tests annotation parsing of {@code AbiquoAsyncClient}.
  * 
  * @author Ignasi Barrera
  */
@@ -57,26 +58,8 @@ public abstract class BaseAbiquoAsyncClientTest<T> extends RestClientTest<T>
     @Override
     public RestContextSpec<AbiquoClient, AbiquoAsyncClient> createContextSpec()
     {
-        String identity =
-            checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
-        String credential =
-            checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
-        String endpoint =
-            checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
-        String apiVersion =
-            checkNotNull(System.getProperty("test.abiquo.api-version"), "test.abiquo.api-version");
-        String buildVersion =
-            checkNotNull(System.getProperty("test.abiquo.build-version"),
-                "test.abiquo.build-version");
-
-        return new RestContextSpec<AbiquoClient, AbiquoAsyncClient>(AbiquoContextFactory.PROVIDER_NAME,
-            endpoint,
-            apiVersion,
-            buildVersion,
-            null,
-            identity,
-            credential,
-            AbiquoClient.class,
-            AbiquoAsyncClient.class);
+        Properties props = new Properties();
+        props.put("abiquo.endpoint", "http://localhost/api");
+        return new RestContextFactory().createContextSpec("abiquo", "admin", "xabiquo", props);
     }
 }
