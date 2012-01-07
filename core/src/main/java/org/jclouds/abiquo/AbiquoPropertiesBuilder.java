@@ -20,6 +20,7 @@
 package org.jclouds.abiquo;
 
 import static org.jclouds.Constants.PROPERTY_API_VERSION;
+import static org.jclouds.Constants.PROPERTY_BUILD_VERSION;
 import static org.jclouds.Constants.PROPERTY_MAX_REDIRECTS;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 import static org.jclouds.abiquo.reference.AbiquoConstants.MAX_SCHEDULER_THREADS;
@@ -44,7 +45,9 @@ public class AbiquoPropertiesBuilder extends PropertiesBuilder
     protected Properties defaultProperties()
     {
         Properties properties = super.defaultProperties();
+        // Supported Abiquo version
         properties.setProperty(PROPERTY_API_VERSION, AbiquoAsyncClient.API_VERSION);
+        properties.setProperty(PROPERTY_BUILD_VERSION, AbiquoAsyncClient.BUILD_VERSION);
         // By default redirects will be handled in the domain objects
         properties.setProperty(PROPERTY_MAX_REDIRECTS, "0");
         // The default polling delay between AsyncTask monitor requests

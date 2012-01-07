@@ -64,11 +64,15 @@ public abstract class BaseAbiquoAsyncClientTest<T> extends RestClientTest<T>
         String endpoint =
             checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
         String apiVersion =
-            checkNotNull(System.getProperty("test.abiquo.apiversion"), "test.abiquo.apiversion");
+            checkNotNull(System.getProperty("test.abiquo.api-version"), "test.abiquo.api-version");
+        String buildVersion =
+            checkNotNull(System.getProperty("test.abiquo.build-version"),
+                "test.abiquo.build-version");
 
         return new RestContextSpec<AbiquoClient, AbiquoAsyncClient>(AbiquoContextFactory.PROVIDER_NAME,
             endpoint,
             apiVersion,
+            buildVersion,
             null,
             identity,
             credential,

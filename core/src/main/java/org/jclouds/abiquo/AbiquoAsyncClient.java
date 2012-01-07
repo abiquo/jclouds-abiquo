@@ -37,7 +37,15 @@ import org.jclouds.rest.annotations.Delegate;
  */
 public interface AbiquoAsyncClient
 {
+    /**
+     * The version of the supported Abiquo API.
+     */
     public static final String API_VERSION = "2.0-SNAPSHOT";
+
+    /**
+     * The supported build version of the Abiquo Api.
+     */
+    public static final String BUILD_VERSION = "700d56a-297f43b";
 
     /**
      * Provides asynchronous access to Admin features.

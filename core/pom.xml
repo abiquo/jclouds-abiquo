@@ -81,6 +81,7 @@
                     </instructions>
                 </configuration>
             </plugin>
+            <!-- 
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
@@ -88,10 +89,12 @@
                         <test.abiquo.identity>${test.abiquo.identity}</test.abiquo.identity>
                         <test.abiquo.credential>${test.abiquo.credential}</test.abiquo.credential>
                         <test.abiquo.endpoint>${test.abiquo.endpoint}</test.abiquo.endpoint>
-                        <test.abiquo.apiversion>${test.abiquo.apiversion}</test.abiquo.apiversion>
+                        <test.abiquo.api-version>${test.abiquo.api-version}</test.abiquo.api-version>
+                        <test.abiquo.build-version>${test.abiquo.build-version}</test.abiquo.build-version>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
+            -->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>

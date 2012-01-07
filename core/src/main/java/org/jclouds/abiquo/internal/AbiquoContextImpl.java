@@ -37,6 +37,7 @@ import org.jclouds.lifecycle.Closer;
 import org.jclouds.location.Provider;
 import org.jclouds.rest.Utils;
 import org.jclouds.rest.annotations.ApiVersion;
+import org.jclouds.rest.annotations.BuildVersion;
 import org.jclouds.rest.annotations.Identity;
 import org.jclouds.rest.internal.RestContextImpl;
 
@@ -66,11 +67,12 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
         final TypeLiteral<AbiquoClient> syncApi, final TypeLiteral<AbiquoAsyncClient> asyncApi,
         @Provider final URI endpoint, @Provider final String provider,
         @Identity final String identity, @ApiVersion final String apiVersion,
-        final AdministrationService administrationService, final CloudService cloudService,
-        final SearchService searchService, final MonitoringService monitoringService)
+        @BuildVersion String buildVersion, final AdministrationService administrationService,
+        final CloudService cloudService, final SearchService searchService,
+        final MonitoringService monitoringService)
     {
         super(closer, credentialStore, utils, injector, syncApi, asyncApi, endpoint, provider,
-            identity, apiVersion, null);
+            identity, apiVersion, buildVersion, null);
         this.administrationService = administrationService;
         this.cloudService = cloudService;
         this.searchService = searchService;
