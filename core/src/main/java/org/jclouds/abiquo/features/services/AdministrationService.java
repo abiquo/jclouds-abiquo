@@ -26,6 +26,7 @@ import org.jclouds.abiquo.domain.enterprise.EnterpriseProperties;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.internal.BaseAdministrationService;
 
 import com.google.common.base.Predicate;
@@ -61,6 +62,23 @@ public interface AdministrationService
      * Get the datacenter with the given id.
      */
     Datacenter getDatacenter(final Integer datacenterId);
+
+    /*********************** Machine ***********************/
+
+    /**
+     * Get the list of all machines in the infrastructure.
+     */
+    public Iterable<Machine> listMachines();
+
+    /**
+     * Get the list of all machines in the infrastructure matching the given filter.
+     */
+    public Iterable<Machine> listMachines(Predicate<Machine> filter);
+
+    /**
+     * Get the first machine in the infrastructure that matches the given filter.
+     */
+    public Machine findMachine(Predicate<Machine> filter);
 
     /*********************** Enterprise ***********************/
 

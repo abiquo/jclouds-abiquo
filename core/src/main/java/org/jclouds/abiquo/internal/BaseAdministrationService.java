@@ -33,6 +33,7 @@ import org.jclouds.abiquo.domain.enterprise.EnterpriseProperties;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
@@ -40,6 +41,7 @@ import org.jclouds.abiquo.strategy.config.ListLicenses;
 import org.jclouds.abiquo.strategy.config.ListPrivileges;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
+import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
@@ -66,6 +68,9 @@ public class BaseAdministrationService implements AdministrationService
     protected final ListDatacenters listDatacenters;
 
     @VisibleForTesting
+    protected final ListMachines listMachines;
+
+    @VisibleForTesting
     protected final ListEnterprises listEnterprises;
 
     @VisibleForTesting
@@ -79,12 +84,13 @@ public class BaseAdministrationService implements AdministrationService
 
     @Inject
     protected BaseAdministrationService(final AbiquoContext context,
-        final ListDatacenters listDatacenters, final ListEnterprises listEnterprises,
-        final ListRoles listRoles, final ListLicenses listLicenses,
-        final ListPrivileges listPrivileges)
+        final ListDatacenters listDatacenters, final ListMachines listMachines,
+        final ListEnterprises listEnterprises, final ListRoles listRoles,
+        final ListLicenses listLicenses, final ListPrivileges listPrivileges)
     {
         this.context = checkNotNull(context, "context");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
+        this.listMachines = checkNotNull(listMachines, "listMachines");
         this.listEnterprises = checkNotNull(listEnterprises, "listEnterprises");
         this.listRoles = checkNotNull(listRoles, "listRoles");
         this.listLicenses = checkNotNull(listLicenses, "listLicenses");
@@ -117,6 +123,26 @@ public class BaseAdministrationService implements AdministrationService
     public Datacenter findDatacenter(final Predicate<Datacenter> filter)
     {
         return Iterables.getFirst(listDatacenters(filter), null);
+    }
+
+    /*********************** Machine ***********************/
+
+    @Override
+    public Iterable<Machine> listMachines()
+    {
+        return listMachines.execute();
+    }
+
+    @Override
+    public Iterable<Machine> listMachines(Predicate<Machine> filter)
+    {
+        return listMachines.execute(filter);
+    }
+
+    @Override
+    public Machine findMachine(Predicate<Machine> filter)
+    {
+        return Iterables.getFirst(listMachines(filter), null);
     }
 
     /*********************** Enterprise ***********************/

@@ -40,6 +40,7 @@ public class BaseAdministrationServiceTest extends BaseInjectionTest
 
         assertNotNull(service.context);
         assertNotNull(service.listDatacenters);
+        assertNotNull(service.listMachines);
         assertNotNull(service.listEnterprises);
         assertNotNull(service.listLicenses);
         assertNotNull(service.listPrivileges);

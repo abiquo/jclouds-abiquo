@@ -33,6 +33,7 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.SingleResourceTransportDto;
+import com.abiquo.model.transport.WrapperDto;
 import com.abiquo.server.core.task.TaskDto;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -161,6 +162,21 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         {
             parent.setHref(source.searchLink(sourceLinkRel).getHref());
         }
+    }
+
+    /**
+     * Join a collection of {@link WrapperDto} objects in a single collection with all the elements
+     * of each wrapper object.
+     */
+    public static <T extends SingleResourceTransportDto> Iterable<T> join(
+        Iterable< ? extends WrapperDto<T>> collection)
+    {
+        List<T> dtos = Lists.newLinkedList();
+        for (WrapperDto<T> wrapper : collection)
+        {
+            dtos.addAll(wrapper.getCollection());
+        }
+        return dtos;
     }
 
     /**

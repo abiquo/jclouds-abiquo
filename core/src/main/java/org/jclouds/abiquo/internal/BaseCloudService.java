@@ -110,6 +110,8 @@ public class BaseCloudService implements CloudService
         return Iterables.getFirst(listVirtualDatacenters(filter), null);
     }
 
+    /*********************** Virtual Machine ********************** */
+
     @Override
     public Iterable<VirtualMachine> listVirtualMachines()
     {

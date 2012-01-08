@@ -23,7 +23,6 @@ import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 import static org.jclouds.concurrent.FutureIterables.transformParallel;
 
-import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -33,20 +32,18 @@ import javax.inject.Singleton;
 
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
 import org.jclouds.logging.Logger;
 
-import com.abiquo.model.transport.SingleResourceTransportDto;
-import com.abiquo.model.transport.WrapperDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 /**
@@ -108,7 +105,7 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
                 }
             }, userExecutor, maxTime, logger, "getting virtual appliances");
 
-        return join(vapps);
+        return DomainWrapper.join(vapps);
     }
 
     private Iterable<VirtualMachineDto> listConcurrentVirtualMachines(
@@ -125,18 +122,7 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
                     }
                 }, userExecutor, maxTime, logger, "getting virtual machines");
 
-        return join(vms);
-    }
-
-    private static <T extends SingleResourceTransportDto> Iterable<T> join(
-        Iterable< ? extends WrapperDto<T>> collection)
-    {
-        List<T> dtos = Lists.newLinkedList();
-        for (WrapperDto<T> wrapper : collection)
-        {
-            dtos.addAll(wrapper.getCollection());
-        }
-        return dtos;
+        return DomainWrapper.join(vms);
     }
 
 }

@@ -35,21 +35,21 @@ import com.google.common.base.Predicate;
  */
 public class MachinePredicates
 {
-    public static Predicate<Machine> name(final String ip)
+    public static Predicate<Machine> name(final String name)
     {
-        return names(checkNotNull(ip, "name must be defined"));
+        return names(checkNotNull(name, "name must be defined"));
     }
 
-    public static Predicate<Machine> names(final String... ips)
+    public static Predicate<Machine> names(final String... names)
     {
-        checkNotNull(ips, "name must be defined");
+        checkNotNull(names, "name must be defined");
 
         return new Predicate<Machine>()
         {
             @Override
             public boolean apply(final Machine machine)
             {
-                return Arrays.asList(ips).contains(machine.getName());
+                return Arrays.asList(names).contains(machine.getName());
             }
         };
     }

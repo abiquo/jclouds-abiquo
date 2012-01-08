@@ -36,7 +36,7 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseCloudService.class)
 public interface CloudService
 {
-    /*********************** VirtualDatacenter ***********************/
+    /*********************** Virtual Datacenter ***********************/
 
     /**
      * Get the list of all virtual datacenters.
@@ -66,6 +66,8 @@ public interface CloudService
      * Get the virtual datacenter with the given id.
      */
     VirtualDatacenter getVirtualDatacenter(final Integer virtualDatacenterId);
+
+    /*********************** Virtual Machine ***********************/
 
     /**
      * Get the list of all virtual machines.
