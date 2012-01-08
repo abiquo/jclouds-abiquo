@@ -27,11 +27,13 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
+import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.google.common.annotations.VisibleForTesting;
@@ -53,13 +55,17 @@ public class BaseCloudService implements CloudService
     @VisibleForTesting
     protected final ListVirtualDatacenters listVirtualDatacenters;
 
+    @VisibleForTesting
+    protected ListVirtualMachines listVirtualMachines;
+
     @Inject
     protected BaseCloudService(final AbiquoContext context,
-        final ListVirtualDatacenters listVirtualDatacenters)
+        final ListVirtualDatacenters listVirtualDatacenters, ListVirtualMachines listVirtualMachines)
     {
         this.context = checkNotNull(context, "context");
         this.listVirtualDatacenters =
             checkNotNull(listVirtualDatacenters, "listVirtualDatacenters");
+        this.listVirtualMachines = checkNotNull(listVirtualMachines, "listVirtualMachines");
     }
 
     /*********************** Virtual Datacenter ********************** */
@@ -102,6 +108,24 @@ public class BaseCloudService implements CloudService
     public VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter)
     {
         return Iterables.getFirst(listVirtualDatacenters(filter), null);
+    }
+
+    @Override
+    public Iterable<VirtualMachine> listVirtualMachines()
+    {
+        return listVirtualMachines.execute();
+    }
+
+    @Override
+    public Iterable<VirtualMachine> listVirtualMachines(Predicate<VirtualMachine> filter)
+    {
+        return listVirtualMachines.execute(filter);
+    }
+
+    @Override
+    public VirtualMachine findVirtualMachine(Predicate<VirtualMachine> filter)
+    {
+        return Iterables.getFirst(listVirtualMachines(filter), null);
     }
 
 }

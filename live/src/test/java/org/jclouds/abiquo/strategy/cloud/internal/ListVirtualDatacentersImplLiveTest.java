@@ -33,7 +33,7 @@ import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
 
 /**
- * Live tests for the {@link ListDatacentersImpl} strategy.
+ * Live tests for the {@link ListVirtualDatacentersImpl} strategy.
  * 
  * @author Ignasi Barrera
  */
@@ -64,10 +64,10 @@ public class ListVirtualDatacentersImplLiveTest extends
 
     public void testExecutePredicateWithoutResults()
     {
-        Iterable<VirtualDatacenter> datacenters =
+        Iterable<VirtualDatacenter> virtualDatacenters =
             strategy.execute(VirtualDatacenterPredicates.name("UNEXISTING"));
-        assertNotNull(datacenters);
-        assertEquals(size(datacenters), 0);
+        assertNotNull(virtualDatacenters);
+        assertEquals(size(virtualDatacenters), 0);
     }
 
     public void testExecutePredicateWithResults()

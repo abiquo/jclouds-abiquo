@@ -16,27 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jclouds.abiquo.strategy.cloud;
 
-package org.jclouds.abiquo.internal;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.strategy.ListRootEntities;
+import org.jclouds.abiquo.strategy.cloud.internal.ListVirtualMachinesImpl;
 
-import static org.testng.Assert.assertNotNull;
-
-import org.jclouds.abiquo.features.services.SearchService;
-import org.testng.annotations.Test;
+import com.google.inject.ImplementedBy;
 
 /**
- * Unit tests for the {@link BaseSearchService} class.
+ * List virtual machines in each virtual datacenter and each virtual appliance.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit")
-public class BaseSearchServiceTest extends BaseInjectionTest
+@ImplementedBy(ListVirtualMachinesImpl.class)
+public interface ListVirtualMachines extends ListRootEntities<VirtualMachine>
 {
 
-    public void testAllPropertiesInjected()
-    {
-        BaseSearchService service = (BaseSearchService) injector.getInstance(SearchService.class);
-
-        assertNotNull(service.context);
-    }
 }

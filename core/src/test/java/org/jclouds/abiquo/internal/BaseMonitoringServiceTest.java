@@ -25,7 +25,6 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.ScheduledExecutorService;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.task.AsyncTask;
@@ -64,9 +63,6 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertNotNull(service.context);
         assertNotNull(service.scheduler);
         assertNotNull(service.pollingDelay);
-
-        assertTrue(service.context instanceof AbiquoContextImpl);
-        assertTrue(service.scheduler instanceof ScheduledExecutorService);
     }
 
     public void testAwaitCompletionWithoutTasks()

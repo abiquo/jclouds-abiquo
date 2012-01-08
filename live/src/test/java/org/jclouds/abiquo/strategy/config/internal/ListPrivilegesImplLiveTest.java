@@ -32,7 +32,7 @@ import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
 
 /**
- * Live tests for the {@link ListLicenseImpl} strategy.
+ * Live tests for the {@link ListPrivilegesImpl} strategy.
  * 
  * @author Ignasi Barrera
  */

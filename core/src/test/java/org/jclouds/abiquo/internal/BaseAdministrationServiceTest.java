@@ -20,14 +20,8 @@
 package org.jclouds.abiquo.internal;
 
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.features.services.AdministrationService;
-import org.jclouds.abiquo.strategy.admin.internal.ListRolesImpl;
-import org.jclouds.abiquo.strategy.config.internal.ListLicensesImpl;
-import org.jclouds.abiquo.strategy.config.internal.ListPrivilegesImpl;
-import org.jclouds.abiquo.strategy.enterprise.internal.ListEnterprisesImpl;
-import org.jclouds.abiquo.strategy.infrastructure.internal.ListDatacentersImpl;
 import org.testng.annotations.Test;
 
 /**
@@ -50,12 +44,5 @@ public class BaseAdministrationServiceTest extends BaseInjectionTest
         assertNotNull(service.listLicenses);
         assertNotNull(service.listPrivileges);
         assertNotNull(service.listRoles);
-
-        assertTrue(service.context instanceof AbiquoContextImpl);
-        assertTrue(service.listDatacenters instanceof ListDatacentersImpl);
-        assertTrue(service.listEnterprises instanceof ListEnterprisesImpl);
-        assertTrue(service.listLicenses instanceof ListLicensesImpl);
-        assertTrue(service.listPrivileges instanceof ListPrivilegesImpl);
-        assertTrue(service.listRoles instanceof ListRolesImpl);
     }
 }

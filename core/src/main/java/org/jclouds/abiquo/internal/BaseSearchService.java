@@ -126,4 +126,5 @@ public class BaseSearchService implements SearchService
 
         return wrap(context, PrivateNic.class, nics);
     }
+
 }
