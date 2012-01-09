@@ -24,11 +24,14 @@ import javax.ws.rs.GET;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.BindLinkToPath;
+import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.RequestFilters;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.task.TaskDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -51,4 +54,11 @@ public interface TaskAsyncClient
      */
     @GET
     ListenableFuture<TaskDto> getTask(@BinderParam(BindLinkToPath.class) RESTLink link);
+
+    /**
+     * @see TaskClient#listTasks(SingleResourceTransportDto)
+     */
+    @GET
+    <T extends SingleResourceTransportDto> ListenableFuture<TaskDto> listTasks(
+        @EndpointLink("tasks") @BinderParam(BindToPath.class) T dto);
 }

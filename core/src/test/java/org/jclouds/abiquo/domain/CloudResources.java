@@ -118,6 +118,9 @@ public class CloudResources
             .addLink(new RESTLink("state",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/state"));
         virtualMachine
+            .addLink(new RESTLink("tasks",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks"));
+        virtualMachine
             .addLink(new RESTLink("volumes",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes"));
         return virtualMachine;
@@ -310,6 +313,8 @@ public class CloudResources
             "edit"));
         buffer.append(link(
             "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/state", "state"));
+        buffer.append(link(
+            "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks", "tasks"));
         buffer.append(link(
             "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes",
             "volumes"));

@@ -24,7 +24,9 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.task.TaskDto;
+import com.abiquo.server.core.task.TasksDto;
 
 /**
  * Provides synchronous access to Abiquo Task API.
@@ -46,4 +48,12 @@ public interface TaskClient
      * @return The task.
      */
     TaskDto getTask(final RESTLink link);
+
+    /**
+     * Get the list of tasks of the given object.
+     * 
+     * @param dto The object.
+     * @return The list of tasks for the given object.
+     */
+    <T extends SingleResourceTransportDto> TasksDto listTasks(T dto);
 }

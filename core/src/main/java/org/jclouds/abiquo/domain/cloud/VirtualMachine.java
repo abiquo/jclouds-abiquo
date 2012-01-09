@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -44,10 +45,13 @@ import com.abiquo.server.core.cloud.chef.RunlistElementsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
+import com.abiquo.server.core.task.TasksDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Longs;
 
 /**
  * Adds high level functionality to {@link VirtualMachineDto}.
@@ -90,8 +94,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
     public AcceptedRequestDto<String> update()
@@ -179,6 +183,34 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public Volume getAttachedVolume(final Predicate<Volume> filter)
     {
         return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
+    }
+
+    public List<AsyncTask> listTasks()
+    {
+        TasksDto result = context.getApi().getTaskClient().listTasks(target);
+        List<AsyncTask> tasks = wrap(context, AsyncTask.class, result.getCollection());
+
+        // Return the most recent task first
+        Collections.sort(tasks, new Ordering<AsyncTask>()
+        {
+            @Override
+            public int compare(final AsyncTask left, final AsyncTask right)
+            {
+                return Longs.compare(left.getTimestamp(), right.getTimestamp());
+            }
+        }.reverse());
+
+        return tasks;
+    }
+
+    public List<AsyncTask> listTasks(final Predicate<AsyncTask> filter)
+    {
+        return Lists.newLinkedList(filter(listTasks(), filter));
+    }
+
+    public AsyncTask findTask(final Predicate<AsyncTask> filter)
+    {
+        return Iterables.getFirst(filter(listTasks(), filter), null);
     }
 
     // Actions
@@ -415,11 +447,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
-                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
-                .vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort()).idState(in.getIdState())
-                .highDisponibility(in.getHighDisponibility()).idType(in.getIdType()).password(
-                    in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
+                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
+                .cpu(in.getCpu()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
+                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
+                .idType(in.getIdType()).password(in.getPassword());
         }
     }
 
