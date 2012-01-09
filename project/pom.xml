@@ -28,7 +28,9 @@
         <test.abiquo.credential>xabiquo</test.abiquo.credential>
         <test.abiquo.api-version>${abiquo.version}</test.abiquo.api-version>
         <test.abiquo.build-version>${abiquo.build}</test.abiquo.build-version>
+        <!--
         <test.abiquo.endpoint>http://localhost/api</test.abiquo.endpoint>
+        -->
     </properties>
     
     <scm>

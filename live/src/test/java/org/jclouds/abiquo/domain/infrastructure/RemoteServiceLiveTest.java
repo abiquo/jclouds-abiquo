@@ -34,7 +34,6 @@ import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
 import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
-import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -83,7 +82,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         assertNull(deleted);
 
         // Recreate it to avoid altering other tests
-        String ip = Config.get("abiquo.remoteservices.address");
+        String ip = context.getEndpoint().getHost(); // Assume a monolithic install
         RemoteService bpm =
             RemoteService.builder(context, env.datacenter).type(RemoteServiceType.BPM_SERVICE)
                 .ip(ip).build();

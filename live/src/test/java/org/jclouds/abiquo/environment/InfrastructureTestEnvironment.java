@@ -115,7 +115,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createDatacenter()
     {
-        String remoteServicesAddress = Config.get("abiquo.remoteservices.address");
+        // Assume a monolithic install
+        String remoteServicesAddress = context.getEndpoint().getHost();
 
         datacenter =
             Datacenter.builder(context).name(randomName()).location("Honolulu")

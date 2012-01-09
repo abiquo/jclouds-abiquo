@@ -64,11 +64,8 @@ public class BaseInjectionTest
 
     protected Properties buildProperties()
     {
-        String endpoint =
-            checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
-
         Properties props = new Properties();
-        props.setProperty("abiquo.endpoint", endpoint);
+        props.setProperty("abiquo.endpoint", "http://localhost/api");
         return props;
     }
 
