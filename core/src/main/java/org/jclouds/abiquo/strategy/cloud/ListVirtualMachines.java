@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.strategy.cloud;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;

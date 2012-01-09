@@ -108,7 +108,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
     {
         return new BaseMonitoringService(injector.getInstance(AbiquoContext.class),
             injector.getInstance(ScheduledExecutorService.class),
-            100L,
+            100L, // Use a small delay in tests
             new MockDeployMonitor(),
             new MockUndeployMonitor());
     }

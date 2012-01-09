@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.functions.monitor;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.annotation.Resource;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -45,6 +47,8 @@ public class VirtualMachineDeployMonitor implements Function<VirtualMachine, Mon
     @Override
     public MonitorStatus apply(final VirtualMachine virtualMachine)
     {
+        checkNotNull(virtualMachine, "virtualMachine");
+
         try
         {
             VirtualMachineState state = virtualMachine.getState();

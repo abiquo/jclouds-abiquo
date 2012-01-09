@@ -20,14 +20,15 @@
 package org.jclouds.abiquo.features.services;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.task.AsyncJob;
-import org.jclouds.abiquo.domain.task.AsyncTask;
+import org.jclouds.abiquo.domain.monitor.MonitorCallback;
+import org.jclouds.abiquo.domain.monitor.MonitorStatus;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 
+import com.google.common.base.Function;
 import com.google.inject.ImplementedBy;
 
 /**
- * Utility service to monitor {@link AsyncTask} and {@link AsyncJob} progress.
+ * Utility service to monitor asynchronous operations.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -35,8 +36,10 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseMonitoringService.class)
 public interface MonitoringService
 {
+    /*************** Virtual machine ***************/
+
     /**
-     * Monitors the given {@link VirtualMachine}s and blocks until either the deploy is met or
+     * Monitor the given {@link VirtualMachine}s and blocks until either the deploy is met or
      * failed.
      * 
      * @param virtualMachine The {@link VirtualMachine}s to monitor.
@@ -44,11 +47,34 @@ public interface MonitoringService
     void awaitCompletionDeploy(final VirtualMachine... virtualMachine);
 
     /**
-     * Monitors the given {@link VirtualMachine}s and blocks until either the undeploy is met or
+     * Monitor the given {@link VirtualMachine}s and blocks until either the undeploy is met or
      * failed.
      * 
      * @param virtualMachine The {@link VirtualMachine}s to monitor.
      */
     void awaitCompletionUndeploy(final VirtualMachine... virtualMachine);
+
+    /*************** Generic methods ***************/
+
+    /**
+     * Monitor the given objects using the given complete condition.
+     * 
+     * @param completeCondition The function that will be used to decide if the asynchronous
+     *            operations have finished.
+     * @param objects The objects to monitor.
+     */
+    public <T> void awaitCompletion(final Function<T, MonitorStatus> completeCondition,
+        final T... objects);
+
+    /**
+     * Monitor the given objects using the given complete condition.
+     * 
+     * @param callback The callback to be invoked when an asynchronous operation completes.
+     * @param completeCondition The function that will be used to decide if the asynchronous
+     *            operations have finished.
+     * @param objects The objects to monitor.
+     */
+    public <T> void monitor(final MonitorCallback<T> callback,
+        final Function<T, MonitorStatus> completeCondition, final T... objects);
 
 }

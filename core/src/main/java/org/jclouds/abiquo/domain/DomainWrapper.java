@@ -55,8 +55,8 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     protected DomainWrapper(final AbiquoContext context, final T target)
     {
         super();
-        this.context = context;
-        this.target = target;
+        this.context = checkNotNull(context, "context");
+        this.target = checkNotNull(target, "target");
     }
 
     /**
@@ -169,7 +169,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      * of each wrapper object.
      */
     public static <T extends SingleResourceTransportDto> Iterable<T> join(
-        Iterable< ? extends WrapperDto<T>> collection)
+        final Iterable< ? extends WrapperDto<T>> collection)
     {
         List<T> dtos = Lists.newLinkedList();
         for (WrapperDto<T> wrapper : collection)

@@ -112,7 +112,8 @@ public class BaseMonitoringService implements MonitoringService
         awaitCompletion(undeployMonitor, vms);
     }
 
-    protected <T> void awaitCompletion(final Function<T, MonitorStatus> completeCondition,
+    @Override
+    public <T> void awaitCompletion(final Function<T, MonitorStatus> completeCondition,
         final T... objects)
     {
         checkNotNull(completeCondition, "completeCondition");
@@ -125,7 +126,8 @@ public class BaseMonitoringService implements MonitoringService
         }
     }
 
-    protected <T> void monitor(final MonitorCallback<T> callback,
+    @Override
+    public <T> void monitor(final MonitorCallback<T> callback,
         final Function<T, MonitorStatus> completeCondition, final T... objects)
     {
         checkNotNull(callback, "callback");

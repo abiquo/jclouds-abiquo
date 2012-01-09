@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.functions.monitor;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import javax.annotation.Resource;
 import javax.inject.Singleton;
 
@@ -32,7 +34,6 @@ import com.google.common.base.Function;
 /**
  * This class takes care of monitoring the a undeploy of a {@link VirtualMachine}.
  * 
- * @see org.jclouds.predicates.RetryablePredicate
  * @author Serafin Sedano
  */
 @Singleton
@@ -44,6 +45,8 @@ public class VirtualMachineUndeployMonitor implements Function<VirtualMachine, M
     @Override
     public MonitorStatus apply(final VirtualMachine virtualMachine)
     {
+        checkNotNull(virtualMachine, "virtualMachine");
+
         try
         {
             VirtualMachineState state = virtualMachine.getState();
