@@ -19,9 +19,9 @@
 
 package org.jclouds.abiquo.features.services;
 
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.task.AsyncJob;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.domain.task.AsyncTaskCallback;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 
 import com.google.inject.ImplementedBy;
@@ -36,17 +36,19 @@ import com.google.inject.ImplementedBy;
 public interface MonitoringService
 {
     /**
-     * Monitors the given tasks and blocks until all of them complete.
+     * Monitors the given {@link VirtualMachine}s and blocks until either the deploy is met or
+     * failed.
      * 
-     * @param tasks The tasks to monitor.
+     * @param virtualMachine The {@link VirtualMachine}s to monitor.
      */
-    void awaitCompletion(final AsyncTask... tasks);
+    void awaitCompletionDeploy(final VirtualMachine... virtualMachine);
 
     /**
-     * Monitors the given tasks and calls the given callback every time a task completes.
+     * Monitors the given {@link VirtualMachine}s and blocks until either the undeploy is met or
+     * failed.
      * 
-     * @param tasks The tasks to monitor.
-     * @param callback The callback to execute when the tasks complete (with or without errors).
+     * @param virtualMachine The {@link VirtualMachine}s to monitor.
      */
-    void monitor(final AsyncTaskCallback callback, final AsyncTask... tasks);
+    void awaitCompletionUndeploy(final VirtualMachine... virtualMachine);
+
 }

@@ -50,7 +50,7 @@ public class AsyncTask extends DomainWrapper<TaskDto>
      */
     public void refresh()
     {
-        target = context.getApi().getTaskClient().getTask(target.getEditLink());
+        target = context.getApi().getTaskClient().getTask(target.searchLink("self"));
     }
 
     // Children access
