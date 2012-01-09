@@ -49,6 +49,16 @@ public interface MonitoringService
     void awaitCompletionDeploy(final VirtualMachine... virtualMachine);
 
     /**
+     * Monitor the given {@link VirtualMachine}s and call the given callback the deploy is met or
+     * failed.
+     * 
+     * @param callback The callback.
+     * @param virtualMachine The {@link VirtualMachine}s to monitor.
+     */
+    public void monitorDeploy(final MonitorCallback<VirtualMachine> callback,
+        final VirtualMachine... vms);
+
+    /**
      * Monitor the given {@link VirtualMachine}s and blocks until either the deploy is met or
      * failed.
      * 
@@ -60,12 +70,34 @@ public interface MonitoringService
         final VirtualMachine... virtualMachine);
 
     /**
+     * Monitor the given {@link VirtualMachine}s and call the given callback the deploy is met or
+     * failed.
+     * 
+     * @param maxWait The maximum time to wait.
+     * @param timeUnit The time unit for the maxWait parameter.
+     * @param callback The callback.
+     * @param virtualMachine The {@link VirtualMachine}s to monitor.
+     */
+    public void monitorDeploy(final Long maxWait, final TimeUnit timeUnit,
+        final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms);
+
+    /**
      * Monitor the given {@link VirtualMachine}s and blocks until either the undeploy is met or
      * failed.
      * 
      * @param virtualMachine The {@link VirtualMachine}s to monitor.
      */
     void awaitCompletionUndeploy(final VirtualMachine... virtualMachine);
+
+    /**
+     * Monitor the given {@link VirtualMachine}s and call the given callback the undeploy is met or
+     * failed.
+     * 
+     * @param callback The callback.
+     * @param virtualMachine The {@link VirtualMachine}s to monitor.
+     */
+    public void monitorUndeploy(final MonitorCallback<VirtualMachine> callback,
+        final VirtualMachine... vms);
 
     /**
      * Monitor the given {@link VirtualMachine}s and blocks until either the undeploy is met or
@@ -77,6 +109,18 @@ public interface MonitoringService
      */
     void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
         final VirtualMachine... virtualMachine);
+
+    /**
+     * Monitor the given {@link VirtualMachine}s and call the given callback the undeploy is met or
+     * failed.
+     * 
+     * @param maxWait The maximum time to wait.
+     * @param timeUnit The time unit for the maxWait parameter.
+     * @param callback The callback.
+     * @param virtualMachine The {@link VirtualMachine}s to monitor.
+     */
+    public void monitorUndeploy(final Long maxWait, final TimeUnit timeUnit,
+        final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms);
 
     /*************** Generic methods ***************/
 

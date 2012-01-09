@@ -118,10 +118,24 @@ public class BaseMonitoringService implements MonitoringService
     }
 
     @Override
+    public void monitorDeploy(final MonitorCallback<VirtualMachine> callback,
+        final VirtualMachine... vms)
+    {
+        monitor(callback, deployMonitor, vms);
+    }
+
+    @Override
     public void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
         final VirtualMachine... vms)
     {
         awaitCompletion(maxWait, timeUnit, deployMonitor, vms);
+    }
+
+    @Override
+    public void monitorDeploy(final Long maxWait, final TimeUnit timeUnit,
+        final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms)
+    {
+        monitor(maxWait, timeUnit, callback, deployMonitor, vms);
     }
 
     @Override
@@ -131,10 +145,24 @@ public class BaseMonitoringService implements MonitoringService
     }
 
     @Override
+    public void monitorUndeploy(final MonitorCallback<VirtualMachine> callback,
+        final VirtualMachine... vms)
+    {
+        monitor(callback, undeployMonitor, vms);
+    }
+
+    @Override
     public void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
         final VirtualMachine... vms)
     {
         awaitCompletion(maxWait, timeUnit, undeployMonitor, vms);
+    }
+
+    @Override
+    public void monitorUndeploy(final Long maxWait, final TimeUnit timeUnit,
+        final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms)
+    {
+        monitor(maxWait, timeUnit, callback, undeployMonitor, vms);
     }
 
     /*************** Generic methods ***************/
