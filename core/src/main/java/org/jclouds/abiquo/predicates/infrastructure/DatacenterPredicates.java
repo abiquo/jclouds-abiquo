@@ -34,12 +34,7 @@ import com.google.common.base.Predicate;
  */
 public class DatacenterPredicates
 {
-    public static Predicate<Datacenter> id(final Integer id)
-    {
-        return ids(checkNotNull(id, "id must be defined"));
-    }
-
-    public static Predicate<Datacenter> ids(final Integer... ids)
+    public static Predicate<Datacenter> id(final Integer... ids)
     {
         checkNotNull(ids, "ids must be defined");
 
@@ -53,12 +48,7 @@ public class DatacenterPredicates
         };
     }
 
-    public static Predicate<Datacenter> name(final String name)
-    {
-        return names(checkNotNull(name, "name must be defined"));
-    }
-
-    public static Predicate<Datacenter> names(final String... names)
+    public static Predicate<Datacenter> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
@@ -72,12 +62,7 @@ public class DatacenterPredicates
         };
     }
 
-    public static Predicate<Datacenter> location(final String location)
-    {
-        return locations(checkNotNull(location, "location must be defined"));
-    }
-
-    public static Predicate<Datacenter> locations(final String... locations)
+    public static Predicate<Datacenter> location(final String... locations)
     {
         checkNotNull(locations, "locations must be defined");
 

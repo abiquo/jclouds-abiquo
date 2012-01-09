@@ -34,12 +34,7 @@ import com.google.common.base.Predicate;
  */
 public class VirtualMachinePredicates
 {
-    public static Predicate<VirtualMachine> name(final String name)
-    {
-        return names(checkNotNull(name, "name must be defined"));
-    }
-
-    public static Predicate<VirtualMachine> names(final String... names)
+    public static Predicate<VirtualMachine> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 

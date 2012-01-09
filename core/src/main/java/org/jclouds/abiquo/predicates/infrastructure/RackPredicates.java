@@ -35,12 +35,7 @@ import com.google.common.base.Predicate;
  */
 public class RackPredicates
 {
-    public static Predicate<Rack> name(final String name)
-    {
-        return names(checkNotNull(name, "name must be defined"));
-    }
-
-    public static Predicate<Rack> names(final String... names)
+    public static Predicate<Rack> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 

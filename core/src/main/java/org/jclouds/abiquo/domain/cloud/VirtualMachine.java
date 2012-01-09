@@ -543,11 +543,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         target.setHighDisponibility(highDisponibility);
     }
 
-    public void setIdState(final int idState)
-    {
-        target.setIdState(idState);
-    }
-
     public void setIdType(final int idType)
     {
         target.setIdType(idType);
@@ -625,9 +620,9 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     @Override
     public String toString()
     {
-        return "VirtualMachine [id=" + getId() + ", state=" + getState() + ", cpu=" + getCpu()
-            + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes() + ", ha="
-            + getHighDisponibility() + ", idType=" + getIdType() + ", name=" + getName()
+        return "VirtualMachine [id=" + getId() + ", state=" + getState().name() + ", cpu="
+            + getCpu() + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes()
+            + ", ha=" + getHighDisponibility() + ", idType=" + getIdType() + ", name=" + getName()
             + ", password=" + getPassword() + ", ram=" + getRam() + ", uuid=" + getUuid()
             + ", vrdpIp=" + getVdrpIP() + ", vdrpPort=" + getVdrpPort() + "]";
     }

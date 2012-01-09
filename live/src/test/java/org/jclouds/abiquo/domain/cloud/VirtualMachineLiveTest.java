@@ -20,6 +20,9 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.task.AsyncTask;
@@ -42,12 +45,10 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         return new CloudTestEnvironment(context);
     }
 
-    @Test(enabled = false)
-    public void testDeploy()
+    public void testGetTasks()
     {
-        AsyncTask task = env.virtualMachine.deploy();
-        System.out.println(task);
-        System.out.println(task.getJobs());
-        assertNotNull(task);
+        List<AsyncTask> tasks = env.virtualMachine.listTasks();
+        assertNotNull(tasks);
+        assertTrue(tasks.isEmpty());
     }
 }

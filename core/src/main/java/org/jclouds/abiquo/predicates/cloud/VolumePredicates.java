@@ -35,12 +35,7 @@ import com.google.common.base.Predicates;
  */
 public class VolumePredicates
 {
-    public static Predicate<Volume> name(final String name)
-    {
-        return names(checkNotNull(name, "name must be defined"));
-    }
-
-    public static Predicate<Volume> names(final String... names)
+    public static Predicate<Volume> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 

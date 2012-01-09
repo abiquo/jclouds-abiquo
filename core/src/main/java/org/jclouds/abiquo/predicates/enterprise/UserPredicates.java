@@ -34,12 +34,7 @@ import com.google.common.base.Predicate;
  */
 public class UserPredicates
 {
-    public static Predicate<User> nick(final String nick)
-    {
-        return nicks(checkNotNull(nick, "nick must be defined"));
-    }
-
-    public static Predicate<User> nicks(final String... nicks)
+    public static Predicate<User> nick(final String... nicks)
     {
         checkNotNull(nicks, "nicks must be defined");
 

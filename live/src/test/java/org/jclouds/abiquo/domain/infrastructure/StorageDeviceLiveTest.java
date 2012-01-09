@@ -54,8 +54,8 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
         // Recover the updated storage device
         StorageDeviceDto updated =
-            env.infrastructureClient.getStorageDevice(env.datacenter.unwrap(), env.storageDevice
-                .getId());
+            env.infrastructureClient.getStorageDevice(env.datacenter.unwrap(),
+                env.storageDevice.getId());
 
         assertEquals(updated.getName(), "Updated storage device");
     }
@@ -66,26 +66,26 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
         assertEquals(Iterables.size(storageDevices), 1);
 
         storageDevices =
-            env.datacenter.listStorageDevices(StorageDevicePredicates
-                .name(env.storageDevice.getName()));
+            env.datacenter.listStorageDevices(StorageDevicePredicates.name(env.storageDevice
+                .getName()));
         assertEquals(Iterables.size(storageDevices), 1);
 
         storageDevices =
-            env.datacenter.listStorageDevices(StorageDevicePredicates
-                .name(env.storageDevice.getName() + "FAIL"));
+            env.datacenter.listStorageDevices(StorageDevicePredicates.name(env.storageDevice
+                .getName() + "FAIL"));
         assertEquals(Iterables.size(storageDevices), 0);
     }
 
     public void testFindStorageDevice()
     {
         StorageDevice storageDevice =
-            env.datacenter.findStorageDevice(StorageDevicePredicates
-                .names(env.storageDevice.getName()));
+            env.datacenter.findStorageDevice(StorageDevicePredicates.name(env.storageDevice
+                .getName()));
         assertNotNull(storageDevice);
 
         storageDevice =
-            env.datacenter.findStorageDevice(StorageDevicePredicates
-                .names(env.storageDevice.getName() + "FAIL"));
+            env.datacenter.findStorageDevice(StorageDevicePredicates.name(env.storageDevice
+                .getName() + "FAIL"));
         assertNull(storageDevice);
     }
 

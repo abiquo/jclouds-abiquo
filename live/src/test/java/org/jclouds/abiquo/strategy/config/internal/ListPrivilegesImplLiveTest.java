@@ -31,6 +31,8 @@ import org.jclouds.abiquo.predicates.configuration.PrivilegePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Predicates;
+
 /**
  * Live tests for the {@link ListPrivilegesImpl} strategy.
  * 
@@ -79,7 +81,7 @@ public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest<Confi
     public void testExecuteNotPredicateWithResults()
     {
         Iterable<Privilege> privileges =
-            strategy.execute(PrivilegePredicates.nameNot("USERS_MANAGE_USERS"));
+            strategy.execute(Predicates.not(PrivilegePredicates.name("USERS_MANAGE_USERS")));
 
         Iterable<Privilege> allPrivileges = strategy.execute();
 

@@ -36,12 +36,7 @@ import com.google.common.base.Predicate;
  */
 public class RemoteServicePredicates
 {
-    public static Predicate<RemoteService> type(final RemoteServiceType type)
-    {
-        return types(checkNotNull(type, "type must be defined"));
-    }
-
-    public static Predicate<RemoteService> types(final RemoteServiceType... types)
+    public static Predicate<RemoteService> type(final RemoteServiceType... types)
     {
         checkNotNull(types, "types must be defined");
 

@@ -34,21 +34,30 @@ import com.google.common.base.Predicate;
  */
 public class VirtualMachineTemplatePredicates
 {
-    public static Predicate<VirtualMachineTemplate> name(final String name)
-    {
-        return names(checkNotNull(name, "name must be defined"));
-    }
-
-    public static Predicate<VirtualMachineTemplate> names(final String... names)
+    public static Predicate<VirtualMachineTemplate> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
         return new Predicate<VirtualMachineTemplate>()
         {
             @Override
-            public boolean apply(final VirtualMachineTemplate virtualMachineTemplate)
+            public boolean apply(final VirtualMachineTemplate template)
             {
-                return Arrays.asList(names).contains(virtualMachineTemplate.getName());
+                return Arrays.asList(names).contains(template.getName());
+            }
+        };
+    }
+
+    public static Predicate<VirtualMachineTemplate> diskFormat(final String... formats)
+    {
+        checkNotNull(formats, "formats must be defined");
+
+        return new Predicate<VirtualMachineTemplate>()
+        {
+            @Override
+            public boolean apply(final VirtualMachineTemplate template)
+            {
+                return Arrays.asList(formats).contains(template.getDiskFormatType());
             }
         };
     }

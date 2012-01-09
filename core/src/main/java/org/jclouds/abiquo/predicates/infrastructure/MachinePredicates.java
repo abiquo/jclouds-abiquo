@@ -35,12 +35,7 @@ import com.google.common.base.Predicate;
  */
 public class MachinePredicates
 {
-    public static Predicate<Machine> name(final String name)
-    {
-        return names(checkNotNull(name, "name must be defined"));
-    }
-
-    public static Predicate<Machine> names(final String... names)
+    public static Predicate<Machine> name(final String... names)
     {
         checkNotNull(names, "name must be defined");
 

@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
+import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.Nic;
 
 import com.google.common.base.Predicate;
@@ -34,12 +35,7 @@ import com.google.common.base.Predicate;
  */
 public class NicPredicates
 {
-    public static Predicate<Nic> name(final String name)
-    {
-        return names(checkNotNull(name, "name must be defined"));
-    }
-
-    public static Predicate<Nic> names(final String... names)
+    public static Predicate<Nic> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 

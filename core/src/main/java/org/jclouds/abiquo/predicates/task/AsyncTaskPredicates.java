@@ -35,12 +35,7 @@ import com.google.common.base.Predicate;
  */
 public class AsyncTaskPredicates
 {
-    public static Predicate<AsyncTask> state(final TaskState state)
-    {
-        return states(checkNotNull(state, "state must be defined"));
-    }
-
-    public static Predicate<AsyncTask> states(final TaskState... states)
+    public static Predicate<AsyncTask> state(final TaskState... states)
     {
         checkNotNull(states, "states must be defined");
 

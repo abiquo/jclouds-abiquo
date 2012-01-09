@@ -77,11 +77,11 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<Infrastructure
     {
         StoragePool storagePool =
             env.storageDevice
-                .findStoragePool(StoragePoolPredicates.names(env.storagePool.getName()));
+                .findStoragePool(StoragePoolPredicates.name(env.storagePool.getName()));
         assertNotNull(storagePool);
 
         storagePool =
-            env.storageDevice.findStoragePool(StoragePoolPredicates.names(env.storagePool.getName()
+            env.storageDevice.findStoragePool(StoragePoolPredicates.name(env.storagePool.getName()
                 + "FAIL"));
         assertNull(storagePool);
     }

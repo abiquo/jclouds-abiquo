@@ -34,12 +34,7 @@ import com.google.common.base.Predicate;
  */
 public class NetworkPredicates
 {
-    public static Predicate<Network< ? >> name(final String name)
-    {
-        return names(checkNotNull(name, "name must be defined"));
-    }
-
-    public static Predicate<Network< ? >> names(final String... names)
+    public static Predicate<Network< ? >> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
