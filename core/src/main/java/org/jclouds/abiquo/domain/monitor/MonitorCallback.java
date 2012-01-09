@@ -37,9 +37,16 @@ public interface MonitorCallback<T>
     public void onCompleted(T object);
 
     /**
-     * Callback method to be executed when the monitor completes with errors
+     * Callback method to be executed when the monitor completes with errors.
      * 
      * @param object The failed monitored object.
      */
     public void onFailed(T object);
+
+    /**
+     * Callback method to be executed when the monitor reaches the timeout.
+     * 
+     * @param object The monitored object.
+     */
+    public void onTimeout(T object);
 }

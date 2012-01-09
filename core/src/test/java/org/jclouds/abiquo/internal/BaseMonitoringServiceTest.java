@@ -19,14 +19,15 @@
 
 package org.jclouds.abiquo.internal;
 
-import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
+import static org.easymock.EasyMock.createMock;
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.monitor.MonitorStatus;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
@@ -34,7 +35,7 @@ import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
 import org.jclouds.abiquo.internal.BaseMonitoringService.BlockingCallback;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.google.common.base.Function;
 
 /**
  * Unit tests for the {@link BaseMonitoringService} class.
@@ -58,36 +59,40 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertNotNull(service.undeployMonitor);
     }
 
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testAwaitCompletionWithNullFunction()
+    {
+        BaseMonitoringService service = mockMonitoringService();
+        service.awaitCompletion(null, new Object[] {});
+    }
+
     public void testAwaitCompletionWithoutTasks()
     {
         BaseMonitoringService service = mockMonitoringService();
 
-        service.awaitCompletionDeploy();
+        service.awaitCompletion(new MockMonitor());
         assertTrue(service.runningMonitors.isEmpty());
 
-        service.awaitCompletionDeploy((VirtualMachine[]) null);
+        service.awaitCompletion(new MockMonitor(), (Object[]) null);
         assertTrue(service.runningMonitors.isEmpty());
 
-        service.awaitCompletionDeploy(new VirtualMachine[] {});
+        service.awaitCompletion(new MockMonitor(), new Object[] {});
         assertTrue(service.runningMonitors.isEmpty());
     }
 
     public void testAwaitCompletion()
     {
         BaseMonitoringService service = mockMonitoringService();
-        VirtualMachine vm = wrap(service.context, VirtualMachine.class, new VirtualMachineDto());
 
-        service.awaitCompletionDeploy(vm);
+        service.awaitCompletion(new MockMonitor(), new Object());
         assertTrue(service.runningMonitors.isEmpty());
     }
 
     public void testAwaitCompletionMultipleTasks()
     {
         BaseMonitoringService service = mockMonitoringService();
-        VirtualMachine vm1 = wrap(service.context, VirtualMachine.class, new VirtualMachineDto());
-        VirtualMachine vm2 = wrap(service.context, VirtualMachine.class, new VirtualMachineDto());
 
-        service.awaitCompletionDeploy(vm1, vm2);
+        service.awaitCompletion(new MockMonitor(), new Object(), new Object());
         assertTrue(service.runningMonitors.isEmpty());
     }
 
@@ -104,45 +109,133 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         new BlockingCallback<Object>(0);
     }
 
+    public void testMonitor()
+    {
+        BaseMonitoringService service = mockMonitoringService();
+        CountingCallback callback = new CountingCallback(1);
+
+        service.monitor(callback, new MockMonitor(), new Object());
+        callback.lock();
+
+        assertTrue(service.runningMonitors.isEmpty());
+        assertEquals(callback.numCompletes, 1);
+        assertEquals(callback.numFailures, 0);
+        assertEquals(callback.numTimeouts, 0);
+    }
+
+    public void testMonutorMultipleTasks()
+    {
+        BaseMonitoringService service = mockMonitoringService();
+        CountingCallback callback = new CountingCallback(2);
+
+        service.monitor(callback, new MockMonitor(), new Object(), new Object());
+        callback.lock();
+
+        assertTrue(service.runningMonitors.isEmpty());
+        assertEquals(callback.numCompletes, 2);
+        assertEquals(callback.numFailures, 0);
+        assertEquals(callback.numTimeouts, 0);
+    }
+
+    public void testMonitorReachesTimeout()
+    {
+        BaseMonitoringService service = mockMonitoringService();
+        CountingCallback callback = new CountingCallback(1);
+
+        service.monitor(100L, TimeUnit.MILLISECONDS, callback, new MockInfiniteMonitor(),
+            new Object());
+        callback.lock();
+
+        assertTrue(service.runningMonitors.isEmpty());
+        assertEquals(callback.numCompletes, 0);
+        assertEquals(callback.numFailures, 0);
+        assertEquals(callback.numTimeouts, 1);
+    }
+
+    public void testMonitorMultipleTasksReachesTimeout()
+    {
+        BaseMonitoringService service = mockMonitoringService();
+        CountingCallback callback = new CountingCallback(2);
+
+        service.monitor(100L, TimeUnit.MILLISECONDS, callback, new MockInfiniteMonitor(),
+            new Object(), new Object());
+        callback.lock();
+
+        assertTrue(service.runningMonitors.isEmpty());
+        assertEquals(callback.numCompletes, 0);
+        assertEquals(callback.numFailures, 0);
+        assertEquals(callback.numTimeouts, 2);
+    }
+
     private BaseMonitoringService mockMonitoringService()
     {
         return new BaseMonitoringService(injector.getInstance(AbiquoContext.class),
             injector.getInstance(ScheduledExecutorService.class),
             100L, // Use a small delay in tests
-            new MockDeployMonitor(),
-            new MockUndeployMonitor());
+            createMock(VirtualMachineDeployMonitor.class),
+            createMock(VirtualMachineUndeployMonitor.class));
     }
 
-    private static class MockDeployMonitor extends VirtualMachineDeployMonitor
+    private static class MockMonitor implements Function<Object, MonitorStatus>
     {
         private int finishAfterCount;
 
-        public MockDeployMonitor()
+        public MockMonitor()
         {
             this.finishAfterCount = 1; // Simulate task completion after one refresh
         }
 
         @Override
-        public MonitorStatus apply(final VirtualMachine virtualMachine)
+        public MonitorStatus apply(final Object object)
         {
             return finishAfterCount-- <= 0 ? MonitorStatus.DONE : MonitorStatus.CONTINUE;
         }
     }
 
-    private static class MockUndeployMonitor extends VirtualMachineUndeployMonitor
+    private static class MockInfiniteMonitor implements Function<Object, MonitorStatus>
     {
-        private int finishAfterCount;
 
-        public MockUndeployMonitor()
+        @Override
+        public MonitorStatus apply(final Object object)
         {
-            this.finishAfterCount = 1; // Simulate task completion after one refresh
+            return MonitorStatus.CONTINUE;
+        }
+    }
+
+    private static class CountingCallback extends BlockingCallback<Object>
+    {
+        public int numCompletes = 0;
+
+        public int numFailures = 0;
+
+        public int numTimeouts = 0;
+
+        public CountingCallback(final int countDownToCompletion)
+        {
+            super(countDownToCompletion);
         }
 
         @Override
-        public MonitorStatus apply(final VirtualMachine virtualMachine)
+        public void onCompleted(final Object object)
         {
-            return finishAfterCount-- <= 0 ? MonitorStatus.DONE : MonitorStatus.CONTINUE;
+            super.onCompleted(object);
+            numCompletes++;
         }
+
+        @Override
+        public void onFailed(final Object object)
+        {
+            super.onFailed(object);
+            numFailures++;
+        }
+
+        @Override
+        public void onTimeout(final Object object)
+        {
+            super.onTimeout(object);
+            numTimeouts++;
+        }
+
     }
 
 }

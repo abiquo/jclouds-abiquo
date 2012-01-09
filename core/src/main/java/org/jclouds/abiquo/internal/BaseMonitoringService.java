@@ -78,12 +78,20 @@ public class BaseMonitoringService implements MonitoringService
     private Logger logger = Logger.NULL;
 
     /**
-     * A map containing all running monitors indexed by task id.
+     * A map containing all running monitors indexed by the monitored object.
      * <p>
-     * This map will be used to cancel concrete tasks when they are completed.
+     * This map will be used to cancel concrete monitors when they are completed.
      */
     @VisibleForTesting
     protected Map<Object, ScheduledFuture< ? >> runningMonitors;
+
+    /**
+     * A map containing all timeouts used in object monitors.
+     * <p>
+     * This map will be used to cancel monitors when the timeout reaches.
+     */
+    @VisibleForTesting
+    protected Map<Object, Long> timeouts;
 
     @Inject
     public BaseMonitoringService(final AbiquoContext context,
@@ -98,12 +106,22 @@ public class BaseMonitoringService implements MonitoringService
         this.deployMonitor = checkNotNull(deployMonitor, "deployMonitor");
         this.undeployMonitor = checkNotNull(undeployMonitor, "undeployMonitor");
         this.runningMonitors = Maps.newHashMap();
+        this.timeouts = Maps.newHashMap();
     }
+
+    /*************** Virtual machine ***************/
 
     @Override
     public void awaitCompletionDeploy(final VirtualMachine... vms)
     {
         awaitCompletion(deployMonitor, vms);
+    }
+
+    @Override
+    public void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualMachine... vms)
+    {
+        awaitCompletion(maxWait, timeUnit, deployMonitor, vms);
     }
 
     @Override
@@ -113,15 +131,31 @@ public class BaseMonitoringService implements MonitoringService
     }
 
     @Override
+    public void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualMachine... vms)
+    {
+        awaitCompletion(maxWait, timeUnit, undeployMonitor, vms);
+    }
+
+    /*************** Generic methods ***************/
+
+    @Override
     public <T> void awaitCompletion(final Function<T, MonitorStatus> completeCondition,
         final T... objects)
+    {
+        awaitCompletion(null, null, completeCondition, objects);
+    }
+
+    @Override
+    public <T> void awaitCompletion(final Long maxWait, final TimeUnit timeUnit,
+        final Function<T, MonitorStatus> completeCondition, final T... objects)
     {
         checkNotNull(completeCondition, "completeCondition");
 
         if (objects != null && objects.length > 0)
         {
             BlockingCallback<T> monitorLock = new BlockingCallback<T>(objects.length);
-            monitor(monitorLock, completeCondition, objects);
+            monitor(maxWait, timeUnit, monitorLock, completeCondition, objects);
             monitorLock.lock();
         }
     }
@@ -130,8 +164,20 @@ public class BaseMonitoringService implements MonitoringService
     public <T> void monitor(final MonitorCallback<T> callback,
         final Function<T, MonitorStatus> completeCondition, final T... objects)
     {
+        monitor(null, null, callback, completeCondition, objects);
+    }
+
+    @Override
+    public <T> void monitor(final Long maxWait, final TimeUnit timeUnit,
+        final MonitorCallback<T> callback, final Function<T, MonitorStatus> completeCondition,
+        final T... objects)
+    {
         checkNotNull(callback, "callback");
         checkNotNull(completeCondition, "completeCondition");
+        if (maxWait != null)
+        {
+            checkNotNull(timeUnit, "timeUnit");
+        }
 
         if (objects != null && objects.length > 0)
         {
@@ -141,8 +187,15 @@ public class BaseMonitoringService implements MonitoringService
                     scheduler.scheduleWithFixedDelay(new AsyncMonitor<T>(object,
                         completeCondition,
                         callback), 0, pollingDelay, TimeUnit.MILLISECONDS);
+
                 // Store the future in the monitors map so we can cancel it when the task completes
                 runningMonitors.put(object, future);
+
+                // Store the timeout, if present
+                if (maxWait != null)
+                {
+                    timeouts.put(object, System.currentTimeMillis() + timeUnit.toMillis(maxWait));
+                }
             }
         }
     }
@@ -179,11 +232,18 @@ public class BaseMonitoringService implements MonitoringService
                 // Remove it from the map only if the future has been cancelled. If cancel fails,
                 // next run will remove it.
                 runningMonitors.remove(monitoredObject);
+                timeouts.remove(monitoredObject);
             }
             catch (Exception ex)
             {
                 logger.warn(ex, "failed to stop monitor job for %s", monitoredObject);
             }
+        }
+
+        private boolean isTimeout(final T monitoredObject)
+        {
+            Long timeout = timeouts.get(monitoredObject);
+            return timeout != null && timeout < System.currentTimeMillis();
         }
 
         @Override
@@ -214,8 +274,13 @@ public class BaseMonitoringService implements MonitoringService
                     break;
                 case CONTINUE:
                 default:
-                    // TODO: Implement timeout
-                    // Monitoring job has not finished, continue monitoring it
+                    if (isTimeout(monitoredObject))
+                    {
+                        logger.warn("monitor for object %s timed out. Shutting down monitor.",
+                            monitoredObject);
+                        stopMonitoring(monitoredObject);
+                        callback.onTimeout(monitoredObject);
+                    }
                     break;
             }
         }
@@ -257,6 +322,12 @@ public class BaseMonitoringService implements MonitoringService
 
         @Override
         public void onFailed(final T object)
+        {
+            release();
+        }
+
+        @Override
+        public void onTimeout(final T object)
         {
             release();
         }

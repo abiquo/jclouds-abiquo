@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.features.services;
 
+import java.util.concurrent.TimeUnit;
+
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.monitor.MonitorCallback;
 import org.jclouds.abiquo.domain.monitor.MonitorStatus;
@@ -47,12 +49,34 @@ public interface MonitoringService
     void awaitCompletionDeploy(final VirtualMachine... virtualMachine);
 
     /**
+     * Monitor the given {@link VirtualMachine}s and blocks until either the deploy is met or
+     * failed.
+     * 
+     * @param maxWait The maximum time to wait.
+     * @param timeUnit The time unit for the maxWait parameter.
+     * @param virtualMachine The {@link VirtualMachine}s to monitor.
+     */
+    void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualMachine... virtualMachine);
+
+    /**
      * Monitor the given {@link VirtualMachine}s and blocks until either the undeploy is met or
      * failed.
      * 
      * @param virtualMachine The {@link VirtualMachine}s to monitor.
      */
     void awaitCompletionUndeploy(final VirtualMachine... virtualMachine);
+
+    /**
+     * Monitor the given {@link VirtualMachine}s and blocks until either the undeploy is met or
+     * failed.
+     * 
+     * @param maxWait The maximum time to wait.
+     * @param timeUnit The time unit for the maxWait parameter.
+     * @param virtualMachine The {@link VirtualMachine}s to monitor.
+     */
+    void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualMachine... virtualMachine);
 
     /*************** Generic methods ***************/
 
@@ -69,6 +93,18 @@ public interface MonitoringService
     /**
      * Monitor the given objects using the given complete condition.
      * 
+     * @param maxWait The maximum time to wait.
+     * @param timeUnit The time unit for the maxWait parameter.
+     * @param completeCondition The function that will be used to decide if the asynchronous
+     *            operations have finished.
+     * @param objects The objects to monitor.
+     */
+    public <T> void awaitCompletion(final Long maxWait, final TimeUnit timeUnit,
+        final Function<T, MonitorStatus> completeCondition, final T... objects);
+
+    /**
+     * Monitor the given objects using the given complete condition.
+     * 
      * @param callback The callback to be invoked when an asynchronous operation completes.
      * @param completeCondition The function that will be used to decide if the asynchronous
      *            operations have finished.
@@ -76,5 +112,19 @@ public interface MonitoringService
      */
     public <T> void monitor(final MonitorCallback<T> callback,
         final Function<T, MonitorStatus> completeCondition, final T... objects);
+
+    /**
+     * Monitor the given objects using the given complete condition.
+     * 
+     * @param maxWait The maximum time to wait.
+     * @param timeUnit The time unit for the maxWait parameter.
+     * @param callback The callback to be invoked when an asynchronous operation completes.
+     * @param completeCondition The function that will be used to decide if the asynchronous
+     *            operations have finished.
+     * @param objects The objects to monitor.
+     */
+    public <T> void monitor(final Long maxWait, final TimeUnit timeUnit,
+        final MonitorCallback<T> callback, final Function<T, MonitorStatus> completeCondition,
+        final T... objects);
 
 }
