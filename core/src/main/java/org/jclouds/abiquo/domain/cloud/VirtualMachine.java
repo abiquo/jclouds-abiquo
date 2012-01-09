@@ -306,9 +306,9 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         private Integer cpu;
 
-        private Integer vdrpPort;
+        private Integer vncPort;
 
-        private String vdrpIP;
+        private String vncAddress;
 
         private Integer idState;
 
@@ -352,15 +352,15 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             return this;
         }
 
-        public Builder vdrpPort(final int vdrpPort)
+        public Builder vncPort(final int vdrpPort)
         {
-            this.vdrpPort = vdrpPort;
+            this.vncPort = vdrpPort;
             return this;
         }
 
-        public Builder vdrpIP(final String vdrpIP)
+        public Builder vncAddress(final String vdrpIP)
         {
-            this.vdrpIP = vdrpIP;
+            this.vncAddress = vdrpIP;
             return this;
         }
 
@@ -395,7 +395,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             dto.setName(name);
             dto.setDescription(description);
             dto.setHdInBytes(template.getHdRequired());
-            dto.setVdrpIP(vdrpIP);
+            dto.setVdrpIP(vncAddress);
 
             if (cpu != null)
             {
@@ -407,9 +407,9 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
                 dto.setRam(ram);
             }
 
-            if (vdrpPort != null)
+            if (vncPort != null)
             {
-                dto.setVdrpPort(vdrpPort);
+                dto.setVdrpPort(vncPort);
             }
 
             if (idState != null)
@@ -436,7 +436,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         {
             return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
                 .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vdrpIP(in.getVncAddress()).vdrpPort(in.getVncPort())
+                .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
                 .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
         }
     }
