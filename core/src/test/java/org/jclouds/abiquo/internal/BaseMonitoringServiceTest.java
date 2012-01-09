@@ -123,7 +123,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertEquals(callback.numTimeouts, 0);
     }
 
-    public void testMonutorMultipleTasks()
+    public void testMonitorMultipleTasks()
     {
         BaseMonitoringService service = mockMonitoringService();
         CountingCallback callback = new CountingCallback(2);
@@ -218,22 +218,22 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         @Override
         public void onCompleted(final Object object)
         {
-            super.onCompleted(object);
             numCompletes++;
+            super.onCompleted(object);
         }
 
         @Override
         public void onFailed(final Object object)
         {
-            super.onFailed(object);
             numFailures++;
+            super.onFailed(object);
         }
 
         @Override
         public void onTimeout(final Object object)
         {
-            super.onTimeout(object);
             numTimeouts++;
+            super.onTimeout(object);
         }
 
     }
