@@ -312,8 +312,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         private Integer idState;
 
-        private Integer highDisponibility;
-
         private Integer idType;
 
         private String password;
@@ -372,12 +370,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             return this;
         }
 
-        public Builder highDisponibility(final int highDisponibility)
-        {
-            this.highDisponibility = highDisponibility;
-            return this;
-        }
-
         public Builder idType(final int idType)
         {
             this.idType = idType;
@@ -425,11 +417,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
                 dto.setIdState(idState);
             }
 
-            if (highDisponibility != null)
-            {
-                dto.setHighDisponibility(highDisponibility);
-            }
-
             if (idType != null)
             {
                 dto.setIdType(idType);
@@ -449,9 +436,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         {
             return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
                 .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vdrpIP(in.getVdrpIP()).vdrpPort(in.getVdrpPort())
-                .idState(in.getIdState()).highDisponibility(in.getHighDisponibility())
-                .idType(in.getIdType()).password(in.getPassword());
+                .cpu(in.getCpu()).vdrpIP(in.getVncAddress()).vdrpPort(in.getVncPort())
+                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
         }
     }
 
@@ -471,11 +457,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public long getHdInBytes()
     {
         return target.getHdInBytes();
-    }
-
-    public int getHighDisponibility()
-    {
-        return target.getHighDisponibility();
     }
 
     public Integer getId()
@@ -518,12 +499,12 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return target.getUuid();
     }
 
-    public String getVdrpIP()
+    public String getVncAddress()
     {
         return target.getVdrpIP();
     }
 
-    public int getVdrpPort()
+    public int getVncPort()
     {
         return target.getVdrpPort();
     }
@@ -536,16 +517,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public void setDescription(final String description)
     {
         target.setDescription(description);
-    }
-
-    public void setHighDisponibility(final int highDisponibility)
-    {
-        target.setHighDisponibility(highDisponibility);
-    }
-
-    public void setIdType(final int idType)
-    {
-        target.setIdType(idType);
     }
 
     public void setName(final String name)
@@ -561,21 +532,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public void setRam(final int ram)
     {
         target.setRam(ram);
-    }
-
-    public void setUuid(final String uuid)
-    {
-        target.setUuid(uuid);
-    }
-
-    public void setVdrpIP(final String vdrpIP)
-    {
-        target.setVdrpIP(vdrpIP);
-    }
-
-    public void setVdrpPort(final int vdrpPort)
-    {
-        target.setVdrpPort(vdrpPort);
     }
 
     private static VolumeManagementDto[] toVolumeDto(final Volume... volumes)
@@ -622,9 +578,9 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     {
         return "VirtualMachine [id=" + getId() + ", state=" + getState().name() + ", cpu="
             + getCpu() + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes()
-            + ", ha=" + getHighDisponibility() + ", idType=" + getIdType() + ", name=" + getName()
-            + ", password=" + getPassword() + ", ram=" + getRam() + ", uuid=" + getUuid()
-            + ", vrdpIp=" + getVdrpIP() + ", vdrpPort=" + getVdrpPort() + "]";
+            + ", idType=" + getIdType() + ", name=" + getName() + ", password=" + getPassword()
+            + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
+            + ", vncPort=" + getVncPort() + "]";
     }
 
 }
