@@ -30,6 +30,8 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.monitor.MonitorStatus;
 import org.jclouds.abiquo.features.services.MonitoringService;
+import org.jclouds.abiquo.functions.monitor.VirtualApplianceDeployMonitor;
+import org.jclouds.abiquo.functions.monitor.VirtualApplianceUndeployMonitor;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
 import org.jclouds.abiquo.internal.BaseMonitoringService.BlockingCallback;
@@ -173,7 +175,9 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
             injector.getInstance(ScheduledExecutorService.class),
             100L, // Use a small delay in tests
             createMock(VirtualMachineDeployMonitor.class),
-            createMock(VirtualMachineUndeployMonitor.class));
+            createMock(VirtualMachineUndeployMonitor.class),
+            createMock(VirtualApplianceDeployMonitor.class),
+            createMock(VirtualApplianceUndeployMonitor.class));
     }
 
     private static class MockMonitor implements Function<Object, MonitorStatus>

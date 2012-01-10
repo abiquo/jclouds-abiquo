@@ -35,10 +35,13 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.config.SchedulerModule;
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.monitor.MonitorCallback;
 import org.jclouds.abiquo.domain.monitor.MonitorStatus;
 import org.jclouds.abiquo.features.services.MonitoringService;
+import org.jclouds.abiquo.functions.monitor.VirtualApplianceDeployMonitor;
+import org.jclouds.abiquo.functions.monitor.VirtualApplianceUndeployMonitor;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
 import org.jclouds.logging.Logger;
@@ -74,6 +77,12 @@ public class BaseMonitoringService implements MonitoringService
     @VisibleForTesting
     protected VirtualMachineUndeployMonitor undeployMonitor;
 
+    @VisibleForTesting
+    protected VirtualApplianceDeployMonitor deployVirtualApplianceMonitor;
+
+    @VisibleForTesting
+    protected VirtualApplianceUndeployMonitor undeployVirtualApplianceMonitor;
+
     @Resource
     private Logger logger = Logger.NULL;
 
@@ -98,13 +107,19 @@ public class BaseMonitoringService implements MonitoringService
         final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay,
         final VirtualMachineDeployMonitor deployMonitor,
-        final VirtualMachineUndeployMonitor undeployMonitor)
+        final VirtualMachineUndeployMonitor undeployMonitor,
+        final VirtualApplianceDeployMonitor deployVirtualApplianceMonitor,
+        final VirtualApplianceUndeployMonitor undeployVirtualApplianceMonitor)
     {
         this.context = checkNotNull(context, "context");
         this.scheduler = checkNotNull(scheduler, "scheduler");
         this.pollingDelay = checkNotNull(pollingDelay, "pollingDelay");
         this.deployMonitor = checkNotNull(deployMonitor, "deployMonitor");
         this.undeployMonitor = checkNotNull(undeployMonitor, "undeployMonitor");
+        this.deployVirtualApplianceMonitor =
+            checkNotNull(deployVirtualApplianceMonitor, "deployVirtualApplianceMonitor");
+        this.undeployVirtualApplianceMonitor =
+            checkNotNull(undeployVirtualApplianceMonitor, "undeployVirtualApplianceMonitor");
         this.runningMonitors = Maps.newHashMap();
         this.timeouts = Maps.newHashMap();
     }
@@ -163,6 +178,32 @@ public class BaseMonitoringService implements MonitoringService
         final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms)
     {
         monitor(maxWait, timeUnit, callback, undeployMonitor, vms);
+    }
+
+    @Override
+    public void awaitCompletionDeploy(final VirtualAppliance... virtualAppliances)
+    {
+        awaitCompletion(deployVirtualApplianceMonitor, virtualAppliances);
+    }
+
+    @Override
+    public void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualAppliance... virtualAppliances)
+    {
+        awaitCompletion(maxWait, timeUnit, deployVirtualApplianceMonitor, virtualAppliances);
+    }
+
+    @Override
+    public void awaitCompletionUndeploy(final VirtualAppliance... virtualAppliances)
+    {
+        awaitCompletion(undeployVirtualApplianceMonitor, virtualAppliances);
+    }
+
+    @Override
+    public void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualAppliance... virtualAppliances)
+    {
+        awaitCompletion(maxWait, timeUnit, undeployVirtualApplianceMonitor, virtualAppliances);
     }
 
     /*************** Generic methods ***************/

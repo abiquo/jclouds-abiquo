@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features.services;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.monitor.MonitorCallback;
 import org.jclouds.abiquo.domain.monitor.MonitorStatus;
@@ -121,6 +122,45 @@ public interface MonitoringService
      */
     public void monitorUndeploy(final Long maxWait, final TimeUnit timeUnit,
         final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms);
+
+    /*************** Virtual appliance *************/
+    /**
+     * Monitor the given {@link VirtualAppliance}s and blocks until either the deploy is met or
+     * failed.
+     * 
+     * @param virtualAppliances The {@link VirtualAppliance}s to monitor.
+     */
+    void awaitCompletionDeploy(final VirtualAppliance... virtualAppliances);
+
+    /**
+     * Monitor the given {@link VirtualAppliance}s and blocks until either the deploy is met or
+     * failed.
+     * 
+     * @param maxWait The maximum time to wait.
+     * @param timeUnit The time unit for the maxWait parameter.
+     * @param virtualAppliances The {@link VirtualAppliance}s to monitor.
+     */
+    void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualAppliance... virtualAppliances);
+
+    /**
+     * Monitor the given {@link VirtualAppliance}s and blocks until either the undeploy is met or
+     * failed.
+     * 
+     * @param virtualAppliances The {@link VirtualAppliance}s to monitor.
+     */
+    void awaitCompletionUndeploy(final VirtualAppliance... virtualAppliances);
+
+    /**
+     * Monitor the given {@link VirtualAppliance}s and blocks until either the undeploy is met or
+     * failed.
+     * 
+     * @param maxWait The maximum time to wait.
+     * @param timeUnit The time unit for the maxWait parameter.
+     * @param virtualAppliances The {@link VirtualAppliance}s to monitor.
+     */
+    void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualAppliance... virtualAppliances);
 
     /*************** Generic methods ***************/
 
