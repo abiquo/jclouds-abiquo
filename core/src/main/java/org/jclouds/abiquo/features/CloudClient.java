@@ -32,6 +32,7 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
+import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
@@ -284,6 +285,14 @@ public interface CloudClient
      * @return The virtual appliance or <code>null</code> if it does not exist.
      */
     VirtualApplianceDto getVirtualAppliance(RESTLink link);
+
+    /**
+     * Get the state of the given virtual appliance.
+     * 
+     * @param virtualAppliance The given virtual appliance.
+     * @return The state of the given virtual appliance.
+     */
+    VirtualApplianceStateDto getVirtualApplianceState(VirtualApplianceDto virtualAppliance);
 
     /*********************** Virtual Machine ***********************/
 

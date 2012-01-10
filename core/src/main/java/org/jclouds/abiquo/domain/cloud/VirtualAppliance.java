@@ -35,6 +35,8 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
+import com.abiquo.server.core.cloud.VirtualApplianceState;
+import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
@@ -112,6 +114,13 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
         EnterpriseDto dto = context.getApi().getEnterpriseClient().getEnterprise(enterpriseId);
         return wrap(context, Enterprise.class, dto);
+    }
+
+    public VirtualApplianceState getState()
+    {
+        VirtualApplianceStateDto stateDto =
+            context.getApi().getCloudClient().getVirtualApplianceState(target);
+        return stateDto.getPower();
     }
 
     // Children access
