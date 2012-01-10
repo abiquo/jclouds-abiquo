@@ -24,7 +24,7 @@ import static org.testng.Assert.assertEquals;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineDto;

@@ -16,37 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.jclouds.abiquo.domain.monitor;
-
-import org.jclouds.abiquo.features.services.MonitoringService;
+package org.jclouds.abiquo.monitor.events;
 
 /**
- * Callback that will be executed when a monitored object is in the complete state.
+ * Event dispatched when a monitoring job completes without error.
  * 
  * @author Ignasi Barrera
- * @see MonitoringService
  */
-public interface MonitorCallback<T>
+public class CompletedEvent<T> extends MonitorEvent<T>
 {
-    /**
-     * Callback method to be executed when the monitor completes without errors.
-     * 
-     * @param object The completed monitored object.
-     */
-    public void onCompleted(T object);
+    public CompletedEvent(final T target)
+    {
+        super(MonitorEvent.Type.COMPLETED, target);
+    }
 
-    /**
-     * Callback method to be executed when the monitor completes with errors.
-     * 
-     * @param object The failed monitored object.
-     */
-    public void onFailed(T object);
-
-    /**
-     * Callback method to be executed when the monitor reaches the timeout.
-     * 
-     * @param object The monitored object.
-     */
-    public void onTimeout(T object);
 }

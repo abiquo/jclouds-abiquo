@@ -19,11 +19,14 @@
 
 package org.jclouds.abiquo;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Properties;
 
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
+import org.jclouds.abiquo.config.ConfiguresEventBus;
 import org.jclouds.abiquo.config.ConfiguresScheduler;
+import org.jclouds.abiquo.config.EventBusModule;
 import org.jclouds.abiquo.config.SchedulerModule;
 import org.jclouds.rest.RestContextBuilder;
 
@@ -59,7 +62,14 @@ public class AbiquoContextBuilder extends RestContextBuilder<AbiquoClient, Abiqu
     @Override
     public Injector buildInjector()
     {
-        addSchedulerModuleIfNotPresent();
+        if (!isModulePresent(ConfiguresScheduler.class))
+        {
+            modules.add(new SchedulerModule());
+        }
+        if (!isModulePresent(ConfiguresEventBus.class))
+        {
+            modules.add(new EventBusModule());
+        }
         return super.buildInjector();
     }
 
@@ -71,27 +81,17 @@ public class AbiquoContextBuilder extends RestContextBuilder<AbiquoClient, Abiqu
         return injector.getInstance(AbiquoContext.class);
     }
 
-    private void addSchedulerModuleIfNotPresent()
+    private boolean isModulePresent(final Class< ? extends Annotation> annotatedWith)
     {
-        boolean isSchedulerModule = Iterables.any(modules, new Predicate<Module>()
+        return Iterables.any(modules, new Predicate<Module>()
         {
             @Override
             public boolean apply(final Module input)
             {
-                return input.getClass().isAnnotationPresent(ConfiguresScheduler.class);
+                return input.getClass().isAnnotationPresent(annotatedWith);
             }
 
         });
-
-        if (!isSchedulerModule)
-        {
-            addSchedulerModule();
-        }
-    }
-
-    private void addSchedulerModule()
-    {
-        modules.add(new SchedulerModule());
     }
 
 }

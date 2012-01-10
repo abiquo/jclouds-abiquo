@@ -25,7 +25,7 @@ import javax.annotation.Resource;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.logging.Logger;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;

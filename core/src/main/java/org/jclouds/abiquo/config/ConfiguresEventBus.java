@@ -17,21 +17,23 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain.monitor;
+package org.jclouds.abiquo.config;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import com.google.common.eventbus.EventBus;
 
 /**
- * Represents the states of a running monitor.
+ * Designates the module configures an {@link EventBus}.
  * 
- * @author Serafin Sedano
+ * @author Ignasi Barrera
  */
-public enum MonitorStatus
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface ConfiguresEventBus
 {
-    /** The monitoring job has finished. */
-    DONE,
 
-    /** The monitoring job has finished and the result is not the expected one. */
-    FAILED,
-
-    /** The monitoring job must continue. */
-    CONTINUE
 }
