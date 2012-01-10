@@ -23,6 +23,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -52,8 +54,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
@@ -112,7 +112,8 @@ public class BaseMonitoringService implements MonitoringService
         this.eventBus = checkNotNull(eventBus, "eventBus");
         this.deployMonitor = checkNotNull(deployMonitor, "deployMonitor");
         this.undeployMonitor = checkNotNull(undeployMonitor, "undeployMonitor");
-        this.runningMonitors = Maps.newHashMap();
+        this.runningMonitors =
+            Collections.synchronizedMap(new HashMap<Object, RunningMonitor< ? >>());
     }
 
     /*************** Virtual machine ***************/
@@ -214,19 +215,24 @@ public class BaseMonitoringService implements MonitoringService
 
         if (objects != null && objects.length > 0)
         {
+
             for (T object : objects)
             {
-                ScheduledFuture< ? > future =
-                    scheduler.scheduleWithFixedDelay(
-                        new AsyncMonitor<T>(object, completeCondition), 0, pollingDelay,
-                        TimeUnit.MILLISECONDS);
+                synchronized (runningMonitors)
+                {
+                    System.err.println("Monitoring: " + object);
 
-                Long timeout =
-                    maxWait == null ? null : System.currentTimeMillis()
-                        + timeUnit.toMillis(maxWait);
+                    ScheduledFuture< ? > future =
+                        scheduler.scheduleWithFixedDelay(new AsyncMonitor<T>(object,
+                            completeCondition), 0, pollingDelay, TimeUnit.MILLISECONDS);
 
-                // Store the monitor so we can cancel the job when the task completes
-                runningMonitors.put(object, new RunningMonitor<T>(future, timeout));
+                    Long timeout =
+                        maxWait == null ? null : System.currentTimeMillis()
+                            + timeUnit.toMillis(maxWait);
+
+                    // Store the monitor so we can cancel the job when the task completes
+                    runningMonitors.put(object, new RunningMonitor<T>(future, timeout));
+                }
             }
         }
     }
@@ -247,30 +253,37 @@ public class BaseMonitoringService implements MonitoringService
 
         private void stopMonitoring(final T monitoredObject)
         {
-            Future< ? > future = runningMonitors.get(monitoredObject).future;
-
-            try
+            synchronized (runningMonitors)
             {
-                if (!future.isCancelled() && !future.isDone())
+                Future< ? > future = runningMonitors.get(monitoredObject).future;
+
+                try
                 {
-                    // Do not force future cancel. Let it finish gracefully
-                    future.cancel(false);
-                }
+                    if (!future.isCancelled() && !future.isDone())
+                    {
+                        // Do not force future cancel. Let it finish gracefully
+                        future.cancel(false);
+                    }
 
-                // Remove it from the map only if the future has been cancelled. If cancel fails,
-                // next run will remove it.
-                runningMonitors.remove(monitoredObject);
-            }
-            catch (Exception ex)
-            {
-                logger.warn(ex, "failed to stop monitor job for %s", monitoredObject);
+                    // Remove it from the map only if the future has been cancelled. If cancel
+                    // fails,
+                    // next run will remove it.
+                    runningMonitors.remove(monitoredObject);
+                }
+                catch (Exception ex)
+                {
+                    logger.warn(ex, "failed to stop monitor job for %s", monitoredObject);
+                }
             }
         }
 
         private boolean isTimeout(final T monitoredObject)
         {
-            Long timeout = runningMonitors.get(monitoredObject).timeout;
-            return timeout != null && timeout < System.currentTimeMillis();
+            synchronized (runningMonitors)
+            {
+                Long timeout = runningMonitors.get(monitoredObject).timeout;
+                return timeout != null && timeout < System.currentTimeMillis();
+            }
         }
 
         @Override
@@ -288,6 +301,8 @@ public class BaseMonitoringService implements MonitoringService
 
             MonitorStatus status = completeCondition.apply(monitoredObject);
             logger.debug("monitored object %s status %s", monitoredObject, status.name());
+
+            System.err.println("Publishing: " + status.name() + " on " + monitoredObject);
 
             switch (status)
             {
@@ -344,20 +359,20 @@ public class BaseMonitoringService implements MonitoringService
      */
     public static class BlockingEventHandler<T>
     {
-        private CountDownLatch completeSignal;
+        protected CountDownLatch completeSignal;
 
-        private List<T> lockedObjects;
+        protected List<T> lockedObjects;
 
         public BlockingEventHandler(final T... lockedObjects)
         {
             super();
             checkArgument(checkNotNull(lockedObjects, "lockedObjects").length > 0,
                 "must provide at least one object");
-            this.lockedObjects = Lists.newArrayList(lockedObjects);
+            this.lockedObjects = Collections.synchronizedList(Lists.newArrayList(lockedObjects));
             this.completeSignal = new CountDownLatch(lockedObjects.length);
         }
 
-        public synchronized void lock()
+        public void lock()
         {
             try
             {
@@ -369,12 +384,13 @@ public class BaseMonitoringService implements MonitoringService
             }
         }
 
-        @AllowConcurrentEvents
         @Subscribe
-        public synchronized void release(final MonitorEvent<T> event)
+        public void release(final MonitorEvent<T> event)
         {
             if (lockedObjects.contains(event.getTarget()))
             {
+                System.err.println("Releasing: " + event.getTarget());
+
                 lockedObjects.remove(event.getTarget());
                 completeSignal.countDown();
             }

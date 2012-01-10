@@ -29,8 +29,8 @@ import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
 import org.jclouds.rest.RestContextFactory;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
@@ -47,7 +47,7 @@ public class BaseInjectionTest
 {
     protected Injector injector;
 
-    @BeforeMethod
+    @BeforeClass
     public void setup()
     {
         String identity =
@@ -69,7 +69,7 @@ public class BaseInjectionTest
         return props;
     }
 
-    @AfterMethod
+    @AfterClass
     public void tearDown() throws Exception
     {
         if (injector != null)
