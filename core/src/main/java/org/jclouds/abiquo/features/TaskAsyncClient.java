@@ -33,6 +33,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.task.TaskDto;
+import com.abiquo.server.core.task.TasksDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -59,6 +60,6 @@ public interface TaskAsyncClient
      * @see TaskClient#listTasks(SingleResourceTransportDto)
      */
     @GET
-    <T extends SingleResourceTransportDto> ListenableFuture<TaskDto> listTasks(
+    <T extends SingleResourceTransportDto> ListenableFuture<TasksDto> listTasks(
         @EndpointLink("tasks") @BinderParam(BindToPath.class) T dto);
 }
