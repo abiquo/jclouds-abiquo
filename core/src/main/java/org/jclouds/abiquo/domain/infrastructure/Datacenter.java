@@ -413,7 +413,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
      *      Retrievethehypervisortypefromremotemachine/a>
      */
-    HypervisorType getHypervisorType(final String ip)
+    public HypervisorType getHypervisorType(final String ip)
     {
         DatacenterOptions options = DatacenterOptions.builder().ip(ip).build();
 
@@ -427,7 +427,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Retrieve the the list of hypervisor types in the datacenter.
      */
-    List<HypervisorType> getAvailableHypervisors()
+    public List<HypervisorType> getAvailableHypervisors()
     {
         HypervisorTypesDto types =
             context.getApi().getInfrastructureClient().getHypervisorTypes(target);
