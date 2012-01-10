@@ -561,28 +561,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
-    public void testDeleteVirtualApplianceWithOptions() throws SecurityException,
-        NoSuchMethodException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("deleteVirtualAppliance", VirtualApplianceDto.class,
-                VirtualApplianceOptions.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualAppliancePut(),
-                VirtualApplianceOptions.builder().force(true).build());
-
-        assertRequestLineEquals(request,
-            "DELETE http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1?force=true HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
     public void testDeployVirtualAppliance() throws SecurityException, NoSuchMethodException,
         IOException
     {
