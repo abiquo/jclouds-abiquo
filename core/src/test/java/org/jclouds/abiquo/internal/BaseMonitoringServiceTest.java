@@ -22,7 +22,6 @@ package org.jclouds.abiquo.internal;
 import static org.easymock.EasyMock.createMock;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertTrue;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -44,8 +43,7 @@ import com.google.common.base.Function;
  * 
  * @author Ignasi Barrera
  */
-// It is important to leave this test single threaded. Do not change it!
-@Test(groups = "unit", singleThreaded = true)
+@Test(groups = "unit")
 public class BaseMonitoringServiceTest extends BaseInjectionTest
 {
 
@@ -73,29 +71,20 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         BaseMonitoringService service = mockMonitoringService();
 
         service.awaitCompletion(new MockMonitor());
-        assertTrue(service.runningMonitors.isEmpty());
-
         service.awaitCompletion(new MockMonitor(), (Object[]) null);
-        assertTrue(service.runningMonitors.isEmpty());
-
         service.awaitCompletion(new MockMonitor(), new Object[] {});
-        assertTrue(service.runningMonitors.isEmpty());
     }
 
     public void testAwaitCompletion()
     {
         BaseMonitoringService service = mockMonitoringService();
-
         service.awaitCompletion(new MockMonitor(), new Object());
-        assertTrue(service.runningMonitors.isEmpty());
     }
 
     public void testAwaitCompletionMultipleTasks()
     {
         BaseMonitoringService service = mockMonitoringService();
-
         service.awaitCompletion(new MockMonitor(), new Object(), new Object());
-        assertTrue(service.runningMonitors.isEmpty());
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -119,7 +108,6 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         service.monitor(callback, new MockMonitor(), new Object());
         callback.lock();
 
-        assertTrue(service.runningMonitors.isEmpty());
         assertEquals(callback.numCompletes, 1);
         assertEquals(callback.numFailures, 0);
         assertEquals(callback.numTimeouts, 0);
@@ -133,7 +121,6 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         service.monitor(callback, new MockMonitor(), new Object(), new Object());
         callback.lock();
 
-        assertTrue(service.runningMonitors.isEmpty());
         assertEquals(callback.numCompletes, 2);
         assertEquals(callback.numFailures, 0);
         assertEquals(callback.numTimeouts, 0);
@@ -148,7 +135,6 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
             new Object());
         callback.lock();
 
-        assertTrue(service.runningMonitors.isEmpty());
         assertEquals(callback.numCompletes, 0);
         assertEquals(callback.numFailures, 0);
         assertEquals(callback.numTimeouts, 1);
@@ -163,7 +149,6 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
             new Object(), new Object());
         callback.lock();
 
-        assertTrue(service.runningMonitors.isEmpty());
         assertEquals(callback.numCompletes, 0);
         assertEquals(callback.numFailures, 0);
         assertEquals(callback.numTimeouts, 2);

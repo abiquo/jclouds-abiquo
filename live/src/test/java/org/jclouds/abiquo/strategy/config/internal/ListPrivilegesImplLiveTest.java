@@ -27,7 +27,7 @@ import static org.testng.Assert.assertTrue;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.environment.ConfigTestEnvironment;
-import org.jclouds.abiquo.predicates.configuration.PrivilegePredicates;
+import org.jclouds.abiquo.predicates.config.PrivilegePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
 

@@ -35,7 +35,7 @@ import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
-import org.jclouds.abiquo.predicates.configuration.PrivilegePredicates;
+import org.jclouds.abiquo.predicates.config.PrivilegePredicates;
 import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.testng.annotations.Test;
 

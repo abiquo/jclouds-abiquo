@@ -23,6 +23,8 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ScheduledExecutorService;
@@ -49,7 +51,6 @@ import org.jclouds.logging.Logger;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Maps;
 import com.google.inject.Inject;
 
 /**
@@ -120,8 +121,9 @@ public class BaseMonitoringService implements MonitoringService
             checkNotNull(deployVirtualApplianceMonitor, "deployVirtualApplianceMonitor");
         this.undeployVirtualApplianceMonitor =
             checkNotNull(undeployVirtualApplianceMonitor, "undeployVirtualApplianceMonitor");
-        this.runningMonitors = Maps.newHashMap();
-        this.timeouts = Maps.newHashMap();
+        this.runningMonitors =
+            Collections.synchronizedMap(new HashMap<Object, ScheduledFuture< ? >>());
+        this.timeouts = Collections.synchronizedMap(new HashMap<Object, Long>());
     }
 
     /*************** Virtual machine ***************/

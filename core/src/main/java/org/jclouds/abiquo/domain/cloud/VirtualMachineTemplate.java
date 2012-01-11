@@ -24,6 +24,7 @@ import java.util.Date;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 
+import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
 /**
@@ -85,9 +86,9 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
         return target.getDiskFileSize();
     }
 
-    public String getDiskFormatType()
+    public DiskFormatType getDiskFormatType()
     {
-        return target.getDiskFormatType();
+        return DiskFormatType.valueOf(target.getDiskFormatType());
     }
 
     public long getHdRequired()

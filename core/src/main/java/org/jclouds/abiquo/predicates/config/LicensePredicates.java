@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.configuration;
+package org.jclouds.abiquo.predicates.config;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 

@@ -25,6 +25,8 @@ import java.util.Arrays;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 
+import com.abiquo.model.enumerator.DiskFormatType;
+import com.abiquo.model.enumerator.HypervisorType;
 import com.google.common.base.Predicate;
 
 /**
@@ -48,7 +50,7 @@ public class VirtualMachineTemplatePredicates
         };
     }
 
-    public static Predicate<VirtualMachineTemplate> diskFormat(final String... formats)
+    public static Predicate<VirtualMachineTemplate> diskFormat(final DiskFormatType... formats)
     {
         checkNotNull(formats, "formats must be defined");
 
@@ -58,6 +60,20 @@ public class VirtualMachineTemplatePredicates
             public boolean apply(final VirtualMachineTemplate template)
             {
                 return Arrays.asList(formats).contains(template.getDiskFormatType());
+            }
+        };
+    }
+
+    public static Predicate<VirtualMachineTemplate> compatible(final HypervisorType type)
+    {
+        checkNotNull(type, "type must be defined");
+
+        return new Predicate<VirtualMachineTemplate>()
+        {
+            @Override
+            public boolean apply(final VirtualMachineTemplate template)
+            {
+                return type.isCompatible(template.getDiskFormatType());
             }
         };
     }

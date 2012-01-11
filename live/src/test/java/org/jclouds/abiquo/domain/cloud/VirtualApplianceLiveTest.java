@@ -84,7 +84,7 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest<CloudTest
 
         assertEquals(virtualAppliances.size(), 2);
 
-        vapp.delete(true);
+        vapp.delete();
 
         virtualAppliances =
             env.cloudClient.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
