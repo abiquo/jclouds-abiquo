@@ -217,7 +217,7 @@ public class BaseMonitoringService implements MonitoringService
                 // arrive before the thread lock has been obtained
                 ScheduledFuture< ? > future =
                     scheduler.scheduleWithFixedDelay(
-                        new AsyncMonitor<T>(object, completeCondition), 500L, pollingDelay,
+                        new AsyncMonitor<T>(object, completeCondition), 1000L, pollingDelay,
                         TimeUnit.MILLISECONDS);
 
                 Long timeout =

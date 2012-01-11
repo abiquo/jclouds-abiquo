@@ -84,7 +84,7 @@ public class BlockingEventHandlerTest
                 handler.release(object);
             }
 
-        }, 500L, TimeUnit.MILLISECONDS);
+        }, 1000L, TimeUnit.MILLISECONDS);
 
         handler.lock();
     }
@@ -103,7 +103,7 @@ public class BlockingEventHandlerTest
                 handler.handle(new MonitorEvent<Object>(Type.COMPLETED, object));
             }
 
-        }, 500L, TimeUnit.MILLISECONDS);
+        }, 1000L, TimeUnit.MILLISECONDS);
 
         handler.lock();
     }
