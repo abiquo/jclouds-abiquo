@@ -30,14 +30,13 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
-import org.jclouds.abiquo.internal.BaseMonitoringService.BlockingEventHandler;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.events.MonitorEvent;
+import org.jclouds.abiquo.monitor.events.handlers.BlockingEventHandler;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
 import com.google.common.eventbus.AsyncEventBus;
-import com.google.common.eventbus.Subscribe;
 
 /**
  * Unit tests for the {@link BaseMonitoringService} class.
@@ -47,7 +46,7 @@ import com.google.common.eventbus.Subscribe;
 @Test(groups = "unit")
 public class BaseMonitoringServiceTest extends BaseInjectionTest
 {
-    private static final long TEST_MONITOR_TIMEOUT = 1000L;
+    private static final long TEST_MONITOR_TIMEOUT = 100L;
 
     public void testAllPropertiesInjected()
     {
@@ -77,16 +76,16 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         service.awaitCompletion(new MockMonitor(), new Object[] {});
     }
 
-    @Test
     public void testAwaitCompletion()
     {
-        mockMonitoringService().awaitCompletion(new MockMonitor(), new Object());
+        BaseMonitoringService service = mockMonitoringService();
+        service.awaitCompletion(new MockMonitor(), new Object());
     }
 
-    @Test
     public void testAwaitCompletionMultipleTasks()
     {
-        mockMonitoringService().awaitCompletion(new MockMonitor(), new Object(), new Object());
+        BaseMonitoringService service = mockMonitoringService();
+        service.awaitCompletion(new MockMonitor(), new Object(), new Object());
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -181,7 +180,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
     {
         return new BaseMonitoringService(injector.getInstance(AbiquoContext.class),
             injector.getInstance(ScheduledExecutorService.class),
-            TEST_MONITOR_TIMEOUT, // Use a small delay in tests
+            TEST_MONITOR_TIMEOUT,
             injector.getInstance(AsyncEventBus.class),
             createMock(VirtualMachineDeployMonitor.class),
             createMock(VirtualMachineUndeployMonitor.class));
@@ -226,30 +225,21 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         }
 
         @Override
-        @Subscribe
-        public void release(final MonitorEvent<Object> event)
+        protected void doBeforeRelease(final MonitorEvent<Object> event)
         {
-            System.err.println("Handling: " + event.getType().name() + " on " + event.getTarget());
-
-            if (lockedObjects.contains(event.getTarget()))
+            switch (event.getType())
             {
-                switch (event.getType())
-                {
-                    case COMPLETED:
-                        numCompletes++;
-                        break;
-                    case FAILED:
-                        numFailures++;
-                        break;
-                    case TIMEOUT:
-                        numTimeouts++;
-                        break;
-                }
-
-                super.release(event);
+                case COMPLETED:
+                    numCompletes++;
+                    break;
+                case FAILED:
+                    numFailures++;
+                    break;
+                case TIMEOUT:
+                    numTimeouts++;
+                    break;
             }
         }
-
     }
 
 }

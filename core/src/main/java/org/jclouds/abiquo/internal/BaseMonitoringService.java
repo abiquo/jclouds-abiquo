@@ -19,15 +19,12 @@
 
 package org.jclouds.abiquo.internal;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -46,16 +43,13 @@ import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.events.CompletedEvent;
 import org.jclouds.abiquo.monitor.events.FailedEvent;
-import org.jclouds.abiquo.monitor.events.MonitorEvent;
 import org.jclouds.abiquo.monitor.events.TimeoutEvent;
+import org.jclouds.abiquo.monitor.events.handlers.BlockingEventHandler;
 import org.jclouds.logging.Logger;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.google.common.base.Throwables;
-import com.google.common.collect.Lists;
 import com.google.common.eventbus.AsyncEventBus;
-import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
@@ -187,7 +181,7 @@ public class BaseMonitoringService implements MonitoringService
 
         if (objects != null && objects.length > 0)
         {
-            BlockingEventHandler<T> blockingHandler = new BlockingEventHandler<T>(objects);
+            BlockingEventHandler<T> blockingHandler = new BlockingEventHandler<T>(logger, objects);
             eventBus.register(blockingHandler);
 
             monitor(maxWait, timeUnit, completeCondition, objects);
@@ -215,24 +209,22 @@ public class BaseMonitoringService implements MonitoringService
 
         if (objects != null && objects.length > 0)
         {
-
             for (T object : objects)
             {
-                synchronized (runningMonitors)
-                {
-                    System.err.println("Monitoring: " + object);
+                // We force a delayed start to ensure events will not get too much fast. It is
+                // important when using the BlockingEventHandler, to prevent event notifications
+                // arrive before the thread lock has been obtained
+                ScheduledFuture< ? > future =
+                    scheduler.scheduleWithFixedDelay(
+                        new AsyncMonitor<T>(object, completeCondition), 500L, pollingDelay,
+                        TimeUnit.MILLISECONDS);
 
-                    ScheduledFuture< ? > future =
-                        scheduler.scheduleWithFixedDelay(new AsyncMonitor<T>(object,
-                            completeCondition), 0, pollingDelay, TimeUnit.MILLISECONDS);
+                Long timeout =
+                    maxWait == null ? null : System.currentTimeMillis()
+                        + timeUnit.toMillis(maxWait);
 
-                    Long timeout =
-                        maxWait == null ? null : System.currentTimeMillis()
-                            + timeUnit.toMillis(maxWait);
-
-                    // Store the monitor so we can cancel the job when the task completes
-                    runningMonitors.put(object, new RunningMonitor<T>(future, timeout));
-                }
+                // Store the monitor so we can cancel the job when the task completes
+                runningMonitors.put(object, new RunningMonitor<T>(future, timeout));
             }
         }
     }
@@ -253,37 +245,30 @@ public class BaseMonitoringService implements MonitoringService
 
         private void stopMonitoring(final T monitoredObject)
         {
-            synchronized (runningMonitors)
+            Future< ? > future = runningMonitors.get(monitoredObject).future;
+
+            try
             {
-                Future< ? > future = runningMonitors.get(monitoredObject).future;
-
-                try
+                if (!future.isCancelled() && !future.isDone())
                 {
-                    if (!future.isCancelled() && !future.isDone())
-                    {
-                        // Do not force future cancel. Let it finish gracefully
-                        future.cancel(false);
-                    }
+                    // Do not force future cancel. Let it finish gracefully
+                    future.cancel(false);
+                }
 
-                    // Remove it from the map only if the future has been cancelled. If cancel
-                    // fails,
-                    // next run will remove it.
-                    runningMonitors.remove(monitoredObject);
-                }
-                catch (Exception ex)
-                {
-                    logger.warn(ex, "failed to stop monitor job for %s", monitoredObject);
-                }
+                // Remove it from the map only if the future has been cancelled. If cancel
+                // fails, next run will remove it.
+                runningMonitors.remove(monitoredObject);
+            }
+            catch (Exception ex)
+            {
+                logger.warn(ex, "failed to stop monitor job for %s", monitoredObject);
             }
         }
 
         private boolean isTimeout(final T monitoredObject)
         {
-            synchronized (runningMonitors)
-            {
-                Long timeout = runningMonitors.get(monitoredObject).timeout;
-                return timeout != null && timeout < System.currentTimeMillis();
-            }
+            Long timeout = runningMonitors.get(monitoredObject).timeout;
+            return timeout != null && timeout < System.currentTimeMillis();
         }
 
         @Override
@@ -301,8 +286,6 @@ public class BaseMonitoringService implements MonitoringService
 
             MonitorStatus status = completeCondition.apply(monitoredObject);
             logger.debug("monitored object %s status %s", monitoredObject, status.name());
-
-            System.err.println("Publishing: " + status.name() + " on " + monitoredObject);
 
             switch (status)
             {
@@ -347,53 +330,6 @@ public class BaseMonitoringService implements MonitoringService
             super();
             this.future = checkNotNull(future, "future");
             this.timeout = timeout; // Timeout can be null
-        }
-    }
-
-    /**
-     * An event handler that blocks the thread until all monitored objects have been finished being
-     * watched.
-     * 
-     * @author Ignasi Barrera
-     * @param <T> The monitored object.
-     */
-    public static class BlockingEventHandler<T>
-    {
-        protected CountDownLatch completeSignal;
-
-        protected List<T> lockedObjects;
-
-        public BlockingEventHandler(final T... lockedObjects)
-        {
-            super();
-            checkArgument(checkNotNull(lockedObjects, "lockedObjects").length > 0,
-                "must provide at least one object");
-            this.lockedObjects = Collections.synchronizedList(Lists.newArrayList(lockedObjects));
-            this.completeSignal = new CountDownLatch(lockedObjects.length);
-        }
-
-        public void lock()
-        {
-            try
-            {
-                completeSignal.await();
-            }
-            catch (InterruptedException ex)
-            {
-                Throwables.propagate(ex);
-            }
-        }
-
-        @Subscribe
-        public void release(final MonitorEvent<T> event)
-        {
-            if (lockedObjects.contains(event.getTarget()))
-            {
-                System.err.println("Releasing: " + event.getTarget());
-
-                lockedObjects.remove(event.getTarget());
-                completeSignal.countDown();
-            }
         }
     }
 

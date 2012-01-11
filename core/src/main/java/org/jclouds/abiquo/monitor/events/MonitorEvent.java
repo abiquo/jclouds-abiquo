@@ -68,4 +68,10 @@ public class MonitorEvent<T>
         this.target = target;
     }
 
+    @Override
+    public String toString()
+    {
+        return "MonitorEvent [type=" + type + ", target=" + target + "]";
+    }
+
 }

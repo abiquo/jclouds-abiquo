@@ -61,7 +61,8 @@ public class EventBusModule extends AbstractModule
     @Override
     protected void configure()
     {
-
+        // Make the synchronous event bus singleton
+        bind(EventBus.class).in(Singleton.class);
     }
 
 }

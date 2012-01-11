@@ -53,7 +53,7 @@ public class AbiquoPropertiesBuilder extends PropertiesBuilder
         // The default polling delay between AsyncTask monitor requests
         properties.setProperty(ASYNC_TASK_MONITOR_DELAY, "5000");
         // The default number of concurrent scheduler threads to be used
-        properties.setProperty(MAX_SCHEDULER_THREADS, "20");
+        properties.setProperty(MAX_SCHEDULER_THREADS, "10");
         return properties;
     }
 
