@@ -36,6 +36,7 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.config.SchedulerModule;
+import org.jclouds.abiquo.config.annotations.AsyncBus;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
@@ -49,7 +50,7 @@ import org.jclouds.logging.Logger;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.google.common.eventbus.AsyncEventBus;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -74,7 +75,7 @@ public class BaseMonitoringService implements MonitoringService
 
     /** The event bus used to dispatch monitoring events. */
     @VisibleForTesting
-    protected AsyncEventBus eventBus;
+    protected EventBus eventBus;
 
     @VisibleForTesting
     protected VirtualMachineDeployMonitor deployMonitor;
@@ -96,8 +97,8 @@ public class BaseMonitoringService implements MonitoringService
     @Inject
     public BaseMonitoringService(final AbiquoContext context,
         final ScheduledExecutorService scheduler,
-        @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final AsyncEventBus eventBus,
-        final VirtualMachineDeployMonitor deployMonitor,
+        @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay,
+        @AsyncBus final EventBus eventBus, final VirtualMachineDeployMonitor deployMonitor,
         final VirtualMachineUndeployMonitor undeployMonitor)
     {
         this.context = checkNotNull(context, "context");

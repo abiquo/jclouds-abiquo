@@ -62,7 +62,7 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
         super();
         checkArgument(checkNotNull(lockedObjects, "lockedObjects").length > 0,
             "must provide at least one object");
-        this.logger = logger;
+        this.logger = checkNotNull(logger, "logger");
         this.lockedObjects = Collections.synchronizedList(Lists.newArrayList(lockedObjects));
         this.completeSignal = new CountDownLatch(lockedObjects.length);
         this.logger.debug("created BlockingEventHandler locking %s objects", lockedObjects.length);

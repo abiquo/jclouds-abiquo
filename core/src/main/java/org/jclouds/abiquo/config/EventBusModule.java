@@ -25,6 +25,7 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
+import org.jclouds.abiquo.config.annotations.AsyncBus;
 import org.jclouds.concurrent.config.ExecutorServiceModule;
 
 import com.google.common.eventbus.AsyncEventBus;
@@ -42,6 +43,7 @@ import com.google.inject.Provides;
  * @see ExecutorServiceModule
  * @see AsyncEventBus
  * @see EventBus
+ * @see AsyncBus
  */
 @ConfiguresEventBus
 public class EventBusModule extends AbstractModule
@@ -58,11 +60,14 @@ public class EventBusModule extends AbstractModule
         return new AsyncEventBus("abiquo-event-bus", executor);
     }
 
+    /**
+     * Configures the {@link EventBus} to be singleton and enables the {@link AsyncBus} annotation.
+     */
     @Override
     protected void configure()
     {
-        // Make the synchronous event bus singleton
         bind(EventBus.class).in(Singleton.class);
+        bind(EventBus.class).annotatedWith(AsyncBus.class).to(AsyncEventBus.class);
     }
 
 }
