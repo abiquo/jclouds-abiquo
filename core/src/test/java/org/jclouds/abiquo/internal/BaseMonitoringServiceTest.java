@@ -198,6 +198,16 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         @Override
         public MonitorStatus apply(final Object object)
         {
+            try
+            {
+                // Simulate some work
+                Thread.sleep(200L);
+            }
+            catch (InterruptedException e)
+            {
+                // Just ignore it
+            }
+
             return finishAfterCount-- <= 0 ? MonitorStatus.DONE : MonitorStatus.CONTINUE;
         }
     }
@@ -207,6 +217,16 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         @Override
         public MonitorStatus apply(final Object object)
         {
+            try
+            {
+                // Simulate some work
+                Thread.sleep(200L);
+            }
+            catch (InterruptedException e)
+            {
+                // Just ignore it
+            }
+
             return MonitorStatus.CONTINUE;
         }
     }
