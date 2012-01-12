@@ -130,6 +130,17 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return context.getAdministrationService().getDatacenter(datacenterId);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveanEnterprise">
+     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveanEnterprise</a>
+     */
+    public Enterprise getEnterprise()
+    {
+        Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
+        return context.getAdministrationService().getEnterprise(enterpriseId);
+    }
+
     // Children access
 
     /**
@@ -296,8 +307,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
                 .getApi()
                 .getVirtualMachineTemplateClient()
                 .listVirtualMachineTemplates(
-                    enterprise.getId(),
-                    datacenter.getId(),
+                    getEnterprise().getId(),
+                    getDatacenter().getId(),
                     VirtualMachineTemplateOptions.builder().hypervisorType(getHypervisorType())
                         .build());
         return wrap(context, VirtualMachineTemplate.class, templates.getCollection());
@@ -319,7 +330,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         VirtualMachineTemplateDto template =
             context.getApi().getVirtualMachineTemplateClient()
-                .getVirtualMachineTemplate(enterprise.getId(), datacenter.getId(), id);
+                .getVirtualMachineTemplate(getEnterprise().getId(), getDatacenter().getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
     }
 
