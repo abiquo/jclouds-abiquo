@@ -85,7 +85,7 @@ public class VirtualMachineTemplateOptions extends QueryOptions
             }
             if (hypervisorType != null)
             {
-                options.map.put("hypervisorType", hypervisorType.name());
+                options.map.put("hypervisorTypeName", hypervisorType.name());
             }
             if (category != null)
             {

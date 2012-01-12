@@ -83,7 +83,7 @@ public class VirtualMachineTemplateAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates"
-                + "?hypervisorType=XENSERVER&categoryName=Firewalls HTTP/1.1");
+                + "?hypervisorTypeName=XENSERVER&categoryName=Firewalls HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
