@@ -27,8 +27,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
@@ -63,6 +65,17 @@ public interface VirtualMachineTemplateAsyncClient
     ListenableFuture<VirtualMachineTemplatesDto> listVirtualMachineTemplates(
         @PathParam("enterprise") Integer enterpriseId,
         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
+
+    /**
+     * @see VirtualMachineTemplateClient#listVirtualMachineTemplates(Integer, Integer,
+     *      VirtualMachineTemplateOptions)
+     */
+    @GET
+    @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
+    ListenableFuture<VirtualMachineTemplatesDto> listVirtualMachineTemplates(
+        @PathParam("enterprise") Integer enterpriseId,
+        @PathParam("datacenterrepository") Integer datacenterRepositoryId,
+        @BinderParam(AppendOptionsToPath.class) VirtualMachineTemplateOptions options);
 
     /**
      * @see VirtualMachineTemplateClient#getVirtualMachineTemplate(Integer, Integer, Integer)

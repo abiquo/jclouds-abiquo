@@ -27,6 +27,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
@@ -40,6 +41,8 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -114,7 +117,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         target = context.getApi().getCloudClient().updateVirtualDatacenter(target);
     }
 
-    // PARENT ACCESS
+    // Parent access
+
     /**
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
@@ -279,6 +283,44 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         VLANNetworkDto network = context.getApi().getCloudClient().getPrivateNetwork(target, id);
         return wrap(context, PrivateNetwork.class, network);
+    }
+
+    /**
+     * @see <a href="http://community.abiquo.com/display/ABI20/Virtual+Image+Resource">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Image+Resource</a>
+     */
+    public List<VirtualMachineTemplate> listAvailableTemplates()
+    {
+        VirtualMachineTemplatesDto templates =
+            context
+                .getApi()
+                .getVirtualMachineTemplateClient()
+                .listVirtualMachineTemplates(
+                    enterprise.getId(),
+                    datacenter.getId(),
+                    VirtualMachineTemplateOptions.builder().hypervisorType(getHypervisorType())
+                        .build());
+        return wrap(context, VirtualMachineTemplate.class, templates.getCollection());
+    }
+
+    public List<VirtualMachineTemplate> listAvailableTemplates(
+        final Predicate<VirtualMachineTemplate> filter)
+    {
+        return Lists.newLinkedList(filter(listAvailableTemplates(), filter));
+    }
+
+    public VirtualMachineTemplate findAvailableTemplate(
+        final Predicate<VirtualMachineTemplate> filter)
+    {
+        return Iterables.getFirst(filter(listAvailableTemplates(), filter), null);
+    }
+
+    public VirtualMachineTemplate getAvailableTemplate(final Integer id)
+    {
+        VirtualMachineTemplateDto template =
+            context.getApi().getVirtualMachineTemplateClient()
+                .getVirtualMachineTemplate(enterprise.getId(), datacenter.getId(), id);
+        return wrap(context, VirtualMachineTemplate.class, template);
     }
 
     // Builder
