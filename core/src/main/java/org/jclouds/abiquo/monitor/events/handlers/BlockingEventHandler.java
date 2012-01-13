@@ -28,6 +28,7 @@ import java.util.concurrent.CountDownLatch;
 import org.jclouds.abiquo.monitor.events.MonitorEvent;
 import org.jclouds.logging.Logger;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.eventbus.AllowConcurrentEvents;
@@ -47,7 +48,8 @@ import com.google.common.eventbus.Subscribe;
 public class BlockingEventHandler<T> extends AbstractEventHandler<T>
 {
     /** The signal used to lock the thread. */
-    private CountDownLatch completeSignal;
+    @VisibleForTesting
+    CountDownLatch completeSignal;
 
     /** The objects being locked. */
     protected List<T> lockedObjects;
@@ -64,7 +66,6 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
             "must provide at least one object");
         this.logger = checkNotNull(logger, "logger");
         this.lockedObjects = Collections.synchronizedList(Lists.newArrayList(lockedObjects));
-        this.completeSignal = new CountDownLatch(lockedObjects.length);
         this.logger.debug("created BlockingEventHandler locking %s objects", lockedObjects.length);
     }
 
@@ -108,13 +109,20 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
      */
     public void lock()
     {
-        try
+        // When invoking the lock, it is possible that all events have
+        // already been consumed. If there are no objects to monitor,
+        // just ignore the lock.
+        if (!lockedObjects.isEmpty())
         {
-            completeSignal.await();
-        }
-        catch (InterruptedException ex)
-        {
-            Throwables.propagate(ex);
+            try
+            {
+                completeSignal = new CountDownLatch(lockedObjects.size());
+                completeSignal.await();
+            }
+            catch (InterruptedException ex)
+            {
+                Throwables.propagate(ex);
+            }
         }
     }
 
@@ -124,9 +132,15 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
     protected void release(final T target)
     {
         lockedObjects.remove(target);
-        completeSignal.countDown();
-        logger.debug("releasing lock for %s. %s remaining objects", target,
-            completeSignal.getCount());
+
+        // The completeSignal might be null if the events have been consumed
+        // before acquiring the lock
+        if (completeSignal != null)
+        {
+            completeSignal.countDown();
+            logger.debug("releasing lock for %s. %s remaining objects", target,
+                completeSignal.getCount());
+        }
     }
 
     /**

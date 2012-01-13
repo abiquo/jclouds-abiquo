@@ -19,6 +19,7 @@
 package org.jclouds.abiquo.monitor.events.handlers;
 
 import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.concurrent.Executors;
@@ -106,5 +107,16 @@ public class BlockingEventHandlerTest
         }, 1000L, TimeUnit.MILLISECONDS);
 
         handler.lock();
+    }
+
+    public void testLockDoesNothingIfNoObjects()
+    {
+        Object object = new Object();
+        BlockingEventHandler<Object> handler = new BlockingEventHandler<Object>(object);
+        handler.lockedObjects.clear();
+
+        handler.lock();     // Lock should do nothing
+
+        assertNull(handler.completeSignal);
     }
 }
