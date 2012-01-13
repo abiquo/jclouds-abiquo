@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 
+import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Predicate;
 
 /**
@@ -44,6 +45,21 @@ public class VirtualMachinePredicates
             public boolean apply(final VirtualMachine virtualMachine)
             {
                 return Arrays.asList(names).contains(virtualMachine.getName());
+            }
+        };
+    }
+
+    public static Predicate<VirtualMachine> state(final VirtualMachineState... states)
+    {
+        checkNotNull(states, "states must be defined");
+
+        return new Predicate<VirtualMachine>()
+        {
+            @Override
+            public boolean apply(final VirtualMachine virtualMachine)
+            {
+                // The getState() method will generate an API call
+                return Arrays.asList(states).contains(virtualMachine.getState());
             }
         };
     }
