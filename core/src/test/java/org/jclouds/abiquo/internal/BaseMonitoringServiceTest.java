@@ -22,6 +22,7 @@ package org.jclouds.abiquo.internal;
 import static org.easymock.EasyMock.createMock;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -47,6 +48,8 @@ import com.google.common.eventbus.AsyncEventBus;
 public class BaseMonitoringServiceTest extends BaseInjectionTest
 {
     private static final long TEST_MONITOR_TIMEOUT = 100L;
+
+    private static final long TEST_MAX_TIME_TO_AWAIT_COMPLETION = 3000L;
 
     public void testAllPropertiesInjected()
     {
@@ -78,14 +81,28 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     public void testAwaitCompletion()
     {
-        BaseMonitoringService service = mockMonitoringService();
-        service.awaitCompletion(new MockMonitor(), new Object());
+        new AwaitListener(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                BaseMonitoringService service = mockMonitoringService();
+                service.awaitCompletion(new MockMonitor(), new Object());
+            }
+        }).startAndWait(TEST_MAX_TIME_TO_AWAIT_COMPLETION);
     }
 
     public void testAwaitCompletionMultipleTasks()
     {
-        BaseMonitoringService service = mockMonitoringService();
-        service.awaitCompletion(new MockMonitor(), new Object(), new Object());
+        new AwaitListener(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                BaseMonitoringService service = mockMonitoringService();
+                service.awaitCompletion(new MockMonitor(), new Object(), new Object());
+            }
+        }).startAndWait(TEST_MAX_TIME_TO_AWAIT_COMPLETION);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -186,6 +203,32 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
             createMock(VirtualMachineUndeployMonitor.class));
     }
 
+    private static class AwaitListener extends Thread
+    {
+        public AwaitListener(final Runnable runnable)
+        {
+            super(runnable);
+        }
+
+        public void startAndWait(final long timeout)
+        {
+            try
+            {
+                start();
+                join(timeout);
+                if (isAlive())
+                {
+                    interrupt();
+                    fail("Interrupting thread after " + timeout + "ms");
+                }
+            }
+            catch (InterruptedException ex)
+            {
+                // Expected exception. Do nothing
+            }
+        }
+    }
+
     private static class MockMonitor implements Function<Object, MonitorStatus>
     {
         private int finishAfterCount;
@@ -198,16 +241,6 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         @Override
         public MonitorStatus apply(final Object object)
         {
-            try
-            {
-                // Simulate some work
-                Thread.sleep(200L);
-            }
-            catch (InterruptedException e)
-            {
-                // Just ignore it
-            }
-
             return finishAfterCount-- <= 0 ? MonitorStatus.DONE : MonitorStatus.CONTINUE;
         }
     }
@@ -217,16 +250,6 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         @Override
         public MonitorStatus apply(final Object object)
         {
-            try
-            {
-                // Simulate some work
-                Thread.sleep(200L);
-            }
-            catch (InterruptedException e)
-            {
-                // Just ignore it
-            }
-
             return MonitorStatus.CONTINUE;
         }
     }
@@ -245,7 +268,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         }
 
         @Override
-        protected void doBeforeRelease(final MonitorEvent<Object> event)
+        protected synchronized void doBeforeRelease(final MonitorEvent<Object> event)
         {
             switch (event.getType())
             {
