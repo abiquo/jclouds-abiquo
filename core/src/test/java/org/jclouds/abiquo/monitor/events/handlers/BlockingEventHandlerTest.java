@@ -83,9 +83,10 @@ public class BlockingEventHandlerTest
             public void run()
             {
                 handler.release(object);
+                assertTrue(handler.lockedObjects.isEmpty());
             }
 
-        }, 1000L, TimeUnit.MILLISECONDS);
+        }, 500L, TimeUnit.MILLISECONDS);
 
         handler.lock();
     }
@@ -102,9 +103,10 @@ public class BlockingEventHandlerTest
             public void run()
             {
                 handler.handle(new MonitorEvent<Object>(Type.COMPLETED, object));
+                assertTrue(handler.lockedObjects.isEmpty());
             }
 
-        }, 1000L, TimeUnit.MILLISECONDS);
+        }, 500L, TimeUnit.MILLISECONDS);
 
         handler.lock();
     }

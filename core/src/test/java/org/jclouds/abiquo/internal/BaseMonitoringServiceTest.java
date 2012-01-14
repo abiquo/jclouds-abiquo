@@ -20,12 +20,14 @@
 package org.jclouds.abiquo.internal;
 
 import static org.easymock.EasyMock.createMock;
+import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.fail;
 
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.features.services.MonitoringService;
@@ -47,9 +49,17 @@ import com.google.common.eventbus.AsyncEventBus;
 @Test(groups = "unit")
 public class BaseMonitoringServiceTest extends BaseInjectionTest
 {
-    private static final long TEST_MONITOR_TIMEOUT = 100L;
+    // The polling interval used in tests (in ms)
+    private static final long TEST_MONITOR_POLLING = 100L;
 
-    private static final long TEST_MAX_TIME_TO_AWAIT_COMPLETION = 3000L;
+    @Override
+    protected Properties buildProperties()
+    {
+        // Use a small monitor polling interval in tests (in ms)
+        Properties props = super.buildProperties();
+        props.setProperty(ASYNC_TASK_MONITOR_DELAY, String.valueOf(TEST_MONITOR_POLLING));
+        return props;
+    }
 
     public void testAllPropertiesInjected()
     {
@@ -89,7 +99,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
                 BaseMonitoringService service = mockMonitoringService();
                 service.awaitCompletion(new MockMonitor(), new Object());
             }
-        }).startAndWait(TEST_MAX_TIME_TO_AWAIT_COMPLETION);
+        }).startAndWait(TEST_MONITOR_POLLING * 4);
     }
 
     public void testAwaitCompletionMultipleTasks()
@@ -102,7 +112,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
                 BaseMonitoringService service = mockMonitoringService();
                 service.awaitCompletion(new MockMonitor(), new Object(), new Object());
             }
-        }).startAndWait(TEST_MAX_TIME_TO_AWAIT_COMPLETION);
+        }).startAndWait(TEST_MONITOR_POLLING * 8);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -139,7 +149,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
                 assertEquals(handler.numFailures, 0);
                 assertEquals(handler.numTimeouts, 0);
             }
-        }).startAndWait(TEST_MAX_TIME_TO_AWAIT_COMPLETION);
+        }).startAndWait(TEST_MONITOR_POLLING * 8);
     }
 
     public void testMonitorMultipleTasks()
@@ -165,7 +175,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
                 assertEquals(handler.numFailures, 0);
                 assertEquals(handler.numTimeouts, 0);
             }
-        }).startAndWait(TEST_MAX_TIME_TO_AWAIT_COMPLETION);
+        }).startAndWait(TEST_MONITOR_POLLING * 8);
     }
 
     public void testMonitorReachesTimeout()
@@ -181,7 +191,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
                 CountingHandler handler = new CountingHandler(monitoredObject);
                 service.eventBus.register(handler);
 
-                service.monitor(TEST_MONITOR_TIMEOUT, TimeUnit.MILLISECONDS,
+                service.monitor(TEST_MONITOR_POLLING + 10L, TimeUnit.MILLISECONDS,
                     new MockInfiniteMonitor(), monitoredObject);
                 handler.lock();
 
@@ -191,7 +201,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
                 assertEquals(handler.numFailures, 0);
                 assertEquals(handler.numTimeouts, 1);
             }
-        }).startAndWait(TEST_MAX_TIME_TO_AWAIT_COMPLETION);
+        }).startAndWait(TEST_MONITOR_POLLING * 6);
     }
 
     public void testMonitorMultipleTasksReachesTimeout()
@@ -208,7 +218,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
                 CountingHandler handler = new CountingHandler(monitoredObject1, monitoredObject2);
                 service.eventBus.register(handler);
 
-                service.monitor(TEST_MONITOR_TIMEOUT, TimeUnit.MILLISECONDS,
+                service.monitor(TEST_MONITOR_POLLING + 10L, TimeUnit.MILLISECONDS,
                     new MockInfiniteMonitor(), monitoredObject1, monitoredObject2);
                 handler.lock();
 
@@ -218,14 +228,14 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
                 assertEquals(handler.numFailures, 0);
                 assertEquals(handler.numTimeouts, 2);
             }
-        }).startAndWait(TEST_MAX_TIME_TO_AWAIT_COMPLETION);
+        }).startAndWait(TEST_MONITOR_POLLING * 12);
     }
 
     private BaseMonitoringService mockMonitoringService()
     {
         return new BaseMonitoringService(injector.getInstance(AbiquoContext.class),
             injector.getInstance(ScheduledExecutorService.class),
-            TEST_MONITOR_TIMEOUT,
+            TEST_MONITOR_POLLING,
             injector.getInstance(AsyncEventBus.class),
             createMock(VirtualMachineDeployMonitor.class),
             createMock(VirtualMachineUndeployMonitor.class));

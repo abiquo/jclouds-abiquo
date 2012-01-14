@@ -76,7 +76,7 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
     }
 
     /**
-     * Handles the dispatched event.
+     * Handles the dispatched event in a thread safe way.
      * <p>
      * Due to <a href="http://code.google.com/p/guava-libraries/issues/detail?id=783">Guava Issue
      * 786</a> {@link #handle(MonitorEvent)} is marked <code>final</code>to avoid having duplicate
@@ -86,7 +86,7 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
      */
     @AllowConcurrentEvents
     @Subscribe
-    public final void handle(final MonitorEvent<T> event)
+    public synchronized final void handle(final MonitorEvent<T> event)
     {
         if (handles(event))
         {

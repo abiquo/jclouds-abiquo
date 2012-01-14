@@ -212,12 +212,9 @@ public class BaseMonitoringService implements MonitoringService
         {
             for (T object : objects)
             {
-                // We force a delayed start to ensure events will not get too much fast. It is
-                // important when using the BlockingEventHandler, to prevent event notifications
-                // arrive before the thread lock has been obtained
                 ScheduledFuture< ? > future =
                     scheduler.scheduleWithFixedDelay(
-                        new AsyncMonitor<T>(object, completeCondition), 1000L, pollingDelay,
+                        new AsyncMonitor<T>(object, completeCondition), 0, pollingDelay,
                         TimeUnit.MILLISECONDS);
 
                 Long timeout =
