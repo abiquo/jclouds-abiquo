@@ -117,7 +117,7 @@ public class BlockingEventHandlerTest
         BlockingEventHandler<Object> handler = new BlockingEventHandler<Object>(object);
         handler.lockedObjects.clear();
 
-        handler.lock();     // Lock should do nothing
+        handler.lock(); // Lock should do nothing
 
         assertNull(handler.completeSignal);
     }

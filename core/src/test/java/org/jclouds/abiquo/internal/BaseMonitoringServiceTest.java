@@ -23,11 +23,10 @@ import static org.easymock.EasyMock.createMock;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.fail;
 
+import java.util.Properties;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.features.services.MonitoringService;
@@ -46,7 +45,7 @@ import com.google.common.eventbus.AsyncEventBus;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit")
+@Test(groups = "unit", timeOut = 5000L)
 public class BaseMonitoringServiceTest extends BaseInjectionTest
 {
     // The polling interval used in tests (in ms)
@@ -91,28 +90,14 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     public void testAwaitCompletion()
     {
-        new AwaitListener(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                BaseMonitoringService service = mockMonitoringService();
-                service.awaitCompletion(new MockMonitor(), new Object());
-            }
-        }).startAndWait(TEST_MONITOR_POLLING * 4);
+        BaseMonitoringService service = mockMonitoringService();
+        service.awaitCompletion(new MockMonitor(), new Object());
     }
 
     public void testAwaitCompletionMultipleTasks()
     {
-        new AwaitListener(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                BaseMonitoringService service = mockMonitoringService();
-                service.awaitCompletion(new MockMonitor(), new Object(), new Object());
-            }
-        }).startAndWait(TEST_MONITOR_POLLING * 8);
+        BaseMonitoringService service = mockMonitoringService();
+        service.awaitCompletion(new MockMonitor(), new Object(), new Object());
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -129,106 +114,78 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     public void testMonitor()
     {
-        new AwaitListener(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = mockMonitoringService();
 
-                Object monitoredObject = new Object();
-                CountingHandler handler = new CountingHandler(monitoredObject);
-                service.eventBus.register(handler);
+        Object monitoredObject = new Object();
+        CountingHandler handler = new CountingHandler(monitoredObject);
+        service.eventBus.register(handler);
 
-                service.monitor(new MockMonitor(), monitoredObject);
-                handler.lock();
+        service.monitor(new MockMonitor(), monitoredObject);
+        handler.lock();
 
-                service.eventBus.unregister(handler);
+        service.eventBus.unregister(handler);
 
-                assertEquals(handler.numCompletes, 1);
-                assertEquals(handler.numFailures, 0);
-                assertEquals(handler.numTimeouts, 0);
-            }
-        }).startAndWait(TEST_MONITOR_POLLING * 8);
+        assertEquals(handler.numCompletes, 1);
+        assertEquals(handler.numFailures, 0);
+        assertEquals(handler.numTimeouts, 0);
     }
 
     public void testMonitorMultipleTasks()
     {
-        new AwaitListener(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = mockMonitoringService();
 
-                Object monitoredObject1 = new Object();
-                Object monitoredObject2 = new Object();
-                CountingHandler handler = new CountingHandler(monitoredObject1, monitoredObject2);
-                service.eventBus.register(handler);
+        Object monitoredObject1 = new Object();
+        Object monitoredObject2 = new Object();
+        CountingHandler handler = new CountingHandler(monitoredObject1, monitoredObject2);
+        service.eventBus.register(handler);
 
-                service.monitor(new MockMonitor(), monitoredObject1, monitoredObject2);
-                handler.lock();
+        service.monitor(new MockMonitor(), monitoredObject1, monitoredObject2);
+        handler.lock();
 
-                service.eventBus.unregister(handler);
+        service.eventBus.unregister(handler);
 
-                assertEquals(handler.numCompletes, 2);
-                assertEquals(handler.numFailures, 0);
-                assertEquals(handler.numTimeouts, 0);
-            }
-        }).startAndWait(TEST_MONITOR_POLLING * 8);
+        assertEquals(handler.numCompletes, 2);
+        assertEquals(handler.numFailures, 0);
+        assertEquals(handler.numTimeouts, 0);
     }
 
     public void testMonitorReachesTimeout()
     {
-        new AwaitListener(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = mockMonitoringService();
 
-                Object monitoredObject = new Object();
-                CountingHandler handler = new CountingHandler(monitoredObject);
-                service.eventBus.register(handler);
+        Object monitoredObject = new Object();
+        CountingHandler handler = new CountingHandler(monitoredObject);
+        service.eventBus.register(handler);
 
-                service.monitor(TEST_MONITOR_POLLING + 10L, TimeUnit.MILLISECONDS,
-                    new MockInfiniteMonitor(), monitoredObject);
-                handler.lock();
+        service.monitor(TEST_MONITOR_POLLING + 10L, TimeUnit.MILLISECONDS,
+            new MockInfiniteMonitor(), monitoredObject);
+        handler.lock();
 
-                service.eventBus.unregister(handler);
+        service.eventBus.unregister(handler);
 
-                assertEquals(handler.numCompletes, 0);
-                assertEquals(handler.numFailures, 0);
-                assertEquals(handler.numTimeouts, 1);
-            }
-        }).startAndWait(TEST_MONITOR_POLLING * 6);
+        assertEquals(handler.numCompletes, 0);
+        assertEquals(handler.numFailures, 0);
+        assertEquals(handler.numTimeouts, 1);
     }
 
     public void testMonitorMultipleTasksReachesTimeout()
     {
-        new AwaitListener(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = mockMonitoringService();
 
-                Object monitoredObject1 = new Object();
-                Object monitoredObject2 = new Object();
-                CountingHandler handler = new CountingHandler(monitoredObject1, monitoredObject2);
-                service.eventBus.register(handler);
+        Object monitoredObject1 = new Object();
+        Object monitoredObject2 = new Object();
+        CountingHandler handler = new CountingHandler(monitoredObject1, monitoredObject2);
+        service.eventBus.register(handler);
 
-                service.monitor(TEST_MONITOR_POLLING + 10L, TimeUnit.MILLISECONDS,
-                    new MockInfiniteMonitor(), monitoredObject1, monitoredObject2);
-                handler.lock();
+        service.monitor(TEST_MONITOR_POLLING + 10L, TimeUnit.MILLISECONDS,
+            new MockInfiniteMonitor(), monitoredObject1, monitoredObject2);
+        handler.lock();
 
-                service.eventBus.unregister(handler);
+        service.eventBus.unregister(handler);
 
-                assertEquals(handler.numCompletes, 0);
-                assertEquals(handler.numFailures, 0);
-                assertEquals(handler.numTimeouts, 2);
-            }
-        }).startAndWait(TEST_MONITOR_POLLING * 12);
+        assertEquals(handler.numCompletes, 0);
+        assertEquals(handler.numFailures, 0);
+        assertEquals(handler.numTimeouts, 2);
     }
 
     private BaseMonitoringService mockMonitoringService()
@@ -239,32 +196,6 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
             injector.getInstance(AsyncEventBus.class),
             createMock(VirtualMachineDeployMonitor.class),
             createMock(VirtualMachineUndeployMonitor.class));
-    }
-
-    private static class AwaitListener extends Thread
-    {
-        public AwaitListener(final Runnable runnable)
-        {
-            super(runnable);
-        }
-
-        public void startAndWait(final long timeout)
-        {
-            try
-            {
-                start();
-                join(timeout);
-                if (isAlive())
-                {
-                    interrupt();
-                    fail("Interruped awaiting thread after " + timeout + "ms");
-                }
-            }
-            catch (InterruptedException ex)
-            {
-                // Expected exception. Do nothing
-            }
-        }
     }
 
     private static class MockMonitor implements Function<Object, MonitorStatus>
