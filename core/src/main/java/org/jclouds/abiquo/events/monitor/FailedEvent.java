@@ -16,38 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.monitor.events.handlers;
-
-import org.jclouds.abiquo.monitor.events.MonitorEvent;
-import org.jclouds.logging.Logger;
+package org.jclouds.abiquo.events.monitor;
 
 /**
- * Base class for all {@link MonitorEvent} handlers.
+ * Event dispatched when a monitoring job completes with errors.
  * 
  * @author Ignasi Barrera
  */
-public abstract class AbstractEventHandler<T>
+public class FailedEvent<T> extends MonitorEvent<T>
 {
-    protected Logger logger = Logger.NULL;
-
-    /**
-     * Checks if the current handler must handle the dispatched event.
-     * 
-     * @param event The event being dispatched.
-     * @return Boolean indicating if the event must be handled by the current handler.
-     */
-    protected abstract boolean handles(MonitorEvent<T> event);
-
-    // Public getters and setters to allow non-guice code to set the appropriate logger
-
-    public Logger getLogger()
+    public FailedEvent(final T target)
     {
-        return logger;
-    }
-
-    public void setLogger(final Logger logger)
-    {
-        this.logger = logger;
+        super(MonitorEvent.Type.FAILED, target);
     }
 
 }

@@ -16,18 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.monitor.events;
+package org.jclouds.abiquo.events.handlers;
+
+import org.jclouds.abiquo.events.monitor.MonitorEvent;
+import org.jclouds.logging.Logger;
 
 /**
- * Event dispatched when a monitoring job times out.
+ * Base class for all {@link MonitorEvent} handlers.
  * 
  * @author Ignasi Barrera
  */
-public class TimeoutEvent<T> extends MonitorEvent<T>
+public abstract class AbstractEventHandler<T>
 {
-    public TimeoutEvent(final T target)
+    protected Logger logger = Logger.NULL;
+
+    /**
+     * Checks if the current handler must handle the dispatched event.
+     * 
+     * @param event The event being dispatched.
+     * @return Boolean indicating if the event must be handled by the current handler.
+     */
+    protected abstract boolean handles(MonitorEvent<T> event);
+
+    // Public getters and setters to allow non-guice code to set the appropriate logger
+
+    public Logger getLogger()
     {
-        super(MonitorEvent.Type.TIMEOUT, target);
+        return logger;
+    }
+
+    public void setLogger(final Logger logger)
+    {
+        this.logger = logger;
     }
 
 }

@@ -25,27 +25,25 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import java.util.Properties;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
+import org.jclouds.abiquo.events.monitor.MonitorEvent;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
 import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
-import org.jclouds.abiquo.monitor.events.MonitorEvent;
-import org.jclouds.abiquo.monitor.events.handlers.BlockingEventHandler;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
-import com.google.common.eventbus.AsyncEventBus;
 
 /**
  * Unit tests for the {@link BaseMonitoringService} class.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit", timeOut = 5000L)
+// Since these tests block the thread, mark them as failed after the given timeout
+@Test(groups = "unit", timeOut = 10000L)
 public class BaseMonitoringServiceTest extends BaseInjectionTest
 {
     // The polling interval used in tests (in ms)
@@ -118,12 +116,12 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
         Object monitoredObject = new Object();
         CountingHandler handler = new CountingHandler(monitoredObject);
-        service.eventBus.register(handler);
+        service.register(handler);
 
         service.monitor(new MockMonitor(), monitoredObject);
         handler.lock();
 
-        service.eventBus.unregister(handler);
+        service.unregister(handler);
 
         assertEquals(handler.numCompletes, 1);
         assertEquals(handler.numFailures, 0);
@@ -137,12 +135,12 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         Object monitoredObject1 = new Object();
         Object monitoredObject2 = new Object();
         CountingHandler handler = new CountingHandler(monitoredObject1, monitoredObject2);
-        service.eventBus.register(handler);
+        service.register(handler);
 
         service.monitor(new MockMonitor(), monitoredObject1, monitoredObject2);
         handler.lock();
 
-        service.eventBus.unregister(handler);
+        service.unregister(handler);
 
         assertEquals(handler.numCompletes, 2);
         assertEquals(handler.numFailures, 0);
@@ -155,13 +153,13 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
         Object monitoredObject = new Object();
         CountingHandler handler = new CountingHandler(monitoredObject);
-        service.eventBus.register(handler);
+        service.register(handler);
 
         service.monitor(TEST_MONITOR_POLLING + 10L, TimeUnit.MILLISECONDS,
             new MockInfiniteMonitor(), monitoredObject);
         handler.lock();
 
-        service.eventBus.unregister(handler);
+        service.unregister(handler);
 
         assertEquals(handler.numCompletes, 0);
         assertEquals(handler.numFailures, 0);
@@ -175,13 +173,13 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         Object monitoredObject1 = new Object();
         Object monitoredObject2 = new Object();
         CountingHandler handler = new CountingHandler(monitoredObject1, monitoredObject2);
-        service.eventBus.register(handler);
+        service.register(handler);
 
         service.monitor(TEST_MONITOR_POLLING + 10L, TimeUnit.MILLISECONDS,
             new MockInfiniteMonitor(), monitoredObject1, monitoredObject2);
         handler.lock();
 
-        service.eventBus.unregister(handler);
+        service.unregister(handler);
 
         assertEquals(handler.numCompletes, 0);
         assertEquals(handler.numFailures, 0);
@@ -190,12 +188,10 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     private BaseMonitoringService mockMonitoringService()
     {
-        return new BaseMonitoringService(injector.getInstance(AbiquoContext.class),
-            injector.getInstance(ScheduledExecutorService.class),
-            TEST_MONITOR_POLLING,
-            injector.getInstance(AsyncEventBus.class),
-            createMock(VirtualMachineDeployMonitor.class),
-            createMock(VirtualMachineUndeployMonitor.class));
+        BaseMonitoringService mock = injector.getInstance(BaseMonitoringService.class);
+        mock.deployMonitor = createMock(VirtualMachineDeployMonitor.class);
+        mock.undeployMonitor = createMock(VirtualMachineUndeployMonitor.class);
+        return mock;
     }
 
     private static class MockMonitor implements Function<Object, MonitorStatus>
@@ -237,7 +233,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         }
 
         @Override
-        protected synchronized void doBeforeRelease(final MonitorEvent<Object> event)
+        protected void doBeforeRelease(final MonitorEvent<Object> event)
         {
             switch (event.getType())
             {

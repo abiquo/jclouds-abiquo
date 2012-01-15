@@ -16,22 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.monitor.events.handlers;
+package org.jclouds.abiquo.events.handlers;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
-import org.jclouds.abiquo.monitor.events.MonitorEvent;
+import org.jclouds.abiquo.events.monitor.MonitorEvent;
 import org.jclouds.logging.Logger;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import com.google.common.eventbus.AllowConcurrentEvents;
 import com.google.common.eventbus.Subscribe;
 
 /**
@@ -51,7 +49,12 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
     @VisibleForTesting
     CountDownLatch completeSignal;
 
-    /** The objects being locked. */
+    /**
+     * The objects being locked.
+     * <p>
+     * This class handles events in a thread safe way. Otherwise this collections should be
+     * synchronised.
+     */
     protected List<T> lockedObjects;
 
     public BlockingEventHandler(final T... lockedObjects)
@@ -65,14 +68,19 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
         checkArgument(checkNotNull(lockedObjects, "lockedObjects").length > 0,
             "must provide at least one object");
         this.logger = checkNotNull(logger, "logger");
-        this.lockedObjects = Collections.synchronizedList(Lists.newArrayList(lockedObjects));
+        this.lockedObjects = Lists.newArrayList(lockedObjects);
         this.logger.debug("created BlockingEventHandler locking %s objects", lockedObjects.length);
     }
 
     @Override
     protected boolean handles(final MonitorEvent<T> event)
     {
-        return lockedObjects.contains(event.getTarget());
+        logger.debug("checking if %s event on %s must be handled by %s", event.getType(),
+            event.getTarget(), this);
+        boolean handles = lockedObjects.contains(event.getTarget());
+        logger.debug("%s event on %s must %sbe handled", event.getType(), event.getTarget(),
+            handles ? "" : "not ");
+        return handles;
     }
 
     /**
@@ -84,9 +92,8 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
      * 
      * @see {@link #doBeforeRelease(MonitorEvent)}
      */
-    @AllowConcurrentEvents
     @Subscribe
-    public synchronized final void handle(final MonitorEvent<T> event)
+    public final void handle(final MonitorEvent<T> event)
     {
         if (handles(event))
         {
@@ -117,12 +124,17 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
             try
             {
                 completeSignal = new CountDownLatch(lockedObjects.size());
+                logger.debug("creating lock for %s object(s)", lockedObjects.size());
                 completeSignal.await();
             }
             catch (InterruptedException ex)
             {
                 Throwables.propagate(ex);
             }
+        }
+        else
+        {
+            logger.debug("there is nothing to watch. Ignoring lock.");
         }
     }
 
@@ -131,6 +143,7 @@ public class BlockingEventHandler<T> extends AbstractEventHandler<T>
      */
     protected void release(final T target)
     {
+        logger.debug("releasing %s", target);
         lockedObjects.remove(target);
 
         // The completeSignal might be null if the events have been consumed

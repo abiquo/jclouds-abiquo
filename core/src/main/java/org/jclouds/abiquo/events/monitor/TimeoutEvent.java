@@ -16,18 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.monitor.events;
+package org.jclouds.abiquo.events.monitor;
 
 /**
- * Event dispatched when a monitoring job completes without error.
+ * Event dispatched when a monitoring job times out.
  * 
  * @author Ignasi Barrera
  */
-public class CompletedEvent<T> extends MonitorEvent<T>
+public class TimeoutEvent<T> extends MonitorEvent<T>
 {
-    public CompletedEvent(final T target)
+    public TimeoutEvent(final T target)
     {
-        super(MonitorEvent.Type.COMPLETED, target);
+        super(MonitorEvent.Type.TIMEOUT, target);
     }
 
 }

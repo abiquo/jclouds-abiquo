@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.monitor.events.handlers;
+package org.jclouds.abiquo.events.handlers;
 
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNull;
@@ -25,8 +25,9 @@ import static org.testng.Assert.assertTrue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.monitor.events.MonitorEvent;
-import org.jclouds.abiquo.monitor.events.MonitorEvent.Type;
+import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
+import org.jclouds.abiquo.events.monitor.MonitorEvent;
+import org.jclouds.abiquo.events.monitor.MonitorEvent.Type;
 import org.testng.annotations.Test;
 
 /**

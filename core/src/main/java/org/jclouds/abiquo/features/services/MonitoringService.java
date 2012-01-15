@@ -22,6 +22,7 @@ package org.jclouds.abiquo.features.services;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 
@@ -153,4 +154,21 @@ public interface MonitoringService
     public <T> void monitor(final Long maxWait, final TimeUnit timeUnit,
         final Function<T, MonitorStatus> completeCondition, final T... objects);
 
+    /*************** Handler registration methods ***************/
+
+    /**
+     * Registers the given event handler.
+     * 
+     * @param <T> The type of event handler to register.
+     * @param handler The event handler to register.
+     */
+    public <T extends AbstractEventHandler< ? >> void register(T handler);
+
+    /**
+     * Unregisters the given event handler.
+     * 
+     * @param <T> The type of event handler to unregister.
+     * @param handler The event handler to unregister.
+     */
+    public <T extends AbstractEventHandler< ? >> void unregister(T handler);
 }
