@@ -32,16 +32,14 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.config.SchedulerModule;
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
 import org.jclouds.abiquo.events.monitor.CompletedEvent;
 import org.jclouds.abiquo.events.monitor.FailedEvent;
 import org.jclouds.abiquo.events.monitor.TimeoutEvent;
 import org.jclouds.abiquo.features.services.MonitoringService;
-import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
-import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.logging.Logger;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -73,87 +71,21 @@ public class BaseMonitoringService implements MonitoringService
     @VisibleForTesting
     protected EventBus eventBus;
 
-    @VisibleForTesting
-    protected VirtualMachineDeployMonitor deployMonitor;
-
-    @VisibleForTesting
-    protected VirtualMachineUndeployMonitor undeployMonitor;
-
     @Resource
     private Logger logger = Logger.NULL;
-
-    private int numHandlers;
 
     @Inject
     public BaseMonitoringService(final AbiquoContext context,
         final ScheduledExecutorService scheduler,
-        @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus,
-        final VirtualMachineDeployMonitor deployMonitor,
-        final VirtualMachineUndeployMonitor undeployMonitor)
+        @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus)
     {
         this.context = checkNotNull(context, "context");
         this.scheduler = checkNotNull(scheduler, "scheduler");
         this.pollingDelay = checkNotNull(pollingDelay, "pollingDelay");
         this.eventBus = checkNotNull(eventBus, "eventBus");
-        this.deployMonitor = checkNotNull(deployMonitor, "deployMonitor");
-        this.undeployMonitor = checkNotNull(undeployMonitor, "undeployMonitor");
     }
 
-    /*************** Virtual machine ***************/
-
-    @Override
-    public void awaitCompletionDeploy(final VirtualMachine... vms)
-    {
-        awaitCompletion(deployMonitor, vms);
-    }
-
-    @Override
-    public void monitorDeploy(final VirtualMachine... vms)
-    {
-        monitor(deployMonitor, vms);
-    }
-
-    @Override
-    public void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... vms)
-    {
-        awaitCompletion(maxWait, timeUnit, deployMonitor, vms);
-    }
-
-    @Override
-    public void monitorDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... vms)
-    {
-        monitor(maxWait, timeUnit, deployMonitor, vms);
-    }
-
-    @Override
-    public void awaitCompletionUndeploy(final VirtualMachine... vms)
-    {
-        awaitCompletion(undeployMonitor, vms);
-    }
-
-    @Override
-    public void monitorUndeploy(final VirtualMachine... vms)
-    {
-        monitor(undeployMonitor, vms);
-    }
-
-    @Override
-    public void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... vms)
-    {
-        awaitCompletion(maxWait, timeUnit, undeployMonitor, vms);
-    }
-
-    @Override
-    public void monitorUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... vms)
-    {
-        monitor(maxWait, timeUnit, undeployMonitor, vms);
-    }
-
-    /*************** Generic methods ***************/
+    /*************** Generic monitoring methods ***************/
 
     @Override
     public <T> void awaitCompletion(final Function<T, MonitorStatus> completeCondition,
@@ -209,15 +141,25 @@ public class BaseMonitoringService implements MonitoringService
     @Override
     public <T extends AbstractEventHandler< ? >> void register(T handler)
     {
-        logger.debug("registering event handler %s. %s in total", handler, ++numHandlers);
+        logger.debug("registering event handler %s", handler);
         eventBus.register(handler);
     }
 
     @Override
     public <T extends AbstractEventHandler< ? >> void unregister(T handler)
     {
-        logger.debug("unregistering event handler %s. %s remaining", handler, --numHandlers);
+        logger.debug("unregistering event handler %s", handler);
         eventBus.unregister(handler);
+    }
+
+    /*************** Delegating monitors ***************/
+
+    @Override
+    public VirtualMachineMonitor getVirtualMachineMonitor()
+    {
+        return checkNotNull(
+            context.getUtils().getInjector().getInstance(VirtualMachineMonitor.class),
+            "virtualMachineMonitor");
     }
 
     /**

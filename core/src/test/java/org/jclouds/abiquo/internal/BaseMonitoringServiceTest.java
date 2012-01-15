@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo.internal;
 
-import static org.easymock.EasyMock.createMock;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
@@ -30,8 +29,6 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
 import org.jclouds.abiquo.events.monitor.MonitorEvent;
 import org.jclouds.abiquo.features.services.MonitoringService;
-import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
-import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.testng.annotations.Test;
 
@@ -67,19 +64,17 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertNotNull(service.scheduler);
         assertNotNull(service.pollingDelay);
         assertNotNull(service.eventBus);
-        assertNotNull(service.deployMonitor);
-        assertNotNull(service.undeployMonitor);
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testAwaitCompletionWithNullFunction()
     {
-        mockMonitoringService().awaitCompletion(null, new Object[] {});
+        monitoringService().awaitCompletion(null, new Object[] {});
     }
 
     public void testAwaitCompletionWithoutTasks()
     {
-        BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = monitoringService();
 
         service.awaitCompletion(new MockMonitor());
         service.awaitCompletion(new MockMonitor(), (Object[]) null);
@@ -88,20 +83,20 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     public void testAwaitCompletion()
     {
-        BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = monitoringService();
         service.awaitCompletion(new MockMonitor(), new Object());
     }
 
     public void testAwaitCompletionMultipleTasks()
     {
-        BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = monitoringService();
         service.awaitCompletion(new MockMonitor(), new Object(), new Object());
     }
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testMonitorWithNullCompletecondition()
     {
-        mockMonitoringService().monitor(null, (Object[]) null);
+        monitoringService().monitor(null, (Object[]) null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
@@ -112,7 +107,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     public void testMonitor()
     {
-        BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = monitoringService();
 
         Object monitoredObject = new Object();
         CountingHandler handler = new CountingHandler(monitoredObject);
@@ -130,7 +125,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     public void testMonitorMultipleTasks()
     {
-        BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = monitoringService();
 
         Object monitoredObject1 = new Object();
         Object monitoredObject2 = new Object();
@@ -149,7 +144,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     public void testMonitorReachesTimeout()
     {
-        BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = monitoringService();
 
         Object monitoredObject = new Object();
         CountingHandler handler = new CountingHandler(monitoredObject);
@@ -168,7 +163,7 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
 
     public void testMonitorMultipleTasksReachesTimeout()
     {
-        BaseMonitoringService service = mockMonitoringService();
+        BaseMonitoringService service = monitoringService();
 
         Object monitoredObject1 = new Object();
         Object monitoredObject2 = new Object();
@@ -186,12 +181,9 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertEquals(handler.numTimeouts, 2);
     }
 
-    private BaseMonitoringService mockMonitoringService()
+    private BaseMonitoringService monitoringService()
     {
-        BaseMonitoringService mock = injector.getInstance(BaseMonitoringService.class);
-        mock.deployMonitor = createMock(VirtualMachineDeployMonitor.class);
-        mock.undeployMonitor = createMock(VirtualMachineUndeployMonitor.class);
-        return mock;
+        return injector.getInstance(BaseMonitoringService.class);
     }
 
     private static class MockMonitor implements Function<Object, MonitorStatus>

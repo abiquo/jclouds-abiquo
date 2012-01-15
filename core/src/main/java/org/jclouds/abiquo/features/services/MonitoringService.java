@@ -21,10 +21,10 @@ package org.jclouds.abiquo.features.services;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 
 import com.google.common.base.Function;
 import com.google.inject.ImplementedBy;
@@ -38,78 +38,8 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseMonitoringService.class)
 public interface MonitoringService
 {
-    /*************** Virtual machine ***************/
 
-    /**
-     * Monitor the given {@link VirtualMachine}s and block until the deploy finishes.
-     * 
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    void awaitCompletionDeploy(final VirtualMachine... virtualMachine);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and populate an event when the deploy finishes.
-     * 
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    public void monitorDeploy(final VirtualMachine... vms);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and block until the deploy finishes.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... virtualMachine);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and populate an event when deploy finishes.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    public void monitorDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... vms);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and block until the undeploy finishes.
-     * 
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    void awaitCompletionUndeploy(final VirtualMachine... virtualMachine);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and call populate an event when undeploy finishes.
-     * 
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    public void monitorUndeploy(final VirtualMachine... vms);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and blocks until the undeploy finishes.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... virtualMachine);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and populate an event when undeploy finishes.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param callback The callback.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    public void monitorUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... vms);
-
-    /*************** Generic methods ***************/
+    /*************** Generic monitoring methods ***************/
 
     /**
      * Monitor the given objects using the given complete condition.
@@ -171,4 +101,13 @@ public interface MonitoringService
      * @param handler The event handler to unregister.
      */
     public <T extends AbstractEventHandler< ? >> void unregister(T handler);
+
+    /*************** Delegating monitors ***************/
+
+    /**
+     * Gets the virtual machine monitor service.
+     * 
+     * @return The virtual machine monitor service.
+     */
+    public VirtualMachineMonitor getVirtualMachineMonitor();
 }
