@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions.monitor;
+package org.jclouds.abiquo.monitor.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
@@ -25,7 +25,7 @@ import javax.annotation.Resource;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
-import org.jclouds.abiquo.domain.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.logging.Logger;
 
 import com.abiquo.server.core.cloud.VirtualApplianceState;

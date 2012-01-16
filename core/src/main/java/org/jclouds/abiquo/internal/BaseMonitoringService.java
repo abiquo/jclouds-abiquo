@@ -67,15 +67,14 @@ public class BaseMonitoringService implements MonitoringService
     @VisibleForTesting
     protected Long pollingDelay;
 
-    /** The event bus used to dispatch monitoring events. */
+    /**
+     * The event bus used to dispatch monitoring events.
+     * <p>
+     * A sync bus is used by default, to prevent deadlocks when using the
+     * {@link BlockingEventHandler}.
+     */
     @VisibleForTesting
     protected EventBus eventBus;
-
-    @VisibleForTesting
-    protected VirtualApplianceDeployMonitor deployVirtualApplianceMonitor;
-
-    @VisibleForTesting
-    protected VirtualApplianceUndeployMonitor undeployVirtualApplianceMonitor;
 
     @Resource
     private Logger logger = Logger.NULL;
@@ -190,7 +189,6 @@ public class BaseMonitoringService implements MonitoringService
         private Future< ? > future;
 
         /** The timeout for this monitor. */
-        @VisibleForTesting
         private Long timeout;
 
         public AsyncMonitor(final T monitoredObject,
