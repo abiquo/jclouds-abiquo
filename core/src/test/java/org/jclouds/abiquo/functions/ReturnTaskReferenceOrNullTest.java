@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo.functions;
 
-import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
@@ -30,6 +29,7 @@ import java.io.IOException;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.easymock.EasyMock;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.io.Payload;
 import org.jclouds.io.Payloads;
@@ -53,7 +53,7 @@ public class ReturnTaskReferenceOrNullTest
         Function<HttpResponse, AcceptedRequestDto<String>> function =
             new ReturnTaskReferenceOrNull(new JAXBParser(), createTypeLiteral());
 
-        HttpResponse response = createMock(HttpResponse.class);
+        HttpResponse response = EasyMock.createMock(HttpResponse.class);
 
         expect(response.getStatusCode()).andReturn(Status.NO_CONTENT.getStatusCode());
         expect(response.getPayload()).andReturn(null);
@@ -74,7 +74,7 @@ public class ReturnTaskReferenceOrNullTest
         Function<HttpResponse, AcceptedRequestDto<String>> function =
             new ReturnTaskReferenceOrNull(parser, createTypeLiteral());
 
-        HttpResponse response = createMock(HttpResponse.class);
+        HttpResponse response = EasyMock.createMock(HttpResponse.class);
 
         expect(response.getStatusCode()).andReturn(Status.ACCEPTED.getStatusCode());
         // Get payload is called three times: one to deserialize it, and twice to release it

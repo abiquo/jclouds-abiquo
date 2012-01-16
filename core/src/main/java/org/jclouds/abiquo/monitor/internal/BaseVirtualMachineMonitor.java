@@ -30,10 +30,10 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
-import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
+import org.jclouds.abiquo.monitor.functions.VirtualMachineDeployMonitor;
+import org.jclouds.abiquo.monitor.functions.VirtualMachineUndeployMonitor;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.eventbus.EventBus;

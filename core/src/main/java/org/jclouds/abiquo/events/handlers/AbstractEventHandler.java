@@ -18,6 +18,8 @@
  */
 package org.jclouds.abiquo.events.handlers;
 
+import javax.annotation.Resource;
+
 import org.jclouds.abiquo.events.monitor.MonitorEvent;
 import org.jclouds.logging.Logger;
 
@@ -28,6 +30,7 @@ import org.jclouds.logging.Logger;
  */
 public abstract class AbstractEventHandler<T>
 {
+    @Resource
     protected Logger logger = Logger.NULL;
 
     /**

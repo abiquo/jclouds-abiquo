@@ -181,6 +181,11 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertEquals(handler.numTimeouts, 2);
     }
 
+    public void testDelegateToVirtualMachineMonitor()
+    {
+        assertNotNull(monitoringService().getVirtualMachineMonitor());
+    }
+
     private BaseMonitoringService monitoringService()
     {
         return injector.getInstance(BaseMonitoringService.class);

@@ -139,14 +139,14 @@ public class BaseMonitoringService implements MonitoringService
     }
 
     @Override
-    public <T extends AbstractEventHandler< ? >> void register(T handler)
+    public <T extends AbstractEventHandler< ? >> void register(final T handler)
     {
         logger.debug("registering event handler %s", handler);
         eventBus.register(handler);
     }
 
     @Override
-    public <T extends AbstractEventHandler< ? >> void unregister(T handler)
+    public <T extends AbstractEventHandler< ? >> void unregister(final T handler)
     {
         logger.debug("unregistering event handler %s", handler);
         eventBus.unregister(handler);
@@ -168,7 +168,8 @@ public class BaseMonitoringService implements MonitoringService
      * @author Ignasi Barrera
      * @param <T> The type of the object being monitored.
      */
-    private class AsyncMonitor<T> implements Runnable
+    @VisibleForTesting
+    class AsyncMonitor<T> implements Runnable
     {
         /** The object being monitored. */
         private T monitoredObject;
@@ -183,14 +184,15 @@ public class BaseMonitoringService implements MonitoringService
         private Future< ? > future;
 
         /** The timeout for this monitor. */
+        @VisibleForTesting
         private Long timeout;
 
         public AsyncMonitor(final T monitoredObject,
             final Function<T, MonitorStatus> completeCondition)
         {
             super();
-            this.monitoredObject = monitoredObject;
-            this.completeCondition = completeCondition;
+            this.monitoredObject = checkNotNull(monitoredObject, "monitoredObject");
+            this.completeCondition = checkNotNull(completeCondition, "completeCondition");
         }
 
         /**
@@ -198,9 +200,10 @@ public class BaseMonitoringService implements MonitoringService
          * 
          * @param maxWait The timeout.
          */
-        public void startMonitoring(Long maxWait)
+        public void startMonitoring(final Long maxWait)
         {
-            future = scheduler.scheduleWithFixedDelay(this, 0, pollingDelay, TimeUnit.MILLISECONDS);
+            future =
+                scheduler.scheduleWithFixedDelay(this, 0L, pollingDelay, TimeUnit.MILLISECONDS);
             timeout = maxWait == null ? null : System.currentTimeMillis() + maxWait;
             logger.debug("started monitor job for %s with %s timeout", monitoredObject,
                 timeout == null ? "no" : String.valueOf(timeout));
@@ -209,7 +212,7 @@ public class BaseMonitoringService implements MonitoringService
         /**
          * Stops the monitoring job, if running.
          */
-        private void stopMonitoring()
+        public void stopMonitoring()
         {
             logger.debug("stopping monitor job for %s", monitoredObject);
 
@@ -231,7 +234,7 @@ public class BaseMonitoringService implements MonitoringService
         /**
          * Checks if the monitor has timed out.
          */
-        private boolean isTimeout()
+        public boolean isTimeout()
         {
             return timeout != null && timeout < System.currentTimeMillis();
         }
@@ -276,6 +279,26 @@ public class BaseMonitoringService implements MonitoringService
                     }
                     break;
             }
+        }
+
+        public T getMonitoredObject()
+        {
+            return monitoredObject;
+        }
+
+        public Function<T, MonitorStatus> getCompleteCondition()
+        {
+            return completeCondition;
+        }
+
+        public Future< ? > getFuture()
+        {
+            return future;
+        }
+
+        public Long getTimeout()
+        {
+            return timeout;
         }
     }
 
