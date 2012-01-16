@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 
 import com.google.common.base.Function;
@@ -110,4 +111,11 @@ public interface MonitoringService
      * @return The virtual machine monitor service.
      */
     public VirtualMachineMonitor getVirtualMachineMonitor();
+
+    /**
+     * Gets the virtual appliance monitor service.
+     * 
+     * @return The virtual appliance monitor service.
+     */
+    public VirtualApplianceMonitor getVirtualApplianceMonitor();
 }
