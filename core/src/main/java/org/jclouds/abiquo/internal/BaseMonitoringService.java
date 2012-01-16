@@ -19,16 +19,11 @@
 
 package org.jclouds.abiquo.internal;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
@@ -37,20 +32,19 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.config.SchedulerModule;
-import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.monitor.MonitorCallback;
-import org.jclouds.abiquo.domain.monitor.MonitorStatus;
+import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
+import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
+import org.jclouds.abiquo.events.monitor.CompletedEvent;
+import org.jclouds.abiquo.events.monitor.FailedEvent;
+import org.jclouds.abiquo.events.monitor.TimeoutEvent;
 import org.jclouds.abiquo.features.services.MonitoringService;
-import org.jclouds.abiquo.functions.monitor.VirtualApplianceDeployMonitor;
-import org.jclouds.abiquo.functions.monitor.VirtualApplianceUndeployMonitor;
-import org.jclouds.abiquo.functions.monitor.VirtualMachineDeployMonitor;
-import org.jclouds.abiquo.functions.monitor.VirtualMachineUndeployMonitor;
+import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.logging.Logger;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
-import com.google.common.base.Throwables;
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 
 /**
@@ -66,17 +60,16 @@ public class BaseMonitoringService implements MonitoringService
     @VisibleForTesting
     protected AbiquoContext context;
 
+    /** The scheduler used to perform monitoring tasks. */
     @VisibleForTesting
     protected ScheduledExecutorService scheduler;
 
     @VisibleForTesting
     protected Long pollingDelay;
 
+    /** The event bus used to dispatch monitoring events. */
     @VisibleForTesting
-    protected VirtualMachineDeployMonitor deployMonitor;
-
-    @VisibleForTesting
-    protected VirtualMachineUndeployMonitor undeployMonitor;
+    protected EventBus eventBus;
 
     @VisibleForTesting
     protected VirtualApplianceDeployMonitor deployVirtualApplianceMonitor;
@@ -87,128 +80,18 @@ public class BaseMonitoringService implements MonitoringService
     @Resource
     private Logger logger = Logger.NULL;
 
-    /**
-     * A map containing all running monitors indexed by the monitored object.
-     * <p>
-     * This map will be used to cancel concrete monitors when they are completed.
-     */
-    @VisibleForTesting
-    protected Map<Object, ScheduledFuture< ? >> runningMonitors;
-
-    /**
-     * A map containing all timeouts used in object monitors.
-     * <p>
-     * This map will be used to cancel monitors when the timeout reaches.
-     */
-    @VisibleForTesting
-    protected Map<Object, Long> timeouts;
-
     @Inject
     public BaseMonitoringService(final AbiquoContext context,
         final ScheduledExecutorService scheduler,
-        @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay,
-        final VirtualMachineDeployMonitor deployMonitor,
-        final VirtualMachineUndeployMonitor undeployMonitor,
-        final VirtualApplianceDeployMonitor deployVirtualApplianceMonitor,
-        final VirtualApplianceUndeployMonitor undeployVirtualApplianceMonitor)
+        @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus)
     {
         this.context = checkNotNull(context, "context");
         this.scheduler = checkNotNull(scheduler, "scheduler");
         this.pollingDelay = checkNotNull(pollingDelay, "pollingDelay");
-        this.deployMonitor = checkNotNull(deployMonitor, "deployMonitor");
-        this.undeployMonitor = checkNotNull(undeployMonitor, "undeployMonitor");
-        this.deployVirtualApplianceMonitor =
-            checkNotNull(deployVirtualApplianceMonitor, "deployVirtualApplianceMonitor");
-        this.undeployVirtualApplianceMonitor =
-            checkNotNull(undeployVirtualApplianceMonitor, "undeployVirtualApplianceMonitor");
-        this.runningMonitors =
-            Collections.synchronizedMap(new HashMap<Object, ScheduledFuture< ? >>());
-        this.timeouts = Collections.synchronizedMap(new HashMap<Object, Long>());
+        this.eventBus = checkNotNull(eventBus, "eventBus");
     }
 
-    /*************** Virtual machine ***************/
-
-    @Override
-    public void awaitCompletionDeploy(final VirtualMachine... vms)
-    {
-        awaitCompletion(deployMonitor, vms);
-    }
-
-    @Override
-    public void monitorDeploy(final MonitorCallback<VirtualMachine> callback,
-        final VirtualMachine... vms)
-    {
-        monitor(callback, deployMonitor, vms);
-    }
-
-    @Override
-    public void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... vms)
-    {
-        awaitCompletion(maxWait, timeUnit, deployMonitor, vms);
-    }
-
-    @Override
-    public void monitorDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms)
-    {
-        monitor(maxWait, timeUnit, callback, deployMonitor, vms);
-    }
-
-    @Override
-    public void awaitCompletionUndeploy(final VirtualMachine... vms)
-    {
-        awaitCompletion(undeployMonitor, vms);
-    }
-
-    @Override
-    public void monitorUndeploy(final MonitorCallback<VirtualMachine> callback,
-        final VirtualMachine... vms)
-    {
-        monitor(callback, undeployMonitor, vms);
-    }
-
-    @Override
-    public void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... vms)
-    {
-        awaitCompletion(maxWait, timeUnit, undeployMonitor, vms);
-    }
-
-    @Override
-    public void monitorUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms)
-    {
-        monitor(maxWait, timeUnit, callback, undeployMonitor, vms);
-    }
-
-    @Override
-    public void awaitCompletionDeploy(final VirtualAppliance... virtualAppliances)
-    {
-        awaitCompletion(deployVirtualApplianceMonitor, virtualAppliances);
-    }
-
-    @Override
-    public void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualAppliance... virtualAppliances)
-    {
-        awaitCompletion(maxWait, timeUnit, deployVirtualApplianceMonitor, virtualAppliances);
-    }
-
-    @Override
-    public void awaitCompletionUndeploy(final VirtualAppliance... virtualAppliances)
-    {
-        awaitCompletion(undeployVirtualApplianceMonitor, virtualAppliances);
-    }
-
-    @Override
-    public void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualAppliance... virtualAppliances)
-    {
-        awaitCompletion(maxWait, timeUnit, undeployVirtualApplianceMonitor, virtualAppliances);
-    }
-
-    /*************** Generic methods ***************/
+    /*************** Generic monitoring methods ***************/
 
     @Override
     public <T> void awaitCompletion(final Function<T, MonitorStatus> completeCondition,
@@ -225,25 +108,26 @@ public class BaseMonitoringService implements MonitoringService
 
         if (objects != null && objects.length > 0)
         {
-            BlockingCallback<T> monitorLock = new BlockingCallback<T>(objects.length);
-            monitor(maxWait, timeUnit, monitorLock, completeCondition, objects);
-            monitorLock.lock();
+            BlockingEventHandler<T> blockingHandler = new BlockingEventHandler<T>(logger, objects);
+            register(blockingHandler);
+
+            monitor(maxWait, timeUnit, completeCondition, objects);
+            blockingHandler.lock();
+
+            unregister(blockingHandler);
         }
     }
 
     @Override
-    public <T> void monitor(final MonitorCallback<T> callback,
-        final Function<T, MonitorStatus> completeCondition, final T... objects)
+    public <T> void monitor(final Function<T, MonitorStatus> completeCondition, final T... objects)
     {
-        monitor(null, null, callback, completeCondition, objects);
+        monitor(null, null, completeCondition, objects);
     }
 
     @Override
     public <T> void monitor(final Long maxWait, final TimeUnit timeUnit,
-        final MonitorCallback<T> callback, final Function<T, MonitorStatus> completeCondition,
-        final T... objects)
+        final Function<T, MonitorStatus> completeCondition, final T... objects)
     {
-        checkNotNull(callback, "callback");
         checkNotNull(completeCondition, "completeCondition");
         if (maxWait != null)
         {
@@ -254,56 +138,98 @@ public class BaseMonitoringService implements MonitoringService
         {
             for (T object : objects)
             {
-                ScheduledFuture< ? > future =
-                    scheduler.scheduleWithFixedDelay(new AsyncMonitor<T>(object,
-                        completeCondition,
-                        callback), 0, pollingDelay, TimeUnit.MILLISECONDS);
-
-                // Store the future in the monitors map so we can cancel it when the task completes
-                runningMonitors.put(object, future);
-
-                // Store the timeout, if present
-                if (maxWait != null)
-                {
-                    timeouts.put(object, System.currentTimeMillis() + timeUnit.toMillis(maxWait));
-                }
+                AsyncMonitor<T> monitor = new AsyncMonitor<T>(object, completeCondition);
+                monitor.startMonitoring(maxWait);
             }
         }
     }
 
-    private class AsyncMonitor<T> implements Runnable
+    @Override
+    public <T extends AbstractEventHandler< ? >> void register(final T handler)
     {
+        logger.debug("registering event handler %s", handler);
+        eventBus.register(handler);
+    }
+
+    @Override
+    public <T extends AbstractEventHandler< ? >> void unregister(final T handler)
+    {
+        logger.debug("unregistering event handler %s", handler);
+        eventBus.unregister(handler);
+    }
+
+    /*************** Delegating monitors ***************/
+
+    @Override
+    public VirtualMachineMonitor getVirtualMachineMonitor()
+    {
+        return checkNotNull(
+            context.getUtils().getInjector().getInstance(VirtualMachineMonitor.class),
+            "virtualMachineMonitor");
+    }
+
+    /**
+     * Performs the periodical monitoring tasks.
+     * 
+     * @author Ignasi Barrera
+     * @param <T> The type of the object being monitored.
+     */
+    @VisibleForTesting
+    class AsyncMonitor<T> implements Runnable
+    {
+        /** The object being monitored. */
         private T monitoredObject;
 
+        /** The function used to monitor the target object. */
         private Function<T, MonitorStatus> completeCondition;
 
-        private MonitorCallback<T> callback;
+        /**
+         * The future representing the monitoring job. Needed to be able to cancel it when monitor
+         * finishes.
+         */
+        private Future< ? > future;
+
+        /** The timeout for this monitor. */
+        @VisibleForTesting
+        private Long timeout;
 
         public AsyncMonitor(final T monitoredObject,
-            final Function<T, MonitorStatus> completeCondition, final MonitorCallback<T> callback)
+            final Function<T, MonitorStatus> completeCondition)
         {
             super();
-            this.monitoredObject = monitoredObject;
-            this.completeCondition = completeCondition;
-            this.callback = callback;
+            this.monitoredObject = checkNotNull(monitoredObject, "monitoredObject");
+            this.completeCondition = checkNotNull(completeCondition, "completeCondition");
         }
 
-        private void stopMonitoring(final T monitoredObject)
+        /**
+         * Starts the monitoring job with the given timeout.
+         * 
+         * @param maxWait The timeout.
+         */
+        public void startMonitoring(final Long maxWait)
         {
-            ScheduledFuture< ? > future = runningMonitors.get(monitoredObject);
+            future =
+                scheduler.scheduleWithFixedDelay(this, 0L, pollingDelay, TimeUnit.MILLISECONDS);
+            timeout = maxWait == null ? null : System.currentTimeMillis() + maxWait;
+            logger.debug("started monitor job for %s with %s timeout", monitoredObject,
+                timeout == null ? "no" : String.valueOf(timeout));
+        }
+
+        /**
+         * Stops the monitoring job, if running.
+         */
+        public void stopMonitoring()
+        {
+            logger.debug("stopping monitor job for %s", monitoredObject);
 
             try
             {
-                if (!future.isCancelled() && !future.isDone())
+                if (future != null && !future.isCancelled() && !future.isDone())
                 {
                     // Do not force future cancel. Let it finish gracefully
+                    logger.debug("cancelling future");
                     future.cancel(false);
                 }
-
-                // Remove it from the map only if the future has been cancelled. If cancel fails,
-                // next run will remove it.
-                runningMonitors.remove(monitoredObject);
-                timeouts.remove(monitoredObject);
             }
             catch (Exception ex)
             {
@@ -311,9 +237,11 @@ public class BaseMonitoringService implements MonitoringService
             }
         }
 
-        private boolean isTimeout(final T monitoredObject)
+        /**
+         * Checks if the monitor has timed out.
+         */
+        public boolean isTimeout()
         {
-            Long timeout = timeouts.get(monitoredObject);
             return timeout != null && timeout < System.currentTimeMillis();
         }
 
@@ -326,7 +254,7 @@ public class BaseMonitoringService implements MonitoringService
             {
                 // If the thread as already been interrupted, just stop monitoring the task and
                 // return
-                stopMonitoring(monitoredObject);
+                stopMonitoring();
                 return;
             }
 
@@ -336,71 +264,47 @@ public class BaseMonitoringService implements MonitoringService
             switch (status)
             {
                 case DONE:
-                    stopMonitoring(monitoredObject);
-                    callback.onCompleted(monitoredObject);
+                    stopMonitoring();
+                    logger.debug("publishing COMPLETED event");
+                    eventBus.post(new CompletedEvent<T>(monitoredObject));
                     break;
                 case FAILED:
-                    stopMonitoring(monitoredObject);
-                    callback.onFailed(monitoredObject);
+                    stopMonitoring();
+                    logger.debug("publishing FAILED event");
+                    eventBus.post(new FailedEvent<T>(monitoredObject));
                     break;
                 case CONTINUE:
                 default:
-                    if (isTimeout(monitoredObject))
+                    if (isTimeout())
                     {
                         logger.warn("monitor for object %s timed out. Shutting down monitor.",
                             monitoredObject);
-                        stopMonitoring(monitoredObject);
-                        callback.onTimeout(monitoredObject);
+                        stopMonitoring();
+                        logger.debug("publishing TIMEOUT event");
+                        eventBus.post(new TimeoutEvent<T>(monitoredObject));
                     }
                     break;
             }
         }
-    }
 
-    public static class BlockingCallback<T> implements MonitorCallback<T>
-    {
-        private CountDownLatch completeSignal;
-
-        public BlockingCallback(final int countDownToCompletion)
+        public T getMonitoredObject()
         {
-            super();
-            checkArgument(countDownToCompletion > 0, "countDownToCompletion must be greater than 0");
-            completeSignal = new CountDownLatch(countDownToCompletion);
+            return monitoredObject;
         }
 
-        public void lock()
+        public Function<T, MonitorStatus> getCompleteCondition()
         {
-            try
-            {
-                completeSignal.await();
-            }
-            catch (InterruptedException ex)
-            {
-                Throwables.propagate(ex);
-            }
+            return completeCondition;
         }
 
-        public void release()
+        public Future< ? > getFuture()
         {
-            completeSignal.countDown();
+            return future;
         }
 
-        @Override
-        public void onCompleted(final T object)
+        public Long getTimeout()
         {
-            release();
-        }
-
-        @Override
-        public void onFailed(final T object)
-        {
-            release();
-        }
-
-        @Override
-        public void onTimeout(final T object)
-        {
-            release();
+            return timeout;
         }
     }
 

@@ -161,7 +161,7 @@ public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDt
     public PrivateNetwork toPrivateNetwork()
     {
         checkArgument(target.getType().equals(NetworkType.INTERNAL),
-            (ValidationErrors.INVALID_NETWORK_TYPE + target.getType()));
+            ValidationErrors.INVALID_NETWORK_TYPE + target.getType());
 
         return wrap(context, PrivateNetwork.class, target);
 
@@ -170,7 +170,7 @@ public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDt
     public ExternalNetwork toExternalNetwork()
     {
         checkArgument(target.getType().equals(NetworkType.EXTERNAL),
-            (ValidationErrors.INVALID_NETWORK_TYPE + target.getType()));
+            ValidationErrors.INVALID_NETWORK_TYPE + target.getType());
 
         return wrap(context, ExternalNetwork.class, target);
 
@@ -179,7 +179,7 @@ public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDt
     public PublicNetwork toPublicNetwork()
     {
         checkArgument(target.getType().equals(NetworkType.PUBLIC),
-            (ValidationErrors.INVALID_NETWORK_TYPE + target.getType()));
+            ValidationErrors.INVALID_NETWORK_TYPE + target.getType());
 
         return wrap(context, PublicNetwork.class, target);
 
@@ -188,7 +188,7 @@ public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDt
     public UnmanagedNetwork toUnmanagedNetwork()
     {
         checkArgument(target.getType().equals(NetworkType.UNMANAGED),
-            (ValidationErrors.INVALID_NETWORK_TYPE + target.getType()));
+            ValidationErrors.INVALID_NETWORK_TYPE + target.getType());
 
         return wrap(context, UnmanagedNetwork.class, target);
 
@@ -311,7 +311,7 @@ public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDt
             + ", unmanaged=" + getUnmanaged() + "]";
     }
 
-    public static Network< ? > wrapNetwork(AbiquoContext context, VLANNetworkDto dto)
+    public static Network< ? > wrapNetwork(final AbiquoContext context, final VLANNetworkDto dto)
     {
         Network< ? > network = null;
 
@@ -319,21 +319,26 @@ public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDt
         {
             case EXTERNAL:
                 network = wrap(context, ExternalNetwork.class, dto);
+                break;
             case EXTERNAL_UNMANAGED:
                 // TODO: How do we manage External && unmanaged networks ?
                 throw new UnsupportedOperationException("EXTERNAL_UNMANAGED networks not supported yet");
             case INTERNAL:
                 network = wrap(context, PrivateNetwork.class, dto);
+                break;
             case PUBLIC:
                 network = wrap(context, PublicNetwork.class, dto);
+                break;
             case UNMANAGED:
                 network = wrap(context, UnmanagedNetwork.class, dto);
+                break;
         }
 
         return network;
     }
 
-    public static List<Network< ? >> wrapNetworks(AbiquoContext context, List<VLANNetworkDto> dtos)
+    public static List<Network< ? >> wrapNetworks(final AbiquoContext context,
+        final List<VLANNetworkDto> dtos)
     {
         List<Network< ? >> networks = Lists.newLinkedList();
         for (VLANNetworkDto dto : dtos)

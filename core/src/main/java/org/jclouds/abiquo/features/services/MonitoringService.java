@@ -21,11 +21,10 @@ package org.jclouds.abiquo.features.services;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.monitor.MonitorCallback;
-import org.jclouds.abiquo.domain.monitor.MonitorStatus;
+import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
+import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 
 import com.google.common.base.Function;
 import com.google.inject.ImplementedBy;
@@ -39,130 +38,8 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(BaseMonitoringService.class)
 public interface MonitoringService
 {
-    /*************** Virtual machine ***************/
 
-    /**
-     * Monitor the given {@link VirtualMachine}s and blocks until either the deploy is met or
-     * failed.
-     * 
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    void awaitCompletionDeploy(final VirtualMachine... virtualMachine);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and call the given callback the deploy is met or
-     * failed.
-     * 
-     * @param callback The callback.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    public void monitorDeploy(final MonitorCallback<VirtualMachine> callback,
-        final VirtualMachine... vms);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and blocks until either the deploy is met or
-     * failed.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... virtualMachine);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and call the given callback the deploy is met or
-     * failed.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param callback The callback.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    public void monitorDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and blocks until either the undeploy is met or
-     * failed.
-     * 
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    void awaitCompletionUndeploy(final VirtualMachine... virtualMachine);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and call the given callback the undeploy is met or
-     * failed.
-     * 
-     * @param callback The callback.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    public void monitorUndeploy(final MonitorCallback<VirtualMachine> callback,
-        final VirtualMachine... vms);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and blocks until either the undeploy is met or
-     * failed.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualMachine... virtualMachine);
-
-    /**
-     * Monitor the given {@link VirtualMachine}s and call the given callback the undeploy is met or
-     * failed.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param callback The callback.
-     * @param virtualMachine The {@link VirtualMachine}s to monitor.
-     */
-    public void monitorUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final MonitorCallback<VirtualMachine> callback, final VirtualMachine... vms);
-
-    /*************** Virtual appliance *************/
-    /**
-     * Monitor the given {@link VirtualAppliance}s and blocks until either the deploy is met or
-     * failed.
-     * 
-     * @param virtualAppliances The {@link VirtualAppliance}s to monitor.
-     */
-    void awaitCompletionDeploy(final VirtualAppliance... virtualAppliances);
-
-    /**
-     * Monitor the given {@link VirtualAppliance}s and blocks until either the deploy is met or
-     * failed.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param virtualAppliances The {@link VirtualAppliance}s to monitor.
-     */
-    void awaitCompletionDeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualAppliance... virtualAppliances);
-
-    /**
-     * Monitor the given {@link VirtualAppliance}s and blocks until either the undeploy is met or
-     * failed.
-     * 
-     * @param virtualAppliances The {@link VirtualAppliance}s to monitor.
-     */
-    void awaitCompletionUndeploy(final VirtualAppliance... virtualAppliances);
-
-    /**
-     * Monitor the given {@link VirtualAppliance}s and blocks until either the undeploy is met or
-     * failed.
-     * 
-     * @param maxWait The maximum time to wait.
-     * @param timeUnit The time unit for the maxWait parameter.
-     * @param virtualAppliances The {@link VirtualAppliance}s to monitor.
-     */
-    void awaitCompletionUndeploy(final Long maxWait, final TimeUnit timeUnit,
-        final VirtualAppliance... virtualAppliances);
-
-    /*************** Generic methods ***************/
+    /*************** Generic monitoring methods ***************/
 
     /**
      * Monitor the given objects using the given complete condition.
@@ -189,26 +66,48 @@ public interface MonitoringService
     /**
      * Monitor the given objects using the given complete condition.
      * 
-     * @param callback The callback to be invoked when an asynchronous operation completes.
      * @param completeCondition The function that will be used to decide if the asynchronous
      *            operations have finished.
      * @param objects The objects to monitor.
      */
-    public <T> void monitor(final MonitorCallback<T> callback,
-        final Function<T, MonitorStatus> completeCondition, final T... objects);
+    public <T> void monitor(final Function<T, MonitorStatus> completeCondition, final T... objects);
 
     /**
      * Monitor the given objects using the given complete condition.
      * 
      * @param maxWait The maximum time to wait.
      * @param timeUnit The time unit for the maxWait parameter.
-     * @param callback The callback to be invoked when an asynchronous operation completes.
      * @param completeCondition The function that will be used to decide if the asynchronous
      *            operations have finished.
      * @param objects The objects to monitor.
      */
     public <T> void monitor(final Long maxWait, final TimeUnit timeUnit,
-        final MonitorCallback<T> callback, final Function<T, MonitorStatus> completeCondition,
-        final T... objects);
+        final Function<T, MonitorStatus> completeCondition, final T... objects);
 
+    /*************** Handler registration methods ***************/
+
+    /**
+     * Registers the given event handler.
+     * 
+     * @param <T> The type of event handler to register.
+     * @param handler The event handler to register.
+     */
+    public <T extends AbstractEventHandler< ? >> void register(T handler);
+
+    /**
+     * Unregisters the given event handler.
+     * 
+     * @param <T> The type of event handler to unregister.
+     * @param handler The event handler to unregister.
+     */
+    public <T extends AbstractEventHandler< ? >> void unregister(T handler);
+
+    /*************** Delegating monitors ***************/
+
+    /**
+     * Gets the virtual machine monitor service.
+     * 
+     * @return The virtual machine monitor service.
+     */
+    public VirtualMachineMonitor getVirtualMachineMonitor();
 }

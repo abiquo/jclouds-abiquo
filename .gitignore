@@ -4,6 +4,7 @@ target
 .settings
 .classpath
 .project
+*.swp
 test-output
 jclouds-abiquo.iml
 jclouds-abiquo.ipr

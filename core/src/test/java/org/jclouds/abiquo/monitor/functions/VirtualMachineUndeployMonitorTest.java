@@ -17,14 +17,14 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions.monitor;
+package org.jclouds.abiquo.monitor.functions;
 
-import static org.easymock.EasyMock.createMock;
 import static org.testng.Assert.assertEquals;
 
+import org.easymock.EasyMock;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.monitor.MonitorStatus;
+import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineDto;
@@ -32,47 +32,47 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
 
 /**
- * Unit tests for the {@link VirtualMachineDeployMonitor} function.
+ * Unit tests for the {@link VirtualMachineUndeployMonitor} function.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class VirtualMachineDeployMonitorTest
+public class VirtualMachineUndeployMonitorTest
 {
+
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullArgument()
     {
-        Function<VirtualMachine, MonitorStatus> function = new VirtualMachineDeployMonitor();
+        Function<VirtualMachine, MonitorStatus> function = new VirtualMachineUndeployMonitor();
         function.apply(null);
     }
 
     public void testReturnDone()
     {
-        VirtualMachineState[] states = {VirtualMachineState.ON};
+        VirtualMachineState[] states = {VirtualMachineState.NOT_ALLOCATED};
 
-        checkStatesReturn(new MockVirtualMachine(), new VirtualMachineDeployMonitor(), states,
+        checkStatesReturn(new MockVirtualMachine(), new VirtualMachineUndeployMonitor(), states,
             MonitorStatus.DONE);
     }
 
     public void testReturnFail()
     {
         VirtualMachineState[] states =
-            {VirtualMachineState.NOT_ALLOCATED, VirtualMachineState.UNKNOWN};
+            {VirtualMachineState.ON, VirtualMachineState.CONFIGURED, VirtualMachineState.OFF,
+            VirtualMachineState.PAUSED, VirtualMachineState.UNKNOWN};
 
-        checkStatesReturn(new MockVirtualMachine(), new VirtualMachineDeployMonitor(), states,
+        checkStatesReturn(new MockVirtualMachine(), new VirtualMachineUndeployMonitor(), states,
             MonitorStatus.FAILED);
     }
 
     public void testReturnContinue()
     {
-        VirtualMachineState[] states =
-            {VirtualMachineState.ALLOCATED, VirtualMachineState.CONFIGURED,
-            VirtualMachineState.LOCKED, VirtualMachineState.OFF, VirtualMachineState.PAUSED};
+        VirtualMachineState[] states = {VirtualMachineState.ALLOCATED, VirtualMachineState.LOCKED};
 
-        checkStatesReturn(new MockVirtualMachine(), new VirtualMachineDeployMonitor(), states,
+        checkStatesReturn(new MockVirtualMachine(), new VirtualMachineUndeployMonitor(), states,
             MonitorStatus.CONTINUE);
 
-        checkStatesReturn(new MockVirtualMachineFailing(), new VirtualMachineDeployMonitor(),
+        checkStatesReturn(new MockVirtualMachineFailing(), new VirtualMachineUndeployMonitor(),
             states, MonitorStatus.CONTINUE);
     }
 
@@ -93,7 +93,7 @@ public class VirtualMachineDeployMonitorTest
 
         public MockVirtualMachine()
         {
-            super(createMock(AbiquoContext.class), new VirtualMachineDto());
+            super(EasyMock.createMock(AbiquoContext.class), new VirtualMachineDto());
         }
 
         @Override

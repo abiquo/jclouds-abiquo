@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.TemplateResources;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -32,6 +33,7 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.google.inject.TypeLiteral;
 
@@ -59,6 +61,29 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListVirtualMachineTemplatesWithOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("listVirtualMachineTemplates",
+                Integer.class, Integer.class, VirtualMachineTemplateOptions.class);
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, 1, 1, VirtualMachineTemplateOptions.builder()
+                .hypervisorType(HypervisorType.XENSERVER).category("Firewalls").build());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates"
+                + "?hypervisorTypeName=XENSERVER&categoryName=Firewalls HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -104,8 +129,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
             request,
             "PUT http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(TemplateResources
-            .virtualMachineTemplatePutPayload()), "application/xml", false);
+        assertPayloadEquals(request,
+            withHeader(TemplateResources.virtualMachineTemplatePutPayload()), "application/xml",
+            false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

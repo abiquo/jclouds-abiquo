@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
@@ -44,9 +45,23 @@ public interface VirtualMachineTemplateClient
      * 
      * @param enterpriseId Id of the enterprise.
      * @param datacenterRepositoryId Id of the datacenter repository contaning the templates.
+     * @return The list of virtual machine templates for the enterprise in the datacenter
+     *         repository.
      */
     VirtualMachineTemplatesDto listVirtualMachineTemplates(Integer enterpriseId,
         Integer datacenterRepositoryId);
+
+    /**
+     * List all virtual machine templates for an enterprise in a datacenter repository.
+     * 
+     * @param enterpriseId Id of the enterprise.
+     * @param datacenterRepositoryId Id of the datacenter repository contaning the templates.
+     * @param options The options to query the virtual machine templates.
+     * @return The filtered list of virtual machine templates for the enterprise in the datacenter
+     *         repository.
+     */
+    VirtualMachineTemplatesDto listVirtualMachineTemplates(Integer enterpriseId,
+        Integer datacenterRepositoryId, VirtualMachineTemplateOptions options);
 
     /**
      * Get the given virtual machine template.

@@ -31,14 +31,15 @@ import java.util.concurrent.ThreadFactory;
 
 import javax.annotation.Resource;
 import javax.inject.Named;
-import javax.inject.Singleton;
 
+import org.jclouds.concurrent.config.ExecutorServiceModule;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.Logger;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
+import com.google.inject.Singleton;
 
 /**
  * Configures the scheduler.
@@ -58,8 +59,8 @@ public class SchedulerModule extends AbstractModule
         final Closer closer)
     {
         ThreadFactory factory =
-            new ThreadFactoryBuilder().setNameFormat("scheduled thread %d").setThreadFactory(
-                Executors.defaultThreadFactory()).build();
+            new ThreadFactoryBuilder().setNameFormat("scheduler-thread-%d")
+                .setThreadFactory(Executors.defaultThreadFactory()).build();
 
         if (count == 0)
         {

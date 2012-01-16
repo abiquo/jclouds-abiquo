@@ -17,32 +17,30 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.functions.monitor;
+package org.jclouds.abiquo.monitor.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.annotation.Resource;
+import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.monitor.MonitorStatus;
-import org.jclouds.abiquo.features.services.MonitoringService;
+import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.logging.Logger;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
-import com.google.inject.Singleton;
 
 /**
- * This class takes care of monitoring the a deploy of a {@link VirtualMachine}.
+ * This class takes care of monitoring the a undeploy of a {@link VirtualMachine}.
  * 
  * @author Serafin Sedano
- * @see MonitoringService
  */
 @Singleton
-public class VirtualMachineDeployMonitor implements Function<VirtualMachine, MonitorStatus>
+public class VirtualMachineUndeployMonitor implements Function<VirtualMachine, MonitorStatus>
 {
     @Resource
-    private Logger logger = Logger.NULL;
+    protected Logger logger = Logger.NULL;
 
     @Override
     public MonitorStatus apply(final VirtualMachine virtualMachine)
@@ -53,12 +51,13 @@ public class VirtualMachineDeployMonitor implements Function<VirtualMachine, Mon
         {
             VirtualMachineState state = virtualMachine.getState();
 
-            if (VirtualMachineState.NOT_ALLOCATED == state || VirtualMachineState.UNKNOWN == state)
+            if (VirtualMachineState.UNKNOWN == state || state.existsInHypervisor())
             {
                 return MonitorStatus.FAILED;
             }
 
-            return VirtualMachineState.ON == state ? MonitorStatus.DONE : MonitorStatus.CONTINUE;
+            return VirtualMachineState.NOT_ALLOCATED == state ? MonitorStatus.DONE
+                : MonitorStatus.CONTINUE;
         }
         catch (Exception ex)
         {
