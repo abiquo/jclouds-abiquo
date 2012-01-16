@@ -20,8 +20,12 @@
 package org.jclouds.abiquo.environment;
 
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
+
+import java.util.Collections;
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
@@ -32,9 +36,10 @@ import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudClient;
-import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
-import org.jclouds.abiquo.util.Config;
+
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Longs;
 
 /**
  * Test environment for cloud live tests.
@@ -103,14 +108,15 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     protected void createVirtualDatacenter()
     {
         network =
-            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1").address(
-                "192.168.1.0").mask(24).build();
+            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1")
+                .address("192.168.1.0").mask(24).build();
 
         virtualDatacenter =
-            VirtualDatacenter.builder(context, datacenter, defaultEnterprise).name(
-                PREFIX + "Virtual Aloha").cpuCountLimits(18, 20).hdLimitsInMb(279172872, 279172872)
-                .publicIpsLimits(2, 2).ramLimits(19456, 20480).storageLimits(289910292, 322122547)
-                .vlansLimits(1, 2).hypervisorType(machine.getType()).network(network).build();
+            VirtualDatacenter.builder(context, datacenter, defaultEnterprise)
+                .name(PREFIX + "Virtual Aloha").cpuCountLimits(18, 20)
+                .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
+                .storageLimits(289910292, 322122547).vlansLimits(1, 2)
+                .hypervisorType(machine.getType()).network(network).build();
 
         virtualDatacenter.save();
         assertNotNull(virtualDatacenter.getId());
@@ -128,16 +134,24 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     protected void createVirtualMachine()
     {
-        String templatename = Config.get("abiquo.template.name");
+        List<VirtualMachineTemplate> templates = virtualDatacenter.listAvailableTemplates();
+        assertFalse(templates.isEmpty());
 
-        template =
-            defaultEnterprise.findTemplateInRepository(datacenter, VirtualMachineTemplatePredicates
-                .name(templatename));
-        assertNotNull(template);
+        // Sort by size to use the smallest one
+        Collections.sort(templates, new Ordering<VirtualMachineTemplate>()
+        {
+            @Override
+            public int compare(final VirtualMachineTemplate left, final VirtualMachineTemplate right)
+            {
+                return Longs.compare(left.getDiskFileSize(), right.getDiskFileSize());
+            }
+        });
+
+        template = templates.get(0);
 
         virtualMachine =
-            VirtualMachine.builder(context, virtualAppliance, template).cpu(2).name(
-                PREFIX + "VM Aloha").ram(128).build();
+            VirtualMachine.builder(context, virtualAppliance, template).cpu(2)
+                .name(PREFIX + "VM Aloha").ram(128).build();
 
         virtualMachine.save();
         assertNotNull(virtualMachine.getId());

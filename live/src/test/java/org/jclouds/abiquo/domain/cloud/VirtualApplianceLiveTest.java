@@ -20,7 +20,6 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -74,33 +73,8 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest<CloudTest
         repeated.delete();
     }
 
-    public void testForceDelete()
-    {
-        VirtualAppliance vapp =
-            VirtualAppliance.Builder.fromVirtualAppliance(env.virtualAppliance).build();
-
-        vapp.save();
-
-        List<VirtualApplianceDto> virtualAppliances =
-            env.cloudClient.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
-
-        assertEquals(virtualAppliances.size(), 2);
-
-        vapp.delete();
-
-        virtualAppliances =
-            env.cloudClient.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
-
-        assertEquals(virtualAppliances.size(), 1);
-    }
-
     public void testGetState()
     {
-        VirtualAppliance vapp =
-            VirtualAppliance.Builder.fromVirtualAppliance(env.virtualAppliance).build();
-
-        VirtualApplianceState state = vapp.getState();
-
-        assertNotNull(state);
+        assertEquals(env.virtualAppliance.getState(), VirtualApplianceState.NOT_DEPLOYED);
     }
 }
