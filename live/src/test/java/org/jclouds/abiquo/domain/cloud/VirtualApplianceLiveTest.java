@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 
 import java.util.List;
 
@@ -29,6 +30,7 @@ import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
+import com.abiquo.server.core.cloud.VirtualApplianceState;
 
 /**
  * Live integration tests for the {@link VirtualAppliance} domain class.
@@ -90,5 +92,15 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest<CloudTest
             env.cloudClient.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
 
         assertEquals(virtualAppliances.size(), 1);
+    }
+
+    public void testGetState()
+    {
+        VirtualAppliance vapp =
+            VirtualAppliance.Builder.fromVirtualAppliance(env.virtualAppliance).build();
+
+        VirtualApplianceState state = vapp.getState();
+
+        assertNotNull(state);
     }
 }

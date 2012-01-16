@@ -63,6 +63,7 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
+import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
@@ -256,7 +257,7 @@ public interface CloudAsyncClient
      * @see CloudClient#getVirtualApplianceState(VirtualApplianceDto)
      */
     @GET
-    ListenableFuture<VirtualApplianceDto> getVirtualApplianceState(
+    ListenableFuture<VirtualApplianceStateDto> getVirtualApplianceState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
