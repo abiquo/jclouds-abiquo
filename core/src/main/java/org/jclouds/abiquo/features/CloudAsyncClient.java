@@ -256,9 +256,8 @@ public interface CloudAsyncClient
      * @see CloudClient#getVirtualApplianceState(VirtualApplianceDto)
      */
     @GET
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<VirtualApplianceDto> getVirtualApplianceState(
-        @EndpointLink("state") @BinderParam(BindLinkToPath.class) VirtualApplianceDto virtualAppliance);
+        @EndpointLink("state") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
      * @see CloudClient#createVirtualAppliance(VirtualDatacenterDto, VirtualApplianceDto)
