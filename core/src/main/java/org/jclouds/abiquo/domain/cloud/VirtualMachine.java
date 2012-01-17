@@ -224,7 +224,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     {
         RESTLink deployLink = target.searchLink("deploy");
         VirtualMachineTaskDto task = new VirtualMachineTaskDto();
-        task.setForceEnterpriseSoftLimits(false);
+        task.setForceEnterpriseSoftLimits(forceEnterpriseSoftLimits);
 
         // get async task
         AcceptedRequestDto<String> response =
