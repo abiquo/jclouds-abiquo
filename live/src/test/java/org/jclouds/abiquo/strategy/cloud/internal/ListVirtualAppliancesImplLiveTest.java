@@ -25,22 +25,22 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
-import org.jclouds.abiquo.predicates.cloud.VirtualMachinePredicates;
+import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.Test;
 
 /**
- * Live tests for the {@link ListVirtualMachinesImpl} strategy.
+ * Live tests for the {@link ListVirtualAppliancesImpl} strategy.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListVirtualMachinesImplLiveTest extends
+public class ListVirtualAppliancesImplLiveTest extends
     BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
 {
-    private ListVirtualMachinesImpl strategy;
+    private ListVirtualAppliancesImpl strategy;
 
     @Override
     protected CloudTestEnvironment environment(final AbiquoContext context)
@@ -51,29 +51,29 @@ public class ListVirtualMachinesImplLiveTest extends
     @Override
     protected void setupStrategy()
     {
-        this.strategy = injector.getInstance(ListVirtualMachinesImpl.class);
+        this.strategy = injector.getInstance(ListVirtualAppliancesImpl.class);
     }
 
     public void testExecute()
     {
-        Iterable<VirtualMachine> vms = strategy.execute();
-        assertNotNull(vms);
-        assertTrue(size(vms) > 0);
+        Iterable<VirtualAppliance> vapps = strategy.execute();
+        assertNotNull(vapps);
+        assertTrue(size(vapps) > 0);
     }
 
     public void testExecutePredicateWithoutResults()
     {
-        Iterable<VirtualMachine> vms =
-            strategy.execute(VirtualMachinePredicates.name("UNEXISTING"));
-        assertNotNull(vms);
-        assertEquals(size(vms), 0);
+        Iterable<VirtualAppliance> vapps =
+            strategy.execute(VirtualAppliancePredicates.name("UNEXISTING"));
+        assertNotNull(vapps);
+        assertEquals(size(vapps), 0);
     }
 
     public void testExecutePredicateWithResults()
     {
-        Iterable<VirtualMachine> vms =
-            strategy.execute(VirtualMachinePredicates.name(env.virtualMachine.getName()));
-        assertNotNull(vms);
-        assertEquals(size(vms), 1);
+        Iterable<VirtualAppliance> vapps =
+            strategy.execute(VirtualAppliancePredicates.name(env.virtualAppliance.getName()));
+        assertNotNull(vapps);
+        assertEquals(size(vapps), 1);
     }
 }

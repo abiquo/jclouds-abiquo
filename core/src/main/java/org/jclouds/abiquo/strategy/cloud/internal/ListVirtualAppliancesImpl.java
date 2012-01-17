@@ -35,23 +35,23 @@ import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.jclouds.logging.Logger;
 
-import com.abiquo.server.core.cloud.VirtualMachineDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualApplianceDto;
+import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 
 /**
- * List virtual machines in each virtual datacenter and each virtual appliance.
+ * List virtual appliance in each virtual datacenter.
  * 
  * @author Ignasi Barrera
  */
 @Singleton
-public class ListVirtualMachinesImpl implements ListVirtualMachines
+public class ListVirtualAppliancesImpl implements ListVirtualAppliances
 {
     protected AbiquoContext context;
 
@@ -65,7 +65,7 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
     protected Long maxTime;
 
     @Inject
-    ListVirtualMachinesImpl(final AbiquoContext context,
+    ListVirtualAppliancesImpl(final AbiquoContext context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
         super();
@@ -74,36 +74,36 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
     }
 
     @Override
-    public Iterable<VirtualMachine> execute()
+    public Iterable<VirtualAppliance> execute()
     {
-        // Find virtual machines in concurrent requests
-        Iterable<VirtualAppliance> vapps = context.getCloudService().listVirtualAppliances();
-        Iterable<VirtualMachineDto> vms = listConcurrentVirtualMachines(vapps);
+        // Find virtual appliances in concurrent requests
+        Iterable<VirtualDatacenter> vdcs = context.getCloudService().listVirtualDatacenters();
+        Iterable<VirtualApplianceDto> vapps = listConcurrentVirtualAppliances(vdcs);
 
-        return wrap(context, VirtualMachine.class, vms);
+        return wrap(context, VirtualAppliance.class, vapps);
     }
 
     @Override
-    public Iterable<VirtualMachine> execute(final Predicate<VirtualMachine> selector)
+    public Iterable<VirtualAppliance> execute(final Predicate<VirtualAppliance> selector)
     {
         return filter(execute(), selector);
     }
 
-    private Iterable<VirtualMachineDto> listConcurrentVirtualMachines(
-        final Iterable<VirtualAppliance> vapps)
+    private Iterable<VirtualApplianceDto> listConcurrentVirtualAppliances(
+        final Iterable<VirtualDatacenter> vdcs)
     {
-        Iterable<VirtualMachinesDto> vms =
-            transformParallel(vapps, new Function<VirtualAppliance, Future<VirtualMachinesDto>>()
+        Iterable<VirtualAppliancesDto> vapps =
+            transformParallel(vdcs, new Function<VirtualDatacenter, Future<VirtualAppliancesDto>>()
             {
                 @Override
-                public Future<VirtualMachinesDto> apply(final VirtualAppliance input)
+                public Future<VirtualAppliancesDto> apply(final VirtualDatacenter input)
                 {
                     return context.getAsyncApi().getCloudClient()
-                        .listVirtualMachines(input.unwrap());
+                        .listVirtualAppliances(input.unwrap());
                 }
-            }, userExecutor, maxTime, logger, "getting virtual machines");
+            }, userExecutor, maxTime, logger, "getting virtual appliances");
 
-        return DomainWrapper.join(vms);
+        return DomainWrapper.join(vapps);
     }
 
 }

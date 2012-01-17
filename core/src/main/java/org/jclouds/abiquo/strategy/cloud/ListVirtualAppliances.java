@@ -17,29 +17,21 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.internal;
+package org.jclouds.abiquo.strategy.cloud;
 
-import static org.testng.Assert.assertNotNull;
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
+import org.jclouds.abiquo.strategy.ListRootEntities;
+import org.jclouds.abiquo.strategy.cloud.internal.ListVirtualAppliancesImpl;
 
-import org.jclouds.abiquo.features.services.CloudService;
-import org.testng.annotations.Test;
+import com.google.inject.ImplementedBy;
 
 /**
- * Unit tests for the {@link BaseCloudService} class.
+ * List virtual appliances in each virtual datacenter.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit")
-public class BaseCloudServiceTest extends BaseInjectionTest
+@ImplementedBy(ListVirtualAppliancesImpl.class)
+public interface ListVirtualAppliances extends ListRootEntities<VirtualAppliance>
 {
 
-    public void testAllPropertiesInjected()
-    {
-        BaseCloudService service = (BaseCloudService) injector.getInstance(CloudService.class);
-
-        assertNotNull(service.context);
-        assertNotNull(service.listVirtualDatacenters);
-        assertNotNull(service.listVirtualAppliances);
-        assertNotNull(service.listVirtualMachines);
-    }
 }

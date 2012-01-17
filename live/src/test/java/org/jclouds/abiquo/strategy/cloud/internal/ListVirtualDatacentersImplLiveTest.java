@@ -57,43 +57,43 @@ public class ListVirtualDatacentersImplLiveTest extends
 
     public void testExecute()
     {
-        Iterable<VirtualDatacenter> virtualDatacenters = strategy.execute();
-        assertNotNull(virtualDatacenters);
-        assertTrue(size(virtualDatacenters) > 0);
+        Iterable<VirtualDatacenter> vdcs = strategy.execute();
+        assertNotNull(vdcs);
+        assertTrue(size(vdcs) > 0);
     }
 
     public void testExecutePredicateWithoutResults()
     {
-        Iterable<VirtualDatacenter> virtualDatacenters =
+        Iterable<VirtualDatacenter> vdcs =
             strategy.execute(VirtualDatacenterPredicates.name("UNEXISTING"));
-        assertNotNull(virtualDatacenters);
-        assertEquals(size(virtualDatacenters), 0);
+        assertNotNull(vdcs);
+        assertEquals(size(vdcs), 0);
     }
 
     public void testExecutePredicateWithResults()
     {
-        Iterable<VirtualDatacenter> virtualDatacenters =
+        Iterable<VirtualDatacenter> vdcs =
             strategy.execute(VirtualDatacenterPredicates.name(env.virtualDatacenter.getName()));
-        assertNotNull(virtualDatacenters);
-        assertEquals(size(virtualDatacenters), 1);
+        assertNotNull(vdcs);
+        assertEquals(size(vdcs), 1);
     }
 
     public void testExecutePredicateOptionsWithResults()
     {
-        Iterable<VirtualDatacenter> virtualDatacenters =
+        Iterable<VirtualDatacenter> vdcs =
             strategy.execute(VirtualDatacenterOptions.builder()
                 .datacenterId(env.datacenter.getId()).enterpriseId(env.defaultEnterprise.getId())
                 .build());
-        assertNotNull(virtualDatacenters);
-        assertEquals(size(virtualDatacenters), 1);
+        assertNotNull(vdcs);
+        assertEquals(size(vdcs), 1);
     }
 
     public void testExecutePredicateOptionsWithoutResults()
     {
-        Iterable<VirtualDatacenter> virtualDatacenters =
+        Iterable<VirtualDatacenter> vdcs =
             strategy.execute(VirtualDatacenterOptions.builder()
                 .enterpriseId(env.enterprise.getId()).build());
-        assertNotNull(virtualDatacenters);
-        assertEquals(size(virtualDatacenters), 0);
+        assertNotNull(vdcs);
+        assertEquals(size(vdcs), 0);
     }
 }

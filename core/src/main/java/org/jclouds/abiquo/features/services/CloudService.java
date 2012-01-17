@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.features.services;
 
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -66,6 +67,23 @@ public interface CloudService
      * Get the virtual datacenter with the given id.
      */
     VirtualDatacenter getVirtualDatacenter(final Integer virtualDatacenterId);
+
+    /*********************** Virtual Appliance ***********************/
+
+    /**
+     * Get the list of all virtual appliances.
+     */
+    Iterable<VirtualAppliance> listVirtualAppliances();
+
+    /**
+     * Get the list of the virtual appliances matching the given filter.
+     */
+    Iterable<VirtualAppliance> listVirtualAppliances(Predicate<VirtualAppliance> filter);
+
+    /**
+     * Get the first virtual appliance that matches the given filter.
+     */
+    VirtualAppliance findVirtualAppliance(Predicate<VirtualAppliance> filter);
 
     /*********************** Virtual Machine ***********************/
 

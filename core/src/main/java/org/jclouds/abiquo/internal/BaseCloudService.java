@@ -26,12 +26,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
 
@@ -56,15 +58,21 @@ public class BaseCloudService implements CloudService
     protected final ListVirtualDatacenters listVirtualDatacenters;
 
     @VisibleForTesting
+    protected ListVirtualAppliances listVirtualAppliances;
+
+    @VisibleForTesting
     protected ListVirtualMachines listVirtualMachines;
 
     @Inject
     protected BaseCloudService(final AbiquoContext context,
-        final ListVirtualDatacenters listVirtualDatacenters, ListVirtualMachines listVirtualMachines)
+        final ListVirtualDatacenters listVirtualDatacenters,
+        final ListVirtualAppliances listVirtualAppliances,
+        final ListVirtualMachines listVirtualMachines)
     {
         this.context = checkNotNull(context, "context");
         this.listVirtualDatacenters =
             checkNotNull(listVirtualDatacenters, "listVirtualDatacenters");
+        this.listVirtualAppliances = checkNotNull(listVirtualAppliances, "listVirtualAppliances");
         this.listVirtualMachines = checkNotNull(listVirtualMachines, "listVirtualMachines");
     }
 
@@ -110,6 +118,26 @@ public class BaseCloudService implements CloudService
         return Iterables.getFirst(listVirtualDatacenters(filter), null);
     }
 
+    /*********************** Virtual Appliance ********************** */
+
+    @Override
+    public Iterable<VirtualAppliance> listVirtualAppliances()
+    {
+        return listVirtualAppliances.execute();
+    }
+
+    @Override
+    public Iterable<VirtualAppliance> listVirtualAppliances(final Predicate<VirtualAppliance> filter)
+    {
+        return listVirtualAppliances.execute(filter);
+    }
+
+    @Override
+    public VirtualAppliance findVirtualAppliance(final Predicate<VirtualAppliance> filter)
+    {
+        return Iterables.getFirst(listVirtualAppliances(filter), null);
+    }
+
     /*********************** Virtual Machine ********************** */
 
     @Override
@@ -119,13 +147,13 @@ public class BaseCloudService implements CloudService
     }
 
     @Override
-    public Iterable<VirtualMachine> listVirtualMachines(Predicate<VirtualMachine> filter)
+    public Iterable<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter)
     {
         return listVirtualMachines.execute(filter);
     }
 
     @Override
-    public VirtualMachine findVirtualMachine(Predicate<VirtualMachine> filter)
+    public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter)
     {
         return Iterables.getFirst(listVirtualMachines(filter), null);
     }
