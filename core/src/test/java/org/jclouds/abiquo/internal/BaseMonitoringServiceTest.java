@@ -191,6 +191,11 @@ public class BaseMonitoringServiceTest extends BaseInjectionTest
         assertNotNull(monitoringService().getVirtualApplianceMonitor());
     }
 
+    public void testDelegateToAsyncTaskMonitor()
+    {
+        assertNotNull(monitoringService().getAsyncTaskMonitor());
+    }
+
     private BaseMonitoringService monitoringService()
     {
         return injector.getInstance(BaseMonitoringService.class);

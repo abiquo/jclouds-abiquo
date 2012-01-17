@@ -19,9 +19,9 @@
 
 package org.jclouds.abiquo.monitor.functions;
 
-import static org.easymock.EasyMock.createMock;
 import static org.testng.Assert.assertEquals;
 
+import org.easymock.EasyMock;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.monitor.MonitorStatus;
@@ -93,7 +93,7 @@ public class VirtualApplianceUndeployMonitorTest
 
         public MockVirtualAppliance()
         {
-            super(createMock(AbiquoContext.class), new VirtualApplianceDto());
+            super(EasyMock.createMock(AbiquoContext.class), new VirtualApplianceDto());
         }
 
         @Override

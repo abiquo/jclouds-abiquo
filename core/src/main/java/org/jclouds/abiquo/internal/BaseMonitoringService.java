@@ -38,6 +38,7 @@ import org.jclouds.abiquo.events.monitor.CompletedEvent;
 import org.jclouds.abiquo.events.monitor.FailedEvent;
 import org.jclouds.abiquo.events.monitor.TimeoutEvent;
 import org.jclouds.abiquo.features.services.MonitoringService;
+import org.jclouds.abiquo.monitor.AsyncTaskMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
@@ -174,6 +175,13 @@ public class BaseMonitoringService implements MonitoringService
         return checkNotNull(
             context.getUtils().getInjector().getInstance(VirtualApplianceMonitor.class),
             "virtualApplianceMonitor");
+    }
+
+    @Override
+    public AsyncTaskMonitor getAsyncTaskMonitor()
+    {
+        return checkNotNull(context.getUtils().getInjector().getInstance(AsyncTaskMonitor.class),
+            "asyncTaskMonitor");
     }
 
     /**

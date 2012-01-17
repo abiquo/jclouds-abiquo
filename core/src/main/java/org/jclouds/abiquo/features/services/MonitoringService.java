@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
+import org.jclouds.abiquo.monitor.AsyncTaskMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
@@ -118,4 +119,11 @@ public interface MonitoringService
      * @return The virtual appliance monitor service.
      */
     public VirtualApplianceMonitor getVirtualApplianceMonitor();
+
+    /**
+     * Gets the asynchronous task monitor service.
+     * 
+     * @return The asynchronous task monitor service.
+     */
+    public AsyncTaskMonitor getAsyncTaskMonitor();
 }
