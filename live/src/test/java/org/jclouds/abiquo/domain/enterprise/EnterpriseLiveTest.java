@@ -173,11 +173,20 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         assertNotNull(limits);
 
         List<Datacenter> allowed = env.enterprise.listAllowedDatacenters();
+
         assertNotNull(allowed);
         assertFalse(allowed.isEmpty());
         assertEquals(allowed.get(0).getId(), env.datacenter.getId());
 
         tearDownLimits();
+    }
+
+    public void testListAllowedDatacentersWithNoAllowedDatacenters()
+    {
+        List<Datacenter> allowed = env.enterprise.listAllowedDatacenters();
+
+        assertNotNull(allowed);
+        assertTrue(allowed.isEmpty());
     }
 
     private void tearDownLimits()
