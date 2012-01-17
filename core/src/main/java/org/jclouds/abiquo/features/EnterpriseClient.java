@@ -33,6 +33,7 @@ import com.abiquo.server.core.enterprise.EnterprisesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 
 /**
  * Provides synchronous access to Abiquo Enterprise API.
@@ -102,6 +103,14 @@ public interface EnterpriseClient
      * @param enterprise The enterprise to delete.
      */
     void deleteEnterprise(EnterpriseDto enterprise);
+
+    /**
+     * List the allowed datacenters to the given enterprise.
+     * 
+     * @param enterpriseId The id of the enterprise.
+     * @return The allowed datacenters to the given enterprise.
+     */
+    DatacentersDto listAllowedDatacenters(Integer enterpriseId);
 
     /*********************** Enterprise Properties ***********************/
 

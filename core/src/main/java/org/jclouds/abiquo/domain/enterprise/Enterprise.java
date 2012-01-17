@@ -37,6 +37,7 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -204,6 +205,13 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     {
         context.getApi().getEnterpriseClient()
             .refreshTemplateRepository(target.getId(), datacenter.getId());
+    }
+
+    public List<Datacenter> listAllowedDatacenters()
+    {
+        DatacentersDto datacenters =
+            context.getApi().getEnterpriseClient().listAllowedDatacenters(target.getId());
+        return wrap(context, Datacenter.class, datacenters.getCollection());
     }
 
     // Actions

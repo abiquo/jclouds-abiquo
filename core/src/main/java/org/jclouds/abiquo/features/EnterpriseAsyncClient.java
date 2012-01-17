@@ -53,6 +53,7 @@ import com.abiquo.server.core.enterprise.EnterprisesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -65,7 +66,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  */
 @RequestFilters(AbiquoAuthentication.class)
 @Consumes(MediaType.APPLICATION_XML)
-@Path("/admin/enterprises")
+@Path("/admin")
 public interface EnterpriseAsyncClient
 {
     /*********************** Enterprise ***********************/
@@ -74,12 +75,14 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listEnterprises()
      */
     @GET
+    @Path("/enterprises")
     ListenableFuture<EnterprisesDto> listEnterprises();
 
     /**
      * @see EnterpriseClient#listEnterprises(EnterpriseOptions)
      */
     @GET
+    @Path("/enterprises")
     ListenableFuture<EnterprisesDto> listEnterprises(
         @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
 
@@ -95,6 +98,7 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#createEnterprise(EnterpriseDto)
      */
     @POST
+    @Path("/enterprises")
     ListenableFuture<EnterpriseDto> createEnterprise(
         @BinderParam(BindToXMLPayload.class) EnterpriseDto enterprise);
 
@@ -102,7 +106,7 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#getEnterprise(Integer)
      */
     @GET
-    @Path("{enterprise}")
+    @Path("/enterprises/{enterprise}")
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<EnterpriseDto> getEnterprise(@PathParam("enterprise") Integer enterpriseId);
 
@@ -120,13 +124,21 @@ public interface EnterpriseAsyncClient
     ListenableFuture<Void> deleteEnterprise(
         @EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
+    /**
+     * @see EnterpriseClient#listAllowedDatacenters(Integer)
+     */
+    @GET
+    @Path("/datacenters")
+    ListenableFuture<DatacentersDto> listAllowedDatacenters(
+        @QueryParam("idEnterprise") Integer enterpriseId);
+
     /*********************** Enterprise Properties ***********************/
 
     /**
      * @see EnterpriseClient#getEnterpriseProperties(EnterpriseDto)
      */
     @GET
-    @Path("{enterprise}/properties")
+    @Path("/enterprises/{enterprise}/properties")
     @EnterpriseEdition
     ListenableFuture<EnterprisePropertiesDto> getEnterpriseProperties(
         @PathParam("enterprise") Integer enterpriseId);
@@ -226,7 +238,7 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#refreshTemplateRepository(Integer, Integer)
      */
     @PUT
-    @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/actions/refresh")
+    @Path("/enterprises/{enterprise}/datacenterrepositories/{datacenterrepository}/actions/refresh")
     ListenableFuture<Void> refreshTemplateRepository(@PathParam("enterprise") Integer enterpriseId,
         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
 }

@@ -33,6 +33,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise.Builder;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
@@ -166,6 +167,19 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         tearDownLimits();
     }
 
+    public void testListAllowedDatacenters()
+    {
+        Limits limits = env.enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(limits);
+
+        List<Datacenter> allowed = env.enterprise.listAllowedDatacenters();
+        assertNotNull(allowed);
+        assertFalse(allowed.isEmpty());
+        assertEquals(allowed.get(0).getId(), env.datacenter.getId());
+
+        tearDownLimits();
+    }
+
     private void tearDownLimits()
     {
         // Cleanup with the prohibe method
@@ -175,4 +189,5 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         assertNotNull(limitsDto);
         assertTrue(limitsDto.isEmpty());
     }
+
 }

@@ -188,6 +188,25 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
+    public void testListAllowedDatacenters() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listAllowedDatacenters", Integer.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters?idEnterprise=1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     /*********************** Enterprise Properties ********************** */
 
     public void testGetEnterpriseProperties() throws SecurityException, NoSuchMethodException,
@@ -275,8 +294,9 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(EnterpriseResources
-            .datacenterLimitsPutPayload(enterprise)), "application/xml", false);
+        assertPayloadEquals(request,
+            withHeader(EnterpriseResources.datacenterLimitsPutPayload(enterprise)),
+            "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
