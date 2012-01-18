@@ -51,14 +51,18 @@ public class VirtualApplianceDeployMonitor implements Function<VirtualAppliance,
         {
             VirtualApplianceState state = virtualAppliance.getState();
 
-            if (VirtualApplianceState.UNKNOWN == state || VirtualApplianceState.NEEDS_SYNC == state
-                || VirtualApplianceState.NOT_DEPLOYED == state)
+            switch (state)
             {
-                return MonitorStatus.FAILED;
+                case UNKNOWN:
+                case NEEDS_SYNC:
+                case NOT_DEPLOYED:
+                    return MonitorStatus.FAILED;
+                case DEPLOYED:
+                    return MonitorStatus.DONE;
+                case LOCKED:
+                default:
+                    return MonitorStatus.CONTINUE;
             }
-
-            return VirtualApplianceState.DEPLOYED == state ? MonitorStatus.DONE
-                : MonitorStatus.CONTINUE;
         }
         catch (Exception ex)
         {

@@ -22,9 +22,9 @@ package org.jclouds.abiquo.monitor.functions;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.annotation.Resource;
-import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.logging.Logger;
 
@@ -32,15 +32,23 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
 
 /**
- * This class takes care of monitoring the a undeploy of a {@link VirtualMachine}.
+ * This class takes care of monitoring the state of a {@link VirtualMachine}.
  * 
- * @author Serafin Sedano
+ * @author Ignasi Barrera
+ * @see MonitoringService
  */
-@Singleton
-public class VirtualMachineUndeployMonitor implements Function<VirtualMachine, MonitorStatus>
+public class VirtualMachineStateMonitor implements Function<VirtualMachine, MonitorStatus>
 {
     @Resource
-    protected Logger logger = Logger.NULL;
+    private Logger logger = Logger.NULL;
+
+    private VirtualMachineState expectedState;
+
+    public VirtualMachineStateMonitor(final VirtualMachineState expectedState)
+    {
+        super();
+        this.expectedState = checkNotNull(expectedState, "expectedState");
+    }
 
     @Override
     public MonitorStatus apply(final VirtualMachine virtualMachine)
@@ -50,22 +58,7 @@ public class VirtualMachineUndeployMonitor implements Function<VirtualMachine, M
         try
         {
             VirtualMachineState state = virtualMachine.getState();
-
-            // TODO: is this check right?
-            if (state.existsInHypervisor())
-            {
-                return MonitorStatus.FAILED;
-            }
-
-            switch (state)
-            {
-                case UNKNOWN:
-                    return MonitorStatus.FAILED;
-                case NOT_ALLOCATED:
-                    return MonitorStatus.DONE;
-                default:
-                    return MonitorStatus.CONTINUE;
-            }
+            return state == expectedState ? MonitorStatus.DONE : MonitorStatus.CONTINUE;
         }
         catch (Exception ex)
         {
@@ -73,6 +66,7 @@ public class VirtualMachineUndeployMonitor implements Function<VirtualMachine, M
                 virtualMachine, getClass().getName());
 
             return MonitorStatus.CONTINUE;
+
         }
     }
 }

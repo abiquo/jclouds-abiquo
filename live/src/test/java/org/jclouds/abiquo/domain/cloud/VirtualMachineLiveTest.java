@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
@@ -29,6 +30,8 @@ import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
+
+import com.abiquo.server.core.cloud.VirtualMachineState;
 
 /**
  * Live integration tests for the {@link VirtualMachine} domain class.
@@ -50,5 +53,11 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         List<AsyncTask> tasks = env.virtualMachine.listTasks();
         assertNotNull(tasks);
         assertTrue(tasks.isEmpty());
+    }
+
+    public void testGetState()
+    {
+        VirtualMachineState state = env.virtualMachine.getState();
+        assertEquals(state, VirtualMachineState.NOT_ALLOCATED);
     }
 }

@@ -53,12 +53,16 @@ public class VirtualMachineDeployMonitor implements Function<VirtualMachine, Mon
         {
             VirtualMachineState state = virtualMachine.getState();
 
-            if (VirtualMachineState.NOT_ALLOCATED == state || VirtualMachineState.UNKNOWN == state)
+            switch (state)
             {
-                return MonitorStatus.FAILED;
+                case NOT_ALLOCATED:
+                case UNKNOWN:
+                    return MonitorStatus.FAILED;
+                case ON:
+                    return MonitorStatus.DONE;
+                default:
+                    return MonitorStatus.CONTINUE;
             }
-
-            return VirtualMachineState.ON == state ? MonitorStatus.DONE : MonitorStatus.CONTINUE;
         }
         catch (Exception ex)
         {
