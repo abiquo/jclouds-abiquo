@@ -51,7 +51,7 @@ public class VirtualMachineUndeployMonitor implements Function<VirtualMachine, M
         {
             VirtualMachineState state = virtualMachine.getState();
 
-            // TODO: is this check right?
+            // This state may be reached if the undeploy process fails and a rollback is done
             if (state.existsInHypervisor())
             {
                 return MonitorStatus.FAILED;
