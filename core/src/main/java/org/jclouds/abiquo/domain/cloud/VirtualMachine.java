@@ -122,7 +122,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     {
         VirtualMachineStateDto stateDto =
             context.getApi().getCloudClient().getVirtualMachineState(target);
-        return stateDto.getState();
+        VirtualMachineState state = stateDto.getState();
+        target.setState(state);
+        target.setIdState(state.id());
+        return state;
     }
 
     // Parent access
@@ -580,12 +583,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     @Override
     public String toString()
     {
-        return "VirtualMachine [id=" + getId() + ", state="
-            + VirtualMachineState.fromId(getIdState()).name() + ", cpu=" + getCpu()
-            + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes() + ", idType="
-            + getIdType() + ", name=" + getName() + ", password=" + getPassword() + ", ram="
-            + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress() + ", vncPort="
-            + getVncPort() + "]";
+        return "VirtualMachine [id=" + getId() + ", state=" + target.getState().name() + ", cpu="
+            + getCpu() + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes()
+            + ", idType=" + getIdType() + ", name=" + getName() + ", password=" + getPassword()
+            + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
+            + ", vncPort=" + getVncPort() + "]";
     }
 
 }
