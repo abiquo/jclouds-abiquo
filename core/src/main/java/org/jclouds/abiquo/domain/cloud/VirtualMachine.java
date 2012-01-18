@@ -67,6 +67,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     // Package protected to allow navigation from children
     VirtualAppliance virtualAppliance;
 
+    /** The virtual machine template of the virtual machine. */
+    // Package protected to allow navigation from children
     VirtualMachineTemplate template;
 
     /**
@@ -98,20 +100,22 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
                 .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
-    public AcceptedRequestDto<String> update()
+    public AsyncTask update()
     {
-        return context.getApi().getCloudClient().updateVirtualMachine(target);
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().updateVirtualMachine(target);
+        return taskRef == null ? null : getTask(taskRef);
     }
 
-    public void changeState(final VirtualMachineState state)
+    public AsyncTask changeState(final VirtualMachineState state)
     {
-        VirtualMachineStateDto stateDto = new VirtualMachineStateDto();
-        stateDto.setState(state);
+        VirtualMachineStateDto dto = new VirtualMachineStateDto();
+        dto.setState(state);
 
-        AcceptedRequestDto<VirtualMachineStateDto> result =
-            context.getApi().getCloudClient().changeVirtualMachineState(target, stateDto);
-        VirtualMachineState newState = result.getEntity().getState();
-        target.setState(newState);
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().changeVirtualMachineState(target, dto);
+
+        return getTask(taskRef);
     }
 
     public VirtualMachineState getState()

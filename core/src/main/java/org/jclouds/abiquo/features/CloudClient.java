@@ -344,10 +344,10 @@ public interface CloudClient
      * 
      * @param virtualMachine The given virtual machine.
      * @param state The new state.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     * @return The task reference.
      */
-    AcceptedRequestDto<VirtualMachineStateDto> changeVirtualMachineState(
-        VirtualMachineDto virtualMachine, VirtualMachineStateDto state);
+    AcceptedRequestDto<String> changeVirtualMachineState(VirtualMachineDto virtualMachine,
+        VirtualMachineStateDto state);
 
     /**
      * Get the state of the given virtual machine.
