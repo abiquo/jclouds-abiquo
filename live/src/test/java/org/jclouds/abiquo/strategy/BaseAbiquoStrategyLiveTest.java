@@ -23,14 +23,10 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Properties;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.environment.TestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
-import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
-import org.jclouds.rest.RestContextFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
@@ -66,10 +62,7 @@ public abstract class BaseAbiquoStrategyLiveTest<E extends TestEnvironment> exte
             new AbiquoContextFactory().createContext(identity, credential,
                 ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
 
-        injector =
-            new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
-                AbiquoContextFactory.PROVIDER_NAME, identity, credential,
-                ImmutableSet.<Module> of(new Log4JLoggingModule()), props).buildInjector();
+        injector = context.getUtils().getInjector();
 
         setupStrategy();
         env = environment(context);
@@ -84,9 +77,12 @@ public abstract class BaseAbiquoStrategyLiveTest<E extends TestEnvironment> exte
     {
         env.tearDown();
 
-        if (injector != null)
+        if (context != null)
         {
-            injector.getInstance(Closer.class).close();
+            // Wait a bit before closing context, to avoid executor shutdown while
+            // there are still open threads
+            Thread.sleep(500L);
+            context.close();
         }
     }
 }

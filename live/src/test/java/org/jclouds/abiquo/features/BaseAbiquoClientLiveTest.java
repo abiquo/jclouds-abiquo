@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Properties;
 
+import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.environment.TestEnvironment;
@@ -58,6 +59,8 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
 
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
+        props.put(Constants.PROPERTY_MAX_RETRIES, "0");
+        props.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
 
         context =
             new AbiquoContextFactory().createContext(identity, credential,
@@ -79,6 +82,9 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
 
         if (context != null)
         {
+            // Wait a bit before closing context, to avoid executor shutdown while
+            // there are still open threads
+            Thread.sleep(500L);
             context.close();
         }
     }
