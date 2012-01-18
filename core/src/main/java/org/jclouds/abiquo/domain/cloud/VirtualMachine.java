@@ -106,11 +106,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public void changeState(final VirtualMachineState state)
     {
         VirtualMachineStateDto stateDto = new VirtualMachineStateDto();
-        stateDto.setPower(state);
+        stateDto.setState(state);
 
         AcceptedRequestDto<VirtualMachineStateDto> result =
             context.getApi().getCloudClient().changeVirtualMachineState(target, stateDto);
-        VirtualMachineState newState = result.getEntity().getPower();
+        VirtualMachineState newState = result.getEntity().getState();
         target.setState(newState);
     }
 
@@ -118,7 +118,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     {
         VirtualMachineStateDto stateDto =
             context.getApi().getCloudClient().getVirtualMachineState(target);
-        return stateDto.getPower();
+        return stateDto.getState();
     }
 
     // Parent access
