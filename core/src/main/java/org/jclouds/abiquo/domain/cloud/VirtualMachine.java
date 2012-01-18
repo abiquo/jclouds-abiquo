@@ -580,11 +580,12 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     @Override
     public String toString()
     {
-        return "VirtualMachine [id=" + getId() + ", state=" + getState().name() + ", cpu="
-            + getCpu() + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes()
-            + ", idType=" + getIdType() + ", name=" + getName() + ", password=" + getPassword()
-            + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
-            + ", vncPort=" + getVncPort() + "]";
+        return "VirtualMachine [id=" + getId() + ", state="
+            + VirtualMachineState.fromId(getIdState()) + ", cpu=" + getCpu() + ", description="
+            + getDescription() + ", hdInBytes=" + getHdInBytes() + ", idType=" + getIdType()
+            + ", name=" + getName() + ", password=" + getPassword() + ", ram=" + getRam()
+            + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress() + ", vncPort="
+            + getVncPort() + "]";
     }
 
 }
