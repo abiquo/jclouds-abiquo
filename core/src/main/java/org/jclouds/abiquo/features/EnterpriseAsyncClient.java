@@ -33,6 +33,7 @@ import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
@@ -231,6 +232,9 @@ public interface EnterpriseAsyncClient
     @DELETE
     ListenableFuture<Void> deleteUser(
         @EndpointLink("edit") @BinderParam(BindToPath.class) UserDto user);
+
+    @GET
+    ListenableFuture<VirtualMachine> virtualMachinesByUser();
 
     /*********************** Datacenter Repository ***********************/
 

@@ -31,7 +31,6 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.config.SchedulerModule;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
 import org.jclouds.abiquo.events.monitor.CompletedEvent;
@@ -164,17 +163,15 @@ public class BaseMonitoringService implements MonitoringService
     @Override
     public VirtualMachineMonitor getVirtualMachineMonitor()
     {
-        return checkNotNull(
-            context.getUtils().getInjector().getInstance(VirtualMachineMonitor.class),
-            "virtualMachineMonitor");
+        return checkNotNull(context.getUtils().getInjector().getInstance(
+            VirtualMachineMonitor.class), "virtualMachineMonitor");
     }
 
     @Override
     public VirtualApplianceMonitor getVirtualApplianceMonitor()
     {
-        return checkNotNull(
-            context.getUtils().getInjector().getInstance(VirtualApplianceMonitor.class),
-            "virtualApplianceMonitor");
+        return checkNotNull(context.getUtils().getInjector().getInstance(
+            VirtualApplianceMonitor.class), "virtualApplianceMonitor");
     }
 
     @Override

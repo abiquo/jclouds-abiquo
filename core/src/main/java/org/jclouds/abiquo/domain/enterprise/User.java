@@ -21,13 +21,19 @@ package org.jclouds.abiquo.domain.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.List;
+import java.util.StringTokenizer;
+
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.UserDto;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link UserDto}.
@@ -103,6 +109,28 @@ public class User extends DomainWrapper<UserDto>
         }
 
         target = context.getApi().getEnterpriseClient().updateUser(target);
+    }
+
+    public Iterable<VirtualDatacenter> getAvailableVirtualDatacenters()
+    {
+        List<Integer> ids = extractAvailableDatacenters();
+
+        return context.getCloudService().getVirtualDatacenters(ids);
+    }
+
+    public void restrictVirtualDatacenter(final VirtualDatacenter vdc)
+    {
+        List<Integer> ids = this.extractAvailableDatacenters();
+        ids.remove(vdc.getId());
+    }
+
+    public void permitVirtualDatacenter(final VirtualDatacenter vdc)
+    {
+        List<Integer> ids = this.extractAvailableDatacenters();
+        if (!ids.contains(vdc.getId()))
+        {
+            ids.add(vdc.getId());
+        }
     }
 
     // Children access
@@ -240,10 +268,10 @@ public class User extends DomainWrapper<UserDto>
 
         public static Builder fromUser(final User in)
         {
-            return User.builder(in.context, in.enterprise, in.role).active(in.isActive())
-                .authType(in.getAuthType()).description(in.getDescription()).email(in.getEmail())
-                .locale(in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick())
-                .password(in.getPassword());
+            return User.builder(in.context, in.enterprise, in.role).active(in.isActive()).authType(
+                in.getAuthType()).description(in.getDescription()).email(in.getEmail()).locale(
+                in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick()).password(
+                in.getPassword());
         }
     }
 
@@ -347,6 +375,33 @@ public class User extends DomainWrapper<UserDto>
     public void setRole(final Role role)
     {
         this.role = role;
+    }
+
+    // Aux operations
+
+    /**
+     * Converts the tokenized String of available virtual datacenters provided in the userDto to a
+     * list of ids.
+     */
+    private List<Integer> extractAvailableDatacenters()
+    {
+        StringTokenizer st = new StringTokenizer(target.getAvailableVirtualDatacenters(), ",");
+        List<Integer> ids = Lists.newArrayList();
+
+        while (st.hasMoreTokens())
+        {
+            ids.add(Integer.parseInt(st.nextToken()));
+        }
+
+        return ids;
+    }
+
+    private void setAvailableVirtualDatacenters(final List<Integer> ids)
+    {
+        Joiner joiner = Joiner.on(",");
+        joiner.join(ids);
+
+        target.setAvailableVirtualDatacenters(joiner.toString());
     }
 
     @Override

@@ -27,7 +27,6 @@ import javax.inject.Singleton;
 import org.jclouds.Constants;
 import org.jclouds.abiquo.config.annotations.AsyncBus;
 import org.jclouds.abiquo.events.handlers.DeadEventLoggingHandler;
-import org.jclouds.concurrent.config.ExecutorServiceModule;
 
 import com.google.common.eventbus.AsyncEventBus;
 import com.google.common.eventbus.EventBus;
@@ -57,7 +56,7 @@ public class EventBusModule extends AbstractModule
     @Singleton
     AsyncEventBus provideAsyncEventBus(
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService executor,
-        DeadEventLoggingHandler deadEventsHandler)
+        final DeadEventLoggingHandler deadEventsHandler)
     {
         AsyncEventBus asyncBus = new AsyncEventBus("abiquo-async-event-bus", executor);
         asyncBus.register(deadEventsHandler);
@@ -69,7 +68,7 @@ public class EventBusModule extends AbstractModule
      */
     @Provides
     @Singleton
-    EventBus provideSyncEventBus(DeadEventLoggingHandler deadEventsHandler)
+    EventBus provideSyncEventBus(final DeadEventLoggingHandler deadEventsHandler)
     {
         EventBus syncBus = new EventBus("abiquo-sync-event-bus");
         syncBus.register(deadEventsHandler);

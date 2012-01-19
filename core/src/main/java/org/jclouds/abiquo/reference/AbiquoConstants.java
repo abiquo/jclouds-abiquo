@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.reference;
 
-import org.jclouds.abiquo.features.services.MonitoringService;
-
 /**
  * Global constants used in the Abiquo provider.
  * 

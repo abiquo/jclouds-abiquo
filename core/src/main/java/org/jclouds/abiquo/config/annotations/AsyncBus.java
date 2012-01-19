@@ -28,11 +28,6 @@ import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
 
-import org.jclouds.abiquo.config.EventBusModule;
-
-import com.google.common.eventbus.AsyncEventBus;
-import com.google.common.eventbus.EventBus;
-
 /**
  * Used to configure {@link EventBus} injection, providing a flexible way to inject the
  * {@link AsyncEventBus}.
@@ -40,7 +35,7 @@ import com.google.common.eventbus.EventBus;
  * @author Ignasi Barrera
  * @see EventBusModule
  */
-@Target({ANNOTATION_TYPE, FIELD, PARAMETER})
+@Target( {ANNOTATION_TYPE, FIELD, PARAMETER})
 @Retention(RUNTIME)
 @Qualifier
 public @interface AsyncBus

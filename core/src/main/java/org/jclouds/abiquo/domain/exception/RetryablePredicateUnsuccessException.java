@@ -19,24 +19,22 @@
 
 package org.jclouds.abiquo.domain.exception;
 
-import org.jclouds.predicates.RetryablePredicate;
-
 /**
- * This exception is meant to be thrown <b>only</b> when a
- * {@link RetryablePredicate} fails.
+ * This exception is meant to be thrown <b>only</b> when a {@link RetryablePredicate} fails.
  * 
  * @author Serafin Sedano
- * 
  */
-public class RetryablePredicateUnsuccessException extends RuntimeException {
+public class RetryablePredicateUnsuccessException extends RuntimeException
+{
 
-	public RetryablePredicateUnsuccessException(String error) {
-		super(error);
-	}
+    public RetryablePredicateUnsuccessException(final String error)
+    {
+        super(error);
+    }
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 9010032102429785242L;
+    private static final long serialVersionUID = 9010032102429785242L;
 
 }

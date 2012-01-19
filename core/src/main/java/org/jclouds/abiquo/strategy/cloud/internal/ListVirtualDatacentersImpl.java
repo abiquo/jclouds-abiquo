@@ -19,18 +19,32 @@
 
 package org.jclouds.abiquo.strategy.cloud.internal;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
+import static org.jclouds.concurrent.FutureIterables.transformParallel;
 
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+
+import javax.annotation.Resource;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
+import org.jclouds.logging.Logger;
 
+import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 /**
@@ -47,10 +61,21 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
 
     protected final AbiquoContext context;
 
+    protected final ExecutorService userExecutor;
+
+    @Resource
+    protected Logger logger = Logger.NULL;
+
+    @Inject(optional = true)
+    @Named(Constants.PROPERTY_REQUEST_TIMEOUT)
+    protected Long maxTime;
+
     @Inject
-    ListVirtualDatacentersImpl(final AbiquoContext context)
+    ListVirtualDatacentersImpl(final AbiquoContext context,
+        @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
         this.context = context;
+        this.userExecutor = checkNotNull(userExecutor, "userExecutor");
     }
 
     @Override
@@ -82,5 +107,27 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
         final VirtualDatacenterOptions virtualDatacenterOptions)
     {
         return filter(execute(virtualDatacenterOptions), selector);
+    }
+
+    @Override
+    public Iterable<VirtualDatacenter> execute(final List<Integer> virtualDatacenterIds)
+    {
+        // Find virtual datacenters in concurrent requests
+        return listConcurrentVirtualDatacenters(virtualDatacenterIds);
+    }
+
+    private Iterable<VirtualDatacenter> listConcurrentVirtualDatacenters(final List<Integer> ids)
+    {
+        Iterable<VirtualDatacenterDto> vdcs =
+            transformParallel(ids, new Function<Integer, Future<VirtualDatacenterDto>>()
+            {
+                @Override
+                public Future<VirtualDatacenterDto> apply(final Integer input)
+                {
+                    return context.getAsyncApi().getCloudClient().getVirtualDatacenter(input);
+                }
+            }, userExecutor, maxTime, logger, "getting virtual machines");
+
+        return DomainWrapper.wrap(context, VirtualDatacenter.class, Lists.newArrayList(vdcs));
     }
 }

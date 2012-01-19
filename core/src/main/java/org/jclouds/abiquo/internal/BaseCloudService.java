@@ -22,6 +22,8 @@ package org.jclouds.abiquo.internal;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -113,6 +115,13 @@ public class BaseCloudService implements CloudService
     }
 
     @Override
+    public Iterable<VirtualDatacenter> getVirtualDatacenters(
+        final List<Integer> virtualDatacenterIds)
+    {
+        return listVirtualDatacenters.execute(virtualDatacenterIds);
+    }
+
+    @Override
     public VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter)
     {
         return Iterables.getFirst(listVirtualDatacenters(filter), null);
@@ -157,5 +166,4 @@ public class BaseCloudService implements CloudService
     {
         return Iterables.getFirst(listVirtualMachines(filter), null);
     }
-
 }

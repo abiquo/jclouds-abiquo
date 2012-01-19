@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.features.services;
 
+import java.util.List;
+
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -67,6 +69,11 @@ public interface CloudService
      * Get the virtual datacenter with the given id.
      */
     VirtualDatacenter getVirtualDatacenter(final Integer virtualDatacenterId);
+
+    /**
+     * Get the list of virtual datacenter with the given ids.
+     */
+    Iterable<VirtualDatacenter> getVirtualDatacenters(final List<Integer> virtualDatacenterIds);
 
     /*********************** Virtual Appliance ***********************/
 

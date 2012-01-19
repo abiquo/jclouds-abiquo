@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.strategy.cloud;
 
+import java.util.List;
+
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.strategy.ListRootEntities;
@@ -36,6 +38,8 @@ import com.google.inject.ImplementedBy;
 public interface ListVirtualDatacenters extends ListRootEntities<VirtualDatacenter>
 {
     Iterable<VirtualDatacenter> execute(VirtualDatacenterOptions virtualDatacenterOptions);
+
+    Iterable<VirtualDatacenter> execute(List<Integer> virtualDatacenterIds);
 
     Iterable<VirtualDatacenter> execute(Predicate<VirtualDatacenter> selector,
         VirtualDatacenterOptions virtualDatacenterOptions);
