@@ -31,22 +31,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!-- Logging -->
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.5.11</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-            <version>0.9.11</version>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-            <version>0.9.11</version>
-        </dependency>
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.jclouds</groupId>
@@ -56,15 +40,27 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
+            <groupId>org.jclouds.driver</groupId>
+            <artifactId>jclouds-slf4j</artifactId>
+            <version>${jclouds.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jclouds.driver</groupId>
-            <artifactId>jclouds-log4j</artifactId>
-            <version>${jclouds.version}</version>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.0.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -81,20 +77,6 @@
                     </instructions>
                 </configuration>
             </plugin>
-            <!-- 
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <systemPropertyVariables>
-                        <test.abiquo.identity>${test.abiquo.identity}</test.abiquo.identity>
-                        <test.abiquo.credential>${test.abiquo.credential}</test.abiquo.credential>
-                        <test.abiquo.endpoint>${test.abiquo.endpoint}</test.abiquo.endpoint>
-                        <test.abiquo.api-version>${test.abiquo.api-version}</test.abiquo.api-version>
-                        <test.abiquo.build-version>${test.abiquo.build-version}</test.abiquo.build-version>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>
-            -->
             <plugin>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>

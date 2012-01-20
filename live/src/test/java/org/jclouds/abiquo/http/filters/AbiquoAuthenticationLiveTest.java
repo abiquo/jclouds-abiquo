@@ -40,7 +40,7 @@ import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.utils.ModifyRequest;
-import org.jclouds.logging.log4j.config.Log4JLoggingModule;
+import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.rest.AuthorizationException;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -83,7 +83,7 @@ public class AbiquoAuthenticationLiveTest
 
         AbiquoContext tokenContext =
             new AbiquoContextFactory().createContext(token,
-                ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
+                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         try
         {
@@ -112,7 +112,7 @@ public class AbiquoAuthenticationLiveTest
 
         AbiquoContext tokenContext =
             new AbiquoContextFactory().createContext(token,
-                ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
+                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         // Perform a call to get the logged user. It should fail
         try
@@ -145,7 +145,7 @@ public class AbiquoAuthenticationLiveTest
 
         AbiquoContext context =
             new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
+                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         try
         {

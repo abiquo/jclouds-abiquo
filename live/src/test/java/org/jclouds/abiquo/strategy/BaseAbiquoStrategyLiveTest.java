@@ -26,7 +26,7 @@ import java.util.Properties;
 import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.environment.TestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
-import org.jclouds.logging.log4j.config.Log4JLoggingModule;
+import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
@@ -60,7 +60,7 @@ public abstract class BaseAbiquoStrategyLiveTest<E extends TestEnvironment> exte
 
         context =
             new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
+                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         injector = context.getUtils().getInjector();
 
