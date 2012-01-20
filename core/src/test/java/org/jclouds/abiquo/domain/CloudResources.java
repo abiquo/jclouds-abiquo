@@ -125,6 +125,9 @@ public class CloudResources
         virtualMachine
             .addLink(new RESTLink("volumes",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes"));
+        virtualMachine
+            .addLink(new RESTLink("virtualmachinetemplate",
+                "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1"));
         return virtualMachine;
     }
 
@@ -166,7 +169,8 @@ public class CloudResources
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier
+            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
     }
 
@@ -321,6 +325,9 @@ public class CloudResources
         buffer.append(link(
             "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes",
             "volumes"));
+        buffer.append(link(
+            "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1",
+            "virtualmachinetemplate"));
         buffer.append("<cpu>0</cpu>");
         buffer.append("<hdInBytes>0</hdInBytes>");
         buffer.append("<highDisponibility>0</highDisponibility>");

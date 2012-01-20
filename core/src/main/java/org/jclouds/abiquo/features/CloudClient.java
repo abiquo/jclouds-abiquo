@@ -31,6 +31,7 @@ import org.jclouds.concurrent.Timeout;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.LinksDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -367,6 +368,16 @@ public interface CloudClient
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> deployVirtualMachineAction(final RESTLink link,
         VirtualMachineTaskDto task);
+
+    /******************* Virtual Machine Template ***********************/
+
+    /**
+     * Get the template of a virtual machine.
+     * 
+     * @param virtualMachine The given virtual machine.
+     * @return The template of the given virtual machine.
+     */
+    VirtualMachineTemplateDto getVirtualMachineTemplate(VirtualMachineDto virtualMachine);
 
     /*********************** Volume ***********************/
 

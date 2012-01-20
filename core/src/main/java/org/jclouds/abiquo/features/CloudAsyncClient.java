@@ -59,6 +59,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.LinksDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -358,6 +359,16 @@ public interface CloudAsyncClient
     ListenableFuture<VirtualMachineStateDto> getVirtualMachineState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
+    /*********************** Virtual Machine Template ***********************/
+
+    /**
+     * @see CloudClient#getVirtualMachineTemplate(VirtualMachineTemplateDto)
+     */
+    @GET
+    ListenableFuture<VirtualMachineTemplateDto> getVirtualMachineTemplate(
+        @EndpointLink("virtualmachinetemplate") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+    /*********************** Volume ***********************/
     /**
      * @see CloudClient#listAttachedVolumes(VirtualMachineDto)
      */

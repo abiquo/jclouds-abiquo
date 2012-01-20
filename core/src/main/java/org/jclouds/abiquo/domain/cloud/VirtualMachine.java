@@ -35,6 +35,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
@@ -96,8 +97,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient()
-                .createVirtualMachine(virtualAppliance.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
+                target);
     }
 
     public AsyncTask update()
@@ -166,6 +167,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
         EnterpriseDto dto = context.getApi().getEnterpriseClient().getEnterprise(enterpriseId);
         return wrap(context, Enterprise.class, dto);
+    }
+
+    public VirtualMachineTemplate getTemplate()
+    {
+        VirtualMachineTemplateDto dto =
+            context.getApi().getCloudClient().getVirtualMachineTemplate(target);
+        return wrap(context, VirtualMachineTemplate.class, dto);
     }
 
     // Children access
@@ -441,10 +449,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
-                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
-                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
+                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+                .vncAddress(in.getVncAddress()).vncPort(in.getVncPort()).idState(in.getIdState())
+                .idType(in.getIdType()).password(in.getPassword());
         }
     }
 
