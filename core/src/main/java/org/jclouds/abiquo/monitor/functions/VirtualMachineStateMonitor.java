@@ -24,24 +24,31 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.annotation.Resource;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.logging.Logger;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
-import com.google.inject.Singleton;
 
 /**
- * This class takes care of monitoring the a deploy of a {@link VirtualMachine}.
+ * This class takes care of monitoring the state of a {@link VirtualMachine}.
  * 
- * @author Serafin Sedano
+ * @author Ignasi Barrera
  * @see MonitoringService
  */
-@Singleton
-public class VirtualMachineDeployMonitor implements Function<VirtualMachine, MonitorStatus>
+public class VirtualMachineStateMonitor implements Function<VirtualMachine, MonitorStatus>
 {
     @Resource
     private Logger logger = Logger.NULL;
+
+    private VirtualMachineState expectedState;
+
+    public VirtualMachineStateMonitor(final VirtualMachineState expectedState)
+    {
+        super();
+        this.expectedState = checkNotNull(expectedState, "expectedState");
+    }
 
     @Override
     public MonitorStatus apply(final VirtualMachine virtualMachine)
@@ -51,17 +58,7 @@ public class VirtualMachineDeployMonitor implements Function<VirtualMachine, Mon
         try
         {
             VirtualMachineState state = virtualMachine.getState();
-
-            switch (state)
-            {
-                case NOT_ALLOCATED:
-                case UNKNOWN:
-                    return MonitorStatus.FAILED;
-                case ON:
-                    return MonitorStatus.DONE;
-                default:
-                    return MonitorStatus.CONTINUE;
-            }
+            return state == expectedState ? MonitorStatus.DONE : MonitorStatus.CONTINUE;
         }
         catch (Exception ex)
         {
@@ -69,6 +66,7 @@ public class VirtualMachineDeployMonitor implements Function<VirtualMachine, Mon
                 virtualMachine, getClass().getName());
 
             return MonitorStatus.CONTINUE;
+
         }
     }
 }

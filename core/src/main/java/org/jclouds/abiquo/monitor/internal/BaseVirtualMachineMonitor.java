@@ -33,8 +33,10 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.abiquo.monitor.functions.VirtualMachineDeployMonitor;
+import org.jclouds.abiquo.monitor.functions.VirtualMachineStateMonitor;
 import org.jclouds.abiquo.monitor.functions.VirtualMachineUndeployMonitor;
 
+import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.eventbus.EventBus;
 
@@ -57,7 +59,8 @@ public class BaseVirtualMachineMonitor extends BaseMonitoringService implements
     public BaseVirtualMachineMonitor(final AbiquoContext context,
         final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus,
-        VirtualMachineDeployMonitor deployMonitor, VirtualMachineUndeployMonitor undeployMonitor)
+        final VirtualMachineDeployMonitor deployMonitor,
+        final VirtualMachineUndeployMonitor undeployMonitor)
     {
         super(context, scheduler, pollingDelay, eventBus);
         this.deployMonitor = checkNotNull(deployMonitor, "deployMonitor");
@@ -114,5 +117,31 @@ public class BaseVirtualMachineMonitor extends BaseMonitoringService implements
         final VirtualMachine... vms)
     {
         monitor(maxWait, timeUnit, undeployMonitor, vms);
+    }
+
+    @Override
+    public void awaitState(final VirtualMachineState state, final VirtualMachine... vms)
+    {
+        awaitCompletion(new VirtualMachineStateMonitor(state), vms);
+    }
+
+    @Override
+    public void monitorState(final VirtualMachineState state, final VirtualMachine... vms)
+    {
+        monitor(new VirtualMachineStateMonitor(state), vms);
+    }
+
+    @Override
+    public void awaitState(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualMachineState state, final VirtualMachine... vms)
+    {
+        awaitCompletion(maxWait, timeUnit, new VirtualMachineStateMonitor(state), vms);
+    }
+
+    @Override
+    public void monitorState(final Long maxWait, final TimeUnit timeUnit,
+        final VirtualMachineState state, final VirtualMachine... vms)
+    {
+        monitor(maxWait, timeUnit, new VirtualMachineStateMonitor(state), vms);
     }
 }

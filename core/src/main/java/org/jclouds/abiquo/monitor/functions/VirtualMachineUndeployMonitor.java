@@ -51,13 +51,21 @@ public class VirtualMachineUndeployMonitor implements Function<VirtualMachine, M
         {
             VirtualMachineState state = virtualMachine.getState();
 
-            if (VirtualMachineState.UNKNOWN == state || state.existsInHypervisor())
+            // This state may be reached if the undeploy process fails and a rollback is done
+            if (state.existsInHypervisor())
             {
                 return MonitorStatus.FAILED;
             }
 
-            return VirtualMachineState.NOT_ALLOCATED == state ? MonitorStatus.DONE
-                : MonitorStatus.CONTINUE;
+            switch (state)
+            {
+                case UNKNOWN:
+                    return MonitorStatus.FAILED;
+                case NOT_ALLOCATED:
+                    return MonitorStatus.DONE;
+                default:
+                    return MonitorStatus.CONTINUE;
+            }
         }
         catch (Exception ex)
         {

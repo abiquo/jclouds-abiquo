@@ -329,7 +329,7 @@ public class Machine extends DomainWrapper<MachineDto>
             dto.setType(type);
             dto.setUser(user);
             dto.setPassword(password);
-            dto.setIpmiIp(ipmiIp);
+            dto.setIpmiIP(ipmiIp);
             dto.setIpmiPassword(ipmiPassword);
             if (ipmiPort != null)
             {
@@ -387,7 +387,7 @@ public class Machine extends DomainWrapper<MachineDto>
 
     public String getIpmiIp()
     {
-        return target.getIpmiIp();
+        return target.getIpmiIP();
     }
 
     public String getIpmiPassword()
@@ -487,7 +487,7 @@ public class Machine extends DomainWrapper<MachineDto>
 
     public void setIpmiIp(final String ipmiIp)
     {
-        target.setIpmiIp(ipmiIp);
+        target.setIpmiIP(ipmiIp);
     }
 
     public void setIpmiPassword(final String ipmiPassword)
