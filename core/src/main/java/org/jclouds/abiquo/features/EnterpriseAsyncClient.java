@@ -33,7 +33,6 @@ import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
-import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
@@ -46,6 +45,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -234,7 +234,8 @@ public interface EnterpriseAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) UserDto user);
 
     @GET
-    ListenableFuture<VirtualMachine> virtualMachinesByUser();
+    ListenableFuture<VirtualMachinesDto> listVirtualMachines(
+        @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) final UserDto user);
 
     /*********************** Datacenter Repository ***********************/
 

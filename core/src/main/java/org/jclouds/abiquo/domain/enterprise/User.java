@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 import java.util.StringTokenizer;
@@ -27,12 +28,16 @@ import java.util.StringTokenizer;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.UserDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
@@ -122,6 +127,8 @@ public class User extends DomainWrapper<UserDto>
     {
         List<Integer> ids = this.extractAvailableDatacenters();
         ids.remove(vdc.getId());
+
+        setAvailableVirtualDatacenters(ids);
     }
 
     public void permitVirtualDatacenter(final VirtualDatacenter vdc)
@@ -131,6 +138,8 @@ public class User extends DomainWrapper<UserDto>
         {
             ids.add(vdc.getId());
         }
+
+        setAvailableVirtualDatacenters(ids);
     }
 
     // Children access
@@ -139,6 +148,27 @@ public class User extends DomainWrapper<UserDto>
     {
         RoleDto role = context.getApi().getAdminClient().getRole(target);
         return wrap(context, Role.class, role);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievethelistofvirtualmachinesbyuser">
+     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievethelistofvirtualmachinesbyuser</a>
+     */
+    public List<Machine> listMachines()
+    {
+        MachinesDto machines = context.getApi().getEnterpriseClient().listVirtualMachines(target);
+        return wrap(context, Machine.class, machines.getCollection());
+    }
+
+    public List<Machine> listMachines(final Predicate<Machine> filter)
+    {
+        return Lists.newLinkedList(filter(listMachines(), filter));
+    }
+
+    public Machine findMachine(final Predicate<Machine> filter)
+    {
+        return Iterables.getFirst(filter(listMachines(), filter), null);
     }
 
     // Builder

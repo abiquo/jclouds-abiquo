@@ -34,6 +34,7 @@ import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 
 /**
  * Provides synchronous access to Abiquo Enterprise API.
@@ -219,6 +220,14 @@ public interface EnterpriseClient
      * @param user The user to delete.
      */
     void deleteUser(UserDto user);
+
+    /**
+     * Retreives list of virtual machines by user.
+     * 
+     * @param user The user.
+     * @return The list of virtual machines of the user.
+     */
+    MachinesDto listVirtualMachines(final UserDto user);
 
     /*********************** Datacenter Repository ***********************/
 
