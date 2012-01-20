@@ -8,7 +8,7 @@
         </filter>
         <encoder>
             <!-- The default pattern: Date Priority [Category] (Thread:NDC) Message${symbol_escape}n -->
-            <pattern>%date %level [%logger] (%thread) %msg%n</pattern>
+            <pattern>%date %level [%logger] \(%thread\) %msg%n</pattern>
             <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) -->
             <!-- 
             <pattern>%date %relative %level [%logger] (%thread) %msg%n</pattern>
@@ -28,7 +28,7 @@
         </filter>
         <encoder>
             <!-- The default pattern: Date Priority [Category] (Thread:NDC) Message${symbol_escape}n -->
-            <pattern>%date %level [%logger] (%thread) %msg%n</pattern>
+            <pattern>%date %level [%logger] \(%thread\) %msg%n</pattern>
             <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) -->
             <!-- 
             <pattern>%date %relative %level [%logger] (%thread) %msg%n</pattern>
@@ -48,7 +48,7 @@
         </filter>
         <encoder>
             <!-- The default pattern: Date Priority [Category] (Thread:NDC) Message${symbol_escape}n -->
-            <pattern>%date %level [%logger] (%thread) %msg%n</pattern>
+            <pattern>%date %level [%logger] \(%thread\) %msg%n</pattern>
             <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) -->
             <!-- 
             <pattern>%date %relative %level [%logger] (%thread) %msg%n</pattern>
