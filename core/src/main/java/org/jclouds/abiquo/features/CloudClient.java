@@ -260,24 +260,26 @@ public interface CloudClient
         VirtualApplianceOptions options);
 
     /**
-     * Deploy/Undeploy a virtual appliance.
+     * Deploy a virtual appliance.
      * 
-     * @param link The link of the deploy/undeploy action.
+     * @param virtualAppliance The virtual appliance to deploy
+     * @param options the extra options for the deploy process.
      * @return Response message to the deploy request.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
-    AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link);
+    AcceptedRequestDto<String> deployVirtualAppliance(VirtualApplianceDto virtualAppliance,
+        VirtualMachineTaskDto options);
 
     /**
-     * Deploy/Undeploy a virtual appliance with task options.
+     * Undeploy a virtual appliance.
      * 
-     * @param link The link of the deploy/undeploy action.
-     * @param task extra deploy options.
-     * @return Response message to the deploy request.
+     * @param virtualAppliance The virtual appliance to undeploy
+     * @param options the extra options for the undeploy process.
+     * @return Response message to the undeploy request.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
-    AcceptedRequestDto<String> deployVirtualApplianceAction(final RESTLink link,
-        VirtualMachineTaskDto task);
+    AcceptedRequestDto<String> undeployVirtualAppliance(VirtualApplianceDto virtualAppliance,
+        VirtualMachineTaskDto options);
 
     /**
      * Get the given virtual appliance from the virtual appliance link.
@@ -359,15 +361,26 @@ public interface CloudClient
     VirtualMachineStateDto getVirtualMachineState(VirtualMachineDto virtualMachine);
 
     /**
-     * Deploy/Undeploy a virtual machine with task options.
+     * Deploy a virtual machine with task options.
      * 
-     * @param link The link of the deploy/undeploy action.
-     * @param task extra deploy options.
+     * @param virtualMachine The virtual machine to deploy.
+     * @param options extra deploy options.
      * @return Response message to the deploy request.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
-    AcceptedRequestDto<String> deployVirtualMachineAction(final RESTLink link,
-        VirtualMachineTaskDto task);
+    AcceptedRequestDto<String> deployVirtualMachine(VirtualMachineDto virtualMachine,
+        VirtualMachineTaskDto options);
+
+    /**
+     * Uneploy a virtual machine with task options.
+     * 
+     * @param virtualMachine The virtual machine to undeploy.
+     * @param options extra deploy unoptions.
+     * @return Response message to the undeploy request.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    AcceptedRequestDto<String> undeployVirtualMachine(VirtualMachineDto virtualMachine,
+        VirtualMachineTaskDto options);
 
     /******************* Virtual Machine Template ***********************/
 
