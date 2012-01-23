@@ -34,7 +34,6 @@ import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
-import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -52,21 +51,13 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
     public void testUpdate()
     {
         // Create a new datacenter
-        Datacenter dc =
-            Datacenter.builder(context).remoteServices("10.10.10.10", AbiquoEdition.ENTERPRISE)
-                .name("dummyTestUpdateDC").location("dummyland").build();
-        dc.save();
-
-        dc.setLocation("New York");
-        dc.update();
+        env.datacenter.setLocation("New York");
+        env.datacenter.update();
 
         // Recover the updated datacenter
-        DatacenterDto updated = env.infrastructureClient.getDatacenter(dc.getId());
+        DatacenterDto updated = env.infrastructureClient.getDatacenter(env.datacenter.getId());
 
         assertEquals(updated.getLocation(), "New York");
-
-        // Delete new datacenter to preserve environment state
-        dc.delete();
     }
 
     public void testCheckHypervisorType()

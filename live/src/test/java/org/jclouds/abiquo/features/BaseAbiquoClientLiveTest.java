@@ -28,7 +28,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.environment.TestEnvironment;
-import org.jclouds.logging.log4j.config.Log4JLoggingModule;
+import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -66,7 +66,7 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
 
         context =
             new AbiquoContextFactory().createContext(identity, credential, ImmutableSet
-                .<Module> of(new Log4JLoggingModule()), props);
+                .<Module> of(new SLF4JLoggingModule()), props);
 
         env = new CloudTestEnvironment(context);
         env.setup();

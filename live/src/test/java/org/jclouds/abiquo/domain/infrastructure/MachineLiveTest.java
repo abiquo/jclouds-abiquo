@@ -30,7 +30,6 @@ import org.jclouds.abiquo.domain.infrastructure.Machine.Builder;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
-import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.Test;
 
@@ -49,15 +48,10 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironme
 
     public void testDiscoverMachineWithouRemoteService()
     {
-        // Create a new datacenter
-        Datacenter dc =
-            Datacenter.builder(context).remoteServices("9.9.9.9", AbiquoEdition.ENTERPRISE).name(
-                "dummyTestDelete").location("dummyland").build();
-        dc.save();
-
         // Delete node collector
         RemoteService nc =
-            dc.findRemoteService(RemoteServicePredicates.type(RemoteServiceType.NODE_COLLECTOR));
+            env.datacenter.findRemoteService(RemoteServicePredicates
+                .type(RemoteServiceType.NODE_COLLECTOR));
         nc.delete();
 
         try
@@ -72,11 +66,13 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironme
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.NOT_FOUND, "RS-2");
-
         }
 
-        // Delete new datacenter to preserve environment state
-        dc.delete();
+        // Restore rs
+        nc =
+            RemoteService.builder(context, env.datacenter).type(RemoteServiceType.NODE_COLLECTOR)
+                .ip(context.getEndpoint().getHost()).build();
+        nc.save();
     }
 
     public void testCreate()

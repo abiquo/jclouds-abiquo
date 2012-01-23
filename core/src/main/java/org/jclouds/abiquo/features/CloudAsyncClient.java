@@ -37,9 +37,12 @@ import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
 import org.jclouds.abiquo.binders.cloud.BindVirtualDatacenterRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
@@ -289,18 +292,19 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualApplianceOptions options);
 
     /**
-     * @see CloudClient#deployVirtualApplianceAction(RESTLink)
+     * @see CloudClient#deployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
      */
     @POST
-    ListenableFuture<AcceptedRequestDto<String>> deployVirtualApplianceAction(
-        @BinderParam(BindLinkToPath.class) RESTLink link);
+    ListenableFuture<AcceptedRequestDto<String>> deployVirtualAppliance(
+        @EndpointLink("deploy") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+        @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
     /**
-     * @see CloudClient#deployVirtualApplianceAction(RESTLink)
+     * @see CloudClient#undeployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
      */
     @POST
-    ListenableFuture<AcceptedRequestDto<String>> deployVirtualApplianceAction(
-        @BinderParam(BindLinkToPath.class) RESTLink link,
+    ListenableFuture<AcceptedRequestDto<String>> undeployVirtualAppliance(
+        @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
     /*********************** Virtual Machine ***********************/
@@ -394,11 +398,19 @@ public interface CloudAsyncClient
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
     /**
-     * @see CloudClient#deployVirtualMachineAction(RESTLink, VirtualMachineTaskDto)
+     * @see CloudClient#deployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)
      */
     @POST
-    ListenableFuture<AcceptedRequestDto<String>> deployVirtualMachineAction(
-        @BinderParam(BindLinkToPath.class) RESTLink link,
+    ListenableFuture<AcceptedRequestDto<String>> deployVirtualMachine(
+        @EndpointLink("deploy") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
+
+    /**
+     * @see CloudClient#undeployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)
+     */
+    @POST
+    ListenableFuture<AcceptedRequestDto<String>> undeployVirtualMachine(
+        @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
     /*********************** Storage ***********************/

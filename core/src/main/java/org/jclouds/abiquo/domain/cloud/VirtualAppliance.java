@@ -31,7 +31,6 @@ import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
-import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceState;
@@ -155,9 +154,16 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public AsyncTask[] deploy()
     {
-        RESTLink deployLink = target.searchLink("deploy");
+        return deploy(false);
+    }
+
+    public AsyncTask[] deploy(final boolean forceEnterpriseSoftLimits)
+    {
+        VirtualMachineTaskDto force = new VirtualMachineTaskDto();
+        force.setForceEnterpriseSoftLimits(forceEnterpriseSoftLimits);
+
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualApplianceAction(deployLink);
+            context.getApi().getCloudClient().deployVirtualAppliance(unwrap(), force);
 
         return getTasks(response);
     }
@@ -169,12 +175,11 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public AsyncTask[] undeploy(final boolean forceUndeploy)
     {
-        RESTLink undeployLink = target.searchLink("undeploy");
-        VirtualMachineTaskDto task = new VirtualMachineTaskDto();
-        task.setForceUndeploy(false);
+        VirtualMachineTaskDto force = new VirtualMachineTaskDto();
+        force.setForceUndeploy(forceUndeploy);
 
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualApplianceAction(undeployLink, task);
+            context.getApi().getCloudClient().undeployVirtualAppliance(unwrap(), force);
 
         return getTasks(response);
     }

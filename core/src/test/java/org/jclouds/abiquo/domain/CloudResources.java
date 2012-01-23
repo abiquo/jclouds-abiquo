@@ -94,10 +94,10 @@ public class CloudResources
         virtualAppliance.setId(1);
         virtualAppliance.addLink(new RESTLink("virtualdatacenter",
             "http://localhost/api/cloud/virtualdatacenters/1"));
-        virtualAppliance.addLink(new RESTLink("edit",
-            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1"));
         virtualAppliance.addLink(new RESTLink("deploy",
             "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/deploy"));
+        virtualAppliance.addLink(new RESTLink("edit",
+            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1"));
         virtualAppliance.addLink(new RESTLink("state",
             "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/state"));
         virtualAppliance.addLink(new RESTLink("undeploy",
@@ -111,8 +111,9 @@ public class CloudResources
     {
         VirtualMachineDto virtualMachine = virtualMachinePost();
         virtualMachine.setId(1);
-        virtualMachine.addLink(new RESTLink("virtualappliance",
-            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1"));
+        virtualMachine
+            .addLink(new RESTLink("deploy",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy"));
         virtualMachine
             .addLink(new RESTLink("edit",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1"));
@@ -123,11 +124,16 @@ public class CloudResources
             .addLink(new RESTLink("tasks",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks"));
         virtualMachine
-            .addLink(new RESTLink("volumes",
-                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes"));
+            .addLink(new RESTLink("undeploy",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy"));
+        virtualMachine.addLink(new RESTLink("virtualappliance",
+            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1"));
         virtualMachine
             .addLink(new RESTLink("virtualmachinetemplate",
                 "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1"));
+        virtualMachine
+            .addLink(new RESTLink("volumes",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes"));
         return virtualMachine;
     }
 
@@ -169,12 +175,11 @@ public class CloudResources
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier
-            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
     }
 
-    public static VirtualMachineTaskDto virtualMachineDeploy()
+    public static VirtualMachineTaskDto deployOptions()
     {
         VirtualMachineTaskDto deploy = new VirtualMachineTaskDto();
         deploy.setForceEnterpriseSoftLimits(false);
@@ -182,18 +187,11 @@ public class CloudResources
 
     }
 
-    public static VirtualMachineTaskDto virtualMachineUndeploy()
+    public static VirtualMachineTaskDto undeployOptions()
     {
         VirtualMachineTaskDto deploy = new VirtualMachineTaskDto();
         deploy.setForceUndeploy(true);
         return deploy;
-    }
-
-    public static VirtualMachineTaskDto virtualApplianceUndeploy()
-    {
-        VirtualMachineTaskDto undeploy = new VirtualMachineTaskDto();
-        undeploy.setForceUndeploy(true);
-        return undeploy;
     }
 
     public static String virtualDatacenterPostPayload()
@@ -294,9 +292,9 @@ public class CloudResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<virtualAppliance>");
         buffer.append(link("/cloud/virtualdatacenters/1", "virtualdatacenter"));
-        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "edit"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/action/deploy",
             "deploy"));
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "edit"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/state", "state"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/action/undeploy",
             "undeploy"));
@@ -315,7 +313,9 @@ public class CloudResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<virtualMachine>");
-        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "virtualappliance"));
+        buffer.append(link(
+            "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/deploy",
+            "deploy"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1",
             "edit"));
         buffer.append(link(
@@ -323,11 +323,15 @@ public class CloudResources
         buffer.append(link(
             "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks", "tasks"));
         buffer.append(link(
-            "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes",
-            "volumes"));
+            "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy",
+            "undeploy"));
+        buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "virtualappliance"));
         buffer.append(link(
             "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1",
             "virtualmachinetemplate"));
+        buffer.append(link(
+            "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes",
+            "volumes"));
         buffer.append("<cpu>0</cpu>");
         buffer.append("<hdInBytes>0</hdInBytes>");
         buffer.append("<highDisponibility>0</highDisponibility>");
@@ -381,7 +385,7 @@ public class CloudResources
         return buffer.toString();
     }
 
-    public static String virtualMachineDeployPayload()
+    public static String deployPayload()
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<virtualmachinetask>");
@@ -390,7 +394,7 @@ public class CloudResources
         return buffer.toString();
     }
 
-    public static String virtualApplianceUndeployPayload()
+    public static String undeployPayload()
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<virtualmachinetask>");

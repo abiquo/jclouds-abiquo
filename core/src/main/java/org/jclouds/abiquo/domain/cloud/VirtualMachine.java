@@ -97,8 +97,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
     public AsyncTask update()
@@ -237,13 +237,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     public AsyncTask deploy(final boolean forceEnterpriseSoftLimits)
     {
-        RESTLink deployLink = target.searchLink("deploy");
-        VirtualMachineTaskDto task = new VirtualMachineTaskDto();
-        task.setForceEnterpriseSoftLimits(forceEnterpriseSoftLimits);
+        VirtualMachineTaskDto force = new VirtualMachineTaskDto();
+        force.setForceEnterpriseSoftLimits(forceEnterpriseSoftLimits);
 
-        // get async task
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualMachineAction(deployLink, task);
+            context.getApi().getCloudClient().deployVirtualMachine(unwrap(), force);
 
         return getTask(response);
     }
@@ -255,12 +253,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     public AsyncTask undeploy(final boolean forceUndeploy)
     {
-        RESTLink undeployLink = target.searchLink("undeploy");
-        VirtualMachineTaskDto task = new VirtualMachineTaskDto();
-        task.setForceUndeploy(false);
+        VirtualMachineTaskDto force = new VirtualMachineTaskDto();
+        force.setForceUndeploy(forceUndeploy);
 
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualMachineAction(undeployLink, task);
+            context.getApi().getCloudClient().undeployVirtualMachine(unwrap(), force);
 
         return getTask(response);
     }
@@ -449,10 +446,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
-                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
-                .vncAddress(in.getVncAddress()).vncPort(in.getVncPort()).idState(in.getIdState())
-                .idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
+                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
+                .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
+                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
         }
     }
 
