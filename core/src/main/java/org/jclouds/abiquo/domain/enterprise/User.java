@@ -129,6 +129,8 @@ public class User extends DomainWrapper<UserDto>
         ids.remove(vdc.getId());
 
         setAvailableVirtualDatacenters(ids);
+
+        update();
     }
 
     public void permitVirtualDatacenter(final VirtualDatacenter vdc)
@@ -140,6 +142,8 @@ public class User extends DomainWrapper<UserDto>
         }
 
         setAvailableVirtualDatacenters(ids);
+
+        update();
     }
 
     // Children access
