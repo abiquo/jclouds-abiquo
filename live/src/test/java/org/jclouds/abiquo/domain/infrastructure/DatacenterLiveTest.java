@@ -29,12 +29,12 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
-import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -46,24 +46,27 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
-    @Override
-    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
-    {
-        return new InfrastructureTestEnvironment(context);
-    }
 
     public void testUpdate()
     {
-        env.datacenter.setLocation("New York");
-        env.datacenter.update();
+        // Create a new datacenter
+        Datacenter dc =
+            Datacenter.builder(context).remoteServices("10.10.10.10", AbiquoEdition.ENTERPRISE)
+                .name("dummyTestUpdateDC").location("dummyland").build();
+        dc.save();
+
+        dc.setLocation("New York");
+        dc.update();
 
         // Recover the updated datacenter
-        DatacenterDto updated = env.infrastructureClient.getDatacenter(env.datacenter.getId());
+        DatacenterDto updated = env.infrastructureClient.getDatacenter(dc.getId());
 
         assertEquals(updated.getLocation(), "New York");
+
+        // Delete new datacenter to preserve environment state
+        dc.delete();
     }
 
     public void testCheckHypervisorType()

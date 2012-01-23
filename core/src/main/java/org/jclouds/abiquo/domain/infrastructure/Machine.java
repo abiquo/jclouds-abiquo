@@ -351,17 +351,16 @@ public class Machine extends DomainWrapper<MachineDto>
         public static Builder fromMachine(final Machine in)
         {
             Builder builder =
-                Machine.builder(in.context, in.rack).name(in.getName())
-                    .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
-                    .virtualCpusPerCore(in.getVirtualCpusPerCore())
-                    .virtualCpusUsed(in.getVirtualCpusUsed())
-                    .virtualRamInMb(in.getVirtualRamInMb())
-                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
-                    .virtualSwitch(in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp())
-                    .ipService(in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
-                    .password(in.getPassword()).ipmiIp(in.getIpmiIp())
-                    .ipmiPassword(in.getIpmiPassword()).ipmiUser(in.getIpmiUser())
-                    .state(in.getState()).datastores(in.getDatastores());
+                Machine.builder(in.context, in.rack).name(in.getName()).description(
+                    in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
+                    .virtualCpusPerCore(in.getVirtualCpusPerCore()).virtualCpusUsed(
+                        in.getVirtualCpusUsed()).virtualRamInMb(in.getVirtualRamInMb())
+                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb()).virtualSwitch(
+                        in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp()).ipService(
+                        in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
+                    .password(in.getPassword()).ipmiIp(in.getIpmiIp()).ipmiPassword(
+                        in.getIpmiPassword()).ipmiUser(in.getIpmiUser()).state(in.getState())
+                    .datastores(in.getDatastores());
 
             // Parameters that can be null
             if (in.getIpmiPort() != null)

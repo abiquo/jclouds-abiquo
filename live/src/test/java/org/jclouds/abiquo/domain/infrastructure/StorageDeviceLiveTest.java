@@ -23,8 +23,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.StorageDevicePredicates;
 import org.testng.annotations.Test;
@@ -39,13 +38,8 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-    @Override
-    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
-    {
-        return new InfrastructureTestEnvironment(context);
-    }
 
     public void testUpdate()
     {
@@ -54,8 +48,8 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
         // Recover the updated storage device
         StorageDeviceDto updated =
-            env.infrastructureClient.getStorageDevice(env.datacenter.unwrap(),
-                env.storageDevice.getId());
+            env.infrastructureClient.getStorageDevice(env.datacenter.unwrap(), env.storageDevice
+                .getId());
 
         assertEquals(updated.getName(), "Updated storage device");
     }
@@ -72,7 +66,8 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
         storageDevices =
             env.datacenter.listStorageDevices(StorageDevicePredicates.name(env.storageDevice
-                .getName() + "FAIL"));
+                .getName()
+                + "FAIL"));
         assertEquals(Iterables.size(storageDevices), 0);
     }
 
@@ -85,7 +80,8 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<Infrastructu
 
         storageDevice =
             env.datacenter.findStorageDevice(StorageDevicePredicates.name(env.storageDevice
-                .getName() + "FAIL"));
+                .getName()
+                + "FAIL"));
         assertNull(storageDevice);
     }
 

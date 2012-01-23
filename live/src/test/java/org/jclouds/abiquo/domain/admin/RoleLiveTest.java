@@ -28,12 +28,11 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.config.PrivilegePredicates;
 import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
@@ -48,24 +47,23 @@ import com.abiquo.server.core.enterprise.RoleDto;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class RoleLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnvironment>
+public class RoleLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
-    @Override
-    protected EnterpriseTestEnvironment environment(final AbiquoContext context)
-    {
-        return new EnterpriseTestEnvironment(context);
-    }
 
     public void testUpdate()
     {
-        env.role.setName("NEW_ROLE");
-        env.role.update();
+        Role role = Role.builder(context).name("dummyRoleUpdateRole").blocked(false).build();
+        role.save();
 
-        // Recover the updated user
-        RoleDto updated = env.adminClient.getRole(env.role.getId());
+        role.setName("UPDATED_ROLE");
+        role.update();
 
-        assertEquals(updated.getName(), "NEW_ROLE");
+        // Recover the updated role
+        RoleDto updated = env.adminClient.getRole(role.getId());
+
+        assertEquals(updated.getName(), "UPDATED_ROLE");
+
+        role.delete();
     }
 
     public void testCreateRepeated()

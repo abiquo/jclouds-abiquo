@@ -24,11 +24,11 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -37,21 +37,15 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListEnterprisesImplLiveTest extends
-    BaseAbiquoStrategyLiveTest<EnterpriseTestEnvironment>
+public class ListEnterprisesImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
 {
     private ListEnterprisesImpl strategy;
 
     @Override
-    protected EnterpriseTestEnvironment environment(final AbiquoContext context)
-    {
-        return new EnterpriseTestEnvironment(context);
-    }
-
-    @Override
+    @BeforeClass(groups = "live")
     protected void setupStrategy()
     {
-        this.strategy = injector.getInstance(ListEnterprisesImpl.class);
+        this.strategy = context.getUtils().getInjector().getInstance(ListEnterprisesImpl.class);
     }
 
     public void testExecute()

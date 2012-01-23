@@ -22,8 +22,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
@@ -37,13 +36,8 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class TierLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class TierLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-    @Override
-    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
-    {
-        return new InfrastructureTestEnvironment(context);
-    }
 
     public void testUpdate()
     {

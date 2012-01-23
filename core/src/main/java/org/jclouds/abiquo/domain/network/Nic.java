@@ -74,11 +74,6 @@ public abstract class Nic extends DomainWrapper<IpPoolManagementDto>
         return target.getAvailable();
     }
 
-    public boolean getConfigureGateway()
-    {
-        return target.getConfigureGateway();
-    }
-
     public Integer getId()
     {
         return target.getId();
@@ -122,9 +117,8 @@ public abstract class Nic extends DomainWrapper<IpPoolManagementDto>
     @Override
     public String toString()
     {
-        return "Nic [id=" + getId() + ", available=" + getAvailable() + ", configureGateway="
-            + getConfigureGateway() + ", ip=" + getIp() + ", mac=" + getMac() + ", name="
-            + getName() + ", networkName=" + getNetworkName() + ", quarantine=" + getQuarantine()
-            + "]";
+        return "Nic [id=" + getId() + ", available=" + getAvailable() + ", ip=" + getIp()
+            + ", mac=" + getMac() + ", name=" + getName() + ", networkName=" + getNetworkName()
+            + ", quarantine=" + getQuarantine() + "]";
     }
 }

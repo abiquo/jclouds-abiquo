@@ -27,9 +27,8 @@ import static org.testng.Assert.fail;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.testng.annotations.Test;
@@ -43,14 +42,8 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class UserLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnvironment>
+public class UserLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
-    @Override
-    protected EnterpriseTestEnvironment environment(final AbiquoContext context)
-    {
-        return new EnterpriseTestEnvironment(context);
-    }
 
     public void testUpdate()
     {

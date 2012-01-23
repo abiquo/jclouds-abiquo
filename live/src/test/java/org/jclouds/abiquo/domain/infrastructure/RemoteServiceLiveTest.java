@@ -29,11 +29,11 @@ import static org.testng.Assert.fail;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
-import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -46,53 +46,50 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
-    @Override
-    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
-    {
-        return new InfrastructureTestEnvironment(context);
-    }
-
     public void testUpdate()
     {
-        RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.TARANTINO));
+        // Create a new datacenter
+        Datacenter dc =
+            Datacenter.builder(context).remoteServices("8.8.8.8", AbiquoEdition.ENTERPRISE).name(
+                "dummyTestUpdateRS").location("dummyland").build();
+        dc.save();
+
+        // Update the remote service
+        RemoteService rs = dc.findRemoteService(type(RemoteServiceType.TARANTINO));
         rs.setUri("http://testuri");
         rs.update();
 
         // Recover the updated remote service
         RemoteServiceDto updated =
-            env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
-                RemoteServiceType.TARANTINO);
+            env.infrastructureClient.getRemoteService(dc.unwrap(), RemoteServiceType.TARANTINO);
 
         assertEquals(updated.getUri(), rs.getUri());
+
+        // Delete new datacenter to preserve environment state
+        dc.delete();
     }
 
     public void testDelete()
     {
-        RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.BPM_SERVICE));
+        // Create a new datacenter
+        Datacenter dc =
+            Datacenter.builder(context).remoteServices("9.9.9.9", AbiquoEdition.ENTERPRISE).name(
+                "dummyTestDeleteRS").location("dummyland").build();
+        dc.save();
+
+        RemoteService rs = dc.findRemoteService(type(RemoteServiceType.BPM_SERVICE));
         rs.delete();
 
         // Recover the deleted remote service
         RemoteServiceDto deleted =
-            env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
-                RemoteServiceType.BPM_SERVICE);
+            env.infrastructureClient.getRemoteService(dc.unwrap(), RemoteServiceType.BPM_SERVICE);
 
         assertNull(deleted);
 
-        // Recreate it to avoid altering other tests
-        String ip = context.getEndpoint().getHost(); // Assume a monolithic install
-        RemoteService bpm =
-            RemoteService.builder(context, env.datacenter).type(RemoteServiceType.BPM_SERVICE)
-                .ip(ip).build();
-        bpm.save();
-
-        RemoteServiceDto saved =
-            env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
-                RemoteServiceType.BPM_SERVICE);
-
-        assertNotNull(saved);
+        // Delete new datacenter to preserve environment state
+        dc.delete();
     }
 
     public void testIsAvailableNonCheckeable()

@@ -31,6 +31,8 @@ import java.util.UUID;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Limits;
+import org.jclouds.abiquo.domain.enterprise.Role;
+import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Datastore;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
@@ -39,10 +41,15 @@ import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
+import org.jclouds.abiquo.features.AdminClient;
+import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.features.services.AdministrationService;
+import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
+import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.util.Config;
 
@@ -61,9 +68,18 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     protected AbiquoContext context;
 
     // Environment data made public so tests can use them easily
+
+    public AdministrationService administrationService;
+
     public InfrastructureClient infrastructureClient;
 
     public EnterpriseClient enterpriseClient;
+
+    public AdminClient adminClient;
+
+    public ConfigClient configClient;
+
+    // Resources
 
     public Datacenter datacenter;
 
@@ -81,28 +97,47 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public Tier tier;
 
+    public User user;
+
+    public Role role;
+
+    public Role anotherRole;
+
     public InfrastructureTestEnvironment(final AbiquoContext context)
     {
         super();
         this.context = context;
-        this.infrastructureClient = context.getApi().getInfrastructureClient();
+        this.administrationService = context.getAdministrationService();
+        this.context = context;
         this.enterpriseClient = context.getApi().getEnterpriseClient();
+        this.infrastructureClient = context.getApi().getInfrastructureClient();
+        this.adminClient = context.getApi().getAdminClient();
+        this.configClient = context.getApi().getConfigClient();
     }
 
     @Override
     public void setup() throws Exception
     {
+        // Intrastructure
         createDatacenter();
         createRack();
         createMachine();
         createStorageDevice();
         createStoragePool();
+
+        // Enterprise
         createEnterprise();
+        createRoles();
+        createUser();
     }
 
     @Override
     public void tearDown() throws Exception
     {
+        deleteUser();
+        deleteRole(role);
+        deleteRole(anotherRole);
+
         deleteStoragePool();
         deleteStorageDevice();
         deleteMachine();
@@ -119,8 +154,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String remoteServicesAddress = context.getEndpoint().getHost();
 
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu")
-                .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
+                remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -164,8 +199,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.storage.pass");
 
         storageDevice =
-            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip)
-                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
+            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip).name(
+                PREFIX + "Storage Device").username(user).password(pass).type(type).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
@@ -176,12 +211,39 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pool = Config.get("abiquo.storage.pool");
 
         storagePool = storageDevice.findRemoteStoragePool(StoragePoolPredicates.name(pool));
-        tier = datacenter.listTiers().get(0);
+        tier = datacenter.findTier(TierPredicates.name("Default Tier 1"));
 
         storagePool.setTier(tier);
         storagePool.save();
 
         assertNotNull(storagePool.getUUID());
+    }
+
+    private void createUser()
+    {
+        Role role = administrationService.listRoles().iterator().next();
+        user =
+            User.builder(context, enterprise, role).name(randomName(), randomName()).nick(
+                randomName()).authType("ABIQUO").description(randomName()).email(
+                randomName() + "@abiquo.com").locale("en_US").password(
+                "c69a39bd64ffb77ea7ee3369dce742f3").build();
+
+        user.save();
+        assertNotNull(user.getId());
+        assertEquals(role.getId(), user.getRole().getId());
+    }
+
+    private void createRoles()
+    {
+        role = Role.builder(context).name(randomName()).blocked(false).build();
+        role.save();
+
+        anotherRole = Role.Builder.fromRole(role).build();
+        anotherRole.setName("Another role");
+        anotherRole.save();
+
+        assertNotNull(role.getId());
+        assertNotNull(anotherRole.getId());
     }
 
     protected void createEnterprise()
@@ -194,6 +256,27 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     }
 
     // Tear down
+
+    private void deleteUser()
+    {
+        if (user != null)
+        {
+            String nick = user.getNick();
+            user.delete();
+            // Nick is unique in an enterprise
+            assertNull(enterprise.findUser(UserPredicates.nick(nick)));
+        }
+    }
+
+    private void deleteRole(final Role role)
+    {
+        if (role != null)
+        {
+            Integer roleId = role.getId();
+            role.delete();
+            assertNull(adminClient.getRole(roleId));
+        }
+    }
 
     protected void deleteStoragePool()
     {

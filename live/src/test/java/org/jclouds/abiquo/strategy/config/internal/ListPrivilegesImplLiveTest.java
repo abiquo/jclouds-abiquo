@@ -24,11 +24,11 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.Privilege;
-import org.jclouds.abiquo.environment.ConfigTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.config.PrivilegePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Predicates;
@@ -39,20 +39,15 @@ import com.google.common.base.Predicates;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest<ConfigTestEnvironment>
+public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
 {
     private ListPrivilegesImpl strategy;
 
     @Override
-    protected ConfigTestEnvironment environment(final AbiquoContext context)
-    {
-        return new ConfigTestEnvironment(context);
-    }
-
-    @Override
+    @BeforeClass(groups = "live")
     protected void setupStrategy()
     {
-        this.strategy = injector.getInstance(ListPrivilegesImpl.class);
+        this.strategy = context.getUtils().getInjector().getInstance(ListPrivilegesImpl.class);
     }
 
     public void testExecute()

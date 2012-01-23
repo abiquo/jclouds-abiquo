@@ -24,7 +24,6 @@ import static org.testng.Assert.assertNotNull;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter.Builder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
@@ -42,12 +41,6 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 @Test(groups = "live")
 public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
-    @Override
-    protected CloudTestEnvironment environment(final AbiquoContext context)
-    {
-        return new CloudTestEnvironment(context);
-    }
 
     public void testUpdate()
     {

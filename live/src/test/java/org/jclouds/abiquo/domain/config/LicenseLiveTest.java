@@ -24,9 +24,8 @@ import static org.testng.Assert.fail;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.environment.ConfigTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -36,14 +35,8 @@ import org.testng.annotations.Test;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class LicenseLiveTest extends BaseAbiquoClientLiveTest<ConfigTestEnvironment>
+public class LicenseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
-    @Override
-    protected ConfigTestEnvironment environment(final AbiquoContext context)
-    {
-        return new ConfigTestEnvironment(context);
-    }
 
     public void testCreateRepeated()
     {

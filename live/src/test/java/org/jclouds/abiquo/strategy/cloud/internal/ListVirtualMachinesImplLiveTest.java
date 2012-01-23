@@ -24,11 +24,11 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachinePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -43,15 +43,10 @@ public class ListVirtualMachinesImplLiveTest extends
     private ListVirtualMachinesImpl strategy;
 
     @Override
-    protected CloudTestEnvironment environment(final AbiquoContext context)
-    {
-        return new CloudTestEnvironment(context);
-    }
-
-    @Override
+    @BeforeClass(groups = "live")
     protected void setupStrategy()
     {
-        this.strategy = injector.getInstance(ListVirtualMachinesImpl.class);
+        this.strategy = context.getUtils().getInjector().getInstance(ListVirtualMachinesImpl.class);
     }
 
     public void testExecute()

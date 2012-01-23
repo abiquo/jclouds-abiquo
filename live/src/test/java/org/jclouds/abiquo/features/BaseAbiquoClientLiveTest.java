@@ -26,10 +26,12 @@ import java.util.Properties;
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.environment.TestEnvironment;
 import org.jclouds.logging.log4j.config.Log4JLoggingModule;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.ITestContext;
+import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeSuite;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
@@ -42,13 +44,13 @@ import com.google.inject.Module;
 public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
 {
     /** The rest context. */
-    protected AbiquoContext context;
+    protected static AbiquoContext context;
 
     /** The test environment. */
-    protected E env;
+    protected static CloudTestEnvironment env;
 
-    @BeforeClass(groups = "live")
-    protected void setupClient() throws Exception
+    @BeforeSuite(groups = "live")
+    protected static void setupClient(final ITestContext testContext) throws Exception
     {
         String identity =
             checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
@@ -63,20 +65,17 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
         props.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
 
         context =
-            new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new Log4JLoggingModule()), props);
-        env = environment(context);
+            new AbiquoContextFactory().createContext(identity, credential, ImmutableSet
+                .<Module> of(new Log4JLoggingModule()), props);
 
+        env = new CloudTestEnvironment(context);
         env.setup();
+
+        testContext.setAttribute("environment", env);
     }
 
-    /**
-     * Get the test environment for the current tests.
-     */
-    protected abstract E environment(AbiquoContext context);
-
-    @AfterClass(groups = "live")
-    public void teardownClient() throws Exception
+    @AfterSuite(groups = "live")
+    public static void teardownClient(final ITestContext testContext) throws Exception
     {
         env.tearDown();
 

@@ -25,7 +25,6 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -41,12 +40,6 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 @Test(groups = "live")
 public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
-    @Override
-    protected CloudTestEnvironment environment(final AbiquoContext context)
-    {
-        return new CloudTestEnvironment(context);
-    }
 
     public void testGetTasks()
     {

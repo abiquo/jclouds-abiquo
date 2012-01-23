@@ -24,12 +24,12 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -44,15 +44,11 @@ public class ListVirtualDatacentersImplLiveTest extends
     private ListVirtualDatacentersImpl strategy;
 
     @Override
-    protected CloudTestEnvironment environment(final AbiquoContext context)
-    {
-        return new CloudTestEnvironment(context);
-    }
-
-    @Override
+    @BeforeClass(groups = "live")
     protected void setupStrategy()
     {
-        this.strategy = injector.getInstance(ListVirtualDatacentersImpl.class);
+        this.strategy =
+            context.getUtils().getInjector().getInstance(ListVirtualDatacentersImpl.class);
     }
 
     public void testExecute()

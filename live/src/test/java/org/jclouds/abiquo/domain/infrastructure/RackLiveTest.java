@@ -24,8 +24,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -38,13 +37,8 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RackLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class RackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-    @Override
-    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
-    {
-        return new InfrastructureTestEnvironment(context);
-    }
 
     public void testUpdate()
     {
@@ -52,7 +46,8 @@ public class RackLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnv
         env.rack.update();
 
         // Recover the updated rack
-        RackDto updated = env.infrastructureClient.getRack(env.datacenter.unwrap(), env.rack.getId());
+        RackDto updated =
+            env.infrastructureClient.getRack(env.datacenter.unwrap(), env.rack.getId());
 
         assertEquals(updated.getName(), "Updated rack");
     }

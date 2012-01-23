@@ -25,11 +25,12 @@ import static org.testng.Assert.assertNotNull;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Machine.Builder;
-import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
+import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.Test;
 
@@ -43,17 +44,20 @@ import com.abiquo.server.core.infrastructure.MachineDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTestEnvironment>
+public class MachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-    @Override
-    protected InfrastructureTestEnvironment environment(final AbiquoContext context)
-    {
-        return new InfrastructureTestEnvironment(context);
-    }
 
     public void testDiscoverMachineWithouRemoteService()
     {
-        RemoteService nc = env.findRemoteService(RemoteServiceType.NODE_COLLECTOR);
+        // Create a new datacenter
+        Datacenter dc =
+            Datacenter.builder(context).remoteServices("9.9.9.9", AbiquoEdition.ENTERPRISE).name(
+                "dummyTestDelete").location("dummyland").build();
+        dc.save();
+
+        // Delete node collector
+        RemoteService nc =
+            dc.findRemoteService(RemoteServicePredicates.type(RemoteServiceType.NODE_COLLECTOR));
         nc.delete();
 
         try
@@ -68,7 +72,11 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<InfrastructureTest
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.NOT_FOUND, "RS-2");
+
         }
+
+        // Delete new datacenter to preserve environment state
+        dc.delete();
     }
 
     public void testCreate()

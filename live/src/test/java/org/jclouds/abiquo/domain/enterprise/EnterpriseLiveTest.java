@@ -30,11 +30,10 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.enterprise.Enterprise.Builder;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.environment.EnterpriseTestEnvironment;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -47,24 +46,22 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestEnvironment>
+public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
-    @Override
-    protected EnterpriseTestEnvironment environment(final AbiquoContext context)
-    {
-        return new EnterpriseTestEnvironment(context);
-    }
 
     public void testUpdate()
     {
-        env.enterprise.setName("Updated Enterprise");
-        env.enterprise.update();
+        Enterprise ent = Enterprise.builder(context).name("dummyTestUpdateRS").build();
+        ent.save();
+        ent.setName("Updated Enterprise");
+        ent.update();
 
         // Recover the updated enterprise
-        EnterpriseDto updated = env.enterpriseClient.getEnterprise(env.enterprise.getId());
+        EnterpriseDto updated = env.enterpriseClient.getEnterprise(ent.getId());
 
         assertEquals(updated.getName(), "Updated Enterprise");
+
+        ent.delete();
     }
 
     public void testCreateRepeated()
@@ -84,6 +81,8 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
 
     public void testAllowProhibitDatacenter()
     {
+        tearDownLimits();
+
         Limits limits = env.enterprise.allowDatacenter(env.datacenter);
         assertNotNull(limits);
 
@@ -97,6 +96,8 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
 
     public void testAllowTwiceFails()
     {
+        tearDownLimits();
+
         Limits limits = env.enterprise.allowDatacenter(env.datacenter);
         assertNotNull(limits);
 
@@ -107,9 +108,8 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.CONFLICT, "LIMIT-7");
+            tearDownLimits();
         }
-
-        tearDownLimits();
     }
 
     public void testDeleteTwiceWorks()
@@ -145,9 +145,8 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<EnterpriseTestE
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.BAD_REQUEST, "CONSTR-LIMITRANGE");
+            tearDownLimits();
         }
-
-        tearDownLimits();
     }
 
     public void testUpdateLimits()
