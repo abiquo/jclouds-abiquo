@@ -415,12 +415,17 @@ public class User extends DomainWrapper<UserDto>
      */
     private List<Integer> extractAvailableDatacenters()
     {
-        StringTokenizer st = new StringTokenizer(target.getAvailableVirtualDatacenters(), ",");
         List<Integer> ids = Lists.newArrayList();
 
-        while (st.hasMoreTokens())
+        if (target.getAvailableVirtualDatacenters() != null)
         {
-            ids.add(Integer.parseInt(st.nextToken()));
+
+            StringTokenizer st = new StringTokenizer(target.getAvailableVirtualDatacenters(), ",");
+
+            while (st.hasMoreTokens())
+            {
+                ids.add(Integer.parseInt(st.nextToken()));
+            }
         }
 
         return ids;
@@ -429,9 +434,7 @@ public class User extends DomainWrapper<UserDto>
     private void setAvailableVirtualDatacenters(final List<Integer> ids)
     {
         Joiner joiner = Joiner.on(",");
-        joiner.join(ids);
-
-        target.setAvailableVirtualDatacenters(joiner.toString());
+        target.setAvailableVirtualDatacenters(joiner.join(ids));
     }
 
     @Override
