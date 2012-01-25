@@ -300,6 +300,13 @@ public class BaseAdministrationService implements AdministrationService
     }
 
     @Override
+    public SystemProperty findSystemProperty(final String name)
+    {
+        PropertyOptions options = PropertyOptions.builder().name(name).build();
+        return Iterables.getFirst(listProperties.execute(options), null);
+    }
+
+    @Override
     public Iterable<SystemProperty> listSystemProperties(final String component)
     {
         PropertyOptions options = PropertyOptions.builder().component(component).build();

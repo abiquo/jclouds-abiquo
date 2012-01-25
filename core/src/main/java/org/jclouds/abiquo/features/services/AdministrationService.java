@@ -200,6 +200,11 @@ public interface AdministrationService
     SystemProperty findSystemProperty(final Predicate<SystemProperty> filter);
 
     /**
+     * Get the system property with the give name or <code>null</code> if none is found.
+     */
+    SystemProperty findSystemProperty(String name);
+
+    /**
      * Get the list of system properties with options.
      */
     Iterable<SystemProperty> listSystemProperties(String component);

@@ -51,9 +51,17 @@ public class PropertyOptions extends QueryOptions
     {
         private String component;
 
+        private String name;
+
         public Builder component(final String component)
         {
             this.component = component;
+            return this;
+        }
+
+        public Builder name(final String name)
+        {
+            this.name = name;
             return this;
         }
 
@@ -63,6 +71,11 @@ public class PropertyOptions extends QueryOptions
             if (component != null)
             {
                 options.map.put("component", component.toString());
+            }
+
+            if (name != null)
+            {
+                options.map.put("name", component.toString());
             }
             return options;
         }
