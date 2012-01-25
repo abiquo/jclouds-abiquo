@@ -94,7 +94,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         Datacenter datacenter = datacenters.get(0);
         assertNotNull(datacenter);
 
-        List<HypervisorType> hypervisors = datacenter.getAvailableHypervisors();
+        List<HypervisorType> hypervisors = datacenter.listAvailableHypervisors();
         assertNotNull(datacenters);
         assertTrue(size(datacenters) > 0);
 
