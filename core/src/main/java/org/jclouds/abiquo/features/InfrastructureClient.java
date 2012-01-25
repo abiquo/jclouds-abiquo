@@ -117,6 +117,7 @@ public interface InfrastructureClient
      * @param password Password to authenticate.
      * @return The physical machine.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip,
         HypervisorType hypervisorType, String user, String password);
 
@@ -134,6 +135,7 @@ public interface InfrastructureClient
      * @param options Optional query params.
      * @return The physical machine.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     MachineDto discoverSingleMachine(DatacenterDto datacenter, String ip,
         HypervisorType hypervisorType, String user, String password, MachineOptions options);
 
@@ -151,6 +153,7 @@ public interface InfrastructureClient
      * @param password Password to authenticate.
      * @return The physical machine list.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     MachinesDto discoverMultipleMachines(final DatacenterDto datacenter, final String ipFrom,
         final String ipTo, final HypervisorType hypervisorType, final String user,
         final String password);
@@ -170,6 +173,7 @@ public interface InfrastructureClient
      * @param options Optional query params.
      * @return The physical machine list.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     MachinesDto discoverMultipleMachines(final DatacenterDto datacenter, final String ipFrom,
         final String ipTo, final HypervisorType hypervisorType, final String user,
         final String password, final MachineOptions options);

@@ -35,13 +35,13 @@ import org.testng.annotations.Test;
 import com.google.common.base.Predicates;
 
 /**
- * Live tests for the {@link ListPrivilegesImpl} strategy.
+ * Live tests for the {@link ListPropertiesImpl} strategy.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class ListPropertiesTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
+public class ListPropertiesImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
 {
     private ListPropertiesImpl strategy;
 

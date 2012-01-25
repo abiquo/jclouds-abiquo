@@ -464,6 +464,7 @@ public interface CloudClient
      * @return The created volume.
      */
     @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     VolumeManagementDto createVolume(VirtualDatacenterDto virtualDatacenter,
         VolumeManagementDto volume);
 

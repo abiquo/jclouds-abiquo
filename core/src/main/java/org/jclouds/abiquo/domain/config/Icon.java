@@ -47,4 +47,28 @@ public class Icon extends DomainWrapper<IconDto>
 
     // Delegate methods
 
+    public Integer getId()
+    {
+        return target.getId();
+    }
+
+    public String getName()
+    {
+        return target.getName();
+    }
+
+    public String getPath()
+    {
+        return target.getPath();
+    }
+
+    public void setName(final String name)
+    {
+        target.setName(name);
+    }
+
+    public void setPath(final String path)
+    {
+        target.setPath(path);
+    }
 }
