@@ -50,7 +50,6 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
 
     public void testUpdate()
     {
-        // Create a new datacenter
         env.datacenter.setLocation("New York");
         env.datacenter.update();
 
