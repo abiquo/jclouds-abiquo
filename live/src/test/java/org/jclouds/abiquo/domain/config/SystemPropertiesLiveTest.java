@@ -21,12 +21,9 @@ package org.jclouds.abiquo.domain.config;
 
 import static org.testng.Assert.assertEquals;
 
-import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
-
-import com.abiquo.server.core.config.SystemPropertyDto;
 
 /**
  * Live integration tests for the {@link User} domain class.
@@ -40,18 +37,19 @@ public class SystemPropertiesLiveTest extends BaseAbiquoClientLiveTest<CloudTest
     public void testUpdate()
     {
         SystemProperty prop =
-            DomainWrapper
-                .wrap(context, SystemProperty.class, env.configClient.getSystemProperty(5));
+            env.administrationService.getSystemProperty("client.dashboard.showStartUpAlert");
 
+        String value = prop.getValue();
         prop.setValue("0");
         prop.update();
 
         // Recover the updated datacenter
-        SystemPropertyDto updated = env.configClient.getSystemProperty(5);
+        SystemProperty updated =
+            env.administrationService.getSystemProperty("client.dashboard.showStartUpAlert");
 
         assertEquals(updated.getValue(), "0");
 
-        prop.setValue("1");
+        prop.setValue(value);
         prop.update();
     }
 }

@@ -57,11 +57,6 @@ public class SystemProperty extends DomainWrapper<SystemPropertyDto>
 
     // Delegate methods
 
-    public Integer getId()
-    {
-        return target.getId();
-    }
-
     public String getName()
     {
         return target.getName();
@@ -80,8 +75,7 @@ public class SystemProperty extends DomainWrapper<SystemPropertyDto>
     @Override
     public String toString()
     {
-        return "SystemPorperty [getId()=" + getId() + ", getName()=" + getName() + ", getValue()="
-            + getValue() + "]";
+        return "SystemPorperty [getName()=" + getName() + ", getValue()=" + getValue() + "]";
     }
 
 }

@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.features.services;
 
+import java.util.List;
+
 import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
@@ -64,6 +66,11 @@ public interface AdministrationService
      * Get the datacenter with the given id.
      */
     Datacenter getDatacenter(final Integer datacenterId);
+
+    /**
+     * Get the list of datacenters with the given ids.
+     */
+    Iterable<Datacenter> getDatacenters(final List<Integer> datacenterIds);
 
     /*********************** Machine ***********************/
 
@@ -203,17 +210,12 @@ public interface AdministrationService
     /**
      * Get the system property with the give name or <code>null</code> if none is found.
      */
-    SystemProperty findSystemProperty(String name);
+    SystemProperty getSystemProperty(String name);
 
     /**
      * Get the list of system properties with options.
      */
     Iterable<SystemProperty> listSystemProperties(String component);
-
-    /**
-     * Get the system property with the given id.
-     */
-    SystemProperty getSystemProperty(final Integer roleId);
 
     /*********************** Icon ***********************/
 

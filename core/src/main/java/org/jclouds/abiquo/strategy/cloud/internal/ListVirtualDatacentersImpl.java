@@ -126,7 +126,7 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
                 {
                     return context.getAsyncApi().getCloudClient().getVirtualDatacenter(input);
                 }
-            }, userExecutor, maxTime, logger, "getting virtual machines");
+            }, userExecutor, maxTime, logger, "getting virtual datacenters");
 
         return DomainWrapper.wrap(context, VirtualDatacenter.class, Lists.newArrayList(vdcs));
     }

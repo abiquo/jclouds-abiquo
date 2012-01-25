@@ -22,6 +22,8 @@ package org.jclouds.abiquo.internal;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -49,7 +51,6 @@ import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 
-import com.abiquo.server.core.config.SystemPropertyDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
@@ -139,6 +140,12 @@ public class BaseAdministrationService implements AdministrationService
     public Datacenter findDatacenter(final Predicate<Datacenter> filter)
     {
         return Iterables.getFirst(listDatacenters(filter), null);
+    }
+
+    @Override
+    public Iterable<Datacenter> getDatacenters(final List<Integer> datacenterIds)
+    {
+        return listDatacenters.execute(datacenterIds);
     }
 
     /*********************** Machine ***********************/
@@ -306,7 +313,7 @@ public class BaseAdministrationService implements AdministrationService
     }
 
     @Override
-    public SystemProperty findSystemProperty(final String name)
+    public SystemProperty getSystemProperty(final String name)
     {
         PropertyOptions options = PropertyOptions.builder().name(name).build();
         return Iterables.getFirst(listProperties.execute(options), null);
@@ -317,14 +324,6 @@ public class BaseAdministrationService implements AdministrationService
     {
         PropertyOptions options = PropertyOptions.builder().component(component).build();
         return listProperties.execute(options);
-    }
-
-    @Override
-    public SystemProperty getSystemProperty(final Integer propertyId)
-    {
-        SystemPropertyDto property =
-            context.getApi().getConfigClient().getSystemProperty(propertyId);
-        return wrap(context, SystemProperty.class, property);
     }
 
     @Override

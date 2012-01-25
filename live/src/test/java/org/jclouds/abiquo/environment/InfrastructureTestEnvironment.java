@@ -46,6 +46,7 @@ import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.features.services.AdministrationService;
+import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
@@ -78,6 +79,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     public AdminClient adminClient;
 
     public ConfigClient configClient;
+
+    public AbiquoContext plainUserContext;
 
     // Resources
 
@@ -221,12 +224,12 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     private void createUser()
     {
-        Role role = administrationService.listRoles().iterator().next();
+        Role role = administrationService.findRole(RolePredicates.name("ENTERPRISE_ADMIN"));
+
         user =
             User.builder(context, enterprise, role).name(randomName(), randomName()).nick(
                 randomName()).authType("ABIQUO").description(randomName()).email(
-                randomName() + "@abiquo.com").locale("en_US").password(
-                "c69a39bd64ffb77ea7ee3369dce742f3").build();
+                randomName() + "@abiquo.com").locale("en_US").password("user").build();
 
         user.save();
         assertNotNull(user.getId());

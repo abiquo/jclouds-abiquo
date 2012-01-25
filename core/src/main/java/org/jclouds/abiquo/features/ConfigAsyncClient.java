@@ -134,14 +134,6 @@ public interface ConfigAsyncClient
         @BinderParam(AppendOptionsToPath.class) PropertyOptions options);
 
     /**
-     * @see ConfigClient#getSystemProperty(Integer)
-     */
-    @GET
-    @Path("/properties/{property}")
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<SystemPropertyDto> getSystemProperty(@PathParam("property") Integer propertyId);
-
-    /**
      * @see ConfigClient#updateSystemProperty(VirtualDatacenterDto)
      */
     @PUT

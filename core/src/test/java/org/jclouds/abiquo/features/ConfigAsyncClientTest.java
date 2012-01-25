@@ -190,22 +190,6 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         checkFilters(request);
     }
 
-    public void testGetProperty() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method = ConfigAsyncClient.class.getMethod("getSystemProperty", Integer.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
-
-        assertRequestLineEquals(request, "GET http://localhost/api/config/properties/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
-
-        checkFilters(request);
-    }
-
     public void testUpdateSystemProperty() throws SecurityException, NoSuchMethodException,
         IOException
     {

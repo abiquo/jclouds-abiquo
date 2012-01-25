@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.strategy.infrastructure;
 
+import java.util.List;
+
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.strategy.ListRootEntities;
 import org.jclouds.abiquo.strategy.infrastructure.internal.ListDatacentersImpl;
@@ -33,5 +35,5 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(ListDatacentersImpl.class)
 public interface ListDatacenters extends ListRootEntities<Datacenter>
 {
-
+    Iterable<Datacenter> execute(List<Integer> datacenterIds);
 }

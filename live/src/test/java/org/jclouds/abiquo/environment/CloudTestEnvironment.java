@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.environment;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
@@ -29,8 +30,10 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -73,9 +76,6 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     public Enterprise defaultEnterprise;
 
-    // Login with created user
-    AbiquoContext enterpriseContext;
-
     public CloudTestEnvironment(final AbiquoContext context)
     {
         super(context);
@@ -88,6 +88,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         // Create base infrastructure
         createLicense();
         super.setup();
+        createUserContext();
         findDefaultEnterprise();
         createVirtualDatacenter();
         createVirtualAppliance();
@@ -98,6 +99,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     @Override
     public void tearDown() throws Exception
     {
+        closeUserContext();
         deleteVirtualMachine();
         deleteVirtualAppliance();
         deleteVirtualDatacenter();
@@ -107,6 +109,16 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     }
 
     // Setup
+
+    private void createUserContext()
+    {
+        String endpoint =
+            checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
+
+        Properties props = new Properties();
+        props.put("abiquo.endpoint", endpoint);
+        plainUserContext = new AbiquoContextFactory().createContext(user.getNick(), "user", props);
+    }
 
     private void createLicense() throws IOException
     {
@@ -180,6 +192,11 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     }
 
     // Tear down
+
+    private void closeUserContext()
+    {
+        plainUserContext.close();
+    }
 
     protected void deleteVirtualDatacenter()
     {

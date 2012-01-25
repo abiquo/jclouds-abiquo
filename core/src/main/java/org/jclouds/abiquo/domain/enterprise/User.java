@@ -30,6 +30,7 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.RoleDto;
@@ -116,11 +117,11 @@ public class User extends DomainWrapper<UserDto>
         target = context.getApi().getEnterpriseClient().updateUser(target);
     }
 
-    public Iterable<VirtualDatacenter> getAvailableVirtualDatacenters()
+    public List<VirtualDatacenter> getAvailableVirtualDatacenters()
     {
         List<Integer> ids = extractAvailableDatacenters();
 
-        return context.getCloudService().getVirtualDatacenters(ids);
+        return Lists.newArrayList(context.getCloudService().getVirtualDatacenters(ids));
     }
 
     public void restrictVirtualDatacenter(final VirtualDatacenter vdc)
@@ -144,6 +145,18 @@ public class User extends DomainWrapper<UserDto>
         setAvailableVirtualDatacenters(ids);
 
         update();
+    }
+
+    // Parent access
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise">
+     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise</a>
+     */
+    public Enterprise getEnterprise()
+    {
+        Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
+        return context.getAdministrationService().getEnterprise(enterpriseId);
     }
 
     // Children access

@@ -94,22 +94,15 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
         tearDownLimits();
     }
 
-    public void testAllowTwiceFails()
+    public void testAllowTwiceWorks()
     {
         tearDownLimits();
 
         Limits limits = env.enterprise.allowDatacenter(env.datacenter);
         assertNotNull(limits);
-
-        try
-        {
-            env.enterprise.allowDatacenter(env.datacenter);
-        }
-        catch (AbiquoException ex)
-        {
-            assertHasError(ex, Status.CONFLICT, "LIMIT-7");
-            tearDownLimits();
-        }
+        limits = env.enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(limits);
+        tearDownLimits();
     }
 
     public void testDeleteTwiceWorks()

@@ -19,18 +19,24 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.size;
+import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter.Builder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 
 /**
@@ -70,6 +76,44 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         assertEquals(virtualDatacenters.size(), 2);
         assertEquals(virtualDatacenters.get(0).getName(), virtualDatacenters.get(1).getName());
         repeated.delete();
+    }
+
+    public void testCreateFromEnterprise()
+    {
+        // Datacenter must be allowed to enterprise
+        env.enterprise.allowDatacenter(env.datacenter);
+
+        Enterprise enterprise =
+            env.plainUserContext.getAdministrationService().getCurrentUserInfo().getEnterprise();
+        assertNotNull(enterprise);
+
+        List<Datacenter> datacenters = enterprise.listAllowedDatacenters();
+        assertNotNull(datacenters);
+        assertTrue(size(datacenters) > 0);
+
+        Datacenter datacenter = datacenters.get(0);
+        assertNotNull(datacenter);
+
+        List<HypervisorType> hypervisors = datacenter.getAvailableHypervisors();
+        assertNotNull(datacenters);
+        assertTrue(size(datacenters) > 0);
+
+        HypervisorType hypervisor = hypervisors.get(0);
+
+        PrivateNetwork network =
+            PrivateNetwork.builder(env.plainUserContext).name("DefaultNetwork").gateway(
+                "192.168.1.1").address("192.168.1.0").mask(24).build();
+
+        VirtualDatacenter virtualDatacenter =
+            VirtualDatacenter.builder(context, datacenters.get(0), enterprise).name(
+                PREFIX + "Plain Virtual Aloha").cpuCountLimits(18, 20).hdLimitsInMb(279172872,
+                279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480).storageLimits(289910292,
+                322122547).vlansLimits(1, 2).hypervisorType(hypervisor).network(network).build();
+
+        virtualDatacenter.save();
+        assertNotNull(virtualDatacenter.getId());
+
+        virtualDatacenter.delete();
     }
 
     public void testGetDefaultNetwork()

@@ -116,14 +116,6 @@ public interface ConfigClient
     SystemPropertiesDto listSystemProperties(PropertyOptions options);
 
     /**
-     * Get the given system property.
-     * 
-     * @param propertyId The id of the system property.
-     * @return The property or <code>null</code> if it does not exist.
-     */
-    SystemPropertyDto getSystemProperty(Integer propertyId);
-
-    /**
      * Updates a system property.
      * 
      * @param property The new attributes for the system property.
