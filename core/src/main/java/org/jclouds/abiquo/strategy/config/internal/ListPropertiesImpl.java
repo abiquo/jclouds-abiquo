@@ -25,22 +25,22 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.domain.config.License;
-import org.jclouds.abiquo.domain.config.options.LicenseOptions;
-import org.jclouds.abiquo.strategy.config.ListLicenses;
+import org.jclouds.abiquo.domain.config.SystemProperty;
+import org.jclouds.abiquo.domain.config.options.PropertyOptions;
+import org.jclouds.abiquo.strategy.config.ListProperties;
 
-import com.abiquo.server.core.config.LicensesDto;
+import com.abiquo.server.core.config.SystemPropertiesDto;
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
 
 /**
- * List licenses.
+ * List properties.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Singleton
-public class ListLicensesImpl implements ListLicenses
+public class ListPropertiesImpl implements ListProperties
 {
     // This strategy does not have still an Executor instance because the current methods call
     // single client methods
@@ -48,29 +48,29 @@ public class ListLicensesImpl implements ListLicenses
     protected final AbiquoContext context;
 
     @Inject
-    ListLicensesImpl(final AbiquoContext context)
+    ListPropertiesImpl(final AbiquoContext context)
     {
         this.context = context;
     }
 
     @Override
-    public Iterable<License> execute()
+    public Iterable<SystemProperty> execute()
     {
-        LicensesDto result = context.getApi().getConfigClient().listLicenses();
-        return wrap(context, License.class, result.getCollection());
+        SystemPropertiesDto result = context.getApi().getConfigClient().listSystemProperties();
+        return wrap(context, SystemProperty.class, result.getCollection());
     }
 
     @Override
-    public Iterable<License> execute(final LicenseOptions options)
-    {
-        LicensesDto result = context.getApi().getConfigClient().listLicenses(options);
-        return wrap(context, License.class, result.getCollection());
-    }
-
-    @Override
-    public Iterable<License> execute(final Predicate<License> selector)
+    public Iterable<SystemProperty> execute(final Predicate<SystemProperty> selector)
     {
         return filter(execute(), selector);
     }
 
+    @Override
+    public Iterable<SystemProperty> execute(final PropertyOptions options)
+    {
+        SystemPropertiesDto result =
+            context.getApi().getConfigClient().listSystemProperties(options);
+        return wrap(context, SystemProperty.class, result.getCollection());
+    }
 }

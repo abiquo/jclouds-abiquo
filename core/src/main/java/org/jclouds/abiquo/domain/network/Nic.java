@@ -45,6 +45,15 @@ public abstract class Nic extends DomainWrapper<IpPoolManagementDto>
 
     // Domain operations
 
+    /**
+     * @see <a href="http://community.abiquo.com/display/ABI20/NICs+Resource">
+     *      http://community.abiquo.com/display/ABI20/NICs+Resource</a>
+     */
+    public void save()
+    {
+
+    }
+
     public PublicNic toPublicNic()
     {
         checkNotNull(target.searchLink("publicnetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
@@ -61,7 +70,6 @@ public abstract class Nic extends DomainWrapper<IpPoolManagementDto>
 
     public ExternalNic toExternalNic()
     {
-        // FIXME Not supperted yet. Rel in API link is "publicnetwork" should be specialized.
         checkNotNull(target.searchLink("externalnetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
 
         return wrap(context, ExternalNic.class, target);

@@ -24,7 +24,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.annotation.Resource;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.logging.Logger;
 

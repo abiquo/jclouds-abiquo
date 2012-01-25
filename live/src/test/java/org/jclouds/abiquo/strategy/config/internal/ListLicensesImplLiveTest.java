@@ -25,6 +25,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.config.License;
+import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.config.LicensePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
@@ -57,14 +58,18 @@ public class ListLicensesImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTe
 
     public void testExecuteInactive()
     {
-        Iterable<License> licenses = strategy.execute(false);
+        LicenseOptions options = LicenseOptions.builder().inactive(true).build();
+
+        Iterable<License> licenses = strategy.execute(options);
         assertNotNull(licenses);
         assertTrue(size(licenses) == 1);
     }
 
     public void testExecuteActive()
     {
-        Iterable<License> licenses = strategy.execute(true);
+        LicenseOptions options = LicenseOptions.builder().active(true).build();
+
+        Iterable<License> licenses = strategy.execute(options);
         assertNotNull(licenses);
         assertTrue(size(licenses) == 1);
     }

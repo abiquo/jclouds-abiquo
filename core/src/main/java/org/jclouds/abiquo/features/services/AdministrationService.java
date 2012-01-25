@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features.services;
 
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
+import org.jclouds.abiquo.domain.config.SystemProperty;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.EnterpriseProperties;
 import org.jclouds.abiquo.domain.enterprise.Role;
@@ -179,4 +180,32 @@ public interface AdministrationService
      * Get the first license that matches the given filter or <code>null</code> if none is found.
      */
     License findLicense(final Predicate<License> filter);
+
+    /*********************** System Properties ***********************/
+
+    /**
+     * Get the list of system properties.
+     */
+    Iterable<SystemProperty> listSystemProperties();
+
+    /**
+     * Get the list of system properties matching the given filter.
+     */
+    Iterable<SystemProperty> listSystemProperties(final Predicate<SystemProperty> filter);
+
+    /**
+     * Get the first system property that matches the given filter or <code>null</code> if none is
+     * found.
+     */
+    SystemProperty findSystemProperty(final Predicate<SystemProperty> filter);
+
+    /**
+     * Get the list of system properties with options.
+     */
+    Iterable<SystemProperty> listSystemProperties(String component);
+
+    /**
+     * Get the system property with the given id.
+     */
+    SystemProperty getSystemProperty(final Integer roleId);
 }

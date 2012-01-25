@@ -23,13 +23,16 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.BindToPath;
+import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
+import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
@@ -41,6 +44,8 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
+import com.abiquo.server.core.config.SystemPropertiesDto;
+import com.abiquo.server.core.config.SystemPropertyDto;
 import com.abiquo.server.core.enterprise.PrivilegeDto;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -69,7 +74,7 @@ public interface ConfigAsyncClient
     ListenableFuture<LicensesDto> listLicenses();
 
     /**
-     * @see ConfigClient#listLicenses()
+     * @see ConfigClient#listLicenses(LicenseOptions)
      */
     @GET
     @Path("/licenses")
@@ -109,4 +114,36 @@ public interface ConfigAsyncClient
     @Path("/privileges/{privilege}")
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<PrivilegeDto> getPrivilege(@PathParam("privilege") Integer privilegeId);
+
+    /*********************** System Properties ***********************/
+
+    /**
+     * @see ConfigClient#listSystemProperties()
+     */
+    @GET
+    @Path("/properties")
+    ListenableFuture<SystemPropertiesDto> listSystemProperties();
+
+    /**
+     * @see ConfigClient#listSystemProperties(PropertyOptions)
+     */
+    @GET
+    @Path("/properties")
+    ListenableFuture<SystemPropertiesDto> listSystemProperties(
+        @BinderParam(AppendOptionsToPath.class) PropertyOptions options);
+
+    /**
+     * @see ConfigClient#getSystemProperty(Integer)
+     */
+    @GET
+    @Path("/properties/{property}")
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<SystemPropertyDto> getSystemProperty(@PathParam("property") Integer propertyId);
+
+    /**
+     * @see ConfigClient#updateSystemProperty(VirtualDatacenterDto)
+     */
+    @PUT
+    ListenableFuture<SystemPropertyDto> updateSystemProperty(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) SystemPropertyDto property);
 }

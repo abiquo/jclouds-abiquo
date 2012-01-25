@@ -27,6 +27,7 @@ import java.nio.charset.Charset;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.config.LicenseDto;
+import com.abiquo.server.core.config.SystemPropertyDto;
 import com.google.common.io.Resources;
 
 /**
@@ -54,6 +55,18 @@ public class ConfigResources
         return license;
     }
 
+    public static SystemPropertyDto propertyPut()
+    {
+        SystemPropertyDto property = new SystemPropertyDto();
+        property.setId(1);
+        property.setDescription("Time interval in seconds");
+        property.setValue("10");
+        property.setName("client.applibrary.ovfpackagesDownloadingProgressUpdateInterval");
+        property.addLink(new RESTLink("edit", "http://localhost/api/config/properties/1"));
+
+        return property;
+    }
+
     public static String licensePutPayload()
     {
         StringBuffer buffer = new StringBuffer();
@@ -66,13 +79,27 @@ public class ConfigResources
         return buffer.toString();
     }
 
-    public static String LicensePostPayload()
+    public static String licensePostPayload()
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<license>");
         buffer.append("<customerid>3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c</customerid>");
         buffer.append("<code>" + readLicense("license/expired") + "</code>");
         buffer.append("</license>");
+        return buffer.toString();
+    }
+
+    public static String propertyPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<property>");
+        buffer.append(link("/config/properties/1", "edit"));
+        buffer.append("<description>Time interval in seconds</description>");
+        buffer.append("<id>1</id>");
+        buffer
+            .append("<name>client.applibrary.ovfpackagesDownloadingProgressUpdateInterval</name>");
+        buffer.append("<value>10</value>");
+        buffer.append("</property>");
         return buffer.toString();
     }
 

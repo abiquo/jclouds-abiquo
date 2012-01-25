@@ -17,22 +17,36 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.strategy.config;
+package org.jclouds.abiquo.predicates.config;
 
-import org.jclouds.abiquo.domain.config.License;
-import org.jclouds.abiquo.domain.config.options.LicenseOptions;
-import org.jclouds.abiquo.strategy.ListRootEntities;
-import org.jclouds.abiquo.strategy.config.internal.ListLicensesImpl;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import com.google.inject.ImplementedBy;
+import java.util.Arrays;
+
+import org.jclouds.abiquo.domain.config.SystemProperty;
+
+import com.google.common.base.Predicate;
 
 /**
- * List licenses.
+ * Container for {@link SystemProperty} filters.
  * 
  * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-@ImplementedBy(ListLicensesImpl.class)
-public interface ListLicenses extends ListRootEntities<License>
+public class SystemPropertyPredicates
 {
-    public Iterable<License> execute(LicenseOptions options);
+    public static Predicate<SystemProperty> name(final String... names)
+    {
+        checkNotNull(names, "names must be defined");
+
+        return new Predicate<SystemProperty>()
+        {
+            @Override
+            public boolean apply(final SystemProperty property)
+            {
+                return Arrays.asList(names).contains(property.getName());
+            }
+        };
+    }
+
 }

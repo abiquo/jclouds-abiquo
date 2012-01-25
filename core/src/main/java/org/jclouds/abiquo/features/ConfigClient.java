@@ -22,11 +22,14 @@ package org.jclouds.abiquo.features;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
+import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
+import com.abiquo.server.core.config.SystemPropertiesDto;
+import com.abiquo.server.core.config.SystemPropertyDto;
 import com.abiquo.server.core.enterprise.PrivilegeDto;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
 
@@ -94,4 +97,36 @@ public interface ConfigClient
      */
     PrivilegeDto getPrivilege(Integer privilegeId);
 
+    /*********************** System Properties ***********************/
+
+    /**
+     * List all system properties.
+     * 
+     * @return The list of properties.
+     */
+    SystemPropertiesDto listSystemProperties();
+
+    /**
+     * List properties with options.
+     * 
+     * @param options Optional query params.
+     * @return The list of system properties.
+     */
+    SystemPropertiesDto listSystemProperties(PropertyOptions options);
+
+    /**
+     * Get the given system property.
+     * 
+     * @param propertyId The id of the system property.
+     * @return The property or <code>null</code> if it does not exist.
+     */
+    SystemPropertyDto getSystemProperty(Integer propertyId);
+
+    /**
+     * Updates a system property.
+     * 
+     * @param property The new attributes for the system property.
+     * @return The updated system property.
+     */
+    SystemPropertyDto updateSystemProperty(SystemPropertyDto property);
 }

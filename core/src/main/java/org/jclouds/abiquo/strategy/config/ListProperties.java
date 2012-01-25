@@ -19,20 +19,20 @@
 
 package org.jclouds.abiquo.strategy.config;
 
-import org.jclouds.abiquo.domain.config.License;
-import org.jclouds.abiquo.domain.config.options.LicenseOptions;
+import org.jclouds.abiquo.domain.config.SystemProperty;
+import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.strategy.ListRootEntities;
-import org.jclouds.abiquo.strategy.config.internal.ListLicensesImpl;
+import org.jclouds.abiquo.strategy.config.internal.ListPropertiesImpl;
 
 import com.google.inject.ImplementedBy;
 
 /**
- * List licenses.
+ * List system properties.
  * 
- * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-@ImplementedBy(ListLicensesImpl.class)
-public interface ListLicenses extends ListRootEntities<License>
+@ImplementedBy(ListPropertiesImpl.class)
+public interface ListProperties extends ListRootEntities<SystemProperty>
 {
-    public Iterable<License> execute(LicenseOptions options);
+    public Iterable<SystemProperty> execute(PropertyOptions options);
 }

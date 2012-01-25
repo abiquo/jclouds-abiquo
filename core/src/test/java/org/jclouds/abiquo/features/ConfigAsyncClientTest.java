@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.ConfigResources;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
+import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -34,6 +35,7 @@ import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.config.LicenseDto;
+import com.abiquo.server.core.config.SystemPropertyDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -63,7 +65,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         checkFilters(request);
     }
 
-    public void testListLicenseOptions() throws SecurityException, NoSuchMethodException,
+    public void testListLicenseWithOptions() throws SecurityException, NoSuchMethodException,
         IOException
     {
         Method method = ConfigAsyncClient.class.getMethod("listLicenses", LicenseOptions.class);
@@ -90,7 +92,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
         assertRequestLineEquals(request, "POST http://localhost/api/config/licenses HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(ConfigResources.LicensePostPayload()),
+        assertPayloadEquals(request, withHeader(ConfigResources.licensePostPayload()),
             "application/xml", false);
 
         assertSaxResponseParserClassEquals(method, null);
@@ -146,6 +148,80 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    /*********************** System Properties ***********************/
+
+    public void testListProperties() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("listSystemProperties");
+        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/properties HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListPropertiesWithOptions() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            ConfigAsyncClient.class.getMethod("listSystemProperties", PropertyOptions.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request =
+            processor.createRequest(method, PropertyOptions.builder().component("client").build());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/config/properties?component=client HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetProperty() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("getSystemProperty", Integer.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/properties/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateSystemProperty() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            ConfigAsyncClient.class.getMethod("updateSystemProperty", SystemPropertyDto.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request =
+            processor.createRequest(method, ConfigResources.propertyPut());
+
+        assertRequestLineEquals(request, "PUT http://localhost/api/config/properties/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(ConfigResources.propertyPutPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }

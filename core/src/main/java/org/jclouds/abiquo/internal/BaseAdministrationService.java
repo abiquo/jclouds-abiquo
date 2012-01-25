@@ -28,6 +28,9 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
+import org.jclouds.abiquo.domain.config.SystemProperty;
+import org.jclouds.abiquo.domain.config.options.LicenseOptions;
+import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.EnterpriseProperties;
 import org.jclouds.abiquo.domain.enterprise.Role;
@@ -39,10 +42,12 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
 import org.jclouds.abiquo.strategy.config.ListLicenses;
 import org.jclouds.abiquo.strategy.config.ListPrivileges;
+import org.jclouds.abiquo.strategy.config.ListProperties;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 
+import com.abiquo.server.core.config.SystemPropertyDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
@@ -82,11 +87,15 @@ public class BaseAdministrationService implements AdministrationService
     @VisibleForTesting
     protected final ListPrivileges listPrivileges;
 
+    @VisibleForTesting
+    protected final ListProperties listProperties;
+
     @Inject
     protected BaseAdministrationService(final AbiquoContext context,
         final ListDatacenters listDatacenters, final ListMachines listMachines,
         final ListEnterprises listEnterprises, final ListRoles listRoles,
-        final ListLicenses listLicenses, final ListPrivileges listPrivileges)
+        final ListLicenses listLicenses, final ListPrivileges listPrivileges,
+        final ListProperties listProperties)
     {
         this.context = checkNotNull(context, "context");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
@@ -95,6 +104,7 @@ public class BaseAdministrationService implements AdministrationService
         this.listRoles = checkNotNull(listRoles, "listRoles");
         this.listLicenses = checkNotNull(listLicenses, "listLicenses");
         this.listPrivileges = checkNotNull(listPrivileges, "listPrivileges");
+        this.listProperties = checkNotNull(listProperties, "listProperties");
     }
 
     /*********************** Datacenter ********************** */
@@ -134,13 +144,13 @@ public class BaseAdministrationService implements AdministrationService
     }
 
     @Override
-    public Iterable<Machine> listMachines(Predicate<Machine> filter)
+    public Iterable<Machine> listMachines(final Predicate<Machine> filter)
     {
         return listMachines.execute(filter);
     }
 
     @Override
-    public Machine findMachine(Predicate<Machine> filter)
+    public Machine findMachine(final Predicate<Machine> filter)
     {
         return Iterables.getFirst(listMachines(filter), null);
     }
@@ -253,7 +263,8 @@ public class BaseAdministrationService implements AdministrationService
     @Override
     public Iterable<License> listLicenses(final boolean active)
     {
-        return listLicenses.execute(active);
+        LicenseOptions options = LicenseOptions.builder().active(active).build();
+        return listLicenses.execute(options);
     }
 
     @Override
@@ -266,5 +277,40 @@ public class BaseAdministrationService implements AdministrationService
     public License findLicense(final Predicate<License> filter)
     {
         return Iterables.getFirst(listLicenses(filter), null);
+    }
+
+    /*********************** System Properties ***********************/
+
+    @Override
+    public Iterable<SystemProperty> listSystemProperties()
+    {
+        return listProperties.execute();
+    }
+
+    @Override
+    public Iterable<SystemProperty> listSystemProperties(final Predicate<SystemProperty> filter)
+    {
+        return listProperties.execute(filter);
+    }
+
+    @Override
+    public SystemProperty findSystemProperty(final Predicate<SystemProperty> filter)
+    {
+        return Iterables.getFirst(listSystemProperties(filter), null);
+    }
+
+    @Override
+    public Iterable<SystemProperty> listSystemProperties(final String component)
+    {
+        PropertyOptions options = PropertyOptions.builder().component(component).build();
+        return listProperties.execute(options);
+    }
+
+    @Override
+    public SystemProperty getSystemProperty(final Integer propertyId)
+    {
+        SystemPropertyDto property =
+            context.getApi().getConfigClient().getSystemProperty(propertyId);
+        return wrap(context, SystemProperty.class, property);
     }
 }
