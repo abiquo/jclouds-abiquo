@@ -65,8 +65,8 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
         props.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
 
         context =
-            new AbiquoContextFactory().createContext(identity, credential, ImmutableSet
-                .<Module> of(new SLF4JLoggingModule()), props);
+            new AbiquoContextFactory().createContext(identity, credential,
+                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         env = new CloudTestEnvironment(context);
         env.setup();
@@ -83,7 +83,7 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
         {
             // Wait a bit before closing context, to avoid executor shutdown while
             // there are still open threads
-            Thread.sleep(500L);
+            Thread.sleep(1000L);
             context.close();
         }
     }
