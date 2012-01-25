@@ -36,7 +36,7 @@ import org.jclouds.rest.Binder;
  * @author Francesc Montserrat
  * @author Ignasi Barrera
  */
-// This class cannot be singleton. uriBuilder is not threadsave!
+// This class cannot be singleton. uriBuilder is not thread-save!
 public class AppendOptionsToPath implements Binder
 {
     /** The configured URI builder. */
