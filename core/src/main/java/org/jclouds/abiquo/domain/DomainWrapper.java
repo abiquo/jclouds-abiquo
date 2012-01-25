@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
 
 import java.lang.reflect.Constructor;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
@@ -190,6 +191,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         RESTLink taskLink = acceptedRequest.getLinks().get(0);
         checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
 
+        // This will return null on untrackable tasks
         TaskDto task = context.getApi().getTaskClient().getTask(taskLink);
         return wrap(context, AsyncTask.class, task);
     }
@@ -202,15 +204,19 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      */
     protected AsyncTask[] getTasks(final AcceptedRequestDto<String> acceptedRequest)
     {
-        AsyncTask[] tasks = new AsyncTask[acceptedRequest.getLinks().size()];
+        List<AsyncTask> tasks = new ArrayList<AsyncTask>();
 
-        for (int i = 0; i < acceptedRequest.getLinks().size(); i++)
+        for (RESTLink link : acceptedRequest.getLinks())
         {
-            RESTLink link = acceptedRequest.getLinks().get(i);
+            // This will return null on untrackable tasks
             TaskDto task = context.getApi().getTaskClient().getTask(link);
-            tasks[i] = wrap(context, AsyncTask.class, task);
+            if (task != null)
+            {
+                tasks.add(wrap(context, AsyncTask.class, task));
+            }
         }
 
-        return tasks;
+        AsyncTask[] taskArr = new AsyncTask[tasks.size()];
+        return tasks.toArray(taskArr);
     }
 }

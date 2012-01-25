@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.CloudResources;
+import org.jclouds.abiquo.functions.ReturnNullOn303;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
@@ -58,9 +59,10 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks/169f1877-5f17-4f62-9563-974001295c54 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
+
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOn303.class);
 
         checkFilters(request);
     }
@@ -77,6 +79,7 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
+
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
