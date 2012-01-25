@@ -427,12 +427,24 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Retrieve the the list of hypervisor types in the datacenter.
      */
-    public List<HypervisorType> getAvailableHypervisors()
+    public List<HypervisorType> listAvailableHypervisors()
     {
         HypervisorTypesDto types =
             context.getApi().getInfrastructureClient().getHypervisorTypes(target);
 
         return getHypervisorTypes(types);
+    }
+
+    @EnterpriseEdition
+    public List<HypervisorType> listAvailableHypervisors(final Predicate<HypervisorType> filter)
+    {
+        return Lists.newLinkedList(filter(listAvailableHypervisors(), filter));
+    }
+
+    @EnterpriseEdition
+    public HypervisorType findHypervisor(final Predicate<HypervisorType> filter)
+    {
+        return Iterables.getFirst(filter(listAvailableHypervisors(), filter), null);
     }
 
     private List<HypervisorType> getHypervisorTypes(final HypervisorTypesDto dtos)
