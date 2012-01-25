@@ -26,6 +26,7 @@ import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
 import com.abiquo.server.core.config.SystemPropertiesDto;
@@ -129,4 +130,13 @@ public interface ConfigClient
      * @return The updated system property.
      */
     SystemPropertyDto updateSystemProperty(SystemPropertyDto property);
+
+    /*********************** Icons ***********************/
+
+    /**
+     * List all icons.
+     * 
+     * @return The list of icons.
+     */
+    IconsDto listIcons();
 }

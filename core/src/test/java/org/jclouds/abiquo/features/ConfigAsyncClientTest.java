@@ -226,6 +226,24 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         checkFilters(request);
     }
 
+    /*********************** Icon ***********************/
+
+    public void testListIcons() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("listIcons");
+        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/icons HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     @Override
     protected TypeLiteral<RestAnnotationProcessor<ConfigAsyncClient>> createTypeLiteral()
     {

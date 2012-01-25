@@ -26,6 +26,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.config.SystemProperty;
@@ -40,6 +41,7 @@ import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
+import org.jclouds.abiquo.strategy.config.ListIcons;
 import org.jclouds.abiquo.strategy.config.ListLicenses;
 import org.jclouds.abiquo.strategy.config.ListPrivileges;
 import org.jclouds.abiquo.strategy.config.ListProperties;
@@ -90,12 +92,15 @@ public class BaseAdministrationService implements AdministrationService
     @VisibleForTesting
     protected final ListProperties listProperties;
 
+    @VisibleForTesting
+    protected final ListIcons listIcons;
+
     @Inject
     protected BaseAdministrationService(final AbiquoContext context,
         final ListDatacenters listDatacenters, final ListMachines listMachines,
         final ListEnterprises listEnterprises, final ListRoles listRoles,
         final ListLicenses listLicenses, final ListPrivileges listPrivileges,
-        final ListProperties listProperties)
+        final ListProperties listProperties, final ListIcons listIcons)
     {
         this.context = checkNotNull(context, "context");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
@@ -105,6 +110,7 @@ public class BaseAdministrationService implements AdministrationService
         this.listLicenses = checkNotNull(listLicenses, "listLicenses");
         this.listPrivileges = checkNotNull(listPrivileges, "listPrivileges");
         this.listProperties = checkNotNull(listProperties, "listProperties");
+        this.listIcons = checkNotNull(listIcons, "listIcons");
     }
 
     /*********************** Datacenter ********************** */
@@ -319,5 +325,23 @@ public class BaseAdministrationService implements AdministrationService
         SystemPropertyDto property =
             context.getApi().getConfigClient().getSystemProperty(propertyId);
         return wrap(context, SystemProperty.class, property);
+    }
+
+    @Override
+    public Iterable<Icon> listIcons()
+    {
+        return listIcons.execute();
+    }
+
+    @Override
+    public Iterable<Icon> listIcons(final Predicate<Icon> filter)
+    {
+        return listIcons.execute(filter);
+    }
+
+    @Override
+    public Icon findIcon(final Predicate<Icon> filter)
+    {
+        return Iterables.getFirst(listIcons(filter), null);
     }
 }

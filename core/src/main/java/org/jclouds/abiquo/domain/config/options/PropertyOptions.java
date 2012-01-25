@@ -75,7 +75,7 @@ public class PropertyOptions extends QueryOptions
 
             if (name != null)
             {
-                options.map.put("name", component.toString());
+                options.map.put("name", name.toString());
             }
             return options;
         }

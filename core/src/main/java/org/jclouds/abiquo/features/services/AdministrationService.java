@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.features.services;
 
+import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.config.SystemProperty;
@@ -213,4 +214,21 @@ public interface AdministrationService
      * Get the system property with the given id.
      */
     SystemProperty getSystemProperty(final Integer roleId);
+
+    /*********************** Icon ***********************/
+
+    /**
+     * Get the list of icons.
+     */
+    Iterable<Icon> listIcons();
+
+    /**
+     * Get the list of icons matching the given filter.
+     */
+    Iterable<Icon> listIcons(final Predicate<Icon> filter);
+
+    /**
+     * Get the first icon that matches the given filter or <code>null</code> if none is found.
+     */
+    Icon findIcon(final Predicate<Icon> filter);
 }

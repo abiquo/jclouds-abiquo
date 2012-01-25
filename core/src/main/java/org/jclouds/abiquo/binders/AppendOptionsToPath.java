@@ -23,7 +23,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.core.UriBuilder;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
@@ -37,7 +36,7 @@ import org.jclouds.rest.Binder;
  * @author Francesc Montserrat
  * @author Ignasi Barrera
  */
-@Singleton
+// This class cannot be singleton. uriBuilder is not threadsave!
 public class AppendOptionsToPath implements Binder
 {
     /** The configured URI builder. */
@@ -50,7 +49,7 @@ public class AppendOptionsToPath implements Binder
     }
 
     @Override
-    public synchronized <R extends HttpRequest> R bindToRequest(final R request, final Object input)
+    public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
         checkArgument(checkNotNull(input, "input") instanceof QueryOptions,
             "this binder is only valid for QueryOptions objects");

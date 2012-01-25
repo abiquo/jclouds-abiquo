@@ -21,7 +21,6 @@ package org.jclouds.abiquo.domain.config;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.server.core.config.SystemPropertyDto;
 
@@ -30,8 +29,10 @@ import com.abiquo.server.core.config.SystemPropertyDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
+ * @see <a href="http://community.abiquo.com/display/ABI20/System+Property+resource">
+ *      http://community.abiquo.com/display/ABI20/System+Property+resource</a>
  */
-@EnterpriseEdition
+
 public class SystemProperty extends DomainWrapper<SystemPropertyDto>
 {
     /**

@@ -42,6 +42,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
 import com.abiquo.server.core.config.SystemPropertiesDto;
@@ -146,4 +147,13 @@ public interface ConfigAsyncClient
     @PUT
     ListenableFuture<SystemPropertyDto> updateSystemProperty(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) SystemPropertyDto property);
+
+    /*********************** Icon ***********************/
+
+    /**
+     * @see ConfigClient#listIcons()
+     */
+    @GET
+    @Path("/icons")
+    ListenableFuture<IconsDto> listIcons();
 }
