@@ -60,15 +60,28 @@ public class AbiquoErrorHandler implements HttpErrorHandler
         Exception exception = null;
         String message = null;
 
-        try
+        if (response.getPayload() != null)
         {
-            ErrorsDto errors = errorParser.apply(response);
-            message = errors.toString();
-            exception = new AbiquoException(fromStatusCode(response.getStatusCode()), errors);
+            try
+            {
+                ErrorsDto errors = errorParser.apply(response);
+                message = errors.toString();
+                exception = new AbiquoException(fromStatusCode(response.getStatusCode()), errors);
+            }
+            catch (Exception ex)
+            {
+                // If it is not an abiquo Exception (can not be unmarshalled), propagate a standard
+                // one
+                message =
+                    String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
+                        response.getStatusLine());
+                exception = new HttpResponseException(command, response, message);
+            }
         }
-        catch (Exception ex)
+        else
         {
-            // If it is not an abiquo Exception (can not be unmarshalled), propagate a standard one
+            // If it is not an abiquo Exception propagate a standard
+            // one
             message =
                 String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
                     response.getStatusLine());
