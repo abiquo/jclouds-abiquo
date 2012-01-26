@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.google.common.base.Predicate;
 
 /**
@@ -44,6 +45,20 @@ public class VirtualDatacenterPredicates
             public boolean apply(final VirtualDatacenter virtualDatacenter)
             {
                 return Arrays.asList(names).contains(virtualDatacenter.getName());
+            }
+        };
+    }
+
+    public static Predicate<VirtualDatacenter> tytpe(final HypervisorType... types)
+    {
+        checkNotNull(types, "types must be defined");
+
+        return new Predicate<VirtualDatacenter>()
+        {
+            @Override
+            public boolean apply(final VirtualDatacenter virtualDatacenter)
+            {
+                return Arrays.asList(types).contains(virtualDatacenter.getHypervisorType());
             }
         };
     }
