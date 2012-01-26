@@ -55,6 +55,7 @@ import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -266,4 +267,13 @@ public interface EnterpriseAsyncClient
     @GET
     ListenableFuture<VirtualMachinesDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /*********************** Machine ***********************/
+
+    /**
+     * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
+     */
+    @GET
+    ListenableFuture<MachinesDto> listReservedMachines(
+        @EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 }

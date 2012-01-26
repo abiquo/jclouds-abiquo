@@ -31,6 +31,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
@@ -42,6 +43,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
@@ -148,4 +150,32 @@ public interface ConfigAsyncClient
     @GET
     @Path("/icons")
     ListenableFuture<IconsDto> listIcons();
+
+    /**
+     * @see ConfigClient#listIcons(IconOptions)
+     */
+    @GET
+    @Path("/icons")
+    ListenableFuture<IconsDto> listIcons(@BinderParam(AppendOptionsToPath.class) IconOptions options);
+
+    /**
+     * @see ConfigClient#createIcon(IconDto)
+     */
+    @POST
+    @Path("/icons")
+    ListenableFuture<IconDto> createIcon(@BinderParam(BindToXMLPayload.class) IconDto icon);
+
+    /**
+     * @see ConfigClient#updateIcon(IconDto)
+     */
+    @PUT
+    ListenableFuture<IconDto> updateIcon(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) IconDto icon);
+
+    /**
+     * @see ConfigClient#deleteIcon(IconDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteIcon(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) IconDto icon);
 }

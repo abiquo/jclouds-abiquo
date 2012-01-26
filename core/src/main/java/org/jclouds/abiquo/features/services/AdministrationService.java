@@ -233,4 +233,14 @@ public interface AdministrationService
      * Get the first icon that matches the given filter or <code>null</code> if none is found.
      */
     Icon findIcon(final Predicate<Icon> filter);
+
+    /**
+     * Get list of icons by path.
+     */
+    Iterable<Icon> listIcons(String path);
+
+    /**
+     * Get the first icon that matches the given path or <code>null</code> if none is found.
+     */
+    Icon findIcon(String path);
 }

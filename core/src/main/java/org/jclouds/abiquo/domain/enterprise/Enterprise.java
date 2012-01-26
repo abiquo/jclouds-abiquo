@@ -30,6 +30,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -45,6 +46,7 @@ import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -285,6 +287,22 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter)
+    {
+        return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
+    }
+
+    public List<Machine> listReservedMachines()
+    {
+        MachinesDto machines = context.getApi().getEnterpriseClient().listReservedMachines(target);
+        return wrap(context, Machine.class, machines.getCollection());
+    }
+
+    public List<VirtualMachine> listReservedMachines(final Predicate<VirtualMachine> filter)
+    {
+        return Lists.newLinkedList(filter(listVirtualMachines(), filter));
+    }
+
+    public VirtualMachine findReservedMachine(final Predicate<VirtualMachine> filter)
     {
         return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
     }

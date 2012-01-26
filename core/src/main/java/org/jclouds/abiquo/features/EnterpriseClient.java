@@ -262,4 +262,12 @@ public interface EnterpriseClient
      * @return The list of virtual machines by the enterprise.
      */
     VirtualMachinesDto listVirtualMachines(EnterpriseDto enterprise);
+
+    /**
+     * List reserved machines for the enterprise
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of reserverd machines by the enterprise.
+     */
+    MachinesDto listReservedMachines(EnterpriseDto enterprise);
 }
