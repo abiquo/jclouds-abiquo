@@ -487,7 +487,7 @@ public interface InfrastructureAsyncClient
     /*********************** Network ***********************/
 
     /**
-     * @see InfrastructureClient#listNetwork(DatacenterDto)
+     * @see InfrastructureClient#listNetworks(DatacenterDto)
      */
     @EnterpriseEdition
     @GET

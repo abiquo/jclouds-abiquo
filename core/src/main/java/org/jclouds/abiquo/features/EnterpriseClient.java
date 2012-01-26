@@ -25,6 +25,7 @@ import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -35,6 +36,7 @@ import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 
 /**
  * Provides synchronous access to Abiquo Enterprise API.
@@ -239,4 +241,25 @@ public interface EnterpriseClient
      */
     @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
     void refreshTemplateRepository(Integer enterpriseId, Integer datacenterRepositoryId);
+
+    /*********************** Network ***********************/
+
+    /**
+     * List external networks of the enterprise
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of external networks created and assigned.
+     */
+    @EnterpriseEdition
+    VLANNetworksDto listExternalNetworks(EnterpriseDto enterprise);
+
+    /*********************** Virtual Machine ***********************/
+
+    /**
+     * List virtual machines for the enterprise
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of virtual machines by the enterprise.
+     */
+    VirtualMachinesDto listVirtualMachines(EnterpriseDto enterprise);
 }

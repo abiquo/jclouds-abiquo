@@ -49,6 +49,10 @@ public class EnterpriseResources
         enterprise
             .addLink(new RESTLink("limits", "http://localhost/api/admin/enterprises/1/limits"));
         enterprise.addLink(new RESTLink("users", "http://localhost/api/admin/enterprises/1/users"));
+        enterprise.addLink(new RESTLink("externalnetworks",
+            "http://localhost/api/admin/enterprises/1/action/externalnetworks"));
+        enterprise.addLink(new RESTLink("virtualmachines",
+            "http://localhost/api/admin/enterprises/1/action/virtualmachines"));
 
         return enterprise;
     }
@@ -84,6 +88,8 @@ public class EnterpriseResources
         buffer.append(link("/admin/enterprises/1", "edit"));
         buffer.append(link("/admin/enterprises/1/limits", "limits"));
         buffer.append(link("/admin/enterprises/1/users", "users"));
+        buffer.append(link("/admin/enterprises/1/action/externalnetworks", "externalnetworks"));
+        buffer.append(link("/admin/enterprises/1/action/virtualmachines", "virtualmachines"));
         buffer.append("<cpuHard>0</cpuHard>");
         buffer.append("<cpuSoft>0</cpuSoft>");
         buffer.append("<hdHard>0</hdHard>");

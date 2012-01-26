@@ -26,13 +26,18 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.network.ExternalNetwork;
+import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
 
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
+import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -40,6 +45,7 @@ import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -54,6 +60,8 @@ import com.google.common.collect.Lists;
  */
 public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 {
+    EnterpriseDto target;
+
     /** The default value for the reservation restricted flag. */
     private static final boolean DEFAULT_RESERVATION_RESTRICTED = false;
 
@@ -172,8 +180,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter)
     {
         VirtualMachineTemplatesDto dto =
-            context.getApi().getVirtualMachineTemplateClient()
-                .listVirtualMachineTemplates(target.getId(), datacenter.getId());
+            context.getApi().getVirtualMachineTemplateClient().listVirtualMachineTemplates(
+                target.getId(), datacenter.getId());
         return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
     }
 
@@ -214,20 +222,9 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         final Integer id)
     {
         VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient()
-                .getVirtualMachineTemplate(target.getId(), datacenter.getId(), id);
+            context.getApi().getVirtualMachineTemplateClient().getVirtualMachineTemplate(
+                target.getId(), datacenter.getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
-    }
-
-    /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository</a>
-     */
-    public void refreshTemplateRepository(final Datacenter datacenter)
-    {
-        context.getApi().getEnterpriseClient()
-            .refreshTemplateRepository(target.getId(), datacenter.getId());
     }
 
     public List<Datacenter> listAllowedDatacenters()
@@ -247,11 +244,69 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return Iterables.getFirst(filter(listAllowedDatacenters(), filter), null);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-Getthelistofexternalnetworks">
+     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-Getthelistofexternalnetworks</a>
+     */
+    @EnterpriseEdition
+    public List<ExternalNetwork> listExternalNetworks()
+    {
+        VLANNetworksDto networks =
+            context.getApi().getEnterpriseClient().listExternalNetworks(target);
+        return wrap(context, ExternalNetwork.class, networks.getCollection());
+    }
+
+    @EnterpriseEdition
+    public List<ExternalNetwork> listExternalNetworks(final Predicate<Network< ? >> filter)
+    {
+        return Lists.newLinkedList(filter(listExternalNetworks(), filter));
+    }
+
+    @EnterpriseEdition
+    public ExternalNetwork findExternalNetwork(final Predicate<Network< ? >> filter)
+    {
+        return Iterables.getFirst(filter(listExternalNetworks(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrievethelistofvirtualmachinesbyanEnterprise">
+     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrievethelistofvirtualmachinesbyanEnterprise</a>
+     */
+    public List<VirtualMachine> listVirtualMachines()
+    {
+        VirtualMachinesDto machines =
+            context.getApi().getEnterpriseClient().listVirtualMachines(target);
+        return wrap(context, VirtualMachine.class, machines.getCollection());
+    }
+
+    public List<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter)
+    {
+        return Lists.newLinkedList(filter(listVirtualMachines(), filter));
+    }
+
+    public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter)
+    {
+        return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
+    }
+
     // Actions
 
     /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository</a>
+     */
+    public void refreshTemplateRepository(final Datacenter datacenter)
+    {
+        context.getApi().getEnterpriseClient().refreshTemplateRepository(target.getId(),
+            datacenter.getId());
+    }
+
+    /**
      * Allows the given datacenter to be used by this enterprise. Creates a {@link DatacenterLimits}
-     * object.
+     * object if not exists.
      * 
      * @param datacenter The datacenter.
      * @return Default datacenter limits of the enterprise for the given datacenter.
@@ -270,8 +325,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
             // Save new limits
             dto =
-                context.getApi().getEnterpriseClient()
-                    .createLimits(target, datacenter.unwrap(), limits.unwrap());
+                context.getApi().getEnterpriseClient().createLimits(target, datacenter.unwrap(),
+                    limits.unwrap());
         }
         catch (AbiquoException ex)
         {
@@ -314,6 +369,23 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         }
     }
 
+    /**
+     * Disables chef in the enterprise.
+     * 
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DisableChefinanexistingEnterprise">
+     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DisableChefinanexistingEnterprise</a>
+     */
+    public void disableChef()
+    {
+        target.setChefClient(null);
+        target.setChefClientCertificate(null);
+        target.setChefURL(null);
+        target.setChefValidator(null);
+        target.setChefValidatorCertificate(null);
+        update();
+    }
+
     // Builder
 
     public static Builder builder(final AbiquoContext context)
@@ -333,6 +405,16 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         private Boolean isReservationRestricted = DEFAULT_RESERVATION_RESTRICTED;
 
+        private String chefURL;
+
+        private String chefClient;
+
+        private String chefValidator;
+
+        private String chefClientCertificate;
+
+        private String chefValidatorCertificate;
+
         public Builder(final AbiquoContext context)
         {
             super();
@@ -342,6 +424,36 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         public Builder isReservationRestricted(final boolean isReservationRestricted)
         {
             this.isReservationRestricted = isReservationRestricted;
+            return this;
+        }
+
+        public Builder chefURL(final String chefURL)
+        {
+            this.chefURL = chefURL;
+            return this;
+        }
+
+        public Builder chefClient(final String chefClient)
+        {
+            this.chefClient = chefClient;
+            return this;
+        }
+
+        public Builder chefClientCertificate(final String chefClientCertificate)
+        {
+            this.chefClientCertificate = chefClientCertificate;
+            return this;
+        }
+
+        public Builder chefValidator(final String chefValidator)
+        {
+            this.chefValidator = chefValidator;
+            return this;
+        }
+
+        public Builder chefValidatorCertificate(final String chefValidatorCertificate)
+        {
+            this.chefValidatorCertificate = chefValidatorCertificate;
             return this;
         }
 
@@ -370,21 +482,28 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
             dto.setPublicIPLimits(publicIpsSoft, publicIpsHard);
             dto.setRepositoryLimits(repositorySoft, repositoryHard);
             dto.setIsReservationRestricted(isReservationRestricted);
+            dto.setChefClient(chefClient);
+            dto.setChefClientCertificate(chefClientCertificate);
+            dto.setChefURL(chefURL);
+            dto.setChefValidator(chefValidator);
+            dto.setChefValidatorCertificate(chefValidatorCertificate);
 
             return new Enterprise(context, dto);
         }
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return Enterprise.builder(in.context).name(in.getName())
-                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
-                .storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+            return Enterprise.builder(in.context).name(in.getName()).ramLimits(
+                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
+                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
+                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
+                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
+                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
                 .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
-                .isReservationRestricted(in.getIsReservationRestricted());
+                .isReservationRestricted(in.getIsReservationRestricted()).chefClient(
+                    in.getChefClient()).chefClientCertificate(in.getChefClientCertificate())
+                .chefURL(in.getChefURL()).chefValidator(in.getChefValidator())
+                .chefValidatorCertificate(in.getChefValidatorCertificate());
         }
     }
 
@@ -440,11 +559,60 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         target.setRepositorySoft(repositorySoft);
     }
 
+    public String getChefClient()
+    {
+        return target.getChefClient();
+    }
+
+    public String getChefClientCertificate()
+    {
+        return target.getChefClientCertificate();
+    }
+
+    public String getChefURL()
+    {
+        return target.getChefURL();
+    }
+
+    public String getChefValidator()
+    {
+        return target.getChefValidator();
+    }
+
+    public String getChefValidatorCertificate()
+    {
+        return target.getChefValidatorCertificate();
+    }
+
+    public void setChefClient(final String chefClient)
+    {
+        target.setChefClient(chefClient);
+    }
+
+    public void setChefClientCertificate(final String chefClientCertificate)
+    {
+        target.setChefClientCertificate(chefClientCertificate);
+    }
+
+    public void setChefURL(final String chefURL)
+    {
+        target.setChefURL(chefURL);
+    }
+
+    public void setChefValidator(final String chefValidator)
+    {
+        target.setChefValidator(chefValidator);
+    }
+
+    public void setChefValidatorCertificate(final String chefValidatorCertificate)
+    {
+        target.setChefValidatorCertificate(chefValidatorCertificate);
+    }
+
     @Override
     public String toString()
     {
         return "Enterprise [id=" + getId() + ", isReservationRestricted="
             + getIsReservationRestricted() + ", name=" + getName() + "]";
     }
-
 }

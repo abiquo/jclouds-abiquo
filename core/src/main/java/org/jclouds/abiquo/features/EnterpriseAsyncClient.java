@@ -55,6 +55,7 @@ import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -246,4 +247,23 @@ public interface EnterpriseAsyncClient
     @Path("/enterprises/{enterprise}/datacenterrepositories/{datacenterrepository}/actions/refresh")
     ListenableFuture<Void> refreshTemplateRepository(@PathParam("enterprise") Integer enterpriseId,
         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
+
+    /*********************** External Network ***********************/
+
+    /**
+     * @see EnterpriseClient#listExternalNetworks(EnterpriseDto)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<VLANNetworksDto> listExternalNetworks(
+        @EndpointLink("externalnetworks") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /*********************** Virtual Machine ***********************/
+
+    /**
+     * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
+     */
+    @GET
+    ListenableFuture<VirtualMachinesDto> listVirtualMachines(
+        @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 }

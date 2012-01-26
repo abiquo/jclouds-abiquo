@@ -485,6 +485,8 @@ public interface InfrastructureClient
     @EnterpriseEdition
     StoragePoolDto getStoragePool(StorageDeviceDto storageDevice, String storagePoolId);
 
+    /*********************** Network ***********************/
+
     /**
      * List all public, external and not managed networks of a datacenter.
      * 
