@@ -62,8 +62,6 @@ import com.google.common.collect.Lists;
  */
 public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 {
-    EnterpriseDto target;
-
     /** The default value for the reservation restricted flag. */
     private static final boolean DEFAULT_RESERVATION_RESTRICTED = false;
 
@@ -182,8 +180,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter)
     {
         VirtualMachineTemplatesDto dto =
-            context.getApi().getVirtualMachineTemplateClient().listVirtualMachineTemplates(
-                target.getId(), datacenter.getId());
+            context.getApi().getVirtualMachineTemplateClient()
+                .listVirtualMachineTemplates(target.getId(), datacenter.getId());
         return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
     }
 
@@ -224,8 +222,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         final Integer id)
     {
         VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient().getVirtualMachineTemplate(
-                target.getId(), datacenter.getId(), id);
+            context.getApi().getVirtualMachineTemplateClient()
+                .getVirtualMachineTemplate(target.getId(), datacenter.getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
     }
 
@@ -318,8 +316,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public void refreshTemplateRepository(final Datacenter datacenter)
     {
-        context.getApi().getEnterpriseClient().refreshTemplateRepository(target.getId(),
-            datacenter.getId());
+        context.getApi().getEnterpriseClient()
+            .refreshTemplateRepository(target.getId(), datacenter.getId());
     }
 
     /**
@@ -343,8 +341,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
             // Save new limits
             dto =
-                context.getApi().getEnterpriseClient().createLimits(target, datacenter.unwrap(),
-                    limits.unwrap());
+                context.getApi().getEnterpriseClient()
+                    .createLimits(target, datacenter.unwrap(), limits.unwrap());
         }
         catch (AbiquoException ex)
         {
@@ -511,16 +509,18 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return Enterprise.builder(in.context).name(in.getName()).ramLimits(
-                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
-                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+            return Enterprise.builder(in.context).name(in.getName())
+                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
                 .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
-                .isReservationRestricted(in.getIsReservationRestricted()).chefClient(
-                    in.getChefClient()).chefClientCertificate(in.getChefClientCertificate())
-                .chefURL(in.getChefURL()).chefValidator(in.getChefValidator())
+                .isReservationRestricted(in.getIsReservationRestricted())
+                .chefClient(in.getChefClient())
+                .chefClientCertificate(in.getChefClientCertificate()).chefURL(in.getChefURL())
+                .chefValidator(in.getChefValidator())
                 .chefValidatorCertificate(in.getChefValidatorCertificate());
         }
     }
