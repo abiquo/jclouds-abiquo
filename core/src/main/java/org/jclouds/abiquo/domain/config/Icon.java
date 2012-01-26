@@ -45,17 +45,32 @@ public class Icon extends DomainWrapper<IconDto>
 
     // Domain operations
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-DeleteanIcon">
+     *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-DeleteanIcon</a>
+     */
     public void delete()
     {
         context.getApi().getConfigClient().deleteIcon(target);
         target = null;
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-CreateanIcon">
+     *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-CreateanIcon</a>
+     */
     public void save()
     {
         target = context.getApi().getConfigClient().createIcon(target);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-UpdateanIcon">
+     *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-UpdateanIcon</a>
+     */
     public void update()
     {
         target = context.getApi().getConfigClient().updateIcon(target);
