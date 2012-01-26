@@ -181,6 +181,10 @@
                     <excludedGroups>integration,live</excludedGroups>
                     <properties>
                         <property>
+                            <name>listener</name>
+                            <value>org.jclouds.abiquo.testng.TestOutputListener</value>
+                        </property>
+                        <property>
                             <name>suitename</name>
                             <value>Unit and Performance Tests</value>
                         </property>
