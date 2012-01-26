@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.ConfigResources;
+import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
@@ -224,6 +225,26 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetIcon() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("getIcon", IconOptions.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request =
+            processor.createRequest(method, IconOptions.builder().path(
+                "http://www.pixeljoint.com/files/icons/mipreview1.gif").build());
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/config/icons?path=http://www.pixeljoint.com/files/icons/mipreview1.gif HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
         checkFilters(request);
     }

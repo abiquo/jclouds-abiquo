@@ -32,6 +32,7 @@ import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.config.SystemProperty;
+import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -51,6 +52,7 @@ import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 
+import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
@@ -342,5 +344,14 @@ public class BaseAdministrationService implements AdministrationService
     public Icon findIcon(final Predicate<Icon> filter)
     {
         return Iterables.getFirst(listIcons(filter), null);
+    }
+
+    @Override
+    public Icon getIcon(final String path)
+    {
+        IconOptions options = IconOptions.builder().path(path).build();
+
+        IconDto result = context.getApi().getConfigClient().getIcon(options);
+        return wrap(context, Icon.class, result);
     }
 }

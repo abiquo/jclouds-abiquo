@@ -21,11 +21,13 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
@@ -131,4 +133,12 @@ public interface ConfigClient
      * @return The list of icons.
      */
     IconsDto listIcons();
+
+    /**
+     * Get the given privilege with options
+     * 
+     * @param options Filter options.
+     * @return The privilege or <code>null</code> if it does not exist.
+     */
+    IconDto getIcon(IconOptions options);
 }
