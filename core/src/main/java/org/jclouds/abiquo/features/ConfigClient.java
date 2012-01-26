@@ -140,5 +140,28 @@ public interface ConfigClient
      * @param options Filter options.
      * @return The privilege or <code>null</code> if it does not exist.
      */
-    IconDto getIcon(IconOptions options);
+    IconsDto listIcons(IconOptions options);
+
+    /**
+     * Create a new icon.
+     * 
+     * @param icon The icon to be created.
+     * @return The created icon.
+     */
+    IconDto createIcon(IconDto icon);
+
+    /**
+     * Updates an existing icon.
+     * 
+     * @param icon The new attributes for the icon.
+     * @return The updated icon.
+     */
+    IconDto updateIcon(IconDto icon);
+
+    /**
+     * Deletes an existing icon.
+     * 
+     * @param icon The icon to delete.
+     */
+    void deleteIcon(IconDto icon);
 }

@@ -152,10 +152,30 @@ public interface ConfigAsyncClient
     ListenableFuture<IconsDto> listIcons();
 
     /**
-     * @see ConfigClient#listLicenses(LicenseOptions)
+     * @see ConfigClient#listIcons(IconOptions)
      */
     @GET
     @Path("/icons")
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<IconDto> getIcon(@BinderParam(AppendOptionsToPath.class) IconOptions options);
+    ListenableFuture<IconsDto> listIcons(@BinderParam(AppendOptionsToPath.class) IconOptions options);
+
+    /**
+     * @see ConfigClient#createIcon(IconDto)
+     */
+    @POST
+    @Path("/icons")
+    ListenableFuture<IconDto> createIcon(@BinderParam(BindToXMLPayload.class) IconDto icon);
+
+    /**
+     * @see ConfigClient#updateIcon(IconDto)
+     */
+    @PUT
+    ListenableFuture<IconDto> updateIcon(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) IconDto icon);
+
+    /**
+     * @see ConfigClient#deleteIcon(IconDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteIcon(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) IconDto icon);
 }

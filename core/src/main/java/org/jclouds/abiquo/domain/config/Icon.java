@@ -45,6 +45,22 @@ public class Icon extends DomainWrapper<IconDto>
 
     // Domain operations
 
+    public void delete()
+    {
+        context.getApi().getConfigClient().deleteIcon(target);
+        target = null;
+    }
+
+    public void save()
+    {
+        target = context.getApi().getConfigClient().createIcon(target);
+    }
+
+    public void update()
+    {
+        target = context.getApi().getConfigClient().updateIcon(target);
+    }
+
     // Builder
 
     public static Builder builder(final AbiquoContext context)
@@ -56,9 +72,9 @@ public class Icon extends DomainWrapper<IconDto>
     {
         private AbiquoContext context;
 
-        String name;
+        private String name;
 
-        String path;
+        private String path;
 
         public Builder(final AbiquoContext context)
         {
