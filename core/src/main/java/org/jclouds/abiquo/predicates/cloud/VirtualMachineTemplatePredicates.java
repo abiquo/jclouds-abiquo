@@ -36,7 +36,7 @@ import com.google.common.base.Predicate;
  */
 public class VirtualMachineTemplatePredicates
 {
-    public static Predicate<VirtualMachineTemplate> id(final String... ids)
+    public static Predicate<VirtualMachineTemplate> id(final Integer... ids)
     {
         checkNotNull(ids, "ids must be defined");
 
