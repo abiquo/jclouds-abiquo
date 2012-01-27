@@ -36,6 +36,20 @@ import com.google.common.base.Predicate;
  */
 public class VirtualMachineTemplatePredicates
 {
+    public static Predicate<VirtualMachineTemplate> id(final String... ids)
+    {
+        checkNotNull(ids, "ids must be defined");
+
+        return new Predicate<VirtualMachineTemplate>()
+        {
+            @Override
+            public boolean apply(final VirtualMachineTemplate template)
+            {
+                return Arrays.asList(ids).contains(template.getId());
+            }
+        };
+    }
+
     public static Predicate<VirtualMachineTemplate> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
