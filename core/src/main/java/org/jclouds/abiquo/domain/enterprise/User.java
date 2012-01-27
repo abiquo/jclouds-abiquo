@@ -117,7 +117,7 @@ public class User extends DomainWrapper<UserDto>
         target = context.getApi().getEnterpriseClient().updateUser(target);
     }
 
-    public List<VirtualDatacenter> getAvailableVirtualDatacenters()
+    public List<VirtualDatacenter> getPermitedVirtualDatacenters()
     {
         List<Integer> ids = extractAvailableDatacenters();
 
