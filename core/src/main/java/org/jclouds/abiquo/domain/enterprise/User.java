@@ -124,26 +124,25 @@ public class User extends DomainWrapper<UserDto>
         return Lists.newArrayList(context.getCloudService().getVirtualDatacenters(ids));
     }
 
-    public void restrictVirtualDatacenter(final VirtualDatacenter vdc)
+    /**
+     * Give access to all virtualdatacenters in the enterprise.
+     */
+    public void permitAllVirtualDatacenters()
     {
-        List<Integer> ids = this.extractAvailableDatacenters();
-        ids.remove(vdc.getId());
-
-        setAvailableVirtualDatacenters(ids);
-
+        target.setAvailableVirtualDatacenters(null);
         update();
     }
 
-    public void permitVirtualDatacenter(final VirtualDatacenter vdc)
+    /**
+     * Limits user access ONLY to the virtual datacenters in the list. If the list is empty, user
+     * will get access to all virtual datacenters.
+     * 
+     * @param vdc List of virtual datancers from the user's enterprise.
+     */
+    public void permitOnlyVirtualDatacenters(final List<VirtualDatacenter> vdc)
     {
         List<Integer> ids = this.extractAvailableDatacenters();
-        if (!ids.contains(vdc.getId()))
-        {
-            ids.add(vdc.getId());
-        }
-
         setAvailableVirtualDatacenters(ids);
-
         update();
     }
 
@@ -450,8 +449,15 @@ public class User extends DomainWrapper<UserDto>
 
     private void setAvailableVirtualDatacenters(final List<Integer> ids)
     {
-        Joiner joiner = Joiner.on(",").useForNull("");
-        target.setAvailableVirtualDatacenters(joiner.join(ids));
+        if (ids.size() == 0)
+        {
+            target.setAvailableVirtualDatacenters("");
+        }
+        else
+        {
+            Joiner joiner = Joiner.on(",").skipNulls();
+            target.setAvailableVirtualDatacenters(joiner.join(ids));
+        }
     }
 
     @Override
