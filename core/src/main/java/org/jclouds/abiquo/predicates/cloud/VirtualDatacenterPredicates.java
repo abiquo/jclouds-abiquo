@@ -49,7 +49,7 @@ public class VirtualDatacenterPredicates
         };
     }
 
-    public static Predicate<VirtualDatacenter> tytpe(final HypervisorType... types)
+    public static Predicate<VirtualDatacenter> type(final HypervisorType... types)
     {
         checkNotNull(types, "types must be defined");
 
