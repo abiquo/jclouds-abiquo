@@ -25,6 +25,8 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
@@ -40,6 +42,8 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.enumerator.VlanTagAvailabilityType;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.HypervisorTypeDto;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
@@ -558,6 +562,35 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         }
 
         return wrap(context, Machine.class, dto.getCollection());
+    }
+
+    public List<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise)
+    {
+        VirtualMachineTemplatesDto dto =
+            context.getApi().getVirtualMachineTemplateClient().listVirtualMachineTemplates(
+                enterprise.getId(), target.getId());
+        return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
+    }
+
+    public List<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise,
+        final Predicate<VirtualMachineTemplate> filter)
+    {
+        return Lists.newLinkedList(filter(listTemplatesInRepository(enterprise), filter));
+    }
+
+    public VirtualMachineTemplate findTemplateInRepository(final Enterprise enterprise,
+        final Predicate<VirtualMachineTemplate> filter)
+    {
+        return Iterables.getFirst(filter(listTemplatesInRepository(enterprise), filter), null);
+    }
+
+    public VirtualMachineTemplate getTemplateInRepository(final Enterprise enterprise,
+        final Integer id)
+    {
+        VirtualMachineTemplateDto template =
+            context.getApi().getVirtualMachineTemplateClient().getVirtualMachineTemplate(
+                enterprise.getId(), target.getId(), id);
+        return wrap(context, VirtualMachineTemplate.class, template);
     }
 
     // Builder

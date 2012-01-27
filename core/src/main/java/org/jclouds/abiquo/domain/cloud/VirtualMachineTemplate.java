@@ -23,6 +23,8 @@ import java.util.Date;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
@@ -59,6 +61,17 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     }
 
     // Parent access
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     */
+    public Datacenter getDatacenter()
+    {
+        Integer repositoryId = target.getIdFromLink(ParentLinkName.DATACENTER_REPOSITORY);
+        return context.getAdministrationService().getDatacenter(repositoryId);
+    }
 
     // Delegate methods
     public int getCpuRequired()

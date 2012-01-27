@@ -180,8 +180,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter)
     {
         VirtualMachineTemplatesDto dto =
-            context.getApi().getVirtualMachineTemplateClient()
-                .listVirtualMachineTemplates(target.getId(), datacenter.getId());
+            context.getApi().getVirtualMachineTemplateClient().listVirtualMachineTemplates(
+                target.getId(), datacenter.getId());
         return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
     }
 
@@ -189,6 +189,21 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         final Predicate<VirtualMachineTemplate> filter)
     {
         return Lists.newLinkedList(filter(listTemplatesInRepository(datacenter), filter));
+    }
+
+    public VirtualMachineTemplate findTemplateInRepository(final Datacenter datacenter,
+        final Predicate<VirtualMachineTemplate> filter)
+    {
+        return Iterables.getFirst(filter(listTemplatesInRepository(datacenter), filter), null);
+    }
+
+    public VirtualMachineTemplate getTemplateInRepository(final Datacenter datacenter,
+        final Integer id)
+    {
+        VirtualMachineTemplateDto template =
+            context.getApi().getVirtualMachineTemplateClient().getVirtualMachineTemplate(
+                target.getId(), datacenter.getId(), id);
+        return wrap(context, VirtualMachineTemplate.class, template);
     }
 
     public List<VirtualMachineTemplate> listTemplates()
@@ -210,21 +225,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         ListVirtualMachineTemplates strategy =
             context.getUtils().getInjector().getInstance(ListVirtualMachineTemplates.class);
         return Iterables.getFirst(strategy.execute(this, filter), null);
-    }
-
-    public VirtualMachineTemplate findTemplateInRepository(final Datacenter datacenter,
-        final Predicate<VirtualMachineTemplate> filter)
-    {
-        return Iterables.getFirst(filter(listTemplatesInRepository(datacenter), filter), null);
-    }
-
-    public VirtualMachineTemplate getTemplateInRepository(final Datacenter datacenter,
-        final Integer id)
-    {
-        VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient()
-                .getVirtualMachineTemplate(target.getId(), datacenter.getId(), id);
-        return wrap(context, VirtualMachineTemplate.class, template);
     }
 
     public List<Datacenter> listAllowedDatacenters()
@@ -316,8 +316,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public void refreshTemplateRepository(final Datacenter datacenter)
     {
-        context.getApi().getEnterpriseClient()
-            .refreshTemplateRepository(target.getId(), datacenter.getId());
+        context.getApi().getEnterpriseClient().refreshTemplateRepository(target.getId(),
+            datacenter.getId());
     }
 
     /**
@@ -341,8 +341,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
             // Save new limits
             dto =
-                context.getApi().getEnterpriseClient()
-                    .createLimits(target, datacenter.unwrap(), limits.unwrap());
+                context.getApi().getEnterpriseClient().createLimits(target, datacenter.unwrap(),
+                    limits.unwrap());
         }
         catch (AbiquoException ex)
         {
@@ -509,18 +509,16 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return Enterprise.builder(in.context).name(in.getName())
-                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
-                .storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+            return Enterprise.builder(in.context).name(in.getName()).ramLimits(
+                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
+                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
+                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
+                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
+                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
                 .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
-                .isReservationRestricted(in.getIsReservationRestricted())
-                .chefClient(in.getChefClient())
-                .chefClientCertificate(in.getChefClientCertificate()).chefURL(in.getChefURL())
-                .chefValidator(in.getChefValidator())
+                .isReservationRestricted(in.getIsReservationRestricted()).chefClient(
+                    in.getChefClient()).chefClientCertificate(in.getChefClientCertificate())
+                .chefURL(in.getChefURL()).chefValidator(in.getChefValidator())
                 .chefValidatorCertificate(in.getChefValidatorCertificate());
         }
     }

@@ -38,18 +38,17 @@ public class IconLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 
     public void testCreateAndGet()
     {
-        // Icon icon =
-        // Icon.builder(context).name("icon").path("http://fakepath.com/fakeimage.jpg").build();
-        // icon.save();
+        Icon icon =
+            Icon.builder(context).name("icon").path("http://fakepath.com/fakeimage.jpg").build();
+        icon.save();
 
         Icon apiIcon =
             context.getAdministrationService().findIcon("http://fakepath.com/fakeimage.jpg");
 
         assertNotNull(apiIcon);
-        // assertEquals(icon.getName(), apiIcon.getName());
+        assertEquals(icon.getName(), apiIcon.getName());
 
-        // icon.delete();
-        apiIcon.delete();
+        icon.delete();
     }
 
     public void testUpdate()
