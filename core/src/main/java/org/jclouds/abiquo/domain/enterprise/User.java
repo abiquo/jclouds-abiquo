@@ -450,7 +450,7 @@ public class User extends DomainWrapper<UserDto>
 
     private void setAvailableVirtualDatacenters(final List<Integer> ids)
     {
-        Joiner joiner = Joiner.on(",");
+        Joiner joiner = Joiner.on(",").useForNull("");
         target.setAvailableVirtualDatacenters(joiner.join(ids));
     }
 
