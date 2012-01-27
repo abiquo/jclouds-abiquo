@@ -125,12 +125,11 @@ public class User extends DomainWrapper<UserDto>
     }
 
     /**
-     * Give access to all virtualdatacenters in the enterprise.
+     * Give access to all virtualdatacenters in the enterprise (requires update).
      */
     public void permitAllVirtualDatacenters()
     {
-        target.setAvailableVirtualDatacenters(null);
-        update();
+        setAvailableVirtualDatacenters(null);
     }
 
     /**
@@ -139,11 +138,10 @@ public class User extends DomainWrapper<UserDto>
      * 
      * @param vdc List of virtual datancers from the user's enterprise.
      */
-    public void permitOnlyVirtualDatacenters(final List<VirtualDatacenter> vdc)
+    public void setPermitedVirtualDatacenters(final List<VirtualDatacenter> vdc)
     {
         List<Integer> ids = this.extractAvailableDatacenters();
         setAvailableVirtualDatacenters(ids);
-        update();
     }
 
     // Parent access
