@@ -35,6 +35,7 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.SystemPropertyDto;
@@ -294,6 +295,93 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.iconPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/icons/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Icon ***********************/
+
+    public void testListCategories() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("listCategories");
+        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/categories HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetCategory() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("getCategory", Integer.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/categories/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testCreateCategory() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("createCategory", CategoryDto.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request =
+            processor.createRequest(method, ConfigResources.categoryPost());
+
+        assertRequestLineEquals(request, "POST http://localhost/api/config/categories HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(ConfigResources.categoryPostPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateCategory() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("updateCategory", CategoryDto.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request =
+            processor.createRequest(method, ConfigResources.categoryPut());
+
+        assertRequestLineEquals(request, "PUT http://localhost/api/config/categories/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(ConfigResources.categoryPutPayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteCategory() throws SecurityException, NoSuchMethodException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("deleteCategory", CategoryDto.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request =
+            processor.createRequest(method, ConfigResources.categoryPut());
+
+        assertRequestLineEquals(request, "DELETE http://localhost/api/config/categories/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 

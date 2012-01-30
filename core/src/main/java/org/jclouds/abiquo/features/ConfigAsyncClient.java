@@ -43,6 +43,8 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.appslibrary.CategoriesDto;
+import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
@@ -178,4 +180,43 @@ public interface ConfigAsyncClient
     @DELETE
     ListenableFuture<Void> deleteIcon(
         @EndpointLink("edit") @BinderParam(BindToPath.class) IconDto icon);
+
+    /*********************** Category ***********************/
+
+    /**
+     * @see ConfigClient#listCategories()
+     */
+    @GET
+    @Path("/categories")
+    ListenableFuture<CategoriesDto> listCategories();
+
+    /**
+     * @see ConfigClient#getCategory(Integer)
+     */
+    @GET
+    @Path("/categories/{category}")
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<CategoryDto> getCategory(@PathParam("category") Integer categoryId);
+
+    /**
+     * @see ConfigClient#createCategory(CategoryDto)
+     */
+    @POST
+    @Path("/categories")
+    ListenableFuture<CategoryDto> createCategory(
+        @BinderParam(BindToXMLPayload.class) CategoryDto category);
+
+    /**
+     * @see ConfigClient#updateIcon(IconDto)
+     */
+    @PUT
+    ListenableFuture<CategoryDto> updateCategory(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) CategoryDto category);
+
+    /**
+     * @see ConfigClient#deleteCategory(CategoryDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteCategory(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) CategoryDto category);
 }

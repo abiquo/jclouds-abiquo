@@ -27,6 +27,8 @@ import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.appslibrary.CategoriesDto;
+import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
@@ -135,10 +137,10 @@ public interface ConfigClient
     IconsDto listIcons();
 
     /**
-     * Get the given privilege with options
+     * List icons with options.
      * 
      * @param options Filter options.
-     * @return The privilege or <code>null</code> if it does not exist.
+     * @return The list of filtered icons.
      */
     IconsDto listIcons(IconOptions options);
 
@@ -164,4 +166,44 @@ public interface ConfigClient
      * @param icon The icon to delete.
      */
     void deleteIcon(IconDto icon);
+
+    /*********************** Category ***********************/
+
+    /**
+     * List all categories.
+     * 
+     * @return The list of categories.
+     */
+    CategoriesDto listCategories();
+
+    /**
+     * Get the given category.
+     * 
+     * @param categoryId The id of the category.
+     * @return The category or <code>null</code> if it does not exist.
+     */
+    CategoryDto getCategory(Integer categoryId);
+
+    /**
+     * Create a new category.
+     * 
+     * @param icon The category to be created.
+     * @return The created category.
+     */
+    CategoryDto createCategory(CategoryDto category);
+
+    /**
+     * Updates an existing category.
+     * 
+     * @param category The new attributes for the category.
+     * @return The updated category.
+     */
+    CategoryDto updateCategory(CategoryDto category);
+
+    /**
+     * Deletes an existing category.
+     * 
+     * @param icon The category to delete.
+     */
+    void deleteCategory(CategoryDto category);
 }
