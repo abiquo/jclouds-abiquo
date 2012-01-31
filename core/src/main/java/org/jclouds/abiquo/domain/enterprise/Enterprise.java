@@ -26,6 +26,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
@@ -38,6 +39,7 @@ import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
 
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
+import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
@@ -107,6 +109,28 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     // Children access
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrievealistofVirtualDatacenters">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrievealistofVirtualDatacenters</a>
+     */
+    public List<VirtualDatacenter> listVirtualDatacenters()
+    {
+        VirtualDatacentersDto dto =
+            context.getApi().getEnterpriseClient().listVirtualDatacenters(target);
+        return wrap(context, VirtualDatacenter.class, dto.getCollection());
+    }
+
+    public List<VirtualDatacenter> listVirtualDatacenters(final Predicate<VirtualDatacenter> filter)
+    {
+        return Lists.newLinkedList(filter(listVirtualDatacenters(), filter));
+    }
+
+    public VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter)
+    {
+        return Iterables.getFirst(filter(listVirtualDatacenters(), filter), null);
+    }
 
     /**
      * @see <a

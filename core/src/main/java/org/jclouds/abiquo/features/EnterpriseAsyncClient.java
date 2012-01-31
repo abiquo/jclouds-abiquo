@@ -45,6 +45,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
@@ -134,6 +135,13 @@ public interface EnterpriseAsyncClient
     @Path("/datacenters")
     ListenableFuture<DatacentersDto> listAllowedDatacenters(
         @QueryParam("idEnterprise") Integer enterpriseId);
+
+    /**
+     * @see EnterpriseClient#listVirtualDatacenters(EnterpriseDto)
+     */
+    @GET
+    ListenableFuture<VirtualDatacentersDto> listVirtualDatacenters(
+        @EndpointLink("cloud/virtualdatacenters") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /*********************** Enterprise Properties ***********************/
 

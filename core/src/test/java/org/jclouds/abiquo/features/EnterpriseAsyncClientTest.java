@@ -207,6 +207,26 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
+    public void testListVirtualDatacentersFromEnterprise() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listVirtualDatacenters", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/action/virtualdatacenters HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     /*********************** Enterprise Properties ********************** */
 
     public void testGetEnterpriseProperties() throws SecurityException, NoSuchMethodException,

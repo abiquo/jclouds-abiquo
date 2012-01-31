@@ -121,6 +121,12 @@ public class User extends DomainWrapper<UserDto>
     {
         List<Integer> ids = extractAvailableDatacenters();
 
+        // null value means all virtual datacenters all allowed
+        if (ids.size() == 0)
+        {
+            return this.getEnterprise().listVirtualDatacenters();
+        }
+
         return Lists.newArrayList(context.getCloudService().getVirtualDatacenters(ids));
     }
 

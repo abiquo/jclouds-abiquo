@@ -25,6 +25,7 @@ import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
@@ -114,6 +115,14 @@ public interface EnterpriseClient
      * @return The allowed datacenters to the given enterprise.
      */
     DatacentersDto listAllowedDatacenters(Integer enterpriseId);
+
+    /**
+     * List all virtual datacenters of an enterprise.
+     * 
+     * @param enterprise The given enterprise.
+     * @return The list of Datacenters.
+     */
+    VirtualDatacentersDto listVirtualDatacenters(EnterpriseDto enterprise);
 
     /*********************** Enterprise Properties ***********************/
 
