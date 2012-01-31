@@ -71,6 +71,8 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.UcsRackDto;
+import com.abiquo.server.core.infrastructure.UcsRacksDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -220,6 +222,15 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
+     * @see InfrastructureClient#listManagedRacks(DatacenterDto)
+     */
+    @GET
+    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    @JAXBResponseParser
+    ListenableFuture<UcsRacksDto> listManagedRacks(
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
      * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
      */
     @POST
@@ -228,11 +239,33 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) RackDto rack);
 
     /**
+     * @see InfrastructureClient#createManagedRack(DatacenterDto, UcsRackDto)
+     */
+    @POST
+    @JAXBResponseParser
+    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    @Produces(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    ListenableFuture<UcsRackDto> createManagedRack(
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(BindToXMLPayload.class) UcsRackDto rack);
+
+    /**
      * @see InfrastructureClient#getRack(DatacenterDto, Integer)
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<RackDto> getRack(
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendToPath.class) Integer rackId);
+
+    /**
+     * @see InfrastructureClient#getManagedRack(DatacenterDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @JAXBResponseParser
+    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    ListenableFuture<UcsRackDto> getManagedRack(
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(AppendToPath.class) Integer rackId);
 
@@ -249,6 +282,16 @@ public interface InfrastructureAsyncClient
     @PUT
     ListenableFuture<RackDto> updateRack(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
+
+    /**
+     * @see InfrastructureClient#updateManagedRack(UcsRackDto)
+     */
+    @PUT
+    @JAXBResponseParser
+    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    @Produces(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    ListenableFuture<UcsRackDto> updateManagedRack(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UcsRackDto rack);
 
     /**
      * @see InfrastructureClient#deleteRack(RackDto)

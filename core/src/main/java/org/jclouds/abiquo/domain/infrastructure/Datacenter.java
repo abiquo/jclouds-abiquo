@@ -53,6 +53,8 @@ import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.UcsRackDto;
+import com.abiquo.server.core.infrastructure.UcsRacksDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
@@ -177,6 +179,33 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     {
         RackDto rack = context.getApi().getInfrastructureClient().getRack(target, id);
         return wrap(context, Rack.class, rack);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievethelistofUcsRacks">
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievethelistofUcsRacks</a>
+     */
+    public List<ManagedRack> listManagedRacks()
+    {
+        UcsRacksDto racks = context.getApi().getInfrastructureClient().listManagedRacks(target);
+        return wrap(context, ManagedRack.class, racks.getCollection());
+    }
+
+    public List<ManagedRack> listManagedRacks(final Predicate<ManagedRack> filter)
+    {
+        return Lists.newLinkedList(filter(listManagedRacks(), filter));
+    }
+
+    public ManagedRack findManagedRack(final Predicate<ManagedRack> filter)
+    {
+        return Iterables.getFirst(filter(listManagedRacks(), filter), null);
+    }
+
+    public ManagedRack getManagedRack(final Integer id)
+    {
+        UcsRackDto rack = context.getApi().getInfrastructureClient().getManagedRack(target, id);
+        return wrap(context, ManagedRack.class, rack);
     }
 
     /**

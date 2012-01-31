@@ -184,6 +184,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
         machine.setRack(rack);
         machine.save();
+        assertNotNull(machine.getId());
     }
 
     protected void createRack()

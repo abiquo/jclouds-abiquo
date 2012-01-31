@@ -32,12 +32,12 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.collect.Iterables;
 
 /**
- * Live integration tests for the {@link Rack} domain class.
+ * Live integration tests for the {@link Datacenter} domain class.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class ManageRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
 
     public void testUpdate()
