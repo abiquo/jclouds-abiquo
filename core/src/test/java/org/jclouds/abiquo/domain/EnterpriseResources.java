@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain;
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.UserDto;
@@ -57,6 +58,8 @@ public class EnterpriseResources
             "http://localhost/api/admin/enterprises/1/action/virtualmachines"));
         enterprise.addLink(new RESTLink("cloud/virtualdatacenters",
             "http://localhost/api/admin/enterprises/1/action/virtualdatacenters"));
+        enterprise.addLink(new RESTLink("appslib/templateDefinitionLists",
+            "http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists"));
 
         return enterprise;
     }
@@ -97,6 +100,8 @@ public class EnterpriseResources
         buffer.append(link("/admin/enterprises/1/action/virtualmachines", "virtualmachines"));
         buffer.append(link("/admin/enterprises/1/action/virtualdatacenters",
             "cloud/virtualdatacenters"));
+        buffer.append(link("/admin/enterprises/1/appslib/templateDefinitionLists",
+            "appslib/templateDefinitionLists"));
         buffer.append("<cpuHard>0</cpuHard>");
         buffer.append("<cpuSoft>0</cpuSoft>");
         buffer.append("<hdHard>0</hdHard>");
@@ -141,6 +146,23 @@ public class EnterpriseResources
         return limits;
     }
 
+    public static TemplateDefinitionListDto templateListPost()
+    {
+        TemplateDefinitionListDto templateList = new TemplateDefinitionListDto();
+        templateList.setName("myList");
+        templateList.setUrl("http://virtualapp-repository.com/vapp1.ovf");
+        return templateList;
+    }
+
+    public static TemplateDefinitionListDto templateListPut()
+    {
+        TemplateDefinitionListDto templateList = templateListPost();
+        templateList.setId(1);
+        templateList.addLink(new RESTLink("edit",
+            "http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1"));
+        return templateList;
+    }
+
     public static String datacenterLimitsPostPayload()
     {
         StringBuffer buffer = new StringBuffer();
@@ -160,6 +182,16 @@ public class EnterpriseResources
         buffer.append("<repositoryHard>0</repositoryHard>");
         buffer.append("<repositorySoft>0</repositorySoft>");
         buffer.append("</limit>");
+        return buffer.toString();
+    }
+
+    public static String templateListPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<templateDefinitionList>");
+        buffer.append("<name>myList</name>");
+        buffer.append("<url>http://virtualapp-repository.com/vapp1.ovf</url>");
+        buffer.append("</templateDefinitionList>");
         return buffer.toString();
     }
 

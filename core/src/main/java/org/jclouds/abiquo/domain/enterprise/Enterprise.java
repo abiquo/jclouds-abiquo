@@ -37,6 +37,8 @@ import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
 
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
@@ -130,6 +132,32 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter)
     {
         return Iterables.getFirst(filter(listVirtualDatacenters(), filter), null);
+    }
+
+    public List<TemplateDefinitionList> listTemplateDefinitionLists()
+    {
+        TemplateDefinitionListsDto dto =
+            context.getApi().getEnterpriseClient().listTemplateDefinitionLists(target);
+        return wrap(context, TemplateDefinitionList.class, dto.getCollection());
+    }
+
+    public List<TemplateDefinitionList> listTemplateDefinitionLists(
+        final Predicate<TemplateDefinitionList> filter)
+    {
+        return Lists.newLinkedList(filter(listTemplateDefinitionLists(), filter));
+    }
+
+    public TemplateDefinitionList findTemplateDefinitionList(
+        final Predicate<TemplateDefinitionList> filter)
+    {
+        return Iterables.getFirst(filter(listTemplateDefinitionLists(), filter), null);
+    }
+
+    public TemplateDefinitionList getTemplateDefinitionList(final Integer id)
+    {
+        TemplateDefinitionListDto templateList =
+            context.getApi().getEnterpriseClient().getTemplateDefinitionList(target, id);
+        return wrap(context, TemplateDefinitionList.class, templateList);
     }
 
     /**

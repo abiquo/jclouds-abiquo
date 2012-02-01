@@ -25,6 +25,8 @@ import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
@@ -279,4 +281,39 @@ public interface EnterpriseClient
      * @return The list of reserverd machines by the enterprise.
      */
     MachinesDto listReservedMachines(EnterpriseDto enterprise);
+
+    /**
+     * List all template definitions in apps library.
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of template definitions by the enterprise.
+     */
+    TemplateDefinitionListsDto listTemplateDefinitionLists(EnterpriseDto enterprise);
+
+    /**
+     * Create a new template definition list in apps library in the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @param template The template to be created.
+     * @return The created template.
+     */
+    TemplateDefinitionListDto createTemplateDefinitionList(EnterpriseDto enterprise,
+        TemplateDefinitionListDto templateList);
+
+    /**
+     * Deletes existing user.
+     * 
+     * @param user The user to delete.
+     */
+    void deleteTemplateDefinitionList(TemplateDefinitionListDto templateList);
+
+    /**
+     * Get the given template definition list from the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @param templateListId The id of the template definition list.
+     * @return The list or <code>null</code> if it does not exist.
+     */
+    TemplateDefinitionListDto getTemplateDefinitionList(final EnterpriseDto enterprise,
+        final Integer templateListId);
 }
