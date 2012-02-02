@@ -20,13 +20,20 @@
 package org.jclouds.abiquo.predicates.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.transform;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
 
 /**
  * Container for {@link VirtualDatacenter} filters.
@@ -59,6 +66,38 @@ public class VirtualDatacenterPredicates
             public boolean apply(final VirtualDatacenter virtualDatacenter)
             {
                 return Arrays.asList(types).contains(virtualDatacenter.getHypervisorType());
+            }
+        };
+    }
+
+    public static Predicate<VirtualDatacenter> datacenter(final Datacenter... datacenters)
+    {
+        checkNotNull(datacenters, "datacenters must be defined");
+
+        final List<Integer> ids =
+            Lists.newArrayList(transform(Arrays.asList(datacenters),
+                new Function<Datacenter, Integer>()
+                {
+                    @Override
+                    public Integer apply(final Datacenter input)
+                    {
+                        return input.getId();
+                    }
+                }));
+
+        return new Predicate<VirtualDatacenter>()
+        {
+            @Override
+            public boolean apply(final VirtualDatacenter virtualDatacenter)
+            {
+                // Avoid using the getDatacenter() method since it will generate an unnecessary API
+                // call. We can get the ID from the datacenter link.
+                Integer datacenterId =
+                    checkNotNull(virtualDatacenter.unwrap()
+                        .getIdFromLink(ParentLinkName.DATACENTER),
+                        ValidationErrors.MISSING_REQUIRED_LINK);
+
+                return ids.contains(datacenterId);
             }
         };
     }
