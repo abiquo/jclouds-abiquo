@@ -184,6 +184,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
         machine.setRack(rack);
         machine.save();
+        assertNotNull(machine.getId());
     }
 
     protected void createRack()
@@ -227,9 +228,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         Role role = administrationService.findRole(RolePredicates.name("ENTERPRISE_ADMIN"));
 
         user =
-            User.builder(context, enterprise, role).name(randomName(), randomName()).nick(
-                randomName()).authType("ABIQUO").description(randomName()).email(
-                randomName() + "@abiquo.com").locale("en_US").password("user").build();
+            User.builder(context, enterprise, role).name(randomName(), randomName())
+                .nick("jclouds").authType("ABIQUO").description(randomName()).email(
+                    randomName() + "@abiquo.com").locale("en_US").password("user").build();
 
         user.save();
         assertNotNull(user.getId());

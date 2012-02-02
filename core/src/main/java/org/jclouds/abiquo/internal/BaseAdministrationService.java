@@ -28,10 +28,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.config.SystemProperty;
+import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -43,6 +45,7 @@ import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
+import org.jclouds.abiquo.strategy.config.ListCategories;
 import org.jclouds.abiquo.strategy.config.ListIcons;
 import org.jclouds.abiquo.strategy.config.ListLicenses;
 import org.jclouds.abiquo.strategy.config.ListPrivileges;
@@ -51,6 +54,7 @@ import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 
+import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
@@ -96,12 +100,16 @@ public class BaseAdministrationService implements AdministrationService
     @VisibleForTesting
     protected final ListIcons listIcons;
 
+    @VisibleForTesting
+    protected final ListCategories listCategories;
+
     @Inject
     protected BaseAdministrationService(final AbiquoContext context,
         final ListDatacenters listDatacenters, final ListMachines listMachines,
         final ListEnterprises listEnterprises, final ListRoles listRoles,
         final ListLicenses listLicenses, final ListPrivileges listPrivileges,
-        final ListProperties listProperties, final ListIcons listIcons)
+        final ListProperties listProperties, final ListIcons listIcons,
+        final ListCategories listCategories)
     {
         this.context = checkNotNull(context, "context");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
@@ -112,6 +120,7 @@ public class BaseAdministrationService implements AdministrationService
         this.listPrivileges = checkNotNull(listPrivileges, "listPrivileges");
         this.listProperties = checkNotNull(listProperties, "listProperties");
         this.listIcons = checkNotNull(listIcons, "listIcons");
+        this.listCategories = checkNotNull(listCategories, "listCategories");
     }
 
     /*********************** Datacenter ********************** */
@@ -342,5 +351,38 @@ public class BaseAdministrationService implements AdministrationService
     public Icon findIcon(final Predicate<Icon> filter)
     {
         return Iterables.getFirst(listIcons(filter), null);
+    }
+
+    @Override
+    public Iterable<Icon> listIcons(final String path)
+    {
+        IconOptions options = IconOptions.builder().path(path).build();
+
+        IconsDto result = context.getApi().getConfigClient().listIcons(options);
+        return wrap(context, Icon.class, result.getCollection());
+    }
+
+    @Override
+    public Icon findIcon(final String path)
+    {
+        return Iterables.getFirst(listIcons(path), null);
+    }
+
+    @Override
+    public Category findCategory(final Predicate<Category> filter)
+    {
+        return Iterables.getFirst(listCategories(filter), null);
+    }
+
+    @Override
+    public Iterable<Category> listCategories()
+    {
+        return listCategories.execute();
+    }
+
+    @Override
+    public Iterable<Category> listCategories(final Predicate<Category> filter)
+    {
+        return listCategories.execute(filter);
     }
 }

@@ -31,6 +31,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
@@ -42,6 +43,9 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.appslibrary.CategoriesDto;
+import com.abiquo.server.core.appslibrary.CategoryDto;
+import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
@@ -148,4 +152,71 @@ public interface ConfigAsyncClient
     @GET
     @Path("/icons")
     ListenableFuture<IconsDto> listIcons();
+
+    /**
+     * @see ConfigClient#listIcons(IconOptions)
+     */
+    @GET
+    @Path("/icons")
+    ListenableFuture<IconsDto> listIcons(@BinderParam(AppendOptionsToPath.class) IconOptions options);
+
+    /**
+     * @see ConfigClient#createIcon(IconDto)
+     */
+    @POST
+    @Path("/icons")
+    ListenableFuture<IconDto> createIcon(@BinderParam(BindToXMLPayload.class) IconDto icon);
+
+    /**
+     * @see ConfigClient#updateIcon(IconDto)
+     */
+    @PUT
+    ListenableFuture<IconDto> updateIcon(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) IconDto icon);
+
+    /**
+     * @see ConfigClient#deleteIcon(IconDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteIcon(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) IconDto icon);
+
+    /*********************** Category ***********************/
+
+    /**
+     * @see ConfigClient#listCategories()
+     */
+    @GET
+    @Path("/categories")
+    ListenableFuture<CategoriesDto> listCategories();
+
+    /**
+     * @see ConfigClient#getCategory(Integer)
+     */
+    @GET
+    @Path("/categories/{category}")
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<CategoryDto> getCategory(@PathParam("category") Integer categoryId);
+
+    /**
+     * @see ConfigClient#createCategory(CategoryDto)
+     */
+    @POST
+    @Path("/categories")
+    ListenableFuture<CategoryDto> createCategory(
+        @BinderParam(BindToXMLPayload.class) CategoryDto category);
+
+    /**
+     * @see ConfigClient#updateIcon(IconDto)
+     */
+    @PUT
+    ListenableFuture<CategoryDto> updateCategory(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) CategoryDto category);
+
+    /**
+     * @see ConfigClient#deleteCategory(CategoryDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteCategory(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) CategoryDto category);
 }

@@ -157,7 +157,7 @@
                             <parallel>tests</parallel>
                             <threadCount>5</threadCount>
                             <groups>integration</groups>
-                            <excludedGroups>unit,performance,live</excludedGroups>
+                            <excludedGroups>unit,performance,live,live+ucs</excludedGroups>
                             <properties>
                                 <property>
                                     <name>suitename</name>
@@ -178,8 +178,12 @@
                     <parallel>methods</parallel>
                     <threadCount>5</threadCount>
                     <groups>unit,performance</groups>
-                    <excludedGroups>integration,live</excludedGroups>
+                    <excludedGroups>integration,live,live+ucs</excludedGroups>
                     <properties>
+                        <property>
+                            <name>listener</name>
+                            <value>org.jclouds.abiquo.testng.TestOutputListener</value>
+                        </property>
                         <property>
                             <name>suitename</name>
                             <value>Unit and Performance Tests</value>

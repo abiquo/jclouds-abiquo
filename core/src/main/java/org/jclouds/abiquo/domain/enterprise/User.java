@@ -117,34 +117,37 @@ public class User extends DomainWrapper<UserDto>
         target = context.getApi().getEnterpriseClient().updateUser(target);
     }
 
-    public List<VirtualDatacenter> getAvailableVirtualDatacenters()
+    public List<VirtualDatacenter> getPermitedVirtualDatacenters()
     {
         List<Integer> ids = extractAvailableDatacenters();
+
+        // null value means all virtual datacenters all allowed
+        if (ids.size() == 0)
+        {
+            return this.getEnterprise().listVirtualDatacenters();
+        }
 
         return Lists.newArrayList(context.getCloudService().getVirtualDatacenters(ids));
     }
 
-    public void restrictVirtualDatacenter(final VirtualDatacenter vdc)
+    /**
+     * Give access to all virtualdatacenters in the enterprise (requires update).
+     */
+    public void permitAllVirtualDatacenters()
     {
-        List<Integer> ids = this.extractAvailableDatacenters();
-        ids.remove(vdc.getId());
-
-        setAvailableVirtualDatacenters(ids);
-
-        update();
+        setAvailableVirtualDatacenters(null);
     }
 
-    public void permitVirtualDatacenter(final VirtualDatacenter vdc)
+    /**
+     * Limits user access ONLY to the virtual datacenters in the list. If the list is empty, user
+     * will get access to all virtual datacenters.
+     * 
+     * @param vdc List of virtual datancers from the user's enterprise.
+     */
+    public void setPermitedVirtualDatacenters(final List<VirtualDatacenter> vdc)
     {
         List<Integer> ids = this.extractAvailableDatacenters();
-        if (!ids.contains(vdc.getId()))
-        {
-            ids.add(vdc.getId());
-        }
-
         setAvailableVirtualDatacenters(ids);
-
-        update();
     }
 
     // Parent access
@@ -450,8 +453,15 @@ public class User extends DomainWrapper<UserDto>
 
     private void setAvailableVirtualDatacenters(final List<Integer> ids)
     {
-        Joiner joiner = Joiner.on(",");
-        target.setAvailableVirtualDatacenters(joiner.join(ids));
+        if (ids.size() == 0)
+        {
+            target.setAvailableVirtualDatacenters("");
+        }
+        else
+        {
+            Joiner joiner = Joiner.on(",").skipNulls();
+            target.setAvailableVirtualDatacenters(joiner.join(ids));
+        }
     }
 
     @Override

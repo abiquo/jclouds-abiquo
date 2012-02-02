@@ -27,6 +27,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
+import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -49,6 +50,19 @@ public class InfrastructureResources
     public static RackDto rackPost()
     {
         RackDto rack = new RackDto();
+        rack.setName("Aloha");
+        rack.setShortDescription("A hawaian rack");
+        rack.setHaEnabled(false);
+        rack.setVlanIdMin(6);
+        rack.setVlanIdMax(3024);
+        rack.setVlanPerVdcReserved(6);
+        rack.setNrsq(80);
+        return rack;
+    }
+
+    public static UcsRackDto managedRackPost()
+    {
+        UcsRackDto rack = new UcsRackDto();
         rack.setName("Aloha");
         rack.setShortDescription("A hawaian rack");
         rack.setHaEnabled(false);
@@ -131,6 +145,17 @@ public class InfrastructureResources
     public static RackDto rackPut()
     {
         RackDto rack = rackPost();
+        rack.setId(1);
+        rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
+        rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
+        rack.addLink(new RESTLink("machines",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines"));
+        return rack;
+    }
+
+    public static UcsRackDto managedRackPut()
+    {
+        UcsRackDto rack = managedRackPost();
         rack.setId(1);
         rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
@@ -229,6 +254,21 @@ public class InfrastructureResources
         buffer.append("<vlanIdMin>6</vlanIdMin>");
         buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
         buffer.append("</rack>");
+        return buffer.toString();
+    }
+
+    public static String managedRackPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<ucsrack>");
+        buffer.append("<haEnabled>false</haEnabled>");
+        buffer.append("<name>Aloha</name>");
+        buffer.append("<nrsq>80</nrsq>");
+        buffer.append("<shortDescription>A hawaian rack</shortDescription>");
+        buffer.append("<vlanIdMax>3024</vlanIdMax>");
+        buffer.append("<vlanIdMin>6</vlanIdMin>");
+        buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
+        buffer.append("</ucsrack>");
         return buffer.toString();
     }
 
@@ -355,6 +395,25 @@ public class InfrastructureResources
         buffer.append("<vlanIdMin>6</vlanIdMin>");
         buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
         buffer.append("</rack>");
+        return buffer.toString();
+    }
+
+    public static String managedRackPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<ucsrack>");
+        buffer.append(link("/admin/datacenters/1", "datacenter"));
+        buffer.append(link("/admin/datacenters/1/racks/1", "edit"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines", "machines"));
+        buffer.append("<haEnabled>false</haEnabled>");
+        buffer.append("<id>1</id>");
+        buffer.append("<name>Aloha</name>");
+        buffer.append("<nrsq>80</nrsq>");
+        buffer.append("<shortDescription>A hawaian rack</shortDescription>");
+        buffer.append("<vlanIdMax>3024</vlanIdMax>");
+        buffer.append("<vlanIdMin>6</vlanIdMin>");
+        buffer.append("<vlanPerVdcReserved>6</vlanPerVdcReserved>");
+        buffer.append("</ucsrack>");
         return buffer.toString();
     }
 

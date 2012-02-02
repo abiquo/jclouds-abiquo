@@ -35,6 +35,16 @@
                 <module>live</module>
             </modules>
         </profile>
+        <profile>
+            <id>live+ucs</id>         
+            <properties>
+                <test.suite>all</test.suite>
+                <it.suite>all</it.suite>
+            </properties>           
+            <modules>
+                <module>live</module>
+            </modules>
+        </profile>
     </profiles>
 </project>
 

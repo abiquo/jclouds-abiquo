@@ -45,6 +45,89 @@ public class Icon extends DomainWrapper<IconDto>
 
     // Domain operations
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-DeleteanIcon">
+     *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-DeleteanIcon</a>
+     */
+    public void delete()
+    {
+        context.getApi().getConfigClient().deleteIcon(target);
+        target = null;
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-CreateanIcon">
+     *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-CreateanIcon</a>
+     */
+    public void save()
+    {
+        target = context.getApi().getConfigClient().createIcon(target);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-UpdateanIcon">
+     *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-UpdateanIcon</a>
+     */
+    public void update()
+    {
+        target = context.getApi().getConfigClient().updateIcon(target);
+    }
+
+    // Builder
+
+    public static Builder builder(final AbiquoContext context)
+    {
+        return new Builder(context);
+    }
+
+    public static class Builder
+    {
+        private AbiquoContext context;
+
+        private String name;
+
+        private String path;
+
+        public Builder(final AbiquoContext context)
+        {
+            super();
+            this.context = context;
+        }
+
+        public Builder name(final String name)
+        {
+            this.name = name;
+            return this;
+        }
+
+        public Builder path(final String path)
+        {
+            this.path = path;
+            return this;
+        }
+
+        public Icon build()
+        {
+            IconDto dto = new IconDto();
+            dto.setName(name);
+            dto.setPath(path);
+
+            Icon icon = new Icon(context, dto);
+
+            return icon;
+        }
+
+        public static Builder fromIcon(final Icon in)
+        {
+            Builder builder = Icon.builder(in.context).name(in.getName()).path(in.getPath());
+
+            return builder;
+        }
+    }
+
     // Delegate methods
 
     public Integer getId()

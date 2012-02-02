@@ -45,6 +45,9 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
+import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
@@ -55,6 +58,8 @@ import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -133,6 +138,13 @@ public interface EnterpriseAsyncClient
     ListenableFuture<DatacentersDto> listAllowedDatacenters(
         @QueryParam("idEnterprise") Integer enterpriseId);
 
+    /**
+     * @see EnterpriseClient#listVirtualDatacenters(EnterpriseDto)
+     */
+    @GET
+    ListenableFuture<VirtualDatacentersDto> listVirtualDatacenters(
+        @EndpointLink("cloud/virtualdatacenters") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
     /*********************** Enterprise Properties ***********************/
 
     /**
@@ -208,7 +220,7 @@ public interface EnterpriseAsyncClient
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<UserDto> getUser(
-        @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto datacenter,
+        @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
         @BinderParam(AppendToPath.class) Integer userId);
 
     /**
@@ -246,4 +258,65 @@ public interface EnterpriseAsyncClient
     @Path("/enterprises/{enterprise}/datacenterrepositories/{datacenterrepository}/actions/refresh")
     ListenableFuture<Void> refreshTemplateRepository(@PathParam("enterprise") Integer enterpriseId,
         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
+
+    /*********************** External Network ***********************/
+
+    /**
+     * @see EnterpriseClient#listExternalNetworks(EnterpriseDto)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<VLANNetworksDto> listExternalNetworks(
+        @EndpointLink("externalnetworks") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /*********************** Virtual Machine ***********************/
+
+    /**
+     * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
+     */
+    @GET
+    ListenableFuture<VirtualMachinesDto> listVirtualMachines(
+        @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /*********************** Machine ***********************/
+
+    /**
+     * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
+     */
+    @GET
+    ListenableFuture<MachinesDto> listReservedMachines(
+        @EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /*********************** Template definition list ***********************/
+
+    /**
+     * @see EnterpriseClient#listTemplateDefinitionLists(EnterpriseDto)
+     */
+    @GET
+    ListenableFuture<TemplateDefinitionListsDto> listTemplateDefinitionLists(
+        @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
+    /**
+     * @see EnterpriseClient#createTemplateDefinitionList(EnterpriseDto)
+     */
+    @POST
+    ListenableFuture<TemplateDefinitionListDto> createTemplateDefinitionList(
+        @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+        @BinderParam(BindToXMLPayload.class) TemplateDefinitionListDto templateList);
+
+    /**
+     * @see EnterpriseClient#deleteTemplateDefinitionList(EnterpriseDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteTemplateDefinitionList(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList);
+
+    /**
+     * @see EnterpriseClient#getTemplateDefinitionList(EnterpriseDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<UserDto> getTemplateDefinitionList(
+        @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+        @BinderParam(AppendToPath.class) Integer templateListId);
 }

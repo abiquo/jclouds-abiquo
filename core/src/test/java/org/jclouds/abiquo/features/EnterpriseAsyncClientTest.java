@@ -36,6 +36,7 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.UserDto;
@@ -197,6 +198,26 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters?idEnterprise=1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListVirtualDatacentersFromEnterprise() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listVirtualDatacenters", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/action/virtualdatacenters HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -443,6 +464,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
     }
 
     /*********************** Datacenter Repository ********************** */
+
     public void testRefreshTemplateRepository() throws SecurityException, NoSuchMethodException,
         IOException
     {
@@ -461,6 +483,160 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** External Network ********************** */
+
+    public void testListExternalNetworks() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listExternalNetworks", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/action/externalnetworks HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Virtual Machine ********************** */
+
+    public void testListVirtualMachines() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listVirtualMachines", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/action/virtualmachines HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Machine ********************** */
+
+    public void testListReservedMachines() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listReservedMachines", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/reservedmachines HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Template definition list ***********************/
+
+    public void testListTemplateDefinitionLists() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("listTemplateDefinitionLists",
+                EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCreateTemplateDefinitionList() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
+        TemplateDefinitionListDto template = EnterpriseResources.templateListPost();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("createTemplateDefinitionList",
+                EnterpriseDto.class, TemplateDefinitionListDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, enterprise, template);
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(EnterpriseResources.templateListPostPayload()),
+            "application/xml", false);
+
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteTemplateDefinitionList() throws SecurityException, NoSuchMethodException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("deleteTemplateDefinitionList",
+                TemplateDefinitionListDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.templateListPut());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void getTemplateDefinitionList() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("getTemplateDefinitionList", EnterpriseDto.class,
+                Integer.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
         checkFilters(request);
     }

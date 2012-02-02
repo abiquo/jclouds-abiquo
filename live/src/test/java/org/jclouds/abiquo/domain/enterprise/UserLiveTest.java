@@ -47,6 +47,7 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 
     public void testUpdate()
     {
+        String username = env.user.getName();
         env.user.setName("Manolo");
         env.user.update();
 
@@ -54,6 +55,9 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
         UserDto updated = env.enterpriseClient.getUser(env.enterprise.unwrap(), env.user.getId());
 
         assertEquals(updated.getName(), "Manolo");
+
+        env.user.setName(username);
+        env.user.update();
     }
 
     public void testCreateRepeated()
@@ -80,6 +84,9 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 
         assertEquals(env.anotherRole.getId(), role2.getId());
         assertEquals(role2.getName(), "Another role");
+
+        env.user.setRole(env.role);
+        env.user.update();
     }
 
     public void testListUser()

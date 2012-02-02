@@ -25,6 +25,10 @@ import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
+import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
+import com.abiquo.server.core.cloud.VirtualDatacentersDto;
+import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -35,6 +39,7 @@ import com.abiquo.server.core.enterprise.UsersDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 
 /**
  * Provides synchronous access to Abiquo Enterprise API.
@@ -112,6 +117,14 @@ public interface EnterpriseClient
      * @return The allowed datacenters to the given enterprise.
      */
     DatacentersDto listAllowedDatacenters(Integer enterpriseId);
+
+    /**
+     * List all virtual datacenters of an enterprise.
+     * 
+     * @param enterprise The given enterprise.
+     * @return The list of Datacenters.
+     */
+    VirtualDatacentersDto listVirtualDatacenters(EnterpriseDto enterprise);
 
     /*********************** Enterprise Properties ***********************/
 
@@ -239,4 +252,68 @@ public interface EnterpriseClient
      */
     @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
     void refreshTemplateRepository(Integer enterpriseId, Integer datacenterRepositoryId);
+
+    /*********************** Network ***********************/
+
+    /**
+     * List external networks of the enterprise
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of external networks created and assigned.
+     */
+    @EnterpriseEdition
+    VLANNetworksDto listExternalNetworks(EnterpriseDto enterprise);
+
+    /*********************** Virtual Machine ***********************/
+
+    /**
+     * List virtual machines for the enterprise
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of virtual machines by the enterprise.
+     */
+    VirtualMachinesDto listVirtualMachines(EnterpriseDto enterprise);
+
+    /**
+     * List reserved machines for the enterprise
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of reserverd machines by the enterprise.
+     */
+    MachinesDto listReservedMachines(EnterpriseDto enterprise);
+
+    /**
+     * List all template definitions in apps library.
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of template definitions by the enterprise.
+     */
+    TemplateDefinitionListsDto listTemplateDefinitionLists(EnterpriseDto enterprise);
+
+    /**
+     * Create a new template definition list in apps library in the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @param template The template to be created.
+     * @return The created template.
+     */
+    TemplateDefinitionListDto createTemplateDefinitionList(EnterpriseDto enterprise,
+        TemplateDefinitionListDto templateList);
+
+    /**
+     * Deletes existing user.
+     * 
+     * @param user The user to delete.
+     */
+    void deleteTemplateDefinitionList(TemplateDefinitionListDto templateList);
+
+    /**
+     * Get the given template definition list from the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @param templateListId The id of the template definition list.
+     * @return The list or <code>null</code> if it does not exist.
+     */
+    TemplateDefinitionListDto getTemplateDefinitionList(final EnterpriseDto enterprise,
+        final Integer templateListId);
 }

@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features.services;
 
 import java.util.List;
 
+import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
@@ -233,4 +234,31 @@ public interface AdministrationService
      * Get the first icon that matches the given filter or <code>null</code> if none is found.
      */
     Icon findIcon(final Predicate<Icon> filter);
+
+    /**
+     * Get list of icons by path.
+     */
+    Iterable<Icon> listIcons(String path);
+
+    /**
+     * Get the first icon that matches the given path or <code>null</code> if none is found.
+     */
+    Icon findIcon(String path);
+
+    /*********************** Category ***********************/
+
+    /**
+     * Get the list of categories.
+     */
+    Iterable<Category> listCategories();
+
+    /**
+     * Get the list of categories matching the given filter.
+     */
+    Iterable<Category> listCategories(final Predicate<Category> filter);
+
+    /**
+     * Get the first categories that matches the given filter or <code>null</code> if none is found.
+     */
+    Category findCategory(final Predicate<Category> filter);
 }

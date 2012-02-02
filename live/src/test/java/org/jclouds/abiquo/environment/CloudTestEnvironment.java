@@ -117,7 +117,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
         Properties props = new Properties();
         props.put("abiquo.endpoint", endpoint);
-        plainUserContext = new AbiquoContextFactory().createContext(user.getNick(), "user", props);
+        plainUserContext = new AbiquoContextFactory().createContext("jclouds", "user", props);
     }
 
     private void createLicense() throws IOException

@@ -43,6 +43,8 @@ import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
+import com.abiquo.server.core.infrastructure.UcsRackDto;
+import com.abiquo.server.core.infrastructure.UcsRacksDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -217,6 +219,15 @@ public interface InfrastructureClient
     RacksDto listRacks(DatacenterDto datacenter);
 
     /**
+     * List all managed racks for a datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @return The list of managed racks for the datacenter.
+     */
+    @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
+    UcsRacksDto listManagedRacks(DatacenterDto datacenter);
+
+    /**
      * Create a new not managed rack in a datacenter.
      * 
      * @param datacenter The datacenter.
@@ -226,6 +237,16 @@ public interface InfrastructureClient
     RackDto createRack(final DatacenterDto datacenter, final RackDto rack);
 
     /**
+     * Create a new managed rack in a datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @param rack The managed rack to be created.
+     * @return The created rack.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    UcsRackDto createManagedRack(final DatacenterDto datacenter, final UcsRackDto rack);
+
+    /**
      * Get the given rack from the given datacenter.
      * 
      * @param datacenter The datacenter.
@@ -233,6 +254,16 @@ public interface InfrastructureClient
      * @return The rack or <code>null</code> if it does not exist.
      */
     RackDto getRack(DatacenterDto datacenter, Integer rackId);
+
+    /**
+     * Get the given managed rack from the given datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @param rackId The id of the rack.
+     * @return The rack or <code>null</code> if it does not exist.
+     */
+    @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
+    UcsRackDto getManagedRack(DatacenterDto datacenter, Integer rackId);
 
     /**
      * Get the given rack from the rack link.
@@ -249,6 +280,15 @@ public interface InfrastructureClient
      * @return The updated rack.
      */
     RackDto updateRack(final RackDto rack);
+
+    /**
+     * Updates an existing managed rack from the given datacenter.
+     * 
+     * @param rack The new attributes for the rack.
+     * @return The updated rack.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    UcsRackDto updateManagedRack(final UcsRackDto rack);
 
     /**
      * Deletes an existing rack.
@@ -495,6 +535,8 @@ public interface InfrastructureClient
      */
     @EnterpriseEdition
     StoragePoolDto getStoragePool(StorageDeviceDto storageDevice, String storagePoolId);
+
+    /*********************** Network ***********************/
 
     /**
      * List all public, external and not managed networks of a datacenter.

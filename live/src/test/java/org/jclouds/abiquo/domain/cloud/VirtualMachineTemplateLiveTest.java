@@ -17,34 +17,29 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.reference.rest;
+package org.jclouds.abiquo.domain.cloud;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.environment.CloudTestEnvironment;
+import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.testng.annotations.Test;
 
 /**
- * Names of the "rel" attribute of the links that point to parent objects.
+ * Live integration tests for the {@link VirtualMachineTemplate} domain class.
  * 
  * @author Francesc Montserrat
  */
-public class ParentLinkName
+@Test(groups = "live")
+public class VirtualMachineTemplateLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-    public final static String RACK = "rack";
 
-    public final static String DATACENTER = "datacenter";
-
-    public final static String ENTERPRISE = "enterprise";
-
-    public final static String ROLE = "role";
-
-    public final static String TIER = "tier";
-
-    public final static String STORAGE_DEVICE = "device";
-
-    public final static String VIRTUAL_DATACENTER = "virtualdatacenter";
-
-    public final static String VIRTUAL_APPLIANCE = "virtualappliance";
-
-    public final static String VIRTUAL_MACHINE_TEMPLATE = "virtualmachinetemplate";
-
-    public final static String DATACENTER_REPOSITORY = "datacenterrepository";
-
-    public final static String COST_CODE = "costcode";
+    public void testGetParent()
+    {
+        Datacenter datacenter = env.virtualMachine.getTemplate().getDatacenter();
+        assertNotNull(datacenter);
+        assertEquals(datacenter.getId(), env.datacenter.getId());
+    }
 }

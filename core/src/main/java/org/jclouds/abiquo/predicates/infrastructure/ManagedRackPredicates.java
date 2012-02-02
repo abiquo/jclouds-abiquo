@@ -17,34 +17,35 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.reference.rest;
+package org.jclouds.abiquo.predicates.infrastructure;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Arrays;
+
+import org.jclouds.abiquo.domain.infrastructure.ManagedRack;
+
+import com.google.common.base.Predicate;
 
 /**
- * Names of the "rel" attribute of the links that point to parent objects.
+ * Container for {@link ManagedRack} filters.
  * 
+ * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public class ParentLinkName
+public class ManagedRackPredicates
 {
-    public final static String RACK = "rack";
+    public static Predicate<ManagedRack> name(final String... names)
+    {
+        checkNotNull(names, "names must be defined");
 
-    public final static String DATACENTER = "datacenter";
-
-    public final static String ENTERPRISE = "enterprise";
-
-    public final static String ROLE = "role";
-
-    public final static String TIER = "tier";
-
-    public final static String STORAGE_DEVICE = "device";
-
-    public final static String VIRTUAL_DATACENTER = "virtualdatacenter";
-
-    public final static String VIRTUAL_APPLIANCE = "virtualappliance";
-
-    public final static String VIRTUAL_MACHINE_TEMPLATE = "virtualmachinetemplate";
-
-    public final static String DATACENTER_REPOSITORY = "datacenterrepository";
-
-    public final static String COST_CODE = "costcode";
+        return new Predicate<ManagedRack>()
+        {
+            @Override
+            public boolean apply(final ManagedRack rack)
+            {
+                return Arrays.asList(names).contains(rack.getName());
+            }
+        };
+    }
 }

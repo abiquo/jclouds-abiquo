@@ -50,6 +50,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
+import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
@@ -240,6 +241,25 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testListManagedRacks() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listManagedRacks", DatacenterDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/managedrackdto+xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testCreateRack() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
@@ -254,6 +274,29 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.rackPostPayload()),
             "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCreateManagedRack() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("createManagedRack", DatacenterDto.class,
+                UcsRackDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(),
+                InfrastructureResources.managedRackPost());
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/managedrackdto+xml\n");
+        assertPayloadEquals(request, withHeader(InfrastructureResources.managedRackPostPayload()),
+            "application/managedrackdto+xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -282,6 +325,26 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testGetManagedRack() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getManagedRack", DatacenterDto.class,
+                Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/managedrackdto+xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
     public void testUpdateRack() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncClient.class.getMethod("updateRack", RackDto.class);
@@ -293,6 +356,27 @@ public class InfrastructureAsyncClientTest extends
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.rackPutPayload()),
             "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateManagedRack() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("updateManagedRack", UcsRackDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.managedRackPut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/managedrackdto+xml\n");
+        assertPayloadEquals(request, withHeader(InfrastructureResources.managedRackPutPayload()),
+            "application/managedrackdto+xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

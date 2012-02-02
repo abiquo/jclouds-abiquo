@@ -26,6 +26,8 @@ import java.net.URL;
 import java.nio.charset.Charset;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.appslibrary.CategoryDto;
+import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.SystemPropertyDto;
 import com.google.common.io.Resources;
@@ -44,6 +46,39 @@ public class ConfigResources
         license.setCode(readLicense("license/expired"));
         license.setCustomerid("3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c");
         return license;
+    }
+
+    public static IconDto iconPost()
+    {
+        IconDto icon = new IconDto();
+        icon.setName("icon");
+        icon.setPath("http://www.pixeljoint.com/files/icons/mipreview1.gif");
+        return icon;
+    }
+
+    public static CategoryDto categoryPost()
+    {
+        CategoryDto category = new CategoryDto();
+        category.setName("category");
+        category.setErasable(false);
+        category.setDefaultCategory(false);
+        return category;
+    }
+
+    public static CategoryDto categoryPut()
+    {
+        CategoryDto category = categoryPost();
+        category.setId(1);
+        category.addLink(new RESTLink("edit", "http://localhost/api/config/categories/1"));
+        return category;
+    }
+
+    public static IconDto iconPut()
+    {
+        IconDto icon = iconPost();
+        icon.setId(1);
+        icon.addLink(new RESTLink("edit", "http://localhost/api/config/icons/1"));
+        return icon;
     }
 
     public static LicenseDto licensePut()
@@ -86,6 +121,52 @@ public class ConfigResources
         buffer.append("<customerid>3bca6d1d-5fe2-42c5-82ea-a5276ea8c71c</customerid>");
         buffer.append("<code>" + readLicense("license/expired") + "</code>");
         buffer.append("</license>");
+        return buffer.toString();
+    }
+
+    public static String categoryPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<category>");
+        buffer.append("<defaultCategory>false</defaultCategory>");
+        buffer.append("<erasable>false</erasable>");
+        buffer.append("<name>category</name>");
+        buffer.append("</category>");
+        return buffer.toString();
+    }
+
+    public static String categoryPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<category>");
+        buffer.append(link("/config/categories/1", "edit"));
+        buffer.append("<defaultCategory>false</defaultCategory>");
+        buffer.append("<erasable>false</erasable>");
+        buffer.append("<id>1</id>");
+        buffer.append("<name>category</name>");
+        buffer.append("</category>");
+        return buffer.toString();
+    }
+
+    public static String iconPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<icon>");
+        buffer.append(link("/config/icons/1", "edit"));
+        buffer.append("<id>1</id>");
+        buffer.append("<name>icon</name>");
+        buffer.append("<path>http://www.pixeljoint.com/files/icons/mipreview1.gif</path>");
+        buffer.append("</icon>");
+        return buffer.toString();
+    }
+
+    public static String iconPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<icon>");
+        buffer.append("<name>icon</name>");
+        buffer.append("<path>http://www.pixeljoint.com/files/icons/mipreview1.gif</path>");
+        buffer.append("</icon>");
         return buffer.toString();
     }
 

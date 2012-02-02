@@ -17,34 +17,35 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.reference.rest;
+package org.jclouds.abiquo.predicates.enterprise;
+
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import java.util.Arrays;
+
+import org.jclouds.abiquo.domain.enterprise.TemplateDefinitionList;
+
+import com.google.common.base.Predicate;
 
 /**
- * Names of the "rel" attribute of the links that point to parent objects.
+ * Container for {@link TemplateDefinitionList} filters.
  * 
+ * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public class ParentLinkName
+public class TemplateDefinitionListPredicates
 {
-    public final static String RACK = "rack";
+    public static Predicate<TemplateDefinitionList> name(final String... names)
+    {
+        checkNotNull(names, "names must be defined");
 
-    public final static String DATACENTER = "datacenter";
-
-    public final static String ENTERPRISE = "enterprise";
-
-    public final static String ROLE = "role";
-
-    public final static String TIER = "tier";
-
-    public final static String STORAGE_DEVICE = "device";
-
-    public final static String VIRTUAL_DATACENTER = "virtualdatacenter";
-
-    public final static String VIRTUAL_APPLIANCE = "virtualappliance";
-
-    public final static String VIRTUAL_MACHINE_TEMPLATE = "virtualmachinetemplate";
-
-    public final static String DATACENTER_REPOSITORY = "datacenterrepository";
-
-    public final static String COST_CODE = "costcode";
+        return new Predicate<TemplateDefinitionList>()
+        {
+            @Override
+            public boolean apply(final TemplateDefinitionList templateList)
+            {
+                return Arrays.asList(names).contains(templateList.getName());
+            }
+        };
+    }
 }
