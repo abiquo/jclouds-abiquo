@@ -37,6 +37,7 @@ import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
@@ -327,6 +328,16 @@ public interface InfrastructureClient
      * @return The machine or <code>null</code> if it does not exist.
      */
     MachineDto getMachine(RackDto rack, Integer machineId);
+
+    /**
+     * Checks the real infrastructure state for the given physical machine. The machine is updated
+     * with the result state.
+     * 
+     * @param machine The machine to check
+     * @paran boolean that indicates a database synchronization
+     * @return A machineStateDto with a machine state value from enum MachineState
+     */
+    MachineStateDto checkMachineState(MachineDto machine, boolean sync);
 
     /**
      * Updates an existing physical machine.

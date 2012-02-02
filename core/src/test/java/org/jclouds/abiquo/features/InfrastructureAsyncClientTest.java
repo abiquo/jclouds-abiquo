@@ -563,8 +563,8 @@ public class InfrastructureAsyncClientTest extends
                 String.class, String.class, MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
-                "80.80.80.86", HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(
-                    8889).build());
+                "80.80.80.86", HypervisorType.KVM, "user", "pass",
+                MachineOptions.builder().port(8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discovermultiple";
         String query =
@@ -615,6 +615,28 @@ public class InfrastructureAsyncClientTest extends
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testCheckMachineState() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("checkMachineState", MachineDto.class,
+                boolean.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.machinePut(), true);
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/checkstate?sync=true HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }

@@ -43,10 +43,10 @@ public class test
     {
         // First of all create the Abiquo context pointing to the Abiquo API
         Properties props = new Properties();
-        props.put("abiquo.endpoint", "http://10.60.1.249/api");
+        props.put("abiquo.endpoint", "http://10.60.21.191/api");
         AbiquoContext context =
-            new AbiquoContextFactory().createContext("admin", "xabiquo", ImmutableSet
-                .<Module> of(new SLF4JLoggingModule()), props);
+            new AbiquoContextFactory().createContext("admin", "xabiquo",
+                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         try
         {
@@ -71,11 +71,11 @@ public class test
 
             // Create the virtual datacenter
             VirtualDatacenter virtualDatacenter =
-                VirtualDatacenter.builder(context, datacenter, enterprise).name(
-                    "API virtual datacenter").cpuCountLimits(18, 20).hdLimitsInMb(279172872,
-                    279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480).storageLimits(
-                    289910292, 322122547).vlansLimits(1, 2).hypervisorType(hypervisor).network(
-                    network).build();
+                VirtualDatacenter.builder(context, datacenter, enterprise)
+                    .name("API virtual datacenter").cpuCountLimits(18, 20)
+                    .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2)
+                    .ramLimits(19456, 20480).storageLimits(289910292, 322122547).vlansLimits(1, 2)
+                    .hypervisorType(hypervisor).network(network).build();
 
             virtualDatacenter.save();
 
