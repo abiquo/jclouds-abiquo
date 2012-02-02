@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain;
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
@@ -42,6 +43,16 @@ public class NetworkResources
         vlan.setMask(24);
 
         return vlan;
+    }
+
+    public static IpPoolManagementDto privateIpPut()
+    {
+        IpPoolManagementDto ip = new IpPoolManagementDto();
+        ip.setId(1);
+        ip.setName("private ip");
+        ip.setMac("00:58:5A:c0:C3:01");
+
+        return ip;
     }
 
     public static VLANNetworkDto privateNetworkPut()
@@ -114,6 +125,19 @@ public class NetworkResources
         buffer.append("<mask>24</mask>");
         buffer.append("<name>PublicNetwork</name>");
         buffer.append("</network>");
+        return buffer.toString();
+    }
+
+    public static String privateIpPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<ipPoolManagement>");
+        buffer.append("<available>false</available>");
+        buffer.append("<id>1</id>");
+        buffer.append("<mac>00:58:5A:c0:C3:01</mac>");
+        buffer.append("<name>private ip</name>");
+        buffer.append("<quarantine>false</quarantine>");
+        buffer.append("</ipPoolManagement>");
         return buffer.toString();
     }
 

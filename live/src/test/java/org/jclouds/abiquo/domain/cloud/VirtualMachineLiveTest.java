@@ -25,6 +25,8 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
+import org.jclouds.abiquo.domain.network.Nic;
+import org.jclouds.abiquo.domain.network.PrivateIPAddress;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -52,5 +54,17 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
     {
         VirtualMachineState state = env.virtualMachine.getState();
         assertEquals(state, VirtualMachineState.NOT_ALLOCATED);
+    }
+
+    @Test(enabled = false)
+    public void testCreateNic()
+    {
+        // TODO not working -> ip self link missing in API
+        PrivateIPAddress ip = env.virtualDatacenter.listPrivateNetworks().get(0).listIps().get(0);
+
+        Nic nic = env.virtualMachine.createNic(ip);
+
+        assertNotNull(nic);
+        assertNotNull(nic.getId());
     }
 }

@@ -42,7 +42,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 @EnterpriseEdition
-public class PublicNetwork extends Network<PublicNic>
+public class PublicNetwork extends Network<PublicIPAddress>
 {
     /** The datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -94,11 +94,11 @@ public class PublicNetwork extends Network<PublicNic>
      *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
      */
     @Override
-    public List<PublicNic> listNics()
+    public List<PublicIPAddress> listIps()
     {
         IpsPoolManagementDto nics =
             context.getApi().getInfrastructureClient().listNetworkIps(target);
-        return wrap(context, PublicNic.class, nics.getCollection());
+        return wrap(context, PublicIPAddress.class, nics.getCollection());
     }
 
     // Builder

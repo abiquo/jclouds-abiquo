@@ -29,12 +29,16 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.network.IPAddress;
+import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
+import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
@@ -42,8 +46,8 @@ import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
-import com.abiquo.server.core.cloud.chef.RunlistElementsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.abiquo.server.core.task.TasksDto;
@@ -97,8 +101,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient()
-                .createVirtualMachine(virtualAppliance.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
+                target);
     }
 
     public AsyncTask update()
@@ -294,6 +298,39 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return taskRef == null ? null : getTask(taskRef);
     }
 
+    public Nic createNic(final IPAddress ip)
+    {
+        // TODO not working -> ip self link missing in API
+        RESTLink link = createNicLink(ip);
+
+        // Create dto
+        LinksDto dto = new LinksDto();
+        dto.addLink(link);
+
+        // Create and return nic
+        NicDto nic = context.getApi().getCloudClient().createNic(target, dto);
+        return wrap(context, Nic.class, nic);
+    }
+
+    private RESTLink createNicLink(final IPAddress ip)
+    {
+        // Create link
+        NetworkType type = ip.getNetworkType();
+        String rel;
+
+        switch (type)
+        {
+            case INTERNAL:
+                rel = "private";
+                break;
+            default:
+                rel = type.toString().toLowerCase();
+                break;
+        }
+
+        return new RESTLink(rel + "ip", ip.unwrap().searchLink("self").getHref());
+    }
+
     // Builder
 
     public static Builder builder(final AbiquoContext context,
@@ -446,10 +483,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
-                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
-                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
+                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+                .vncAddress(in.getVncAddress()).vncPort(in.getVncPort()).idState(in.getIdState())
+                .idType(in.getIdType()).password(in.getPassword());
         }
     }
 
@@ -499,11 +536,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public int getRam()
     {
         return target.getRam();
-    }
-
-    public RunlistElementsDto getRunlist()
-    {
-        return target.getRunlist();
     }
 
     public String getUuid()

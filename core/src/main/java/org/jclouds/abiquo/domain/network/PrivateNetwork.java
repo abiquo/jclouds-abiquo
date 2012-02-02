@@ -36,7 +36,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  * @see <a href="http://community.abiquo.com/display/ABI20/Private+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Private+Network+Resource</a>
  */
-public class PrivateNetwork extends Network<PrivateNic>
+public class PrivateNetwork extends Network<PrivateIPAddress>
 {
     /** The virtual datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -71,8 +71,8 @@ public class PrivateNetwork extends Network<PrivateNic>
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
-                .createPrivateNetwork(virtualDatacenter.unwrap(), target);
+            context.getApi().getCloudClient().createPrivateNetwork(virtualDatacenter.unwrap(),
+                target);
     }
 
     /**
@@ -91,10 +91,10 @@ public class PrivateNetwork extends Network<PrivateNic>
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork</a>
      */
     @Override
-    public List<PrivateNic> listNics()
+    public List<PrivateIPAddress> listIps()
     {
         IpsPoolManagementDto nics = context.getApi().getCloudClient().listPrivateNetworkIps(target);
-        return wrap(context, PrivateNic.class, nics.getCollection());
+        return wrap(context, PrivateIPAddress.class, nics.getCollection());
     }
 
     // Builder
@@ -143,11 +143,10 @@ public class PrivateNetwork extends Network<PrivateNic>
 
         public static Builder fromPrivateNetwork(final PrivateNetwork in)
         {
-            return PrivateNetwork.builder(in.context).name(in.getName()).tag(in.getTag())
-                .gateway(in.getGateway()).address(in.getAddress()).mask(in.getMask())
-                .primaryDNS(in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS())
-                .sufixDNS(in.getSufixDNS()).defaultNetwork(in.getDefaultNetwork())
-                .virtualDatacenter(in.virtualDatacenter);
+            return PrivateNetwork.builder(in.context).name(in.getName()).tag(in.getTag()).gateway(
+                in.getGateway()).address(in.getAddress()).mask(in.getMask()).primaryDNS(
+                in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(in.getSufixDNS())
+                .defaultNetwork(in.getDefaultNetwork()).virtualDatacenter(in.virtualDatacenter);
         }
     }
 

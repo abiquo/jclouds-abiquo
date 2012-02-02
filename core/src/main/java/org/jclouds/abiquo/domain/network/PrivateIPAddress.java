@@ -20,49 +20,28 @@
 package org.jclouds.abiquo.domain.network;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
-import com.abiquo.server.core.infrastructure.network.NicDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
- * Adds high level functionality to {@link NicDto}.
+ * Adds generic high level functionality to {IpPoolManagementDto} for private networks.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Attached+NICs+Resource
  */
-@EnterpriseEdition
-public class Nic extends DomainWrapper<NicDto>
+public class PrivateIPAddress extends IPAddress
 {
-    NicDto target;
-
     /**
-     * Constructor to be used only by the builder (if any).
+     * Constructor to be used only by the builder.
      */
-    protected Nic(final AbiquoContext context, final NicDto target)
+    protected PrivateIPAddress(final AbiquoContext context, final IpPoolManagementDto target)
     {
         super(context, target);
     }
 
-    // Domain operations
-
-    // Parent access
-
-    // Delegate methods
-
-    public Integer getId()
+    @Override
+    public String toString()
     {
-        return target.getId();
-    }
-
-    public String getIp()
-    {
-        return target.getIp();
-    }
-
-    public String getMac()
-    {
-        return target.getMac();
+        return "Private " + super.toString();
     }
 }

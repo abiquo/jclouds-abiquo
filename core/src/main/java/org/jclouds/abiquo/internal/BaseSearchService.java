@@ -38,7 +38,7 @@ import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.domain.network.PrivateNic;
+import org.jclouds.abiquo.domain.network.PrivateIPAddress;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.services.SearchService;
 
@@ -117,14 +117,14 @@ public class BaseSearchService implements SearchService
     /*********************** Private Network ***********************/
 
     @Override
-    public Iterable<PrivateNic> searchPrivateNics(final PrivateNetwork network,
+    public Iterable<PrivateIPAddress> searchPrivateNics(final PrivateNetwork network,
         final IpOptions options)
     {
         List<IpPoolManagementDto> nics =
             context.getApi().getCloudClient().listPrivateNetworkIps(network.unwrap(), options)
                 .getCollection();
 
-        return wrap(context, PrivateNic.class, nics);
+        return wrap(context, PrivateIPAddress.class, nics);
     }
 
 }

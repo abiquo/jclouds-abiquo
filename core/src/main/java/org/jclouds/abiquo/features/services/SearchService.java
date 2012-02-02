@@ -29,7 +29,7 @@ import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.domain.network.PrivateNic;
+import org.jclouds.abiquo.domain.network.PrivateIPAddress;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.internal.BaseSearchService;
 
@@ -95,5 +95,5 @@ public interface SearchService
      * @param network The given private network.
      * @param options The set of filtering and pagination options of the search.
      */
-    Iterable<PrivateNic> searchPrivateNics(final PrivateNetwork network, final IpOptions options);
+    Iterable<PrivateIPAddress> searchPrivateNics(final PrivateNetwork network, final IpOptions options);
 }

@@ -455,6 +455,34 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
+    /*********************** Attached Nic ***********************/
+
+    public void testCreateNic() throws SecurityException, NoSuchMethodException, IOException
+    {
+        LinksDto dto = new LinksDto();
+        RESTLink link =
+            new RESTLink("privateip",
+                "http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips/1");
+        dto.addLink(link);
+        Method method =
+            CloudAsyncClient.class.getMethod("createNic", VirtualMachineDto.class, LinksDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualMachinePut(), dto);
+
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(NetworkResources.linksDtoPayload(link)),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     /*********************** Virtual Appliance ***********************/
 
     public void testListVirtualAppliances() throws SecurityException, NoSuchMethodException,

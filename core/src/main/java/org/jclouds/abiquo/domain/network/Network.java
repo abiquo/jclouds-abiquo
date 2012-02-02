@@ -40,7 +40,7 @@ import com.google.common.collect.Lists;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDto>
+public abstract class Network<T extends IPAddress> extends DomainWrapper<VLANNetworkDto>
 {
     /**
      * Constructor to be used only by the builder.
@@ -52,16 +52,16 @@ public abstract class Network<T extends Nic> extends DomainWrapper<VLANNetworkDt
 
     // Domain operations
 
-    public abstract List<T> listNics();
+    public abstract List<T> listIps();
 
-    public List<T> listNics(final Predicate<Nic> filter)
+    public List<T> listIps(final Predicate<IPAddress> filter)
     {
-        return Lists.newLinkedList(filter(listNics(), filter));
+        return Lists.newLinkedList(filter(listIps(), filter));
     }
 
-    public T findNic(final Predicate<Nic> filter)
+    public T findIp(final Predicate<IPAddress> filter)
     {
-        return Iterables.getFirst(filter(listNics(), filter), null);
+        return Iterables.getFirst(filter(listIps(), filter), null);
     }
 
     // Builder

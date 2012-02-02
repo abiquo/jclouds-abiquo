@@ -43,7 +43,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 @EnterpriseEdition
-public class ExternalNetwork extends Network<ExternalNic>
+public class ExternalNetwork extends Network<ExternalIPAddress>
 {
     /** The datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -99,11 +99,11 @@ public class ExternalNetwork extends Network<ExternalNic>
      *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
      */
     @Override
-    public List<ExternalNic> listNics()
+    public List<ExternalIPAddress> listIps()
     {
         IpsPoolManagementDto nics =
             context.getApi().getInfrastructureClient().listNetworkIps(target);
-        return wrap(context, ExternalNic.class, nics.getCollection());
+        return wrap(context, ExternalIPAddress.class, nics.getCollection());
     }
 
     private void addEnterpriseLink()

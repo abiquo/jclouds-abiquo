@@ -43,7 +43,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 @EnterpriseEdition
-public class UnmanagedNetwork extends Network<UnmanagedNic>
+public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
 {
     /** The datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -99,11 +99,11 @@ public class UnmanagedNetwork extends Network<UnmanagedNic>
      *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
      */
     @Override
-    public List<UnmanagedNic> listNics()
+    public List<UnmanagedIPAddress> listIps()
     {
         IpsPoolManagementDto nics =
             context.getApi().getInfrastructureClient().listNetworkIps(target);
-        return wrap(context, UnmanagedNic.class, nics.getCollection());
+        return wrap(context, UnmanagedIPAddress.class, nics.getCollection());
     }
 
     private void addEnterpriseLink()

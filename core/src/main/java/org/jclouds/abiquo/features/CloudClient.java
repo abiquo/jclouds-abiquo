@@ -44,6 +44,7 @@ import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -204,6 +205,17 @@ public interface CloudClient
      * @return The list of ips for the private network.
      */
     IpsPoolManagementDto listPrivateNetworkIps(VLANNetworkDto network, IpOptions options);
+
+    /*********************** Attached Nic ***********************/
+
+    /**
+     * Create a new nic using an ip address.
+     * 
+     * @param virtualMachine The virtual machine where the nic will be created.
+     * @param links link of the ip.
+     * @return The created nic.
+     */
+    NicDto createNic(VirtualMachineDto virtuaMachine, LinksDto links);
 
     /*********************** Virtual Appliance ***********************/
 

@@ -72,6 +72,7 @@ import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
@@ -224,6 +225,16 @@ public interface CloudAsyncClient
     ListenableFuture<IpsPoolManagementDto> listPrivateNetworkIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
+
+    /*********************** Attached Nic ***********************/
+
+    /**
+     * @see CloudClient#createNic(VirtualMachineDto, LinksDto)
+     */
+    @POST
+    ListenableFuture<NicDto> createNic(
+        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtuaMachine,
+        @BinderParam(BindToXMLPayload.class) LinksDto links);
 
     /*********************** Virtual Appliance ***********************/
 
