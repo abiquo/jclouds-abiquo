@@ -117,7 +117,7 @@ public class User extends DomainWrapper<UserDto>
         target = context.getApi().getEnterpriseClient().updateUser(target);
     }
 
-    public List<VirtualDatacenter> getPermitedVirtualDatacenters()
+    public List<VirtualDatacenter> listPermitedVirtualDatacenters()
     {
         List<Integer> ids = extractAvailableDatacenters();
 
@@ -128,6 +128,17 @@ public class User extends DomainWrapper<UserDto>
         }
 
         return Lists.newArrayList(context.getCloudService().getVirtualDatacenters(ids));
+    }
+
+    public List<VirtualDatacenter> listPermitedVirtualDatacenters(
+        final Predicate<VirtualDatacenter> filter)
+    {
+        return Lists.newLinkedList(filter(listPermitedVirtualDatacenters(), filter));
+    }
+
+    public VirtualDatacenter findPermitedVirtualDatacenter(final Predicate<VirtualDatacenter> filter)
+    {
+        return Iterables.getFirst(filter(listPermitedVirtualDatacenters(), filter), null);
     }
 
     /**
