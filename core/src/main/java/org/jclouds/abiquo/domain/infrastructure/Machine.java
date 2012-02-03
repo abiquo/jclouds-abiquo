@@ -36,6 +36,7 @@ import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
@@ -88,6 +89,15 @@ public class Machine extends DomainWrapper<MachineDto>
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateMachine(target);
+    }
+
+    public MachineState check()
+    {
+        MachineStateDto dto =
+            context.getApi().getInfrastructureClient().checkMachineState(target, true);
+        MachineState state = dto.getState();
+        target.setState(state);
+        return state;
     }
 
     // Parent access
@@ -351,16 +361,17 @@ public class Machine extends DomainWrapper<MachineDto>
         public static Builder fromMachine(final Machine in)
         {
             Builder builder =
-                Machine.builder(in.context, in.rack).name(in.getName()).description(
-                    in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
-                    .virtualCpusPerCore(in.getVirtualCpusPerCore()).virtualCpusUsed(
-                        in.getVirtualCpusUsed()).virtualRamInMb(in.getVirtualRamInMb())
-                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb()).virtualSwitch(
-                        in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp()).ipService(
-                        in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
-                    .password(in.getPassword()).ipmiIp(in.getIpmiIp()).ipmiPassword(
-                        in.getIpmiPassword()).ipmiUser(in.getIpmiUser()).state(in.getState())
-                    .datastores(in.getDatastores());
+                Machine.builder(in.context, in.rack).name(in.getName())
+                    .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
+                    .virtualCpusPerCore(in.getVirtualCpusPerCore())
+                    .virtualCpusUsed(in.getVirtualCpusUsed())
+                    .virtualRamInMb(in.getVirtualRamInMb())
+                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
+                    .virtualSwitch(in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp())
+                    .ipService(in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
+                    .password(in.getPassword()).ipmiIp(in.getIpmiIp())
+                    .ipmiPassword(in.getIpmiPassword()).ipmiUser(in.getIpmiUser())
+                    .state(in.getState()).datastores(in.getDatastores());
 
             // Parameters that can be null
             if (in.getIpmiPort() != null)

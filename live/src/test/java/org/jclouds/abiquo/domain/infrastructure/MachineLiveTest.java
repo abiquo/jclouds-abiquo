@@ -34,6 +34,7 @@ import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.MachineDto;
 
@@ -101,6 +102,16 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironme
         MachineDto updated =
             env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
         assertEquals(updated.getName(), "API Machine");
+    }
+
+    public void testCheck()
+    {
+        MachineState state = env.machine.check();
+
+        // Recover the machine with same state that has been returned
+        MachineDto machine =
+            env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
+        assertEquals(machine.getState(), state);
     }
 
     public void testFindDatastore()

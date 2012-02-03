@@ -66,6 +66,7 @@ import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
@@ -373,6 +374,14 @@ public interface InfrastructureAsyncClient
     ListenableFuture<MachineDto> getMachine(
         @EndpointLink("machines") @BinderParam(BindToPath.class) final RackDto rack,
         @BinderParam(AppendToPath.class) Integer machineId);
+
+    /**
+     * @see InfrastructureClient#checkMachineState(MachineDto)
+     */
+    @GET
+    ListenableFuture<MachineStateDto> checkMachineState(
+        @EndpointLink("checkstate") @BinderParam(BindToPath.class) final MachineDto machine,
+        @QueryParam("sync") boolean sync);
 
     /**
      * @see InfrastructureClient#updateMachine(MachineDto)
