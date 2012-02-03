@@ -41,9 +41,23 @@ public class IPAddressPredicates
         return new Predicate<IPAddress>()
         {
             @Override
-            public boolean apply(final IPAddress nic)
+            public boolean apply(final IPAddress address)
             {
-                return Arrays.asList(names).contains(nic.getName());
+                return Arrays.asList(names).contains(address.getName());
+            }
+        };
+    }
+
+    public static Predicate<IPAddress> address(final String... addresses)
+    {
+        checkNotNull(addresses, "addresses must be defined");
+
+        return new Predicate<IPAddress>()
+        {
+            @Override
+            public boolean apply(final IPAddress address)
+            {
+                return Arrays.asList(addresses).contains(address.getIp());
             }
         };
     }
