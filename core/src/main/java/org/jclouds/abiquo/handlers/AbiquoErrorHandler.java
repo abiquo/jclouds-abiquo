@@ -60,7 +60,8 @@ public class AbiquoErrorHandler implements HttpErrorHandler
         Exception exception = null;
         String message = null;
 
-        if (response.getPayload() != null)
+        if (response.getPayload() != null
+            && response.getPayload().getContentMetadata().getContentLength() > 0)
         {
             try
             {
@@ -83,8 +84,8 @@ public class AbiquoErrorHandler implements HttpErrorHandler
             // If it is not an abiquo Exception propagate a standard
             // one
             message =
-                String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
-                    response.getStatusLine());
+                String.format("%s -> %s", command.getCurrentRequest().getRequestLine(), response
+                    .getStatusLine());
             exception = new HttpResponseException(command, response, message);
         }
 
