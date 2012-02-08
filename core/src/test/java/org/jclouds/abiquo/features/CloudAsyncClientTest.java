@@ -30,7 +30,7 @@ import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
-import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.network.options.IPOptions;
 import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
@@ -183,6 +183,50 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListAvailablePublicIPsToPurchaseWithOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        IPOptions options = IPOptions.builder().limit(5).build();
+        Method method =
+            CloudAsyncClient.class.getMethod("listAvailablePublicIPsToPurchase",
+                VirtualDatacenterDto.class, IPOptions.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(), options);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase?limit=5 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListPurchasedPublicIPsWithOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        IPOptions options = IPOptions.builder().limit(5).build();
+        Method method =
+            CloudAsyncClient.class.getMethod("listPurchasedPublicIPs", VirtualDatacenterDto.class,
+                IPOptions.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(), options);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/publicips/purchased?limit=5 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -436,10 +480,10 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testListPrivateNetworkIpsWithOptions() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        IpOptions options = IpOptions.builder().startWith(10).build();
+        IPOptions options = IPOptions.builder().startWith(10).build();
         Method method =
             CloudAsyncClient.class.getMethod("listPrivateNetworkIps", VLANNetworkDto.class,
-                IpOptions.class);
+                IPOptions.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, NetworkResources.privateNetworkPut(), options);
 

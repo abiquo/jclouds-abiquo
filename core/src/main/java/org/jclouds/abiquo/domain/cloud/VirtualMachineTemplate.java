@@ -34,6 +34,8 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
+ * @see <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource">
+ *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource</a>
  */
 public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplateDto>
 {

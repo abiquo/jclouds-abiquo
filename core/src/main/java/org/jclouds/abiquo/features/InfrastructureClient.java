@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.network.options.IPOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
@@ -620,5 +620,5 @@ public interface InfrastructureClient
      * @param options Filtering options.
      * @return The list of ips for the network.
      */
-    IpsPoolManagementDto listNetworkIps(VLANNetworkDto network, IpOptions options);
+    IpsPoolManagementDto listNetworkIps(VLANNetworkDto network, IPOptions options);
 }

@@ -19,7 +19,10 @@
 
 package org.jclouds.abiquo.domain.network;
 
+import static com.google.common.base.Preconditions.checkNotNull;
+
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
@@ -41,6 +44,38 @@ public class PublicIPAddress extends IPAddress
     protected PublicIPAddress(final AbiquoContext context, final IpPoolManagementDto target)
     {
         super(context, target);
+    }
+
+    // Domain operations
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#Virtual+Datacenter+Resource#VirtualDatacenterResource-PurchaseaPublicIP">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#Virtual+Datacenter+Resource#VirtualDatacenterResource-PurchaseaPublicIP</a>
+     */
+    public void purchase()
+    {
+        checkNotNull(target.searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
+
+        target = context.getApi().getCloudClient().purchasePublicIP(target);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ReleaseaPublicIP">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ReleaseaPublicIP</a>
+     */
+    public void release()
+    {
+        checkNotNull(target.searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
+
+        target = context.getApi().getCloudClient().releasePublicIP(target);
     }
 
     @Override

@@ -40,7 +40,7 @@ import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
-import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.network.options.IPOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
 import org.jclouds.abiquo.functions.enterprise.ParseEnterpriseId;
@@ -71,6 +71,7 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
@@ -154,6 +155,38 @@ public interface CloudAsyncClient
         @EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer tierId);
 
+    /*********************** Public IP ***********************/
+
+    /**
+     * @see CloudClient#listAvailablePublicIPsToPurchase(VirtualDatacenterDto, IpOptions)
+     */
+    @GET
+    ListenableFuture<IpsPoolManagementDto> listAvailablePublicIPsToPurchase(
+        @EndpointLink("topurchase") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendOptionsToPath.class) IPOptions options);
+
+    /**
+     * @see CloudClient#listPurchasedPublicIPs(VirtualDatacenterDto, IpOptions)
+     */
+    @GET
+    ListenableFuture<IpsPoolManagementDto> listPurchasedPublicIPs(
+        @EndpointLink("purchased") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendOptionsToPath.class) IPOptions options);
+
+    /**
+     * @see CloudClient#purchasePublicIP(IpsPoolManagementDto)
+     */
+    @PUT
+    ListenableFuture<IpPoolManagementDto> purchasePublicIP(
+        @EndpointLink("purchase") @BinderParam(BindToPath.class) IpPoolManagementDto publicIp);
+
+    /**
+     * @see CloudClient#releasePublicIP(IpsPoolManagementDto)
+     */
+    @PUT
+    ListenableFuture<IpPoolManagementDto> releasePublicIP(
+        @EndpointLink("release") @BinderParam(BindToPath.class) IpPoolManagementDto publicIp);
+
     /*********************** Private Network ***********************/
 
     /**
@@ -224,7 +257,7 @@ public interface CloudAsyncClient
     @GET
     ListenableFuture<IpsPoolManagementDto> listPrivateNetworkIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-        @BinderParam(AppendOptionsToPath.class) IpOptions options);
+        @BinderParam(AppendOptionsToPath.class) IPOptions options);
 
     /*********************** Attached Nic ***********************/
 

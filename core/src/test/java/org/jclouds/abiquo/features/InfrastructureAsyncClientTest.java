@@ -29,7 +29,7 @@ import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.network.options.IPOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
@@ -647,8 +647,8 @@ public class InfrastructureAsyncClientTest extends
                 String.class, String.class, MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
-                "80.80.80.86", HypervisorType.KVM, "user", "pass",
-                MachineOptions.builder().port(8889).build());
+                "80.80.80.86", HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(
+                    8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discovermultiple";
         String query =
@@ -1276,10 +1276,10 @@ public class InfrastructureAsyncClientTest extends
     public void testListPublicNetworkIpsWithOptions() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        IpOptions options = IpOptions.builder().startWith(10).build();
+        IPOptions options = IPOptions.builder().startWith(10).build();
         Method method =
             InfrastructureAsyncClient.class.getMethod("listNetworkIps", VLANNetworkDto.class,
-                IpOptions.class);
+                IPOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, NetworkResources.publicNetworkPut(), options);
 

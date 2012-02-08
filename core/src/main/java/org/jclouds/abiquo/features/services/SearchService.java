@@ -28,9 +28,10 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PrivateIPAddress;
-import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.network.PublicIPAddress;
+import org.jclouds.abiquo.domain.network.options.IPOptions;
 import org.jclouds.abiquo.internal.BaseSearchService;
 
 import com.google.inject.ImplementedBy;
@@ -87,13 +88,34 @@ public interface SearchService
     Iterable<StoragePool> searchStoragePools(final StorageDevice device,
         final StoragePoolOptions options);
 
-    /*********************** Private Network ***********************/
+    /*********************** Private IPs ***********************/
 
     /**
-     * Get the list of filtered nics for a private network.
+     * Get the list of filtered ips for a private network.
      * 
      * @param network The given private network.
      * @param options The set of filtering and pagination options of the search.
      */
-    Iterable<PrivateIPAddress> searchPrivateNics(final PrivateNetwork network, final IpOptions options);
+    Iterable<PrivateIPAddress> searchPrivateIPs(final PrivateNetwork network,
+        final IPOptions options);
+
+    /*********************** Public IPs ***********************/
+
+    /**
+     * Get the list of filtered public ips to purchase by a virtual datacenter.
+     * 
+     * @param virtualDatacenter The given virtual datacenter.
+     * @param options The set of filtering and pagination options of the search.
+     */
+    Iterable<PublicIPAddress> searchPublicIPsToPurchase(final VirtualDatacenter virtualDatacenter,
+        final IPOptions options);
+
+    /**
+     * Get the list of filtered purchased public ips by a virtual datacenter.
+     * 
+     * @param virtualDatacenter The given virtual datacenter.
+     * @param options The set of filtering and pagination options of the search.
+     */
+    Iterable<PublicIPAddress> searchPurchasedPublicIPs(final VirtualDatacenter virtualDatacenter,
+        final IPOptions options);
 }

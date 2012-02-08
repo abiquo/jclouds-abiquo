@@ -34,6 +34,8 @@ import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.network.PublicIPAddress;
+import org.jclouds.abiquo.domain.network.options.IPOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
@@ -46,6 +48,7 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -103,8 +106,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
-                .createVirtualDatacenter(target, datacenter.unwrap(), enterprise.unwrap());
+            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenter.unwrap(),
+                enterprise.unwrap());
     }
 
     /**
@@ -242,35 +245,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     /**
      * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter</a>
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter</a>
-     */
-    public void setDefaultNetwork(final Network< ? > network)
-    {
-        RESTLink link = null;
-        RESTLink netlink = network.unwrap().searchLink("edit");
-        checkNotNull(netlink, ValidationErrors.MISSING_REQUIRED_LINK);
-
-        switch (network.getType())
-        {
-            case INTERNAL:
-                link = new RESTLink("internalnetwork", netlink.getHref());
-                break;
-            case EXTERNAL:
-                link = new RESTLink("externalnetwork", netlink.getHref());
-                break;
-        }
-
-        LinksDto dto = new LinksDto();
-        dto.addLink(link);
-        context.getApi().getCloudClient().setDefaultNetworkByVirtualDatacenter(target, dto);
-    }
-
-    /**
-     * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievealistofPrivateNetworks">
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievealistofPrivateNetworks</a>
      */
@@ -297,15 +271,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a href="http://community.abiquo.com/display/ABI20/Virtual+Image+Resource">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Image+Resource</a>
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource#VirtualMachineTemplateResource-RetrievethelistofVirtualMachineTemplates">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource#VirtualMachineTemplateResource-RetrievethelistofVirtualMachineTemplates</a>
      */
     public List<VirtualMachineTemplate> listAvailableTemplates()
     {
         VirtualMachineTemplatesDto templates =
-            context
-                .getApi()
-                .getVirtualMachineTemplateClient()
+            context.getApi().getVirtualMachineTemplateClient()
                 .listVirtualMachineTemplates(
                     getEnterprise().getId(),
                     getDatacenter().getId(),
@@ -329,9 +302,91 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public VirtualMachineTemplate getAvailableTemplate(final Integer id)
     {
         VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient()
-                .getVirtualMachineTemplate(getEnterprise().getId(), getDatacenter().getId(), id);
+            context.getApi().getVirtualMachineTemplateClient().getVirtualMachineTemplate(
+                getEnterprise().getId(), getDatacenter().getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
+     */
+    public List<PublicIPAddress> listAvailablePublicIpsToPurchase()
+    {
+        IPOptions options = IPOptions.builder().build();
+
+        IpsPoolManagementDto ips =
+            context.getApi().getCloudClient().listAvailablePublicIPsToPurchase(target, options);
+
+        return wrap(context, PublicIPAddress.class, ips.getCollection());
+    }
+
+    public List<PublicIPAddress> listAvailablePublicIpsToPurchase(
+        final Predicate<PublicIPAddress> filter)
+    {
+        return Lists.newLinkedList(filter(listAvailablePublicIpsToPurchase(), filter));
+    }
+
+    public PublicIPAddress findAvailablePublicIPToPurchase(final Predicate<PublicIPAddress> filter)
+    {
+        return Iterables.getFirst(filter(listAvailablePublicIpsToPurchase(), filter), null);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
+     */
+    public List<PublicIPAddress> listPurchasedPublicIPs()
+    {
+        IPOptions options = IPOptions.builder().build();
+
+        IpsPoolManagementDto ips =
+            context.getApi().getCloudClient().listPurchasedPublicIPs(target, options);
+
+        return wrap(context, PublicIPAddress.class, ips.getCollection());
+    }
+
+    public List<PublicIPAddress> listPurchasedPublicIPs(final Predicate<PublicIPAddress> filter)
+    {
+        return Lists.newLinkedList(filter(listPurchasedPublicIPs(), filter));
+    }
+
+    public PublicIPAddress findPurchasedPublicIP(final Predicate<PublicIPAddress> filter)
+    {
+        return Iterables.getFirst(filter(listPurchasedPublicIPs(), filter), null);
+    }
+
+    // Actions
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter</a>
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter</a>
+     */
+    public void setDefaultNetwork(final Network< ? > network)
+    {
+        RESTLink link = null;
+        RESTLink netlink = network.unwrap().searchLink("edit");
+        checkNotNull(netlink, ValidationErrors.MISSING_REQUIRED_LINK);
+
+        switch (network.getType())
+        {
+            case INTERNAL:
+                link = new RESTLink("internalnetwork", netlink.getHref());
+                break;
+            case EXTERNAL:
+                link = new RESTLink("externalnetwork", netlink.getHref());
+                break;
+        }
+
+        LinksDto dto = new LinksDto();
+        dto.addLink(link);
+        context.getApi().getCloudClient().setDefaultNetworkByVirtualDatacenter(target, dto);
     }
 
     // Builder
@@ -423,14 +478,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         public static Builder fromVirtualDatacenter(final VirtualDatacenter in)
         {
-            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise)
-                .name(in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
-                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
-                .storageLimits(in.getStorageSoft(), in.getStorageHard())
-                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
-                .network(in.getNetwork()).hypervisorType(in.getHypervisorType());
+            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise).name(
+                in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
+                    in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
+                    in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
+                    in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).network(
+                    in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }
 

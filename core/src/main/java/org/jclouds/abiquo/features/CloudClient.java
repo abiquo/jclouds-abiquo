@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
-import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.network.options.IPOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
@@ -43,6 +43,7 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
@@ -108,6 +109,42 @@ public interface CloudClient
     void deleteVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
 
     /**
+     * List all available ips to purchase in the datacenter by the virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param options Filtering options.
+     * @return The list of available ips.
+     */
+    IpsPoolManagementDto listAvailablePublicIPsToPurchase(VirtualDatacenterDto virtualDatacenter,
+        IPOptions options);
+
+    /**
+     * List all purchased public ip addresses in the virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param options Filtering options.
+     * @return The list of purchased ips.
+     */
+    IpsPoolManagementDto listPurchasedPublicIPs(VirtualDatacenterDto virtualDatacenter,
+        IPOptions options);
+
+    /**
+     * Purchase a public IP.
+     * 
+     * @param ip The public ip address to purchase.
+     * @return The purchased public ip.
+     */
+    IpPoolManagementDto purchasePublicIP(IpPoolManagementDto publicIp);
+
+    /**
+     * Release a public IP.
+     * 
+     * @param ip The public ip address to purchase.
+     * @return The release public ip.
+     */
+    IpPoolManagementDto releasePublicIP(IpPoolManagementDto publicIp);
+
+    /**
      * List the storage tiers available for the given virtual datacenter.
      * 
      * @param virtualDatacenter The virtual datacenter.
@@ -126,6 +163,8 @@ public interface CloudClient
     @EnterpriseEdition
     TierDto getStorageTier(VirtualDatacenterDto virtualDatacenter, Integer tierId);
 
+    /*********************** Private Network ***********************/
+
     /**
      * Get the default network of the virtual datacenter.
      * 
@@ -141,8 +180,6 @@ public interface CloudClient
      * @param links Link to the network.
      */
     void setDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto virtualDatacenter, LinksDto links);
-
-    /*********************** Private Network ***********************/
 
     /**
      * List all private networks for a virtual datacenter.
@@ -204,7 +241,7 @@ public interface CloudClient
      * @param options Filtering options.
      * @return The list of ips for the private network.
      */
-    IpsPoolManagementDto listPrivateNetworkIps(VLANNetworkDto network, IpOptions options);
+    IpsPoolManagementDto listPrivateNetworkIps(VLANNetworkDto network, IPOptions options);
 
     /*********************** Attached Nic ***********************/
 
