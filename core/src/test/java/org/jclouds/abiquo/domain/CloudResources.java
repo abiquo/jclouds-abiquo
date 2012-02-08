@@ -144,6 +144,9 @@ public class CloudResources
         virtualMachine
             .addLink(new RESTLink("volumes",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes"));
+        virtualMachine
+            .addLink(new RESTLink("configurations",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/configurations"));
         return virtualMachine;
     }
 
@@ -185,7 +188,8 @@ public class CloudResources
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier
+            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
     }
 
@@ -348,6 +352,11 @@ public class CloudResources
         buffer.append(link(
             "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes",
             "volumes"));
+        buffer
+            .append(link(
+                "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/configurations",
+                "configurations"));
+
         buffer.append("<cpu>0</cpu>");
         buffer.append("<hdInBytes>0</hdInBytes>");
         buffer.append("<highDisponibility>0</highDisponibility>");
@@ -430,7 +439,8 @@ public class CloudResources
     public static DiskManagementDto hardDiskPut()
     {
         DiskManagementDto disk = hardDiskPost();
-        disk.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/disks/1"));
+        disk
+            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/disks/1"));
         disk.addLink(new RESTLink("virtualdatacenter",
             "http://localhost/api/cloud/virtualdatacenters/1"));
         return disk;

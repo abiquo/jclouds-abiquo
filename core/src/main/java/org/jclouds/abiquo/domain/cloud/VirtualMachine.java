@@ -30,6 +30,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.IPAddress;
+import org.jclouds.abiquo.domain.network.NetworkConfiguration;
 import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -48,6 +49,8 @@ import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
+import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
+import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.abiquo.server.core.task.TasksDto;
@@ -232,6 +235,33 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return Iterables.getFirst(filter(listTasks(), filter), null);
     }
 
+    public List<NetworkConfiguration> listNetworkConfigurations()
+    {
+        VMNetworkConfigurationsDto configs =
+            context.getApi().getCloudClient().listNetworkConfigurations(target);
+
+        return wrap(context, NetworkConfiguration.class, configs.getCollection());
+    }
+
+    public List<NetworkConfiguration> listNetworkConfigurations(
+        final Predicate<NetworkConfiguration> filter)
+    {
+        return Lists.newLinkedList(filter(listNetworkConfigurations(), filter));
+    }
+
+    public NetworkConfiguration findNetworkConfiguration(
+        final Predicate<NetworkConfiguration> filter)
+    {
+        return Iterables.getFirst(filter(listNetworkConfigurations(), filter), null);
+    }
+
+    public NetworkConfiguration getNetworkConfiguration(final Integer id)
+    {
+        VMNetworkConfigurationDto dto =
+            context.getApi().getCloudClient().getNetworkConfiguration(target, id);
+        return wrap(context, NetworkConfiguration.class, dto);
+    }
+
     // Actions
 
     public AsyncTask deploy()
@@ -296,6 +326,22 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         AcceptedRequestDto<String> taskRef =
             context.getApi().getCloudClient().replaceVolumes(target, toVolumeDto(volumes));
         return taskRef == null ? null : getTask(taskRef);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource#VirtualMachineNetworkConfigurationResource-Changetheusedconfiguration">
+     *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource#VirtualMachineNetworkConfigurationResource-Changetheusedconfiguration</a>
+     */
+    public void ChangeNetworkConfiguration(final NetworkConfiguration config)
+    {
+        RESTLink edit = config.unwrap().searchLink("edit");
+        checkNotNull(edit, ValidationErrors.MISSING_REQUIRED_LINK);
+
+        LinksDto links = new LinksDto();
+        links.addLink(new RESTLink("network_configuration", edit.getHref()));
+
+        context.getApi().getCloudClient().changeNetworkConfiguration(target, links);
     }
 
     public Nic createNic(final IPAddress ip)

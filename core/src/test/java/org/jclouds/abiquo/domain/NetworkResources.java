@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain;
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
@@ -141,11 +142,14 @@ public class NetworkResources
         return buffer.toString();
     }
 
-    public static String linksDtoPayload(final RESTLink link)
+    public static String linksDtoPayload(final LinksDto dto)
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<links>");
-        buffer.append(link(link));
+        for (RESTLink link : dto.getLinks())
+        {
+            buffer.append(link(link));
+        }
         buffer.append("</links>");
         return buffer.toString();
     }

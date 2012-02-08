@@ -76,6 +76,8 @@ import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
+import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
@@ -405,6 +407,30 @@ public interface CloudAsyncClient
     @GET
     ListenableFuture<VirtualMachineStateDto> getVirtualMachineState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+    /**
+     * @see CloudClient#listNetworkConfigurations(VirtualMachineDto)
+     */
+    @GET
+    ListenableFuture<VMNetworkConfigurationsDto> listNetworkConfigurations(
+        @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+    /**
+     * @see CloudClient#getNetworkConfiguration(VirtualMachineDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<VMNetworkConfigurationDto> getNetworkConfiguration(
+        @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(AppendToPath.class) Integer networkConfigId);
+
+    /**
+     * @see CloudClient#changeNetworkConfiguration(VirtualMachineDto, VMNetworkConfigurationDto)
+     */
+    @PUT
+    ListenableFuture<Void> changeNetworkConfiguration(
+        @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindToXMLPayload.class) LinksDto links);
 
     /*********************** Virtual Machine Template ***********************/
 

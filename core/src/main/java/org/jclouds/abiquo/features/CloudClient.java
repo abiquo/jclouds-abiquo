@@ -48,6 +48,8 @@ import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
+import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -432,6 +434,32 @@ public interface CloudClient
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> undeployVirtualMachine(VirtualMachineDto virtualMachine,
         VirtualMachineTaskDto options);
+
+    /**
+     * List all available network configurations for a virtual machine.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @return The list of network configurations.
+     */
+    VMNetworkConfigurationsDto listNetworkConfigurations(VirtualMachineDto virtualMachine);
+
+    /**
+     * Get a single network configuration from a virtual machine.
+     * 
+     * @param virtualMachine The given virtual machine.
+     * @return The network configuration.
+     */
+    VMNetworkConfigurationDto getNetworkConfiguration(VirtualMachineDto virtualMachine,
+        Integer networkConfigId);
+
+    /**
+     * Changes network configuration used by a virtual machine.
+     * 
+     * @param virtualMachine The given virtual machine.
+     * @param links Link to the configuration.
+     * @return The network configuration.
+     */
+    void changeNetworkConfiguration(final VirtualMachineDto virtualMachine, final LinksDto links);
 
     /******************* Virtual Machine Template ***********************/
 
