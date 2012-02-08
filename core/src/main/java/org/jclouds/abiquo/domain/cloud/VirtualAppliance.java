@@ -68,12 +68,18 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     // Domain operations
 
+    /**
+     * Delete the virtual appliance.
+     */
     public void delete()
     {
         context.getApi().getCloudClient().deleteVirtualAppliance(target);
         target = null;
     }
 
+    /**
+     * Create the virtual appliance in the selected virtual datacenter.
+     */
     public void save()
     {
         target =
@@ -81,6 +87,9 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
                 .createVirtualAppliance(virtualDatacenter.unwrap(), target);
     }
 
+    /**
+     * Update the virtual appliance information when some of its properties have changed.
+     */
     public void update()
     {
         target = context.getApi().getCloudClient().updateVirtualAppliance(target);
@@ -89,6 +98,9 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     // Parent access
 
     /**
+     * Get the virtual datacenter where the virtual appliance belongs to.
+     * 
+     * @resturn The virtual datacenter where the virtual appliance belongs to.
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
@@ -103,6 +115,9 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
+     * Get the enterprise where the virtual appliance belongs to.
+     * 
+     * @return The enterprise where the virtual appliance belongs to.
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise</a>
@@ -114,6 +129,11 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         return wrap(context, Enterprise.class, dto);
     }
 
+    /**
+     * Get the current state of the virtual appliance.
+     * 
+     * @return The current state of the virtual appliance.
+     */
     public VirtualApplianceState getState()
     {
         VirtualApplianceStateDto stateDto =
@@ -124,6 +144,9 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     // Children access
 
     /**
+     * Get the list of virtual machines in the virtual appliance.
+     * 
+     * @return The list of virtual machines in the virtual appliance.
      * @see <a
      *      href="http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource-RetrievethelistofVirtualMachines.">
      *      http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource-RetrievethelistofVirtualMachines.</a>
@@ -134,16 +157,34 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         return wrap(context, VirtualMachine.class, vms.getCollection());
     }
 
+    /**
+     * Get the list of virtual machines in the virtual appliance matching the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The list of virtual machines in the virtual appliance matching the given filter.
+     */
     public List<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter)
     {
         return Lists.newLinkedList(filter(listVirtualMachines(), filter));
     }
 
+    /**
+     * Get a single virtual machine in the virtual appliance matching the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The virtual machine or <code>null</code> if none matched the given filter.
+     */
     public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter)
     {
         return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
     }
 
+    /**
+     * Get a concrete virtual machine in the virtual appliance.
+     * 
+     * @param id The id of the virtual machine.
+     * @return The requested virtual machine.
+     */
     public VirtualMachine getVirtualMachine(final Integer id)
     {
         VirtualMachineDto vm = context.getApi().getCloudClient().getVirtualMachine(target, id);
@@ -152,11 +193,33 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     // Actions
 
+    /**
+     * Deploy the virtual appliance.
+     * <p>
+     * This method will start the deployment of all the virtual machines in the virtual appliance,
+     * and will return an {@link AsyncTask} reference for each deployment operation. The deployment
+     * will finish when all individual tasks finish.
+     * 
+     * @return The list of tasks corresponding to the deploy process of each virtual machine in the
+     *         appliance.
+     */
     public AsyncTask[] deploy()
     {
         return deploy(false);
     }
 
+    /**
+     * Deploy the virtual appliance.
+     * <p>
+     * This method will start the deployment of all the virtual machines in the virtual appliance,
+     * and will return an {@link AsyncTask} reference for each deploy operation. The deployment will
+     * finish when all individual tasks finish.
+     * 
+     * @param forceEnterpriseSoftLimits Boolean indicating if the deployment must be executed even
+     *            if the enterprise soft limits are reached.
+     * @return The list of tasks corresponding to the deploy process of each virtual machine in the
+     *         appliance.
+     */
     public AsyncTask[] deploy(final boolean forceEnterpriseSoftLimits)
     {
         VirtualMachineTaskDto force = new VirtualMachineTaskDto();
@@ -168,11 +231,33 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         return getTasks(response);
     }
 
+    /**
+     * Undeploy the virtual appliance.
+     * <p>
+     * This method will start the undeploy of all the virtual machines in the virtual appliance, and
+     * will return an {@link AsyncTask} reference for each undeploy operation. The undeploy will
+     * finish when all individual tasks finish.
+     * 
+     * @return The list of tasks corresponding to the undeploy process of each virtual machine in
+     *         the appliance.
+     */
     public AsyncTask[] undeploy()
     {
         return undeploy(false);
     }
 
+    /**
+     * Undeploy the virtual appliance.
+     * <p>
+     * This method will start the undeploy of all the virtual machines in the virtual appliance, and
+     * will return an {@link AsyncTask} reference for each undeploy operation. The undeploy will
+     * finish when all individual tasks finish.
+     * 
+     * @param forceUndeploy Boolean flag to force the undeploy even if the virtual appliance
+     *            contains imported virtual machines.
+     * @return The list of tasks corresponding to the undeploy process of each virtual machine in
+     *         the appliance.
+     */
     public AsyncTask[] undeploy(final boolean forceUndeploy)
     {
         VirtualMachineTaskDto force = new VirtualMachineTaskDto();

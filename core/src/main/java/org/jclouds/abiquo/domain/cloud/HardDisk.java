@@ -51,12 +51,21 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
 
     // Domain operations
 
+    /**
+     * Create the hard disk in the selected virtual datacenter.
+     * <p>
+     * Once the hard disk has been created it can be attached to a virtual machine of the virtual
+     * datacenter.
+     */
     public void save()
     {
         target =
             context.getApi().getCloudClient().createHardDisk(virtualDatacenter.unwrap(), target);
     }
 
+    /**
+     * Delete the hard disk.
+     */
     public void delete()
     {
         context.getApi().getCloudClient().deleteHardDisk(target);
@@ -66,6 +75,8 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     // Parent access
 
     /**
+     * Get the virtual datacenter where the hard disk belongs to.
+     * 
      * @see <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
@@ -124,17 +135,29 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
 
     // Delegate methods. Since a hard disk cannot be edited, setters are not visible
 
+    /**
+     * Returns the id of the hard disk.
+     */
     public Integer getId()
     {
         // TODO: DiskManagementDto does not have an id field
         return target.getEditLink() == null ? null : target.getIdFromLink("edit");
     }
 
+    /**
+     * Returns the size of the hard disk in MB.
+     */
     public Long getSizeInMb()
     {
         return target.getSizeInMb();
     }
 
+    /**
+     * Returns the sequence number of the hard disk.
+     * <p>
+     * It will be computed when attaching the hard disk to a virtual machine and will determine the
+     * attachment order of the disk in the virtual machine.
+     */
     public Integer getSequence()
     {
         return target.getSequence();
