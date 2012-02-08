@@ -124,6 +124,12 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
 
     // Delegate methods. Since a hard disk cannot be edited, setters are not visible
 
+    public Integer getId()
+    {
+        // TODO: DiskManagementDto does not have an id field
+        return target.getEditLink() == null ? null : target.getIdFromLink("edit");
+    }
+
     public Long getSizeInMb()
     {
         return target.getSizeInMb();
@@ -137,7 +143,8 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     @Override
     public String toString()
     {
-        return "HardDisk [sizeInMb()=" + getSizeInMb() + ", sequence()=" + getSequence() + "]";
+        return "HardDisk [id=" + getId() + ", sizeInMb()=" + getSizeInMb() + ", sequence()="
+            + getSequence() + "]";
     }
 
 }

@@ -34,6 +34,7 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.binders.cloud.BindHardDiskRefsToPayload;
 import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
 import org.jclouds.abiquo.binders.cloud.BindVirtualDatacenterRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
@@ -373,8 +374,6 @@ public interface CloudAsyncClient
     ListenableFuture<VirtualMachineStateDto> getVirtualMachineState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
-    /*********************** Virtual Machine Template ***********************/
-
     /**
      * @see CloudClient#getVirtualMachineTemplate(VirtualMachineTemplateDto)
      */
@@ -382,7 +381,6 @@ public interface CloudAsyncClient
     ListenableFuture<VirtualMachineTemplateDto> getVirtualMachineTemplate(
         @EndpointLink("virtualmachinetemplate") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
-    /*********************** Volume ***********************/
     /**
      * @see CloudClient#listAttachedVolumes(VirtualMachineDto)
      */
@@ -406,6 +404,30 @@ public interface CloudAsyncClient
     ListenableFuture<AcceptedRequestDto<String>> replaceVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
+
+    /**
+     * @see CloudClient#listAttachedHardDisks(VirtualMachineDto)
+     */
+    @GET
+    ListenableFuture<DisksManagementDto> listAttachedHardDisks(
+        @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+    /**
+     * @see CloudClient#detachAllHardDisks(VirtualMachineDto)
+     */
+    @DELETE
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> detachAllHardDisks(
+        @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
+
+    /**
+     * @see CloudClient#replaceHardDisks(VirtualMachineDto, DiskManagementDto...)
+     */
+    @PUT
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> replaceHardDisks(
+        @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindHardDiskRefsToPayload.class) DiskManagementDto... hardDisks);
 
     /**
      * @see CloudClient#deployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)

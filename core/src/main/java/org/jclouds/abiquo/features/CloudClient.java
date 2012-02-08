@@ -396,8 +396,6 @@ public interface CloudClient
     AcceptedRequestDto<String> undeployVirtualMachine(VirtualMachineDto virtualMachine,
         VirtualMachineTaskDto options);
 
-    /******************* Virtual Machine Template ***********************/
-
     /**
      * Get the template of a virtual machine.
      * 
@@ -405,8 +403,6 @@ public interface CloudClient
      * @return The template of the given virtual machine.
      */
     VirtualMachineTemplateDto getVirtualMachineTemplate(VirtualMachineDto virtualMachine);
-
-    /*********************** Volume ***********************/
 
     /**
      * Get the volumes attached to the given virtual machine.
@@ -437,6 +433,36 @@ public interface CloudClient
      */
     AcceptedRequestDto<String> replaceVolumes(VirtualMachineDto virtualMachine,
         VolumeManagementDto... volumes);
+
+    /**
+     * List all hard disks attached to the given virtual machine.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @return The hard disks attached to the virtual machine.
+     */
+    DisksManagementDto listAttachedHardDisks(VirtualMachineDto virtualMachine);
+
+    /**
+     * Detach all hard disks from the given virtual machine.
+     * <p>
+     * If the virtual machine is deployed, the operation will be executed asynchronously.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
+    AcceptedRequestDto<String> detachAllHardDisks(VirtualMachineDto virtualMachine);
+
+    /**
+     * Replaces the current hard disks attached to the virtual machine with the given ones.
+     * <p>
+     * If the virtual machine is deployed, the operation will be executed asynchronously.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @param hardDisks The new hard disks for the virtual machine.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
+    AcceptedRequestDto<String> replaceHardDisks(VirtualMachineDto virtualMachine,
+        DiskManagementDto... hardDisks);
 
     /*********************** Hard disks ***********************/
 

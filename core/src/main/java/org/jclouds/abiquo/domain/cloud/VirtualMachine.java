@@ -48,6 +48,8 @@ import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
+import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
+import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.abiquo.server.core.task.TasksDto;
@@ -101,8 +103,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
     public AsyncTask update()
@@ -182,6 +184,23 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     // Children access
 
+    public List<HardDisk> listAttachedHardDisks()
+    {
+        DisksManagementDto hardDisks =
+            context.getApi().getCloudClient().listAttachedHardDisks(target);
+        return wrap(context, HardDisk.class, hardDisks.getCollection());
+    }
+
+    public List<HardDisk> listAttachedHardDisks(final Predicate<HardDisk> filter)
+    {
+        return Lists.newLinkedList(filter(listAttachedHardDisks(), filter));
+    }
+
+    public HardDisk findAttachedHardDisk(final Predicate<HardDisk> filter)
+    {
+        return Iterables.getFirst(filter(listAttachedHardDisks(), filter), null);
+    }
+
     public List<Volume> listAttachedVolumes()
     {
         VolumesManagementDto volumes =
@@ -195,11 +214,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     public Volume findAttachedVolume(final Predicate<Volume> filter)
-    {
-        return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
-    }
-
-    public Volume getAttachedVolume(final Predicate<Volume> filter)
     {
         return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
     }
@@ -266,6 +280,38 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return getTask(response);
     }
 
+    public AsyncTask attachHardDisks(final HardDisk... hardDisks)
+    {
+        List<HardDisk> expected = listAttachedHardDisks();
+        expected.addAll(Arrays.asList(hardDisks));
+
+        HardDisk[] disks = new HardDisk[expected.size()];
+        return replaceHardDisks(expected.toArray(disks));
+    }
+
+    public AsyncTask detachAllHardDisks()
+    {
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().detachAllHardDisks(target);
+        return taskRef == null ? null : getTask(taskRef);
+    }
+
+    public AsyncTask detachHardDisks(final HardDisk... hardDisks)
+    {
+        List<HardDisk> expected = listAttachedHardDisks();
+        Iterables.removeIf(expected, hardDiskIdIn(hardDisks));
+
+        HardDisk[] disks = new HardDisk[expected.size()];
+        return replaceHardDisks(expected.toArray(disks));
+    }
+
+    public AsyncTask replaceHardDisks(final HardDisk... hardDisks)
+    {
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().replaceHardDisks(target, toHardDiskDto(hardDisks));
+        return taskRef == null ? null : getTask(taskRef);
+    }
+
     public AsyncTask attachVolumes(final Volume... volumes)
     {
         List<Volume> expected = listAttachedVolumes();
@@ -285,7 +331,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public AsyncTask detachVolumes(final Volume... volumes)
     {
         List<Volume> expected = listAttachedVolumes();
-        Iterables.removeIf(expected, idIn(volumes));
+        Iterables.removeIf(expected, volumeIdIn(volumes));
 
         Volume[] vols = new Volume[expected.size()];
         return replaceVolumes(expected.toArray(vols));
@@ -483,10 +529,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
-                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
-                .vncAddress(in.getVncAddress()).vncPort(in.getVncPort()).idState(in.getIdState())
-                .idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
+                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
+                .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
+                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
         }
     }
 
@@ -591,11 +637,24 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return dtos;
     }
 
-    private static Predicate<Volume> idIn(final Volume... volumes)
+    private static DiskManagementDto[] toHardDiskDto(final HardDisk... hardDisks)
+    {
+        checkNotNull(hardDisks, "must provide at least one volume");
+
+        DiskManagementDto[] dtos = new DiskManagementDto[hardDisks.length];
+        for (int i = 0; i < hardDisks.length; i++)
+        {
+            dtos[i] = hardDisks[i].unwrap();
+        }
+
+        return dtos;
+    }
+
+    private static Predicate<Volume> volumeIdIn(final Volume... volumes)
     {
         return new Predicate<Volume>()
         {
-            List<Integer> ids = ids(Arrays.asList(volumes));
+            List<Integer> ids = volumeIds(Arrays.asList(volumes));
 
             @Override
             public boolean apply(final Volume input)
@@ -605,12 +664,38 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         };
     }
 
-    private static List<Integer> ids(final List<Volume> volumes)
+    private static Predicate<HardDisk> hardDiskIdIn(final HardDisk... hardDisks)
+    {
+        return new Predicate<HardDisk>()
+        {
+            List<Integer> ids = hardDisksIds(Arrays.asList(hardDisks));
+
+            @Override
+            public boolean apply(final HardDisk input)
+            {
+                return ids.contains(input.getId());
+            }
+        };
+    }
+
+    private static List<Integer> volumeIds(final List<Volume> volumes)
     {
         return Lists.transform(volumes, new Function<Volume, Integer>()
         {
             @Override
             public Integer apply(final Volume input)
+            {
+                return input.getId();
+            }
+        });
+    }
+
+    private static List<Integer> hardDisksIds(final List<HardDisk> HardDisk)
+    {
+        return Lists.transform(HardDisk, new Function<HardDisk, Integer>()
+        {
+            @Override
+            public Integer apply(final HardDisk input)
             {
                 return input.getId();
             }

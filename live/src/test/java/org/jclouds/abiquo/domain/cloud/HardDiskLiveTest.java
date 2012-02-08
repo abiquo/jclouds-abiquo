@@ -34,29 +34,28 @@ import org.testng.annotations.Test;
 @Test(groups = "live")
 public class HardDiskLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-    private Integer diskId;
+    private HardDisk hardDisk;
 
     public void createHardDisk()
     {
-        HardDisk hardDisk = HardDisk.builder(context, env.virtualDatacenter).sizeInMb(64L).build();
+        hardDisk = HardDisk.builder(context, env.virtualDatacenter).sizeInMb(64L).build();
         hardDisk.save();
 
-        // TODO: Hard disk does not have an id field
-        assertNotNull(hardDisk.unwrap().getEditLink());
+        assertNotNull(hardDisk.getId());
         assertNotNull(hardDisk.getSequence());
 
-        diskId = hardDisk.unwrap().getIdFromLink("edit");
-        assertNotNull(env.virtualDatacenter.getHardDisk(diskId));
+        assertNotNull(env.virtualDatacenter.getHardDisk(hardDisk.getId()));
     }
 
     @Test(dependsOnMethods = "createHardDisk")
-    public void deleteHardDiske()
+    public void deleteHardDisk()
     {
-        HardDisk hardDisk = env.virtualDatacenter.getHardDisk(diskId);
-        assertNotNull(hardDisk);
+        HardDisk hd = env.virtualDatacenter.getHardDisk(hardDisk.getId());
+        assertNotNull(hd);
 
+        Integer id = hd.getId();
         hardDisk.delete();
-        assertNull(env.virtualDatacenter.getVolume(diskId));
+        assertNull(env.virtualDatacenter.getHardDisk(id));
     }
 
 }
