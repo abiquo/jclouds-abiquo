@@ -73,6 +73,7 @@ public class ListVirtualMachineTemplatesImplLiveTest extends
             strategy.execute(env.defaultEnterprise,
                 VirtualMachineTemplatePredicates.name(env.template.getName()));
         assertNotNull(templates);
-        assertEquals(size(templates), 1);
+        // Repository can have multiple templates with the same name
+        assertTrue(size(templates) > 0);
     }
 }
