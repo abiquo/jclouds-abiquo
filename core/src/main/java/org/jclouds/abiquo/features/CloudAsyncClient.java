@@ -76,6 +76,8 @@ import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
+import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
@@ -454,7 +456,40 @@ public interface CloudAsyncClient
         @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
-    /*********************** Storage ***********************/
+    /*********************** Hard disks ***********************/
+
+    /**
+     * @see CloudClient#listHardDisks(VirtualDatacenterDto)
+     */
+    @GET
+    ListenableFuture<DisksManagementDto> listHardDisks(
+        @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#getHardDisk(VirtualDatacenterDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<DiskManagementDto> getHardDisk(
+        @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendToPath.class) Integer diskId);
+
+    /**
+     * @see CloudClient#createHardDisk(VirtualDatacenterDto, DiskManagementDto)
+     */
+    @POST
+    ListenableFuture<DiskManagementDto> createHardDisk(
+        @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(BindToXMLPayload.class) DiskManagementDto hardDisk);
+
+    /**
+     * @see CloudClient#deleteHardDisk(DiskManagementDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteHardDisk(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) DiskManagementDto hardDisk);
+
+    /*********************** Volumes ***********************/
 
     /**
      * @see CloudClient#listVolumes(VirtualDatacenterDto)

@@ -275,7 +275,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return replaceVolumes(expected.toArray(vols));
     }
 
-    public AsyncTask dettachAllVolumes()
+    public AsyncTask detachAllVolumes()
     {
         AcceptedRequestDto<String> taskRef =
             context.getApi().getCloudClient().detachAllVolumes(target);

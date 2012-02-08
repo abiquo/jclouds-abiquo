@@ -51,6 +51,8 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
+import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -228,6 +230,33 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         VolumeManagementDto volume = context.getApi().getCloudClient().getVolume(target, id);
         return wrap(context, Volume.class, volume);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Hard+Disks+Resource#HardDisksResource-GetthelistofHardDisksofaVirtualDatacenter">
+     *      http://community.abiquo.com/display/ABI20/Hard+Disks+Resource#HardDisksResource-GetthelistofHardDisksofaVirtualDatacenter</a>
+     */
+    public List<HardDisk> listHardDisks()
+    {
+        DisksManagementDto hardDisks = context.getApi().getCloudClient().listHardDisks(target);
+        return wrap(context, HardDisk.class, hardDisks.getCollection());
+    }
+
+    public List<HardDisk> listHardDisks(final Predicate<HardDisk> filter)
+    {
+        return Lists.newLinkedList(filter(listHardDisks(), filter));
+    }
+
+    public HardDisk findHardDisk(final Predicate<HardDisk> filter)
+    {
+        return Iterables.getFirst(filter(listHardDisks(), filter), null);
+    }
+
+    public HardDisk getHardDisk(final Integer id)
+    {
+        DiskManagementDto hardDisk = context.getApi().getCloudClient().getHardDisk(target, id);
+        return wrap(context, HardDisk.class, hardDisk);
     }
 
     /**

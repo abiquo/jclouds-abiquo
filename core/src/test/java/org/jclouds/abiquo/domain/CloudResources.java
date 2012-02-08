@@ -28,6 +28,7 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
+import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
@@ -68,6 +69,8 @@ public class CloudResources
         virtualDatacenter.setId(1);
         virtualDatacenter.addLink(new RESTLink("datacenter",
             "http://localhost/api/admin/datacenters/1"));
+        virtualDatacenter.addLink(new RESTLink("disks",
+            "http://localhost/api/cloud/virtualdatacenters/1/disks"));
         virtualDatacenter.addLink(new RESTLink("enterprise",
             "http://localhost/api/admin/enterprises/1"));
         virtualDatacenter.addLink(new RESTLink("edit",
@@ -182,8 +185,7 @@ public class CloudResources
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier
-            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
     }
 
@@ -258,6 +260,7 @@ public class CloudResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<virtualDatacenter>");
         buffer.append(link("/admin/datacenters/1", "datacenter"));
+        buffer.append(link("/cloud/virtualdatacenters/1/disks", "disks"));
         buffer.append(link("/admin/enterprises/1", "enterprise"));
         buffer.append(link("/cloud/virtualdatacenters/1", "edit"));
         buffer.append(link("/cloud/virtualdatacenters/1/tiers", "tiers"));
@@ -414,6 +417,43 @@ public class CloudResources
         buffer.append("<forceEnterpriseSoftLimits>false</forceEnterpriseSoftLimits>");
         buffer.append("<forceUndeploy>true</forceUndeploy>");
         buffer.append("</virtualmachinetask>");
+        return buffer.toString();
+    }
+
+    public static DiskManagementDto hardDiskPost()
+    {
+        DiskManagementDto disk = new DiskManagementDto();
+        disk.setSizeInMb(1024L);
+        return disk;
+    }
+
+    public static DiskManagementDto hardDiskPut()
+    {
+        DiskManagementDto disk = hardDiskPost();
+        disk.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/disks/1"));
+        disk.addLink(new RESTLink("virtualdatacenter",
+            "http://localhost/api/cloud/virtualdatacenters/1"));
+        return disk;
+    }
+
+    public static String hardDiskPostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<disk>");
+        buffer.append("<sizeInMb>1024</sizeInMb>");
+        buffer.append("</disk>");
+        return buffer.toString();
+    }
+
+    public static String hardDiskPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<disk>");
+        buffer.append(link("/cloud/virtualdatacenters/1", "virtualdatacenter"));
+        buffer.append(link("/cloud/virtualdatacenters/1/disks/1", "edit"));
+        buffer.append("<sequence>0</sequence>");
+        buffer.append("<sizeInMb>1024</sizeInMb>");
+        buffer.append("</disk>");
         return buffer.toString();
     }
 }
