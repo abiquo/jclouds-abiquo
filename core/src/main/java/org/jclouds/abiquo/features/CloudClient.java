@@ -47,6 +47,8 @@ import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
+import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -436,7 +438,43 @@ public interface CloudClient
     AcceptedRequestDto<String> replaceVolumes(VirtualMachineDto virtualMachine,
         VolumeManagementDto... volumes);
 
-    /*********************** Storage ***********************/
+    /*********************** Hard disks ***********************/
+
+    /**
+     * List all hard disks in the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @return The hard disks in the virtual datacenter.
+     */
+    DisksManagementDto listHardDisks(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * Get the hard disk with the given id in the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter.
+     * @param diskId The id of the hard disk to get.
+     * @return The requested hard disk or <code>null</code> if it does not exist.
+     */
+    DiskManagementDto getHardDisk(VirtualDatacenterDto virtualDatacenter, Integer diskId);
+
+    /**
+     * Creates a new hard disk in the given virtual datacenter.
+     * 
+     * @param virtualDatacenter The virtual datacenter where the hard disk will be created.
+     * @param hardDisk The hard disk to create.
+     * @return The created hard disk.
+     */
+    DiskManagementDto createHardDisk(VirtualDatacenterDto virtualDatacenter,
+        DiskManagementDto hardDisk);
+
+    /**
+     * Deletes the given hard disk.
+     * 
+     * @param hardDisk The hard disk to delete.
+     */
+    void deleteHardDisk(DiskManagementDto hardDisk);
+
+    /*********************** Volumes ***********************/
 
     /**
      * List all volumes in the given virtual datacenter.

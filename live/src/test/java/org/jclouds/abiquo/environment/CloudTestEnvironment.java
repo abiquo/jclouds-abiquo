@@ -38,7 +38,6 @@ import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
-import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
@@ -69,8 +68,6 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     public VirtualMachine virtualMachine;
 
     public VirtualMachineTemplate template;
-
-    public Volume volume;
 
     public PrivateNetwork network;
 
@@ -137,14 +134,15 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     protected void createVirtualDatacenter()
     {
         network =
-            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1").address(
-                "192.168.1.0").mask(24).build();
+            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1")
+                .address("192.168.1.0").mask(24).build();
 
         virtualDatacenter =
-            VirtualDatacenter.builder(context, datacenter, defaultEnterprise).name(
-                PREFIX + "Virtual Aloha").cpuCountLimits(18, 20).hdLimitsInMb(279172872, 279172872)
-                .publicIpsLimits(2, 2).ramLimits(19456, 20480).storageLimits(289910292, 322122547)
-                .vlansLimits(1, 2).hypervisorType(machine.getType()).network(network).build();
+            VirtualDatacenter.builder(context, datacenter, defaultEnterprise)
+                .name(PREFIX + "Virtual Aloha").cpuCountLimits(18, 20)
+                .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
+                .storageLimits(289910292, 322122547).vlansLimits(1, 2)
+                .hypervisorType(machine.getType()).network(network).build();
 
         virtualDatacenter.save();
         assertNotNull(virtualDatacenter.getId());
@@ -178,8 +176,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         template = templates.get(0);
 
         virtualMachine =
-            VirtualMachine.builder(context, virtualAppliance, template).cpu(2).name(
-                PREFIX + "VM Aloha").ram(128).build();
+            VirtualMachine.builder(context, virtualAppliance, template).cpu(2)
+                .name(PREFIX + "VM Aloha").ram(128).build();
 
         virtualMachine.save();
         assertNotNull(virtualMachine.getId());
