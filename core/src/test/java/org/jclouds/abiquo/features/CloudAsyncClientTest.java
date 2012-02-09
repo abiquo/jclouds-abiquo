@@ -516,7 +516,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, withHeader(NetworkResources.linksDtoPayload(dto)),
             "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

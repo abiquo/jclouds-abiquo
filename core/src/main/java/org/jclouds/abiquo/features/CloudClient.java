@@ -257,7 +257,7 @@ public interface CloudClient
      * @param links link of the ip.
      * @return The created nic.
      */
-    NicDto createNic(VirtualMachineDto virtuaMachine, LinksDto links);
+    void createNic(VirtualMachineDto virtuaMachine, LinksDto links);
 
     /**
      * Deletes an existing nic.

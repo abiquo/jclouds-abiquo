@@ -33,6 +33,7 @@ import org.jclouds.abiquo.domain.network.PrivateIPAddress;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.network.NicPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
@@ -62,14 +63,13 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         assertEquals(state, VirtualMachineState.NOT_ALLOCATED);
     }
 
-    @Test(enabled = false)
     public void testCreateNic()
     {
-        // TODO not working -> ip self link missing in API
         PrivateIPAddress ip = env.virtualDatacenter.listPrivateNetworks().get(0).listIps().get(0);
 
-        Nic nic = env.virtualMachine.createNic(ip);
-
+        // XXX create nic does not return the created nic
+        env.virtualMachine.createNic(ip);
+        Nic nic = env.virtualMachine.findAttachedNic(NicPredicates.ip(ip.getIp()));
         assertNotNull(nic);
         assertNotNull(nic.getId());
     }

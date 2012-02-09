@@ -35,8 +35,6 @@ import com.abiquo.server.core.infrastructure.network.NicDto;
 @EnterpriseEdition
 public class Nic extends DomainWrapper<NicDto>
 {
-    NicDto target;
-
     /**
      * Constructor to be used only by the builder (if any).
      */

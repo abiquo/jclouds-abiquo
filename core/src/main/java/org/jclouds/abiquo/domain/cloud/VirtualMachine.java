@@ -37,7 +37,6 @@ import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
-import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.LinksDto;
@@ -49,7 +48,6 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
-import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
@@ -420,18 +418,19 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP">
      *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP</a>
      */
-    public Nic createNic(final IPAddress ip)
+    public void createNic(final IPAddress ip)
     {
-        // TODO not working -> ip self link missing in API
-        RESTLink link = createNicLink(ip);
+        // TODO waiting for http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3144
+        RESTLink ipLink = ip.unwrap().searchLink("self");
+        checkNotNull(ipLink, ValidationErrors.MISSING_REQUIRED_LINK);
+        RESTLink link = new RESTLink(ipLink.getTitle(), ipLink.getHref());
 
         // Create dto
         LinksDto dto = new LinksDto();
         dto.addLink(link);
 
         // Create and return nic
-        NicDto nic = context.getApi().getCloudClient().createNic(target, dto);
-        return wrap(context, Nic.class, nic);
+        context.getApi().getCloudClient().createNic(target, dto);
     }
 
     /**
@@ -439,7 +438,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork">
      *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork</a>
      */
-    public Nic createNic(final UnmanagedNetwork network)
+    public void createNic(final UnmanagedNetwork network)
     {
         RESTLink linkIps = network.unwrap().searchLink("ips");
         checkNotNull(linkIps, ValidationErrors.MISSING_REQUIRED_LINK);
@@ -450,27 +449,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         dto.addLink(link);
 
         // Create and return nic
-        NicDto nic = context.getApi().getCloudClient().createNic(target, dto);
-        return wrap(context, Nic.class, nic);
-    }
-
-    private RESTLink createNicLink(final IPAddress ip)
-    {
-        // Create link
-        NetworkType type = ip.getNetworkType();
-        String rel;
-
-        switch (type)
-        {
-            case INTERNAL:
-                rel = "private";
-                break;
-            default:
-                rel = type.toString().toLowerCase();
-                break;
-        }
-
-        return new RESTLink(rel + "ip", ip.unwrap().searchLink("self").getHref());
+        context.getApi().getCloudClient().createNic(target, dto);
     }
 
     // Builder

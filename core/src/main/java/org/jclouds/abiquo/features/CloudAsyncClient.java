@@ -271,7 +271,7 @@ public interface CloudAsyncClient
      * @see CloudClient#createNic(VirtualMachineDto, LinksDto)
      */
     @POST
-    ListenableFuture<NicDto> createNic(
+    ListenableFuture<Void> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindToXMLPayload.class) LinksDto links);
 
