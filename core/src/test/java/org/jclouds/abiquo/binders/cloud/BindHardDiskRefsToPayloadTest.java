@@ -29,21 +29,21 @@ import org.jclouds.xml.XMLParser;
 import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 
 /**
- * Unit tests for the {@link BindVolumeRefsToPayload} binder.
+ * Unit tests for the {@link BindHardDiskRefsToPayload} binder.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class BindVolumeRefsToPayloadTest
+public class BindHardDiskRefsToPayloadTest
 {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -52,7 +52,7 @@ public class BindVolumeRefsToPayloadTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -60,35 +60,37 @@ public class BindVolumeRefsToPayloadTest
 
     public void testBindEmptyArray()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new VolumeManagementDto[] {});
+        request = binder.bindToRequest(request, new DiskManagementDto[] {});
         assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
             + "<links/>");
     }
 
-    public void testBindSingleVolume()
+    public void testBindSingleHardDisk()
     {
-        VolumeManagementDto volume = CloudResources.volumePut();
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        DiskManagementDto hardDisk = CloudResources.hardDiskPut();
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new VolumeManagementDto[] {volume});
+        request = binder.bindToRequest(request, new DiskManagementDto[] {hardDisk});
         assertEquals(request.getPayload().getRawContent(),
-            XMLParser.DEFAULT_XML_HEADER + "<links><link href=\"" + volume.getEditLink().getHref()
-                + "\" rel=\"" + binder.getRelToUse() + "\"/></links>");
+            XMLParser.DEFAULT_XML_HEADER + "<links><link href=\""
+                + hardDisk.getEditLink().getHref() + "\" rel=\"" + binder.getRelToUse()
+                + "\"/></links>");
     }
 
-    public void testBindMultipleVolumes()
+    public void testBindMultipleHardDisks()
     {
-        VolumeManagementDto volume = CloudResources.volumePut();
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        DiskManagementDto hardDisk = CloudResources.hardDiskPut();
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new VolumeManagementDto[] {volume, volume});
+        request = binder.bindToRequest(request, new DiskManagementDto[] {hardDisk, hardDisk});
         assertEquals(request.getPayload().getRawContent(),
-            XMLParser.DEFAULT_XML_HEADER + "<links><link href=\"" + volume.getEditLink().getHref()
-                + "\" rel=\"" + binder.getRelToUse() + "\"/></links>");
+            XMLParser.DEFAULT_XML_HEADER + "<links><link href=\""
+                + hardDisk.getEditLink().getHref() + "\" rel=\"" + binder.getRelToUse()
+                + "\"/></links>");
     }
 }

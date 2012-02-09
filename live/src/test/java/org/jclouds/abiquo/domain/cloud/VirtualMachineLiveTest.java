@@ -47,6 +47,8 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
 {
     private Volume volume;
 
+    private HardDisk hardDisk;
+
     public void testGetTasks()
     {
         List<AsyncTask> tasks = env.virtualMachine.listTasks();
@@ -107,6 +109,41 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         deleteVolume(volume);
     }
 
+    public void testAttachHardDisks()
+    {
+        hardDisk = createHardDisk();
+
+        // Since the virtual machine is not deployed, this should not generate a task
+        AsyncTask task = env.virtualMachine.attachHardDisks(hardDisk);
+        assertNull(task);
+
+        List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
+        assertEquals(attached.size(), 1);
+        assertEquals(attached.get(0).getId(), hardDisk.getId());
+    }
+
+    @Test(dependsOnMethods = "testAttachHardDisks")
+    public void detachHardDisks()
+    {
+        env.virtualMachine.detachHardDisks(hardDisk);
+        List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
+        assertTrue(attached.isEmpty());
+    }
+
+    @Test(dependsOnMethods = {"testAttachHardDisks", "detachHardDisks"})
+    public void detachAllHardDisks()
+    {
+        // Since the virtual machine is not deployed, this should not generate a task
+        AsyncTask task = env.virtualMachine.attachHardDisks(hardDisk);
+        assertNull(task);
+
+        env.virtualMachine.detachAllHardDisks();
+        List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
+        assertTrue(attached.isEmpty());
+
+        deleteHardDisk(hardDisk);
+    }
+
     private Volume createVolume()
     {
         Tier tier = env.virtualDatacenter.listStorageTiers().get(0);
@@ -126,5 +163,23 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         Integer id = volume.getId();
         volume.delete();
         assertNull(env.virtualDatacenter.getVolume(id));
+    }
+
+    private HardDisk createHardDisk()
+    {
+        HardDisk hardDisk = HardDisk.builder(context, env.virtualDatacenter).sizeInMb(64L).build();
+        hardDisk.save();
+
+        assertNotNull(hardDisk.getId());
+        assertNotNull(hardDisk.getSequence());
+
+        return hardDisk;
+    }
+
+    private void deleteHardDisk(final HardDisk hardDisk)
+    {
+        Integer id = hardDisk.getId();
+        hardDisk.delete();
+        assertNull(env.virtualDatacenter.getHardDisk(id));
     }
 }
