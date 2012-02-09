@@ -46,6 +46,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
+import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
@@ -257,6 +258,21 @@ public interface CloudClient
      * @return The created nic.
      */
     NicDto createNic(VirtualMachineDto virtuaMachine, LinksDto links);
+
+    /**
+     * Deletes an existing nic.
+     * 
+     * @param nic The nic to delete.
+     */
+    void deleteNic(NicDto nic);
+
+    /**
+     * List nics attached to a virtual machine.
+     * 
+     * @param virtualMachine The virtual machine.
+     * @return The list of nics.
+     */
+    NicsDto listAttachedNics(VirtualMachineDto virtualMachine);
 
     /*********************** Virtual Appliance ***********************/
 

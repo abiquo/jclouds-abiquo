@@ -75,6 +75,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
+import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
@@ -271,8 +272,21 @@ public interface CloudAsyncClient
      */
     @POST
     ListenableFuture<NicDto> createNic(
-        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtuaMachine,
+        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindToXMLPayload.class) LinksDto links);
+
+    /**
+     * @see CloudClient#deleteNic(NicDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteNic(@EndpointLink("edit") @BinderParam(BindToPath.class) NicDto nic);
+
+    /**
+     * @see CloudClient#listAttachedNics(VirtualMachineDto)
+     */
+    @GET
+    ListenableFuture<NicsDto> listAttachedNics(
+        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /*********************** Virtual Appliance ***********************/
 

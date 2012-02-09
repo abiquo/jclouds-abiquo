@@ -32,6 +32,7 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.IPAddress;
 import org.jclouds.abiquo.domain.network.NetworkConfiguration;
 import org.jclouds.abiquo.domain.network.Nic;
+import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -49,6 +50,7 @@ import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
+import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
@@ -276,6 +278,23 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return wrap(context, NetworkConfiguration.class, dto);
     }
 
+    public List<Nic> listAttachedNics()
+    {
+        NicsDto nics = context.getApi().getCloudClient().listAttachedNics(target);
+
+        return wrap(context, Nic.class, nics.getCollection());
+    }
+
+    public List<Nic> listAttachedNics(final Predicate<Nic> filter)
+    {
+        return Lists.newLinkedList(filter(listAttachedNics(), filter));
+    }
+
+    public Nic findAttachedNic(final Predicate<Nic> filter)
+    {
+        return Iterables.getFirst(filter(listAttachedNics(), filter), null);
+    }
+
     // Actions
 
     public AsyncTask deploy()
@@ -390,10 +409,41 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         context.getApi().getCloudClient().changeNetworkConfiguration(target, links);
     }
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP">
+     *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP</a>
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP">
+     *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP</a>
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP">
+     *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP</a>
+     */
     public Nic createNic(final IPAddress ip)
     {
         // TODO not working -> ip self link missing in API
         RESTLink link = createNicLink(ip);
+
+        // Create dto
+        LinksDto dto = new LinksDto();
+        dto.addLink(link);
+
+        // Create and return nic
+        NicDto nic = context.getApi().getCloudClient().createNic(target, dto);
+        return wrap(context, Nic.class, nic);
+    }
+
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork">
+     *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork</a>
+     */
+    public Nic createNic(final UnmanagedNetwork network)
+    {
+        RESTLink linkIps = network.unwrap().searchLink("ips");
+        checkNotNull(linkIps, ValidationErrors.MISSING_REQUIRED_LINK);
+        RESTLink link = new RESTLink("unmanagedip", linkIps.getHref());
 
         // Create dto
         LinksDto dto = new LinksDto();

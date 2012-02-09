@@ -24,6 +24,7 @@ import static org.jclouds.abiquo.domain.DomainUtils.link;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
@@ -52,8 +53,20 @@ public class NetworkResources
         ip.setId(1);
         ip.setName("private ip");
         ip.setMac("00:58:5A:c0:C3:01");
-
         return ip;
+    }
+
+    public static NicDto nicPut()
+    {
+        NicDto nic = new NicDto();
+        nic.setId(1);
+        nic.setIp("123.123.123.123");
+        nic.setMac("00:58:5A:c0:C3:01");
+        nic
+            .addLink(new RESTLink("edit",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics/1"));
+
+        return nic;
     }
 
     public static VLANNetworkDto privateNetworkPut()

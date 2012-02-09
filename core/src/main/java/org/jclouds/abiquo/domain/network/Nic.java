@@ -47,6 +47,17 @@ public class Nic extends DomainWrapper<NicDto>
 
     // Domain operations
 
+    /**
+     * @see <a
+     *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-DeleteaNICs">
+     *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-DeleteaNICs</a>
+     */
+    public void delete()
+    {
+        context.getApi().getCloudClient().deleteNic(target);
+        target = null;
+    }
+
     // Parent access
 
     // Delegate methods
