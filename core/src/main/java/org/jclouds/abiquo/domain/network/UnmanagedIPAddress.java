@@ -29,7 +29,7 @@ import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource">
  *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource</a>
  */
 @EnterpriseEdition

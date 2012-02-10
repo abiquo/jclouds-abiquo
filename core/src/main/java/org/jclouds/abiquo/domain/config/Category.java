@@ -29,7 +29,7 @@ import com.abiquo.server.core.appslibrary.CategoryDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Category+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Category+Resource">
  *      http://community.abiquo.com/display/ABI20/Category+Resource</a>
  */
 
@@ -52,7 +52,7 @@ public class Category extends DomainWrapper<CategoryDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Category+Resource#CategoryResource-Deleteacategory">
      *      http://community.abiquo.com/display/ABI20/Category+Resource#CategoryResource-Deleteacategory</a>
      */
@@ -63,7 +63,7 @@ public class Category extends DomainWrapper<CategoryDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Category+Resource#CategoryResource-Createacategory">
      *      http://community.abiquo.com/display/ABI20/Category+Resource#CategoryResource-Createacategory</a>
      */
@@ -73,7 +73,7 @@ public class Category extends DomainWrapper<CategoryDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Category+Resource#CategoryResource-Updateanexistingcategory">
      *      http://community.abiquo.com/display/ABI20/Category+Resource#CategoryResource-Updateanexistingcategory</a>
      */

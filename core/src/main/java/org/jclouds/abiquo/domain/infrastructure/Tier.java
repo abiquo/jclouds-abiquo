@@ -60,7 +60,7 @@ public class Tier extends DomainWrapper<TierDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-UpdateaTier">
      *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-UpdateaTier</a>
      */
@@ -89,7 +89,7 @@ public class Tier extends DomainWrapper<TierDto>
     // Parent access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
      */

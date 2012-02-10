@@ -70,7 +70,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Datacenter+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Datacenter+Resource">
  *      http://community.abiquo.com/display/ABI20/Datacenter+Resource</a>
  */
 public class Datacenter extends DomainWrapper<DatacenterDto>
@@ -83,7 +83,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Indicates the Abiquo edition to create the available remote services.
      * 
-     * @see <a href="http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform">
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform">
      *      http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform</a>
      */
     private AbiquoEdition edition;
@@ -99,7 +99,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-DeleteanexistingDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-DeleteanexistingDatacenter</a>
      */
@@ -110,10 +110,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-CreateanewDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-CreateanewDatacenter</a>
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService">
      *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService</a>
      */
@@ -130,7 +130,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-UpdateanexistingDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-UpdateanexistingDatacenter</a>
      */
@@ -140,7 +140,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-ChecktheTagavailability">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-ChecktheTagavailability</a>
      */
@@ -155,7 +155,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     // Children access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks">
      *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks</a>
      */
@@ -182,7 +182,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievethelistofUcsRacks">
      *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievethelistofUcsRacks</a>
      */
@@ -209,7 +209,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices">
      *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices</a>
      */
@@ -242,7 +242,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-RetrievealistofRemoteServices">
      *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-RetrievealistofRemoteServices</a>
      */
@@ -284,7 +284,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinadatacenterforalltheenterprisesusingit">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinadatacenterforalltheenterprisesusingit</a>
      */
@@ -306,7 +306,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers">
      *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers</a>
      */
@@ -330,7 +330,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks</a>
      */
@@ -357,7 +357,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofPublicNetworks">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofPublicNetworks</a>
      */
@@ -384,7 +384,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofExternalNetworks">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofExternalNetworks</a>
      */
@@ -411,7 +411,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofUnmanagedNetworks">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofUnmanagedNetworks</a>
      */
@@ -442,7 +442,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Retrieve the hypervisor type from remote machine.
      * 
-     * @see <a href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievethehypervisortypefromremotemachine"
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievethehypervisortypefromremotemachine"
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
      *      Retrievethehypervisortypefromremotemachine/a>
      */
@@ -501,7 +501,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param user User to log in.
      * @param password Password to authenticate.
      * @return A physical machine if found or <code>null</code>.
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation</a>
      */
@@ -521,7 +521,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param password Password to authenticate.
      * @param port Port to connect.
      * @return A physical machine if found or <code>null</code>.
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation</a>
      */
@@ -549,7 +549,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param user User to log in.
      * @param password Password to authenticate.
      * @return The physical machine list.
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation</a>
      */
@@ -571,7 +571,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param password Password to authenticate.
      * @param port Port to connect.
      * @return The physical machine list.
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation</a>
      */

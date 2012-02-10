@@ -29,10 +29,14 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 
 /**
- * Adds high level functionality to {@link DiskManagementDto}.
+ * Represents a disk attached to a virtual machine.
+ * <p>
+ * This disks will be created when a virtual machine is deployed, and will be destroyed when it is
+ * undeployed. If there is a need to use persistent storage, a persistent {@link Volume} should be
+ * used instead.
  * 
  * @author Ignasi Barrera
- * @see <a href="http://community.abiquo.com/display/ABI20/Hard+Disks+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Hard+Disks+Resource">
  *      http://community.abiquo.com/display/ABI20/Hard+Disks+Resource</a>
  */
 public class HardDisk extends DomainWrapper<DiskManagementDto>
@@ -52,7 +56,7 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     // Domain operations
 
     /**
-     * Create the hard disk in the selected virtual datacenter.
+     * Creates the hard disk in the selected virtual datacenter.
      * <p>
      * Once the hard disk has been created it can be attached to a virtual machine of the virtual
      * datacenter.
@@ -64,7 +68,7 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     }
 
     /**
-     * Delete the hard disk.
+     * Deletes the hard disk.
      */
     public void delete()
     {
@@ -75,11 +79,12 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     // Parent access
 
     /**
-     * Get the virtual datacenter where the hard disk belongs to.
+     * Gets the virtual datacenter where the hard disk belongs to.
      * 
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
      */
     public VirtualDatacenter getVirtualDatacenter()
     {

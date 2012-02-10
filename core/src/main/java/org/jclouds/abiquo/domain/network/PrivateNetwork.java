@@ -33,7 +33,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Private+Network+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Private+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Private+Network+Resource</a>
  */
 public class PrivateNetwork extends Network<PrivateIPAddress>
@@ -53,7 +53,7 @@ public class PrivateNetwork extends Network<PrivateIPAddress>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-DeleteaPrivateNetwork">
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-DeleteaPrivateNetwork</a>
      */
@@ -64,7 +64,7 @@ public class PrivateNetwork extends Network<PrivateIPAddress>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-CreateaPrivateNetwork">
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-CreateaPrivateNetwork</a>
      */
@@ -76,7 +76,7 @@ public class PrivateNetwork extends Network<PrivateIPAddress>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-UpdateaPrivateNetwork">
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-UpdateaPrivateNetwork</a>
      */
@@ -86,7 +86,7 @@ public class PrivateNetwork extends Network<PrivateIPAddress>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork">
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork</a>
      */

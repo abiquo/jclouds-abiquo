@@ -62,11 +62,14 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * Adds high level functionality to {@link VirtualDatacenterDto}.
+ * Represents a virtual datacenter.
+ * <p>
+ * Virtual datacenters expose a set of compute, storage and networking resources that can be
+ * consumed by the tenants.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource">
  *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource</a>
  */
 public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenterDto>
@@ -90,9 +93,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     // Domain operations
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-DeleteanexistingVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-DeleteanexistingVirtualDatacenter</a>
+     * Delete the virtual datacenter.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-DeleteanexistingVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-DeleteanexistingVirtualDatacenter</a>
      */
     public void delete()
     {
@@ -101,21 +107,27 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-CreateanewVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-CreateanewVirtualDatacenter</a>
+     * Creates the virtual datacenter.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-CreateanewVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-CreateanewVirtualDatacenter</a>
      */
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createVirtualDatacenter(target, datacenter.unwrap(),
-                enterprise.unwrap());
+            context.getApi().getCloudClient()
+                .createVirtualDatacenter(target, datacenter.unwrap(), enterprise.unwrap());
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-UpdatesanexistingVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-UpdatesanexistingVirtualDatacenter</a>
+     * Updates the virtual datacenter information when some of its properties have changed.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-UpdatesanexistingVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-UpdatesanexistingVirtualDatacenter</a>
      */
     public void update()
     {
@@ -125,9 +137,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     // Parent access
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     * Gets the datacenter where this virtual datacenter is assigned.
+     * 
+     * @return The datacenter where this virtual datacenter is assigned.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      RetrieveaDatacenter</a>
      */
     public Datacenter getDatacenter()
     {
@@ -136,9 +152,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveanEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveanEnterprise</a>
+     * Gets the enterprise that owns this virtual datacenter.
+     * 
+     * @return The enterprise that owns this virtual datacenter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      RetrieveanEnterprise</a>
      */
     public Enterprise getEnterprise()
     {
@@ -149,9 +169,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     // Children access
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances</a>
+     * Lists all the virtual appliances in the virtual datacenter.
+     * 
+     * @return The list of virtual appliances in the virtual datacenter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances"
+     *      >http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#
+     *      VirtualApplianceResource-RetrievethelistofVirtualAppliances</a>
      */
     public List<VirtualAppliance> listVirtualAppliances()
     {
@@ -160,16 +184,43 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, VirtualAppliance.class, vapps.getCollection());
     }
 
+    /**
+     * Lists all the virtual appliances in the virtual datacenter that match the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The list of virtual appliances in the virtual datacenter that match the given filter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances"
+     *      >http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#
+     *      VirtualApplianceResource-RetrievethelistofVirtualAppliances</a>
+     */
     public List<VirtualAppliance> listVirtualAppliances(final Predicate<VirtualAppliance> filter)
     {
         return Lists.newLinkedList(filter(listVirtualAppliances(), filter));
     }
 
+    /**
+     * Gets the first virtual appliance in the virtual datacenter that match the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return the first virtual appliance in the virtual datacenter that match the given filter or
+     *         <code>null</code> if none is found.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrievethelistofVirtualAppliances"
+     *      >http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#
+     *      VirtualApplianceResource-RetrievethelistofVirtualAppliances</a>
+     */
     public VirtualAppliance findVirtualAppliance(final Predicate<VirtualAppliance> filter)
     {
         return Iterables.getFirst(filter(listVirtualAppliances(), filter), null);
     }
 
+    /**
+     * Gets the virtual appliance with the given id in the current virtual datacenter.
+     * 
+     * @param id The id of the virtual appliance to get.
+     * @return The virtual appliance.
+     */
     public VirtualAppliance getVirtualAppliance(final Integer id)
     {
         VirtualApplianceDto vapp =
@@ -178,27 +229,60 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers</a>
+     * Lists the storage tiers that are available to the virtual datacenter.
+     * 
+     * @return The list of storage tiers that are available to the virtual datacenter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-Retrieveenabledtiers</a>
      */
-
     public List<Tier> listStorageTiers()
     {
         TiersDto tiers = context.getApi().getCloudClient().listStorageTiers(target);
         return wrap(context, Tier.class, tiers.getCollection());
     }
 
+    /**
+     * Lists the storage tiers that are available to the virtual datacenter and match the given
+     * filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The list of storage tiers that are available to the virtual datacenter and match the
+     *         given filter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-Retrieveenabledtiers</a>
+     */
     public List<Tier> listStorageTiers(final Predicate<Tier> filter)
     {
         return Lists.newLinkedList(filter(listStorageTiers(), filter));
     }
 
+    /**
+     * Finds the first the storage tier that is available to the virtual datacenter and matches the
+     * given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The first the storage tier that is available to the virtual datacenter and matches
+     *         the given filter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-Retrieveenabledtiers"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-Retrieveenabledtiers</a>
+     */
     public Tier findStorageTier(final Predicate<Tier> filter)
     {
         return Iterables.getFirst(filter(listStorageTiers(), filter), null);
     }
 
+    /**
+     * Gets the storage tier with the given id from the current virtual datacenter.
+     * 
+     * @param id The id of the storage tier.
+     * @return The sotrage tier.
+     */
     public Tier getStorageTier(final Integer id)
     {
         TierDto tier = context.getApi().getCloudClient().getStorageTier(target, id);
@@ -206,9 +290,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes">
-     *      http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes</a>
+     * Lists all persistent volumes in the virtual datacenter.
+     * 
+     * @return The list of all persistent volumes in the virtual datacenter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes"
+     *      > http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-
+     *      Retrievethelistofvolumes</a>
      */
     public List<Volume> listVolumes()
     {
@@ -216,11 +304,32 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, Volume.class, volumes.getCollection());
     }
 
+    /**
+     * Lists all persistent volumes in the virtual datacenter that match the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The list of all persistent volumes in the virtual datacenter that match the given
+     *         filter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes"
+     *      > http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-
+     *      Retrievethelistofvolumes</a>
+     */
     public List<Volume> listVolumes(final Predicate<Volume> filter)
     {
         return Lists.newLinkedList(filter(listVolumes(), filter));
     }
 
+    /**
+     * Finds the first persistent volume in the virtual datacenter that matches the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The first persistent volumes in the virtual datacenter that matches the given filter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-Retrievethelistofvolumes"
+     *      > http://community.abiquo.com/display/ABI20/Volume+Resource#VolumeResource-
+     *      Retrievethelistofvolumes</a>
+     */
     public Volume findVolume(final Predicate<Volume> filter)
     {
         return Iterables.getFirst(filter(listVolumes(), filter), null);
@@ -233,9 +342,10 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Hard+Disks+Resource#HardDisksResource-GetthelistofHardDisksofaVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Hard+Disks+Resource#HardDisksResource-GetthelistofHardDisksofaVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Hard+Disks+Resource#HardDisksResource-GetthelistofHardDisksofaVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Hard+Disks+Resource#HardDisksResource-
+     *      GetthelistofHardDisksofaVirtualDatacenter</a>
      */
     public List<HardDisk> listHardDisks()
     {
@@ -260,9 +370,10 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
      */
     public Network< ? > getDefaultNetwork()
     {
@@ -273,9 +384,11 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievealistofPrivateNetworks">
-     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievealistofPrivateNetworks</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievealistofPrivateNetworks"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource
+     *      -RetrievealistofPrivateNetworks</a>
      */
     public List<PrivateNetwork> listPrivateNetworks()
     {
@@ -300,14 +413,17 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource#VirtualMachineTemplateResource-RetrievethelistofVirtualMachineTemplates">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource#VirtualMachineTemplateResource-RetrievethelistofVirtualMachineTemplates</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource#VirtualMachineTemplateResource-RetrievethelistofVirtualMachineTemplates"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource#
+     *      VirtualMachineTemplateResource-RetrievethelistofVirtualMachineTemplates</a>
      */
     public List<VirtualMachineTemplate> listAvailableTemplates()
     {
         VirtualMachineTemplatesDto templates =
-            context.getApi().getVirtualMachineTemplateClient()
+            context
+                .getApi()
+                .getVirtualMachineTemplateClient()
                 .listVirtualMachineTemplates(
                     getEnterprise().getId(),
                     getDatacenter().getId(),
@@ -331,15 +447,16 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public VirtualMachineTemplate getAvailableTemplate(final Integer id)
     {
         VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient().getVirtualMachineTemplate(
-                getEnterprise().getId(), getDatacenter().getId(), id);
+            context.getApi().getVirtualMachineTemplateClient()
+                .getVirtualMachineTemplate(getEnterprise().getId(), getDatacenter().getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
      */
     public List<PublicIPAddress> listAvailablePublicIpsToPurchase()
     {
@@ -363,9 +480,10 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
      */
     public List<PublicIPAddress> listPurchasedPublicIPs()
     {
@@ -390,12 +508,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     // Actions
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter</a>
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter</a>
      */
     public void setDefaultNetwork(final Network< ? > network)
     {
@@ -507,14 +627,14 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         public static Builder fromVirtualDatacenter(final VirtualDatacenter in)
         {
-            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise).name(
-                in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
-                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                    in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                    in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                    in.getVlansHard())
-                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard()).network(
-                    in.getNetwork()).hypervisorType(in.getHypervisorType());
+            return VirtualDatacenter.builder(in.context, in.datacenter, in.enterprise)
+                .name(in.getName()).ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+                .network(in.getNetwork()).hypervisorType(in.getHypervisorType());
         }
     }
 

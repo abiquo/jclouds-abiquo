@@ -40,7 +40,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
  *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
 public class Rack extends DomainWrapper<RackDto>
@@ -78,7 +78,7 @@ public class Rack extends DomainWrapper<RackDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack">
      *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack</a>
      */
@@ -88,7 +88,7 @@ public class Rack extends DomainWrapper<RackDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack">
      *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack</a>
      */
@@ -99,7 +99,7 @@ public class Rack extends DomainWrapper<RackDto>
 
     // Parent access
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
      */

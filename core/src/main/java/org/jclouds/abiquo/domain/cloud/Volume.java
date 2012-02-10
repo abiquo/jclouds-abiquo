@@ -38,7 +38,7 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
  * Adds high level functionality to {@link VolumeManagementDto}.
  * 
  * @author Ignasi Barrera
- * @see <a href="http://community.abiquo.com/display/ABI20/Volume+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Volume+Resource">
  *      http://community.abiquo.com/display/ABI20/Volume+Resource</a>
  */
 @EnterpriseEdition
@@ -84,7 +84,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     // Parent access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
      */

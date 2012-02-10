@@ -39,7 +39,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Public+Network+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Public+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 @EnterpriseEdition
@@ -61,7 +61,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanUnmanagedNetwork">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanUnmanagedNetwork</a>
      */
@@ -72,7 +72,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewUnmanagedNetwork">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewUnmanagedNetwork</a>
      */
@@ -84,7 +84,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanUnmanagedNetwork">
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanUnmanagedNetwork</a>
      */
@@ -94,7 +94,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork">
      *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
      */

@@ -46,7 +46,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Users+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Users+Resource">
  *      http://community.abiquo.com/display/ABI20/Users+Resource</a>
  */
 public class User extends DomainWrapper<UserDto>
@@ -79,7 +79,7 @@ public class User extends DomainWrapper<UserDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Deleteanexistinguser">
      *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Deleteanexistinguser</a>
      */
@@ -90,7 +90,7 @@ public class User extends DomainWrapper<UserDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Createanewuser">
      *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Createanewuser</a>
      */
@@ -102,7 +102,7 @@ public class User extends DomainWrapper<UserDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Updatesanexistinguser">
      *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Updatesanexistinguser</a>
      */
@@ -163,7 +163,7 @@ public class User extends DomainWrapper<UserDto>
 
     // Parent access
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise</a>
      */
@@ -182,7 +182,7 @@ public class User extends DomainWrapper<UserDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievethelistofvirtualmachinesbyuser">
      *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievethelistofvirtualmachinesbyuser</a>
      */

@@ -29,7 +29,7 @@ import com.abiquo.server.core.appslibrary.IconDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Icon+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Icon+Resource">
  *      http://community.abiquo.com/display/ABI20/Icon+Resource</a>
  */
 
@@ -46,7 +46,7 @@ public class Icon extends DomainWrapper<IconDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-DeleteanIcon">
      *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-DeleteanIcon</a>
      */
@@ -57,7 +57,7 @@ public class Icon extends DomainWrapper<IconDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-CreateanIcon">
      *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-CreateanIcon</a>
      */
@@ -67,7 +67,7 @@ public class Icon extends DomainWrapper<IconDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-UpdateanIcon">
      *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-UpdateanIcon</a>
      */

@@ -40,7 +40,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
  *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
 public class ManagedRack extends DomainWrapper<UcsRackDto>
@@ -78,7 +78,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack">
      *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack</a>
      */
@@ -90,7 +90,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack">
      *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack</a>
      */
@@ -101,7 +101,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
     // Parent access
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
      */

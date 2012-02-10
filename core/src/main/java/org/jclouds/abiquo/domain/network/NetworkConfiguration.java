@@ -29,7 +29,7 @@ import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a
+ * @see API: <a
  *      href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource">
  *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource</a>
  */

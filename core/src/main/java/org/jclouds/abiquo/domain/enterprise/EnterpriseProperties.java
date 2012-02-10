@@ -32,7 +32,7 @@ import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
  * Adds high level functionality to {@link EnterprisePropertiesDto}.
  * 
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource">
  *      http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource</a>
  */
 @EnterpriseEdition
@@ -48,7 +48,7 @@ public class EnterpriseProperties extends DomainWrapper<EnterprisePropertiesDto>
 
     // Domain operations
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource#EnterprisePropertiesResource-UpdatesthepropertiesforanEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource#EnterprisePropertiesResource-UpdatesthepropertiesforanEnterprise</a>
      */
@@ -59,7 +59,7 @@ public class EnterpriseProperties extends DomainWrapper<EnterprisePropertiesDto>
 
     // Parent access
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise</a>
      */

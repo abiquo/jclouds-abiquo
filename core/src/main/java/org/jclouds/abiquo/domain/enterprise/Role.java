@@ -42,7 +42,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Roles+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Roles+Resource">
  *      http://community.abiquo.com/display/ABI20/Roles+Resource</a>
  */
 public class Role extends DomainWrapper<RoleDto>
@@ -61,7 +61,7 @@ public class Role extends DomainWrapper<RoleDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-DeleteanexistingRole">
      *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-DeleteanexistingRole</a>
      */
@@ -72,7 +72,7 @@ public class Role extends DomainWrapper<RoleDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-CreateanewRole">
      *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-CreateanewRole</a>
      */
@@ -82,7 +82,7 @@ public class Role extends DomainWrapper<RoleDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-UpdateanexistingRole">
      *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-UpdateanexistingRole</a>
      */
@@ -135,7 +135,7 @@ public class Role extends DomainWrapper<RoleDto>
 
     // Children access
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-RetrievealistofprivilegesfromaRole">
      *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-RetrievealistofprivilegesfromaRole</a>
      */

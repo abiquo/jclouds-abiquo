@@ -61,7 +61,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Enterprise+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Enterprise+Resource">
  *      http://community.abiquo.com/display/ABI20/Enterprise+Resource</a>
  */
 public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
@@ -80,7 +80,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DeleteanexistingEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DeleteanexistingEnterprise</a>
      */
@@ -91,7 +91,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-CreateanewEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-CreateanewEnterprise</a>
      */
@@ -101,7 +101,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-UpdatesanexistingEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-UpdatesanexistingEnterprise</a>
      */
@@ -113,7 +113,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     // Children access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrievealistofVirtualDatacenters">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrievealistofVirtualDatacenters</a>
      */
@@ -161,7 +161,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise</a>
      */
@@ -182,7 +182,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers">
      *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers</a>
      */
@@ -209,7 +209,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles">
      *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles</a>
      */
@@ -297,7 +297,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-Getthelistofexternalnetworks">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-Getthelistofexternalnetworks</a>
      */
@@ -322,7 +322,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrievethelistofvirtualmachinesbyanEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrievethelistofvirtualmachinesbyanEnterprise</a>
      */
@@ -362,7 +362,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     // Actions
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository</a>
      */
@@ -378,7 +378,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      * 
      * @param datacenter The datacenter.
      * @return Default datacenter limits of the enterprise for the given datacenter.
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-CreateanewLimitforanenterpriseinadatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-CreateanewLimitforanenterpriseinadatacenter</a>
      */
@@ -419,7 +419,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      * 
      * @param datacenter The datacenter.
      * @return Default datacenter limits of the enterprise for the given datacenter.
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Deleteanexistinglimitforanenterpriseinadatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Deleteanexistinglimitforanenterpriseinadatacenter</a>
      */
@@ -440,7 +440,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     /**
      * Disables chef in the enterprise.
      * 
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DisableChefinanexistingEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DisableChefinanexistingEnterprise</a>
      */

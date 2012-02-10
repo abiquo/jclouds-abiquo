@@ -37,7 +37,7 @@ import com.abiquo.server.core.infrastructure.storage.TierDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource">
  *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource</a>
  */
 @EnterpriseEdition
@@ -61,7 +61,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-DeleteaStoragePool">
      *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-DeleteaStoragePool</a>
      */
@@ -72,7 +72,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink">
      *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink</a>
      */
@@ -84,7 +84,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-UpdateaStoragePool">
      *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-UpdateaStoragePool</a>
      */
@@ -94,7 +94,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink">
      *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink</a>
      */
@@ -109,7 +109,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     // Parent access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrieveaStorageDevice">
      *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrieveaStorageDevice</a>
      */
