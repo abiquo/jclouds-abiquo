@@ -56,9 +56,6 @@ public class Machine extends DomainWrapper<MachineDto>
     /** The default virtual cpu used in MB. */
     private static final int DEFAULT_VCPU_USED = 1;
 
-    /** The default virtual cpu per core. */
-    private static final int DEFAULT_VCPU_PER_CORE = 1;
-
     /** The rack where the machine belongs. */
     // Package protected to allow navigation from children
     Rack rack;
@@ -142,8 +139,6 @@ public class Machine extends DomainWrapper<MachineDto>
         private Integer virtualCpuCores;
 
         private Integer virtualCpusUsed = DEFAULT_VCPU_USED;
-
-        private Integer virtualCpusPerCore = DEFAULT_VCPU_PER_CORE;
 
         private String virtualSwitch;
 
@@ -293,12 +288,6 @@ public class Machine extends DomainWrapper<MachineDto>
             return this;
         }
 
-        public Builder virtualCpusPerCore(final int virtualCpusPerCore)
-        {
-            this.virtualCpusPerCore = virtualCpusPerCore;
-            return this;
-        }
-
         public Builder hypervisorType(final HypervisorType hypervisorType)
         {
             this.type = hypervisorType;
@@ -328,7 +317,6 @@ public class Machine extends DomainWrapper<MachineDto>
             dto.setVirtualRamUsedInMb(virtualRamUsedInMb);
             dto.setVirtualCpuCores(virtualCpuCores);
             dto.setVirtualCpusUsed(virtualCpusUsed);
-            dto.setVirtualCpusPerCore(virtualCpusPerCore);
             dto.setVirtualSwitch(virtualSwitch);
             if (port != null)
             {
@@ -363,7 +351,6 @@ public class Machine extends DomainWrapper<MachineDto>
             Builder builder =
                 Machine.builder(in.context, in.rack).name(in.getName())
                     .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
-                    .virtualCpusPerCore(in.getVirtualCpusPerCore())
                     .virtualCpusUsed(in.getVirtualCpusUsed())
                     .virtualRamInMb(in.getVirtualRamInMb())
                     .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
@@ -453,11 +440,6 @@ public class Machine extends DomainWrapper<MachineDto>
     public Integer getVirtualCpuCores()
     {
         return target.getVirtualCpuCores();
-    }
-
-    public Integer getVirtualCpusPerCore()
-    {
-        return target.getVirtualCpusPerCore();
     }
 
     public Integer getVirtualCpusUsed()
@@ -555,11 +537,6 @@ public class Machine extends DomainWrapper<MachineDto>
         target.setVirtualCpuCores(virtualCpuCores);
     }
 
-    public void setVirtualCpusPerCore(final Integer virtualCpusPerCore)
-    {
-        target.setVirtualCpusPerCore(virtualCpusPerCore);
-    }
-
     public void setVirtualCpusUsed(final Integer virtualCpusUsed)
     {
         target.setVirtualCpusUsed(virtualCpusUsed);
@@ -633,11 +610,11 @@ public class Machine extends DomainWrapper<MachineDto>
             + getIpmiUser() + ", ipService=" + getIpService() + ", name=" + getName()
             + ", password=" + getPassword() + ", port=" + getPort() + ", state=" + getState()
             + ", type=" + getType() + ", user=" + getUser() + ", virtualCpuCores="
-            + getVirtualCpuCores() + ", virtualCpusPerCore=" + getVirtualCpusPerCore()
-            + ", virtualCpusUsed=" + getVirtualCpusUsed() + ", getVirtualRamInMb()="
-            + getVirtualRamInMb() + ", virtualRamUsedInMb=" + getVirtualRamUsedInMb()
-            + ", virtualSwitch=" + getVirtualSwitch() + ", description=" + getDescription()
-            + ", availableVirtualSwitches=" + getAvailableVirtualSwitches() + "]";
+            + getVirtualCpuCores() + ", virtualCpusUsed=" + getVirtualCpusUsed()
+            + ", getVirtualRamInMb()=" + getVirtualRamInMb() + ", virtualRamUsedInMb="
+            + getVirtualRamUsedInMb() + ", virtualSwitch=" + getVirtualSwitch() + ", description="
+            + getDescription() + ", availableVirtualSwitches=" + getAvailableVirtualSwitches()
+            + "]";
     }
 
 }
