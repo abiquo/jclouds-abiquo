@@ -39,7 +39,7 @@ import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.domain.network.options.IPOptions;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
@@ -615,5 +615,5 @@ public interface InfrastructureAsyncClient
     @GET
     ListenableFuture<IpsPoolManagementDto> listNetworkIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-        @BinderParam(AppendOptionsToPath.class) IPOptions options);
+        @BinderParam(AppendOptionsToPath.class) IpOptions options);
 }

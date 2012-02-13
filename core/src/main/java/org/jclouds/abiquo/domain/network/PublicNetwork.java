@@ -42,7 +42,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 @EnterpriseEdition
-public class PublicNetwork extends Network<PublicIPAddress>
+public class PublicNetwork extends Network
 {
     /** The datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -57,9 +57,11 @@ public class PublicNetwork extends Network<PublicIPAddress>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteaPublicNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteaPublicNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteaPublicNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
+     *      -DeleteaPublicNetwork</a>
      */
     public void delete()
     {
@@ -68,9 +70,11 @@ public class PublicNetwork extends Network<PublicIPAddress>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewPublicNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewPublicNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewPublicNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
+     *      -CreateanewPublicNetwork</a>
      */
     public void save()
     {
@@ -79,9 +83,11 @@ public class PublicNetwork extends Network<PublicIPAddress>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateaPublicNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateaPublicNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateaPublicNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
+     *      -UpdateaPublicNetwork</a>
      */
     public void update()
     {
@@ -89,16 +95,17 @@ public class PublicNetwork extends Network<PublicIPAddress>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork"
+     *      > http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-
+     *      ReturnthelistofIPsforaPublicNetwork</a>
      */
     @Override
-    public List<PublicIPAddress> listIps()
+    public List<Ip> listIps()
     {
         IpsPoolManagementDto nics =
             context.getApi().getInfrastructureClient().listNetworkIps(target);
-        return wrap(context, PublicIPAddress.class, nics.getCollection());
+        return wrap(context, Ip.class, nics.getCollection());
     }
 
     // Builder

@@ -40,7 +40,7 @@ import com.google.common.collect.Lists;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public abstract class Network<T extends IPAddress> extends DomainWrapper<VLANNetworkDto>
+public abstract class Network extends DomainWrapper<VLANNetworkDto>
 {
     /**
      * Constructor to be used only by the builder.
@@ -52,14 +52,14 @@ public abstract class Network<T extends IPAddress> extends DomainWrapper<VLANNet
 
     // Domain operations
 
-    public abstract List<T> listIps();
+    public abstract List<Ip> listIps();
 
-    public List<T> listIps(final Predicate<IPAddress> filter)
+    public List<Ip> listIps(final Predicate<Ip> filter)
     {
         return Lists.newLinkedList(filter(listIps(), filter));
     }
 
-    public T findIp(final Predicate<IPAddress> filter)
+    public Ip findIp(final Predicate<Ip> filter)
     {
         return Iterables.getFirst(filter(listIps(), filter), null);
     }
@@ -311,9 +311,9 @@ public abstract class Network<T extends IPAddress> extends DomainWrapper<VLANNet
             + ", unmanaged=" + getUnmanaged() + "]";
     }
 
-    public static Network< ? > wrapNetwork(final AbiquoContext context, final VLANNetworkDto dto)
+    public static Network wrapNetwork(final AbiquoContext context, final VLANNetworkDto dto)
     {
-        Network< ? > network = null;
+        Network network = null;
 
         switch (dto.getType())
         {
@@ -337,10 +337,10 @@ public abstract class Network<T extends IPAddress> extends DomainWrapper<VLANNet
         return network;
     }
 
-    public static List<Network< ? >> wrapNetworks(final AbiquoContext context,
+    public static List<Network> wrapNetworks(final AbiquoContext context,
         final List<VLANNetworkDto> dtos)
     {
-        List<Network< ? >> networks = Lists.newLinkedList();
+        List<Network> networks = Lists.newLinkedList();
         for (VLANNetworkDto dto : dtos)
         {
             networks.add(wrapNetwork(context, dto));

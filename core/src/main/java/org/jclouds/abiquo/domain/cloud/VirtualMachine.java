@@ -29,7 +29,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.domain.network.IPAddress;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.NetworkConfiguration;
 import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
@@ -418,7 +418,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP">
      *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP</a>
      */
-    public void createNic(final IPAddress ip)
+    public void createNic(final Ip ip)
     {
         // TODO waiting for http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3144
         RESTLink ipLink = ip.unwrap().searchLink("self");

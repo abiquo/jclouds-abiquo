@@ -30,10 +30,7 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
-import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
-import org.jclouds.abiquo.domain.network.PublicNetwork;
-import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -83,7 +80,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Indicates the Abiquo edition to create the available remote services.
      * 
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform">
+     * @see API: <a
+     *      href="http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform">
      *      http://community.abiquo.com/display/ABI20/Introduction+-+The+Abiquo+Platform</a>
      */
     private AbiquoEdition edition;
@@ -99,9 +97,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     // Domain operations
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-DeleteanexistingDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-DeleteanexistingDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-DeleteanexistingDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      DeleteanexistingDatacenter</a>
      */
     public void delete()
     {
@@ -110,12 +109,15 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-CreateanewDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-CreateanewDatacenter</a>
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService">
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-CreateanewDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      CreateanewDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
+     *      -CreateanewRemoteService</a>
      */
     public void save()
     {
@@ -130,9 +132,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-UpdateanexistingDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-UpdateanexistingDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-UpdateanexistingDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      UpdateanexistingDatacenter</a>
      */
     public void update()
     {
@@ -140,9 +143,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-ChecktheTagavailability">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-ChecktheTagavailability</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-ChecktheTagavailability"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
+     *      -ChecktheTagavailability</a>
      */
     public VlanTagAvailabilityType checkTagAvailability(final int tag)
     {
@@ -155,9 +160,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     // Children access
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks">
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks
+     *      </a>
      */
     public List<Rack> listRacks()
     {
@@ -182,9 +189,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievethelistofUcsRacks">
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievethelistofUcsRacks</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievethelistofUcsRacks"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      RetrievethelistofUcsRacks</a>
      */
     public List<ManagedRack> listManagedRacks()
     {
@@ -209,9 +217,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices">
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrievethelistofStorageDevices"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
+     *      -RetrievethelistofStorageDevices</a>
      */
     @EnterpriseEdition
     public List<StorageDevice> listStorageDevices()
@@ -242,9 +252,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-RetrievealistofRemoteServices">
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-RetrievealistofRemoteServices</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-RetrievealistofRemoteServices"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
+     *      -RetrievealistofRemoteServices</a>
      */
     public List<RemoteService> listRemoteServices()
     {
@@ -284,9 +296,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinadatacenterforalltheenterprisesusingit">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinadatacenterforalltheenterprisesusingit</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinadatacenterforalltheenterprisesusingit"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#
+     *      DatacenterLimitsResource
+     *      -Retrievethelistofallocationlimitsinadatacenterforalltheenterprisesusingit</a>
      */
     public List<Limits> listLimits()
     {
@@ -306,9 +320,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers">
-     *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers
+     *      </a>
      */
     @EnterpriseEdition
     public List<Tier> listTiers()
@@ -330,111 +346,50 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
+     *      -GetPublic%2CExternalandUnmanagedNetworks</a>
      */
-    public List<Network< ? >> listNetworks()
+    public List<Network> listNetworks()
     {
         VLANNetworksDto networks = context.getApi().getInfrastructureClient().listNetworks(target);
         return Network.wrapNetworks(context, networks.getCollection());
     }
 
-    public List<Network< ? >> listNetworks(final Predicate<Network< ? >> filter)
+    public List<Network> listNetworks(final Predicate<Network> filter)
     {
         return Lists.newLinkedList(filter(listNetworks(), filter));
     }
 
-    public Network< ? > findNetwork(final Predicate<Network< ? >> filter)
+    public Network findNetwork(final Predicate<Network> filter)
     {
         return Iterables.getFirst(filter(listNetworks(), filter), null);
     }
 
-    public Network< ? > getNetwork(final Integer id)
+    public List<Network> listNetworks(final NetworkType type)
+    {
+        NetworkOptions options = NetworkOptions.builder().type(type).build();
+        VLANNetworksDto networks =
+            context.getApi().getInfrastructureClient().listNetworks(target, options);
+        return Network.wrapNetworks(context, networks.getCollection());
+    }
+
+    public List<Network> listNetworks(final NetworkType type, final Predicate<Network> filter)
+    {
+        return Lists.newLinkedList(filter(listNetworks(type), filter));
+    }
+
+    public Network findNetwork(final NetworkType type, final Predicate<Network> filter)
+    {
+        return Iterables.getFirst(filter(listNetworks(type), filter), null);
+    }
+
+    public Network getNetwork(final Integer id)
     {
         VLANNetworkDto network = context.getApi().getInfrastructureClient().getNetwork(target, id);
         return Network.wrapNetwork(context, network);
-    }
-
-    /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofPublicNetworks">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofPublicNetworks</a>
-     */
-    @EnterpriseEdition
-    public List<PublicNetwork> listPublicNetworks()
-    {
-        NetworkOptions options = NetworkOptions.builder().type(NetworkType.PUBLIC).build();
-
-        VLANNetworksDto networks =
-            context.getApi().getInfrastructureClient().listNetworks(target, options);
-        return wrap(context, PublicNetwork.class, networks.getCollection());
-    }
-
-    @EnterpriseEdition
-    public List<PublicNetwork> listPublicNetworks(final Predicate<Network< ? >> filter)
-    {
-        return Lists.newLinkedList(filter(listPublicNetworks(), filter));
-    }
-
-    @EnterpriseEdition
-    public PublicNetwork findPublicNetwork(final Predicate<Network< ? >> filter)
-    {
-        return Iterables.getFirst(filter(listPublicNetworks(), filter), null);
-    }
-
-    /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofExternalNetworks">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofExternalNetworks</a>
-     */
-    @EnterpriseEdition
-    public List<ExternalNetwork> listExternalNetworks()
-    {
-        NetworkOptions options = NetworkOptions.builder().type(NetworkType.EXTERNAL).build();
-
-        VLANNetworksDto networks =
-            context.getApi().getInfrastructureClient().listNetworks(target, options);
-        return wrap(context, ExternalNetwork.class, networks.getCollection());
-    }
-
-    @EnterpriseEdition
-    public List<ExternalNetwork> listExternalNetworks(final Predicate<Network< ? >> filter)
-    {
-        return Lists.newLinkedList(filter(listExternalNetworks(), filter));
-    }
-
-    @EnterpriseEdition
-    public ExternalNetwork findExternalNetwork(final Predicate<Network< ? >> filter)
-    {
-        return Iterables.getFirst(filter(listExternalNetworks(), filter), null);
-    }
-
-    /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofUnmanagedNetworks">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetthelistofUnmanagedNetworks</a>
-     */
-    @EnterpriseEdition
-    public List<UnmanagedNetwork> listUnmanagedNetworks()
-    {
-        NetworkOptions options = NetworkOptions.builder().type(NetworkType.EXTERNAL).build();
-
-        VLANNetworksDto networks =
-            context.getApi().getInfrastructureClient().listNetworks(target, options);
-        return wrap(context, UnmanagedNetwork.class, networks.getCollection());
-    }
-
-    @EnterpriseEdition
-    public List<UnmanagedNetwork> listUnmanagedNetworks(final Predicate<Network< ? >> filter)
-    {
-        return Lists.newLinkedList(filter(listUnmanagedNetworks(), filter));
-    }
-
-    @EnterpriseEdition
-    public UnmanagedNetwork findUnmanagedNetwork(final Predicate<Network< ? >> filter)
-    {
-        return Iterables.getFirst(filter(listUnmanagedNetworks(), filter), null);
     }
 
     // Actions
@@ -442,7 +397,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Retrieve the hypervisor type from remote machine.
      * 
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievethehypervisortypefromremotemachine"
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievethehypervisortypefromremotemachine"
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
      *      Retrievethehypervisortypefromremotemachine/a>
      */
@@ -501,9 +457,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param user User to log in.
      * @param password Password to authenticate.
      * @return A physical machine if found or <code>null</code>.
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      Retrieveremotemachineinformation</a>
      */
     public Machine discoverSingleMachine(final String ip, final HypervisorType hypervisorType,
         final String user, final String password)
@@ -521,16 +478,20 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param password Password to authenticate.
      * @param port Port to connect.
      * @return A physical machine if found or <code>null</code>.
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrieveremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      Retrieveremotemachineinformation</a>
      */
     public Machine discoverSingleMachine(final String ip, final HypervisorType hypervisorType,
         final String user, final String password, final int port)
     {
         MachineDto dto =
-            context.getApi().getInfrastructureClient().discoverSingleMachine(target, ip,
-                hypervisorType, user, password, MachineOptions.builder().port(port).build());
+            context
+                .getApi()
+                .getInfrastructureClient()
+                .discoverSingleMachine(target, ip, hypervisorType, user, password,
+                    MachineOptions.builder().port(port).build());
 
         // Credentials are not returned by the API
         dto.setUser(user);
@@ -549,9 +510,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param user User to log in.
      * @param password Password to authenticate.
      * @return The physical machine list.
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      Retrievealistofremotemachineinformation</a>
      */
     public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
         final HypervisorType hypervisorType, final String user, final String password)
@@ -571,17 +533,21 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param password Password to authenticate.
      * @param port Port to connect.
      * @return The physical machine list.
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      Retrievealistofremotemachineinformation</a>
      */
     public List<Machine> discoverMultipleMachines(final String ipFrom, final String ipTo,
         final HypervisorType hypervisorType, final String user, final String password,
         final int port)
     {
         MachinesDto dto =
-            context.getApi().getInfrastructureClient().discoverMultipleMachines(target, ipFrom,
-                ipTo, hypervisorType, user, password, MachineOptions.builder().port(port).build());
+            context
+                .getApi()
+                .getInfrastructureClient()
+                .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
+                    MachineOptions.builder().port(port).build());
 
         // Credentials are not returned by the API
         for (MachineDto machine : dto.getCollection())
@@ -596,8 +562,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise)
     {
         VirtualMachineTemplatesDto dto =
-            context.getApi().getVirtualMachineTemplateClient().listVirtualMachineTemplates(
-                enterprise.getId(), target.getId());
+            context.getApi().getVirtualMachineTemplateClient()
+                .listVirtualMachineTemplates(enterprise.getId(), target.getId());
         return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
     }
 
@@ -617,8 +583,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final Integer id)
     {
         VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient().getVirtualMachineTemplate(
-                enterprise.getId(), target.getId(), id);
+            context.getApi().getVirtualMachineTemplateClient()
+                .getVirtualMachineTemplate(enterprise.getId(), target.getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
     }
 

@@ -28,10 +28,10 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.domain.network.PrivateIPAddress;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.domain.network.PublicIPAddress;
-import org.jclouds.abiquo.domain.network.options.IPOptions;
+import org.jclouds.abiquo.domain.network.PublicIp;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.internal.BaseSearchService;
 
 import com.google.inject.ImplementedBy;
@@ -59,9 +59,10 @@ public interface SearchService
      * 
      * @param datacenter The given datacenter.
      * @param options The set of filtering and pagination options of the search.
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofenterprisesusingdatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofenterprisesusingdatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-Retrievealistofenterprisesusingdatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      Retrievealistofenterprisesusingdatacenter</a>
      */
     Iterable<Enterprise> searchEnterprisesUsingDatacenter(final Datacenter datacenter,
         final EnterpriseOptions options);
@@ -96,8 +97,7 @@ public interface SearchService
      * @param network The given private network.
      * @param options The set of filtering and pagination options of the search.
      */
-    Iterable<PrivateIPAddress> searchPrivateIPs(final PrivateNetwork network,
-        final IPOptions options);
+    Iterable<Ip> searchPrivateIps(final PrivateNetwork network, final IpOptions options);
 
     /*********************** Public IPs ***********************/
 
@@ -107,8 +107,8 @@ public interface SearchService
      * @param virtualDatacenter The given virtual datacenter.
      * @param options The set of filtering and pagination options of the search.
      */
-    Iterable<PublicIPAddress> searchPublicIPsToPurchase(final VirtualDatacenter virtualDatacenter,
-        final IPOptions options);
+    Iterable<PublicIp> searchPublicIpsToPurchase(final VirtualDatacenter virtualDatacenter,
+        final IpOptions options);
 
     /**
      * Get the list of filtered purchased public ips by a virtual datacenter.
@@ -116,6 +116,6 @@ public interface SearchService
      * @param virtualDatacenter The given virtual datacenter.
      * @param options The set of filtering and pagination options of the search.
      */
-    Iterable<PublicIPAddress> searchPurchasedPublicIPs(final VirtualDatacenter virtualDatacenter,
-        final IPOptions options);
+    Iterable<PublicIp> searchPurchasedPublicIps(final VirtualDatacenter virtualDatacenter,
+        final IpOptions options);
 }

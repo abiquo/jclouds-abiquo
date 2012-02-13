@@ -29,7 +29,7 @@ import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.domain.network.options.IPOptions;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
@@ -1276,10 +1276,10 @@ public class InfrastructureAsyncClientTest extends
     public void testListPublicNetworkIpsWithOptions() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        IPOptions options = IPOptions.builder().startWith(10).build();
+        IpOptions options = IpOptions.builder().startWith(10).build();
         Method method =
             InfrastructureAsyncClient.class.getMethod("listNetworkIps", VLANNetworkDto.class,
-                IPOptions.class);
+                IpOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, NetworkResources.publicNetworkPut(), options);
 

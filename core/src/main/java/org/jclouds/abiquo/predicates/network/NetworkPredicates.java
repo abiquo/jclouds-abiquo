@@ -34,14 +34,14 @@ import com.google.common.base.Predicate;
  */
 public class NetworkPredicates
 {
-    public static Predicate<Network< ? >> name(final String... names)
+    public static Predicate<Network> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
-        return new Predicate<Network< ? >>()
+        return new Predicate<Network>()
         {
             @Override
-            public boolean apply(final Network< ? > network)
+            public boolean apply(final Network network)
             {
                 return Arrays.asList(names).contains(network.getName());
             }

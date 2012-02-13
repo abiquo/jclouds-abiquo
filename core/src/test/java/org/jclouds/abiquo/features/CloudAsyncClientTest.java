@@ -30,7 +30,7 @@ import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
-import org.jclouds.abiquo.domain.network.options.IPOptions;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
@@ -194,10 +194,10 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testListAvailablePublicIPsToPurchaseWithOptions() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        IPOptions options = IPOptions.builder().limit(5).build();
+        IpOptions options = IpOptions.builder().limit(5).build();
         Method method =
             CloudAsyncClient.class.getMethod("listAvailablePublicIPsToPurchase",
-                VirtualDatacenterDto.class, IPOptions.class);
+                VirtualDatacenterDto.class, IpOptions.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, CloudResources.virtualDatacenterPut(), options);
 
@@ -216,10 +216,10 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testListPurchasedPublicIPsWithOptions() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        IPOptions options = IPOptions.builder().limit(5).build();
+        IpOptions options = IpOptions.builder().limit(5).build();
         Method method =
             CloudAsyncClient.class.getMethod("listPurchasedPublicIPs", VirtualDatacenterDto.class,
-                IPOptions.class);
+                IpOptions.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, CloudResources.virtualDatacenterPut(), options);
 
@@ -478,10 +478,10 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     public void testListPrivateNetworkIpsWithOptions() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        IPOptions options = IPOptions.builder().startWith(10).build();
+        IpOptions options = IpOptions.builder().startWith(10).build();
         Method method =
             CloudAsyncClient.class.getMethod("listPrivateNetworkIps", VLANNetworkDto.class,
-                IPOptions.class);
+                IpOptions.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, NetworkResources.privateNetworkPut(), options);
 

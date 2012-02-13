@@ -23,7 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
-import org.jclouds.abiquo.domain.network.IPAddress;
+import org.jclouds.abiquo.domain.network.Ip;
 
 import com.google.common.base.Predicate;
 
@@ -34,28 +34,28 @@ import com.google.common.base.Predicate;
  */
 public class IPAddressPredicates
 {
-    public static Predicate<IPAddress> name(final String... names)
+    public static Predicate<Ip> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
-        return new Predicate<IPAddress>()
+        return new Predicate<Ip>()
         {
             @Override
-            public boolean apply(final IPAddress address)
+            public boolean apply(final Ip address)
             {
                 return Arrays.asList(names).contains(address.getName());
             }
         };
     }
 
-    public static Predicate<IPAddress> address(final String... addresses)
+    public static Predicate<Ip> address(final String... addresses)
     {
         checkNotNull(addresses, "addresses must be defined");
 
-        return new Predicate<IPAddress>()
+        return new Predicate<Ip>()
         {
             @Override
-            public boolean apply(final IPAddress address)
+            public boolean apply(final Ip address)
             {
                 return Arrays.asList(addresses).contains(address.getIp());
             }
