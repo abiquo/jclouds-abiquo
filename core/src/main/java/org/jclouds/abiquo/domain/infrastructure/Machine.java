@@ -56,9 +56,6 @@ public class Machine extends DomainWrapper<MachineDto>
     /** The default virtual cpu used in MB. */
     private static final int DEFAULT_VCPU_USED = 1;
 
-    /** The default virtual cpu per core. */
-    private static final int DEFAULT_VCPU_PER_CORE = 1;
-
     /** The rack where the machine belongs. */
     // Package protected to allow navigation from children
     Rack rack;
@@ -142,8 +139,6 @@ public class Machine extends DomainWrapper<MachineDto>
         private Integer virtualCpuCores;
 
         private Integer virtualCpusUsed = DEFAULT_VCPU_USED;
-
-        private Integer virtualCpusPerCore = DEFAULT_VCPU_PER_CORE;
 
         private String virtualSwitch;
 
@@ -293,12 +288,6 @@ public class Machine extends DomainWrapper<MachineDto>
             return this;
         }
 
-        public Builder virtualCpusPerCore(final int virtualCpusPerCore)
-        {
-            this.virtualCpusPerCore = virtualCpusPerCore;
-            return this;
-        }
-
         public Builder hypervisorType(final HypervisorType hypervisorType)
         {
             this.type = hypervisorType;
@@ -360,15 +349,16 @@ public class Machine extends DomainWrapper<MachineDto>
         public static Builder fromMachine(final Machine in)
         {
             Builder builder =
-                Machine.builder(in.context, in.rack).name(in.getName()).description(
-                    in.getDescription()).virtualCpuCores(in.getVirtualCpuCores()).virtualCpusUsed(
-                    in.getVirtualCpusUsed()).virtualRamInMb(in.getVirtualRamInMb())
-                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb()).virtualSwitch(
-                        in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp()).ipService(
-                        in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
-                    .password(in.getPassword()).ipmiIp(in.getIpmiIp()).ipmiPassword(
-                        in.getIpmiPassword()).ipmiUser(in.getIpmiUser()).state(in.getState())
-                    .datastores(in.getDatastores());
+                Machine.builder(in.context, in.rack).name(in.getName())
+                    .description(in.getDescription()).virtualCpuCores(in.getVirtualCpuCores())
+                    .virtualCpusUsed(in.getVirtualCpusUsed())
+                    .virtualRamInMb(in.getVirtualRamInMb())
+                    .virtualRamUsedInMb(in.getVirtualRamUsedInMb())
+                    .virtualSwitch(in.getVirtualSwitch()).port(in.getPort()).ip(in.getIp())
+                    .ipService(in.getIpService()).hypervisorType(in.getType()).user(in.getUser())
+                    .password(in.getPassword()).ipmiIp(in.getIpmiIp())
+                    .ipmiPassword(in.getIpmiPassword()).ipmiUser(in.getIpmiUser())
+                    .state(in.getState()).datastores(in.getDatastores());
 
             // Parameters that can be null
             if (in.getIpmiPort() != null)
