@@ -37,10 +37,10 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.domain.network.PrivateIPAddress;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.domain.network.PublicIPAddress;
-import org.jclouds.abiquo.domain.network.options.IPOptions;
+import org.jclouds.abiquo.domain.network.PublicIp;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.services.SearchService;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -118,36 +118,36 @@ public class BaseSearchService implements SearchService
     /*********************** Private Network ***********************/
 
     @Override
-    public Iterable<PrivateIPAddress> searchPrivateIPs(final PrivateNetwork network,
-        final IPOptions options)
+    public Iterable<Ip> searchPrivateIps(final PrivateNetwork network, final IpOptions options)
     {
         List<IpPoolManagementDto> ips =
             context.getApi().getCloudClient().listPrivateNetworkIps(network.unwrap(), options)
                 .getCollection();
 
-        return wrap(context, PrivateIPAddress.class, ips);
+        return wrap(context, Ip.class, ips);
     }
 
     @Override
-    public Iterable<PublicIPAddress> searchPublicIPsToPurchase(
-        final VirtualDatacenter virtualDatacenter, final IPOptions options)
+    public Iterable<PublicIp> searchPublicIpsToPurchase(final VirtualDatacenter virtualDatacenter,
+        final IpOptions options)
     {
         List<IpPoolManagementDto> ips =
-            context.getApi().getCloudClient().listAvailablePublicIPsToPurchase(
-                virtualDatacenter.unwrap(), options).getCollection();
+            context.getApi().getCloudClient()
+                .listAvailablePublicIPsToPurchase(virtualDatacenter.unwrap(), options)
+                .getCollection();
 
-        return wrap(context, PublicIPAddress.class, ips);
+        return wrap(context, PublicIp.class, ips);
     }
 
     @Override
-    public Iterable<PublicIPAddress> searchPurchasedPublicIPs(
-        final VirtualDatacenter virtualDatacenter, final IPOptions options)
+    public Iterable<PublicIp> searchPurchasedPublicIps(final VirtualDatacenter virtualDatacenter,
+        final IpOptions options)
     {
         List<IpPoolManagementDto> ips =
-            context.getApi().getCloudClient().listPurchasedPublicIPs(virtualDatacenter.unwrap(),
-                options).getCollection();
+            context.getApi().getCloudClient()
+                .listPurchasedPublicIPs(virtualDatacenter.unwrap(), options).getCollection();
 
-        return wrap(context, PublicIPAddress.class, ips);
+        return wrap(context, PublicIp.class, ips);
     }
 
 }

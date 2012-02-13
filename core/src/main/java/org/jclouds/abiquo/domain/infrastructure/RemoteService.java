@@ -55,7 +55,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-DeleteaRemoteService">
      *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-DeleteaRemoteService</a>
      */
@@ -66,7 +66,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService">
      *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService</a>
      */
@@ -78,7 +78,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-UpdateanexistingRemoteService">
      *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-UpdateanexistingRemoteService</a>
      */
@@ -88,7 +88,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CheckthestatusofaRemoteService">
      *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CheckthestatusofaRemoteService</a>
      */
@@ -102,7 +102,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     // Parent access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
      */

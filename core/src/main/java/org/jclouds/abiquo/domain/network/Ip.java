@@ -34,44 +34,44 @@ import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public abstract class IPAddress extends DomainWrapper<IpPoolManagementDto>
+public class Ip extends DomainWrapper<IpPoolManagementDto>
 {
     /**
      * Constructor to be used only by the builder.
      */
-    protected IPAddress(final AbiquoContext context, final IpPoolManagementDto target)
+    protected Ip(final AbiquoContext context, final IpPoolManagementDto target)
     {
         super(context, target);
     }
 
     // Domain operations
 
-    public PublicIPAddress toPublicIP()
+    public PublicIp toPublicIP()
     {
         checkNotNull(target.searchLink("publicnetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
 
-        return wrap(context, PublicIPAddress.class, target);
+        return wrap(context, PublicIp.class, target);
     }
 
-    public PrivateIPAddress toPrivateIP()
+    public Ip toPrivateIP()
     {
         checkNotNull(target.searchLink("privatenetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
 
-        return wrap(context, PrivateIPAddress.class, target);
+        return wrap(context, Ip.class, target);
     }
 
-    public ExternalIPAddress toExternalIP()
+    public Ip toExternalIP()
     {
         checkNotNull(target.searchLink("externalnetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
 
-        return wrap(context, ExternalIPAddress.class, target);
+        return wrap(context, Ip.class, target);
     }
 
-    public UnmanagedIPAddress toUnmanagedIP()
+    public Ip toUnmanagedIP()
     {
         checkNotNull(target.searchLink("unmanagednetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
 
-        return wrap(context, UnmanagedIPAddress.class, target);
+        return wrap(context, Ip.class, target);
     }
 
     /**
@@ -150,8 +150,8 @@ public abstract class IPAddress extends DomainWrapper<IpPoolManagementDto>
     @Override
     public String toString()
     {
-        return "Nic [id=" + getId() + ", available=" + getAvailable() + ", ip=" + getIp()
-            + ", mac=" + getMac() + ", name=" + getName() + ", networkName=" + getNetworkName()
+        return "Ip [id=" + getId() + ", available=" + getAvailable() + ", ip=" + getIp() + ", mac="
+            + getMac() + ", name=" + getName() + ", networkName=" + getNetworkName()
             + ", quarantine=" + getQuarantine() + "]";
     }
 }

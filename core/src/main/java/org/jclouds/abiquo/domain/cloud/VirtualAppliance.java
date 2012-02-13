@@ -45,11 +45,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * Adds high level functionality to {@link VirtualApplianceDto}.
+ * Represents a virtual appliance.
+ * <p>
+ * A virtual appliance is a logic container for virtual machines that together make an appliance.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource">
  *      http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource</a>
  */
 public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
@@ -69,7 +71,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     // Domain operations
 
     /**
-     * Delete the virtual appliance.
+     * Deletes the virtual appliance.
      */
     public void delete()
     {
@@ -78,7 +80,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Create the virtual appliance in the selected virtual datacenter.
+     * Creates the virtual appliance in the selected virtual datacenter.
      */
     public void save()
     {
@@ -88,7 +90,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Update the virtual appliance information when some of its properties have changed.
+     * Updates the virtual appliance information when some of its properties have changed.
      */
     public void update()
     {
@@ -98,12 +100,13 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     // Parent access
 
     /**
-     * Get the virtual datacenter where the virtual appliance belongs to.
+     * Gets the virtual datacenter where the virtual appliance belongs to.
      * 
      * @resturn The virtual datacenter where the virtual appliance belongs to.
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
      */
     public VirtualDatacenter getVirtualDatacenter()
     {
@@ -115,12 +118,13 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Get the enterprise where the virtual appliance belongs to.
+     * Gets the enterprise where the virtual appliance belongs to.
      * 
      * @return The enterprise where the virtual appliance belongs to.
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      RetrieveaEnterprise</a>
      */
     public Enterprise getEnterprise()
     {
@@ -130,7 +134,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Get the current state of the virtual appliance.
+     * Gets the current state of the virtual appliance.
      * 
      * @return The current state of the virtual appliance.
      */
@@ -144,12 +148,14 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     // Children access
 
     /**
-     * Get the list of virtual machines in the virtual appliance.
+     * Gets the list of virtual machines in the virtual appliance.
      * 
      * @return The list of virtual machines in the virtual appliance.
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource-RetrievethelistofVirtualMachines.">
-     *      http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource-RetrievethelistofVirtualMachines.</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource-RetrievethelistofVirtualMachines."
+     *      >
+     *      http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource
+     *      -RetrievethelistofVirtualMachines.</a>
      */
     public List<VirtualMachine> listVirtualMachines()
     {
@@ -158,7 +164,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Get the list of virtual machines in the virtual appliance matching the given filter.
+     * Gets the list of virtual machines in the virtual appliance matching the given filter.
      * 
      * @param filter The filter to apply.
      * @return The list of virtual machines in the virtual appliance matching the given filter.
@@ -169,7 +175,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Get a single virtual machine in the virtual appliance matching the given filter.
+     * Gets a single virtual machine in the virtual appliance matching the given filter.
      * 
      * @param filter The filter to apply.
      * @return The virtual machine or <code>null</code> if none matched the given filter.
@@ -180,7 +186,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Get a concrete virtual machine in the virtual appliance.
+     * Gets a concrete virtual machine in the virtual appliance.
      * 
      * @param id The id of the virtual machine.
      * @return The requested virtual machine.
@@ -194,7 +200,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     // Actions
 
     /**
-     * Deploy the virtual appliance.
+     * Deploys the virtual appliance.
      * <p>
      * This method will start the deployment of all the virtual machines in the virtual appliance,
      * and will return an {@link AsyncTask} reference for each deployment operation. The deployment
@@ -209,7 +215,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Deploy the virtual appliance.
+     * Deploys the virtual appliance.
      * <p>
      * This method will start the deployment of all the virtual machines in the virtual appliance,
      * and will return an {@link AsyncTask} reference for each deploy operation. The deployment will
@@ -232,7 +238,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Undeploy the virtual appliance.
+     * Undeploys the virtual appliance.
      * <p>
      * This method will start the undeploy of all the virtual machines in the virtual appliance, and
      * will return an {@link AsyncTask} reference for each undeploy operation. The undeploy will
@@ -247,7 +253,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     }
 
     /**
-     * Undeploy the virtual appliance.
+     * Undeploys the virtual appliance.
      * <p>
      * This method will start the undeploy of all the virtual machines in the virtual appliance, and
      * will return an {@link AsyncTask} reference for each undeploy operation. The undeploy will

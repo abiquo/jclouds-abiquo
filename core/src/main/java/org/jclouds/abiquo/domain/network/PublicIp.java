@@ -32,16 +32,16 @@ import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource">
  *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource</a>
  */
 @EnterpriseEdition
-public class PublicIPAddress extends IPAddress
+public class PublicIp extends Ip
 {
     /**
      * Constructor to be used only by the builder.
      */
-    protected PublicIPAddress(final AbiquoContext context, final IpPoolManagementDto target)
+    protected PublicIp(final AbiquoContext context, final IpPoolManagementDto target)
     {
         super(context, target);
     }
@@ -49,32 +49,35 @@ public class PublicIPAddress extends IPAddress
     // Domain operations
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#Virtual+Datacenter+Resource#VirtualDatacenterResource-PurchaseaPublicIP">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#Virtual+Datacenter+Resource#VirtualDatacenterResource-PurchaseaPublicIP</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#Virtual+Datacenter+Resource#VirtualDatacenterResource-PurchaseaPublicIP"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#Virtual+Datacenter
+     *      +Resource#VirtualDatacenterResource-PurchaseaPublicIP</a>
      */
     public void purchase()
     {
         checkNotNull(target.searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
-
         target = context.getApi().getCloudClient().purchasePublicIP(target);
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ReleaseaPublicIP">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ReleaseaPublicIP</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-ReleaseaPublicIP"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-ReleaseaPublicIP</a>
      */
     public void release()
     {
         checkNotNull(target.searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
-
         target = context.getApi().getCloudClient().releasePublicIP(target);
     }
 

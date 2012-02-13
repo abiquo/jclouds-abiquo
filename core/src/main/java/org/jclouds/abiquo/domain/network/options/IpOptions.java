@@ -26,7 +26,7 @@ import org.jclouds.abiquo.domain.options.search.FilterOptions;
  * 
  * @author Francesc Montserrat
  */
-public class IPOptions extends FilterOptions
+public class IpOptions extends FilterOptions
 {
     public static Builder builder()
     {
@@ -36,7 +36,7 @@ public class IPOptions extends FilterOptions
     @Override
     protected Object clone() throws CloneNotSupportedException
     {
-        IPOptions options = new IPOptions();
+        IpOptions options = new IpOptions();
         options.map.putAll(map);
         return options;
     }
@@ -58,9 +58,9 @@ public class IPOptions extends FilterOptions
         }
 
         @Override
-        public IPOptions build()
+        public IpOptions build()
         {
-            IPOptions options = new IPOptions();
+            IpOptions options = new IpOptions();
 
             if (free != null)
             {

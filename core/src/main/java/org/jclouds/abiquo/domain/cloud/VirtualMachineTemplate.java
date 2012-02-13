@@ -34,7 +34,7 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource">
  *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource</a>
  */
 public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplateDto>
@@ -65,7 +65,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     // Parent access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
      */

@@ -33,10 +33,10 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Private+Network+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Private+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Private+Network+Resource</a>
  */
-public class PrivateNetwork extends Network<PrivateIPAddress>
+public class PrivateNetwork extends Network
 {
     /** The virtual datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -53,9 +53,11 @@ public class PrivateNetwork extends Network<PrivateIPAddress>
     // Domain operations
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-DeleteaPrivateNetwork">
-     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-DeleteaPrivateNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-DeleteaPrivateNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource
+     *      -DeleteaPrivateNetwork</a>
      */
     public void delete()
     {
@@ -64,21 +66,25 @@ public class PrivateNetwork extends Network<PrivateIPAddress>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-CreateaPrivateNetwork">
-     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-CreateaPrivateNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-CreateaPrivateNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource
+     *      -CreateaPrivateNetwork</a>
      */
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createPrivateNetwork(virtualDatacenter.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createPrivateNetwork(virtualDatacenter.unwrap(), target);
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-UpdateaPrivateNetwork">
-     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-UpdateaPrivateNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-UpdateaPrivateNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource
+     *      -UpdateaPrivateNetwork</a>
      */
     public void update()
     {
@@ -86,15 +92,17 @@ public class PrivateNetwork extends Network<PrivateIPAddress>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork">
-     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource-RetrievethelistofIPSofthePrivateNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource
+     *      -RetrievethelistofIPSofthePrivateNetwork</a>
      */
     @Override
-    public List<PrivateIPAddress> listIps()
+    public List<Ip> listIps()
     {
         IpsPoolManagementDto nics = context.getApi().getCloudClient().listPrivateNetworkIps(target);
-        return wrap(context, PrivateIPAddress.class, nics.getCollection());
+        return wrap(context, Ip.class, nics.getCollection());
     }
 
     // Builder
@@ -143,10 +151,11 @@ public class PrivateNetwork extends Network<PrivateIPAddress>
 
         public static Builder fromPrivateNetwork(final PrivateNetwork in)
         {
-            return PrivateNetwork.builder(in.context).name(in.getName()).tag(in.getTag()).gateway(
-                in.getGateway()).address(in.getAddress()).mask(in.getMask()).primaryDNS(
-                in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS()).sufixDNS(in.getSufixDNS())
-                .defaultNetwork(in.getDefaultNetwork()).virtualDatacenter(in.virtualDatacenter);
+            return PrivateNetwork.builder(in.context).name(in.getName()).tag(in.getTag())
+                .gateway(in.getGateway()).address(in.getAddress()).mask(in.getMask())
+                .primaryDNS(in.getPrimaryDNS()).secondaryDNS(in.getSecondaryDNS())
+                .sufixDNS(in.getSufixDNS()).defaultNetwork(in.getDefaultNetwork())
+                .virtualDatacenter(in.virtualDatacenter);
         }
     }
 

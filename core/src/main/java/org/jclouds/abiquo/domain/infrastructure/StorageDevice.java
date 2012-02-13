@@ -46,7 +46,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource">
  *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource</a>
  */
 @EnterpriseEdition
@@ -65,7 +65,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-DeleteaStorageDevice">
      *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-DeleteaStorageDevice</a>
      */
@@ -76,7 +76,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-CreateaStorageDevice">
      *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-CreateaStorageDevice</a>
      */
@@ -88,7 +88,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-UpdateaStorageDevice">
      *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-UpdateaStorageDevice</a>
      */
@@ -100,7 +100,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     // Parent access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
      */
@@ -117,7 +117,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     /**
      * List storage pools from device (synchronized).
      * 
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools">
      *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools</a>
      * @return Storage Pools from device (synchronized).
@@ -152,7 +152,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     /**
      * List storage pools from device (from Database).
      * 
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools">
      *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools</a>
      * @return Storage Pools from device (from Database).
@@ -183,7 +183,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers">
      *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers</a>
      */

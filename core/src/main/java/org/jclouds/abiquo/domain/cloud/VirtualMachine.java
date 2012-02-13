@@ -29,7 +29,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.domain.network.IPAddress;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.NetworkConfiguration;
 import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
@@ -68,7 +68,7 @@ import com.google.common.primitives.Longs;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Resource">
  *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Resource</a>
  */
 public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
@@ -141,7 +141,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     // Parent access
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrieveaVirtualAppliance">
      *      http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrieveaVirtualAppliance</a>
      */
@@ -154,7 +154,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter">
      *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
      */
@@ -167,7 +167,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise">
      *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise</a>
      */
@@ -392,7 +392,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource#VirtualMachineNetworkConfigurationResource-Changetheusedconfiguration">
      *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource#VirtualMachineNetworkConfigurationResource-Changetheusedconfiguration</a>
      */
@@ -408,17 +408,17 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP">
      *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP</a>
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP">
      *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP</a>
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP">
      *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP</a>
      */
-    public void createNic(final IPAddress ip)
+    public void createNic(final Ip ip)
     {
         // TODO waiting for http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3144
         RESTLink ipLink = ip.unwrap().searchLink("self");
@@ -434,7 +434,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork">
      *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork</a>
      */

@@ -61,7 +61,7 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Enterprise+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Enterprise+Resource">
  *      http://community.abiquo.com/display/ABI20/Enterprise+Resource</a>
  */
 public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
@@ -80,9 +80,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     // Domain operations
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DeleteanexistingEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DeleteanexistingEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DeleteanexistingEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      DeleteanexistingEnterprise</a>
      */
     public void delete()
     {
@@ -91,9 +92,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-CreateanewEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-CreateanewEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-CreateanewEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      CreateanewEnterprise</a>
      */
     public void save()
     {
@@ -101,9 +103,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-UpdatesanexistingEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-UpdatesanexistingEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-UpdatesanexistingEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      UpdatesanexistingEnterprise</a>
      */
     public void update()
     {
@@ -113,9 +116,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     // Children access
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrievealistofVirtualDatacenters">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrievealistofVirtualDatacenters</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrievealistofVirtualDatacenters"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-RetrievealistofVirtualDatacenters</a>
      */
     public List<VirtualDatacenter> listVirtualDatacenters()
     {
@@ -161,9 +165,11 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#
+     *      DatacenterLimitsResource
+     *      -Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise</a>
      */
     public List<Limits> listLimits()
     {
@@ -182,9 +188,11 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers">
-     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers
+     *      </a>
      */
     public List<User> listUsers()
     {
@@ -209,9 +217,11 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles">
-     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles
+     *      </a>
      */
     public List<Role> listRoles()
     {
@@ -232,8 +242,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter)
     {
         VirtualMachineTemplatesDto dto =
-            context.getApi().getVirtualMachineTemplateClient().listVirtualMachineTemplates(
-                target.getId(), datacenter.getId());
+            context.getApi().getVirtualMachineTemplateClient()
+                .listVirtualMachineTemplates(target.getId(), datacenter.getId());
         return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
     }
 
@@ -253,8 +263,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         final Integer id)
     {
         VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient().getVirtualMachineTemplate(
-                target.getId(), datacenter.getId(), id);
+            context.getApi().getVirtualMachineTemplateClient()
+                .getVirtualMachineTemplate(target.getId(), datacenter.getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
     }
 
@@ -297,9 +307,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-Getthelistofexternalnetworks">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-Getthelistofexternalnetworks</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-Getthelistofexternalnetworks"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      Getthelistofexternalnetworks</a>
      */
     @EnterpriseEdition
     public List<ExternalNetwork> listExternalNetworks()
@@ -310,21 +321,22 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     @EnterpriseEdition
-    public List<ExternalNetwork> listExternalNetworks(final Predicate<Network< ? >> filter)
+    public List<ExternalNetwork> listExternalNetworks(final Predicate<Network> filter)
     {
         return Lists.newLinkedList(filter(listExternalNetworks(), filter));
     }
 
     @EnterpriseEdition
-    public ExternalNetwork findExternalNetwork(final Predicate<Network< ? >> filter)
+    public ExternalNetwork findExternalNetwork(final Predicate<Network> filter)
     {
         return Iterables.getFirst(filter(listExternalNetworks(), filter), null);
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrievethelistofvirtualmachinesbyanEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrievethelistofvirtualmachinesbyanEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrievethelistofvirtualmachinesbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      RetrievethelistofvirtualmachinesbyanEnterprise</a>
      */
     public List<VirtualMachine> listVirtualMachines()
     {
@@ -362,14 +374,15 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     // Actions
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Repository+Resource#
+     *      DatacenterRepositoryResource-SynchronizetheDatacenterRepositorywiththerepository</a>
      */
     public void refreshTemplateRepository(final Datacenter datacenter)
     {
-        context.getApi().getEnterpriseClient().refreshTemplateRepository(target.getId(),
-            datacenter.getId());
+        context.getApi().getEnterpriseClient()
+            .refreshTemplateRepository(target.getId(), datacenter.getId());
     }
 
     /**
@@ -378,9 +391,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      * 
      * @param datacenter The datacenter.
      * @return Default datacenter limits of the enterprise for the given datacenter.
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-CreateanewLimitforanenterpriseinadatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-CreateanewLimitforanenterpriseinadatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-CreateanewLimitforanenterpriseinadatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#
+     *      DatacenterLimitsResource-CreateanewLimitforanenterpriseinadatacenter</a>
      */
     public Limits allowDatacenter(final Datacenter datacenter)
     {
@@ -393,8 +407,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
             // Save new limits
             dto =
-                context.getApi().getEnterpriseClient().createLimits(target, datacenter.unwrap(),
-                    limits.unwrap());
+                context.getApi().getEnterpriseClient()
+                    .createLimits(target, datacenter.unwrap(), limits.unwrap());
         }
         catch (AbiquoException ex)
         {
@@ -419,9 +433,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      * 
      * @param datacenter The datacenter.
      * @return Default datacenter limits of the enterprise for the given datacenter.
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Deleteanexistinglimitforanenterpriseinadatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Deleteanexistinglimitforanenterpriseinadatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Deleteanexistinglimitforanenterpriseinadatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#
+     *      DatacenterLimitsResource-Deleteanexistinglimitforanenterpriseinadatacenter</a>
      */
     public void prohibitDatacenter(final Datacenter datacenter)
     {
@@ -440,9 +455,10 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     /**
      * Disables chef in the enterprise.
      * 
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DisableChefinanexistingEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DisableChefinanexistingEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DisableChefinanexistingEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      DisableChefinanexistingEnterprise</a>
      */
     public void disableChef()
     {
@@ -561,16 +577,18 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         public static Builder fromEnterprise(final Enterprise in)
         {
-            return Enterprise.builder(in.context).name(in.getName()).ramLimits(
-                in.getRamSoftLimitInMb(), in.getRamHardLimitInMb()).cpuCountLimits(
-                in.getCpuCountSoftLimit(), in.getCpuCountHardLimit()).hdLimitsInMb(
-                in.getHdSoftLimitInMb(), in.getHdHardLimitInMb()).storageLimits(
-                in.getStorageSoft(), in.getStorageHard()).vlansLimits(in.getVlansSoft(),
-                in.getVlansHard()).publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
+            return Enterprise.builder(in.context).name(in.getName())
+                .ramLimits(in.getRamSoftLimitInMb(), in.getRamHardLimitInMb())
+                .cpuCountLimits(in.getCpuCountSoftLimit(), in.getCpuCountHardLimit())
+                .hdLimitsInMb(in.getHdSoftLimitInMb(), in.getHdHardLimitInMb())
+                .storageLimits(in.getStorageSoft(), in.getStorageHard())
+                .vlansLimits(in.getVlansSoft(), in.getVlansHard())
+                .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
                 .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
-                .isReservationRestricted(in.getIsReservationRestricted()).chefClient(
-                    in.getChefClient()).chefClientCertificate(in.getChefClientCertificate())
-                .chefURL(in.getChefURL()).chefValidator(in.getChefValidator())
+                .isReservationRestricted(in.getIsReservationRestricted())
+                .chefClient(in.getChefClient())
+                .chefClientCertificate(in.getChefClientCertificate()).chefURL(in.getChefURL())
+                .chefValidator(in.getChefValidator())
                 .chefValidatorCertificate(in.getChefValidatorCertificate());
         }
     }

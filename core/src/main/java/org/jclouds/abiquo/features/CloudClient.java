@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
-import org.jclouds.abiquo.domain.network.options.IPOptions;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
@@ -121,7 +121,7 @@ public interface CloudClient
      * @return The list of available ips.
      */
     IpsPoolManagementDto listAvailablePublicIPsToPurchase(VirtualDatacenterDto virtualDatacenter,
-        IPOptions options);
+        IpOptions options);
 
     /**
      * List all purchased public ip addresses in the virtual datacenter.
@@ -131,7 +131,7 @@ public interface CloudClient
      * @return The list of purchased ips.
      */
     IpsPoolManagementDto listPurchasedPublicIPs(VirtualDatacenterDto virtualDatacenter,
-        IPOptions options);
+        IpOptions options);
 
     /**
      * Purchase a public IP.
@@ -246,7 +246,7 @@ public interface CloudClient
      * @param options Filtering options.
      * @return The list of ips for the private network.
      */
-    IpsPoolManagementDto listPrivateNetworkIps(VLANNetworkDto network, IPOptions options);
+    IpsPoolManagementDto listPrivateNetworkIps(VLANNetworkDto network, IpOptions options);
 
     /*********************** Attached Nic ***********************/
 

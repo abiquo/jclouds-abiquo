@@ -29,7 +29,7 @@ import com.abiquo.server.core.config.SystemPropertyDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/System+Property+resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/System+Property+resource">
  *      http://community.abiquo.com/display/ABI20/System+Property+resource</a>
  */
 
@@ -46,7 +46,7 @@ public class SystemProperty extends DomainWrapper<SystemPropertyDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/System+Property+resource#SystemPropertyresource-ModifyanexistingSystemProperty">
      *      http://community.abiquo.com/display/ABI20/System+Property+resource#SystemPropertyresource-ModifyanexistingSystemProperty</a>
      */

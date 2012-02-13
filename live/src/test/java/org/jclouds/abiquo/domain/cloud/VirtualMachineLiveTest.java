@@ -28,8 +28,8 @@ import static org.testng.Assert.assertTrue;
 import java.util.List;
 
 import org.jclouds.abiquo.domain.infrastructure.Tier;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Nic;
-import org.jclouds.abiquo.domain.network.PrivateIPAddress;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -65,7 +65,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
 
     public void testCreateNic()
     {
-        PrivateIPAddress ip = env.virtualDatacenter.listPrivateNetworks().get(0).listIps().get(0);
+        Ip ip = env.virtualDatacenter.listPrivateNetworks().get(0).listIps().get(0);
 
         // XXX create nic does not return the created nic
         env.virtualMachine.createNic(ip);

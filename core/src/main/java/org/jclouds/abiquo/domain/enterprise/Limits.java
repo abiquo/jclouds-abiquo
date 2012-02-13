@@ -30,7 +30,7 @@ import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource">
  *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource</a>
  */
 public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
@@ -46,7 +46,7 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-UpdatesanexistingLimitforanenterpriseinadatacenter">
      *      http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-UpdatesanexistingLimitforanenterpriseinadatacenter</a>
      */

@@ -46,7 +46,7 @@ public class Nic extends DomainWrapper<NicDto>
     // Domain operations
 
     /**
-     * @see <a
+     * @see API: <a
      *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-DeleteaNICs">
      *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-DeleteaNICs</a>
      */

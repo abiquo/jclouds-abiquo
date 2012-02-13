@@ -39,11 +39,11 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see <a href="http://community.abiquo.com/display/ABI20/Public+Network+Resource">
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/Public+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 @EnterpriseEdition
-public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
+public class UnmanagedNetwork extends Network
 {
     /** The datacenter where the network belongs. */
     // Package protected to allow navigation from children
@@ -61,9 +61,11 @@ public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanUnmanagedNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanUnmanagedNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-DeleteanUnmanagedNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
+     *      -DeleteanUnmanagedNetwork</a>
      */
     public void delete()
     {
@@ -72,9 +74,11 @@ public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewUnmanagedNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewUnmanagedNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-CreateanewUnmanagedNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
+     *      -CreateanewUnmanagedNetwork</a>
      */
     public void save()
     {
@@ -84,9 +88,11 @@ public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanUnmanagedNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanUnmanagedNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-UpdateanUnmanagedNetwork"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
+     *      -UpdateanUnmanagedNetwork</a>
      */
     public void update()
     {
@@ -94,16 +100,17 @@ public class UnmanagedNetwork extends Network<UnmanagedIPAddress>
     }
 
     /**
-     * @see <a
-     *      href="http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork">
-     *      http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-ReturnthelistofIPsforaPublicNetwork"
+     *      > http://community.abiquo.com/display/ABI20/Public+IPs+Resource#PublicIPsResource-
+     *      ReturnthelistofIPsforaPublicNetwork</a>
      */
     @Override
-    public List<UnmanagedIPAddress> listIps()
+    public List<Ip> listIps()
     {
         IpsPoolManagementDto nics =
             context.getApi().getInfrastructureClient().listNetworkIps(target);
-        return wrap(context, UnmanagedIPAddress.class, nics.getCollection());
+        return wrap(context, Ip.class, nics.getCollection());
     }
 
     private void addEnterpriseLink()
