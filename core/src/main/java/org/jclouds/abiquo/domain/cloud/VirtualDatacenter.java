@@ -41,8 +41,6 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
-import com.abiquo.model.rest.RESTLink;
-import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -377,8 +375,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public Network getDefaultNetwork()
     {
-        VLANNetworkDto network =
-            context.getApi().getCloudClient().getDefaultNetworkByVirtualDatacenter(target);
+        VLANNetworkDto network = context.getApi().getCloudClient().getDefaultNetwork(target);
         return wrap(context, network.getType() == NetworkType.INTERNAL ? PrivateNetwork.class
             : ExternalNetwork.class, network);
     }
@@ -401,12 +398,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return Lists.newLinkedList(filter(listPrivateNetworks(), filter));
     }
 
-    public PrivateNetwork findNetwork(final Predicate<Network> filter)
+    public PrivateNetwork findPrivateNetwork(final Predicate<Network> filter)
     {
         return Iterables.getFirst(filter(listPrivateNetworks(), filter), null);
     }
 
-    public PrivateNetwork getNetwork(final Integer id)
+    public PrivateNetwork getPrivateNetwork(final Integer id)
     {
         VLANNetworkDto network = context.getApi().getCloudClient().getPrivateNetwork(target, id);
         return wrap(context, PrivateNetwork.class, network);
@@ -458,24 +455,24 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
      *      VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
      */
-    public List<PublicIp> listAvailablePublicIpsToPurchase()
+    public List<PublicIp> listAvailablePublicIps()
     {
         IpOptions options = IpOptions.builder().build();
 
         IpsPoolManagementDto ips =
-            context.getApi().getCloudClient().listAvailablePublicIPsToPurchase(target, options);
+            context.getApi().getCloudClient().listAvailablePublicIps(target, options);
 
         return wrap(context, PublicIp.class, ips.getCollection());
     }
 
-    public List<PublicIp> listAvailablePublicIpsToPurchase(final Predicate<PublicIp> filter)
+    public List<PublicIp> listAvailablePublicIps(final Predicate<PublicIp> filter)
     {
-        return Lists.newLinkedList(filter(listAvailablePublicIpsToPurchase(), filter));
+        return Lists.newLinkedList(filter(listAvailablePublicIps(), filter));
     }
 
-    public PublicIp findAvailablePublicIPToPurchase(final Predicate<PublicIp> filter)
+    public PublicIp findAvailablePublicIp(final Predicate<PublicIp> filter)
     {
-        return Iterables.getFirst(filter(listAvailablePublicIpsToPurchase(), filter), null);
+        return Iterables.getFirst(filter(listAvailablePublicIps(), filter), null);
     }
 
     /**
@@ -484,57 +481,31 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
      *      VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
      */
-    public List<PublicIp> listPurchasedPublicIPs()
+    public List<PublicIp> listPurchasedPublicIps()
     {
         IpOptions options = IpOptions.builder().build();
 
         IpsPoolManagementDto ips =
-            context.getApi().getCloudClient().listPurchasedPublicIPs(target, options);
+            context.getApi().getCloudClient().listPurchasedPublicIps(target, options);
 
         return wrap(context, PublicIp.class, ips.getCollection());
     }
 
-    public List<PublicIp> listPurchasedPublicIPs(final Predicate<PublicIp> filter)
+    public List<PublicIp> listPurchasedPublicIps(final Predicate<PublicIp> filter)
     {
-        return Lists.newLinkedList(filter(listPurchasedPublicIPs(), filter));
+        return Lists.newLinkedList(filter(listPurchasedPublicIps(), filter));
     }
 
-    public PublicIp findPurchasedPublicIP(final Predicate<PublicIp> filter)
+    public PublicIp findPurchasedPublicIp(final Predicate<PublicIp> filter)
     {
-        return Iterables.getFirst(filter(listPurchasedPublicIPs(), filter), null);
+        return Iterables.getFirst(filter(listPurchasedPublicIps(), filter), null);
     }
 
     // Actions
 
-    /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
-     *      VirtualDatacenterResource-SetanexternalnetworkasthedefaultVLANinavirtualdatacenter</a>
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
-     *      VirtualDatacenterResource-SetinternalnetworkasdefaultVLANinavirtualdatacenter</a>
-     */
     public void setDefaultNetwork(final Network network)
     {
-        RESTLink link = null;
-        RESTLink netlink = network.unwrap().searchLink("edit");
-        checkNotNull(netlink, ValidationErrors.MISSING_REQUIRED_LINK);
-
-        switch (network.getType())
-        {
-            case INTERNAL:
-                link = new RESTLink("internalnetwork", netlink.getHref());
-                break;
-            case EXTERNAL:
-                link = new RESTLink("externalnetwork", netlink.getHref());
-                break;
-        }
-
-        LinksDto dto = new LinksDto();
-        dto.addLink(link);
-        context.getApi().getCloudClient().setDefaultNetworkByVirtualDatacenter(target, dto);
+        context.getApi().getCloudClient().setDefaultNetwork(target, network.unwrap());
     }
 
     // Builder

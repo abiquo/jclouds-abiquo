@@ -62,7 +62,7 @@ public class PublicIp extends Ip
     public void purchase()
     {
         checkNotNull(target.searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
-        target = context.getApi().getCloudClient().purchasePublicIP(target);
+        target = context.getApi().getCloudClient().purchasePublicIp(target);
     }
 
     /**
@@ -78,7 +78,7 @@ public class PublicIp extends Ip
     public void release()
     {
         checkNotNull(target.searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
-        target = context.getApi().getCloudClient().releasePublicIP(target);
+        target = context.getApi().getCloudClient().releasePublicIp(target);
     }
 
     @Override

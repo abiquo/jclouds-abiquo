@@ -35,12 +35,19 @@ import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.cloud.BindHardDiskRefsToPayload;
+import org.jclouds.abiquo.binders.cloud.BindIpRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
+import org.jclouds.abiquo.binders.cloud.BindNetworkConfigurationRefToPayload;
+import org.jclouds.abiquo.binders.cloud.BindNetworkRefToPayload;
+import org.jclouds.abiquo.binders.cloud.BindUnmanagedIpRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindVirtualDatacenterRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
@@ -59,7 +66,6 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
-import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
@@ -164,33 +170,33 @@ public interface CloudAsyncClient
     /*********************** Public IP ***********************/
 
     /**
-     * @see CloudClient#listAvailablePublicIPsToPurchase(VirtualDatacenterDto, IpOptions)
+     * @see CloudClient#listAvailablePublicIps(VirtualDatacenterDto, IpOptions)
      */
     @GET
-    ListenableFuture<IpsPoolManagementDto> listAvailablePublicIPsToPurchase(
+    ListenableFuture<IpsPoolManagementDto> listAvailablePublicIps(
         @EndpointLink("topurchase") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
-     * @see CloudClient#listPurchasedPublicIPs(VirtualDatacenterDto, IpOptions)
+     * @see CloudClient#listPurchasedPublicIps(VirtualDatacenterDto, IpOptions)
      */
     @GET
-    ListenableFuture<IpsPoolManagementDto> listPurchasedPublicIPs(
+    ListenableFuture<IpsPoolManagementDto> listPurchasedPublicIps(
         @EndpointLink("purchased") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
-     * @see CloudClient#purchasePublicIP(IpsPoolManagementDto)
+     * @see CloudClient#purchasePublicIp(IpsPoolManagementDto)
      */
     @PUT
-    ListenableFuture<IpPoolManagementDto> purchasePublicIP(
+    ListenableFuture<IpPoolManagementDto> purchasePublicIp(
         @EndpointLink("purchase") @BinderParam(BindToPath.class) IpPoolManagementDto publicIp);
 
     /**
-     * @see CloudClient#releasePublicIP(IpsPoolManagementDto)
+     * @see CloudClient#releasePublicIp(IpsPoolManagementDto)
      */
     @PUT
-    ListenableFuture<IpPoolManagementDto> releasePublicIP(
+    ListenableFuture<IpPoolManagementDto> releasePublicIp(
         @EndpointLink("release") @BinderParam(BindToPath.class) IpPoolManagementDto publicIp);
 
     /*********************** Private Network ***********************/
@@ -234,19 +240,19 @@ public interface CloudAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto privateNetwork);
 
     /**
-     * @see CloudClient#getDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto)
+     * @see CloudClient#getDefaultNetwork(VirtualDatacenterDto)
      */
     @GET
-    ListenableFuture<VLANNetworkDto> getDefaultNetworkByVirtualDatacenter(
+    ListenableFuture<VLANNetworkDto> getDefaultNetwork(
         @EndpointLink("defaultnetwork") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#setDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto, LinksDto)
+     * @see CloudClient#setDefaultNetwork(VirtualDatacenterDto, VLANNetworkDto)
      */
     @PUT
-    ListenableFuture<Void> setDefaultNetworkByVirtualDatacenter(
+    ListenableFuture<Void> setDefaultNetwork(
         @EndpointLink("defaultvlan") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
-        @BinderParam(BindToXMLPayload.class) LinksDto links);
+        @BinderParam(BindNetworkRefToPayload.class) VLANNetworkDto network);
 
     /*********************** Private Network IPs ***********************/
 
@@ -268,12 +274,20 @@ public interface CloudAsyncClient
     /*********************** Attached Nic ***********************/
 
     /**
-     * @see CloudClient#createNic(VirtualMachineDto, LinksDto)
+     * @see CloudClient#createNic(VirtualMachineDto, IpPoolManagementDto)
      */
     @POST
     ListenableFuture<Void> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(BindToXMLPayload.class) LinksDto links);
+        @BinderParam(BindIpRefToPayload.class) IpPoolManagementDto ip);
+
+    /**
+     * @see CloudClient#createNic(VirtualMachineDto, VLANNetworkDto)
+     */
+    @POST
+    ListenableFuture<Void> createNic(
+        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindUnmanagedIpRefToPayload.class) VLANNetworkDto network);
 
     /**
      * @see CloudClient#deleteNic(NicDto)
@@ -431,21 +445,12 @@ public interface CloudAsyncClient
         @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#getNetworkConfiguration(VirtualMachineDto, Integer)
-     */
-    @GET
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<VMNetworkConfigurationDto> getNetworkConfiguration(
-        @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(AppendToPath.class) Integer networkConfigId);
-
-    /**
-     * @see CloudClient#changeNetworkConfiguration(VirtualMachineDto, VMNetworkConfigurationDto)
+     * @see CloudClient#setGatewayNetwork(VirtualMachineDto, VMNetworkConfigurationDto)
      */
     @PUT
-    ListenableFuture<Void> changeNetworkConfiguration(
+    ListenableFuture<Void> setGatewayNetwork(
         @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(BindToXMLPayload.class) LinksDto links);
+        @BinderParam(BindNetworkConfigurationRefToPayload.class) VLANNetworkDto network);
 
     /*********************** Virtual Machine Template ***********************/
 

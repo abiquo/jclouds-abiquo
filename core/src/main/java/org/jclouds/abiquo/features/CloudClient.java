@@ -30,7 +30,6 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
-import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
@@ -49,7 +48,6 @@ import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
-import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
@@ -120,7 +118,7 @@ public interface CloudClient
      * @param options Filtering options.
      * @return The list of available ips.
      */
-    IpsPoolManagementDto listAvailablePublicIPsToPurchase(VirtualDatacenterDto virtualDatacenter,
+    IpsPoolManagementDto listAvailablePublicIps(VirtualDatacenterDto virtualDatacenter,
         IpOptions options);
 
     /**
@@ -130,7 +128,7 @@ public interface CloudClient
      * @param options Filtering options.
      * @return The list of purchased ips.
      */
-    IpsPoolManagementDto listPurchasedPublicIPs(VirtualDatacenterDto virtualDatacenter,
+    IpsPoolManagementDto listPurchasedPublicIps(VirtualDatacenterDto virtualDatacenter,
         IpOptions options);
 
     /**
@@ -139,7 +137,7 @@ public interface CloudClient
      * @param ip The public ip address to purchase.
      * @return The purchased public ip.
      */
-    IpPoolManagementDto purchasePublicIP(IpPoolManagementDto publicIp);
+    IpPoolManagementDto purchasePublicIp(IpPoolManagementDto publicIp);
 
     /**
      * Release a public IP.
@@ -147,7 +145,7 @@ public interface CloudClient
      * @param ip The public ip address to purchase.
      * @return The release public ip.
      */
-    IpPoolManagementDto releasePublicIP(IpPoolManagementDto publicIp);
+    IpPoolManagementDto releasePublicIp(IpPoolManagementDto publicIp);
 
     /**
      * List the storage tiers available for the given virtual datacenter.
@@ -176,15 +174,15 @@ public interface CloudClient
      * @param virtualDatacenter The virtual datacenter.
      * @return The default network of the virtual datacenter.
      */
-    VLANNetworkDto getDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+    VLANNetworkDto getDefaultNetwork(VirtualDatacenterDto virtualDatacenter);
 
     /**
      * Set the default network of the virtual datacenter.
      * 
      * @param virtualDatacenter The virtual datacenter.
-     * @param links Link to the network.
+     * @param network The default network.
      */
-    void setDefaultNetworkByVirtualDatacenter(VirtualDatacenterDto virtualDatacenter, LinksDto links);
+    void setDefaultNetwork(VirtualDatacenterDto virtualDatacenter, VLANNetworkDto network);
 
     /**
      * List all private networks for a virtual datacenter.
@@ -254,10 +252,19 @@ public interface CloudClient
      * Create a new nic using an ip address.
      * 
      * @param virtualMachine The virtual machine where the nic will be created.
-     * @param links link of the ip.
+     * @param ip The ip to attach as a new Nic.
      * @return The created nic.
      */
-    void createNic(VirtualMachineDto virtuaMachine, LinksDto links);
+    void createNic(VirtualMachineDto virtuaMachine, IpPoolManagementDto ip);
+
+    /**
+     * Create a new nic choosing a free ip address from an unmanaged network.
+     * 
+     * @param virtualMachine The virtual machine where the nic will be created.
+     * @param network The unmanaged network.
+     * @return The created nic.
+     */
+    void createNic(VirtualMachineDto virtuaMachine, VLANNetworkDto network);
 
     /**
      * Deletes an existing nic.
@@ -460,22 +467,12 @@ public interface CloudClient
     VMNetworkConfigurationsDto listNetworkConfigurations(VirtualMachineDto virtualMachine);
 
     /**
-     * Get a single network configuration from a virtual machine.
+     * Sets the gateway network to be used by this virtual machine.
      * 
-     * @param virtualMachine The given virtual machine.
-     * @return The network configuration.
+     * @param virtualMachine The virtual machine.
+     * @param network The gateway network to use.
      */
-    VMNetworkConfigurationDto getNetworkConfiguration(VirtualMachineDto virtualMachine,
-        Integer networkConfigId);
-
-    /**
-     * Changes network configuration used by a virtual machine.
-     * 
-     * @param virtualMachine The given virtual machine.
-     * @param links Link to the configuration.
-     * @return The network configuration.
-     */
-    void changeNetworkConfiguration(final VirtualMachineDto virtualMachine, final LinksDto links);
+    void setGatewayNetwork(final VirtualMachineDto virtualMachine, final VLANNetworkDto network);
 
     /******************* Virtual Machine Template ***********************/
 

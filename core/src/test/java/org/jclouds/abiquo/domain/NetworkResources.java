@@ -21,6 +21,7 @@ package org.jclouds.abiquo.domain;
 
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
+import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
@@ -53,6 +54,11 @@ public class NetworkResources
         ip.setId(1);
         ip.setName("private ip");
         ip.setMac("00:58:5A:c0:C3:01");
+        RESTLink self =
+            new RESTLink("self",
+                "http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips/1");
+        self.setTitle("privateip");
+        ip.addLink(self);
         return ip;
     }
 
@@ -62,9 +68,8 @@ public class NetworkResources
         nic.setId(1);
         nic.setIp("123.123.123.123");
         nic.setMac("00:58:5A:c0:C3:01");
-        nic
-            .addLink(new RESTLink("edit",
-                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics/1"));
+        nic.addLink(new RESTLink("edit",
+            "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics/1"));
 
         return nic;
     }
@@ -72,11 +77,13 @@ public class NetworkResources
     public static VLANNetworkDto privateNetworkPut()
     {
         VLANNetworkDto vlan = new VLANNetworkDto();
+        vlan.setId(1);
         vlan.setAddress("192.168.1.0");
         vlan.setDefaultNetwork(true);
         vlan.setName("DefaultNetwork");
         vlan.setGateway("192.168.1.1");
         vlan.setMask(24);
+        vlan.setType(NetworkType.INTERNAL);
         vlan.addLink(new RESTLink("edit",
             "http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1"));
         vlan.addLink(new RESTLink("ips",
@@ -88,12 +95,48 @@ public class NetworkResources
     public static VLANNetworkDto publicNetworkPut()
     {
         VLANNetworkDto vlan = new VLANNetworkDto();
+        vlan.setId(1);
         vlan.setAddress("192.168.1.0");
         vlan.setDefaultNetwork(true);
         vlan.setName("PublicNetwork");
         vlan.setGateway("192.168.1.1");
         vlan.setMask(24);
+        vlan.setType(NetworkType.PUBLIC);
         vlan.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/network/1"));
+        vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/datacenters/1/network/1/ips"));
+
+        return vlan;
+    }
+
+    public static VLANNetworkDto externalNetworkPut()
+    {
+        VLANNetworkDto vlan = new VLANNetworkDto();
+        vlan.setId(1);
+        vlan.setAddress("192.168.1.0");
+        vlan.setDefaultNetwork(true);
+        vlan.setName("ExternalNetwork");
+        vlan.setGateway("192.168.1.1");
+        vlan.setMask(24);
+        vlan.setType(NetworkType.EXTERNAL);
+        vlan.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/network/1"));
+        vlan.addLink(new RESTLink("enterprise", "http://localhost/api/admin/enterprises/1"));
+        vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/datacenters/1/network/1/ips"));
+
+        return vlan;
+    }
+
+    public static VLANNetworkDto unmanagedNetworkPut()
+    {
+        VLANNetworkDto vlan = new VLANNetworkDto();
+        vlan.setId(1);
+        vlan.setAddress("192.168.1.0");
+        vlan.setDefaultNetwork(true);
+        vlan.setName("UnmanagedNetwork");
+        vlan.setGateway("192.168.1.1");
+        vlan.setMask(24);
+        vlan.setType(NetworkType.UNMANAGED);
+        vlan.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/network/1"));
+        vlan.addLink(new RESTLink("enterprise", "http://localhost/api/admin/enterprises/1"));
         vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/datacenters/1/network/1/ips"));
 
         return vlan;
@@ -121,8 +164,10 @@ public class NetworkResources
         buffer.append("<address>192.168.1.0</address>");
         buffer.append("<defaultNetwork>true</defaultNetwork>");
         buffer.append("<gateway>192.168.1.1</gateway>");
+        buffer.append("<id>1</id>");
         buffer.append("<mask>24</mask>");
         buffer.append("<name>DefaultNetwork</name>");
+        buffer.append("<type>INTERNAL</type>");
         buffer.append("</network>");
         return buffer.toString();
     }
@@ -136,8 +181,46 @@ public class NetworkResources
         buffer.append("<address>192.168.1.0</address>");
         buffer.append("<defaultNetwork>true</defaultNetwork>");
         buffer.append("<gateway>192.168.1.1</gateway>");
+        buffer.append("<id>1</id>");
         buffer.append("<mask>24</mask>");
         buffer.append("<name>PublicNetwork</name>");
+        buffer.append("<type>PUBLIC</type>");
+        buffer.append("</network>");
+        return buffer.toString();
+    }
+
+    public static String externalNetworkPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<network>");
+        buffer.append(link("/admin/datacenters/1/network/1", "edit"));
+        buffer.append(link("/admin/enterprises/1", "enterprise"));
+        buffer.append(link("/admin/datacenters/1/network/1/ips", "ips"));
+        buffer.append("<address>192.168.1.0</address>");
+        buffer.append("<defaultNetwork>true</defaultNetwork>");
+        buffer.append("<gateway>192.168.1.1</gateway>");
+        buffer.append("<id>1</id>");
+        buffer.append("<mask>24</mask>");
+        buffer.append("<name>ExternalNetwork</name>");
+        buffer.append("<type>EXTERNAL</type>");
+        buffer.append("</network>");
+        return buffer.toString();
+    }
+
+    public static String unmanagedNetworkPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<network>");
+        buffer.append(link("/admin/datacenters/1/network/1", "edit"));
+        buffer.append(link("/admin/enterprises/1", "enterprise"));
+        buffer.append(link("/admin/datacenters/1/network/1/ips", "ips"));
+        buffer.append("<address>192.168.1.0</address>");
+        buffer.append("<defaultNetwork>true</defaultNetwork>");
+        buffer.append("<gateway>192.168.1.1</gateway>");
+        buffer.append("<id>1</id>");
+        buffer.append("<mask>24</mask>");
+        buffer.append("<name>UnmanagedNetwork</name>");
+        buffer.append("<type>UNMANAGED</type>");
         buffer.append("</network>");
         return buffer.toString();
     }
@@ -146,6 +229,8 @@ public class NetworkResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<ipPoolManagement>");
+        buffer.append(link("/cloud/virtualdatacenters/1/privatenetworks/1/ips/1", "self",
+            "privateip"));
         buffer.append("<available>false</available>");
         buffer.append("<id>1</id>");
         buffer.append("<mac>00:58:5A:c0:C3:01</mac>");

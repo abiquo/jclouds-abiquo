@@ -68,7 +68,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         Ip ip = env.virtualDatacenter.listPrivateNetworks().get(0).listIps().get(0);
 
         // XXX create nic does not return the created nic
-        env.virtualMachine.createNic(ip);
+        env.virtualMachine.attachNic(ip);
         Nic nic = env.virtualMachine.findAttachedNic(NicPredicates.ip(ip.getIp()));
         assertNotNull(nic);
         assertNotNull(nic.getId());

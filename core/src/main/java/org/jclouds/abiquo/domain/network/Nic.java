@@ -21,7 +21,6 @@ package org.jclouds.abiquo.domain.network;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.server.core.infrastructure.network.NicDto;
 
@@ -32,7 +31,6 @@ import com.abiquo.server.core.infrastructure.network.NicDto;
  * @author Francesc Montserrat
  * @see http://community.abiquo.com/display/ABI20/Attached+NICs+Resource
  */
-@EnterpriseEdition
 public class Nic extends DomainWrapper<NicDto>
 {
     /**
@@ -46,9 +44,10 @@ public class Nic extends DomainWrapper<NicDto>
     // Domain operations
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-DeleteaNICs">
-     *      http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-DeleteaNICs</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-DeleteaNICs"
+     *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
+     *      DeleteaNICs</a>
      */
     public void delete()
     {

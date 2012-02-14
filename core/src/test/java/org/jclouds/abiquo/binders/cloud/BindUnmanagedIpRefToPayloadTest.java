@@ -23,47 +23,51 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 
-import org.jclouds.abiquo.functions.cloud.ParseVolumeId;
+import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.http.HttpRequest;
+import org.jclouds.xml.XMLParser;
+import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
- * Unit tests for the {@link AppendVolumeIdToPath} binder.
+ * Unit tests for the {@link BindUnmanagedIpRefToPayload} binder.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class AppendVolumeIdToPathTest
+public class BindUnmanagedIpRefToPayloadTest
 {
+
     @Test(expectedExceptions = NullPointerException.class)
-    public void testGetValueWithNullInput()
+    public void testInvalidNullInput()
     {
-        AppendVolumeIdToPath binder = new AppendVolumeIdToPath(new ParseVolumeId());
+        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        binder.getValue(request, null);
+        binder.bindToRequest(request, null);
     }
 
     @Test(expectedExceptions = IllegalArgumentException.class)
-    public void testGetValueWithInvalidInput()
+    public void testInvalidTypeInput()
     {
-        AppendVolumeIdToPath binder = new AppendVolumeIdToPath(new ParseVolumeId());
+        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        binder.getValue(request, new Object());
+        binder.bindToRequest(request, new Object());
     }
 
-    public void testGetValue()
+    public void testBindUnmanagedNetworkIpRef()
     {
-        AppendVolumeIdToPath binder = new AppendVolumeIdToPath(new ParseVolumeId());
+        VLANNetworkDto network = NetworkResources.unmanagedNetworkPut();
+        RESTLink ipsLink = network.searchLink("ips");
+        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-
-        VolumeManagementDto dto = new VolumeManagementDto();
-        dto.setId(5);
-
-        assertEquals(binder.getValue(request, dto), "5");
+        request = binder.bindToRequest(request, network);
+        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
+            + "<links><link href=\"" + ipsLink.getHref() + "\" rel=\"unmanagedip\"/></links>");
     }
 }
