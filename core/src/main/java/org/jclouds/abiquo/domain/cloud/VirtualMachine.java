@@ -47,6 +47,7 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
@@ -364,6 +365,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return taskRef == null ? null : getTask(taskRef);
     }
 
+    public AsyncTask replaceNics(final Ip... ips)
+    {
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().replaceNics(target, toIpDto(ips));
+        return taskRef == null ? null : getTask(taskRef);
+    }
+
     public void setGatewayNetwork(final Network network)
     {
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
@@ -383,10 +391,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusingapublicIP</a>
      */
-    public void attachNic(final Ip ip)
+    public AsyncTask attachNic(final Ip ip)
     {
-        // TODO waiting for http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3144
-        context.getApi().getCloudClient().createNic(target, ip.unwrap());
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().createNic(target, ip.unwrap());
+        return taskRef == null ? null : getTask(taskRef);
     }
 
     /**
@@ -395,14 +404,16 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusinganUnmanagedNetwork</a>
      */
-    public void attachNicFromUnmanagedNetwork(final UnmanagedNetwork network)
+    public AsyncTask attachNicFromUnmanagedNetwork(final UnmanagedNetwork network)
     {
-        context.getApi().getCloudClient().createNic(target, network.unwrap());
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().createNic(target, network.unwrap());
+        return taskRef == null ? null : getTask(taskRef);
     }
 
-    public void detachNic(final Nic nic)
+    public AsyncTask detachNic(final Nic nic)
     {
-        nic.delete();
+        return nic.delete();
     }
 
     // Builder
@@ -670,12 +681,25 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     private static DiskManagementDto[] toHardDiskDto(final HardDisk... hardDisks)
     {
-        checkNotNull(hardDisks, "must provide at least one volume");
+        checkNotNull(hardDisks, "must provide at least one hard disk");
 
         DiskManagementDto[] dtos = new DiskManagementDto[hardDisks.length];
         for (int i = 0; i < hardDisks.length; i++)
         {
             dtos[i] = hardDisks[i].unwrap();
+        }
+
+        return dtos;
+    }
+
+    private static IpPoolManagementDto[] toIpDto(final Ip... ips)
+    {
+        checkNotNull(ips, "must provide at least one ip");
+
+        IpPoolManagementDto[] dtos = new IpPoolManagementDto[ips.length];
+        for (int i = 0; i < ips.length; i++)
+        {
+            dtos[i] = ips[i].unwrap();
         }
 
         return dtos;

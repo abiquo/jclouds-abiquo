@@ -36,6 +36,7 @@ import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.cloud.BindHardDiskRefsToPayload;
 import org.jclouds.abiquo.binders.cloud.BindIpRefToPayload;
+import org.jclouds.abiquo.binders.cloud.BindIpRefsToPayload;
 import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
 import org.jclouds.abiquo.binders.cloud.BindNetworkConfigurationRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindNetworkRefToPayload;
@@ -277,7 +278,8 @@ public interface CloudAsyncClient
      * @see CloudClient#createNic(VirtualMachineDto, IpPoolManagementDto)
      */
     @POST
-    ListenableFuture<Void> createNic(
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindIpRefToPayload.class) IpPoolManagementDto ip);
 
@@ -285,7 +287,8 @@ public interface CloudAsyncClient
      * @see CloudClient#createNic(VirtualMachineDto, VLANNetworkDto)
      */
     @POST
-    ListenableFuture<Void> createNic(
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindUnmanagedIpRefToPayload.class) VLANNetworkDto network);
 
@@ -293,7 +296,18 @@ public interface CloudAsyncClient
      * @see CloudClient#deleteNic(NicDto)
      */
     @DELETE
-    ListenableFuture<Void> deleteNic(@EndpointLink("edit") @BinderParam(BindToPath.class) NicDto nic);
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> deleteNic(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) NicDto nic);
+
+    /**
+     * @see CloudClient#replaceVolumes(VirtualMachineDto, VolumeManagementDto...)
+     */
+    @PUT
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> replaceNics(
+        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindIpRefsToPayload.class) IpPoolManagementDto... ips);
 
     /**
      * @see CloudClient#listAttachedNics(VirtualMachineDto)

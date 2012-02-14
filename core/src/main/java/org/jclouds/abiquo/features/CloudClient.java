@@ -250,28 +250,48 @@ public interface CloudClient
 
     /**
      * Create a new nic using an ip address.
+     * <p>
+     * If the virtual machine is deployed, the operation will be executed asynchronously.
      * 
      * @param virtualMachine The virtual machine where the nic will be created.
      * @param ip The ip to attach as a new Nic.
-     * @return The created nic.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    void createNic(VirtualMachineDto virtuaMachine, IpPoolManagementDto ip);
+    AcceptedRequestDto<String> createNic(VirtualMachineDto virtuaMachine, IpPoolManagementDto ip);
 
     /**
      * Create a new nic choosing a free ip address from an unmanaged network.
+     * <p>
+     * If the virtual machine is deployed, the operation will be executed asynchronously.
      * 
      * @param virtualMachine The virtual machine where the nic will be created.
      * @param network The unmanaged network.
-     * @return The created nic.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    void createNic(VirtualMachineDto virtuaMachine, VLANNetworkDto network);
+    AcceptedRequestDto<String> createNic(VirtualMachineDto virtuaMachine, VLANNetworkDto network);
 
     /**
      * Deletes an existing nic.
+     * <p>
+     * If the virtual machine is deployed, the operation will be executed asynchronously.
      * 
      * @param nic The nic to delete.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    void deleteNic(NicDto nic);
+    AcceptedRequestDto<String> deleteNic(NicDto nic);
+
+    /**
+     * Replace the attached nics in the given virtual machine by new ones created based on the given
+     * ips.
+     * <p>
+     * If the virtual machine is deployed, the operation will be executed asynchronously.
+     * 
+     * @param virtualMachine The virtual machine where the nics will be attached.
+     * @param ips The nics to attach.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
+    AcceptedRequestDto<String> replaceNics(VirtualMachineDto virtualMachine,
+        IpPoolManagementDto... ips);
 
     /**
      * List nics attached to a virtual machine.

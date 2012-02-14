@@ -514,7 +514,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, withHeader("<links><link href=\"" + ipLink.getHref()
             + "\" rel=\"" + ipLink.getTitle() + "\"/></links>"), "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -540,7 +540,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, withHeader("<links><link href=\"" + ipsLink.getHref()
             + "\" rel=\"unmanagedip\"/></links>"), "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -579,7 +579,36 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testReplaceNics() throws SecurityException, NoSuchMethodException, IOException
+    {
+        IpPoolManagementDto first = NetworkResources.privateIpPut();
+        IpPoolManagementDto second = NetworkResources.privateIpPut();
+        second.searchLink("self").setHref(second.searchLink("self").getHref() + "second");
+
+        Method method =
+            CloudAsyncClient.class.getMethod("replaceNics", VirtualMachineDto.class,
+                IpPoolManagementDto[].class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                new IpPoolManagementDto[] {first, second});
+
+        RESTLink selfLink = first.searchLink("self");
+        assertRequestLineEquals(
+            request,
+            "PUT http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader("<links><link href=\"" + selfLink.getHref()
+            + "\" rel=\"" + selfLink.getTitle() + "\"/><link href=\"" + selfLink.getHref()
+            + "second\" rel=\"" + selfLink.getTitle() + "\"/></links>"), "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
