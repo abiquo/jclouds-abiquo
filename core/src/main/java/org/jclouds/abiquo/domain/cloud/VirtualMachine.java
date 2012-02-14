@@ -31,7 +31,6 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
-import org.jclouds.abiquo.domain.network.NetworkConfiguration;
 import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
@@ -49,7 +48,6 @@ import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
-import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -249,14 +247,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public AsyncTask findTask(final Predicate<AsyncTask> filter)
     {
         return Iterables.getFirst(filter(listTasks(), filter), null);
-    }
-
-    public List<NetworkConfiguration> listNetworkConfigurations()
-    {
-        VMNetworkConfigurationsDto configs =
-            context.getApi().getCloudClient().listNetworkConfigurations(target);
-
-        return wrap(context, NetworkConfiguration.class, configs.getCollection());
     }
 
     public List<Nic> listAttachedNics()
