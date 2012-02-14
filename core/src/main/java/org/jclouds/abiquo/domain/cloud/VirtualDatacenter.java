@@ -604,7 +604,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
                 .storageLimits(in.getStorageSoft(), in.getStorageHard())
                 .vlansLimits(in.getVlansSoft(), in.getVlansHard())
                 .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
-                .network(in.getNetwork()).hypervisorType(in.getHypervisorType());
+                .hypervisorType(in.getHypervisorType());
         }
     }
 
@@ -633,16 +633,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public void setName(final String name)
     {
         target.setName(name);
-    }
-
-    public PrivateNetwork getNetwork()
-    {
-        return wrap(context, PrivateNetwork.class, target.getVlan());
-    }
-
-    public void setNetwork(final PrivateNetwork network)
-    {
-        target.setVlan(network.unwrap());
     }
 
     @Override
