@@ -374,7 +374,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return taskRef == null ? null : getTask(taskRef);
     }
 
-    public void setGatewaynetwork(final Network network)
+    public void setGatewayNetwork(final Network network)
     {
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
     }
