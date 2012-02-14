@@ -133,7 +133,7 @@ public class BaseSearchService implements SearchService
     {
         List<IpPoolManagementDto> ips =
             context.getApi().getCloudClient()
-                .listAvailablePublicIPsToPurchase(virtualDatacenter.unwrap(), options)
+                .listAvailablePublicIps(virtualDatacenter.unwrap(), options)
                 .getCollection();
 
         return wrap(context, PublicIp.class, ips);
@@ -145,7 +145,7 @@ public class BaseSearchService implements SearchService
     {
         List<IpPoolManagementDto> ips =
             context.getApi().getCloudClient()
-                .listPurchasedPublicIPs(virtualDatacenter.unwrap(), options).getCollection();
+                .listPurchasedPublicIps(virtualDatacenter.unwrap(), options).getCollection();
 
         return wrap(context, PublicIp.class, ips);
     }

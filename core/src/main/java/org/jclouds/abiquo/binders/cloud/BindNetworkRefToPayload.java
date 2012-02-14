@@ -31,20 +31,18 @@ import org.jclouds.xml.XMLParser;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
-import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
- * Bind multiple {@link VolumeManagementDto} objects to the payload of the request as a list of
- * links.
+ * Bind the link reference to an {@link VLANNetworkDto} object into the payload.
  * 
  * @author Ignasi Barrera
  */
 @Singleton
-public class BindVirtualDatacenterRefToPayload extends BindToXMLPayload
+public class BindNetworkRefToPayload extends BindToXMLPayload
 {
     @Inject
-    public BindVirtualDatacenterRefToPayload(final XMLParser xmlParser)
+    public BindNetworkRefToPayload(final XMLParser xmlParser)
     {
         super(xmlParser);
     }
@@ -52,14 +50,32 @@ public class BindVirtualDatacenterRefToPayload extends BindToXMLPayload
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof VirtualDatacenterDto,
-            "this binder is only valid for VirtualDatacenterDto objects");
+        checkArgument(checkNotNull(input, "input") instanceof VLANNetworkDto,
+            "this binder is only valid for VLANNetworkDto objects");
 
-        VirtualDatacenterDto vdc = (VirtualDatacenterDto) input;
+        VLANNetworkDto network = (VLANNetworkDto) input;
         RESTLink editLink =
-            checkNotNull(vdc.getEditLink(), "VirtualDatacenterDto must have an edit link");
+            checkNotNull(network.getEditLink(), "VLANNetworkDto must have an edit link");
+
         LinksDto refs = new LinksDto();
-        refs.addLink(new RESTLink("virtualdatacenter", editLink.getHref()));
+        switch (network.getType())
+        {
+            case INTERNAL:
+                refs.addLink(new RESTLink("internalnetwork", editLink.getHref()));
+                break;
+            case EXTERNAL:
+                refs.addLink(new RESTLink("externalnetwork", editLink.getHref()));
+                break;
+            case PUBLIC:
+                refs.addLink(new RESTLink("publicnetwork", editLink.getHref()));
+                break;
+            case UNMANAGED:
+                refs.addLink(new RESTLink("unmanagednetwork", editLink.getHref()));
+                break;
+            default:
+                // TODO: EXTERNAL_UNMANAGED network type
+                throw new IllegalArgumentException("Unsupported network type");
+        }
 
         return super.bindToRequest(request, refs);
     }

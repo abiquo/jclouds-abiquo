@@ -647,8 +647,8 @@ public class InfrastructureAsyncClientTest extends
                 String.class, String.class, MachineOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
-                "80.80.80.86", HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(
-                    8889).build());
+                "80.80.80.86", HypervisorType.KVM, "user", "pass",
+                MachineOptions.builder().port(8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/discovermultiple";
         String query =
@@ -1253,8 +1253,7 @@ public class InfrastructureAsyncClientTest extends
 
     /*********************** Network IPs ***********************/
 
-    public void testListPublicNetworkIps() throws SecurityException, NoSuchMethodException,
-        IOException
+    public void testListNetworkIps() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
             InfrastructureAsyncClient.class.getMethod("listNetworkIps", VLANNetworkDto.class);
@@ -1273,8 +1272,8 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    public void testListPublicNetworkIpsWithOptions() throws SecurityException,
-        NoSuchMethodException, IOException
+    public void testListNetworkIpsWithOptions() throws SecurityException, NoSuchMethodException,
+        IOException
     {
         IpOptions options = IpOptions.builder().startWith(10).build();
         Method method =

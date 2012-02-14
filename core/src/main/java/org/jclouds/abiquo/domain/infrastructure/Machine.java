@@ -317,7 +317,6 @@ public class Machine extends DomainWrapper<MachineDto>
             dto.setVirtualRamUsedInMb(virtualRamUsedInMb);
             dto.setVirtualCpuCores(virtualCpuCores);
             dto.setVirtualCpusUsed(virtualCpusUsed);
-            dto.setVirtualCpusPerCore(virtualCpusPerCore);
             dto.setVirtualSwitch(virtualSwitch);
             if (port != null)
             {

@@ -19,11 +19,8 @@
 
 package org.jclouds.abiquo.domain.network;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
@@ -46,34 +43,6 @@ public class Ip extends DomainWrapper<IpPoolManagementDto>
 
     // Domain operations
 
-    public PublicIp toPublicIP()
-    {
-        checkNotNull(target.searchLink("publicnetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
-
-        return wrap(context, PublicIp.class, target);
-    }
-
-    public Ip toPrivateIP()
-    {
-        checkNotNull(target.searchLink("privatenetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
-
-        return wrap(context, Ip.class, target);
-    }
-
-    public Ip toExternalIP()
-    {
-        checkNotNull(target.searchLink("externalnetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
-
-        return wrap(context, Ip.class, target);
-    }
-
-    public Ip toUnmanagedIP()
-    {
-        checkNotNull(target.searchLink("unmanagednetwork"), ValidationErrors.MISSING_REQUIRED_LINK);
-
-        return wrap(context, Ip.class, target);
-    }
-
     /**
      * Retrevies the type of the network using the ip or <value>null</value> if the ip does not
      * belong to a network.
@@ -90,7 +59,7 @@ public class Ip extends DomainWrapper<IpPoolManagementDto>
         }
         if (target.searchLink("externalnetwork") != null)
         {
-            return NetworkType.PUBLIC;
+            return NetworkType.EXTERNAL;
         }
         if (target.searchLink("unmanagednetwork") != null)
         {

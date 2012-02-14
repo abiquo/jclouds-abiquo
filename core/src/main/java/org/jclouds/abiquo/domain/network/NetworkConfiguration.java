@@ -30,13 +30,12 @@ import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  * @see API: <a
- *      href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource">
+ *      href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource"
+ *      >
  *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Network+Configuration+Resource</a>
  */
 public class NetworkConfiguration extends DomainWrapper<VMNetworkConfigurationDto>
 {
-    VMNetworkConfigurationDto target;
-
     /**
      * Constructor to be used only by the builder.
      */
@@ -81,9 +80,9 @@ public class NetworkConfiguration extends DomainWrapper<VMNetworkConfigurationDt
     @Override
     public String toString()
     {
-        return "NetworkConfiguration [getId()=" + getId() + ", getGateway()=" + getGateway()
-            + ", getPrimaryDNS()=" + getPrimaryDNS() + ", getSecondaryDNS()=" + getSecondaryDNS()
-            + ", getSuffixDNS()=" + getSuffixDNS() + ", getUsed()=" + getUsed() + "]";
+        return "NetworkConfiguration [id=" + getId() + ", gateway=" + getGateway()
+            + ", primaryDNS=" + getPrimaryDNS() + ", secondaryDNS=" + getSecondaryDNS()
+            + ", suffixDNS=" + getSuffixDNS() + ", used=" + getUsed() + "]";
     }
 
 }

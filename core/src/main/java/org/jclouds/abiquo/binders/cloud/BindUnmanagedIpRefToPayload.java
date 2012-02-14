@@ -29,22 +29,22 @@ import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.xml.XMLParser;
 
+import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
-import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
 /**
- * Bind multiple {@link VolumeManagementDto} objects to the payload of the request as a list of
- * links.
+ * Bind the link reference to an {@link IpPoolManagementDto} object into the payload.
  * 
  * @author Ignasi Barrera
  */
 @Singleton
-public class BindVirtualDatacenterRefToPayload extends BindToXMLPayload
+public class BindUnmanagedIpRefToPayload extends BindToXMLPayload
 {
     @Inject
-    public BindVirtualDatacenterRefToPayload(final XMLParser xmlParser)
+    public BindUnmanagedIpRefToPayload(final XMLParser xmlParser)
     {
         super(xmlParser);
     }
@@ -52,16 +52,19 @@ public class BindVirtualDatacenterRefToPayload extends BindToXMLPayload
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof VirtualDatacenterDto,
-            "this binder is only valid for VirtualDatacenterDto objects");
+        checkArgument(checkNotNull(input, "input") instanceof VLANNetworkDto,
+            "this binder is only valid for VLANNetworkDto objects");
 
-        VirtualDatacenterDto vdc = (VirtualDatacenterDto) input;
-        RESTLink editLink =
-            checkNotNull(vdc.getEditLink(), "VirtualDatacenterDto must have an edit link");
+        VLANNetworkDto network = (VLANNetworkDto) input;
+        checkArgument(network.getType() == NetworkType.UNMANAGED,
+            "this binder is only valid for UNMANAGED networks");
+
+        RESTLink ipsLink =
+            checkNotNull(network.searchLink("ips"), "VLANNetworkDto must have an ips link");
+
         LinksDto refs = new LinksDto();
-        refs.addLink(new RESTLink("virtualdatacenter", editLink.getHref()));
+        refs.addLink(new RESTLink("unmanagedip", ipsLink.getHref()));
 
         return super.bindToRequest(request, refs);
     }
-
 }

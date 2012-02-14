@@ -31,20 +31,18 @@ import org.jclouds.xml.XMLParser;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
-import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
- * Bind multiple {@link VolumeManagementDto} objects to the payload of the request as a list of
- * links.
+ * Bind the link reference to an {@link IpPoolManagementDto} object into the payload.
  * 
  * @author Ignasi Barrera
  */
 @Singleton
-public class BindVirtualDatacenterRefToPayload extends BindToXMLPayload
+public class BindIpRefToPayload extends BindToXMLPayload
 {
     @Inject
-    public BindVirtualDatacenterRefToPayload(final XMLParser xmlParser)
+    public BindIpRefToPayload(final XMLParser xmlParser)
     {
         super(xmlParser);
     }
@@ -52,16 +50,16 @@ public class BindVirtualDatacenterRefToPayload extends BindToXMLPayload
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof VirtualDatacenterDto,
-            "this binder is only valid for VirtualDatacenterDto objects");
+        checkArgument(checkNotNull(input, "input") instanceof IpPoolManagementDto,
+            "this binder is only valid for IpPoolManagementDto objects");
 
-        VirtualDatacenterDto vdc = (VirtualDatacenterDto) input;
-        RESTLink editLink =
-            checkNotNull(vdc.getEditLink(), "VirtualDatacenterDto must have an edit link");
+        IpPoolManagementDto ip = (IpPoolManagementDto) input;
+        RESTLink selfLink =
+            checkNotNull(ip.searchLink("self"), "IpPoolManagementDto must have an self link");
+
         LinksDto refs = new LinksDto();
-        refs.addLink(new RESTLink("virtualdatacenter", editLink.getHref()));
+        refs.addLink(new RESTLink(selfLink.getTitle(), selfLink.getHref()));
 
         return super.bindToRequest(request, refs);
     }
-
 }
