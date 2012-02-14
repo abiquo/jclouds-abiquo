@@ -63,6 +63,9 @@ public abstract class BaseAbiquoClientLiveTest<E extends TestEnvironment>
         props.setProperty("abiquo.endpoint", endpoint);
         props.put(Constants.PROPERTY_MAX_RETRIES, "0");
         props.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
+        // Wait at most one minute in Machine discovery
+        props.put("jclouds.timeouts.InfrastructureClient.discoverSingleMachine", "60000");
+        props.put("jclouds.timeouts.InfrastructureClient.discoverMultipleMachines", "60000");
 
         context =
             new AbiquoContextFactory().createContext(identity, credential,
