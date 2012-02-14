@@ -475,33 +475,36 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             return this;
         }
 
-        public Builder vncPort(final int vdrpPort)
+        public Builder password(final String password)
+        {
+            this.password = password;
+            return this;
+        }
+
+        // This methods are used only to build a builder from an existing VirtualMachine but should
+        // never be used by the user. This fields are set automatically by Abiquo
+
+        private Builder vncPort(final int vdrpPort)
         {
             this.vncPort = vdrpPort;
             return this;
         }
 
-        public Builder vncAddress(final String vdrpIP)
+        private Builder vncAddress(final String vdrpIP)
         {
             this.vncAddress = vdrpIP;
             return this;
         }
 
-        public Builder idState(final int idState)
+        private Builder idState(final int idState)
         {
             this.idState = idState;
             return this;
         }
 
-        public Builder idType(final int idType)
+        private Builder idType(final int idType)
         {
             this.idType = idType;
-            return this;
-        }
-
-        public Builder password(final String password)
-        {
-            this.password = password;
             return this;
         }
 
