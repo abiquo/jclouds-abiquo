@@ -39,7 +39,6 @@ import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.services.SearchService;
 
@@ -128,26 +127,25 @@ public class BaseSearchService implements SearchService
     }
 
     @Override
-    public Iterable<PublicIp> searchPublicIpsToPurchase(final VirtualDatacenter virtualDatacenter,
+    public Iterable<Ip> searchPublicIpsToPurchase(final VirtualDatacenter virtualDatacenter,
         final IpOptions options)
     {
         List<IpPoolManagementDto> ips =
             context.getApi().getCloudClient()
-                .listAvailablePublicIps(virtualDatacenter.unwrap(), options)
-                .getCollection();
+                .listAvailablePublicIps(virtualDatacenter.unwrap(), options).getCollection();
 
-        return wrap(context, PublicIp.class, ips);
+        return wrap(context, Ip.class, ips);
     }
 
     @Override
-    public Iterable<PublicIp> searchPurchasedPublicIps(final VirtualDatacenter virtualDatacenter,
+    public Iterable<Ip> searchPurchasedPublicIps(final VirtualDatacenter virtualDatacenter,
         final IpOptions options)
     {
         List<IpPoolManagementDto> ips =
             context.getApi().getCloudClient()
                 .listPurchasedPublicIps(virtualDatacenter.unwrap(), options).getCollection();
 
-        return wrap(context, PublicIp.class, ips);
+        return wrap(context, Ip.class, ips);
     }
 
 }

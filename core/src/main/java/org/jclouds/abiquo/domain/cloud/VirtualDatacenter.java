@@ -32,9 +32,9 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -455,22 +455,22 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
      *      VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
      */
-    public List<PublicIp> listAvailablePublicIps()
+    public List<Ip> listAvailablePublicIps()
     {
         IpOptions options = IpOptions.builder().build();
 
         IpsPoolManagementDto ips =
             context.getApi().getCloudClient().listAvailablePublicIps(target, options);
 
-        return wrap(context, PublicIp.class, ips.getCollection());
+        return wrap(context, Ip.class, ips.getCollection());
     }
 
-    public List<PublicIp> listAvailablePublicIps(final Predicate<PublicIp> filter)
+    public List<Ip> listAvailablePublicIps(final Predicate<Ip> filter)
     {
         return Lists.newLinkedList(filter(listAvailablePublicIps(), filter));
     }
 
-    public PublicIp findAvailablePublicIp(final Predicate<PublicIp> filter)
+    public Ip findAvailablePublicIp(final Predicate<Ip> filter)
     {
         return Iterables.getFirst(filter(listAvailablePublicIps(), filter), null);
     }
@@ -481,24 +481,36 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
      *      VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
      */
-    public List<PublicIp> listPurchasedPublicIps()
+    public List<Ip> listPurchasedPublicIps()
     {
         IpOptions options = IpOptions.builder().build();
 
         IpsPoolManagementDto ips =
             context.getApi().getCloudClient().listPurchasedPublicIps(target, options);
 
-        return wrap(context, PublicIp.class, ips.getCollection());
+        return wrap(context, Ip.class, ips.getCollection());
     }
 
-    public List<PublicIp> listPurchasedPublicIps(final Predicate<PublicIp> filter)
+    public List<Ip> listPurchasedPublicIps(final Predicate<Ip> filter)
     {
         return Lists.newLinkedList(filter(listPurchasedPublicIps(), filter));
     }
 
-    public PublicIp findPurchasedPublicIp(final Predicate<PublicIp> filter)
+    public Ip findPurchasedPublicIp(final Predicate<Ip> filter)
     {
         return Iterables.getFirst(filter(listPurchasedPublicIps(), filter), null);
+    }
+
+    public void purchasePublicIp(final Ip ip)
+    {
+        checkNotNull(target.searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
+        context.getApi().getCloudClient().purchasePublicIp(ip.unwrap());
+    }
+
+    public void releaseePublicIp(final Ip ip)
+    {
+        checkNotNull(target.searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
+        context.getApi().getCloudClient().releasePublicIp(ip.unwrap());
     }
 
     // Actions
