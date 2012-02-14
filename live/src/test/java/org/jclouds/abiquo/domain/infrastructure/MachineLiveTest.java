@@ -26,7 +26,6 @@ import static org.testng.Assert.assertNotNull;
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.domain.infrastructure.Machine.Builder;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
@@ -74,23 +73,6 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironme
             RemoteService.builder(context, env.datacenter).type(RemoteServiceType.NODE_COLLECTOR)
                 .ip(context.getEndpoint().getHost()).build();
         nc.save();
-    }
-
-    public void testCreate()
-    {
-        Machine newmachine =
-            Builder.fromMachine(env.machine).hypervisorType(HypervisorType.XEN_3).ip("10.60.1.98")
-                .ipService("10.60.1.98").build();
-
-        // Credentials are not returned by the api, so they may not present in the domain object
-        // if it was retrieved with a GET operation
-        newmachine.setUser("dummy");
-        newmachine.setPassword("dummy");
-
-        newmachine.save();
-        assertNotNull(newmachine.getId());
-
-        newmachine.delete();
     }
 
     public void testUpdate()

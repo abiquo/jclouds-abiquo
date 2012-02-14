@@ -54,7 +54,6 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
     {
         List<AsyncTask> tasks = env.virtualMachine.listTasks();
         assertNotNull(tasks);
-        assertTrue(tasks.isEmpty());
     }
 
     public void testGetState()
