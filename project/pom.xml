@@ -156,7 +156,7 @@
                             <parallel>tests</parallel>
                             <threadCount>5</threadCount>
                             <groups>integration</groups>
-                            <excludedGroups>unit,performance,live,live+ucs</excludedGroups>
+                            <excludedGroups>unit,performance,live,ucs</excludedGroups>
                             <properties>
                                 <property>
                                     <name>suitename</name>
@@ -177,7 +177,7 @@
                     <parallel>methods</parallel>
                     <threadCount>5</threadCount>
                     <groups>unit,performance</groups>
-                    <excludedGroups>integration,live,live+ucs</excludedGroups>
+                    <excludedGroups>integration,live,ucs</excludedGroups>
                     <properties>
                         <property>
                             <name>listener</name>

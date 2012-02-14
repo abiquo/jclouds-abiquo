@@ -101,6 +101,39 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+        <profile>
+            <id>ucs</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>integration</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <groups>ucs,live,integration</groups>
+                                    <excludedGroups>unit,performance</excludedGroups>
+                                    <properties>
+                                        <property>
+                                            <name>listener</name>
+                                            <value>org.jclouds.abiquo.testng.TestOutputListener</value>
+                                        </property>
+                                        <property>
+                                            <name>suitename</name>
+                                            <value>Live Integration Tests</value>
+                                        </property>
+                                    </properties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
     
 </project>
