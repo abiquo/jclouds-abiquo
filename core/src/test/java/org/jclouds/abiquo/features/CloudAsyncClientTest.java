@@ -262,7 +262,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         Method method =
             CloudAsyncClient.class.getMethod("releasePublicIp", IpPoolManagementDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, NetworkResources.publicIpToPurchase());
+            processor.createRequest(method, NetworkResources.publicIpToRelease());
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/cloud/virtualdatacenters/5/publicips/topurchase/1 HTTP/1.1");

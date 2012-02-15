@@ -23,6 +23,7 @@ import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.List;
@@ -31,9 +32,11 @@ import org.jclouds.abiquo.domain.cloud.VirtualDatacenter.Builder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -117,6 +120,23 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         assertNotNull(virtualDatacenter.getId());
 
         virtualDatacenter.delete();
+    }
+
+    @Test(enabled = false)
+    // Missing changes in api
+    public void testPurchaseIp()
+    {
+        Ip publicIp = env.virtualDatacenter.listAvailablePublicIps().get(0);
+        assertNotNull(publicIp);
+        env.virtualDatacenter.purchasePublicIp(publicIp);
+
+        Ip apiIp =
+            env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.address(publicIp.getIp()));
+        assertNotNull(apiIp);
+
+        env.virtualDatacenter.releaseePublicIp(apiIp);
+        apiIp = env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.address(publicIp.getIp()));
+        assertNull(apiIp);
     }
 
     public void testGetDefaultNetwork()
