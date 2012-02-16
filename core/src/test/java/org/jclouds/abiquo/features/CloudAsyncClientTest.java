@@ -237,8 +237,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
-    public void testPurchasedPublicIp() throws SecurityException, NoSuchMethodException,
-        IOException
+    public void testPurchasePublicIp() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
             CloudAsyncClient.class.getMethod("purchasePublicIp", IpPoolManagementDto.class);

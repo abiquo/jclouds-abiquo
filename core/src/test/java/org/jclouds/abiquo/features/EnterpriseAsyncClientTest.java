@@ -251,8 +251,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
     /*********************** Enterprise Limits ********************** */
 
-    public void testCreateEnterpriseLimits() throws SecurityException, NoSuchMethodException,
-        IOException
+    public void testCreateLimits() throws SecurityException, NoSuchMethodException, IOException
     {
         EnterpriseDto enterprise = EnterpriseResources.enterprisePut();
         DatacenterDto datacenter = InfrastructureResources.datacenterPut();
@@ -315,8 +314,9 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, withHeader(EnterpriseResources
-            .datacenterLimitsPutPayload(enterprise)), "application/xml", false);
+        assertPayloadEquals(request,
+            withHeader(EnterpriseResources.datacenterLimitsPutPayload(enterprise)),
+            "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

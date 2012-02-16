@@ -179,8 +179,8 @@ public class InfrastructureAsyncClientTest extends
 
     /*********************** Hypervisor ***********************/
 
-    public void testGetHypervisorFromRemoteMachine() throws SecurityException,
-        NoSuchMethodException, IOException
+    public void testGetHypervisorTypeFromMachine() throws SecurityException, NoSuchMethodException,
+        IOException
     {
         Method method =
             InfrastructureAsyncClient.class.getMethod("getHypervisorTypeFromMachine",
@@ -1188,8 +1188,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    public void testCreatePublicNetwork() throws SecurityException, NoSuchMethodException,
-        IOException
+    public void testCreateNetwork() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
             InfrastructureAsyncClient.class.getMethod("createNetwork", DatacenterDto.class,
