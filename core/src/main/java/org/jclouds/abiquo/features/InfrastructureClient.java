@@ -299,12 +299,20 @@ public interface InfrastructureClient
     void deleteRack(final RackDto rack);
 
     /**
-     * List all services profile of the ucs rack.
+     * List all service profiles of the ucs rack.
      * 
      * @param rack The ucs rack.
-     * @return The list of logic servers for the rack.
+     * @return The list of service profiles for the rack.
      */
     LogicServersDto listServiceProfiles(UcsRackDto rack);
+
+    /**
+     * List all service profile templates of the ucs rack.
+     * 
+     * @param rack The ucs rack.
+     * @return The list of service profile templates for the rack.
+     */
+    LogicServersDto listServiceProfileTemplates(UcsRackDto rack);
 
     /*********************** Remote Service ********************** */
 
