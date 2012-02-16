@@ -65,6 +65,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
@@ -300,6 +301,13 @@ public interface InfrastructureAsyncClient
     @DELETE
     ListenableFuture<Void> deleteRack(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
+
+    /**
+     * @see InfrastructureClient#listServiceProfiles(UcsRackDto)
+     */
+    @GET
+    ListenableFuture<LogicServersDto> listServiceProfiles(
+        @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack);
 
     /*********************** Remote Service ***********************/
 

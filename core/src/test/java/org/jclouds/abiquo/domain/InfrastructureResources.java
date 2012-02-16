@@ -161,6 +161,9 @@ public class InfrastructureResources
         rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
         rack.addLink(new RESTLink("machines",
             "http://localhost/api/admin/datacenters/1/racks/1/machines"));
+        rack.addLink(new RESTLink("logicservers",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers"));
+
         return rack;
     }
 
@@ -404,6 +407,7 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append(link("/admin/datacenters/1/racks/1", "edit"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines", "machines"));
+        buffer.append(link("/admin/datacenters/1/racks/1/logicservers", "logicservers"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<id>1</id>");
         buffer.append("<name>Aloha</name>");

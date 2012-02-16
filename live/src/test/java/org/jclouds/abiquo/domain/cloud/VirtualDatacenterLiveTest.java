@@ -123,7 +123,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
     }
 
     @Test(enabled = false)
-    // Missing changes in api
+    // TODO Missing changes in api
     public void testPurchaseIp()
     {
         Ip publicIp = env.virtualDatacenter.listAvailablePublicIps().get(0);
