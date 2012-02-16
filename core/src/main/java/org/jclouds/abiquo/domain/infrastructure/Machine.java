@@ -462,9 +462,11 @@ public class Machine extends DomainWrapper<MachineDto>
         return target.getVirtualSwitch();
     }
 
-    public void setDatastores(final DatastoresDto datastores)
+    public void setDatastores(final List<Datastore> datastores)
     {
-        target.setDatastores(datastores);
+        DatastoresDto datastoresDto = new DatastoresDto();
+        datastoresDto.getCollection().addAll(DomainWrapper.unwrap(datastores));
+        target.setDatastores(datastoresDto);
     }
 
     public void setDescription(final String description)

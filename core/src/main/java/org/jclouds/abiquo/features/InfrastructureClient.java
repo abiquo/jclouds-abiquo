@@ -36,6 +36,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
@@ -296,6 +297,14 @@ public interface InfrastructureClient
      * @param rack The rack to delete.
      */
     void deleteRack(final RackDto rack);
+
+    /**
+     * List all services profile of the ucs rack.
+     * 
+     * @param rack The ucs rack.
+     * @return The list of logic servers for the rack.
+     */
+    LogicServersDto listServiceProfiles(UcsRackDto rack);
 
     /*********************** Remote Service ********************** */
 
