@@ -18,7 +18,7 @@
  */
 package org.jclouds.abiquo.features;
 
-import static org.testng.Assert.fail;
+import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -30,6 +30,7 @@ import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
+import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 
@@ -46,7 +47,7 @@ public class FeatureCoverageTest
 {
     public void testAllFeaturesHaveTest() throws ClassNotFoundException
     {
-        List<Method> missingTests = new ArrayList<Method>();
+        List<String> missingTests = new ArrayList<String>();
         Collection<Class< ? >> featureClasses = AbiquoRestClientModule.DELEGATE_MAP.values();
 
         for (Class< ? > featureClass : featureClasses)
@@ -58,23 +59,13 @@ public class FeatureCoverageTest
             {
                 if (!hasTest(testMethodNames, method))
                 {
-                    missingTests.add(method);
+                    missingTests.add(method.getDeclaringClass().getSimpleName() + "."
+                        + method.getName());
                 }
             }
         }
 
-        if (!missingTests.isEmpty())
-        {
-            StringBuffer sb = new StringBuffer("Missing tests: ");
-            for (Method method : missingTests)
-            {
-                sb.append("\n");
-                sb.append(method.getDeclaringClass().getSimpleName());
-                sb.append(".").append(method.getName());
-            }
-
-            fail(sb.toString());
-        }
+        assertTrue(missingTests.isEmpty(), "Missing tests: " + Joiner.on(", ").join(missingTests));
     }
 
     private Class< ? > loadTestClass(final Class< ? > featureClass) throws ClassNotFoundException
