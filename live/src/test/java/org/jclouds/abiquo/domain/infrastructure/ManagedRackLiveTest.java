@@ -42,7 +42,7 @@ import com.google.common.collect.Iterables;
 @Test(groups = "ucs")
 public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-    ManagedRack ucsRack;
+    private ManagedRack ucsRack;
 
     public void testUpdate()
     {
@@ -85,8 +85,8 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvir
         String pass = Config.get("abiquo.ucs.pass");
 
         ucsRack =
-            ManagedRack.builder(context, env.datacenter).ipAddress(ip).port(port).user(user).name(
-                "ucs rack").password(pass).build();
+            ManagedRack.builder(context, env.datacenter).ipAddress(ip).port(port).user(user)
+                .name("ucs rack").password(pass).build();
 
         ucsRack.save();
         assertNotNull(ucsRack.getId());

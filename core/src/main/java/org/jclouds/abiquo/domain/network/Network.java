@@ -324,6 +324,11 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
 
     public static Network wrapNetwork(final AbiquoContext context, final VLANNetworkDto dto)
     {
+        if (dto == null)
+        {
+            return null;
+        }
+
         Network network = null;
 
         switch (dto.getType())

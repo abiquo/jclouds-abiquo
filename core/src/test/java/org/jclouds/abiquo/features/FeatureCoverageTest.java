@@ -22,11 +22,16 @@ import static org.testng.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.testng.annotations.Test;
+
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 /**
  * Tests that all features have a unit test.
@@ -47,15 +52,11 @@ public class FeatureCoverageTest
         for (Class< ? > featureClass : featureClasses)
         {
             Class< ? > testClass = loadTestClass(featureClass);
+            Iterable<String> testMethodNames = methodNames(testClass);
 
             for (Method method : featureClass.getMethods())
             {
-                try
-                {
-                    String testName = "test" + capitalize(method.getName());
-                    testClass.getMethod(testName);
-                }
-                catch (NoSuchMethodException e)
+                if (!hasTest(testMethodNames, method))
                 {
                     missingTests.add(method);
                 }
@@ -83,21 +84,30 @@ public class FeatureCoverageTest
         return Thread.currentThread().getContextClassLoader().loadClass(testClassName);
     }
 
-    private static String capitalize(final String str)
+    private static Iterable<String> methodNames(final Class< ? > clazz)
     {
-        if (str == null)
-        {
-            return null;
-        }
+        return Iterables.transform(Arrays.asList(clazz.getMethods()),
+            new Function<Method, String>()
+            {
+                @Override
+                public String apply(final Method input)
+                {
+                    return input.getName();
+                }
+            });
+    }
 
-        switch (str.length())
+    private static boolean hasTest(final Iterable<String> testMethodNames, final Method method)
+    {
+        String testMethod = Iterables.find(testMethodNames, new Predicate<String>()
         {
-            case 0:
-                return str;
-            case 1:
-                return str.toUpperCase();
-            default:
-                return str.substring(0, 1).toUpperCase() + str.substring(1);
-        }
+            @Override
+            public boolean apply(final String input)
+            {
+                return input.toLowerCase().contains(method.getName().toLowerCase());
+            }
+        }, null);
+
+        return testMethod != null;
     }
 }
