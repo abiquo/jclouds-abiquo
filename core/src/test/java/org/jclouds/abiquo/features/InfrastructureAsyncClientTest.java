@@ -423,6 +423,27 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testListServiceProfileTemplates() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listServiceProfileTemplates",
+                UcsRackDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.managedRackPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1/lstemplates HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     /*********************** Remote Service **********************/
 
     public void testListRemoteServices() throws SecurityException, NoSuchMethodException,

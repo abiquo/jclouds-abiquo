@@ -309,6 +309,13 @@ public interface InfrastructureAsyncClient
     ListenableFuture<LogicServersDto> listServiceProfiles(
         @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack);
 
+    /**
+     * @see InfrastructureClient#listServiceProfiles(UcsRackDto)
+     */
+    @GET
+    ListenableFuture<LogicServersDto> listServiceProfileTemplates(
+        @EndpointLink("lstemplates") @BinderParam(BindToPath.class) UcsRackDto rack);
+
     /*********************** Remote Service ***********************/
 
     /**
