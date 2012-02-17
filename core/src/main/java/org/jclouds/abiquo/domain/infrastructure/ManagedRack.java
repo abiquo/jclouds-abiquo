@@ -29,7 +29,9 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
+import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -78,21 +80,24 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack">
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack<
+     *      /a>
      */
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient().createManagedRack(datacenter.unwrap(),
-                target);
+            context.getApi().getInfrastructureClient()
+                .createManagedRack(datacenter.unwrap(), target);
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack">
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      UpdateanexistingUcsRack</a>
      */
     public void update()
     {
@@ -101,9 +106,10 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
     // Parent access
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      RetrieveaDatacenter</a>
      */
     public Datacenter getDatacenter()
     {
@@ -127,6 +133,40 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public Machine findMachine(final Predicate<Machine> filter)
     {
         return Iterables.getFirst(filter(listMachines(), filter), null);
+    }
+
+    public List<LogicServer> listServiceProfiles()
+    {
+        LogicServersDto profiles =
+            context.getApi().getInfrastructureClient().listServiceProfiles(target);
+        return wrap(context, LogicServer.class, profiles.getCollection());
+    }
+
+    public List<LogicServer> listServiceProfiles(final Predicate<LogicServer> filter)
+    {
+        return Lists.newLinkedList(filter(listServiceProfiles(), filter));
+    }
+
+    public LogicServer findServiceProfile(final Predicate<LogicServer> filter)
+    {
+        return Iterables.getFirst(filter(listServiceProfiles(), filter), null);
+    }
+
+    public List<LogicServer> listServiceProfileTemplates()
+    {
+        LogicServersDto templates =
+            context.getApi().getInfrastructureClient().listServiceProfileTemplates(target);
+        return wrap(context, LogicServer.class, templates.getCollection());
+    }
+
+    public List<LogicServer> listServiceProfileTemplates(final Predicate<LogicServer> filter)
+    {
+        return Lists.newLinkedList(filter(listServiceProfileTemplates(), filter));
+    }
+
+    public LogicServer findServiceProfileTemplate(final Predicate<LogicServer> filter)
+    {
+        return Iterables.getFirst(filter(listServiceProfileTemplates(), filter), null);
     }
 
     // Builder
@@ -304,12 +344,12 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         public static Builder fromRack(final ManagedRack in)
         {
             return ManagedRack.builder(in.context, in.datacenter).id(in.getId()).name(in.getName())
-                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(
-                    in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
-                .vlanPerVdcReserved(in.getVlanPerVdcReserved()).VlansIdAvoided(
-                    in.getVlansIdAvoided()).port(in.getPort()).ipAddress(in.getIp()).password(
-                    in.getPassword()).user(in.getUser()).defaultTemplate(in.getDefaultTemplate())
-                .maxMachinesOn(in.getMaxMachinesOn());
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
+                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcReserved(in.getVlanPerVdcReserved())
+                .VlansIdAvoided(in.getVlansIdAvoided()).port(in.getPort()).ipAddress(in.getIp())
+                .password(in.getPassword()).user(in.getUser())
+                .defaultTemplate(in.getDefaultTemplate()).maxMachinesOn(in.getMaxMachinesOn());
         }
     }
 
@@ -328,11 +368,6 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public String getShortDescription()
     {
         return target.getShortDescription();
-    }
-
-    public void setName(final String name)
-    {
-        target.setName(name);
     }
 
     public void setShortDescription(final String description)

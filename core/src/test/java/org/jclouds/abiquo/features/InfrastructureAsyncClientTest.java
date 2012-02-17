@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.LogicServerOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -423,6 +424,29 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testListServiceProfilesWithOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        LogicServerOptions options = LogicServerOptions.builder().startWith(1).limit(2).build();
+
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listServiceProfiles", UcsRackDto.class,
+                LogicServerOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.managedRackPut(), options);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1/logicservers?startwith=1&limit=2 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testListServiceProfileTemplates() throws SecurityException, NoSuchMethodException,
         IOException
     {
@@ -434,6 +458,29 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks/1/lstemplates HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListServiceProfileTemplatesWithOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        LogicServerOptions options = LogicServerOptions.builder().ascendant(true).build();
+
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listServiceProfileTemplates",
+                UcsRackDto.class, LogicServerOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.managedRackPut(), options);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1/lstemplates?asc=true HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 

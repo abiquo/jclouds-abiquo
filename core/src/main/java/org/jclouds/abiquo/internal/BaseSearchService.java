@@ -34,8 +34,11 @@ import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.LogicServer;
+import org.jclouds.abiquo.domain.infrastructure.ManagedRack;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
+import org.jclouds.abiquo.domain.infrastructure.options.LogicServerOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
@@ -43,6 +46,7 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.services.SearchService;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -146,6 +150,28 @@ public class BaseSearchService implements SearchService
                 .listPurchasedPublicIps(virtualDatacenter.unwrap(), options).getCollection();
 
         return wrap(context, Ip.class, ips);
+    }
+
+    @Override
+    public Iterable<LogicServer> searchServiceProfiles(final ManagedRack rack,
+        final LogicServerOptions options)
+    {
+        List<LogicServerDto> profiles =
+            context.getApi().getInfrastructureClient().listServiceProfiles(rack.unwrap(), options)
+                .getCollection();
+
+        return wrap(context, LogicServer.class, profiles);
+    }
+
+    @Override
+    public Iterable<LogicServer> searchServiceProfileTemplates(final ManagedRack rack,
+        final LogicServerOptions options)
+    {
+        List<LogicServerDto> profiles =
+            context.getApi().getInfrastructureClient()
+                .listServiceProfileTemplates(rack.unwrap(), options).getCollection();
+
+        return wrap(context, LogicServer.class, profiles);
     }
 
 }

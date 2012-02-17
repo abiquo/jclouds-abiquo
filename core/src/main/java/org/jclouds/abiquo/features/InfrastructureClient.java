@@ -22,6 +22,7 @@ package org.jclouds.abiquo.features;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.LogicServerOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -307,12 +308,30 @@ public interface InfrastructureClient
     LogicServersDto listServiceProfiles(UcsRackDto rack);
 
     /**
+     * List service profiles of the ucs rack with filtering options.
+     * 
+     * @param rack The ucs rack.
+     * @param options Optional query params.
+     * @return The list of service profiles for the rack.
+     */
+    LogicServersDto listServiceProfiles(UcsRackDto rack, LogicServerOptions options);
+
+    /**
      * List all service profile templates of the ucs rack.
      * 
      * @param rack The ucs rack.
      * @return The list of service profile templates for the rack.
      */
     LogicServersDto listServiceProfileTemplates(UcsRackDto rack);
+
+    /**
+     * List all service profile templates of the ucs rack with options.
+     * 
+     * @param rack The ucs rack.
+     * @param options Optional query params.
+     * @return The list of service profile templates for the rack.
+     */
+    LogicServersDto listServiceProfileTemplates(UcsRackDto rack, LogicServerOptions options);
 
     /*********************** Remote Service ********************** */
 

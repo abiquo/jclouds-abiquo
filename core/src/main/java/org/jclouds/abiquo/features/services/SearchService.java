@@ -25,8 +25,11 @@ import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.LogicServer;
+import org.jclouds.abiquo.domain.infrastructure.ManagedRack;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
+import org.jclouds.abiquo.domain.infrastructure.options.LogicServerOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
@@ -117,4 +120,24 @@ public interface SearchService
      */
     Iterable<Ip> searchPurchasedPublicIps(final VirtualDatacenter virtualDatacenter,
         final IpOptions options);
+
+    /*********************** Logic Server ***********************/
+
+    /**
+     * Get the list of service profiles for managed rack.
+     * 
+     * @param managedRack The given rack.
+     * @param options The set of filtering and pagination options of the search.
+     */
+    Iterable<LogicServer> searchServiceProfiles(final ManagedRack rack,
+        final LogicServerOptions options);
+
+    /**
+     * Get the list of service profile templates for managed rack.
+     * 
+     * @param managedRack The given rack.
+     * @param options The set of filtering and pagination options of the search.
+     */
+    Iterable<LogicServer> searchServiceProfileTemplates(final ManagedRack rack,
+        final LogicServerOptions options);
 }

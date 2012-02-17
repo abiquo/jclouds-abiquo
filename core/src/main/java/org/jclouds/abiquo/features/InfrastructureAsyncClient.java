@@ -37,10 +37,12 @@ import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.LogicServerOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
+import org.jclouds.abiquo.domain.options.QueryOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
@@ -310,11 +312,27 @@ public interface InfrastructureAsyncClient
         @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack);
 
     /**
-     * @see InfrastructureClient#listServiceProfiles(UcsRackDto)
+     * @see InfrastructureClient#listServiceProfiles(UcsRackDto, QueryOptions)
+     */
+    @GET
+    ListenableFuture<LogicServersDto> listServiceProfiles(
+        @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(AppendOptionsToPath.class) LogicServerOptions options);
+
+    /**
+     * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto)
      */
     @GET
     ListenableFuture<LogicServersDto> listServiceProfileTemplates(
         @EndpointLink("lstemplates") @BinderParam(BindToPath.class) UcsRackDto rack);
+
+    /**
+     * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto, LogicServerOptions)
+     */
+    @GET
+    ListenableFuture<LogicServersDto> listServiceProfileTemplates(
+        @EndpointLink("lstemplates") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(AppendOptionsToPath.class) LogicServerOptions options);
 
     /*********************** Remote Service ***********************/
 
