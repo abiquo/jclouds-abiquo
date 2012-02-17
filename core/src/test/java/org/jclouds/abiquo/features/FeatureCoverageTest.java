@@ -36,13 +36,10 @@ import com.google.common.collect.Iterables;
 
 /**
  * Tests that all features have a unit test.
- * <p>
- * This test is disabled by default, since it may fail due to unit tests having different method
- * names. However, it can be enabled and used to have an idea of the feature test coverage.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit", enabled = false)
+@Test(groups = "unit")
 public class FeatureCoverageTest
 {
     public void testAllFeaturesHaveTest() throws ClassNotFoundException

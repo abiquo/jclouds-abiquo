@@ -441,8 +441,8 @@ public interface CloudAsyncClient
      */
     @PUT
     ListenableFuture<AcceptedRequestDto<String>> changeVirtualMachineState(
-        @EndpointLink("state") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine,
-        VirtualMachineStateDto state);
+        @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindToXMLPayload.class) VirtualMachineStateDto state);
 
     /**
      * @see CloudClient#getVirtualMachineState(VirtualMachineDto)

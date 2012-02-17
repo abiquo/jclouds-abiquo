@@ -68,8 +68,8 @@ public class AdminResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<role>");
-        buffer.append(link("/admin/roles/1", "edit"));
         buffer.append(link("/admin/roles/1/action/privileges", "privileges"));
+        buffer.append(link("/admin/roles/1", "edit"));
         buffer.append("<blocked>false</blocked>");
         buffer.append("<id>1</id>");
         buffer.append("<name>HAWAIAN_ADMIN</name>");

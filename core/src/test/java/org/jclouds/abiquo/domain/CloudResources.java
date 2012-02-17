@@ -27,6 +27,8 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachineState;
+import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -153,6 +155,22 @@ public class CloudResources
         return virtualMachine;
     }
 
+    public static VirtualMachineStateDto virtualMachineState()
+    {
+        VirtualMachineStateDto state = new VirtualMachineStateDto();
+        state.setState(VirtualMachineState.ON);
+        return state;
+    }
+
+    public static String virtualMachineStatePayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualMachineState>");
+        buffer.append("<state>ON</state>");
+        buffer.append("</virtualMachineState>");
+        return buffer.toString();
+    }
+
     public static VolumeManagementDto volumePost()
     {
         VolumeManagementDto volume = new VolumeManagementDto();
@@ -191,8 +209,7 @@ public class CloudResources
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier
-            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
     }
 
@@ -445,8 +462,7 @@ public class CloudResources
     public static DiskManagementDto hardDiskPut()
     {
         DiskManagementDto disk = hardDiskPost();
-        disk
-            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/disks/1"));
+        disk.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/disks/1"));
         disk.addLink(new RESTLink("virtualdatacenter",
             "http://localhost/api/cloud/virtualdatacenters/1"));
         return disk;
