@@ -67,6 +67,8 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.CategoryDto;
+import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
@@ -538,6 +540,20 @@ public interface CloudAsyncClient
     ListenableFuture<AcceptedRequestDto<String>> undeployVirtualMachine(
         @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
+
+    /**
+     * @see CloudClient#getIcon(VirtualMachineTemplateDto)
+     */
+    @GET
+    ListenableFuture<IconDto> getIcon(
+        @EndpointLink("icon") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
+
+    /**
+     * @see CloudClient#getCategory(VirtualMachineTemplateDto)
+     */
+    @GET
+    ListenableFuture<CategoryDto> getCategory(
+        @EndpointLink("category") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
     /*********************** Hard disks ***********************/
 

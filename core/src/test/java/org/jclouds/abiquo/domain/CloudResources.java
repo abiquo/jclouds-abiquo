@@ -21,9 +21,11 @@ package org.jclouds.abiquo.domain;
 
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
+import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
@@ -201,6 +203,25 @@ public class CloudResources
         volume.addLink(new RESTLink("virtualdatacenter",
             "http://localhost/api/cloud/virtualdatacenters/1"));
         return volume;
+    }
+
+    public static VirtualMachineTemplateDto virtualMachineTemplatePut()
+    {
+        VirtualMachineTemplateDto template = new VirtualMachineTemplateDto();
+        template.setId(10);
+        template.setName("m0n0wall");
+        template.setDiskFormatType(DiskFormatType.VMDK_FLAT.toString());
+        template.setPath("1/abiquo-repository.abiquo.com/m0n0wall/m0n0wall-1.3b18-i386-flat.vmdk");
+        template.setDiskFileSize(27262976);
+        template.setCpuRequired(1);
+        template.setRamRequired(128);
+        template.setCpuRequired(27262976);
+        template.setCreationUser("SYSTEM");
+        template.addLink(new RESTLink("icon", "http://localhost/api/config/icons/1"));
+        template.addLink(new RESTLink("category", "http://localhost/api/config/categories/1"));
+
+        return template;
+
     }
 
     public static TierDto cloudTierPut()

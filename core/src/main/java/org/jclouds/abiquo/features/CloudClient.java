@@ -30,6 +30,8 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.CategoryDto;
+import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
@@ -563,6 +565,22 @@ public interface CloudClient
      */
     AcceptedRequestDto<String> replaceHardDisks(VirtualMachineDto virtualMachine,
         DiskManagementDto... hardDisks);
+
+    /**
+     * Get the icon of the given virtual machine template.
+     * 
+     * @param template The virtual machine template.
+     * @return The icon.
+     */
+    IconDto getIcon(VirtualMachineTemplateDto template);
+
+    /**
+     * Get the category of the given virtual machine template.
+     * 
+     * @param template The virtual machine template.
+     * @return The category.
+     */
+    CategoryDto getCategory(VirtualMachineTemplateDto template);
 
     /*********************** Hard disks ***********************/
 

@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud.options;
 
+import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -55,7 +56,9 @@ public class VirtualMachineTemplateOptions extends QueryOptions
 
         private HypervisorType hypervisorType;
 
-        private String category;
+        private Category category;
+
+        private String categoryName;
 
         public Builder persistent(final Boolean persistent)
         {
@@ -69,9 +72,15 @@ public class VirtualMachineTemplateOptions extends QueryOptions
             return this;
         }
 
-        public Builder category(final String category)
+        public Builder category(final Category category)
         {
             this.category = category;
+            return this;
+        }
+
+        public Builder categoryName(final String categoryName)
+        {
+            this.categoryName = categoryName;
             return this;
         }
 
@@ -89,7 +98,12 @@ public class VirtualMachineTemplateOptions extends QueryOptions
             }
             if (category != null)
             {
-                options.map.put("categoryName", category);
+                options.map.put("categoryName", category.getName());
+            }
+
+            if (category == null && categoryName != null)
+            {
+                options.map.put("categoryName", categoryName);
             }
 
             return options;

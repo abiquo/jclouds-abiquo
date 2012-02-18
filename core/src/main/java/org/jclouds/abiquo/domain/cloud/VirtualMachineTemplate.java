@@ -23,10 +23,14 @@ import java.util.Date;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.config.Category;
+import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.DiskFormatType;
+import com.abiquo.server.core.appslibrary.CategoryDto;
+import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
 /**
@@ -62,12 +66,38 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
             context.getApi().getVirtualMachineTemplateClient().updateVirtualMachineTemplate(target);
     }
 
+    // Children access
+
+    /**
+     * Gets the icon of this virtual machine template or null there is not.
+     */
+    public Icon getIcon()
+    {
+        if (target.searchLink("icon") == null)
+        {
+            return null;
+        }
+
+        IconDto icon = context.getApi().getCloudClient().getIcon(target);
+        return wrap(context, Icon.class, icon);
+    }
+
+    /**
+     * Gets the category of this virtual machine templatae.
+     */
+    public Category getCategory()
+    {
+        CategoryDto category = context.getApi().getCloudClient().getCategory(target);
+        return wrap(context, Category.class, category);
+    }
+
     // Parent access
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      RetrieveaDatacenter</a>
      */
     public Datacenter getDatacenter()
     {
