@@ -47,6 +47,7 @@ import com.abiquo.server.core.appslibrary.CategoriesDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.IconsDto;
+import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
 import com.abiquo.server.core.config.SystemPropertiesDto;
@@ -180,6 +181,14 @@ public interface ConfigAsyncClient
     @DELETE
     ListenableFuture<Void> deleteIcon(
         @EndpointLink("edit") @BinderParam(BindToPath.class) IconDto icon);
+
+    /**
+     * @see ConfigClient#getIcon(Integer)
+     */
+    @GET
+    @Path("/icons/{icon}")
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<IconDto> getIcon(@PathParam("icon") Integer categoryId);
 
     /*********************** Category ***********************/
 

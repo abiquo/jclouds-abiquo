@@ -167,6 +167,14 @@ public interface ConfigClient
      */
     void deleteIcon(IconDto icon);
 
+    /**
+     * Get the given icon.
+     * 
+     * @param iconId The id of the icon.
+     * @return The icon or <code>null</code> if it does not exist.
+     */
+    IconDto getIcon(Integer iconId);
+
     /*********************** Category ***********************/
 
     /**
