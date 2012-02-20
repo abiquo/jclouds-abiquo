@@ -63,6 +63,13 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         assertEquals(state, VirtualMachineState.NOT_ALLOCATED);
     }
 
+    public void testGetVirtualAppliance()
+    {
+        VirtualAppliance vapp = env.virtualMachine.getVirtualAppliance();
+        assertNotNull(vapp);
+        assertEquals(vapp.getId(), env.virtualAppliance.getId());
+    }
+
     public void testAttachNic()
     {
         Network network = env.virtualDatacenter.getDefaultNetwork();

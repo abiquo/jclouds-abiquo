@@ -53,8 +53,7 @@ import com.google.common.collect.Lists;
 public class StorageDevice extends DomainWrapper<StorageDeviceDto>
 {
     /** The datacenter where the storage device is. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -65,9 +64,11 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-DeleteaStorageDevice">
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-DeleteaStorageDevice</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-DeleteaStorageDevice"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
+     *      -DeleteaStorageDevice</a>
      */
     public void delete()
     {
@@ -76,21 +77,25 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-CreateaStorageDevice">
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-CreateaStorageDevice</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-CreateaStorageDevice"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
+     *      -CreateaStorageDevice</a>
      */
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient().createStorageDevice(datacenter.unwrap(),
-                target);
+            context.getApi().getInfrastructureClient()
+                .createStorageDevice(datacenter.unwrap(), target);
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-UpdateaStorageDevice">
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-UpdateaStorageDevice</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-UpdateaStorageDevice"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
+     *      -UpdateaStorageDevice</a>
      */
     public void update()
     {
@@ -100,9 +105,10 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     // Parent access
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      RetrieveaDatacenter</a>
      */
     public Datacenter getDatacenter()
     {
@@ -117,26 +123,18 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     /**
      * List storage pools from device (synchronized).
      * 
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools">
-     *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools"
+     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
+     *      GetremotelistofPools</a>
      * @return Storage Pools from device (synchronized).
      */
     public List<StoragePool> discoverStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient().listStoragePools(target,
-                StoragePoolOptions.builder().sync(true).build());
-
-        List<StoragePool> storagePoolList =
-            wrap(context, StoragePool.class, storagePools.getCollection());
-
-        for (StoragePool storagePool : storagePoolList)
-        {
-            storagePool.storageDevice = this;
-        }
-
-        return storagePoolList;
+            context.getApi().getInfrastructureClient()
+                .listStoragePools(target, StoragePoolOptions.builder().sync(true).build());
+        return wrap(context, StoragePool.class, storagePools.getCollection());
     }
 
     public List<StoragePool> listRemoteStoragePools(final Predicate<StoragePool> filter)
@@ -152,16 +150,17 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     /**
      * List storage pools from device (from Database).
      * 
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools">
-     *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-GetremotelistofPools"
+     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
+     *      GetremotelistofPools</a>
      * @return Storage Pools from device (from Database).
      */
     public List<StoragePool> listStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient().listStoragePools(target,
-                StoragePoolOptions.builder().sync(false).build());
+            context.getApi().getInfrastructureClient()
+                .listStoragePools(target, StoragePoolOptions.builder().sync(false).build());
         return wrap(context, StoragePool.class, storagePools.getCollection());
     }
 
@@ -183,9 +182,11 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers">
-     *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-RetrievethelistofTiers
+     *      </a>
      */
     public List<Tier> listTiersFromDatacenter()
     {
@@ -337,8 +338,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
             Builder builder =
                 StorageDevice.builder(in.context, in.getDatacenter()).iscsiIp(in.getIscsiIp())
                     .iscsiPort(in.getIscsiPort()).managementIp(in.getManagementIp())
-                    .managementPort(in.getManagementPort()).name(in.getName()).password(
-                        in.getPassword()).type(in.getType()).username(in.getUsername());
+                    .managementPort(in.getManagementPort()).name(in.getName())
+                    .password(in.getPassword()).type(in.getType()).username(in.getUsername());
 
             return builder;
         }

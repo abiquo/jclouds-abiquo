@@ -46,11 +46,10 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 public class ExternalNetwork extends Network
 {
     /** The datacenter where the network belongs. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /** The enterprise where the network belongs. */
-    Enterprise enterprise;
+    private Enterprise enterprise;
 
     /**
      * Constructor to be used only by the builder.

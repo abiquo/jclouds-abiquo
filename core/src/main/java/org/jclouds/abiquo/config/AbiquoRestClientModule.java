@@ -38,12 +38,14 @@ import org.jclouds.abiquo.features.TaskClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.RequiresHttp;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
 import org.jclouds.rest.ConfiguresRestClient;
+import org.jclouds.rest.Utils;
 import org.jclouds.rest.config.RestClientModule;
 
 import com.google.common.collect.ImmutableMap;
@@ -71,6 +73,13 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
     public AbiquoRestClientModule()
     {
         super(AbiquoClient.class, AbiquoAsyncClient.class, DELEGATE_MAP);
+    }
+
+    @Override
+    protected void configure()
+    {
+        super.configure();
+        bind(Utils.class).to(ExtendedUtils.class);
     }
 
     @Override

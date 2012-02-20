@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
@@ -35,14 +36,23 @@ import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
  *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
+@EnterpriseEdition
 public class LogicServer extends DomainWrapper<LogicServerDto>
 {
+    /**
+     * Constructor to be used only by the builder.
+     */
+    protected LogicServer(final AbiquoContext context, final LogicServerDto target)
+    {
+        super(context, target);
+    }
+
+    // Delegate Methods
+
     public String getName()
     {
         return target.getName();
     }
-
-    // Delegate Methods
 
     public void setType(final String value)
     {
@@ -89,11 +99,12 @@ public class LogicServer extends DomainWrapper<LogicServerDto>
         return target.getCollection();
     }
 
-    /**
-     * Constructor to be used only by the builder.
-     */
-    protected LogicServer(final AbiquoContext context, final LogicServerDto target)
+    @Override
+    public String toString()
     {
-        super(context, target);
+        return "LogicServer [name=" + getName() + ", associated=" + getAssociated() + ", type="
+            + getType() + ", associatedTo=" + getAssociatedTo() + ", description="
+            + getDescription() + "]";
     }
+
 }

@@ -48,12 +48,10 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     public static final VolumeState DEFAULT_STATE = VolumeState.DETACHED;
 
     /** The virtual datacenter where the volume belongs. */
-    // Package protected to allow navigation from children
-    VirtualDatacenter virtualDatacenter;
+    private VirtualDatacenter virtualDatacenter;
 
     /** The tier where the volume belongs. */
-    // Package protected to allow navigation from children
-    Tier tier;
+    private Tier tier;
 
     /**
      * Constructor to be used only by the builder.
@@ -84,9 +82,10 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     // Parent access
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
+     *      VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
      */
     public VirtualDatacenter getVirtualDatacenter()
     {

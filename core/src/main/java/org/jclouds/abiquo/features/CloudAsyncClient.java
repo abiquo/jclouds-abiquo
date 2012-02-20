@@ -31,7 +31,6 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
-import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.cloud.BindHardDiskRefsToPayload;
@@ -65,7 +64,6 @@ import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
-import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.IconDto;
@@ -335,14 +333,6 @@ public interface CloudAsyncClient
     ListenableFuture<VirtualApplianceDto> getVirtualAppliance(
         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer virtualApplianceId);
-
-    /**
-     * @see CloudClient#getVirtualAppliance(RESTLink)
-     */
-    @GET
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<VirtualApplianceDto> getVirtualAppliance(
-        @BinderParam(BindLinkToPath.class) RESTLink link);
 
     /**
      * @see CloudClient#getVirtualApplianceState(VirtualApplianceDto)

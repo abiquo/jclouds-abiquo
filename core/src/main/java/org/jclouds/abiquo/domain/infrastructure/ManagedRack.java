@@ -27,6 +27,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.LogicServersDto;
@@ -45,6 +46,7 @@ import com.google.common.collect.Lists;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
  *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
+@EnterpriseEdition
 public class ManagedRack extends DomainWrapper<UcsRackDto>
 {
     /** The default minimum VLAN id. */
@@ -60,8 +62,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     private static final int DEFAULT_NRSQ = 10;
 
     /** The datacenter where the rack belongs. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -498,6 +499,18 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public void setUser(final String user)
     {
         target.setUser(user);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ManagedRack [id=" + getId() + ", name=" + getName() + ", shortDescription="
+            + getShortDescription() + ", haEnabled=" + isHaEnabled() + ", nrsq=" + getNrsq()
+            + ", vlanIdMax=" + getVlanIdMax() + ", vlanIdMin=" + getVlanIdMin()
+            + ", vlanPerVdcReserved=" + getVlanPerVdcReserved() + ", vlansIdAvoided="
+            + getVlansIdAvoided() + ", ip=" + getIp() + ", longDescription=" + getLongDescription()
+            + ", maxMachinesOn=" + getMaxMachinesOn() + ", password=**PROTECTED**, port="
+            + getPort() + ", user=" + getUser() + ", defaultTemplate=" + getDefaultTemplate() + "]";
     }
 
 }

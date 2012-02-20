@@ -28,7 +28,6 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
-import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.IconDto;
@@ -378,14 +377,6 @@ public interface CloudClient
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> undeployVirtualAppliance(VirtualApplianceDto virtualAppliance,
         VirtualMachineTaskDto options);
-
-    /**
-     * Get the given virtual appliance from the virtual appliance link.
-     * 
-     * @param link Link to the virtual appliance.
-     * @return The virtual appliance or <code>null</code> if it does not exist.
-     */
-    VirtualApplianceDto getVirtualAppliance(RESTLink link);
 
     /**
      * Get the state of the given virtual appliance.
