@@ -30,8 +30,9 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
@@ -42,6 +43,7 @@ import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link MachineDto}.
@@ -106,9 +108,13 @@ public class Machine extends DomainWrapper<MachineDto>
             checkNotNull(target.searchLink(ParentLinkName.RACK),
                 ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.RACK);
 
-        AbiquoHttpClient http = ((ExtendedUtils) context.getUtils()).getAbiquoHttpClient();
-        RackDto dto = http.get(link, RackDto.class);
-        return wrap(context, Rack.class, dto);
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<RackDto> parser =
+            new ParseXMLWithJAXB<RackDto>(utils.getXml(), TypeLiteral.get(RackDto.class));
+
+        return wrap(context, Rack.class, parser.apply(response));
     }
 
     // Children access

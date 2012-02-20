@@ -27,13 +27,15 @@ import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link StoragePoolDto}.
@@ -125,26 +127,35 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
      */
     public StorageDevice getStorageDevice()
     {
-        RESTLink deviceLink =
+        RESTLink link =
             checkNotNull(target.searchLink(ParentLinkName.STORAGE_DEVICE),
                 ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.STORAGE_DEVICE);
 
-        AbiquoHttpClient http = ((ExtendedUtils) context.getUtils()).getAbiquoHttpClient();
-        StorageDeviceDto dto = http.get(deviceLink, StorageDeviceDto.class);
-        return wrap(context, StorageDevice.class, dto);
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<StorageDeviceDto> parser =
+            new ParseXMLWithJAXB<StorageDeviceDto>(utils.getXml(),
+                TypeLiteral.get(StorageDeviceDto.class));
+
+        return wrap(context, StorageDevice.class, parser.apply(response));
     }
 
     // Children access
 
     public Tier getTier()
     {
-        RESTLink tierLink =
+        RESTLink link =
             checkNotNull(target.searchLink(ParentLinkName.TIER),
                 ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.TIER);
 
-        AbiquoHttpClient http = ((ExtendedUtils) context.getUtils()).getAbiquoHttpClient();
-        TierDto dto = http.get(tierLink, TierDto.class);
-        return wrap(context, Tier.class, dto);
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<TierDto> parser =
+            new ParseXMLWithJAXB<TierDto>(utils.getXml(), TypeLiteral.get(TierDto.class));
+
+        return wrap(context, Tier.class, parser.apply(response));
     }
 
     // Builder

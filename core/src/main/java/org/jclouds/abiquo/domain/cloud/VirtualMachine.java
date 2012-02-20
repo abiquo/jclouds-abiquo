@@ -36,8 +36,9 @@ import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
-import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -62,6 +63,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link VirtualMachineDto}.
@@ -150,9 +152,14 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_APPLIANCE),
                 ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_APPLIANCE);
 
-        AbiquoHttpClient http = ((ExtendedUtils) context.getUtils()).getAbiquoHttpClient();
-        VirtualApplianceDto dto = http.get(link, VirtualApplianceDto.class);
-        return wrap(context, VirtualAppliance.class, dto);
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<VirtualApplianceDto> parser =
+            new ParseXMLWithJAXB<VirtualApplianceDto>(utils.getXml(),
+                TypeLiteral.get(VirtualApplianceDto.class));
+
+        return wrap(context, VirtualAppliance.class, parser.apply(response));
     }
 
     /**

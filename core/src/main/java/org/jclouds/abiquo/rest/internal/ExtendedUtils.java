@@ -51,18 +51,21 @@ public class ExtendedUtils extends UtilsImpl implements Utils
 
     private AbiquoHttpClient abiquoHttpClient;
 
+    private AbiquoHttpAsyncClient abiquoHttpAsyncClient;
+
     @Inject
     public ExtendedUtils(final Injector injector, final Json json, final HttpClient simpleClient,
         final HttpAsyncClient simpleAsyncClient, final Crypto encryption, final DateService date,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userThreads,
         @Named(Constants.PROPERTY_IO_WORKER_THREADS) final ExecutorService ioThreads,
         final LoggerFactory loggerFactory, final XMLParser xml,
-        final AbiquoHttpClient abiquoHttpClient)
+        final AbiquoHttpClient abiquoHttpClient, final AbiquoHttpAsyncClient abiquoHttpAsyncClient)
     {
         super(injector, json, simpleClient, simpleAsyncClient, encryption, date, userThreads,
             ioThreads, loggerFactory);
         this.xml = checkNotNull(xml, "xml");
         this.abiquoHttpClient = checkNotNull(abiquoHttpClient, "abiquoHttpClient");
+        this.abiquoHttpAsyncClient = checkNotNull(abiquoHttpAsyncClient, "abiquoHttpAsyncClient");
     }
 
     public XMLParser getXml()
@@ -73,6 +76,11 @@ public class ExtendedUtils extends UtilsImpl implements Utils
     public AbiquoHttpClient getAbiquoHttpClient()
     {
         return abiquoHttpClient;
+    }
+
+    public AbiquoHttpAsyncClient getAbiquoHttpAsyncClient()
+    {
+        return abiquoHttpAsyncClient;
     }
 
 }

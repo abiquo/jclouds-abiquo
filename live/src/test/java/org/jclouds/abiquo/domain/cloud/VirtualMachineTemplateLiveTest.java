@@ -23,7 +23,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import org.jclouds.abiquo.domain.config.Category;
-import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -43,12 +42,6 @@ public class VirtualMachineTemplateLiveTest extends BaseAbiquoClientLiveTest<Clo
         Datacenter datacenter = env.virtualMachine.getTemplate().getDatacenter();
         assertNotNull(datacenter);
         assertEquals(datacenter.getId(), env.datacenter.getId());
-    }
-
-    public void testGetIcon()
-    {
-        Icon icon = env.virtualMachine.getTemplate().getIcon();
-        assertNotNull(icon);
     }
 
     public void testGetCategory()

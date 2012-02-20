@@ -18,26 +18,34 @@
  */
 package org.jclouds.abiquo.rest.internal;
 
-import java.util.concurrent.TimeUnit;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.core.MediaType;
 
-import org.jclouds.concurrent.Timeout;
+import org.jclouds.abiquo.binders.BindLinkToPath;
+import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.http.HttpResponse;
+import org.jclouds.rest.annotations.BinderParam;
+import org.jclouds.rest.annotations.ExceptionParser;
+import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.rest.RESTLink;
+import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * Custom Rest methods to work with the Abiquo Api.
  * 
  * @author Ignasi Barrera
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoHttpClient
+@RequestFilters(AbiquoAuthentication.class)
+@Consumes(MediaType.APPLICATION_XML)
+public interface AbiquoHttpAsyncClient
 {
     /**
-     * Perform a GET request to the given link.
-     * 
-     * @param link The link to get.
-     * @return The response.
+     * @see AbiquoHttpClient#get(RESTLink)
      */
-    public HttpResponse get(final RESTLink link);
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    public ListenableFuture<HttpResponse> get(@BinderParam(BindLinkToPath.class) final RESTLink link);
 }

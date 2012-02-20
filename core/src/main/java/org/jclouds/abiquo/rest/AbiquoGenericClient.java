@@ -16,28 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.rest.internal;
-
-import java.util.concurrent.TimeUnit;
-
-import org.jclouds.concurrent.Timeout;
-import org.jclouds.http.HttpResponse;
-
-import com.abiquo.model.rest.RESTLink;
+package org.jclouds.abiquo.rest;
 
 /**
- * Custom Rest methods to work with the Abiquo Api.
- * 
  * @author Ignasi Barrera
+ *
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoHttpClient
+public class AbiquoGenericClient
 {
-    /**
-     * Perform a GET request to the given link.
-     * 
-     * @param link The link to get.
-     * @return The response.
-     */
-    public HttpResponse get(final RESTLink link);
+
 }
