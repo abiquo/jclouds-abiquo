@@ -40,6 +40,12 @@ import com.google.common.collect.Iterables;
 @Test(groups = "live")
 public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
+    public void testGetDevice()
+    {
+        StorageDevice device = env.storagePool.getStorageDevice();
+        assertNotNull(device);
+        assertEquals(device.getId(), env.storageDevice.getId());
+    }
 
     public void testUpdate()
     {
@@ -57,8 +63,8 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvir
         assertEquals(Iterables.size(storagePools), 1);
 
         storagePools =
-            env.storageDevice.listStoragePools(StoragePoolPredicates
-                .name(env.storagePool.getName()));
+            env.storageDevice
+                .listStoragePools(StoragePoolPredicates.name(env.storagePool.getName()));
         assertEquals(Iterables.size(storagePools), 1);
 
         storagePools =

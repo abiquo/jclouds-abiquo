@@ -73,12 +73,10 @@ import com.google.common.collect.Lists;
 public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenterDto>
 {
     /** The enterprise where the rack belongs. */
-    // Package protected to allow navigation from children
-    Enterprise enterprise;
+    private Enterprise enterprise;
 
     /** The dataceter where the virtual datacenter will be deployed. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.

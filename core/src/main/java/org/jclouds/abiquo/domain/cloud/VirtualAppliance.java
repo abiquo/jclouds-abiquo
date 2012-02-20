@@ -57,8 +57,7 @@ import com.google.common.collect.Lists;
 public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 {
     /** The virtual datacenter where the virtual appliance belongs. */
-    // Package protected to allow navigation from children
-    VirtualDatacenter virtualDatacenter;
+    private VirtualDatacenter virtualDatacenter;
 
     /**
      * Constructor to be used only by the builder.

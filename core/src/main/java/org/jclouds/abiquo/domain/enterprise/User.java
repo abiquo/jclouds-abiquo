@@ -61,12 +61,10 @@ public class User extends DomainWrapper<UserDto>
     private static final String DEFAULT_LOCALE = "en_US";
 
     /** The enterprise where the user belongs. */
-    // Package protected to allow navigation from children
-    Enterprise enterprise;
+    private Enterprise enterprise;
 
     /** Role of the user. */
-    // Package protected to allow navigation from children
-    Role role;
+    private Role role;
 
     /**
      * Constructor to be used only by the builder.
@@ -79,9 +77,11 @@ public class User extends DomainWrapper<UserDto>
     // Domain operations
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Deleteanexistinguser">
-     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Deleteanexistinguser</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/User+resource#Userresource-Deleteanexistinguser"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Deleteanexistinguser
+     *      </a>
      */
     public void delete()
     {
@@ -91,7 +91,8 @@ public class User extends DomainWrapper<UserDto>
 
     /**
      * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Createanewuser">
+     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Createanewuser"
+     *      >
      *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Createanewuser</a>
      */
     public void save()
@@ -102,9 +103,11 @@ public class User extends DomainWrapper<UserDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Updatesanexistinguser">
-     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Updatesanexistinguser</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/User+resource#Userresource-Updatesanexistinguser"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Updatesanexistinguser
+     *      </a>
      */
     public void update()
     {
@@ -163,9 +166,10 @@ public class User extends DomainWrapper<UserDto>
 
     // Parent access
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      RetrieveaEnterprise</a>
      */
     public Enterprise getEnterprise()
     {
@@ -182,9 +186,10 @@ public class User extends DomainWrapper<UserDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievethelistofvirtualmachinesbyuser">
-     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievethelistofvirtualmachinesbyuser</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievethelistofvirtualmachinesbyuser"
+     *      > http://community.abiquo.com/display/ABI20/User+resource#Userresource-
+     *      Retrievethelistofvirtualmachinesbyuser</a>
      */
     public List<Machine> listMachines()
     {
@@ -329,10 +334,10 @@ public class User extends DomainWrapper<UserDto>
 
         public static Builder fromUser(final User in)
         {
-            return User.builder(in.context, in.enterprise, in.role).active(in.isActive()).authType(
-                in.getAuthType()).description(in.getDescription()).email(in.getEmail()).locale(
-                in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick()).password(
-                in.getPassword());
+            return User.builder(in.context, in.enterprise, in.role).active(in.isActive())
+                .authType(in.getAuthType()).description(in.getDescription()).email(in.getEmail())
+                .locale(in.getLocale()).name(in.getName(), in.getSurname()).nick(in.getNick())
+                .password(in.getPassword());
         }
     }
 

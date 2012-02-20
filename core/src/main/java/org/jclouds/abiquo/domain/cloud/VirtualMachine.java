@@ -36,6 +36,8 @@ import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -72,12 +74,10 @@ import com.google.common.primitives.Longs;
 public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 {
     /** The virtual appliance where the virtual machine belongs. */
-    // Package protected to allow navigation from children
-    VirtualAppliance virtualAppliance;
+    private VirtualAppliance virtualAppliance;
 
     /** The virtual machine template of the virtual machine. */
-    // Package protected to allow navigation from children
-    VirtualMachineTemplate template;
+    private VirtualMachineTemplate template;
 
     /**
      * Constructor to be used only by the builder.
@@ -146,10 +146,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      */
     public VirtualAppliance getVirtualAppliance()
     {
-        RESTLink link = target.searchLink(ParentLinkName.VIRTUAL_APPLIANCE);
-        VirtualApplianceDto dto = context.getApi().getCloudClient().getVirtualAppliance(link);
-        virtualAppliance = wrap(context, VirtualAppliance.class, dto);
-        return virtualAppliance;
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_APPLIANCE),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_APPLIANCE);
+
+        AbiquoHttpClient http = ((ExtendedUtils) context.getUtils()).getAbiquoHttpClient();
+        VirtualApplianceDto dto = http.get(link, VirtualApplianceDto.class);
+        return wrap(context, VirtualAppliance.class, dto);
     }
 
     /**

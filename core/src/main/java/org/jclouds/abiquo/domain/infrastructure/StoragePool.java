@@ -27,7 +27,10 @@ import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -47,7 +50,8 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     private static final long DEFAULT_USED_SIZE = 0;
 
     /** The datacenter where the storage device is. */
-    // Package protected to allow navigation from children
+    // Package protected to allow the storage device to be set automatically when discovering the
+    // pools in a device.
     StorageDevice storageDevice;
 
     /**
@@ -61,9 +65,10 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     // Domain operations
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-DeleteaStoragePool">
-     *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-DeleteaStoragePool</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-DeleteaStoragePool"
+     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
+     *      DeleteaStoragePool</a>
      */
     public void delete()
     {
@@ -72,9 +77,10 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink">
-     *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink"
+     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
+     *      CreateaStoragePoolWithaTierLink</a>
      */
     public void save()
     {
@@ -84,9 +90,10 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-UpdateaStoragePool">
-     *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-UpdateaStoragePool</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-UpdateaStoragePool"
+     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
+     *      UpdateaStoragePool</a>
      */
     public void update()
     {
@@ -94,9 +101,10 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink">
-     *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink"
+     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
+     *      CreateaStoragePoolWithaTierLink</a>
      */
     public void setTier(final Tier tier)
     {
@@ -109,32 +117,33 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     // Parent access
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrieveaStorageDevice">
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrieveaStorageDevice</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrieveaStorageDevice"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
+     *      -RetrieveaStorageDevice</a>
      */
     public StorageDevice getStorageDevice()
     {
-        Integer storageId = target.getIdFromLink(ParentLinkName.STORAGE_DEVICE);
-        checkNotNull(storageId, ValidationErrors.MISSING_REQUIRED_LINK);
+        RESTLink deviceLink =
+            checkNotNull(target.searchLink(ParentLinkName.STORAGE_DEVICE),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.STORAGE_DEVICE);
 
-        StorageDeviceDto dto =
-            context.getApi().getInfrastructureClient()
-                .getStorageDevice(storageDevice.datacenter.unwrap(), storageId);
-        storageDevice = wrap(context, StorageDevice.class, dto);
-        return storageDevice;
+        AbiquoHttpClient http = ((ExtendedUtils) context.getUtils()).getAbiquoHttpClient();
+        StorageDeviceDto dto = http.get(deviceLink, StorageDeviceDto.class);
+        return wrap(context, StorageDevice.class, dto);
     }
 
     // Children access
 
     public Tier getTier()
     {
-        Integer tierId = target.getIdFromLink(ParentLinkName.TIER);
-        checkNotNull(tierId, ValidationErrors.MISSING_REQUIRED_LINK);
+        RESTLink tierLink =
+            checkNotNull(target.searchLink(ParentLinkName.TIER),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.TIER);
 
-        TierDto dto =
-            context.getApi().getInfrastructureClient()
-                .getTier(storageDevice.datacenter.unwrap(), tierId);
+        AbiquoHttpClient http = ((ExtendedUtils) context.getUtils()).getAbiquoHttpClient();
+        TierDto dto = http.get(tierLink, TierDto.class);
         return wrap(context, Tier.class, dto);
     }
 
@@ -243,7 +252,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
             return storagePool;
         }
 
-        public static Builder fromStorageDevice(final StoragePool in)
+        public static Builder fromStoragePool(final StoragePool in)
         {
             Builder builder =
                 StoragePool.builder(in.context, in.getStorageDevice())

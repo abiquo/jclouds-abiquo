@@ -20,12 +20,14 @@
 package org.jclouds.abiquo.domain.infrastructure.options;
 
 import org.jclouds.abiquo.domain.options.search.FilterOptions;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 /**
  * Available options to query logic servers.
  * 
  * @author Francesc Montserrat
  */
+@EnterpriseEdition
 public class LogicServerOptions extends FilterOptions
 {
     public static Builder builder()

@@ -20,12 +20,14 @@
 package org.jclouds.abiquo.domain.infrastructure.options;
 
 import org.jclouds.abiquo.domain.options.search.FilterOptions;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 /**
  * Available options to query storage pools.
  * 
  * @author Francesc Montserrat
  */
+@EnterpriseEdition
 public class StoragePoolOptions extends FilterOptions
 {
     public static Builder builder()

@@ -30,6 +30,8 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
@@ -57,8 +59,7 @@ public class Machine extends DomainWrapper<MachineDto>
     private static final int DEFAULT_VCPU_USED = 1;
 
     /** The rack where the machine belongs. */
-    // Package protected to allow navigation from children
-    Rack rack;
+    private Rack rack;
 
     /** List of available virtual switches provided by discover operation **/
     private List<String> virtualSwitches;
@@ -101,10 +102,13 @@ public class Machine extends DomainWrapper<MachineDto>
 
     public Rack getRack()
     {
-        RESTLink link = target.searchLink(ParentLinkName.RACK);
-        RackDto dto = context.getApi().getInfrastructureClient().getRack(link);
-        rack = wrap(context, Rack.class, dto);
-        return rack;
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.RACK),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.RACK);
+
+        AbiquoHttpClient http = ((ExtendedUtils) context.getUtils()).getAbiquoHttpClient();
+        RackDto dto = http.get(link, RackDto.class);
+        return wrap(context, Rack.class, dto);
     }
 
     // Children access
