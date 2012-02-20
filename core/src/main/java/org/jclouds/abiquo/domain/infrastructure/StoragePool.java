@@ -50,7 +50,9 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     private static final long DEFAULT_USED_SIZE = 0;
 
     /** The datacenter where the storage device is. */
-    private StorageDevice storageDevice;
+    // Package protected to allow the storage device to be set automatically when discovering the
+    // pools in a device.
+    StorageDevice storageDevice;
 
     /**
      * Constructor to be used only by the builder.
@@ -250,7 +252,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
             return storagePool;
         }
 
-        public static Builder fromStorageDevice(final StoragePool in)
+        public static Builder fromStoragePool(final StoragePool in)
         {
             Builder builder =
                 StoragePool.builder(in.context, in.getStorageDevice())

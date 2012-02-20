@@ -129,22 +129,31 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
      *      GetremotelistofPools</a>
      * @return Storage Pools from device (synchronized).
      */
-    public List<StoragePool> discoverStoragePools()
+    public List<StoragePool> listRemoteStoragePools()
     {
         StoragePoolsDto storagePools =
             context.getApi().getInfrastructureClient()
                 .listStoragePools(target, StoragePoolOptions.builder().sync(true).build());
-        return wrap(context, StoragePool.class, storagePools.getCollection());
+
+        List<StoragePool> storagePoolList =
+            wrap(context, StoragePool.class, storagePools.getCollection());
+
+        for (StoragePool storagePool : storagePoolList)
+        {
+            storagePool.storageDevice = this;
+        }
+
+        return storagePoolList;
     }
 
     public List<StoragePool> listRemoteStoragePools(final Predicate<StoragePool> filter)
     {
-        return Lists.newLinkedList(filter(discoverStoragePools(), filter));
+        return Lists.newLinkedList(filter(listRemoteStoragePools(), filter));
     }
 
     public StoragePool findRemoteStoragePool(final Predicate<StoragePool> filter)
     {
-        return Iterables.getFirst(filter(discoverStoragePools(), filter), null);
+        return Iterables.getFirst(filter(listRemoteStoragePools(), filter), null);
     }
 
     /**
