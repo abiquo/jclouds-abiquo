@@ -43,7 +43,6 @@ import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
-import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
@@ -1261,42 +1260,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testGetIcon() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("getIcon", VirtualMachineTemplateDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachineTemplatePut());
-
-        assertRequestLineEquals(request, "GET http://localhost/api/config/icons/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testGetCategory() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("getCategory", VirtualMachineTemplateDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachineTemplatePut());
-
-        assertRequestLineEquals(request, "GET http://localhost/api/config/categories/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

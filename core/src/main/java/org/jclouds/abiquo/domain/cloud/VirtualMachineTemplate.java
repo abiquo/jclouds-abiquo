@@ -25,6 +25,7 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.Icon;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
@@ -69,7 +70,9 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     // Children access
 
     /**
-     * Gets the icon of this virtual machine template or null there is not.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-RetrieveanIcon" >
+     *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-RetrieveanIcon</a>
      */
     public Icon getIcon()
     {
@@ -78,20 +81,37 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
             return null;
         }
 
-        IconDto icon = context.getApi().getCloudClient().getIcon(target);
+        Integer iconId = target.getIdFromLink(ParentLinkName.ICON);
+        IconDto icon = context.getApi().getConfigClient().getIcon(iconId);
         return wrap(context, Icon.class, icon);
     }
 
     /**
-     * Gets the category of this virtual machine templatae.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Category+Resource#CategoryResource-Retrieveacategory"
+     *      > http://community.abiquo.com/display/ABI20/Category+Resource#CategoryResource-
+     *      Retrieveacategory</a>
      */
     public Category getCategory()
     {
-        CategoryDto category = context.getApi().getCloudClient().getCategory(target);
+        Integer categoryId = target.getIdFromLink(ParentLinkName.CATEGORY);
+        CategoryDto category = context.getApi().getConfigClient().getCategory(categoryId);
         return wrap(context, Category.class, category);
     }
 
     // Parent access
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      RetrieveanEnterprise</a>
+     */
+    public Enterprise getEnterprise()
+    {
+        Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
+        return context.getAdministrationService().getEnterprise(enterpriseId);
+    }
 
     /**
      * @see API: <a href=
