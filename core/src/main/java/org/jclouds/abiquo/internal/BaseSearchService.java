@@ -38,11 +38,11 @@ import org.jclouds.abiquo.domain.infrastructure.LogicServer;
 import org.jclouds.abiquo.domain.infrastructure.ManagedRack;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
-import org.jclouds.abiquo.domain.infrastructure.options.LogicServerOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.features.services.SearchService;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -154,7 +154,7 @@ public class BaseSearchService implements SearchService
 
     @Override
     public Iterable<LogicServer> searchServiceProfiles(final ManagedRack rack,
-        final LogicServerOptions options)
+        final FilterOptions options)
     {
         List<LogicServerDto> profiles =
             context.getApi().getInfrastructureClient().listServiceProfiles(rack.unwrap(), options)
@@ -165,7 +165,7 @@ public class BaseSearchService implements SearchService
 
     @Override
     public Iterable<LogicServer> searchServiceProfileTemplates(final ManagedRack rack,
-        final LogicServerOptions options)
+        final FilterOptions options)
     {
         List<LogicServerDto> profiles =
             context.getApi().getInfrastructureClient()

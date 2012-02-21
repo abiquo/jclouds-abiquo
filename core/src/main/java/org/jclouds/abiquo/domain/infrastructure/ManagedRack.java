@@ -32,6 +32,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.google.common.base.Predicate;
@@ -168,6 +169,23 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public LogicServer findServiceProfileTemplate(final Predicate<LogicServer> filter)
     {
         return Iterables.getFirst(filter(listServiceProfileTemplates(), filter), null);
+    }
+
+    public List<Organization> listOrganizations()
+    {
+        OrganizationsDto templates =
+            context.getApi().getInfrastructureClient().listOrganizations(target);
+        return wrap(context, Organization.class, templates.getCollection());
+    }
+
+    public List<Organization> listOrganizations(final Predicate<Organization> filter)
+    {
+        return Lists.newLinkedList(filter(listOrganizations(), filter));
+    }
+
+    public Organization findOrganization(final Predicate<Organization> filter)
+    {
+        return Iterables.getFirst(filter(listOrganizations(), filter), null);
     }
 
     // Builder

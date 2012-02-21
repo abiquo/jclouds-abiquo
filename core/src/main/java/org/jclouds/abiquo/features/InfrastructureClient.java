@@ -22,11 +22,11 @@ package org.jclouds.abiquo.features;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
-import org.jclouds.abiquo.domain.infrastructure.options.LogicServerOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
@@ -40,6 +40,7 @@ import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
@@ -209,7 +210,7 @@ public interface InfrastructureClient
      */
     HypervisorTypesDto getHypervisorTypes(DatacenterDto datacenter);
 
-    /*********************** Rack ********************** */
+    /*********************** Unmanaged Rack **********************/
 
     /**
      * List all not managed racks for a datacenter.
@@ -220,15 +221,6 @@ public interface InfrastructureClient
     RacksDto listRacks(DatacenterDto datacenter);
 
     /**
-     * List all managed racks for a datacenter.
-     * 
-     * @param datacenter The datacenter.
-     * @return The list of managed racks for the datacenter.
-     */
-    @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
-    UcsRacksDto listManagedRacks(DatacenterDto datacenter);
-
-    /**
      * Create a new not managed rack in a datacenter.
      * 
      * @param datacenter The datacenter.
@@ -236,6 +228,41 @@ public interface InfrastructureClient
      * @return The created rack.
      */
     RackDto createRack(final DatacenterDto datacenter, final RackDto rack);
+
+    /**
+     * Get the given rack from the given datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @param rackId The id of the rack.
+     * @return The rack or <code>null</code> if it does not exist.
+     */
+    RackDto getRack(DatacenterDto datacenter, Integer rackId);
+
+    /**
+     * Updates an existing rack from the given datacenter.
+     * 
+     * @param rack The new attributes for the rack.
+     * @return The updated rack.
+     */
+    RackDto updateRack(final RackDto rack);
+
+    /**
+     * Deletes an existing rack.
+     * 
+     * @param rack The rack to delete.
+     */
+    void deleteRack(final RackDto rack);
+
+    /*********************** Managed Rack **********************/
+
+    /**
+     * List all managed racks for a datacenter.
+     * 
+     * @param datacenter The datacenter.
+     * @return The list of managed racks for the datacenter.
+     */
+    @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
+    UcsRacksDto listManagedRacks(DatacenterDto datacenter);
 
     /**
      * Create a new managed rack in a datacenter.
@@ -248,15 +275,6 @@ public interface InfrastructureClient
     UcsRackDto createManagedRack(final DatacenterDto datacenter, final UcsRackDto rack);
 
     /**
-     * Get the given rack from the given datacenter.
-     * 
-     * @param datacenter The datacenter.
-     * @param rackId The id of the rack.
-     * @return The rack or <code>null</code> if it does not exist.
-     */
-    RackDto getRack(DatacenterDto datacenter, Integer rackId);
-
-    /**
      * Get the given managed rack from the given datacenter.
      * 
      * @param datacenter The datacenter.
@@ -265,14 +283,6 @@ public interface InfrastructureClient
      */
     @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
     UcsRackDto getManagedRack(DatacenterDto datacenter, Integer rackId);
-
-    /**
-     * Updates an existing rack from the given datacenter.
-     * 
-     * @param rack The new attributes for the rack.
-     * @return The updated rack.
-     */
-    RackDto updateRack(final RackDto rack);
 
     /**
      * Updates an existing managed rack from the given datacenter.
@@ -284,18 +294,12 @@ public interface InfrastructureClient
     UcsRackDto updateManagedRack(final UcsRackDto rack);
 
     /**
-     * Deletes an existing rack.
-     * 
-     * @param rack The rack to delete.
-     */
-    void deleteRack(final RackDto rack);
-
-    /**
      * List all service profiles of the ucs rack.
      * 
      * @param rack The ucs rack.
      * @return The list of service profiles for the rack.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     LogicServersDto listServiceProfiles(UcsRackDto rack);
 
     /**
@@ -305,7 +309,8 @@ public interface InfrastructureClient
      * @param options Optional query params.
      * @return The list of service profiles for the rack.
      */
-    LogicServersDto listServiceProfiles(UcsRackDto rack, LogicServerOptions options);
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    LogicServersDto listServiceProfiles(UcsRackDto rack, FilterOptions options);
 
     /**
      * List all service profile templates of the ucs rack.
@@ -313,6 +318,7 @@ public interface InfrastructureClient
      * @param rack The ucs rack.
      * @return The list of service profile templates for the rack.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     LogicServersDto listServiceProfileTemplates(UcsRackDto rack);
 
     /**
@@ -322,7 +328,27 @@ public interface InfrastructureClient
      * @param options Optional query params.
      * @return The list of service profile templates for the rack.
      */
-    LogicServersDto listServiceProfileTemplates(UcsRackDto rack, LogicServerOptions options);
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    LogicServersDto listServiceProfileTemplates(UcsRackDto rack, FilterOptions options);
+
+    /**
+     * List all organizations of the ucs rack.
+     * 
+     * @param rack The ucs rack.
+     * @return The list of organizations for the rack.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    OrganizationsDto listOrganizations(UcsRackDto rack);
+
+    /**
+     * List all organizations of the ucs rack with options.
+     * 
+     * @param rack The ucs rack.
+     * @param options Optional query params.
+     * @return The list of organizations for the rack.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    OrganizationsDto listOrganizations(UcsRackDto rack, FilterOptions options);
 
     /*********************** Remote Service ********************** */
 

@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud.options;
 
-import org.jclouds.abiquo.domain.options.search.FilterOptions;
+import org.jclouds.abiquo.domain.options.QueryOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 /**
@@ -28,7 +28,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
  * @author Ignasi Barrera
  */
 @EnterpriseEdition
-public class VolumeOptions extends FilterOptions
+public class VolumeOptions extends QueryOptions
 {
     public static Builder builder()
     {
@@ -49,7 +49,7 @@ public class VolumeOptions extends FilterOptions
         return this.map.toString();
     }
 
-    public static class Builder extends FilterOptionsBuilder<Builder>
+    public static class Builder extends QueryOptionsBuilder<Builder>
     {
         private Boolean onlyAvailable;
 
