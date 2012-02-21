@@ -31,7 +31,6 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.LogicServersDto;
-import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
@@ -120,23 +119,12 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     // Children access
-
-    public List<Machine> listMachines()
-    {
-        MachinesDto machines = context.getApi().getInfrastructureClient().listMachines(target);
-        return wrap(context, Machine.class, machines.getCollection());
-    }
-
-    public List<Machine> listMachines(final Predicate<Machine> filter)
-    {
-        return Lists.newLinkedList(filter(listMachines(), filter));
-    }
-
-    public Machine findMachine(final Predicate<Machine> filter)
-    {
-        return Iterables.getFirst(filter(listMachines(), filter), null);
-    }
-
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofallServicesProfilesinaUCSRack"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      RetrievealistofallServicesProfilesinaUCSRack</a>
+     */
     public List<LogicServer> listServiceProfiles()
     {
         LogicServersDto profiles =
@@ -154,6 +142,12 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         return Iterables.getFirst(filter(listServiceProfiles(), filter), null);
     }
 
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource-RetrievealistofallServicesProfilesTemplatesinaUCSRack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource-
+     *      RetrievealistofallServicesProfilesTemplatesinaUCSRack</a>
+     */
     public List<LogicServer> listServiceProfileTemplates()
     {
         LogicServersDto templates =
@@ -171,6 +165,12 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         return Iterables.getFirst(filter(listServiceProfileTemplates(), filter), null);
     }
 
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrieveallOrganizationsfromaUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      RetrieveallOrganizationsfromaUCS</a>
+     */
     public List<Organization> listOrganizations()
     {
         OrganizationsDto templates =
