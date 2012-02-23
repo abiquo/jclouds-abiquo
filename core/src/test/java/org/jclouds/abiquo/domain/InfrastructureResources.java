@@ -163,7 +163,7 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/racks/1/machines"));
         rack.addLink(new RESTLink("logicservers",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers"));
-        rack.addLink(new RESTLink("lstemplates",
+        rack.addLink(new RESTLink("ls-templates",
             "http://localhost/api/admin/datacenters/1/racks/1/lstemplates"));
         rack.addLink(new RESTLink("organizations",
             "http://localhost/api/admin/datacenters/1/racks/1/organizations"));
@@ -411,7 +411,7 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks/1", "edit"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines", "machines"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers", "logicservers"));
-        buffer.append(link("/admin/datacenters/1/racks/1/lstemplates", "lstemplates"));
+        buffer.append(link("/admin/datacenters/1/racks/1/lstemplates", "ls-templates"));
         buffer.append(link("/admin/datacenters/1/racks/1/organizations", "organizations"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<id>1</id>");

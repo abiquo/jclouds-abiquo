@@ -318,14 +318,14 @@ public interface InfrastructureAsyncClient
      */
     @GET
     ListenableFuture<LogicServersDto> listServiceProfileTemplates(
-        @EndpointLink("lstemplates") @BinderParam(BindToPath.class) UcsRackDto rack);
+        @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack);
 
     /**
      * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto, LogicServerOptions)
      */
     @GET
     ListenableFuture<LogicServersDto> listServiceProfileTemplates(
-        @EndpointLink("lstemplates") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(AppendOptionsToPath.class) FilterOptions options);
 
     /**
