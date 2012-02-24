@@ -230,7 +230,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     private void createUser()
     {
-        Role role = administrationService.findRole(RolePredicates.name("ENTERPRISE_ADMIN"));
+        Role role = administrationService.findRole(RolePredicates.name("USER"));
 
         user =
             User.builder(context, enterprise, role).name(randomName(), randomName())
