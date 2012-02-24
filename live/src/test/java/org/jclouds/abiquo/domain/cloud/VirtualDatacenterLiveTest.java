@@ -111,7 +111,37 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
 
         VirtualDatacenter virtualDatacenter =
             VirtualDatacenter.builder(context, datacenters.get(0), enterprise)
-                .name(PREFIX + "Plain Virtual Aloha").cpuCountLimits(18, 20)
+                .name(PREFIX + "Plain Virtual Aloha from ENT").cpuCountLimits(18, 20)
+                .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
+                .storageLimits(289910292, 322122547).vlansLimits(1, 2).hypervisorType(hypervisor)
+                .network(network).build();
+
+        virtualDatacenter.save();
+        assertNotNull(virtualDatacenter.getId());
+
+        virtualDatacenter.delete();
+    }
+
+    public void testCreateFromVirtualDatacenter()
+    {
+        // Datacenter must be allowed to enterprise
+        env.enterprise.allowDatacenter(env.datacenter);
+
+        HypervisorType hypervisor = env.virtualDatacenter.getHypervisorType();
+
+        Enterprise enterprise = env.user.getEnterprise();
+        assertNotNull(enterprise);
+
+        Datacenter datacenter = env.virtualDatacenter.getDatacenter();
+        assertNotNull(datacenter);
+
+        PrivateNetwork network =
+            PrivateNetwork.builder(env.plainUserContext).name("DefaultNetwork")
+                .gateway("192.168.1.1").address("192.168.1.0").mask(24).build();
+
+        VirtualDatacenter virtualDatacenter =
+            VirtualDatacenter.builder(context, datacenter, enterprise)
+                .name(PREFIX + "Plain Virtual Aloha from VDC").cpuCountLimits(18, 20)
                 .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
                 .storageLimits(289910292, 322122547).vlansLimits(1, 2).hypervisorType(hypervisor)
                 .network(network).build();
