@@ -32,6 +32,7 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
+import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
@@ -61,6 +62,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -69,6 +71,7 @@ import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
@@ -79,7 +82,6 @@ import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
-import com.abiquo.server.core.infrastructure.nodecollector.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
@@ -225,6 +227,15 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
+     * @see InfrastructureClient#getRack(DatacenterDto, Integer) =======
+     * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
+     */
+    @POST
+    ListenableFuture<RackDto> createRack(
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(BindToXMLPayload.class) RackDto rack);
+
+    /**
      * @see InfrastructureClient#getRack(DatacenterDto, Integer)
      */
     @GET
@@ -234,12 +245,11 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) Integer rackId);
 
     /**
-     * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
+     * @see InfrastructureClient#getRack(RESTLink)
      */
-    @POST
-    ListenableFuture<RackDto> createRack(
-        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @BinderParam(BindToXMLPayload.class) RackDto rack);
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<RackDto> getRack(@BinderParam(BindLinkToPath.class) RESTLink link);
 
     /**
      * @see InfrastructureClient#updateRack(RackDto)

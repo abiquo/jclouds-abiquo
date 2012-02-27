@@ -32,6 +32,7 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -210,7 +211,7 @@ public interface InfrastructureClient
      */
     HypervisorTypesDto getHypervisorTypes(DatacenterDto datacenter);
 
-    /*********************** Unmanaged Rack **********************/
+    /*********************** Unmanaged Rack ********************** */
 
     /**
      * List all not managed racks for a datacenter.
@@ -237,6 +238,14 @@ public interface InfrastructureClient
      * @return The rack or <code>null</code> if it does not exist.
      */
     RackDto getRack(DatacenterDto datacenter, Integer rackId);
+
+    /**
+     * Get the given rack from the rack link.
+     * 
+     * @param link Link to the rack.
+     * @return The rack or <code>null</code> if it does not exist.
+     */
+    RackDto getRack(RESTLink link);
 
     /**
      * Updates an existing rack from the given datacenter.

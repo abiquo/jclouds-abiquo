@@ -20,7 +20,6 @@
 package org.jclouds.abiquo.domain.network.options;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
-import org.jclouds.abiquo.domain.options.QueryOptions.QueryOptionsBuilder;
 
 /**
  * Available options to query ips.
