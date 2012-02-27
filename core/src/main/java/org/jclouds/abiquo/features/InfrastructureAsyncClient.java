@@ -41,6 +41,8 @@ import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
+import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
@@ -65,9 +67,11 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
@@ -211,7 +215,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<HypervisorTypesDto> getHypervisorTypes(
         @EndpointLink("hypervisors") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
-    /*********************** Rack ***********************/
+    /*********************** Unmanaged Rack ***********************/
 
     /**
      * @see InfrastructureClient#listRacks(DatacenterDto)
@@ -223,15 +227,6 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#listManagedRacks(DatacenterDto)
-     */
-    @GET
-    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
-    @JAXBResponseParser
-    ListenableFuture<UcsRacksDto> listManagedRacks(
-        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
-
-    /**
      * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
      */
     @POST
@@ -240,33 +235,11 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) RackDto rack);
 
     /**
-     * @see InfrastructureClient#createManagedRack(DatacenterDto, UcsRackDto)
-     */
-    @POST
-    @JAXBResponseParser
-    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
-    @Produces(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
-    ListenableFuture<UcsRackDto> createManagedRack(
-        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @BinderParam(BindToXMLPayload.class) UcsRackDto rack);
-
-    /**
      * @see InfrastructureClient#getRack(DatacenterDto, Integer)
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<RackDto> getRack(
-        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @BinderParam(AppendToPath.class) Integer rackId);
-
-    /**
-     * @see InfrastructureClient#getManagedRack(DatacenterDto, Integer)
-     */
-    @GET
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    @JAXBResponseParser
-    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
-    ListenableFuture<UcsRackDto> getManagedRack(
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(AppendToPath.class) Integer rackId);
 
@@ -285,6 +258,46 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
 
     /**
+     * @see InfrastructureClient#deleteRack(RackDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteRack(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
+
+    /*********************** Managed Rack ***********************/
+
+    /**
+     * @see InfrastructureClient#listManagedRacks(DatacenterDto)
+     */
+    @GET
+    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    @JAXBResponseParser
+    ListenableFuture<UcsRacksDto> listManagedRacks(
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#createManagedRack(DatacenterDto, UcsRackDto)
+     */
+    @POST
+    @JAXBResponseParser
+    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    @Produces(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    ListenableFuture<UcsRackDto> createManagedRack(
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(BindToXMLPayload.class) UcsRackDto rack);
+
+    /**
+     * @see InfrastructureClient#getManagedRack(DatacenterDto, Integer)
+     */
+    @GET
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @JAXBResponseParser
+    @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
+    ListenableFuture<UcsRackDto> getManagedRack(
+        @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @BinderParam(AppendToPath.class) Integer rackId);
+
+    /**
      * @see InfrastructureClient#updateManagedRack(UcsRackDto)
      */
     @PUT
@@ -295,11 +308,49 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UcsRackDto rack);
 
     /**
-     * @see InfrastructureClient#deleteRack(RackDto)
+     * @see InfrastructureClient#listServiceProfiles(UcsRackDto)
      */
-    @DELETE
-    ListenableFuture<Void> deleteRack(
-        @EndpointLink("edit") @BinderParam(BindToPath.class) RackDto rack);
+    @GET
+    ListenableFuture<LogicServersDto> listServiceProfiles(
+        @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack);
+
+    /**
+     * @see InfrastructureClient#listServiceProfiles(UcsRackDto, QueryOptions)
+     */
+    @GET
+    ListenableFuture<LogicServersDto> listServiceProfiles(
+        @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(AppendOptionsToPath.class) FilterOptions options);
+
+    /**
+     * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto)
+     */
+    @GET
+    ListenableFuture<LogicServersDto> listServiceProfileTemplates(
+        @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack);
+
+    /**
+     * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto, LogicServerOptions)
+     */
+    @GET
+    ListenableFuture<LogicServersDto> listServiceProfileTemplates(
+        @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(AppendOptionsToPath.class) FilterOptions options);
+
+    /**
+     * @see InfrastructureClient#listOrganizations(UcsRackDto)
+     */
+    @GET
+    ListenableFuture<OrganizationsDto> listOrganizations(
+        @EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack);
+
+    /**
+     * @see InfrastructureClient#listOrganizations(UcsRackDto, OrganizationOptions)
+     */
+    @GET
+    ListenableFuture<OrganizationsDto> listOrganizations(
+        @EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(AppendOptionsToPath.class) FilterOptions options);
 
     /*********************** Remote Service ***********************/
 

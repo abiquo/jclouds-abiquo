@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.enterprise.options;
 
-import org.jclouds.abiquo.domain.options.search.FilterOptions;
+import org.jclouds.abiquo.domain.options.QueryOptions;
 
 /**
  * Available options to query enterprises.
  * 
  * @author Francesc Montserrat
  */
-public class EnterpriseOptions extends FilterOptions
+public class EnterpriseOptions extends QueryOptions
 {
     public static Builder builder()
     {
@@ -47,7 +47,7 @@ public class EnterpriseOptions extends FilterOptions
         return this.map.toString();
     }
 
-    public static class Builder extends FilterOptionsBuilder<Builder>
+    public static class Builder extends QueryOptionsBuilder<Builder>
     {
         private String idPricingTemplate;
 

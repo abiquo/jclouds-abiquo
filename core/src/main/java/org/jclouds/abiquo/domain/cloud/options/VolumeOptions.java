@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.cloud.options;
 
-import org.jclouds.abiquo.domain.options.search.FilterOptions;
+import org.jclouds.abiquo.domain.options.QueryOptions;
 
 /**
  * Available options to query volumes.
  * 
  * @author Ignasi Barrera
  */
-public class VolumeOptions extends FilterOptions
+public class VolumeOptions extends QueryOptions
 {
     public static Builder builder()
     {
@@ -47,7 +47,7 @@ public class VolumeOptions extends FilterOptions
         return this.map.toString();
     }
 
-    public static class Builder extends FilterOptionsBuilder<Builder>
+    public static class Builder extends QueryOptionsBuilder<Builder>
     {
         private Boolean onlyAvailable;
 

@@ -19,6 +19,9 @@
 
 package org.jclouds.abiquo.domain.options;
 
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
+import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
+
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
 
@@ -38,5 +41,91 @@ public abstract class QueryOptions
     public Multimap<String, String> getOptions()
     {
         return map;
+    }
+
+    public static class QueryOptionsBuilder<T extends QueryOptionsBuilder<T>>
+    {
+        protected Integer startWith;
+
+        protected Integer limit;
+
+        protected OrderBy by;
+
+        protected String has;
+
+        protected Boolean asc;
+
+        @SuppressWarnings("unchecked")
+        public T startWith(final int startWith)
+        {
+            this.startWith = startWith;
+            return (T) this;
+        }
+
+        @SuppressWarnings("unchecked")
+        public T has(final String has)
+        {
+            this.has = has;
+            return (T) this;
+        }
+
+        @SuppressWarnings("unchecked")
+        public T limit(final int limit)
+        {
+            this.limit = limit;
+            return (T) this;
+        }
+
+        @SuppressWarnings("unchecked")
+        public T orderBy(final OrderBy by)
+        {
+            this.by = by;
+            return (T) this;
+        }
+
+        @SuppressWarnings("unchecked")
+        public T ascendant(final boolean asc)
+        {
+            this.asc = asc;
+            return (T) this;
+        }
+
+        @SuppressWarnings("unchecked")
+        public T descendant(final boolean desc)
+        {
+            this.asc = !desc;
+            return (T) this;
+        }
+
+        public QueryOptions build()
+        {
+            FilterOptions options = new FilterOptions();
+            if (startWith != null)
+            {
+                options.map.put("startwith", startWith.toString());
+            }
+
+            if (limit != null)
+            {
+                options.map.put("limit", limit.toString());
+            }
+
+            if (has != null)
+            {
+                options.map.put("has", has);
+            }
+
+            if (by != null)
+            {
+                options.map.put("by", by.getValue());
+            }
+
+            if (asc != null)
+            {
+                options.map.put("asc", asc.toString());
+            }
+
+            return options;
+        }
     }
 }

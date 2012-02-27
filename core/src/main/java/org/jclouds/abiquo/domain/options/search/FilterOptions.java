@@ -20,7 +20,6 @@
 package org.jclouds.abiquo.domain.options.search;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
-import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
 
 /**
  * Available options to filter and pagination methods.
@@ -37,93 +36,26 @@ public class FilterOptions extends QueryOptions
         return options;
     }
 
+    public static Builder builder()
+    {
+        return new Builder();
+    }
+
     @Override
     public String toString()
     {
         return this.map.toString();
     }
 
-    public static class FilterOptionsBuilder<T extends FilterOptionsBuilder<T>>
+    public static class Builder extends QueryOptionsBuilder<Builder>
     {
-        protected Integer startWith;
-
-        protected Integer limit;
-
-        protected OrderBy by;
-
-        protected String has;
-
-        protected Boolean asc;
-
-        @SuppressWarnings("unchecked")
-        public T startWith(final int startWith)
-        {
-            this.startWith = startWith;
-            return (T) this;
-        }
-
-        @SuppressWarnings("unchecked")
-        public T has(final String has)
-        {
-            this.has = has;
-            return (T) this;
-        }
-
-        @SuppressWarnings("unchecked")
-        public T limit(final int limit)
-        {
-            this.limit = limit;
-            return (T) this;
-        }
-
-        @SuppressWarnings("unchecked")
-        public T orderBy(final OrderBy by)
-        {
-            this.by = by;
-            return (T) this;
-        }
-
-        @SuppressWarnings("unchecked")
-        public T ascendant(final boolean asc)
-        {
-            this.asc = asc;
-            return (T) this;
-        }
-
-        @SuppressWarnings("unchecked")
-        public T descendant(final boolean desc)
-        {
-            this.asc = !desc;
-            return (T) this;
-        }
-
+        @Override
         public FilterOptions build()
         {
             FilterOptions options = new FilterOptions();
-            if (startWith != null)
-            {
-                options.map.put("startwith", startWith.toString());
-            }
 
-            if (limit != null)
-            {
-                options.map.put("limit", limit.toString());
-            }
-
-            if (has != null)
-            {
-                options.map.put("has", has);
-            }
-
-            if (by != null)
-            {
-                options.map.put("by", by.getValue());
-            }
-
-            if (asc != null)
-            {
-                options.map.put("asc", asc.toString());
-            }
+            // Add FilterOptions options
+            options.map.putAll(super.build().getOptions());
 
             return options;
         }
