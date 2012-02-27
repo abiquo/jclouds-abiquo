@@ -27,6 +27,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
  * 
  * @author Francesc Montserrat
  */
+
 @EnterpriseEdition
 public class StoragePoolOptions extends QueryOptions
 {

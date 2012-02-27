@@ -227,7 +227,10 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
+<<<<<<< HEAD
      * @see InfrastructureClient#getRack(DatacenterDto, Integer) =======
+=======
+>>>>>>> UCS
      * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
      */
     @POST

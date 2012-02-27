@@ -395,8 +395,7 @@ public class InfrastructureAsyncClientTest extends
             processor.createRequest(method, InfrastructureResources.managedRackPut());
 
         assertRequestLineEquals(request,
-
-        "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+            "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/managedrackdto+xml\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.managedRackPutPayload()),
             "application/managedrackdto+xml", false);
@@ -417,8 +416,7 @@ public class InfrastructureAsyncClientTest extends
             processor.createRequest(method, InfrastructureResources.managedRackPut());
 
         assertRequestLineEquals(request,
-
-        "GET http://localhost/api/admin/datacenters/1/racks/1/logicservers HTTP/1.1");
+            "GET http://localhost/api/admin/datacenters/1/racks/1/logicservers HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
