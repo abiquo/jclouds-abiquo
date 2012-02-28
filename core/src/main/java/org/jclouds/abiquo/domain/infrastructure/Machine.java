@@ -442,11 +442,6 @@ public class Machine extends DomainWrapper<MachineDto>
         return target.getVirtualCpuCores();
     }
 
-    public Integer getVirtualCpusPerCore()
-    {
-        return target.getVirtualCpusPerCore();
-    }
-
     public Integer getVirtualCpusUsed()
     {
         return target.getVirtualCpusUsed();
@@ -542,11 +537,6 @@ public class Machine extends DomainWrapper<MachineDto>
         target.setVirtualCpuCores(virtualCpuCores);
     }
 
-    public void setVirtualCpusPerCore(final Integer virtualCpusPerCore)
-    {
-        target.setVirtualCpusPerCore(virtualCpusPerCore);
-    }
-
     public void setVirtualCpusUsed(final Integer virtualCpusUsed)
     {
         target.setVirtualCpusUsed(virtualCpusUsed);
@@ -620,11 +610,11 @@ public class Machine extends DomainWrapper<MachineDto>
             + getIpmiUser() + ", ipService=" + getIpService() + ", name=" + getName()
             + ", password=" + getPassword() + ", port=" + getPort() + ", state=" + getState()
             + ", type=" + getType() + ", user=" + getUser() + ", virtualCpuCores="
-            + getVirtualCpuCores() + ", virtualCpusPerCore=" + getVirtualCpusPerCore()
-            + ", virtualCpusUsed=" + getVirtualCpusUsed() + ", getVirtualRamInMb()="
-            + getVirtualRamInMb() + ", virtualRamUsedInMb=" + getVirtualRamUsedInMb()
-            + ", virtualSwitch=" + getVirtualSwitch() + ", description=" + getDescription()
-            + ", availableVirtualSwitches=" + getAvailableVirtualSwitches() + "]";
+            + getVirtualCpuCores() + ", virtualCpusUsed=" + getVirtualCpusUsed()
+            + ", getVirtualRamInMb()=" + getVirtualRamInMb() + ", virtualRamUsedInMb="
+            + getVirtualRamUsedInMb() + ", virtualSwitch=" + getVirtualSwitch() + ", description="
+            + getDescription() + ", availableVirtualSwitches=" + getAvailableVirtualSwitches()
+            + "]";
     }
 
 }

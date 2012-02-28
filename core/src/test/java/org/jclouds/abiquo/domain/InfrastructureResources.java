@@ -305,7 +305,6 @@ public class InfrastructureResources
         buffer.append("<description>A hawaian machine</description>");
         buffer.append("<name>Kamehameha</name>");
         buffer.append("<cpu>3</cpu>");
-        buffer.append("<cpuRatio>1</cpuRatio>");
         buffer.append("<cpuUsed>1</cpuUsed>");
         buffer.append("<ram>512</ram>");
         buffer.append("<ramUsed>1</ramUsed>");
@@ -462,7 +461,6 @@ public class InfrastructureResources
         buffer.append("<id>1</id>");
         buffer.append("<name>Kamehameha</name>");
         buffer.append("<cpu>5</cpu>");
-        buffer.append("<cpuRatio>1</cpuRatio>");
         buffer.append("<cpuUsed>1</cpuUsed>");
         buffer.append("<ram>512</ram>");
         buffer.append("<ramUsed>1</ramUsed>");
