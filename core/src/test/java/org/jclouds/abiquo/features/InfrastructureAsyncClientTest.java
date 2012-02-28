@@ -48,7 +48,9 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.OrganizationDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
@@ -505,6 +507,29 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/racks/1/lstemplates?asc=true HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCloneLogicServer() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("cloneLogicServer", UcsRackDto.class,
+                LogicServerDto.class, OrganizationDto.class, String.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.managedRackPut(),
+                InfrastructureResources.logicServerPut(),
+                InfrastructureResources.organizationPut(), "name");
+
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/admin/datacenters/1/racks/1/logicservers/clone?newName=name&org=org-root%2Forg-Finance&lsName=server HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 

@@ -37,10 +37,12 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.OrganizationDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
@@ -358,6 +360,19 @@ public interface InfrastructureClient
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     OrganizationsDto listOrganizations(UcsRackDto rack, FilterOptions options);
+
+    /**
+     * Clone a service profile.
+     * 
+     * @param rack The managed rack where thw service profile will be created.
+     * @param logicServer The original logic server.
+     * @param organization The organization to be associated.
+     * @param newName The name of the new service profile.
+     * @return The created service profile.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    LogicServerDto cloneLogicServer(UcsRackDto rack, LogicServerDto logicServer,
+        OrganizationDto organization, String newName);
 
     /*********************** Remote Service ********************** */
 

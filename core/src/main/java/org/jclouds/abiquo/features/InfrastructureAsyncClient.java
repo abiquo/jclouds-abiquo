@@ -36,6 +36,8 @@ import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
+import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
+import org.jclouds.abiquo.binders.infrastructure.ucs.BindOrganizationParameters;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
@@ -67,10 +69,12 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.OrganizationDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
@@ -351,6 +355,17 @@ public interface InfrastructureAsyncClient
     ListenableFuture<OrganizationsDto> listOrganizations(
         @EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(AppendOptionsToPath.class) FilterOptions options);
+
+    /**
+     * @see InfrastructureClient#cloneLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
+     *      String)
+     */
+    @POST
+    ListenableFuture<LogicServerDto> cloneLogicServer(
+        @EndpointLink("ls-clone") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+        @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+        @QueryParam("newName") String newName);
 
     /*********************** Remote Service ***********************/
 
