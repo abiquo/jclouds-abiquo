@@ -167,9 +167,9 @@ public class CloudResources
     public static String virtualMachineStatePayload()
     {
         StringBuffer buffer = new StringBuffer();
-        buffer.append("<virtualmachinestate>");
+        buffer.append("<virtualMachineState>");
         buffer.append("<state>ON</state>");
-        buffer.append("</virtualmachinestate>");
+        buffer.append("</virtualMachineState>");
         return buffer.toString();
     }
 
