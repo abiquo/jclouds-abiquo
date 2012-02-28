@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
@@ -39,8 +40,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 public class PrivateNetwork extends Network
 {
     /** The virtual datacenter where the network belongs. */
-    // Package protected to allow navigation from children
-    VirtualDatacenter virtualDatacenter;
+    private VirtualDatacenter virtualDatacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -102,6 +102,16 @@ public class PrivateNetwork extends Network
     public List<Ip> listIps()
     {
         IpsPoolManagementDto nics = context.getApi().getCloudClient().listPrivateNetworkIps(target);
+        return wrap(context, Ip.class, nics.getCollection());
+    }
+
+    // Override to apply the filter in the server side
+    @Override
+    public List<Ip> listAvailableIps()
+    {
+        IpOptions options = IpOptions.builder().free(true).build();
+        IpsPoolManagementDto nics =
+            context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
         return wrap(context, Ip.class, nics.getCollection());
     }
 

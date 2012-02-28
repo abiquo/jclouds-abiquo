@@ -45,8 +45,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 public class PublicNetwork extends Network
 {
     /** The datacenter where the network belongs. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.

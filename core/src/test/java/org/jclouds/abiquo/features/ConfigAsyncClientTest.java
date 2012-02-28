@@ -157,7 +157,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     /*********************** System Properties ***********************/
 
-    public void testListProperties() throws SecurityException, NoSuchMethodException, IOException
+    public void testListSystemProperties() throws SecurityException, NoSuchMethodException,
+        IOException
     {
         Method method = ConfigAsyncClient.class.getMethod("listSystemProperties");
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
@@ -173,8 +174,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         checkFilters(request);
     }
 
-    public void testListPropertiesWithOptions() throws SecurityException, NoSuchMethodException,
-        IOException
+    public void testListSystemPropertiesWithOptions() throws SecurityException,
+        NoSuchMethodException, IOException
     {
         Method method =
             ConfigAsyncClient.class.getMethod("listSystemProperties", PropertyOptions.class);
@@ -236,8 +237,9 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
     {
         Method method = ConfigAsyncClient.class.getMethod("listIcons", IconOptions.class);
         GeneratedHttpRequest<ConfigAsyncClient> request =
-            processor.createRequest(method, IconOptions.builder().path(
-                "http://www.pixeljoint.com/files/icons/mipreview1.gif").build());
+            processor.createRequest(method,
+                IconOptions.builder().path("http://www.pixeljoint.com/files/icons/mipreview1.gif")
+                    .build());
 
         assertRequestLineEquals(
             request,
@@ -305,7 +307,23 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         checkFilters(request);
     }
 
-    /*********************** Icon ***********************/
+    public void testGetIcon() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = ConfigAsyncClient.class.getMethod("getIcon", Integer.class);
+        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/icons/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    /*********************** Category ***********************/
 
     public void testListCategories() throws SecurityException, NoSuchMethodException, IOException
     {

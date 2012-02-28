@@ -79,7 +79,7 @@ public class VirtualMachineTemplateAsyncClientTest extends
                 Integer.class, Integer.class, VirtualMachineTemplateOptions.class);
         GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
             processor.createRequest(method, 1, 1, VirtualMachineTemplateOptions.builder()
-                .hypervisorType(HypervisorType.XENSERVER).category("Firewalls").build());
+                .hypervisorType(HypervisorType.XENSERVER).categoryName("Firewalls").build());
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates"

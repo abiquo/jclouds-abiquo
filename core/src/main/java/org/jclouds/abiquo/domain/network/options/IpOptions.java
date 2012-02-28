@@ -19,14 +19,15 @@
 
 package org.jclouds.abiquo.domain.network.options;
 
-import org.jclouds.abiquo.domain.options.search.FilterOptions;
+import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.QueryOptions.QueryOptionsBuilder;
 
 /**
  * Available options to query ips.
  * 
  * @author Francesc Montserrat
  */
-public class IpOptions extends FilterOptions
+public class IpOptions extends QueryOptions
 {
     public static Builder builder()
     {
@@ -47,7 +48,7 @@ public class IpOptions extends FilterOptions
         return this.map.toString();
     }
 
-    public static class Builder extends FilterOptionsBuilder<Builder>
+    public static class Builder extends QueryOptionsBuilder<Builder>
     {
         private Boolean free;
 

@@ -18,62 +18,51 @@
  */
 package org.jclouds.abiquo.features;
 
-import static org.testng.Assert.fail;
+import static org.testng.Assert.assertTrue;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.testng.annotations.Test;
 
+import com.google.common.base.Function;
+import com.google.common.base.Joiner;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+
 /**
  * Tests that all features have a unit test.
- * <p>
- * This test is disabled by default, since it may fail due to unit tests having different method
- * names. However, it can be enabled and used to have an idea of the feature test coverage.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit", enabled = false)
+@Test(groups = "unit")
 public class FeatureCoverageTest
 {
     public void testAllFeaturesHaveTest() throws ClassNotFoundException
     {
-        List<Method> missingTests = new ArrayList<Method>();
+        List<String> missingTests = new ArrayList<String>();
         Collection<Class< ? >> featureClasses = AbiquoRestClientModule.DELEGATE_MAP.values();
 
         for (Class< ? > featureClass : featureClasses)
         {
             Class< ? > testClass = loadTestClass(featureClass);
+            Iterable<String> testMethodNames = methodNames(testClass);
 
             for (Method method : featureClass.getMethods())
             {
-                try
+                if (!hasTest(testMethodNames, method))
                 {
-                    String testName = "test" + capitalize(method.getName());
-                    testClass.getMethod(testName);
-                }
-                catch (NoSuchMethodException e)
-                {
-                    missingTests.add(method);
+                    missingTests.add(method.getDeclaringClass().getSimpleName() + "."
+                        + method.getName());
                 }
             }
         }
 
-        if (!missingTests.isEmpty())
-        {
-            StringBuffer sb = new StringBuffer("Missing tests: ");
-            for (Method method : missingTests)
-            {
-                sb.append("\n");
-                sb.append(method.getDeclaringClass().getSimpleName());
-                sb.append(".").append(method.getName());
-            }
-
-            fail(sb.toString());
-        }
+        assertTrue(missingTests.isEmpty(), "Missing tests: " + Joiner.on(", ").join(missingTests));
     }
 
     private Class< ? > loadTestClass(final Class< ? > featureClass) throws ClassNotFoundException
@@ -83,21 +72,30 @@ public class FeatureCoverageTest
         return Thread.currentThread().getContextClassLoader().loadClass(testClassName);
     }
 
-    private static String capitalize(final String str)
+    private static Iterable<String> methodNames(final Class< ? > clazz)
     {
-        if (str == null)
-        {
-            return null;
-        }
+        return Iterables.transform(Arrays.asList(clazz.getMethods()),
+            new Function<Method, String>()
+            {
+                @Override
+                public String apply(final Method input)
+                {
+                    return input.getName();
+                }
+            });
+    }
 
-        switch (str.length())
+    private static boolean hasTest(final Iterable<String> testMethodNames, final Method method)
+    {
+        String testMethod = Iterables.find(testMethodNames, new Predicate<String>()
         {
-            case 0:
-                return str;
-            case 1:
-                return str.toUpperCase();
-            default:
-                return str.substring(0, 1).toUpperCase() + str.substring(1);
-        }
+            @Override
+            public boolean apply(final String input)
+            {
+                return input.toLowerCase().contains(method.getName().toLowerCase());
+            }
+        }, null);
+
+        return testMethod != null;
     }
 }

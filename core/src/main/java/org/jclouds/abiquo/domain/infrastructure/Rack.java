@@ -58,8 +58,7 @@ public class Rack extends DomainWrapper<RackDto>
     private static final int DEFAULT_NRSQ = 10;
 
     /** The datacenter where the rack belongs. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -79,7 +78,8 @@ public class Rack extends DomainWrapper<RackDto>
 
     /**
      * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack">
+     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack"
+     *      >
      *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack</a>
      */
     public void save()
@@ -88,9 +88,11 @@ public class Rack extends DomainWrapper<RackDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack">
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack
+     *      </a>
      */
     public void update()
     {
@@ -99,9 +101,10 @@ public class Rack extends DomainWrapper<RackDto>
 
     // Parent access
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      RetrieveaDatacenter</a>
      */
     public Datacenter getDatacenter()
     {

@@ -43,8 +43,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     private static final int DEFAULT_STATUS = 0;
 
     /** The datacenter using the remote service. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -55,9 +54,11 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-DeleteaRemoteService">
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-DeleteaRemoteService</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-DeleteaRemoteService"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
+     *      -DeleteaRemoteService</a>
      */
     public void delete()
     {
@@ -66,9 +67,11 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService">
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
+     *      -CreateanewRemoteService</a>
      */
     public void save()
     {
@@ -78,9 +81,11 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-UpdateanexistingRemoteService">
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-UpdateanexistingRemoteService</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-UpdateanexistingRemoteService"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
+     *      -UpdateanexistingRemoteService</a>
      */
     public void update()
     {
@@ -88,9 +93,11 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CheckthestatusofaRemoteService">
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CheckthestatusofaRemoteService</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CheckthestatusofaRemoteService"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
+     *      -CheckthestatusofaRemoteService</a>
      */
     public boolean isAvailable()
     {
@@ -102,9 +109,10 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     // Parent access
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      RetrieveaDatacenter</a>
      */
     public Datacenter getDatacenter()
     {

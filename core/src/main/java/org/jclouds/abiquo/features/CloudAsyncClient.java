@@ -31,11 +31,11 @@ import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
-import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.cloud.BindHardDiskRefsToPayload;
 import org.jclouds.abiquo.binders.cloud.BindIpRefToPayload;
+import org.jclouds.abiquo.binders.cloud.BindIpRefsToPayload;
 import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
 import org.jclouds.abiquo.binders.cloud.BindNetworkConfigurationRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindNetworkRefToPayload;
@@ -64,7 +64,6 @@ import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
-import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -277,7 +276,8 @@ public interface CloudAsyncClient
      * @see CloudClient#createNic(VirtualMachineDto, IpPoolManagementDto)
      */
     @POST
-    ListenableFuture<Void> createNic(
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindIpRefToPayload.class) IpPoolManagementDto ip);
 
@@ -285,7 +285,8 @@ public interface CloudAsyncClient
      * @see CloudClient#createNic(VirtualMachineDto, VLANNetworkDto)
      */
     @POST
-    ListenableFuture<Void> createNic(
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindUnmanagedIpRefToPayload.class) VLANNetworkDto network);
 
@@ -293,7 +294,18 @@ public interface CloudAsyncClient
      * @see CloudClient#deleteNic(NicDto)
      */
     @DELETE
-    ListenableFuture<Void> deleteNic(@EndpointLink("edit") @BinderParam(BindToPath.class) NicDto nic);
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> deleteNic(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) NicDto nic);
+
+    /**
+     * @see CloudClient#replaceVolumes(VirtualMachineDto, VolumeManagementDto...)
+     */
+    @PUT
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    ListenableFuture<AcceptedRequestDto<String>> replaceNics(
+        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindIpRefsToPayload.class) IpPoolManagementDto... ips);
 
     /**
      * @see CloudClient#listAttachedNics(VirtualMachineDto)
@@ -319,14 +331,6 @@ public interface CloudAsyncClient
     ListenableFuture<VirtualApplianceDto> getVirtualAppliance(
         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer virtualApplianceId);
-
-    /**
-     * @see CloudClient#getVirtualAppliance(RESTLink)
-     */
-    @GET
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<VirtualApplianceDto> getVirtualAppliance(
-        @BinderParam(BindLinkToPath.class) RESTLink link);
 
     /**
      * @see CloudClient#getVirtualApplianceState(VirtualApplianceDto)
@@ -427,8 +431,8 @@ public interface CloudAsyncClient
      */
     @PUT
     ListenableFuture<AcceptedRequestDto<String>> changeVirtualMachineState(
-        @EndpointLink("state") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine,
-        VirtualMachineStateDto state);
+        @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(BindToXMLPayload.class) VirtualMachineStateDto state);
 
     /**
      * @see CloudClient#getVirtualMachineState(VirtualMachineDto)

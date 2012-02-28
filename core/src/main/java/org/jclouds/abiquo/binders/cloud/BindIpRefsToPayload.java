@@ -17,12 +17,13 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.binders;
+package org.jclouds.abiquo.binders.cloud;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.binders.BindToXMLPayload;
@@ -30,44 +31,41 @@ import org.jclouds.xml.XMLParser;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
-import com.abiquo.model.transport.SingleResourceTransportDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
- * Bind multiple objects to the payload of the request as a list of links.
+ * Bind the link reference to an {@link IpPoolManagementDto} object into the payload.
  * 
  * @author Ignasi Barrera
  */
-public abstract class BindRefsToPayload extends BindToXMLPayload
+@Singleton
+public class BindIpRefsToPayload extends BindToXMLPayload
 {
     @Inject
-    public BindRefsToPayload(final XMLParser xmlParser)
+    public BindIpRefsToPayload(final XMLParser xmlParser)
     {
         super(xmlParser);
     }
 
-    protected abstract String getRelToUse(final Object input);
-
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof SingleResourceTransportDto[],
-            "this binder is only valid for SingleResourceTransportDto arrays");
+        checkArgument(checkNotNull(input, "input") instanceof IpPoolManagementDto[],
+            "this binder is only valid for IpPoolManagementDto arrays");
 
-        SingleResourceTransportDto[] dtos = (SingleResourceTransportDto[]) input;
+        IpPoolManagementDto[] ips = (IpPoolManagementDto[]) input;
         LinksDto refs = new LinksDto();
 
-        for (SingleResourceTransportDto dto : dtos)
+        for (IpPoolManagementDto ip : ips)
         {
-            RESTLink editLink = checkNotNull(dto.getEditLink(), "entity must have an edit link");
-
-            // Do not add repeated references
-            if (refs.searchLinkByHref(editLink.getHref()) == null)
+            RESTLink selfLink =
+                checkNotNull(ip.searchLink("self"), "IpPoolManagementDto must have an self link");
+            if (refs.searchLinkByHref(selfLink.getHref()) == null)
             {
-                refs.addLink(new RESTLink(getRelToUse(input), editLink.getHref()));
+                refs.addLink(new RESTLink(selfLink.getTitle(), selfLink.getHref()));
             }
         }
 
         return super.bindToRequest(request, refs);
     }
-
 }

@@ -27,9 +27,12 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
-import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.LogicServersDto;
+import com.abiquo.server.core.infrastructure.OrganizationsDto;
+import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -43,6 +46,7 @@ import com.google.common.collect.Lists;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
  *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
+@EnterpriseEdition
 public class ManagedRack extends DomainWrapper<UcsRackDto>
 {
     /** The default minimum VLAN id. */
@@ -58,8 +62,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     private static final int DEFAULT_NRSQ = 10;
 
     /** The datacenter where the rack belongs. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -78,21 +81,24 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack">
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack<
+     *      /a>
      */
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient().createManagedRack(datacenter.unwrap(),
-                target);
+            context.getApi().getInfrastructureClient()
+                .createManagedRack(datacenter.unwrap(), target);
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack">
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      UpdateanexistingUcsRack</a>
      */
     public void update()
     {
@@ -101,9 +107,10 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
     // Parent access
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      RetrieveaDatacenter</a>
      */
     public Datacenter getDatacenter()
     {
@@ -112,21 +119,73 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     // Children access
-
-    public List<Machine> listMachines()
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofallServicesProfilesinaUCSRack"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      RetrievealistofallServicesProfilesinaUCSRack</a>
+     */
+    public List<LogicServer> listServiceProfiles()
     {
-        MachinesDto machines = context.getApi().getInfrastructureClient().listMachines(target);
-        return wrap(context, Machine.class, machines.getCollection());
+        LogicServersDto profiles =
+            context.getApi().getInfrastructureClient().listServiceProfiles(target);
+        return wrap(context, LogicServer.class, profiles.getCollection());
     }
 
-    public List<Machine> listMachines(final Predicate<Machine> filter)
+    public List<LogicServer> listServiceProfiles(final Predicate<LogicServer> filter)
     {
-        return Lists.newLinkedList(filter(listMachines(), filter));
+        return Lists.newLinkedList(filter(listServiceProfiles(), filter));
     }
 
-    public Machine findMachine(final Predicate<Machine> filter)
+    public LogicServer findServiceProfile(final Predicate<LogicServer> filter)
     {
-        return Iterables.getFirst(filter(listMachines(), filter), null);
+        return Iterables.getFirst(filter(listServiceProfiles(), filter), null);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource-RetrievealistofallServicesProfilesTemplatesinaUCSRack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource-
+     *      RetrievealistofallServicesProfilesTemplatesinaUCSRack</a>
+     */
+    public List<LogicServer> listServiceProfileTemplates()
+    {
+        LogicServersDto templates =
+            context.getApi().getInfrastructureClient().listServiceProfileTemplates(target);
+        return wrap(context, LogicServer.class, templates.getCollection());
+    }
+
+    public List<LogicServer> listServiceProfileTemplates(final Predicate<LogicServer> filter)
+    {
+        return Lists.newLinkedList(filter(listServiceProfileTemplates(), filter));
+    }
+
+    public LogicServer findServiceProfileTemplate(final Predicate<LogicServer> filter)
+    {
+        return Iterables.getFirst(filter(listServiceProfileTemplates(), filter), null);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrieveallOrganizationsfromaUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      RetrieveallOrganizationsfromaUCS</a>
+     */
+    public List<Organization> listOrganizations()
+    {
+        OrganizationsDto templates =
+            context.getApi().getInfrastructureClient().listOrganizations(target);
+        return wrap(context, Organization.class, templates.getCollection());
+    }
+
+    public List<Organization> listOrganizations(final Predicate<Organization> filter)
+    {
+        return Lists.newLinkedList(filter(listOrganizations(), filter));
+    }
+
+    public Organization findOrganization(final Predicate<Organization> filter)
+    {
+        return Iterables.getFirst(filter(listOrganizations(), filter), null);
     }
 
     // Builder
@@ -304,12 +363,12 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         public static Builder fromRack(final ManagedRack in)
         {
             return ManagedRack.builder(in.context, in.datacenter).id(in.getId()).name(in.getName())
-                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled()).nrsq(
-                    in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
-                .vlanPerVdcReserved(in.getVlanPerVdcReserved()).VlansIdAvoided(
-                    in.getVlansIdAvoided()).port(in.getPort()).ipAddress(in.getIp()).password(
-                    in.getPassword()).user(in.getUser()).defaultTemplate(in.getDefaultTemplate())
-                .maxMachinesOn(in.getMaxMachinesOn());
+                .shortDescription(in.getShortDescription()).haEnabled(in.isHaEnabled())
+                .nrsq(in.getNrsq()).vlanIdMax(in.getVlanIdMax()).vlanIdMin(in.getVlanIdMin())
+                .vlanPerVdcReserved(in.getVlanPerVdcReserved())
+                .VlansIdAvoided(in.getVlansIdAvoided()).port(in.getPort()).ipAddress(in.getIp())
+                .password(in.getPassword()).user(in.getUser())
+                .defaultTemplate(in.getDefaultTemplate()).maxMachinesOn(in.getMaxMachinesOn());
         }
     }
 
@@ -328,11 +387,6 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public String getShortDescription()
     {
         return target.getShortDescription();
-    }
-
-    public void setName(final String name)
-    {
-        target.setName(name);
     }
 
     public void setShortDescription(final String description)
@@ -463,6 +517,18 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public void setUser(final String user)
     {
         target.setUser(user);
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ManagedRack [id=" + getId() + ", name=" + getName() + ", shortDescription="
+            + getShortDescription() + ", haEnabled=" + isHaEnabled() + ", nrsq=" + getNrsq()
+            + ", vlanIdMax=" + getVlanIdMax() + ", vlanIdMin=" + getVlanIdMin()
+            + ", vlanPerVdcReserved=" + getVlanPerVdcReserved() + ", vlansIdAvoided="
+            + getVlansIdAvoided() + ", ip=" + getIp() + ", longDescription=" + getLongDescription()
+            + ", maxMachinesOn=" + getMaxMachinesOn() + ", password=**PROTECTED**, port="
+            + getPort() + ", user=" + getUser() + ", defaultTemplate=" + getDefaultTemplate() + "]";
     }
 
 }

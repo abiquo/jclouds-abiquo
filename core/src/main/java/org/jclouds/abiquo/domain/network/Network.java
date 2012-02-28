@@ -26,6 +26,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 
 import com.abiquo.model.enumerator.NetworkType;
@@ -62,6 +63,16 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
     public Ip findIp(final Predicate<Ip> filter)
     {
         return Iterables.getFirst(filter(listIps(), filter), null);
+    }
+
+    public List<Ip> listAvailableIps()
+    {
+        return listIps(IpPredicates.available());
+    }
+
+    public Ip findAvailableIp(final Predicate<Ip> filter)
+    {
+        return Iterables.getFirst(filter(listAvailableIps(), filter), null);
     }
 
     // Builder
@@ -313,6 +324,11 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
 
     public static Network wrapNetwork(final AbiquoContext context, final VLANNetworkDto dto)
     {
+        if (dto == null)
+        {
+            return null;
+        }
+
         Network network = null;
 
         switch (dto.getType())

@@ -21,7 +21,9 @@ package org.jclouds.abiquo.domain.network;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
 
 /**
@@ -49,10 +51,11 @@ public class Nic extends DomainWrapper<NicDto>
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      DeleteaNICs</a>
      */
-    public void delete()
+    public AsyncTask delete()
     {
-        context.getApi().getCloudClient().deleteNic(target);
+        AcceptedRequestDto<String> taskRef = context.getApi().getCloudClient().deleteNic(target);
         target = null;
+        return taskRef == null ? null : getTask(taskRef);
     }
 
     // Parent access

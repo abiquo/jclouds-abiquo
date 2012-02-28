@@ -41,6 +41,7 @@ import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
+import org.jclouds.abiquo.domain.network.PublicNetwork;
 import org.jclouds.abiquo.features.AdminClient;
 import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
@@ -86,6 +87,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public Datacenter datacenter;
 
+    public PublicNetwork publicNetwork;
+
     public List<RemoteService> remoteServices;
 
     public Rack rack;
@@ -127,6 +130,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         createMachine();
         createStorageDevice();
         createStoragePool();
+        createPublicNetwork();
 
         // Enterprise
         createEnterprise();
@@ -141,6 +145,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         deleteRole(role);
         deleteRole(anotherRole);
 
+        deletePublicNetwork();
         deleteStoragePool();
         deleteStorageDevice();
         deleteMachine();
@@ -157,8 +162,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String remoteServicesAddress = context.getEndpoint().getHost();
 
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu").remoteServices(
-                remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
+            Datacenter.builder(context).name(randomName()).location("Honolulu")
+                .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
 
@@ -203,8 +208,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.storage.pass");
 
         storageDevice =
-            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip).name(
-                PREFIX + "Storage Device").username(user).password(pass).type(type).build();
+            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip)
+                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
@@ -225,12 +230,12 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     private void createUser()
     {
-        Role role = administrationService.findRole(RolePredicates.name("ENTERPRISE_ADMIN"));
+        Role role = administrationService.findRole(RolePredicates.name("USER"));
 
         user =
             User.builder(context, enterprise, role).name(randomName(), randomName())
-                .nick("jclouds").authType("ABIQUO").description(randomName()).email(
-                    randomName() + "@abiquo.com").locale("en_US").password("user").build();
+                .nick("jclouds").authType("ABIQUO").description(randomName())
+                .email(randomName() + "@abiquo.com").locale("en_US").password("user").build();
 
         user.save();
         assertNotNull(user.getId());
@@ -259,7 +264,27 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(limits);
     }
 
+    protected void createPublicNetwork()
+    {
+        publicNetwork =
+            PublicNetwork.builder(context, datacenter).name("PublicNetwork").gateway("80.80.80.1")
+                .address("80.80.80.0").mask(24).tag(5).build();
+        publicNetwork.save();
+        assertNotNull(publicNetwork.getId());
+    }
+
     // Tear down
+
+    private void deletePublicNetwork()
+    {
+        if (publicNetwork != null)
+        {
+            Integer id = publicNetwork.getId();
+            publicNetwork.delete();
+            // Nick is unique in an enterprise
+            assertNull(datacenter.getNetwork(id));
+        }
+    }
 
     private void deleteUser()
     {

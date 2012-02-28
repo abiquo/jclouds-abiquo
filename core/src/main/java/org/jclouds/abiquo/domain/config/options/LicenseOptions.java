@@ -20,12 +20,14 @@
 package org.jclouds.abiquo.domain.config.options;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 /**
  * Available options to query licenses.
  * 
  * @author Francesc Montserrat
  */
+@EnterpriseEdition
 public class LicenseOptions extends QueryOptions
 {
     public static Builder builder()

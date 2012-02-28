@@ -42,8 +42,7 @@ import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 public class HardDisk extends DomainWrapper<DiskManagementDto>
 {
     /** The virtual datacenter where the hard disk belongs. */
-    // Package protected to allow navigation from children
-    VirtualDatacenter virtualDatacenter;
+    private VirtualDatacenter virtualDatacenter;
 
     /**
      * Constructor to be used only by the builder.

@@ -23,27 +23,27 @@ import static org.testng.Assert.assertEquals;
 
 import java.net.URI;
 
-import org.jclouds.abiquo.domain.CloudResources;
+import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.xml.XMLParser;
 import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
- * Unit tests for the {@link BindVolumeRefsToPayload} binder.
+ * Unit tests for the {@link BindIpRefsToPayload} binder.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class BindVolumeRefsToPayloadTest
+public class BindIpRefsToPayloadTest
 {
 
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -52,7 +52,7 @@ public class BindVolumeRefsToPayloadTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -60,35 +60,35 @@ public class BindVolumeRefsToPayloadTest
 
     public void testBindEmptyArray()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new VolumeManagementDto[] {});
+        request = binder.bindToRequest(request, new IpPoolManagementDto[] {});
         assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
             + "<links/>");
     }
 
-    public void testBindSingleVolume()
+    public void testBindSingleIp()
     {
-        VolumeManagementDto volume = CloudResources.volumePut();
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        IpPoolManagementDto ip = NetworkResources.privateIpPut();
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new VolumeManagementDto[] {volume});
-        assertEquals(request.getPayload().getRawContent(),
-            XMLParser.DEFAULT_XML_HEADER + "<links><link href=\"" + volume.getEditLink().getHref()
-                + "\" rel=\"" + binder.getRelToUse(volume) + "\"/></links>");
+        request = binder.bindToRequest(request, new IpPoolManagementDto[] {ip});
+        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
+            + "<links><link href=\"" + ip.searchLink("self").getHref() + "\" rel=\""
+            + ip.searchLink("self").getTitle() + "\"/></links>");
     }
 
-    public void testBindMultipleVolumes()
+    public void testBindMultipleIps()
     {
-        VolumeManagementDto volume = CloudResources.volumePut();
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        IpPoolManagementDto ip = NetworkResources.privateIpPut();
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new VolumeManagementDto[] {volume, volume});
-        assertEquals(request.getPayload().getRawContent(),
-            XMLParser.DEFAULT_XML_HEADER + "<links><link href=\"" + volume.getEditLink().getHref()
-                + "\" rel=\"" + binder.getRelToUse(volume) + "\"/></links>");
+        request = binder.bindToRequest(request, new IpPoolManagementDto[] {ip, ip});
+        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
+            + "<links><link href=\"" + ip.searchLink("self").getHref() + "\" rel=\""
+            + ip.searchLink("self").getTitle() + "\"/></links>");
     }
 }

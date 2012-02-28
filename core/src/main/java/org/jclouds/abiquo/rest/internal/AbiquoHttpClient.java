@@ -16,25 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jclouds.abiquo.rest.internal;
 
-package org.jclouds.abiquo.domain.exception;
+import java.util.concurrent.TimeUnit;
+
+import org.jclouds.concurrent.Timeout;
+import org.jclouds.http.HttpResponse;
+
+import com.abiquo.model.rest.RESTLink;
 
 /**
- * This exception is meant to be thrown <b>only</b> when a {@link RetryablePredicate} fails.
+ * Custom Rest methods to work with the Abiquo Api.
  * 
- * @author Serafin Sedano
+ * @author Ignasi Barrera
  */
-public class RetryablePredicateUnsuccessException extends RuntimeException
+@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
+public interface AbiquoHttpClient
 {
-
-    public RetryablePredicateUnsuccessException(final String error)
-    {
-        super(error);
-    }
-
     /**
-	 * 
-	 */
-    private static final long serialVersionUID = 9010032102429785242L;
-
+     * Perform a GET request to the given link.
+     * 
+     * @param link The link to get.
+     * @return The response.
+     */
+    public HttpResponse get(final RESTLink link);
 }
