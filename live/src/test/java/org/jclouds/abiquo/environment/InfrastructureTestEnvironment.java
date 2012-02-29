@@ -81,8 +81,6 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public ConfigClient configClient;
 
-    public AbiquoContext plainUserContext;
-
     // Resources
 
     public Datacenter datacenter;
@@ -104,6 +102,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     public Tier tier;
 
     public User user;
+
+    public User enterpriseAdmin;
 
     public Role role;
 
@@ -135,13 +135,13 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         // Enterprise
         createEnterprise();
         createRoles();
-        createUser();
+        createUsers();
     }
 
     @Override
     public void tearDown() throws Exception
     {
-        deleteUser();
+        deleteUsers();
         deleteRole(role);
         deleteRole(anotherRole);
 
@@ -228,18 +228,29 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(storagePool.getUUID());
     }
 
-    private void createUser()
+    private void createUsers()
     {
-        Role role = administrationService.findRole(RolePredicates.name("USER"));
+        Role userRole = administrationService.findRole(RolePredicates.name("USER"));
+        Role enterpriseAdminRole =
+            administrationService.findRole(RolePredicates.name("ENTERPRISE_ADMIN"));
 
         user =
-            User.builder(context, enterprise, role).name(randomName(), randomName())
+            User.builder(context, enterprise, userRole).name(randomName(), randomName())
                 .nick("jclouds").authType("ABIQUO").description(randomName())
                 .email(randomName() + "@abiquo.com").locale("en_US").password("user").build();
 
         user.save();
         assertNotNull(user.getId());
-        assertEquals(role.getId(), user.getRole().getId());
+        assertEquals(userRole.getId(), user.getRole().getId());
+
+        enterpriseAdmin =
+            User.builder(context, enterprise, enterpriseAdminRole).name(randomName(), randomName())
+                .nick("jclouds-admin").authType("ABIQUO").description(randomName())
+                .email(randomName() + "@abiquo.com").locale("en_US").password("admin").build();
+
+        enterpriseAdmin.save();
+        assertNotNull(enterpriseAdmin.getId());
+        assertEquals(enterpriseAdminRole.getId(), enterpriseAdmin.getRole().getId());
     }
 
     private void createRoles()
@@ -286,12 +297,20 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    private void deleteUser()
+    private void deleteUsers()
     {
         if (user != null)
         {
             String nick = user.getNick();
             user.delete();
+            // Nick is unique in an enterprise
+            assertNull(enterprise.findUser(UserPredicates.nick(nick)));
+        }
+
+        if (enterpriseAdmin != null)
+        {
+            String nick = enterpriseAdmin.getNick();
+            enterpriseAdmin.delete();
             // Nick is unique in an enterprise
             assertNull(enterprise.findUser(UserPredicates.nick(nick)));
         }

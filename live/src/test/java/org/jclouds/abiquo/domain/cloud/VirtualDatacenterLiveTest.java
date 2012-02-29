@@ -86,10 +86,11 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
     public void testCreateFromEnterprise()
     {
         // Datacenter must be allowed to enterprise
-        env.enterprise.allowDatacenter(env.datacenter);
+        // env.enterprise.allowDatacenter(env.datacenter);
 
         Enterprise enterprise =
-            env.plainUserContext.getAdministrationService().getCurrentUserInfo().getEnterprise();
+            env.enterpriseAdminContext.getAdministrationService().getCurrentUserInfo()
+                .getEnterprise();
         assertNotNull(enterprise);
 
         List<Datacenter> datacenters = enterprise.listAllowedDatacenters();
@@ -97,7 +98,6 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         assertTrue(size(datacenters) > 0);
 
         Datacenter datacenter = datacenters.get(0);
-        assertNotNull(datacenter);
 
         List<HypervisorType> hypervisors = datacenter.listAvailableHypervisors();
         assertNotNull(datacenters);
@@ -106,11 +106,11 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
         HypervisorType hypervisor = hypervisors.get(0);
 
         PrivateNetwork network =
-            PrivateNetwork.builder(env.plainUserContext).name("DefaultNetwork")
+            PrivateNetwork.builder(env.enterpriseAdminContext).name("DefaultNetwork")
                 .gateway("192.168.1.1").address("192.168.1.0").mask(24).build();
 
         VirtualDatacenter virtualDatacenter =
-            VirtualDatacenter.builder(context, datacenters.get(0), enterprise)
+            VirtualDatacenter.builder(env.enterpriseAdminContext, datacenters.get(0), enterprise)
                 .name(PREFIX + "Plain Virtual Aloha from ENT").cpuCountLimits(18, 20)
                 .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
                 .storageLimits(289910292, 322122547).vlansLimits(1, 2).hypervisorType(hypervisor)
@@ -125,7 +125,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
     public void testCreateFromVirtualDatacenter()
     {
         // Datacenter must be allowed to enterprise
-        env.enterprise.allowDatacenter(env.datacenter);
+        // env.enterprise.allowDatacenter(env.datacenter);
 
         HypervisorType hypervisor = env.virtualDatacenter.getHypervisorType();
 

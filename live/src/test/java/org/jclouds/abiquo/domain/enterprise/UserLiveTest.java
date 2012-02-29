@@ -92,7 +92,7 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
     public void testListUser()
     {
         Iterable<User> users = env.enterprise.listUsers();
-        assertEquals(Iterables.size(users), 1);
+        assertEquals(Iterables.size(users), 2);
 
         users = env.enterprise.listUsers(nick(env.user.getNick()));
         assertEquals(Iterables.size(users), 1);
