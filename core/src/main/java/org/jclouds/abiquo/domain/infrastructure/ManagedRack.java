@@ -173,9 +173,9 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      */
     public List<Organization> listOrganizations()
     {
-        OrganizationsDto templates =
+        OrganizationsDto organizations =
             context.getApi().getInfrastructureClient().listOrganizations(target);
-        return wrap(context, Organization.class, templates.getCollection());
+        return wrap(context, Organization.class, organizations.getCollection());
     }
 
     public List<Organization> listOrganizations(final Predicate<Organization> filter)
