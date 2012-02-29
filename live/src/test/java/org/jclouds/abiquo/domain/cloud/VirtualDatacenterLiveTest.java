@@ -85,9 +85,6 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
 
     public void testCreateFromEnterprise()
     {
-        // Datacenter must be allowed to enterprise
-        // env.enterprise.allowDatacenter(env.datacenter);
-
         Enterprise enterprise =
             env.enterpriseAdminContext.getAdministrationService().getCurrentUserInfo()
                 .getEnterprise();
@@ -124,9 +121,6 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTes
 
     public void testCreateFromVirtualDatacenter()
     {
-        // Datacenter must be allowed to enterprise
-        // env.enterprise.allowDatacenter(env.datacenter);
-
         HypervisorType hypervisor = env.virtualDatacenter.getHypervisorType();
 
         Enterprise enterprise = env.user.getEnterprise();
