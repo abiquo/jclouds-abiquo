@@ -47,4 +47,8 @@ public class ParentLinkName
     public final static String DATACENTER_REPOSITORY = "datacenterrepository";
 
     public final static String COST_CODE = "costcode";
+
+    public final static String CATEGORY = "category";
+
+    public final static String ICON = "icon";
 }

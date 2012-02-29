@@ -24,6 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Arrays;
 
 import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.Network;
 
 import com.google.common.base.Predicate;
 
@@ -32,7 +33,7 @@ import com.google.common.base.Predicate;
  * 
  * @author Francesc Montserrat
  */
-public class IPAddressPredicates
+public class IpPredicates
 {
     public static Predicate<Ip> name(final String... names)
     {
@@ -58,6 +59,18 @@ public class IPAddressPredicates
             public boolean apply(final Ip address)
             {
                 return Arrays.asList(addresses).contains(address.getIp());
+            }
+        };
+    }
+
+    public static Predicate<Ip> available()
+    {
+        return new Predicate<Ip>()
+        {
+            @Override
+            public boolean apply(final Ip address)
+            {
+                return address.getAvailable();
             }
         };
     }

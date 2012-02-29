@@ -36,6 +36,9 @@ import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -47,6 +50,7 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
@@ -59,6 +63,7 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link VirtualMachineDto}.
@@ -71,12 +76,10 @@ import com.google.common.primitives.Longs;
 public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 {
     /** The virtual appliance where the virtual machine belongs. */
-    // Package protected to allow navigation from children
-    VirtualAppliance virtualAppliance;
+    private VirtualAppliance virtualAppliance;
 
     /** The virtual machine template of the virtual machine. */
-    // Package protected to allow navigation from children
-    VirtualMachineTemplate template;
+    private VirtualMachineTemplate template;
 
     /**
      * Constructor to be used only by the builder.
@@ -145,10 +148,18 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      */
     public VirtualAppliance getVirtualAppliance()
     {
-        RESTLink link = target.searchLink(ParentLinkName.VIRTUAL_APPLIANCE);
-        VirtualApplianceDto dto = context.getApi().getCloudClient().getVirtualAppliance(link);
-        virtualAppliance = wrap(context, VirtualAppliance.class, dto);
-        return virtualAppliance;
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_APPLIANCE),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_APPLIANCE);
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<VirtualApplianceDto> parser =
+            new ParseXMLWithJAXB<VirtualApplianceDto>(utils.getXml(),
+                TypeLiteral.get(VirtualApplianceDto.class));
+
+        return wrap(context, VirtualAppliance.class, parser.apply(response));
     }
 
     /**
@@ -364,6 +375,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return taskRef == null ? null : getTask(taskRef);
     }
 
+    public AsyncTask replaceNics(final Ip... ips)
+    {
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().replaceNics(target, toIpDto(ips));
+        return taskRef == null ? null : getTask(taskRef);
+    }
+
     public void setGatewayNetwork(final Network network)
     {
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
@@ -383,10 +401,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusingapublicIP</a>
      */
-    public void attachNic(final Ip ip)
+    public AsyncTask attachNic(final Ip ip)
     {
-        // TODO waiting for http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3144
-        context.getApi().getCloudClient().createNic(target, ip.unwrap());
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().createNic(target, ip.unwrap());
+        return taskRef == null ? null : getTask(taskRef);
     }
 
     /**
@@ -395,14 +414,16 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusinganUnmanagedNetwork</a>
      */
-    public void attachNicFromUnmanagedNetwork(final UnmanagedNetwork network)
+    public AsyncTask attachNicFromUnmanagedNetwork(final UnmanagedNetwork network)
     {
-        context.getApi().getCloudClient().createNic(target, network.unwrap());
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().createNic(target, network.unwrap());
+        return taskRef == null ? null : getTask(taskRef);
     }
 
-    public void detachNic(final Nic nic)
+    public AsyncTask detachNic(final Nic nic)
     {
-        nic.delete();
+        return nic.delete();
     }
 
     // Builder
@@ -475,33 +496,36 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             return this;
         }
 
-        public Builder vncPort(final int vdrpPort)
+        public Builder password(final String password)
+        {
+            this.password = password;
+            return this;
+        }
+
+        // This methods are used only to build a builder from an existing VirtualMachine but should
+        // never be used by the user. This fields are set automatically by Abiquo
+
+        private Builder vncPort(final int vdrpPort)
         {
             this.vncPort = vdrpPort;
             return this;
         }
 
-        public Builder vncAddress(final String vdrpIP)
+        private Builder vncAddress(final String vdrpIP)
         {
             this.vncAddress = vdrpIP;
             return this;
         }
 
-        public Builder idState(final int idState)
+        private Builder idState(final int idState)
         {
             this.idState = idState;
             return this;
         }
 
-        public Builder idType(final int idType)
+        private Builder idType(final int idType)
         {
             this.idType = idType;
-            return this;
-        }
-
-        public Builder password(final String password)
-        {
-            this.password = password;
             return this;
         }
 
@@ -667,12 +691,25 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     private static DiskManagementDto[] toHardDiskDto(final HardDisk... hardDisks)
     {
-        checkNotNull(hardDisks, "must provide at least one volume");
+        checkNotNull(hardDisks, "must provide at least one hard disk");
 
         DiskManagementDto[] dtos = new DiskManagementDto[hardDisks.length];
         for (int i = 0; i < hardDisks.length; i++)
         {
             dtos[i] = hardDisks[i].unwrap();
+        }
+
+        return dtos;
+    }
+
+    private static IpPoolManagementDto[] toIpDto(final Ip... ips)
+    {
+        checkNotNull(ips, "must provide at least one ip");
+
+        IpPoolManagementDto[] dtos = new IpPoolManagementDto[ips.length];
+        for (int i = 0; i < ips.length; i++)
+        {
+            dtos[i] = ips[i].unwrap();
         }
 
         return dtos;

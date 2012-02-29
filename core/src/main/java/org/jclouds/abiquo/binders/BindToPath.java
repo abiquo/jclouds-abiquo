@@ -28,6 +28,8 @@ import java.net.URI;
 import java.util.Arrays;
 
 import javax.inject.Singleton;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.PUT;
 
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
@@ -93,8 +95,8 @@ public class BindToPath implements Binder
         Annotation[] annotations = request.getJavaMethod().getParameterAnnotations()[argIndex];
 
         EndpointLink linkName =
-            (EndpointLink) Iterables.find(Arrays.asList(annotations), Predicates
-                .instanceOf(EndpointLink.class), null);
+            (EndpointLink) Iterables.find(Arrays.asList(annotations),
+                Predicates.instanceOf(EndpointLink.class), null);
 
         if (linkName == null)
         {
@@ -131,7 +133,7 @@ public class BindToPath implements Binder
         return (SingleResourceTransportDto) input;
     }
 
-    private static <R extends HttpRequest> String getParameterString(final R request)
+    protected static <R extends HttpRequest> String getParameterString(final R request)
     {
         String endpoint = request.getEndpoint().toString();
 

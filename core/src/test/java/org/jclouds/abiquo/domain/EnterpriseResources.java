@@ -21,10 +21,14 @@ package org.jclouds.abiquo.domain;
 
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 
 /**
@@ -62,6 +66,21 @@ public class EnterpriseResources
             "http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists"));
 
         return enterprise;
+    }
+
+    public static EnterprisePropertiesDto enterprisePropertiesPut()
+    {
+        EnterprisePropertiesDto enterpriseProp = new EnterprisePropertiesDto();
+        enterpriseProp.setId(1);
+        Map<String, String> props = new HashMap<String, String>();
+        props.put("key", "value");
+        enterpriseProp.setProperties(props);
+        enterpriseProp.addLink(new RESTLink("edit",
+            "http://localhost/api/admin/enterprises/1/properties"));
+        enterpriseProp.addLink(new RESTLink("enterprise",
+            "http://localhost/api/admin/enterprises/1"));
+
+        return enterpriseProp;
     }
 
     public static String enterprisePostPayload()
@@ -120,6 +139,23 @@ public class EnterpriseResources
         buffer.append("<repositoryHard>0</repositoryHard>");
         buffer.append("<repositorySoft>0</repositorySoft>");
         buffer.append("</enterprise>");
+        return buffer.toString();
+    }
+
+    public static String enterprisePropertiesPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<enterpriseProperties>");
+        buffer.append(link("/admin/enterprises/1/properties", "edit"));
+        buffer.append(link("/admin/enterprises/1", "enterprise"));
+        buffer.append("<id>1</id>");
+        buffer.append("<properties>");
+        buffer.append("<entry>");
+        buffer.append("<key>key</key>");
+        buffer.append("<value>value</value>");
+        buffer.append("</entry>");
+        buffer.append("</properties>");
+        buffer.append("</enterpriseProperties>");
         return buffer.toString();
     }
 

@@ -43,7 +43,7 @@ public class BindVolumeRefsToPayload extends BindRefsToPayload
     }
 
     @Override
-    protected String getRelToUse()
+    protected String getRelToUse(final Object input)
     {
         return "volume";
     }

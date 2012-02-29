@@ -29,6 +29,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
@@ -54,7 +55,6 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
     {
         List<AsyncTask> tasks = env.virtualMachine.listTasks();
         assertNotNull(tasks);
-        assertTrue(tasks.isEmpty());
     }
 
     public void testGetState()
@@ -63,12 +63,20 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEn
         assertEquals(state, VirtualMachineState.NOT_ALLOCATED);
     }
 
-    public void testCreateNic()
+    public void testGetVirtualAppliance()
     {
-        Ip ip = env.virtualDatacenter.listPrivateNetworks().get(0).listIps().get(0);
+        VirtualAppliance vapp = env.virtualMachine.getVirtualAppliance();
+        assertNotNull(vapp);
+        assertEquals(vapp.getId(), env.virtualAppliance.getId());
+    }
 
-        // XXX create nic does not return the created nic
+    public void testAttachNic()
+    {
+        Network network = env.virtualDatacenter.getDefaultNetwork();
+        Ip ip = network.listAvailableIps().get(0);
+
         env.virtualMachine.attachNic(ip);
+
         Nic nic = env.virtualMachine.findAttachedNic(NicPredicates.ip(ip.getIp()));
         assertNotNull(nic);
         assertNotNull(nic.getId());

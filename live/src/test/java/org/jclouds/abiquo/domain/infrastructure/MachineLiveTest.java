@@ -45,7 +45,6 @@ import com.abiquo.server.core.infrastructure.MachineDto;
 @Test(groups = "live")
 public class MachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
-
     public void testDiscoverMachineWithouRemoteService()
     {
         // Delete node collector

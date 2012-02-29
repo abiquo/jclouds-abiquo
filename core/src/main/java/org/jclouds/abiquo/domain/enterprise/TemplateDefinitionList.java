@@ -33,8 +33,7 @@ import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionListDto>
 {
     /** The enterprise where the list belongs. */
-    // Package protected to allow navigation from children
-    Enterprise enterprise;
+    private Enterprise enterprise;
 
     /**
      * Constructor to be used only by the builder.
@@ -56,8 +55,8 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
     public void save()
     {
         target =
-            context.getApi().getEnterpriseClient().createTemplateDefinitionList(
-                enterprise.unwrap(), target);
+            context.getApi().getEnterpriseClient()
+                .createTemplateDefinitionList(enterprise.unwrap(), target);
     }
 
     // Builder

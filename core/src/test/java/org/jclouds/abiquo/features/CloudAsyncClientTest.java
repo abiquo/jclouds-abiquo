@@ -34,7 +34,6 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
 import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.functions.cloud.ReturnMovedVolume;
-import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -46,6 +45,7 @@ import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -191,6 +191,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
+    /*********************** Ips ***********************/
+
     public void testListAvailablePublicIpsWithOptions() throws SecurityException,
         NoSuchMethodException, IOException
     {
@@ -234,6 +236,46 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         checkFilters(request);
     }
+
+    public void testPurchasePublicIp() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("purchasePublicIp", IpPoolManagementDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, NetworkResources.publicIpToPurchase());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/cloud/virtualdatacenters/5/publicips/purchased/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testReleasePublicIp() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("releasePublicIp", IpPoolManagementDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, NetworkResources.publicIpToRelease());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/cloud/virtualdatacenters/5/publicips/topurchase/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Storage Tiers ***********************/
 
     public void testListStorageTiers() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -514,7 +556,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, withHeader("<links><link href=\"" + ipLink.getHref()
             + "\" rel=\"" + ipLink.getTitle() + "\"/></links>"), "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -540,7 +582,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, withHeader("<links><link href=\"" + ipsLink.getHref()
             + "\" rel=\"unmanagedip\"/></links>"), "application/xml", false);
 
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -579,7 +621,36 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testReplaceNics() throws SecurityException, NoSuchMethodException, IOException
+    {
+        IpPoolManagementDto first = NetworkResources.privateIpPut();
+        IpPoolManagementDto second = NetworkResources.privateIpPut();
+        second.searchLink("self").setHref(second.searchLink("self").getHref() + "second");
+
+        Method method =
+            CloudAsyncClient.class.getMethod("replaceNics", VirtualMachineDto.class,
+                IpPoolManagementDto[].class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                new IpPoolManagementDto[] {first, second});
+
+        RESTLink selfLink = first.searchLink("self");
+        assertRequestLineEquals(
+            request,
+            "PUT http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader("<links><link href=\"" + selfLink.getHref()
+            + "\" rel=\"" + selfLink.getTitle() + "\"/><link href=\"" + selfLink.getHref()
+            + "second\" rel=\"" + selfLink.getTitle() + "\"/></links>"), "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -604,26 +675,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testGetVirtualApplianceWithLink() throws SecurityException, NoSuchMethodException,
-        IOException
-    {
-        Method method = CloudAsyncClient.class.getMethod("getVirtualAppliance", RESTLink.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method,
-                CloudResources.virtualMachinePut().searchLink(ParentLinkName.VIRTUAL_APPLIANCE));
-
-        assertRequestLineEquals(request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
         checkFilters(request);
     }
@@ -861,6 +912,30 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "application/xml", false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testChangeVirtualMachineState() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("changeVirtualMachineState", VirtualMachineDto.class,
+                VirtualMachineStateDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                CloudResources.virtualMachineState());
+
+        assertRequestLineEquals(
+            request,
+            "PUT http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/state HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, withHeader(CloudResources.virtualMachineStatePayload()),
+            "application/xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

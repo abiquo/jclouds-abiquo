@@ -77,7 +77,7 @@ public class BindHardDiskRefsToPayloadTest
         request = binder.bindToRequest(request, new DiskManagementDto[] {hardDisk});
         assertEquals(request.getPayload().getRawContent(),
             XMLParser.DEFAULT_XML_HEADER + "<links><link href=\""
-                + hardDisk.getEditLink().getHref() + "\" rel=\"" + binder.getRelToUse()
+                + hardDisk.getEditLink().getHref() + "\" rel=\"" + binder.getRelToUse(hardDisk)
                 + "\"/></links>");
     }
 
@@ -90,7 +90,7 @@ public class BindHardDiskRefsToPayloadTest
         request = binder.bindToRequest(request, new DiskManagementDto[] {hardDisk, hardDisk});
         assertEquals(request.getPayload().getRawContent(),
             XMLParser.DEFAULT_XML_HEADER + "<links><link href=\""
-                + hardDisk.getEditLink().getHref() + "\" rel=\"" + binder.getRelToUse()
+                + hardDisk.getEditLink().getHref() + "\" rel=\"" + binder.getRelToUse(hardDisk)
                 + "\"/></links>");
     }
 }

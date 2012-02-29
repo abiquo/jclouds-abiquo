@@ -30,6 +30,9 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
@@ -40,6 +43,7 @@ import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link MachineDto}.
@@ -57,8 +61,7 @@ public class Machine extends DomainWrapper<MachineDto>
     private static final int DEFAULT_VCPU_USED = 1;
 
     /** The rack where the machine belongs. */
-    // Package protected to allow navigation from children
-    Rack rack;
+    private Rack rack;
 
     /** List of available virtual switches provided by discover operation **/
     private List<String> virtualSwitches;
@@ -101,10 +104,17 @@ public class Machine extends DomainWrapper<MachineDto>
 
     public Rack getRack()
     {
-        RESTLink link = target.searchLink(ParentLinkName.RACK);
-        RackDto dto = context.getApi().getInfrastructureClient().getRack(link);
-        rack = wrap(context, Rack.class, dto);
-        return rack;
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.RACK),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.RACK);
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<RackDto> parser =
+            new ParseXMLWithJAXB<RackDto>(utils.getXml(), TypeLiteral.get(RackDto.class));
+
+        return wrap(context, Rack.class, parser.apply(response));
     }
 
     // Children access
@@ -442,11 +452,6 @@ public class Machine extends DomainWrapper<MachineDto>
         return target.getVirtualCpuCores();
     }
 
-    public Integer getVirtualCpusPerCore()
-    {
-        return target.getVirtualCpusPerCore();
-    }
-
     public Integer getVirtualCpusUsed()
     {
         return target.getVirtualCpusUsed();
@@ -467,9 +472,11 @@ public class Machine extends DomainWrapper<MachineDto>
         return target.getVirtualSwitch();
     }
 
-    public void setDatastores(final DatastoresDto datastores)
+    public void setDatastores(final List<Datastore> datastores)
     {
-        target.setDatastores(datastores);
+        DatastoresDto datastoresDto = new DatastoresDto();
+        datastoresDto.getCollection().addAll(DomainWrapper.unwrap(datastores));
+        target.setDatastores(datastoresDto);
     }
 
     public void setDescription(final String description)
@@ -540,11 +547,6 @@ public class Machine extends DomainWrapper<MachineDto>
     public void setVirtualCpuCores(final Integer virtualCpuCores)
     {
         target.setVirtualCpuCores(virtualCpuCores);
-    }
-
-    public void setVirtualCpusPerCore(final Integer virtualCpusPerCore)
-    {
-        target.setVirtualCpusPerCore(virtualCpusPerCore);
     }
 
     public void setVirtualCpusUsed(final Integer virtualCpusUsed)
@@ -620,11 +622,11 @@ public class Machine extends DomainWrapper<MachineDto>
             + getIpmiUser() + ", ipService=" + getIpService() + ", name=" + getName()
             + ", password=" + getPassword() + ", port=" + getPort() + ", state=" + getState()
             + ", type=" + getType() + ", user=" + getUser() + ", virtualCpuCores="
-            + getVirtualCpuCores() + ", virtualCpusPerCore=" + getVirtualCpusPerCore()
-            + ", virtualCpusUsed=" + getVirtualCpusUsed() + ", getVirtualRamInMb()="
-            + getVirtualRamInMb() + ", virtualRamUsedInMb=" + getVirtualRamUsedInMb()
-            + ", virtualSwitch=" + getVirtualSwitch() + ", description=" + getDescription()
-            + ", availableVirtualSwitches=" + getAvailableVirtualSwitches() + "]";
+            + getVirtualCpuCores() + ", virtualCpusUsed=" + getVirtualCpusUsed()
+            + ", getVirtualRamInMb()=" + getVirtualRamInMb() + ", virtualRamUsedInMb="
+            + getVirtualRamUsedInMb() + ", virtualSwitch=" + getVirtualSwitch() + ", description="
+            + getDescription() + ", availableVirtualSwitches=" + getAvailableVirtualSwitches()
+            + "]";
     }
 
 }

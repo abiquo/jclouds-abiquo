@@ -90,8 +90,6 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
             env.enterpriseClient.getLimits(env.enterprise.unwrap(), env.datacenter.unwrap());
         assertNotNull(limitsDto);
         assertFalse(limitsDto.isEmpty());
-
-        tearDownLimits();
     }
 
     public void testAllowTwiceWorks()
@@ -109,6 +107,8 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
     {
         env.enterprise.prohibitDatacenter(env.datacenter);
         env.enterprise.prohibitDatacenter(env.datacenter);
+
+        env.enterprise.allowDatacenter(env.datacenter);
     }
 
     public void testListLimits()
@@ -119,8 +119,6 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
         List<Limits> allLimits = env.enterprise.listLimits();
         assertNotNull(allLimits);
         assertEquals(allLimits.size(), 1);
-
-        tearDownLimits();
     }
 
     public void testUpdateInvalidLimits()
@@ -138,7 +136,6 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.BAD_REQUEST, "CONSTR-LIMITRANGE");
-            tearDownLimits();
         }
     }
 
@@ -155,8 +152,6 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
         assertNotNull(limitsDto);
         assertEquals(limitsDto.getCollection().get(0).getCpuCountHardLimit(), 5);
         assertEquals(limitsDto.getCollection().get(0).getCpuCountSoftLimit(), 4);
-
-        tearDownLimits();
     }
 
     public void testListAllowedDatacenters()
@@ -169,16 +164,18 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
         assertNotNull(allowed);
         assertFalse(allowed.isEmpty());
         assertEquals(allowed.get(0).getId(), env.datacenter.getId());
-
-        tearDownLimits();
     }
 
     public void testListAllowedDatacentersWithNoAllowedDatacenters()
     {
+        tearDownLimits();
+
         List<Datacenter> allowed = env.enterprise.listAllowedDatacenters();
 
         assertNotNull(allowed);
         assertTrue(allowed.isEmpty());
+
+        env.enterprise.allowDatacenter(env.datacenter);
     }
 
     private void tearDownLimits()
@@ -190,5 +187,4 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
         assertNotNull(limitsDto);
         assertTrue(limitsDto.isEmpty());
     }
-
 }

@@ -21,12 +21,16 @@ package org.jclouds.abiquo.domain;
 
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
+import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachineState;
+import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -153,6 +157,22 @@ public class CloudResources
         return virtualMachine;
     }
 
+    public static VirtualMachineStateDto virtualMachineState()
+    {
+        VirtualMachineStateDto state = new VirtualMachineStateDto();
+        state.setState(VirtualMachineState.ON);
+        return state;
+    }
+
+    public static String virtualMachineStatePayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualmachinestate>");
+        buffer.append("<state>ON</state>");
+        buffer.append("</virtualmachinestate>");
+        return buffer.toString();
+    }
+
     public static VolumeManagementDto volumePost()
     {
         VolumeManagementDto volume = new VolumeManagementDto();
@@ -185,14 +205,32 @@ public class CloudResources
         return volume;
     }
 
+    public static VirtualMachineTemplateDto virtualMachineTemplatePut()
+    {
+        VirtualMachineTemplateDto template = new VirtualMachineTemplateDto();
+        template.setId(10);
+        template.setName("m0n0wall");
+        template.setDiskFormatType(DiskFormatType.VMDK_FLAT.toString());
+        template.setPath("1/abiquo-repository.abiquo.com/m0n0wall/m0n0wall-1.3b18-i386-flat.vmdk");
+        template.setDiskFileSize(27262976);
+        template.setCpuRequired(1);
+        template.setRamRequired(128);
+        template.setCpuRequired(27262976);
+        template.setCreationUser("SYSTEM");
+        template.addLink(new RESTLink("icon", "http://localhost/api/config/icons/1"));
+        template.addLink(new RESTLink("category", "http://localhost/api/config/categories/1"));
+
+        return template;
+
+    }
+
     public static TierDto cloudTierPut()
     {
         TierDto tier = new TierDto();
         tier.setId(1);
         tier.setEnabled(true);
         tier.setName("Tier");
-        tier
-            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        tier.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
         return tier;
     }
 
@@ -445,8 +483,7 @@ public class CloudResources
     public static DiskManagementDto hardDiskPut()
     {
         DiskManagementDto disk = hardDiskPost();
-        disk
-            .addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/disks/1"));
+        disk.addLink(new RESTLink("edit", "http://localhost/api/cloud/virtualdatacenters/1/disks/1"));
         disk.addLink(new RESTLink("virtualdatacenter",
             "http://localhost/api/cloud/virtualdatacenters/1"));
         return disk;

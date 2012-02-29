@@ -182,8 +182,8 @@ public class InfrastructureAsyncClientTest extends
 
     /*********************** Hypervisor ***********************/
 
-    public void testGetHypervisorFromRemoteMachine() throws SecurityException,
-        NoSuchMethodException, IOException
+    public void testGetHypervisorTypeFromMachine() throws SecurityException, NoSuchMethodException,
+        IOException
     {
         Method method =
             InfrastructureAsyncClient.class.getMethod("getHypervisorTypeFromMachine",
@@ -383,6 +383,28 @@ public class InfrastructureAsyncClientTest extends
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateManagedRack() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("updateManagedRack", UcsRackDto.class);
+
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.managedRackPut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/managedrackdto+xml\n");
+        assertPayloadEquals(request, withHeader(InfrastructureResources.managedRackPutPayload()),
+            "application/managedrackdto+xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }
@@ -1305,8 +1327,7 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    public void testCreatePublicNetwork() throws SecurityException, NoSuchMethodException,
-        IOException
+    public void testCreateNetwork() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
             InfrastructureAsyncClient.class.getMethod("createNetwork", DatacenterDto.class,

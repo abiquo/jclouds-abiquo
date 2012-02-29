@@ -73,6 +73,10 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     public Enterprise defaultEnterprise;
 
+    public AbiquoContext plainUserContext;
+
+    public AbiquoContext enterpriseAdminContext;
+
     public CloudTestEnvironment(final AbiquoContext context)
     {
         super(context);
@@ -86,6 +90,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         createLicense();
         super.setup();
         createUserContext();
+        createEnterpriseAdminContext();
         findDefaultEnterprise();
         createVirtualDatacenter();
         createVirtualAppliance();
@@ -115,6 +120,17 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         Properties props = new Properties();
         props.put("abiquo.endpoint", endpoint);
         plainUserContext = new AbiquoContextFactory().createContext("jclouds", "user", props);
+    }
+
+    private void createEnterpriseAdminContext()
+    {
+        String endpoint =
+            checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
+
+        Properties props = new Properties();
+        props.put("abiquo.endpoint", endpoint);
+        enterpriseAdminContext =
+            new AbiquoContextFactory().createContext("jclouds-admin", "admin", props);
     }
 
     private void createLicense() throws IOException

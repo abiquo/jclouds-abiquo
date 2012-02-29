@@ -63,4 +63,5 @@ public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClie
      * This service provides an entry point to asyncohonous task monitoring tasks.
      */
     MonitoringService getMonitoringService();
+
 }

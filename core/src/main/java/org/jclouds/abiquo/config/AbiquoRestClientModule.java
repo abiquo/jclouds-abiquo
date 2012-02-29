@@ -38,12 +38,17 @@ import org.jclouds.abiquo.features.TaskClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
+import org.jclouds.abiquo.rest.internal.AbiquoHttpAsyncClient;
+import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpErrorHandler;
 import org.jclouds.http.RequiresHttp;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
 import org.jclouds.rest.ConfiguresRestClient;
+import org.jclouds.rest.Utils;
+import org.jclouds.rest.config.BinderUtils;
 import org.jclouds.rest.config.RestClientModule;
 
 import com.google.common.collect.ImmutableMap;
@@ -71,6 +76,22 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
     public AbiquoRestClientModule()
     {
         super(AbiquoClient.class, AbiquoAsyncClient.class, DELEGATE_MAP);
+    }
+
+    @Override
+    protected void configure()
+    {
+        super.configure();
+        bindAbiquoGenericHttpClient();
+        bind(Utils.class).to(ExtendedUtils.class);
+    }
+
+    protected void bindAbiquoGenericHttpClient()
+    {
+        BinderUtils.bindAsyncClient(binder(), AbiquoHttpAsyncClient.class);
+        BinderUtils.bindClient(binder(), AbiquoHttpClient.class, AbiquoHttpAsyncClient.class,
+            ImmutableMap.<Class< ? >, Class< ? >> of(AbiquoHttpClient.class,
+                AbiquoHttpAsyncClient.class));
     }
 
     @Override

@@ -42,7 +42,7 @@ public class BindHardDiskRefsToPayload extends BindRefsToPayload
     }
 
     @Override
-    protected String getRelToUse()
+    protected String getRelToUse(final Object input)
     {
         return "disk";
     }

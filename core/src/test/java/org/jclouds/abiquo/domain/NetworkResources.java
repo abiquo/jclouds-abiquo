@@ -62,6 +62,26 @@ public class NetworkResources
         return ip;
     }
 
+    public static IpPoolManagementDto publicIpToPurchase()
+    {
+        IpPoolManagementDto ip = new IpPoolManagementDto();
+        RESTLink self =
+            new RESTLink("purchase",
+                "http://localhost/api/cloud/virtualdatacenters/5/publicips/purchased/1");
+        ip.addLink(self);
+        return ip;
+    }
+
+    public static IpPoolManagementDto publicIpToRelease()
+    {
+        IpPoolManagementDto ip = new IpPoolManagementDto();
+        RESTLink self =
+            new RESTLink("release",
+                "http://localhost/api/cloud/virtualdatacenters/5/publicips/topurchase/1");
+        ip.addLink(self);
+        return ip;
+    }
+
     public static NicDto nicPut()
     {
         NicDto nic = new NicDto();

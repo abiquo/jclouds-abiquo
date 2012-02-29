@@ -46,8 +46,7 @@ import com.google.common.collect.Lists;
 public class Tier extends DomainWrapper<TierDto>
 {
     /** The datacenter where the tier belongs. */
-    // Package protected to allow navigation from children
-    Datacenter datacenter;
+    private Datacenter datacenter;
 
     /**
      * Constructor to be used only by the builder.
@@ -89,9 +88,10 @@ public class Tier extends DomainWrapper<TierDto>
     // Parent access
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter">
-     *      http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      RetrieveaDatacenter</a>
      */
     public Datacenter getDatacenter()
     {

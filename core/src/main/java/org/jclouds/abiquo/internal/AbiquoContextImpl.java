@@ -67,7 +67,7 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
         final TypeLiteral<AbiquoClient> syncApi, final TypeLiteral<AbiquoAsyncClient> asyncApi,
         @Provider final URI endpoint, @Provider final String provider,
         @Identity final String identity, @ApiVersion final String apiVersion,
-        @BuildVersion String buildVersion, final AdministrationService administrationService,
+        @BuildVersion final String buildVersion, final AdministrationService administrationService,
         final CloudService cloudService, final SearchService searchService,
         final MonitoringService monitoringService)
     {

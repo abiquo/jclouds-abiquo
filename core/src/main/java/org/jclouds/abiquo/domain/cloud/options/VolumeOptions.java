@@ -20,12 +20,14 @@
 package org.jclouds.abiquo.domain.cloud.options;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
 /**
  * Available options to query volumes.
  * 
  * @author Ignasi Barrera
  */
+@EnterpriseEdition
 public class VolumeOptions extends QueryOptions
 {
     public static Builder builder()

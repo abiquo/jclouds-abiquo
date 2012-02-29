@@ -70,6 +70,7 @@ public class AbiquoContextBuilder extends RestContextBuilder<AbiquoClient, Abiqu
         {
             modules.add(new EventBusModule());
         }
+
         return super.buildInjector();
     }
 

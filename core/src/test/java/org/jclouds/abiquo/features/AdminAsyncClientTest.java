@@ -92,6 +92,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         assertPayloadEquals(request, withHeader(AdminResources.rolePostPayload()),
             "application/link+xml", false);
 
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -109,6 +110,24 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateRole() throws SecurityException, NoSuchMethodException
+    {
+        Method method = AdminAsyncClient.class.getMethod("updateRole", RoleDto.class);
+        GeneratedHttpRequest<AdminAsyncClient> request =
+            processor.createRequest(method, AdminResources.rolePut());
+
+        assertRequestLineEquals(request, "PUT http://localhost/api/admin/roles/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/link+xml\n");
+        assertPayloadEquals(request, withHeader(AdminResources.rolePutPayload()),
+            "application/link+xml", false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
