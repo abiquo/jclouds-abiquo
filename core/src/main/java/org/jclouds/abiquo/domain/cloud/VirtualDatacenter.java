@@ -501,13 +501,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     public void purchasePublicIp(final Ip ip)
     {
-        checkNotNull(target.searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
+        checkNotNull(ip.unwrap().searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
         context.getApi().getCloudClient().purchasePublicIp(ip.unwrap());
     }
 
     public void releaseePublicIp(final Ip ip)
     {
-        checkNotNull(target.searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
+        checkNotNull(ip.unwrap().searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
         context.getApi().getCloudClient().releasePublicIp(ip.unwrap());
     }
 
