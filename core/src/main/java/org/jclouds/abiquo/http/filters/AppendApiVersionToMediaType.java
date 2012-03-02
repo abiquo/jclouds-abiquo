@@ -83,7 +83,7 @@ public class AppendApiVersionToMediaType implements HttpRequestFilter
     }
 
     @VisibleForTesting
-    protected Iterable<String> appendVersion(final Collection<String> headers)
+    Iterable<String> appendVersion(final Collection<String> headers)
     {
         return Iterables.transform(headers, new Function<String, String>()
         {
