@@ -426,6 +426,7 @@ public interface InfrastructureAsyncClient
      */
     @PUT
     @Consumes(RemoteServiceDto.BASE_MEDIA_TYPE)
+    @Produces(RemoteServiceDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<RemoteServiceDto> updateRemoteService(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RemoteServiceDto remoteService);
@@ -635,8 +636,10 @@ public interface InfrastructureAsyncClient
      */
     @EnterpriseEdition
     @PUT
-    @Consumes(StoragePoolDto.BASE_MEDIA_TYPE)
-    @Produces(StoragePoolDto.BASE_MEDIA_TYPE)
+    // For the most strangest reason in world, compiler does not accept 
+    // constants StoragePoolDto.BASE_MEDIA_TYPE for this method.
+    @Consumes("application/vnd.abiquo.storagepool+xml")
+    @Produces("application/vnd.abiquo.storagepool+xml")
     @JAXBResponseParser
     ListenableFuture<StoragePoolDto> updateStoragePool(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StoragePoolDto StoragePoolDto);

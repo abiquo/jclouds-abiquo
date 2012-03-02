@@ -1134,7 +1134,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/storage/tiers/1/pools HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + RemoteServiceDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + StoragePoolsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
