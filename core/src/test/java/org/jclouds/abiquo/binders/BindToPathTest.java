@@ -26,6 +26,7 @@ import java.net.URI;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.HttpMethod;
+import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
@@ -35,6 +36,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.SingleResourceTransportDto;
+import com.abiquo.server.core.infrastructure.DatastoreDto;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -190,6 +192,18 @@ public class BindToPathTest
         public TestDto()
         {
             addLink(new RESTLink("edit", "http://linkuri"));
+        }
+    
+        @Override
+        public String getMediaType()
+        {
+            return MediaType.APPLICATION_XML;
+        }
+        
+        @Override
+        public String getBaseMediaType()
+        {
+            return MediaType.APPLICATION_XML;
         }
     }
 }

@@ -33,7 +33,9 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
+import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.google.inject.TypeLiteral;
 
@@ -54,7 +56,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/roles HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + RolesDto.MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -71,7 +73,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
             processor.createRequest(method, EnterpriseResources.userPut());
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/roles/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/link+xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + RoleDto.MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -88,9 +90,9 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
             processor.createRequest(method, AdminResources.rolePost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/admin/roles HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/link+xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + RoleDto.MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(AdminResources.rolePostPayload()),
-            "application/link+xml", false);
+            RoleDto.MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -106,7 +108,6 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
             processor.createRequest(method, AdminResources.rolePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/roles/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -123,9 +124,9 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
             processor.createRequest(method, AdminResources.rolePut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/roles/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/link+xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + RoleDto.MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(AdminResources.rolePutPayload()),
-            "application/link+xml", false);
+            RoleDto.MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -140,7 +141,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/roles/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/link+xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + RoleDto.MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -159,7 +160,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/roles/1/action/privileges HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/flat+xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PrivilegesDto.MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -177,7 +178,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/login HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + UserDto.MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

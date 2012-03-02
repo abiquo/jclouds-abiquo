@@ -28,6 +28,8 @@ import org.jclouds.abiquo.features.TaskAsyncClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
 import org.jclouds.rest.annotations.Delegate;
 
+import com.abiquo.model.transport.SingleResourceTransportDto;
+
 /**
  * Provides asynchronous access to Abiquo via their REST API.
  * 
@@ -40,7 +42,7 @@ public interface AbiquoAsyncClient
     /**
      * The version of the supported Abiquo API.
      */
-    public static final String API_VERSION = "2.0-SNAPSHOT";
+    public static final String API_VERSION = SingleResourceTransportDto.API_VERSION;
 
     /**
      * The supported build version of the Abiquo Api.

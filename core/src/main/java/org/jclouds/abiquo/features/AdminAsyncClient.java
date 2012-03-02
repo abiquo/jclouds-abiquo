@@ -28,13 +28,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.functions.enterprise.ParseEnterpriseId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
-import org.jclouds.abiquo.reference.rest.AbiquoMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
@@ -60,7 +58,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Francesc Montserrat
  */
 @RequestFilters(AbiquoAuthentication.class)
-@Consumes(MediaType.APPLICATION_XML)
 public interface AdminAsyncClient
 {
     /*********************** Login ***********************/
@@ -70,6 +67,8 @@ public interface AdminAsyncClient
      */
     @GET
     @Path("/login")
+    @Consumes(UserDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<UserDto> getCurrentUser();
 
     /*********************** Role ***********************/
@@ -79,6 +78,8 @@ public interface AdminAsyncClient
      */
     @GET
     @Path("/admin/roles")
+    @Consumes(RolesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<RolesDto> listRoles();
 
     /**
@@ -86,6 +87,8 @@ public interface AdminAsyncClient
      */
     @GET
     @Path("/admin/roles")
+    @Consumes(RolesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<RolesDto> listRoles(
         @QueryParam("identerprise") @ParamParser(ParseEnterpriseId.class) final EnterpriseDto enterprise);
 
@@ -93,7 +96,7 @@ public interface AdminAsyncClient
      * @see AdminClient#getRole(UserDto)
      */
     @GET
-    @Consumes(AbiquoMediaType.APPLICATION_LINK_XML)
+    @Consumes(RoleDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<RoleDto> getRole(
@@ -104,7 +107,7 @@ public interface AdminAsyncClient
      */
     @GET
     @Path("/admin/roles/{role}")
-    @Consumes(AbiquoMediaType.APPLICATION_LINK_XML)
+    @Consumes(RoleDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<RoleDto> getRole(@PathParam("role") Integer roleId);
@@ -120,9 +123,9 @@ public interface AdminAsyncClient
      * @see AdminClient#updateRole(RoleDto)
      */
     @PUT
+    @Produces(RoleDto.BASE_MEDIA_TYPE)
+    @Consumes(RoleDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    @Produces(AbiquoMediaType.APPLICATION_LINK_XML)
-    @Consumes(AbiquoMediaType.APPLICATION_LINK_XML)
     ListenableFuture<RoleDto> updateRole(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RoleDto role);
 
@@ -131,17 +134,17 @@ public interface AdminAsyncClient
      */
     @POST
     @Path("/admin/roles")
+    @Produces(RoleDto.BASE_MEDIA_TYPE)
+    @Consumes(RoleDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    @Produces(AbiquoMediaType.APPLICATION_LINK_XML)
-    @Consumes(AbiquoMediaType.APPLICATION_LINK_XML)
     ListenableFuture<RoleDto> createRole(@BinderParam(BindToXMLPayload.class) RoleDto role);
 
     /**
      * @see AdminClient#listPrivileges(RoleDto)
      */
     @GET
+    @Consumes(PrivilegesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    @Consumes(AbiquoMediaType.APPLICATION_FLAT_XML)
     ListenableFuture<PrivilegesDto> listPrivileges(
         @EndpointLink("privileges") @BinderParam(BindToPath.class) RoleDto role);
 }
