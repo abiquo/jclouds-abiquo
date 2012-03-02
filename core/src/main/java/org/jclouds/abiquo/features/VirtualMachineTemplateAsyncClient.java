@@ -32,6 +32,7 @@ import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
@@ -50,7 +51,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters(AbiquoAuthentication.class)
+@RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Consumes(MediaType.APPLICATION_XML)
 @Path("/admin/enterprises")
 public interface VirtualMachineTemplateAsyncClient

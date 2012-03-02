@@ -27,6 +27,7 @@ import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.RestClientTest;
 import org.jclouds.rest.RestContextFactory;
@@ -45,8 +46,9 @@ public abstract class BaseAbiquoAsyncClientTest<T> extends RestClientTest<T>
     @Override
     protected void checkFilters(final HttpRequest request)
     {
-        assertEquals(request.getFilters().size(), 1);
+        assertEquals(request.getFilters().size(), 2);
         assertEquals(request.getFilters().get(0).getClass(), AbiquoAuthentication.class);
+        assertEquals(request.getFilters().get(1).getClass(), AppendApiVersionToMediaType.class);
     }
 
     @Override

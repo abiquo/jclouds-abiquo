@@ -35,6 +35,7 @@ import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
@@ -64,7 +65,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters(AbiquoAuthentication.class)
+@RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Consumes(MediaType.APPLICATION_XML)
 @Path("/config")
 public interface ConfigAsyncClient

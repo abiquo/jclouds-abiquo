@@ -46,6 +46,7 @@ import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.functions.ReturnStringIf2xx;
@@ -95,8 +96,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters(AbiquoAuthentication.class)
-@Consumes(MediaType.APPLICATION_XML)
+@RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/admin")
 public interface InfrastructureAsyncClient
 {
@@ -138,6 +138,7 @@ public interface InfrastructureAsyncClient
     @PUT
     @Produces(DatacenterDto.BASE_MEDIA_TYPE)
     @Consumes(DatacenterDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DatacenterDto> updateDatacenter(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterDto datacenter);
 
@@ -180,7 +181,7 @@ public interface InfrastructureAsyncClient
      *      HypervisorType, String, String)
      */
     @GET
-    @Consumes(MachineDto.BASE_MEDIA_TYPE)
+    @Consumes(MachinesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
     ListenableFuture<MachineDto> discoverMultipleMachines(
@@ -194,7 +195,7 @@ public interface InfrastructureAsyncClient
      *      HypervisorType, String, String, MachineOptions)
      */
     @GET
-    @Consumes(MachineDto.BASE_MEDIA_TYPE)
+    @Consumes(MachinesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
     ListenableFuture<MachineDto> discoverMultipleMachines(
@@ -275,6 +276,7 @@ public interface InfrastructureAsyncClient
      */
     @PUT
     @Consumes(RackDto.BASE_MEDIA_TYPE)
+    @Produces(RackDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<RackDto> updateRack(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
@@ -633,6 +635,8 @@ public interface InfrastructureAsyncClient
      */
     @EnterpriseEdition
     @PUT
+    @Consumes(StoragePoolDto.BASE_MEDIA_TYPE)
+    @Produces(StoragePoolDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<StoragePoolDto> updateStoragePool(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StoragePoolDto StoragePoolDto);
@@ -664,7 +668,7 @@ public interface InfrastructureAsyncClient
      */
     @EnterpriseEdition
     @GET
-    @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+    @Consumes(VLANNetworksDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<VLANNetworksDto> listNetworks(
         @EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter);
