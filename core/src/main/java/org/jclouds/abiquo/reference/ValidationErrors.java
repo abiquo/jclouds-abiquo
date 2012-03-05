@@ -28,7 +28,7 @@ public class ValidationErrors
 {
     public static final String NULL_RESOURCE = "The resource should be assigned to a ";
 
-    public static final String MISSING_REQUIRED_FIELD = "Missing required field: ";
+    public static final String MISSING_REQUIRED_FIELD = "Missing required field ";
 
     public static final String MISSING_REQUIRED_LINK = "Missing required link ";
 
