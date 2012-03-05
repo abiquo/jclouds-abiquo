@@ -18,18 +18,14 @@
  */
 
 package org.jclouds.abiquo.features;
-import static org.jclouds.abiquo.rest.util.MediaTypeUtils.formatMediaType;
+
 import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
-import static org.testng.Assert.assertEquals;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.AdminResources;
 import org.jclouds.abiquo.domain.EnterpriseResources;
-import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
-import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
-import org.jclouds.http.HttpRequest;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -59,7 +55,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         Method method = AdminAsyncClient.class.getMethod("listRoles");
         GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method);
         checkFilters(request);
-        
+
         assertRequestLineEquals(request, "GET http://localhost/api/admin/roles HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RolesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
@@ -200,5 +196,5 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         {
         };
     }
-    
+
 }
