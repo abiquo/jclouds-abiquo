@@ -30,6 +30,7 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
+import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -186,6 +187,21 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public Organization findOrganization(final Predicate<Organization> filter)
     {
         return Iterables.getFirst(filter(listOrganizations(), filter), null);
+    }
+
+    // Children access
+
+    public LogicServer clone(final LogicServer logicServer, final Organization organization,
+        final String newName)
+    {
+        LogicServerDto server =
+            context
+                .getApi()
+                .getInfrastructureClient()
+                .cloneLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
+                    newName);
+
+        return wrap(context, LogicServer.class, server);
     }
 
     // Builder

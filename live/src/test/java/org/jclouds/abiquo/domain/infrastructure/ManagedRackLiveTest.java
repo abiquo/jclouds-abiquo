@@ -22,6 +22,9 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
+import java.util.List;
 
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -74,6 +77,23 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvir
         rack =
             env.datacenter.findManagedRack(ManagedRackPredicates.name(ucsRack.getName() + "FAIL"));
         assertNull(rack);
+    }
+
+    public void testCloneLogicServer()
+    {
+        List<LogicServer> originals = ucsRack.listServiceProfiles();
+        assertNotNull(originals);
+        assertTrue(originals.size() > 0);
+        LogicServer original = originals.get(0);
+
+        List<Organization> organizations = ucsRack.listOrganizations();
+        assertNotNull(organizations);
+        assertTrue(organizations.size() > 0);
+        Organization organization = organizations.get(0);
+
+        LogicServer server = ucsRack.clone(original, organization, original.getName() + "copy");
+        assertNotNull(server);
+        assertEquals(server.getName(), original.getName() + "copy");
     }
 
     @BeforeClass
