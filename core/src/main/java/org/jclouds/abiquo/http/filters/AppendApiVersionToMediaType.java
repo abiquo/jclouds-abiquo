@@ -44,7 +44,7 @@ import com.google.common.net.HttpHeaders;
 public class AppendApiVersionToMediaType implements HttpRequestFilter
 {
     /** The function used to append the version to media types. */
-    protected AppendApiVersionToAbiquoMimeType versionAppender;
+    private AppendApiVersionToAbiquoMimeType versionAppender;
 
     @Inject
     public AppendApiVersionToMediaType(final AppendApiVersionToAbiquoMimeType versionAppender)
