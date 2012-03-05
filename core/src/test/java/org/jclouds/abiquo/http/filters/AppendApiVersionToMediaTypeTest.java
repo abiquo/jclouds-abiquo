@@ -141,7 +141,7 @@ public class AppendApiVersionToMediaTypeTest
             + AbiquoAsyncClient.API_VERSION);
     }
 
-    public void testFilterWithMixedVersionInMediaType()
+    public void testFilterWithMixedVersionInMediaTypeAndNoVersionInAccept()
     {
         Multimap<String, String> headers = LinkedHashMultimap.<String, String> create();
         headers.put(HttpHeaders.ACCEPT, "application/xml");
@@ -165,5 +165,32 @@ public class AppendApiVersionToMediaTypeTest
         Collection<String> contentType = filtered.getHeaders().get(HttpHeaders.CONTENT_TYPE);
         assertEquals(contentType.size(), 1);
         assertEquals(contentType.iterator().next(), "application/xml;version=1.8.5");
+    }
+
+    public void testFilterWithMixedVersionInMediaTypeAndNoVersionInContentType()
+    {
+        Multimap<String, String> headers = LinkedHashMultimap.<String, String> create();
+        headers.put(HttpHeaders.ACCEPT, "application/xml");
+        headers.put(HttpHeaders.ACCEPT, "application/json;version=3.5");
+        headers.put(HttpHeaders.CONTENT_TYPE, "application/xml");
+
+        HttpRequest request =
+            HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).headers(headers)
+                .build();
+
+        AppendApiVersionToMediaType filter =
+            new AppendApiVersionToMediaType(AbiquoAsyncClient.API_VERSION);
+
+        HttpRequest filtered = filter.filter(request);
+
+        List<String> accept = Lists.newArrayList(filtered.getHeaders().get(HttpHeaders.ACCEPT));
+        assertEquals(accept.size(), 2);
+        assertEquals(accept.get(0), "application/xml;version=" + AbiquoAsyncClient.API_VERSION);
+        assertEquals(accept.get(1), "application/json;version=3.5");
+
+        Collection<String> contentType = filtered.getHeaders().get(HttpHeaders.CONTENT_TYPE);
+        assertEquals(contentType.size(), 1);
+        assertEquals(contentType.iterator().next(), "application/xml;version="
+            + AbiquoAsyncClient.API_VERSION);
     }
 }
