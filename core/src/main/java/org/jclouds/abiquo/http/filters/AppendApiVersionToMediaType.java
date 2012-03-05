@@ -23,84 +23,61 @@ import java.util.Collection;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.functions.AppendApiVersionToAbiquoMimeType;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
 import org.jclouds.http.utils.ModifyRequest;
-import org.jclouds.rest.annotations.ApiVersion;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
 import com.google.common.net.HttpHeaders;
 
 /**
- * Appends the api version to the media types to ensure the input and output of api calls will be in
- * the desired format.
+ * Appends the api version to the Abiquo mime types to ensure the input and output of api calls will
+ * be in the desired format.
  * 
  * @author Ignasi Barrera
  */
 @Singleton
 public class AppendApiVersionToMediaType implements HttpRequestFilter
 {
-    /** The version to append to media types without version. */
-    protected String apiVersion;
+    /** The function used to append the version to media types. */
+    protected AppendApiVersionToAbiquoMimeType versionAppender;
 
     @Inject
-    public AppendApiVersionToMediaType(@ApiVersion final String apiVersion)
+    public AppendApiVersionToMediaType(final AppendApiVersionToAbiquoMimeType versionAppender)
     {
         super();
-        this.apiVersion = apiVersion;
+        this.versionAppender = versionAppender;
     }
 
     @Override
     public HttpRequest filter(final HttpRequest request) throws HttpException
     {
-        Collection<String> accept = request.getHeaders().get(HttpHeaders.ACCEPT);
-        Collection<String> contentType = request.getHeaders().get(HttpHeaders.CONTENT_TYPE);
-
-        Iterable<String> acceptWithVersion = appendVersion(accept);
-        Iterable<String> contentTypeWithVersion = appendVersion(contentType);
-
-        HttpRequest requestWithVersionInMediaTypes = request;
-
-        if (!accept.isEmpty())
-        {
-            requestWithVersionInMediaTypes =
-                ModifyRequest.replaceHeader(requestWithVersionInMediaTypes, HttpHeaders.ACCEPT,
-                    acceptWithVersion);
-        }
-        if (!contentType.isEmpty())
-        {
-            requestWithVersionInMediaTypes =
-                ModifyRequest.replaceHeader(requestWithVersionInMediaTypes,
-                    HttpHeaders.CONTENT_TYPE, contentTypeWithVersion);
-        }
-
-        return requestWithVersionInMediaTypes;
+        HttpRequest requestWithVersionInMediaTypes = appendVersionToNonPayloadHeaders(request);
+        return appendVersionToPayloadHeaders(requestWithVersionInMediaTypes);
     }
 
     @VisibleForTesting
-    Iterable<String> appendVersion(final Collection<String> headers)
+    HttpRequest appendVersionToNonPayloadHeaders(final HttpRequest request)
     {
-        return Iterables.transform(headers, new Function<String, String>()
-        {
-            @Override
-            public String apply(final String input)
-            {
-                MediaType mediaType = MediaType.valueOf(input);
-                if (!mediaType.getParameters().containsKey("version"))
-                {
-                    return mediaType.toString() + ";version=" + apiVersion;
-                }
-                else
-                {
-                    return mediaType.toString();
-                }
-            }
-        });
+        Collection<String> accept = request.getHeaders().get(HttpHeaders.ACCEPT);
+        return accept.isEmpty() ? request : ModifyRequest.replaceHeader(request,
+            HttpHeaders.ACCEPT, Iterables.transform(accept, versionAppender));
     }
 
+    @VisibleForTesting
+    HttpRequest appendVersionToPayloadHeaders(final HttpRequest request)
+    {
+        if (request.getPayload() != null)
+        {
+            String contentTypeWithVersion =
+                versionAppender.apply(request.getPayload().getContentMetadata().getContentType());
+            request.getPayload().getContentMetadata().setContentType(contentTypeWithVersion);
+        }
+
+        return request;
+    }
 }

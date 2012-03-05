@@ -29,7 +29,7 @@ import com.abiquo.model.transport.error.ErrorsDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Parses a datacenter sobject.
+ * Parses a errors object.
  * 
  * @author Ignasi Barrera
  */
@@ -37,7 +37,7 @@ import com.google.inject.TypeLiteral;
 public class ParseErrors extends ParseXMLWithJAXB<ErrorsDto>
 {
     @Inject
-    public ParseErrors(XMLParser xml, TypeLiteral<ErrorsDto> type)
+    public ParseErrors(final XMLParser xml, final TypeLiteral<ErrorsDto> type)
     {
         super(xml, type);
     }

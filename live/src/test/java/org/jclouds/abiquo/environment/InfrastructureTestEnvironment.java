@@ -25,10 +25,14 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.List;
 import java.util.UUID;
 
 import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.enterprise.Role;
@@ -58,6 +62,7 @@ import org.jclouds.abiquo.util.Config;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.enumerator.StorageTechnologyType;
+import com.google.common.io.Resources;
 
 /**
  * Test environment for infrastructure live tests.
@@ -82,6 +87,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     public ConfigClient configClient;
 
     // Resources
+
+    public License license;
 
     public Datacenter datacenter;
 
@@ -124,6 +131,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     @Override
     public void setup() throws Exception
     {
+        // Configuration
+        createLicense();
+
         // Intrastructure
         createDatacenter();
         createRack();
@@ -152,9 +162,19 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         deleteRack();
         deleteDatacenter();
         deleteEnterprise();
+
+        deleteLicense();
     }
 
     // Setup
+
+    protected void createLicense() throws IOException
+    {
+        license = License.builder(context, readLicense()).build();
+
+        license.add();
+        assertNotNull(license.getId());
+    }
 
     protected void createDatacenter()
     {
@@ -390,12 +410,24 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
+    private void deleteLicense()
+    {
+        license.remove();
+    }
+
     protected static String randomName()
     {
         return PREFIX + UUID.randomUUID().toString().substring(0, 12);
     }
 
     // Utility methods
+
+    public static String readLicense() throws IOException
+    {
+        URL url = CloudTestEnvironment.class.getResource("/license/expired");
+
+        return Resources.toString(url, Charset.defaultCharset());
+    }
 
     public RemoteService findRemoteService(final RemoteServiceType type)
     {
