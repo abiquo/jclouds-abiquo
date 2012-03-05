@@ -26,8 +26,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
@@ -59,6 +59,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
+import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.annotations.ResponseParser;
@@ -66,6 +67,7 @@ import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
@@ -88,6 +90,7 @@ import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
+import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
@@ -102,7 +105,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
-@Consumes(MediaType.APPLICATION_XML)
 @Path("/cloud")
 public interface CloudAsyncClient
 {
@@ -113,6 +115,8 @@ public interface CloudAsyncClient
      */
     @GET
     @Path("/virtualdatacenters")
+    @Consumes(VirtualDatacentersDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualDatacentersDto> listVirtualDatacenters(
         @BinderParam(AppendOptionsToPath.class) VirtualDatacenterOptions options);
 
@@ -122,6 +126,8 @@ public interface CloudAsyncClient
     @GET
     @Path("/virtualdatacenters/{virtualdatacenter}")
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @Consumes(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualDatacenterDto> getVirtualDatacenter(
         @PathParam("virtualdatacenter") Integer virtualDatacenterId);
 
@@ -130,6 +136,9 @@ public interface CloudAsyncClient
      */
     @POST
     @Path("/virtualdatacenters")
+    @Consumes(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualDatacenterDto> createVirtualDatacenter(
         @BinderParam(BindToXMLPayload.class) final VirtualDatacenterDto virtualDatacenter,
         @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter,
@@ -139,6 +148,9 @@ public interface CloudAsyncClient
      * @see CloudClient#updateVirtualDatacenter(VirtualDatacenterDto)
      */
     @PUT
+    @Consumes(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualDatacenterDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualDatacenterDto> updateVirtualDatacenter(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualDatacenterDto virtualDatacenter);
 
@@ -154,6 +166,8 @@ public interface CloudAsyncClient
      */
     @EnterpriseEdition
     @GET
+    @Consumes(TiersDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<TiersDto> listStorageTiers(
         @EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
@@ -163,7 +177,9 @@ public interface CloudAsyncClient
     @EnterpriseEdition
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<TiersDto> getStorageTier(
+    @Consumes(TierDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<TierDto> getStorageTier(
         @EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer tierId);
 
@@ -173,6 +189,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listAvailablePublicIps(VirtualDatacenterDto, IpOptions)
      */
     @GET
+    @Consumes(IpsPoolManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IpsPoolManagementDto> listAvailablePublicIps(
         @EndpointLink("topurchase") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
@@ -181,6 +199,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listPurchasedPublicIps(VirtualDatacenterDto, IpOptions)
      */
     @GET
+    @Consumes(IpsPoolManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IpsPoolManagementDto> listPurchasedPublicIps(
         @EndpointLink("purchased") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
@@ -189,6 +209,8 @@ public interface CloudAsyncClient
      * @see CloudClient#purchasePublicIp(IpsPoolManagementDto)
      */
     @PUT
+    @Consumes(IpPoolManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IpPoolManagementDto> purchasePublicIp(
         @EndpointLink("purchase") @BinderParam(BindToPath.class) IpPoolManagementDto publicIp);
 
@@ -196,6 +218,8 @@ public interface CloudAsyncClient
      * @see CloudClient#releasePublicIp(IpsPoolManagementDto)
      */
     @PUT
+    @Consumes(IpPoolManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IpPoolManagementDto> releasePublicIp(
         @EndpointLink("release") @BinderParam(BindToPath.class) IpPoolManagementDto publicIp);
 
@@ -205,6 +229,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listPrivateNetworks(VirtualDatacenter)
      */
     @GET
+    @Consumes(VLANNetworksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VLANNetworksDto> listPrivateNetworks(
         @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
@@ -213,6 +239,8 @@ public interface CloudAsyncClient
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VLANNetworkDto> getPrivateNetwork(
         @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer privateNetworkId);
@@ -221,6 +249,9 @@ public interface CloudAsyncClient
      * @see CloudClient#createPrivateNetwork(VirtualDatacenterDto, VLANNetworkDto)
      */
     @POST
+    @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+    @Produces(VLANNetworkDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VLANNetworkDto> createPrivateNetwork(
         @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(BindToXMLPayload.class) VLANNetworkDto privateNetwork);
@@ -229,6 +260,9 @@ public interface CloudAsyncClient
      * @see CloudClient#updatePrivateNetwork(VLANNetworkDto)
      */
     @PUT
+    @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+    @Produces(VLANNetworkDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VLANNetworkDto> updatePrivateNetwork(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VLANNetworkDto privateNetwork);
 
@@ -243,6 +277,8 @@ public interface CloudAsyncClient
      * @see CloudClient#getDefaultNetwork(VirtualDatacenterDto)
      */
     @GET
+    @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VLANNetworkDto> getDefaultNetwork(
         @EndpointLink("defaultnetwork") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
@@ -250,6 +286,7 @@ public interface CloudAsyncClient
      * @see CloudClient#setDefaultNetwork(VirtualDatacenterDto, VLANNetworkDto)
      */
     @PUT
+    @Produces(LinksDto.BASE_MEDIA_TYPE)
     ListenableFuture<Void> setDefaultNetwork(
         @EndpointLink("defaultvlan") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(BindNetworkRefToPayload.class) VLANNetworkDto network);
@@ -260,6 +297,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listPrivateNetworkIps(VLANNetworkDto)
      */
     @GET
+    @Consumes(IpsPoolManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IpsPoolManagementDto> listPrivateNetworkIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
@@ -267,6 +306,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listPrivateNetworkIps(VLANNetworkDto, IpOptions)
      */
     @GET
+    @Consumes(IpsPoolManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IpsPoolManagementDto> listPrivateNetworkIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
@@ -278,6 +319,9 @@ public interface CloudAsyncClient
      */
     @POST
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(LinksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindIpRefToPayload.class) IpPoolManagementDto ip);
@@ -287,6 +331,9 @@ public interface CloudAsyncClient
      */
     @POST
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(LinksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindUnmanagedIpRefToPayload.class) VLANNetworkDto network);
@@ -296,6 +343,8 @@ public interface CloudAsyncClient
      */
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> deleteNic(
         @EndpointLink("edit") @BinderParam(BindToPath.class) NicDto nic);
 
@@ -304,6 +353,9 @@ public interface CloudAsyncClient
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(LinksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> replaceNics(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindIpRefsToPayload.class) IpPoolManagementDto... ips);
@@ -312,6 +364,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listAttachedNics(VirtualMachineDto)
      */
     @GET
+    @Consumes(NicsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<NicsDto> listAttachedNics(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -321,6 +375,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listVirtualAppliances(VirtualDatacenterDto)
      */
     @GET
+    @Consumes(VirtualAppliancesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualAppliancesDto> listVirtualAppliances(
         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
@@ -329,6 +385,8 @@ public interface CloudAsyncClient
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @Consumes(VirtualApplianceDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualApplianceDto> getVirtualAppliance(
         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer virtualApplianceId);
@@ -337,6 +395,8 @@ public interface CloudAsyncClient
      * @see CloudClient#getVirtualApplianceState(VirtualApplianceDto)
      */
     @GET
+    @Consumes(VirtualApplianceStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualApplianceStateDto> getVirtualApplianceState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
@@ -344,6 +404,9 @@ public interface CloudAsyncClient
      * @see CloudClient#createVirtualAppliance(VirtualDatacenterDto, VirtualApplianceDto)
      */
     @POST
+    @Consumes(VirtualApplianceDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualApplianceDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualApplianceDto> createVirtualAppliance(
         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(BindToXMLPayload.class) VirtualApplianceDto virtualAppliance);
@@ -352,6 +415,9 @@ public interface CloudAsyncClient
      * @see CloudClient#updateVirtualAppliance(VirtualApplianceDto)
      */
     @PUT
+    @Consumes(VirtualApplianceDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualApplianceDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualApplianceDto> updateVirtualAppliance(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualApplianceDto virtualAppliance);
 
@@ -374,6 +440,9 @@ public interface CloudAsyncClient
      * @see CloudClient#deployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
      */
     @POST
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> deployVirtualAppliance(
         @EndpointLink("deploy") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
@@ -382,6 +451,9 @@ public interface CloudAsyncClient
      * @see CloudClient#undeployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
      */
     @POST
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> undeployVirtualAppliance(
         @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
@@ -392,6 +464,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listVirtualMachines(VirtualApplianceDto)
      */
     @GET
+    @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualMachinesDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
@@ -400,6 +474,8 @@ public interface CloudAsyncClient
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @Consumes(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualMachineDto> getVirtualMachine(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(AppendToPath.class) Integer virtualMachineId);
@@ -408,6 +484,9 @@ public interface CloudAsyncClient
      * @see CloudClient#createVirtualMachine(VirtualApplianceDto, VirtualMachineDto)
      */
     @POST
+    @Consumes(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualMachineDto> createVirtualMachine(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(BindToXMLPayload.class) VirtualMachineDto virtualMachine);
@@ -424,6 +503,9 @@ public interface CloudAsyncClient
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> updateVirtualMachine(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine);
 
@@ -431,6 +513,9 @@ public interface CloudAsyncClient
      * @see CloudClient#changeVirtualMachineState(VirtualMachineDto, VirtualMachineStateDto)
      */
     @PUT
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> changeVirtualMachineState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindToXMLPayload.class) VirtualMachineStateDto state);
@@ -439,6 +524,8 @@ public interface CloudAsyncClient
      * @see CloudClient#getVirtualMachineState(VirtualMachineDto)
      */
     @GET
+    @Consumes(VirtualMachineStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualMachineStateDto> getVirtualMachineState(
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -446,6 +533,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listNetworkConfigurations(VirtualMachineDto)
      */
     @GET
+    @Consumes(VMNetworkConfigurationsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VMNetworkConfigurationsDto> listNetworkConfigurations(
         @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -453,6 +542,7 @@ public interface CloudAsyncClient
      * @see CloudClient#setGatewayNetwork(VirtualMachineDto, VMNetworkConfigurationDto)
      */
     @PUT
+    @Produces(LinksDto.BASE_MEDIA_TYPE)
     ListenableFuture<Void> setGatewayNetwork(
         @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindNetworkConfigurationRefToPayload.class) VLANNetworkDto network);
@@ -463,6 +553,8 @@ public interface CloudAsyncClient
      * @see CloudClient#getVirtualMachineTemplate(VirtualMachineTemplateDto)
      */
     @GET
+    @Consumes(VirtualMachineTemplateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualMachineTemplateDto> getVirtualMachineTemplate(
         @EndpointLink("virtualmachinetemplate") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -470,6 +562,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listAttachedVolumes(VirtualMachineDto)
      */
     @GET
+    @Consumes(VolumesManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VolumesManagementDto> listAttachedVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -478,6 +572,8 @@ public interface CloudAsyncClient
      */
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> detachAllVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -486,6 +582,9 @@ public interface CloudAsyncClient
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(LinksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> replaceVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
@@ -494,6 +593,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listAttachedHardDisks(VirtualMachineDto)
      */
     @GET
+    @Consumes(DisksManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DisksManagementDto> listAttachedHardDisks(
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -502,6 +603,8 @@ public interface CloudAsyncClient
      */
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> detachAllHardDisks(
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -510,6 +613,9 @@ public interface CloudAsyncClient
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(LinksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> replaceHardDisks(
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindHardDiskRefsToPayload.class) DiskManagementDto... hardDisks);
@@ -518,6 +624,9 @@ public interface CloudAsyncClient
      * @see CloudClient#deployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)
      */
     @POST
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> deployVirtualMachine(
         @EndpointLink("deploy") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
@@ -526,6 +635,9 @@ public interface CloudAsyncClient
      * @see CloudClient#undeployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)
      */
     @POST
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> undeployVirtualMachine(
         @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
@@ -536,6 +648,8 @@ public interface CloudAsyncClient
      * @see CloudClient#listHardDisks(VirtualDatacenterDto)
      */
     @GET
+    @Consumes(DisksManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DisksManagementDto> listHardDisks(
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
@@ -544,6 +658,8 @@ public interface CloudAsyncClient
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @Consumes(DiskManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DiskManagementDto> getHardDisk(
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer diskId);
@@ -552,6 +668,9 @@ public interface CloudAsyncClient
      * @see CloudClient#createHardDisk(VirtualDatacenterDto, DiskManagementDto)
      */
     @POST
+    @Consumes(DiskManagementDto.BASE_MEDIA_TYPE)
+    @Produces(DiskManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DiskManagementDto> createHardDisk(
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(BindToXMLPayload.class) DiskManagementDto hardDisk);
@@ -570,6 +689,8 @@ public interface CloudAsyncClient
      */
     @EnterpriseEdition
     @GET
+    @Consumes(VolumesManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VolumesManagementDto> listVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
@@ -578,6 +699,8 @@ public interface CloudAsyncClient
      */
     @EnterpriseEdition
     @GET
+    @Consumes(VolumesManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VolumesManagementDto> listVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendOptionsToPath.class) VolumeOptions options);
@@ -588,6 +711,8 @@ public interface CloudAsyncClient
     @EnterpriseEdition
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    @Consumes(VolumeManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VolumeManagementDto> getVolume(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendToPath.class) Integer volumeId);
@@ -597,6 +722,9 @@ public interface CloudAsyncClient
      */
     @EnterpriseEdition
     @POST
+    @Consumes(VolumeManagementDto.BASE_MEDIA_TYPE)
+    @Produces(VolumeManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VolumeManagementDto> createVolume(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(BindToXMLPayload.class) VolumeManagementDto volume);
@@ -606,6 +734,9 @@ public interface CloudAsyncClient
      */
     @EnterpriseEdition
     @PUT
+    @Consumes(VolumeManagementDto.BASE_MEDIA_TYPE)
+    @Produces(VolumeManagementDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VolumeManagementDto> updateVolume(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VolumeManagementDto volume);
 
@@ -623,6 +754,9 @@ public interface CloudAsyncClient
     @EnterpriseEdition
     @POST
     @ExceptionParser(ReturnMovedVolume.class)
+    @Consumes(VolumeManagementDto.BASE_MEDIA_TYPE)
+    @Produces(LinksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VolumeManagementDto> moveVolume(
         @BinderParam(BindMoveVolumeToPath.class) VolumeManagementDto volume,
         @BinderParam(BindVirtualDatacenterRefToPayload.class) VirtualDatacenterDto newVirtualDatacenter);
