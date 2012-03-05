@@ -31,6 +31,8 @@ import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.SingleResourceTransportDto;
+import com.abiquo.server.core.task.TaskDto;
+import com.abiquo.server.core.task.TasksDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -57,7 +59,7 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks/169f1877-5f17-4f62-9563-974001295c54 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request,"Accept: " + TaskDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -77,7 +79,7 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + TasksDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

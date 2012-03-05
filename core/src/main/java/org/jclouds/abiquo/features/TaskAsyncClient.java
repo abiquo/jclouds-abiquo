@@ -21,7 +21,6 @@ package org.jclouds.abiquo.features;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.BindLinkToPath;
 import org.jclouds.abiquo.binders.BindToPath;
@@ -31,6 +30,7 @@ import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
+import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.RequestFilters;
 
 import com.abiquo.model.rest.RESTLink;
@@ -48,7 +48,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
-@Consumes(MediaType.APPLICATION_XML)
 public interface TaskAsyncClient
 {
     /*********************** Task ***********************/
@@ -57,6 +56,8 @@ public interface TaskAsyncClient
      * @see TaskClient#getTask(RESTLink)
      */
     @GET
+    @Consumes(TaskDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     @ExceptionParser(ReturnNullOn303.class)
     ListenableFuture<TaskDto> getTask(@BinderParam(BindLinkToPath.class) RESTLink link);
 
@@ -64,6 +65,8 @@ public interface TaskAsyncClient
      * @see TaskClient#listTasks(SingleResourceTransportDto)
      */
     @GET
+    @Consumes(TasksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     <T extends SingleResourceTransportDto> ListenableFuture<TasksDto> listTasks(
         @EndpointLink("tasks") @BinderParam(BindToPath.class) T dto);
 }
