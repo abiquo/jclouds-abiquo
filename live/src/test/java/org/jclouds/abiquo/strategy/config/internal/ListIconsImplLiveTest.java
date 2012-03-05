@@ -25,7 +25,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.config.Icon;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.config.IconPredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.BeforeClass;
@@ -40,7 +39,7 @@ import com.google.common.base.Predicates;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class ListIconsImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
+public class ListIconsImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListIconsImpl strategy;
 

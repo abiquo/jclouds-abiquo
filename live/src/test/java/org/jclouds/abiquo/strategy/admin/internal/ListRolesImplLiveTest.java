@@ -25,7 +25,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.enterprise.Role;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.BeforeClass;
@@ -37,7 +36,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListRolesImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
+public class ListRolesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListRolesImpl strategy;
 

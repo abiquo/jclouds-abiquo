@@ -22,7 +22,6 @@ package org.jclouds.abiquo.domain.enterprise;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -34,7 +33,7 @@ import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class EnterprisePropertiesLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class EnterprisePropertiesLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void testUpdate()

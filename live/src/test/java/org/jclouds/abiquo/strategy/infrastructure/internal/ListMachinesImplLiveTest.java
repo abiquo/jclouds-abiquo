@@ -25,7 +25,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.infrastructure.Machine;
-import org.jclouds.abiquo.environment.InfrastructureTestEnvironment;
 import org.jclouds.abiquo.predicates.infrastructure.MachinePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.BeforeClass;
@@ -37,8 +36,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListMachinesImplLiveTest extends
-    BaseAbiquoStrategyLiveTest<InfrastructureTestEnvironment>
+public class ListMachinesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListMachinesImpl strategy;
 

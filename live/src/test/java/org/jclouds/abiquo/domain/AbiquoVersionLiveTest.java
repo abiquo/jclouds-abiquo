@@ -17,39 +17,40 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.features;
+package org.jclouds.abiquo.domain;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.util.Assert.assertHasError;
+import static org.testng.Assert.fail;
 
 import java.util.Properties;
+
+import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.AbiquoContextFactory;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
+import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.testng.ITestContext;
-import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.inject.Module;
 
 /**
- * Base class for live and domain tests.
+ * Live integration tests for the Abiquo versioning support.
  * 
- * @author Ignasi Barrera
+ * @author Francesc Montserrat
  */
-public abstract class BaseAbiquoClientLiveTest
+@Test(groups = "live")
+public class AbiquoVersionLiveTest
 {
-    /** The rest context. */
-    protected static AbiquoContext context;
+    private AbiquoContext context;
 
-    /** The test environment. */
-    protected static CloudTestEnvironment env;
-
-    @BeforeSuite(groups = "live")
-    protected static void setupClient(final ITestContext testContext) throws Exception
+    @BeforeMethod
+    public void setup()
     {
         String identity =
             checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
@@ -60,37 +61,32 @@ public abstract class BaseAbiquoClientLiveTest
 
         Properties props = new Properties();
         props.setProperty("abiquo.endpoint", endpoint);
-        props.put(Constants.PROPERTY_MAX_RETRIES, "0");
-        props.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
-        // Wait at most one minute in Machine discovery
-        props.put("jclouds.timeouts.InfrastructureClient.discoverSingleMachine", "60000");
-        props.put("jclouds.timeouts.InfrastructureClient.discoverMultipleMachines", "60000");
-        props.put("jclouds.timeouts.InfrastructureClient.createMachine", "60000");
-        props.put("jclouds.timeouts.InfrastructureClient.updateMachine", "60000");
-        props.put("jclouds.timeouts.InfrastructureClient.checkMachineState", "60000");
+        props.setProperty(Constants.PROPERTY_API_VERSION, "0.0");
 
         context =
             new AbiquoContextFactory().createContext(identity, credential,
                 ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
-
-        env = new CloudTestEnvironment(context);
-        env.setup();
-
-        testContext.setAttribute("environment", env);
     }
 
-    @AfterSuite(groups = "live")
-    public static void teardownClient(final ITestContext testContext) throws Exception
+    @AfterMethod
+    public void tearDown()
     {
-        env.tearDown();
-
         if (context != null)
         {
-            // Wait a bit before closing context, to avoid executor shutdown while
-            // there are still open threads
-            Thread.sleep(1000L);
             context.close();
         }
     }
 
+    public void testUnsupportedVersion()
+    {
+        try
+        {
+            context.getAdministrationService().getCurrentUserInfo();
+            fail("Unsupported versions in mime types should not be allowed");
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.NOT_ACCEPTABLE, "406-NOT ACCEPTABLE");
+        }
+    }
 }

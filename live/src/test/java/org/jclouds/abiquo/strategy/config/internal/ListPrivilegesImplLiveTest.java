@@ -25,7 +25,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.config.Privilege;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.config.PrivilegePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.BeforeClass;
@@ -39,7 +38,7 @@ import com.google.common.base.Predicates;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
+public class ListPrivilegesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListPrivilegesImpl strategy;
 
