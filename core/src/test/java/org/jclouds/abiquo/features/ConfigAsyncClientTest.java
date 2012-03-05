@@ -35,10 +35,16 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.appslibrary.CategoriesDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.IconDto;
+import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
+import com.abiquo.server.core.config.LicensesDto;
+import com.abiquo.server.core.config.SystemPropertiesDto;
 import com.abiquo.server.core.config.SystemPropertyDto;
+import com.abiquo.server.core.enterprise.PrivilegeDto;
+import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -58,7 +64,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/licenses HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + LicensesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -77,7 +83,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/config/licenses?active=true HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + LicensesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -94,9 +100,9 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.licensePost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/config/licenses HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + LicenseDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.licensePostPayload()),
-            "application/xml", false);
+            LicenseDto.BASE_MEDIA_TYPE, false);
 
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
@@ -111,7 +117,6 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.licensePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/licenses/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -129,7 +134,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/privileges HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PrivilegesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -145,7 +150,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/privileges/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PrivilegeDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -164,7 +169,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/properties HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertiesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -184,7 +189,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/config/properties?component=client HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertiesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -203,9 +208,9 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.propertyPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/config/properties/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertyDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.propertyPutPayload()),
-            "application/xml", false);
+            SystemPropertyDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -222,7 +227,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/icons HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + IconsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -244,7 +249,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/config/icons?path=http%3A%2F%2Fwww.pixeljoint.com%2Ffiles%2Ficons%2Fmipreview1.gif HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + IconsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -261,9 +266,9 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.iconPost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/config/icons HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + IconDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.iconPostPayload()),
-            "application/xml", false);
+            IconDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -279,9 +284,9 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.iconPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/config/icons/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + IconDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.iconPutPayload()),
-            "application/xml", false);
+            IconDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -297,7 +302,6 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.iconPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/icons/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -313,7 +317,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/icons/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + IconDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -331,7 +335,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/categories HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + CategoriesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -347,7 +351,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/categories/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + CategoryDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -364,9 +368,9 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.categoryPost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/config/categories HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + CategoryDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.categoryPostPayload()),
-            "application/xml", false);
+            CategoryDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -382,9 +386,9 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.categoryPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/config/categories/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + CategoryDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.categoryPutPayload()),
-            "application/xml", false);
+            CategoryDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -400,7 +404,6 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.categoryPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/categories/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);

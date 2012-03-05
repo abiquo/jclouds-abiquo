@@ -26,7 +26,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.MediaType;
+import javax.ws.rs.Produces;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.BindToPath;
@@ -40,6 +40,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
+import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -66,7 +67,6 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
-@Consumes(MediaType.APPLICATION_XML)
 @Path("/config")
 public interface ConfigAsyncClient
 {
@@ -75,26 +75,34 @@ public interface ConfigAsyncClient
     /**
      * @see ConfigClient#listLicenses()
      */
+
+    @EnterpriseEdition
     @GET
     @Path("/licenses")
-    @EnterpriseEdition
+    @Consumes(LicensesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<LicensesDto> listLicenses();
 
     /**
      * @see ConfigClient#listLicenses(LicenseOptions)
      */
+    @EnterpriseEdition
     @GET
     @Path("/licenses")
-    @EnterpriseEdition
+    @Consumes(LicensesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<LicensesDto> listLicenses(
         @BinderParam(AppendOptionsToPath.class) LicenseOptions options);
 
     /**
      * @see ConfigClient#addLicense(LicenseDto)
      */
-    @POST
-    @Path("/licenses")
     @EnterpriseEdition
+    @POST
+    @Produces(LicenseDto.BASE_MEDIA_TYPE)
+    @Consumes(LicenseDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @Path("/licenses")
     ListenableFuture<LicenseDto> addLicense(@BinderParam(BindToXMLPayload.class) LicenseDto license);
 
     /**
@@ -112,6 +120,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/privileges")
+    @Consumes(PrivilegesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<PrivilegesDto> listPrivileges();
 
     /**
@@ -119,6 +129,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/privileges/{privilege}")
+    @Consumes(PrivilegeDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<PrivilegeDto> getPrivilege(@PathParam("privilege") Integer privilegeId);
 
@@ -129,6 +141,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/properties")
+    @Consumes(SystemPropertiesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<SystemPropertiesDto> listSystemProperties();
 
     /**
@@ -136,6 +150,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/properties")
+    @Consumes(SystemPropertiesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<SystemPropertiesDto> listSystemProperties(
         @BinderParam(AppendOptionsToPath.class) PropertyOptions options);
 
@@ -143,6 +159,9 @@ public interface ConfigAsyncClient
      * @see ConfigClient#updateSystemProperty(VirtualDatacenterDto)
      */
     @PUT
+    @Produces(SystemPropertyDto.BASE_MEDIA_TYPE)
+    @Consumes(SystemPropertyDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<SystemPropertyDto> updateSystemProperty(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) SystemPropertyDto property);
 
@@ -153,6 +172,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/icons")
+    @Consumes(IconsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IconsDto> listIcons();
 
     /**
@@ -160,6 +181,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/icons")
+    @Consumes(IconsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IconsDto> listIcons(@BinderParam(AppendOptionsToPath.class) IconOptions options);
 
     /**
@@ -167,12 +190,18 @@ public interface ConfigAsyncClient
      */
     @POST
     @Path("/icons")
+    @Produces(IconDto.BASE_MEDIA_TYPE)
+    @Consumes(IconDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IconDto> createIcon(@BinderParam(BindToXMLPayload.class) IconDto icon);
 
     /**
      * @see ConfigClient#updateIcon(IconDto)
      */
     @PUT
+    @Produces(IconDto.BASE_MEDIA_TYPE)
+    @Consumes(IconDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<IconDto> updateIcon(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) IconDto icon);
 
@@ -188,6 +217,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/icons/{icon}")
+    @Consumes(IconDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<IconDto> getIcon(@PathParam("icon") Integer categoryId);
 
@@ -198,6 +229,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/categories")
+    @Consumes(CategoriesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<CategoriesDto> listCategories();
 
     /**
@@ -205,6 +238,8 @@ public interface ConfigAsyncClient
      */
     @GET
     @Path("/categories/{category}")
+    @Consumes(CategoryDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<CategoryDto> getCategory(@PathParam("category") Integer categoryId);
 
@@ -213,6 +248,9 @@ public interface ConfigAsyncClient
      */
     @POST
     @Path("/categories")
+    @Produces(CategoryDto.BASE_MEDIA_TYPE)
+    @Consumes(CategoryDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<CategoryDto> createCategory(
         @BinderParam(BindToXMLPayload.class) CategoryDto category);
 
@@ -220,6 +258,9 @@ public interface ConfigAsyncClient
      * @see ConfigClient#updateIcon(IconDto)
      */
     @PUT
+    @Produces(CategoryDto.BASE_MEDIA_TYPE)
+    @Consumes(CategoryDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<CategoryDto> updateCategory(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) CategoryDto category);
 
