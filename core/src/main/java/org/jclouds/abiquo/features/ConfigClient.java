@@ -21,7 +21,6 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -29,8 +28,6 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.appslibrary.CategoriesDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
-import com.abiquo.server.core.appslibrary.IconDto;
-import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
 import com.abiquo.server.core.config.SystemPropertiesDto;
@@ -126,54 +123,6 @@ public interface ConfigClient
      * @return The updated system property.
      */
     SystemPropertyDto updateSystemProperty(SystemPropertyDto property);
-
-    /*********************** Icons ***********************/
-
-    /**
-     * List all icons.
-     * 
-     * @return The list of icons.
-     */
-    IconsDto listIcons();
-
-    /**
-     * List icons with options.
-     * 
-     * @param options Filter options.
-     * @return The list of filtered icons.
-     */
-    IconsDto listIcons(IconOptions options);
-
-    /**
-     * Create a new icon.
-     * 
-     * @param icon The icon to be created.
-     * @return The created icon.
-     */
-    IconDto createIcon(IconDto icon);
-
-    /**
-     * Updates an existing icon.
-     * 
-     * @param icon The new attributes for the icon.
-     * @return The updated icon.
-     */
-    IconDto updateIcon(IconDto icon);
-
-    /**
-     * Deletes an existing icon.
-     * 
-     * @param icon The icon to delete.
-     */
-    void deleteIcon(IconDto icon);
-
-    /**
-     * Get the given icon.
-     * 
-     * @param iconId The id of the icon.
-     * @return The icon or <code>null</code> if it does not exist.
-     */
-    IconDto getIcon(Integer iconId);
 
     /*********************** Category ***********************/
 
