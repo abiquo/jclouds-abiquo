@@ -166,6 +166,7 @@ public class InfrastructureAsyncClientTest extends
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/datacenters/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -185,7 +186,8 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/action/getLimits HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + DatacentersLimitsDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + DatacentersLimitsDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -229,7 +231,8 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/hypervisors HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + HypervisorTypesDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + HypervisorTypesDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -328,6 +331,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -589,8 +593,8 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RemoteServiceDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request,
-            withHeader(InfrastructureResources.remoteServicePostPayload()), RemoteServiceDto.BASE_MEDIA_TYPE,
-            false);
+            withHeader(InfrastructureResources.remoteServicePostPayload()),
+            RemoteServiceDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -652,6 +656,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/remoteservices/nodecollector HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -671,6 +676,7 @@ public class InfrastructureAsyncClientTest extends
 
         String checkUri = InfrastructureResources.remoteServicePut().searchLink("check").getHref();
         assertRequestLineEquals(request, String.format("GET %s HTTP/1.1", checkUri));
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReturnTrueIf2xx.class);
@@ -924,6 +930,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/racks/1/machines/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -969,8 +976,8 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/storage/devices HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + StorageDeviceDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request,
-            withHeader(InfrastructureResources.storageDevicePostPayload()), StorageDeviceDto.BASE_MEDIA_TYPE,
-            false);
+            withHeader(InfrastructureResources.storageDevicePostPayload()),
+            StorageDeviceDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -989,6 +996,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/storage/devices/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -1219,6 +1227,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/storage/devices/1/pools/tururututu HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -1364,6 +1373,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/datacenters/1/network/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -1384,7 +1394,8 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/network/action/checkavailability?tag=2 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VlanTagAvailabilityDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + VlanTagAvailabilityDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -1405,7 +1416,8 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/network/1/ips HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -1427,7 +1439,8 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/network/1/ips?startwith=10 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

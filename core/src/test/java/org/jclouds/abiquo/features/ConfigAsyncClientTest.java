@@ -117,6 +117,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.licensePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/licenses/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -169,7 +170,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/properties HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertiesDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertiesDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -189,7 +191,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/config/properties?component=client HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertiesDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertiesDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -302,6 +305,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.iconPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/icons/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -404,6 +408,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
             processor.createRequest(method, ConfigResources.categoryPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/categories/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);

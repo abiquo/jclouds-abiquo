@@ -109,6 +109,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
             processor.createRequest(method, AdminResources.rolePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/roles/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);

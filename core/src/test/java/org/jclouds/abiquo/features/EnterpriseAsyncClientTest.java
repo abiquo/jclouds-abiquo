@@ -189,6 +189,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/enterprises/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -227,7 +228,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/action/virtualdatacenters HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualDatacentersDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualDatacentersDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -248,7 +250,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/properties HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + EnterprisePropertiesDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + EnterprisePropertiesDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -269,10 +272,11 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/properties HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + EnterprisePropertiesDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + EnterprisePropertiesDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request,
-            withHeader(EnterpriseResources.enterprisePropertiesPutPayload()), EnterprisePropertiesDto.BASE_MEDIA_TYPE,
-            false);
+            withHeader(EnterpriseResources.enterprisePropertiesPutPayload()),
+            EnterprisePropertiesDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -299,7 +303,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
             String.format("POST %s?datacenter=%d HTTP/1.1", limitsUri, datacenter.getId());
 
         assertRequestLineEquals(request, requestURI);
-        assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterLimitsDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterLimitsDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, withHeader(EnterpriseResources.datacenterLimitsPostPayload()),
             DatacenterLimitsDto.BASE_MEDIA_TYPE, false);
 
@@ -324,8 +329,11 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         String requestURI =
             String.format("GET %s?datacenter=%d HTTP/1.1", limitsUri, datacenter.getId());
 
-        assertPayloadEquals(request, null, null, false);
         assertRequestLineEquals(request, requestURI);
+        assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterLimitsDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
@@ -344,7 +352,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterLimitsDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterLimitsDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request,
             withHeader(EnterpriseResources.datacenterLimitsPutPayload(enterprise)),
             DatacenterLimitsDto.BASE_MEDIA_TYPE, false);
@@ -367,6 +376,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/enterprises/1/limits/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -385,7 +395,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/limits HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + DatacentersLimitsDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + DatacentersLimitsDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -406,7 +417,9 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/users/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + UserDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
+
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
@@ -481,6 +494,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/enterprises/1/users/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -499,7 +513,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/users/1/action/virtualmachines HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -523,6 +538,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/datacenterrepositories/1/actions/refresh HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
+        assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -565,7 +582,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/action/virtualmachines HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -610,7 +628,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + TemplateDefinitionListsDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + TemplateDefinitionListsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -634,7 +653,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + TemplateDefinitionListDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + TemplateDefinitionListDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(EnterpriseResources.templateListPostPayload()),
             TemplateDefinitionListDto.BASE_MEDIA_TYPE, false);
 
@@ -654,6 +674,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "DELETE http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
@@ -674,7 +695,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + TemplateDefinitionListDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + TemplateDefinitionListDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

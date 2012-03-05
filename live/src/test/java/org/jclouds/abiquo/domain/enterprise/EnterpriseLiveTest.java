@@ -37,7 +37,7 @@ import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 
 /**
@@ -86,10 +86,9 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
         Limits limits = env.enterprise.allowDatacenter(env.datacenter);
         assertNotNull(limits);
 
-        DatacentersLimitsDto limitsDto =
+        DatacenterLimitsDto limitsDto =
             env.enterpriseClient.getLimits(env.enterprise.unwrap(), env.datacenter.unwrap());
         assertNotNull(limitsDto);
-        assertFalse(limitsDto.isEmpty());
     }
 
     public void testAllowTwiceWorks()
@@ -147,11 +146,11 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
         limits.setCpuCountLimits(4, 5);
         limits.update();
 
-        DatacentersLimitsDto limitsDto =
+        DatacenterLimitsDto limitsDto =
             env.enterpriseClient.getLimits(env.enterprise.unwrap(), env.datacenter.unwrap());
         assertNotNull(limitsDto);
-        assertEquals(limitsDto.getCollection().get(0).getCpuCountHardLimit(), 5);
-        assertEquals(limitsDto.getCollection().get(0).getCpuCountSoftLimit(), 4);
+        assertEquals(limitsDto.getCpuCountHardLimit(), 5);
+        assertEquals(limitsDto.getCpuCountSoftLimit(), 4);
     }
 
     public void testListAllowedDatacenters()
@@ -182,9 +181,8 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnviro
     {
         // Cleanup with the prohibe method
         env.enterprise.prohibitDatacenter(env.datacenter);
-        DatacentersLimitsDto limitsDto =
+        DatacenterLimitsDto limitsDto =
             env.enterpriseClient.getLimits(env.enterprise.unwrap(), env.datacenter.unwrap());
         assertNotNull(limitsDto);
-        assertTrue(limitsDto.isEmpty());
     }
 }

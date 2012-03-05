@@ -166,7 +166,7 @@ public interface EnterpriseClient
      * @param datacenter The datacenter.
      * @return The usage limits for the enterprise in the given datacenter.
      */
-    DatacentersLimitsDto getLimits(EnterpriseDto enterprise, DatacenterDto datacenter);
+    DatacenterLimitsDto getLimits(EnterpriseDto enterprise, DatacenterDto datacenter);
 
     /**
      * Retreives limits for the given enterprise and any datacenter.

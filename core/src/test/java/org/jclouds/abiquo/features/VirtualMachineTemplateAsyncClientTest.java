@@ -156,6 +156,7 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertRequestLineEquals(
             request,
             "DELETE http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);

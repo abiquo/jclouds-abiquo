@@ -415,9 +415,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
             // Controlled error to allow duplicated authorizations
             if (ex.hasError("LIMIT-7"))
             {
-                dto =
-                    context.getApi().getEnterpriseClient().getLimits(target, datacenter.unwrap())
-                        .getCollection().get(0);
+                dto = context.getApi().getEnterpriseClient().getLimits(target, datacenter.unwrap());
             }
             else
             {
@@ -441,14 +439,14 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public void prohibitDatacenter(final Datacenter datacenter)
     {
         // Get limits
-        DatacentersLimitsDto dto =
+        DatacenterLimitsDto dto =
             context.getApi().getEnterpriseClient().getLimits(this.unwrap(), datacenter.unwrap());
 
         // Delete limits (if any)
-        if (dto != null && !dto.isEmpty())
+        if (dto != null)
         {
             // Should be only one limit
-            context.getApi().getEnterpriseClient().deleteLimits(dto.getCollection().get(0));
+            context.getApi().getEnterpriseClient().deleteLimits(dto);
         }
     }
 
