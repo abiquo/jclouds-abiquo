@@ -65,6 +65,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
+import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -1540,8 +1541,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/volumes/1/action/move HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VolumeManagementDto.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + MovedVolumeDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualDatacenterRefPayload()),
             LinksDto.BASE_MEDIA_TYPE, false);
 

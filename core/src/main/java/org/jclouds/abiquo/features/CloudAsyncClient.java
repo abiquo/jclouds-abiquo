@@ -90,6 +90,7 @@ import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
+import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -754,7 +755,7 @@ public interface CloudAsyncClient
     @EnterpriseEdition
     @POST
     @ExceptionParser(ReturnMovedVolume.class)
-    @Consumes(VolumeManagementDto.BASE_MEDIA_TYPE)
+    @Consumes(MovedVolumeDto.BASE_MEDIA_TYPE)
     @Produces(LinksDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<VolumeManagementDto> moveVolume(
