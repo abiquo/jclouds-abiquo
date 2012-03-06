@@ -362,8 +362,17 @@ public interface InfrastructureClient
      * @return The created service profile.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
-    LogicServerDto cloneLogicServer(UcsRackDto rack, LogicServerDto logicServer,
+    void cloneLogicServer(UcsRackDto rack, LogicServerDto logicServer,
         OrganizationDto organization, String newName);
+
+    /**
+     * Delete a service profile.
+     * 
+     * @param rack The managed rack where thw service profile will be created.
+     * @param logicServer The original logic server.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void deleteLogicServer(UcsRackDto rack, LogicServerDto logicServer);
 
     /*********************** Remote Service ********************** */
 

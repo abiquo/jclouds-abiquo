@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.infrastructure.LogicServerPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.ManagedRackPredicates;
 import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.AfterClass;
@@ -42,10 +43,12 @@ import com.google.common.collect.Iterables;
  * 
  * @author Francesc Montserrat
  */
-@Test(groups = "ucs")
+@Test(groups = "live")
 public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
 {
     private ManagedRack ucsRack;
+
+    private LogicServer logicServer;
 
     public void testUpdate()
     {
@@ -91,9 +94,26 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvir
         assertTrue(organizations.size() > 0);
         Organization organization = organizations.get(0);
 
-        LogicServer server = ucsRack.clone(original, organization, original.getName() + "copy");
-        assertNotNull(server);
-        assertEquals(server.getName(), original.getName() + "copy");
+        ucsRack.cloneLogicServer(original, organization, "jclouds");
+
+        logicServer =
+            ucsRack.findServiceProfile(LogicServerPredicates.name(organization.getDn() + "/"
+                + "ls-jclouds"));
+        assertNotNull(logicServer);
+
+        String name = logicServer.getName();
+        assertEquals(name.substring(name.length() - 7, name.length()), "jclouds");
+    }
+
+    @Test(dependsOnMethods = "testCloneLogicServer")
+    public void testDeleteLogicServer()
+    {
+        String name = logicServer.getName();
+
+        ucsRack.deleteLogicServer(logicServer);
+
+        LogicServer profile = ucsRack.findServiceProfile(LogicServerPredicates.name(name));
+        assertNull(profile);
     }
 
     @BeforeClass

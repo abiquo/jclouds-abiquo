@@ -30,7 +30,6 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
-import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -191,17 +190,29 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
     // Children access
 
-    public LogicServer clone(final LogicServer logicServer, final Organization organization,
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CloneLogicServerinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#Rack+Resource#RackResource-
+     *      CloneLogicServerinUCS</a>
+     */
+    public void cloneLogicServer(final LogicServer logicServer, final Organization organization,
         final String newName)
     {
-        LogicServerDto server =
-            context
-                .getApi()
-                .getInfrastructureClient()
-                .cloneLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
-                    newName);
+        context.getApi().getInfrastructureClient()
+            .cloneLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(), newName);
+    }
 
-        return wrap(context, LogicServer.class, server);
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-DeleteLogicServerwithabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      DeleteLogicServerwithabladeinUCS</a>
+     */
+    public void deleteLogicServer(final LogicServer logicServer)
+    {
+        context.getApi().getInfrastructureClient()
+            .deleteLogicServer(this.unwrap(), logicServer.unwrap());
     }
 
     // Builder

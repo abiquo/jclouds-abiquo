@@ -39,6 +39,9 @@ import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
 @EnterpriseEdition
 public class LogicServer extends DomainWrapper<LogicServerDto>
 {
+    /** The rack where the logic server belongs. */
+    private ManagedRack rack;
+
     /**
      * Constructor to be used only by the builder.
      */
@@ -47,6 +50,13 @@ public class LogicServer extends DomainWrapper<LogicServerDto>
         super(context, target);
     }
 
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CloneLogicServerinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#Rack+Resource#RackResource-
+     *      CloneLogicServerinUCS</a>
+     */
+    
     // Delegate Methods
 
     public String getName()

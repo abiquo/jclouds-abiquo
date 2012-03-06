@@ -35,6 +35,8 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
+import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
+import org.jclouds.abiquo.binders.infrastructure.ucs.BindOrganizationParameters;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
@@ -353,7 +355,7 @@ public interface InfrastructureAsyncClient
      *      String)
      */
     @POST
-    ListenableFuture<LogicServerDto> cloneLogicServer(
+    ListenableFuture<Void> cloneLogicServer(
         @EndpointLink("ls-clone") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
