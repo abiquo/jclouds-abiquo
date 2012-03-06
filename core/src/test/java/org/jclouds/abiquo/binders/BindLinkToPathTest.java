@@ -16,34 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.jclouds.abiquo.binders;
 
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
+import static org.testng.Assert.assertEquals;
 
-import javax.inject.Singleton;
-
-import org.jclouds.rest.internal.GeneratedHttpRequest;
+import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
 
 /**
- * Binds the given link to the uri.
+ * Unit tests for the {@link BindLinkToPath} class.
  * 
- * @author Francesc Montserrat
+ * @author Ignasi Barrera
  */
-@Singleton
-public class BindLinkToPath extends BindToPath
+@Test(groups = "unit")
+public class BindLinkToPathTest
 {
-
-    @Override
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetNewEnpointNullInput()
     {
-        checkArgument(checkNotNull(input, "input") instanceof RESTLink,
-            "this binder is only valid for RESTLink objects");
-
-        return ((RESTLink) input).getHref();
+        BindLinkToPath binder = new BindLinkToPath();
+        binder.getNewEndpoint(null, null);
     }
 
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetNewEnpointInvalidInput()
+    {
+        BindLinkToPath binder = new BindLinkToPath();
+        binder.getNewEndpoint(null, new Object());
+    }
+
+    public void testGetNewEnpoint()
+    {
+        BindLinkToPath binder = new BindLinkToPath();
+        assertEquals(binder.getNewEndpoint(null, new RESTLink("edit", "http://foo/bar")),
+            "http://foo/bar");
+    }
 }

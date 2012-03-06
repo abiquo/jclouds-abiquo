@@ -330,7 +330,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
             String.format("GET %s?datacenter=%d HTTP/1.1", limitsUri, datacenter.getId());
 
         assertRequestLineEquals(request, requestURI);
-        assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterLimitsDto.BASE_MEDIA_TYPE
+        assertNonPayloadHeadersEqual(request, "Accept: " + DatacentersLimitsDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, null, null, false);
 

@@ -28,8 +28,6 @@ import java.net.URI;
 import java.util.Arrays;
 
 import javax.inject.Singleton;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.PUT;
 
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
@@ -44,17 +42,13 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 
 /**
- * Binds the given object to the payload and extracts the path parameters from the edit link.
- * <p>
- * This method should be used in {@link PUT} and {@link DELETE} methods to automatically extract the
- * path parameters from the edit link of the updated object.
+ * Binds the given object to the path..
  * 
  * @author Ignasi Barrera
  */
 @Singleton
 public class BindToPath implements Binder
 {
-
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {

@@ -206,10 +206,10 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#getLimits(EnterpriseDto, DatacenterDto)
      */
     @GET
-    @Consumes(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+    @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<DatacenterLimitsDto> getLimits(
+    ListenableFuture<DatacentersLimitsDto> getLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
         @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter);
 
