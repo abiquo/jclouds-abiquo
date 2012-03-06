@@ -48,7 +48,7 @@ import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Tests annotation parsing of {@code AdminAsyncClient}
+ * Tests annotation parsing of {@code AdminAsyncClient}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -104,6 +104,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertPayloadEquals(request, withHeader(ConfigResources.licensePostPayload()),
             LicenseDto.BASE_MEDIA_TYPE, false);
 
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

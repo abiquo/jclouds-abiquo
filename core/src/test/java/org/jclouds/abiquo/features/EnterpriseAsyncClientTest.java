@@ -140,6 +140,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertPayloadEquals(request, withHeader(EnterpriseResources.enterprisePostPayload()),
             EnterpriseDto.BASE_MEDIA_TYPE, false);
 
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -281,6 +282,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
+
         checkFilters(request);
     }
 
@@ -308,6 +310,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertPayloadEquals(request, withHeader(EnterpriseResources.datacenterLimitsPostPayload()),
             DatacenterLimitsDto.BASE_MEDIA_TYPE, false);
 
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -461,6 +464,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertPayloadEquals(request, withHeader(EnterpriseResources.userPostPayload()),
             UserDto.BASE_MEDIA_TYPE, false);
 
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -658,6 +662,7 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         assertPayloadEquals(request, withHeader(EnterpriseResources.templateListPostPayload()),
             TemplateDefinitionListDto.BASE_MEDIA_TYPE, false);
 
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

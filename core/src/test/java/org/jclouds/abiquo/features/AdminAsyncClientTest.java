@@ -54,7 +54,6 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
     {
         Method method = AdminAsyncClient.class.getMethod("listRoles");
         GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method);
-        checkFilters(request);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/roles HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RolesDto.BASE_MEDIA_TYPE + "\n");
