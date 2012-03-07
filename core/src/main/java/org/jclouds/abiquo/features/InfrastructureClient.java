@@ -263,6 +263,7 @@ public interface InfrastructureClient
      * @param datacenter The datacenter.
      * @return The list of managed racks for the datacenter.
      */
+    @EnterpriseEdition
     @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
     UcsRacksDto listManagedRacks(DatacenterDto datacenter);
 
@@ -273,6 +274,7 @@ public interface InfrastructureClient
      * @param rack The managed rack to be created.
      * @return The created rack.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     UcsRackDto createManagedRack(final DatacenterDto datacenter, final UcsRackDto rack);
 
@@ -283,6 +285,7 @@ public interface InfrastructureClient
      * @param rackId The id of the rack.
      * @return The rack or <code>null</code> if it does not exist.
      */
+    @EnterpriseEdition
     @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
     UcsRackDto getManagedRack(DatacenterDto datacenter, Integer rackId);
 
@@ -292,6 +295,7 @@ public interface InfrastructureClient
      * @param rack The new attributes for the rack.
      * @return The updated rack.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     UcsRackDto updateManagedRack(final UcsRackDto rack);
 
@@ -301,6 +305,7 @@ public interface InfrastructureClient
      * @param rack The ucs rack.
      * @return The list of service profiles for the rack.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     LogicServersDto listServiceProfiles(UcsRackDto rack);
 
@@ -311,6 +316,7 @@ public interface InfrastructureClient
      * @param options Optional query params.
      * @return The list of service profiles for the rack.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     LogicServersDto listServiceProfiles(UcsRackDto rack, FilterOptions options);
 
@@ -320,6 +326,7 @@ public interface InfrastructureClient
      * @param rack The ucs rack.
      * @return The list of service profile templates for the rack.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     LogicServersDto listServiceProfileTemplates(UcsRackDto rack);
 
@@ -330,6 +337,7 @@ public interface InfrastructureClient
      * @param options Optional query params.
      * @return The list of service profile templates for the rack.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     LogicServersDto listServiceProfileTemplates(UcsRackDto rack, FilterOptions options);
 
@@ -339,6 +347,7 @@ public interface InfrastructureClient
      * @param rack The ucs rack.
      * @return The list of organizations for the rack.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     OrganizationsDto listOrganizations(UcsRackDto rack);
 
@@ -349,6 +358,7 @@ public interface InfrastructureClient
      * @param options Optional query params.
      * @return The list of organizations for the rack.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     OrganizationsDto listOrganizations(UcsRackDto rack, FilterOptions options);
 
@@ -359,8 +369,8 @@ public interface InfrastructureClient
      * @param logicServer The original logic server.
      * @param organization The organization to be associated.
      * @param newName The name of the new service profile.
-     * @return The created service profile.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void cloneLogicServer(UcsRackDto rack, LogicServerDto logicServer,
         OrganizationDto organization, String newName);
@@ -368,11 +378,36 @@ public interface InfrastructureClient
     /**
      * Delete a service profile.
      * 
-     * @param rack The managed rack where thw service profile will be created.
+     * @param rack The managed rack where the service profile will be created.
      * @param logicServer The original logic server.
      */
+    @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void deleteLogicServer(UcsRackDto rack, LogicServerDto logicServer);
+
+    /**
+     * Associate a service profile with a blade.
+     * 
+     * @param rack The managed rack where the service profile is.
+     * @param logicServer The logic server.
+     * @param organization The organization to be associated.
+     * @param newName The name of the new service profile.
+     * @param bladeName The name of the blade.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void associateLogicServer(UcsRackDto rack, LogicServerDto logicServer,
+        OrganizationDto organization, String newName, String bladeName);
+
+    /**
+     * Dissociate a service profile from a blade.
+     * 
+     * @param rack The managed rack where the service profile is.
+     * @param logicServer The logic server.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void dissociateLogicServer(UcsRackDto rack, LogicServerDto logicServer);
 
     /*********************** Remote Service ********************** */
 

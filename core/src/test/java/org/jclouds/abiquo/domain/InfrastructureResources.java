@@ -169,10 +169,14 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/racks/1/lstemplates"));
         rack.addLink(new RESTLink("organizations",
             "http://localhost/api/admin/datacenters/1/racks/1/organizations"));
+        rack.addLink(new RESTLink("ls-associate",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/associate"));
         rack.addLink(new RESTLink("ls-clone",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers/clone"));
         rack.addLink(new RESTLink("ls-delete",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers/delete"));
+        rack.addLink(new RESTLink("ls-dissociate",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/dissociate"));
         return rack;
     }
 
@@ -439,8 +443,11 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers", "logicservers"));
         buffer.append(link("/admin/datacenters/1/racks/1/lstemplates", "ls-templates"));
         buffer.append(link("/admin/datacenters/1/racks/1/organizations", "organizations"));
+        buffer.append(link("/admin/datacenters/1/racks/1/logicservers/associate", "ls-associate"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers/clone", "ls-clone"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers/delete", "ls-delete"));
+        buffer
+            .append(link("/admin/datacenters/1/racks/1/logicservers/dissociate", "ls-dissociate"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<id>1</id>");
         buffer.append("<name>Aloha</name>");

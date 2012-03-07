@@ -229,9 +229,6 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * <<<<<<< HEAD
-     * 
-     * @see InfrastructureClient#getRack(DatacenterDto, Integer) ======= ======= >>>>>>> UCS
      * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
      */
     @POST
@@ -267,6 +264,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listManagedRacks(DatacenterDto)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
     @JAXBResponseParser
@@ -276,6 +274,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#createManagedRack(DatacenterDto, UcsRackDto)
      */
+    @EnterpriseEdition
     @POST
     @JAXBResponseParser
     @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
@@ -287,6 +286,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#getManagedRack(DatacenterDto, Integer)
      */
+    @EnterpriseEdition
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     @JAXBResponseParser
@@ -298,6 +298,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#updateManagedRack(UcsRackDto)
      */
+    @EnterpriseEdition
     @PUT
     @JAXBResponseParser
     @Consumes(AbiquoMediaType.APPLICATION_MANAGEDRACKDTO_XML)
@@ -308,6 +309,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listServiceProfiles(UcsRackDto)
      */
+    @EnterpriseEdition
     @GET
     ListenableFuture<LogicServersDto> listServiceProfiles(
         @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack);
@@ -315,6 +317,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listServiceProfiles(UcsRackDto, QueryOptions)
      */
+    @EnterpriseEdition
     @GET
     ListenableFuture<LogicServersDto> listServiceProfiles(
         @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack,
@@ -323,6 +326,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto)
      */
+    @EnterpriseEdition
     @GET
     ListenableFuture<LogicServersDto> listServiceProfileTemplates(
         @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack);
@@ -330,6 +334,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto, LogicServerOptions)
      */
+    @EnterpriseEdition
     @GET
     ListenableFuture<LogicServersDto> listServiceProfileTemplates(
         @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack,
@@ -338,6 +343,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listOrganizations(UcsRackDto)
      */
+    @EnterpriseEdition
     @GET
     ListenableFuture<OrganizationsDto> listOrganizations(
         @EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack);
@@ -346,6 +352,7 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#listOrganizations(UcsRackDto, OrganizationOptions)
      */
     @GET
+    @EnterpriseEdition
     ListenableFuture<OrganizationsDto> listOrganizations(
         @EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(AppendOptionsToPath.class) FilterOptions options);
@@ -355,6 +362,7 @@ public interface InfrastructureAsyncClient
      *      String)
      */
     @POST
+    @EnterpriseEdition
     ListenableFuture<Void> cloneLogicServer(
         @EndpointLink("ls-clone") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
@@ -362,8 +370,30 @@ public interface InfrastructureAsyncClient
         @QueryParam("newName") String newName);
 
     /**
+     * @see InfrastructureClient#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
+     *      String, String)
+     */
+    @POST
+    @EnterpriseEdition
+    ListenableFuture<Void> associateLogicServer(
+        @EndpointLink("ls-associate") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+        @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+        @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
+
+    /**
+     * @see InfrastructureClient#dissociateLogicServer(UcsRackDto, LogicServerDto)
+     */
+    @POST
+    @EnterpriseEdition
+    ListenableFuture<Void> dissociateLogicServer(
+        @EndpointLink("ls-dissociate") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
+
+    /**
      * @see InfrastructureClient#deleteLogicServer(UcsRackDto, LogicServerDto)
      */
+    @EnterpriseEdition
     @POST
     ListenableFuture<Void> deleteLogicServer(
         @EndpointLink("ls-delete") @BinderParam(BindToPath.class) UcsRackDto rack,
