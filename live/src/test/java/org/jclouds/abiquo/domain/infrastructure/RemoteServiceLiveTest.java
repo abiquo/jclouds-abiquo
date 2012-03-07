@@ -50,14 +50,15 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnv
     public void testUpdate()
     {
         // Update the remote service
-        RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.TARANTINO));
+        RemoteService rs =
+            env.datacenter.findRemoteService(type(RemoteServiceType.VIRTUAL_FACTORY));
         rs.setUri(rs.getUri());
         rs.update();
 
         // Recover the updated remote service
         RemoteServiceDto updated =
             env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
-                RemoteServiceType.TARANTINO);
+                RemoteServiceType.VIRTUAL_FACTORY);
 
         assertEquals(updated.getUri(), rs.getUri());
     }
@@ -76,8 +77,8 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnv
 
         // Restore rs
         RemoteService bpm =
-            RemoteService.builder(context, env.datacenter).type(RemoteServiceType.BPM_SERVICE).ip(
-                context.getEndpoint().getHost()).build();
+            RemoteService.builder(context, env.datacenter).type(RemoteServiceType.BPM_SERVICE)
+                .ip(context.getEndpoint().getHost()).build();
         bpm.save();
     }
 
