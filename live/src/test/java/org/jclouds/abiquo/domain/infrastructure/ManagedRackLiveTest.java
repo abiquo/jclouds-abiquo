@@ -50,6 +50,8 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvir
 
     private LogicServer logicServer;
 
+    private Organization organization;
+
     public void testUpdate()
     {
         ucsRack.setShortDescription("Updated description");
@@ -92,7 +94,7 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvir
         List<Organization> organizations = ucsRack.listOrganizations();
         assertNotNull(organizations);
         assertTrue(organizations.size() > 0);
-        Organization organization = organizations.get(0);
+        organization = organizations.get(0);
 
         ucsRack.cloneLogicServer(original, organization, "jclouds");
 

@@ -50,13 +50,6 @@ public class LogicServer extends DomainWrapper<LogicServerDto>
         super(context, target);
     }
 
-    /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CloneLogicServerinUCS"
-     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#Rack+Resource#RackResource-
-     *      CloneLogicServerinUCS</a>
-     */
-    
     // Delegate Methods
 
     public String getName()
@@ -79,19 +72,9 @@ public class LogicServer extends DomainWrapper<LogicServerDto>
         return target.getType();
     }
 
-    public void setAssociated(final String value)
-    {
-        target.setAssociated(value);
-    }
-
     public String getAssociatedTo()
     {
         return target.getAssociatedTo();
-    }
-
-    public void setAssociatedTo(final String value)
-    {
-        target.setAssociatedTo(value);
     }
 
     public String getDescription()

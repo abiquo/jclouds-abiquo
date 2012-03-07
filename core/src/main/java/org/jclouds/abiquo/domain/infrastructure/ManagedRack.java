@@ -188,7 +188,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         return Iterables.getFirst(filter(listOrganizations(), filter), null);
     }
 
-    // Children access
+    // Actions
 
     /**
      * @see API: <a href=
@@ -201,6 +201,34 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     {
         context.getApi().getInfrastructureClient()
             .cloneLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(), newName);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-AssociateLogicServerwithabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#Rack+Resource#RackResource-
+     *      AssociateLogicServerwithabladeinUCS</a>
+     */
+    public void associateLogicServer(final String bladeName, final LogicServer logicServer,
+        final Organization organization, final String newName)
+    {
+        context
+            .getApi()
+            .getInfrastructureClient()
+            .associateLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
+                newName, bladeName);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-DissociateLogicServerfromabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/RackResource-
+     *      DissociateLogicServerfromabladeinUCS</a>
+     */
+    public void dissociateLogicServer(final LogicServer logicServer)
+    {
+        context.getApi().getInfrastructureClient()
+            .dissociateLogicServer(this.unwrap(), logicServer.unwrap());
     }
 
     /**
