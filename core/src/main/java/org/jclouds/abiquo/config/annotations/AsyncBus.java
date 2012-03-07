@@ -16,6 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.config.annotations;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
