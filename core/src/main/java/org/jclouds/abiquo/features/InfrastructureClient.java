@@ -583,11 +583,22 @@ public interface InfrastructureClient
     /**
      * Get the storage pool.
      * 
+     * @param storageDevice The storage device.
      * @param storagePoolId The id of the storage pool.
      * @return The storage pool or <code>null</code> if it does not exist.
      */
     @EnterpriseEdition
     StoragePoolDto getStoragePool(StorageDeviceDto storageDevice, String storagePoolId);
+
+    /**
+     * Refresh the given storage pool data.
+     * 
+     * @param storagePool The storage pool to refresh.
+     * @param options The options to query the storage pool.
+     * @return The updated storage pool.
+     */
+    @EnterpriseEdition
+    StoragePoolDto refreshStoragePool(StoragePoolDto storagePool, StoragePoolOptions options);
 
     /*********************** Network ***********************/
 
