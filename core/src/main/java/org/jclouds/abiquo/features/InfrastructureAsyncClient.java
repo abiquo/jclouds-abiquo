@@ -575,11 +575,18 @@ public interface InfrastructureAsyncClient
     @EnterpriseEdition
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    @Consumes(AbiquoMediaType.APPLICATION_STORAGEPOOLDTO_XML)
-    @JAXBResponseParser
     ListenableFuture<StoragePoolDto> getStoragePool(
         @EndpointLink("pools") @BinderParam(BindToPath.class) final StorageDeviceDto storageDevice,
-        @BinderParam(AppendToPath.class) final String machineId);
+        @BinderParam(AppendToPath.class) final String storagePoolId);
+
+    /**
+     * @see InfrastructureClient#refreshStoragePool(StoragePoolDto, StoragePoolOptions)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<StoragePoolDto> refreshStoragePool(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool,
+        @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
 
     /*********************** Network ***********************/
 
