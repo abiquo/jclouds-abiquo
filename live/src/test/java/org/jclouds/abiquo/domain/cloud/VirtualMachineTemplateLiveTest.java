@@ -49,4 +49,10 @@ public class VirtualMachineTemplateLiveTest extends BaseAbiquoClientLiveTest<Clo
         Category category = env.virtualMachine.getTemplate().getCategory();
         assertNotNull(category);
     }
+
+    public void testGetIcon()
+    {
+        String iconUrl = env.virtualMachine.getTemplate().getIconUrl();
+        assertNotNull(iconUrl);
+    }
 }

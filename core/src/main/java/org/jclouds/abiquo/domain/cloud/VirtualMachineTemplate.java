@@ -24,14 +24,12 @@ import java.util.Date;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Category;
-import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.server.core.appslibrary.CategoryDto;
-import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
 /**
@@ -68,23 +66,6 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     }
 
     // Children access
-
-    /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-RetrieveanIcon" >
-     *      http://community.abiquo.com/display/ABI20/Icon+Resource#IconResource-RetrieveanIcon</a>
-     */
-    public Icon getIcon()
-    {
-        if (target.searchLink("icon") == null)
-        {
-            return null;
-        }
-
-        Integer iconId = target.getIdFromLink(ParentLinkName.ICON);
-        IconDto icon = context.getApi().getConfigClient().getIcon(iconId);
-        return wrap(context, Icon.class, icon);
-    }
 
     /**
      * @see API: <a href=
@@ -194,6 +175,11 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public Integer getId()
     {
         return target.getId();
+    }
+
+    public String getIconUrl()
+    {
+        return target.getIconUrl();
     }
 
     @Override

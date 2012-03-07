@@ -24,6 +24,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
+import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -100,6 +101,13 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateStoragePool(target);
+    }
+
+    public void refresh()
+    {
+        target =
+            context.getApi().getInfrastructureClient()
+                .refreshStoragePool(target, StoragePoolOptions.builder().sync(true).build());
     }
 
     /**
