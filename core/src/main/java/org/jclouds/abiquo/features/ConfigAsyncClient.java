@@ -31,7 +31,6 @@ import javax.ws.rs.Produces;
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
-import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
@@ -47,8 +46,6 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.server.core.appslibrary.CategoriesDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
-import com.abiquo.server.core.appslibrary.IconDto;
-import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
@@ -164,63 +161,6 @@ public interface ConfigAsyncClient
     @JAXBResponseParser
     ListenableFuture<SystemPropertyDto> updateSystemProperty(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) SystemPropertyDto property);
-
-    /*********************** Icon ***********************/
-
-    /**
-     * @see ConfigClient#listIcons()
-     */
-    @GET
-    @Path("/icons")
-    @Consumes(IconsDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<IconsDto> listIcons();
-
-    /**
-     * @see ConfigClient#listIcons(IconOptions)
-     */
-    @GET
-    @Path("/icons")
-    @Consumes(IconsDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<IconsDto> listIcons(@BinderParam(AppendOptionsToPath.class) IconOptions options);
-
-    /**
-     * @see ConfigClient#createIcon(IconDto)
-     */
-    @POST
-    @Path("/icons")
-    @Produces(IconDto.BASE_MEDIA_TYPE)
-    @Consumes(IconDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<IconDto> createIcon(@BinderParam(BindToXMLPayload.class) IconDto icon);
-
-    /**
-     * @see ConfigClient#updateIcon(IconDto)
-     */
-    @PUT
-    @Produces(IconDto.BASE_MEDIA_TYPE)
-    @Consumes(IconDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<IconDto> updateIcon(
-        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) IconDto icon);
-
-    /**
-     * @see ConfigClient#deleteIcon(IconDto)
-     */
-    @DELETE
-    ListenableFuture<Void> deleteIcon(
-        @EndpointLink("edit") @BinderParam(BindToPath.class) IconDto icon);
-
-    /**
-     * @see ConfigClient#getIcon(Integer)
-     */
-    @GET
-    @Path("/icons/{icon}")
-    @Consumes(IconDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<IconDto> getIcon(@PathParam("icon") Integer categoryId);
 
     /*********************** Category ***********************/
 

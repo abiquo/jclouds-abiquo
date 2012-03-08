@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.ConfigResources;
-import org.jclouds.abiquo.domain.config.options.IconOptions;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
@@ -37,8 +36,6 @@ import org.testng.annotations.Test;
 
 import com.abiquo.server.core.appslibrary.CategoriesDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
-import com.abiquo.server.core.appslibrary.IconDto;
-import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.LicensesDto;
 import com.abiquo.server.core.config.SystemPropertiesDto;
@@ -219,115 +216,6 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    /*********************** Icon ***********************/
-
-    public void testListIcons() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method = ConfigAsyncClient.class.getMethod("listIcons");
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
-
-        assertRequestLineEquals(request, "GET http://localhost/api/config/icons HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IconsDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testListIconsWithOptions() throws SecurityException, NoSuchMethodException,
-        IOException
-    {
-        Method method = ConfigAsyncClient.class.getMethod("listIcons", IconOptions.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
-            processor.createRequest(method,
-                IconOptions.builder().path("http://www.pixeljoint.com/files/icons/mipreview1.gif")
-                    .build());
-
-        assertRequestLineEquals(
-            request,
-            "GET http://localhost/api/config/icons?path=http%3A%2F%2Fwww.pixeljoint.com%2Ffiles%2Ficons%2Fmipreview1.gif HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IconsDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testCreateIcon() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method = ConfigAsyncClient.class.getMethod("createIcon", IconDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
-            processor.createRequest(method, ConfigResources.iconPost());
-
-        assertRequestLineEquals(request, "POST http://localhost/api/config/icons HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IconDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, withHeader(ConfigResources.iconPostPayload()),
-            IconDto.BASE_MEDIA_TYPE, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testUpdateIcon() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method = ConfigAsyncClient.class.getMethod("updateIcon", IconDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
-            processor.createRequest(method, ConfigResources.iconPut());
-
-        assertRequestLineEquals(request, "PUT http://localhost/api/config/icons/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IconDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, withHeader(ConfigResources.iconPutPayload()),
-            IconDto.BASE_MEDIA_TYPE, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testDeleteIcon() throws SecurityException, NoSuchMethodException
-    {
-        Method method = ConfigAsyncClient.class.getMethod("deleteIcon", IconDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
-            processor.createRequest(method, ConfigResources.iconPut());
-
-        assertRequestLineEquals(request, "DELETE http://localhost/api/config/icons/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testGetIcon() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method = ConfigAsyncClient.class.getMethod("getIcon", Integer.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
-
-        assertRequestLineEquals(request, "GET http://localhost/api/config/icons/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IconDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
         checkFilters(request);
     }

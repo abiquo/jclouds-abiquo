@@ -217,6 +217,8 @@ public class CloudResources
         template.setRamRequired(128);
         template.setCpuRequired(27262976);
         template.setCreationUser("SYSTEM");
+        template
+            .setIconUrl("http://ww1.prweb.com/prfiles/2010/08/02/2823234/gI_0_HakunaLogoMedium.jpg");
         template.addLink(new RESTLink("icon", "http://localhost/api/config/icons/1"));
         template.addLink(new RESTLink("category", "http://localhost/api/config/categories/1"));
 

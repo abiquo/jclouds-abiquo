@@ -1258,6 +1258,29 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testRefreshStoragePool() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("refreshStoragePool", StoragePoolDto.class,
+                StoragePoolOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.storagePoolPut(),
+                StoragePoolOptions.builder().sync(true).build());
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/datacenters/1/storage/devices/1/pools/tururututu?sync=true HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, MapHttp4xxCodesToExceptions.class);
+
+        checkFilters(request);
+    }
+
     /*********************** Network ***********************/
 
     public void testListNetworks() throws SecurityException, NoSuchMethodException, IOException

@@ -27,7 +27,6 @@ import java.nio.charset.Charset;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.CategoryDto;
-import com.abiquo.server.core.appslibrary.IconDto;
 import com.abiquo.server.core.config.LicenseDto;
 import com.abiquo.server.core.config.SystemPropertyDto;
 import com.google.common.io.Resources;
@@ -48,14 +47,6 @@ public class ConfigResources
         return license;
     }
 
-    public static IconDto iconPost()
-    {
-        IconDto icon = new IconDto();
-        icon.setName("icon");
-        icon.setPath("http://www.pixeljoint.com/files/icons/mipreview1.gif");
-        return icon;
-    }
-
     public static CategoryDto categoryPost()
     {
         CategoryDto category = new CategoryDto();
@@ -71,14 +62,6 @@ public class ConfigResources
         category.setId(1);
         category.addLink(new RESTLink("edit", "http://localhost/api/config/categories/1"));
         return category;
-    }
-
-    public static IconDto iconPut()
-    {
-        IconDto icon = iconPost();
-        icon.setId(1);
-        icon.addLink(new RESTLink("edit", "http://localhost/api/config/icons/1"));
-        return icon;
     }
 
     public static LicenseDto licensePut()

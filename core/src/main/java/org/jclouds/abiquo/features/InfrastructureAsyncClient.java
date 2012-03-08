@@ -247,9 +247,6 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * <<<<<<< HEAD
-     * 
-     * @see InfrastructureClient#getRack(DatacenterDto, Integer) ======= ======= >>>>>>> UCS
      * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
      */
     @POST
@@ -662,7 +659,16 @@ public interface InfrastructureAsyncClient
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<StoragePoolDto> getStoragePool(
         @EndpointLink("pools") @BinderParam(BindToPath.class) final StorageDeviceDto storageDevice,
-        @BinderParam(AppendToPath.class) final String machineId);
+        @BinderParam(AppendToPath.class) final String storagePoolId);
+
+    /**
+     * @see InfrastructureClient#refreshStoragePool(StoragePoolDto, StoragePoolOptions)
+     */
+    @EnterpriseEdition
+    @GET
+    ListenableFuture<StoragePoolDto> refreshStoragePool(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool,
+        @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
 
     /*********************** Network ***********************/
 
