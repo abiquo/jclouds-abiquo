@@ -23,7 +23,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.ManagedRackPredicates;
 import org.jclouds.abiquo.util.Config;
@@ -40,7 +39,7 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "ucs")
-public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
 {
     private ManagedRack ucsRack;
 

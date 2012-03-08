@@ -26,8 +26,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
@@ -36,10 +36,12 @@ import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.functions.infrastructure.ParseDatacenterId;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
+import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.ParamParser;
 import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
@@ -70,8 +72,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters(AbiquoAuthentication.class)
-@Consumes(MediaType.APPLICATION_XML)
+@RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/admin")
 public interface EnterpriseAsyncClient
 {
@@ -82,6 +83,8 @@ public interface EnterpriseAsyncClient
      */
     @GET
     @Path("/enterprises")
+    @Consumes(EnterprisesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<EnterprisesDto> listEnterprises();
 
     /**
@@ -89,6 +92,8 @@ public interface EnterpriseAsyncClient
      */
     @GET
     @Path("/enterprises")
+    @Consumes(EnterprisesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<EnterprisesDto> listEnterprises(
         @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
 
@@ -96,6 +101,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listEnterprises(DatacenterDto, EnterpriseOptions)
      */
     @GET
+    @Consumes(EnterprisesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<EnterprisesDto> listEnterprises(
         @EndpointLink("enterprises") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
@@ -105,6 +112,9 @@ public interface EnterpriseAsyncClient
      */
     @POST
     @Path("/enterprises")
+    @Produces(EnterpriseDto.BASE_MEDIA_TYPE)
+    @Consumes(EnterpriseDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<EnterpriseDto> createEnterprise(
         @BinderParam(BindToXMLPayload.class) EnterpriseDto enterprise);
 
@@ -113,6 +123,8 @@ public interface EnterpriseAsyncClient
      */
     @GET
     @Path("/enterprises/{enterprise}")
+    @Consumes(EnterpriseDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<EnterpriseDto> getEnterprise(@PathParam("enterprise") Integer enterpriseId);
 
@@ -120,6 +132,9 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#updateEnterprise(EnterpriseDto)
      */
     @PUT
+    @Produces(EnterpriseDto.BASE_MEDIA_TYPE)
+    @Consumes(EnterpriseDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<EnterpriseDto> updateEnterprise(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) EnterpriseDto enterprise);
 
@@ -135,6 +150,8 @@ public interface EnterpriseAsyncClient
      */
     @GET
     @Path("/datacenters")
+    @Consumes(DatacentersDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DatacentersDto> listAllowedDatacenters(
         @QueryParam("idEnterprise") Integer enterpriseId);
 
@@ -142,6 +159,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listVirtualDatacenters(EnterpriseDto)
      */
     @GET
+    @Consumes(VirtualDatacentersDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualDatacentersDto> listVirtualDatacenters(
         @EndpointLink("cloud/virtualdatacenters") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
@@ -150,17 +169,22 @@ public interface EnterpriseAsyncClient
     /**
      * @see EnterpriseClient#getEnterpriseProperties(EnterpriseDto)
      */
+    @EnterpriseEdition
     @GET
     @Path("/enterprises/{enterprise}/properties")
-    @EnterpriseEdition
+    @Consumes(EnterprisePropertiesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<EnterprisePropertiesDto> getEnterpriseProperties(
         @PathParam("enterprise") Integer enterpriseId);
 
     /**
      * @see EnterpriseClient#updateEnterpriseProperties(EnterprisePropertiesDto)
      */
-    @PUT
     @EnterpriseEdition
+    @PUT
+    @Produces(EnterprisePropertiesDto.BASE_MEDIA_TYPE)
+    @Consumes(EnterprisePropertiesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<EnterprisePropertiesDto> updateEnterpriseProperties(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) EnterprisePropertiesDto properties);
 
@@ -170,6 +194,9 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#createLimits(EnterpriseDto, DatacenterDto, DatacenterLimitsDto)
      */
     @POST
+    @Produces(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+    @Consumes(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DatacenterLimitsDto> createLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
         @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter,
@@ -179,6 +206,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#getLimits(EnterpriseDto, DatacenterDto)
      */
     @GET
+    @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<DatacentersLimitsDto> getLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) final EnterpriseDto enterprise,
@@ -188,6 +217,9 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#updateLimits(DatacenterLimitsDto)
      */
     @PUT
+    @Produces(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+    @Consumes(DatacenterLimitsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DatacenterLimitsDto> updateLimits(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterLimitsDto limits);
 
@@ -202,6 +234,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listLimits(EnterpriseDto)
      */
     @GET
+    @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<DatacentersLimitsDto> listLimits(
         @EndpointLink("limits") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
@@ -211,6 +245,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listUsers(EnterpriseDto)
      */
     @GET
+    @Consumes(UsersDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<UsersDto> listUsers(
         @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
@@ -218,6 +254,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#getUser(EnterpriseDto, Integer)
      */
     @GET
+    @Consumes(UserDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
     ListenableFuture<UserDto> getUser(
         @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
@@ -227,6 +265,9 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#createUser(EnterpriseDto)
      */
     @POST
+    @Produces(UserDto.BASE_MEDIA_TYPE)
+    @Consumes(UserDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<UserDto> createUser(
         @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
         @BinderParam(BindToXMLPayload.class) UserDto user);
@@ -235,6 +276,9 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#updateUser(UserDto)
      */
     @PUT
+    @Produces(UserDto.BASE_MEDIA_TYPE)
+    @Consumes(UserDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<UserDto> updateUser(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UserDto user);
 
@@ -246,6 +290,8 @@ public interface EnterpriseAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) UserDto user);
 
     @GET
+    @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualMachinesDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) final UserDto user);
 
@@ -266,6 +312,8 @@ public interface EnterpriseAsyncClient
      */
     @EnterpriseEdition
     @GET
+    @Consumes(VLANNetworksDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VLANNetworksDto> listExternalNetworks(
         @EndpointLink("externalnetworks") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
@@ -275,6 +323,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
      */
     @GET
+    @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<VirtualMachinesDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
@@ -284,6 +334,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
      */
     @GET
+    @Consumes(MachinesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<MachinesDto> listReservedMachines(
         @EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
@@ -293,6 +345,8 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listTemplateDefinitionLists(EnterpriseDto)
      */
     @GET
+    @Consumes(TemplateDefinitionListsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<TemplateDefinitionListsDto> listTemplateDefinitionLists(
         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
@@ -300,6 +354,9 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#createTemplateDefinitionList(EnterpriseDto)
      */
     @POST
+    @Produces(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+    @Consumes(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<TemplateDefinitionListDto> createTemplateDefinitionList(
         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
         @BinderParam(BindToXMLPayload.class) TemplateDefinitionListDto templateList);
@@ -315,8 +372,10 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#getTemplateDefinitionList(EnterpriseDto, Integer)
      */
     @GET
+    @Consumes(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    ListenableFuture<UserDto> getTemplateDefinitionList(
+    ListenableFuture<TemplateDefinitionListsDto> getTemplateDefinitionList(
         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
         @BinderParam(AppendToPath.class) Integer templateListId);
 }

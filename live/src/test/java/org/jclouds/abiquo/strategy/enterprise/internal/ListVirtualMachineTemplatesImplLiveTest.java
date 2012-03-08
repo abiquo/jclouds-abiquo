@@ -25,7 +25,6 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.jclouds.abiquo.strategy.cloud.internal.ListVirtualAppliancesImpl;
@@ -39,7 +38,7 @@ import org.testng.annotations.Test;
  */
 @Test(groups = "live")
 public class ListVirtualMachineTemplatesImplLiveTest extends
-    BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
+    BaseAbiquoStrategyLiveTest
 {
     private ListVirtualMachineTemplatesImpl strategy;
 

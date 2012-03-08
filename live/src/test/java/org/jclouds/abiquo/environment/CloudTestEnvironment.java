@@ -25,9 +25,6 @@ import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import java.io.IOException;
-import java.net.URL;
-import java.nio.charset.Charset;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
@@ -38,14 +35,12 @@ import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
-import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
 
 import com.google.common.collect.Ordering;
-import com.google.common.io.Resources;
 import com.google.common.primitives.Longs;
 
 /**
@@ -58,8 +53,6 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     // Environment data made public so tests can use them easily
     public CloudClient cloudClient;
-
-    public License license;
 
     public VirtualDatacenter virtualDatacenter;
 
@@ -87,7 +80,6 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     public void setup() throws Exception
     {
         // Create base infrastructure
-        createLicense();
         super.setup();
         createUserContext();
         createEnterpriseAdminContext();
@@ -107,7 +99,6 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         deleteVirtualDatacenter();
         // Delete base infrastructure
         super.tearDown();
-        deleteLicense();
     }
 
     // Setup
@@ -131,14 +122,6 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         props.put("abiquo.endpoint", endpoint);
         enterpriseAdminContext =
             new AbiquoContextFactory().createContext("jclouds-admin", "admin", props);
-    }
-
-    private void createLicense() throws IOException
-    {
-        license = License.builder(context, readLicense()).build();
-
-        license.add();
-        assertNotNull(license.getId());
     }
 
     protected void findDefaultEnterprise()
@@ -244,17 +227,4 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     }
 
-    private void deleteLicense()
-    {
-        license.remove();
-    }
-
-    // Utility methods
-
-    public static String readLicense() throws IOException
-    {
-        URL url = CloudTestEnvironment.class.getResource("/license/expired");
-
-        return Resources.toString(url, Charset.defaultCharset());
-    }
 }

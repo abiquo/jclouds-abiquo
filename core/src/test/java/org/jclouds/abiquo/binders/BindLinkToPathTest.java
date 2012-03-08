@@ -16,40 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.jclouds.abiquo.domain.config;
+package org.jclouds.abiquo.binders;
 
 import static org.testng.Assert.assertEquals;
 
-import org.jclouds.abiquo.domain.enterprise.User;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.rest.RESTLink;
+
 /**
- * Live integration tests for the {@link User} domain class.
+ * Unit tests for the {@link BindLinkToPath} class.
  * 
- * @author Francesc Montserrat
+ * @author Ignasi Barrera
  */
-@Test(groups = "live")
-public class SystemPropertiesLiveTest extends BaseAbiquoClientLiveTest
+@Test(groups = "unit")
+public class BindLinkToPathTest
 {
-
-    public void testUpdate()
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetNewEnpointNullInput()
     {
-        SystemProperty prop =
-            env.administrationService.getSystemProperty("client.dashboard.showStartUpAlert");
+        BindLinkToPath binder = new BindLinkToPath();
+        binder.getNewEndpoint(null, null);
+    }
 
-        String value = prop.getValue();
-        prop.setValue("0");
-        prop.update();
+    @Test(expectedExceptions = IllegalArgumentException.class)
+    public void testGetNewEnpointInvalidInput()
+    {
+        BindLinkToPath binder = new BindLinkToPath();
+        binder.getNewEndpoint(null, new Object());
+    }
 
-        // Recover the updated datacenter
-        SystemProperty updated =
-            env.administrationService.getSystemProperty("client.dashboard.showStartUpAlert");
-
-        assertEquals(updated.getValue(), "0");
-
-        prop.setValue(value);
-        prop.update();
+    public void testGetNewEnpoint()
+    {
+        BindLinkToPath binder = new BindLinkToPath();
+        assertEquals(binder.getNewEndpoint(null, new RESTLink("edit", "http://foo/bar")),
+            "http://foo/bar");
     }
 }

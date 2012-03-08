@@ -26,7 +26,6 @@ import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.config.LicensePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.BeforeClass;
@@ -38,7 +37,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListLicensesImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
+public class ListLicensesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListLicensesImpl strategy;
 

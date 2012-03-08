@@ -23,7 +23,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.StorageDevicePredicates;
 import org.testng.annotations.Test;
@@ -38,7 +37,7 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void testUpdate()

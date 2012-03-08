@@ -19,31 +19,36 @@
 
 package org.jclouds.abiquo.binders;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Singleton;
+import javax.ws.rs.core.HttpHeaders;
 
-import org.jclouds.rest.internal.GeneratedHttpRequest;
+import org.jclouds.http.HttpRequest;
+import org.jclouds.http.utils.ModifyRequest;
 
 import com.abiquo.model.rest.RESTLink;
+import com.google.common.annotations.VisibleForTesting;
 
 /**
- * Binds the given link to the uri.
+ * Binds the given link to the uri and the Accept header.
  * 
- * @author Francesc Montserrat
+ * @author Ignasi Barrera
  */
 @Singleton
-public class BindLinkToPath extends BindToPath
+public class BindLinkToPathAndAcceptHeader extends BindLinkToPath
 {
-
     @Override
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
+    public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof RESTLink,
-            "this binder is only valid for RESTLink objects");
-
-        return ((RESTLink) input).getHref();
+        R updatedRequest = super.bindToRequest(request, input);
+        return addHeader(updatedRequest, HttpHeaders.ACCEPT, ((RESTLink) input).getType());
     }
 
+    @VisibleForTesting
+    <R extends HttpRequest> R addHeader(final R request, final String header, final String value)
+    {
+        return ModifyRequest.replaceHeader(request, HttpHeaders.ACCEPT,
+            checkNotNull(value, "value"));
+    }
 }

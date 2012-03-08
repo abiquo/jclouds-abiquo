@@ -23,7 +23,6 @@ import static org.testng.Assert.assertEquals;
 
 import java.util.List;
 
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -36,7 +35,7 @@ import com.abiquo.server.core.cloud.VirtualApplianceState;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void testUpdate()

@@ -30,7 +30,6 @@ import java.util.List;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.cloud.VolumePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
@@ -44,7 +43,7 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class VolumeLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class VolumeLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void createVolume()
