@@ -26,7 +26,6 @@ import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.config.SystemProperty;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.config.SystemPropertyPredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.BeforeClass;
@@ -41,7 +40,7 @@ import com.google.common.base.Predicates;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class ListPropertiesImplLiveTest extends BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
+public class ListPropertiesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListPropertiesImpl strategy;
 

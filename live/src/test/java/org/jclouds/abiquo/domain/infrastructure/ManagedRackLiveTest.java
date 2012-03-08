@@ -26,7 +26,6 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.LogicServerPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.ManagedRackPredicates;
@@ -43,8 +42,8 @@ import com.google.common.collect.Iterables;
  * 
  * @author Francesc Montserrat
  */
-@Test(groups = "live")
-public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+@Test(groups = "ucs")
+public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
 {
     private ManagedRack ucsRack;
 

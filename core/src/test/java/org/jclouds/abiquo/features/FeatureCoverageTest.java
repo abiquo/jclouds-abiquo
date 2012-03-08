@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.features;
 
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -28,6 +29,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
+import org.jclouds.abiquo.rest.internal.AbiquoHttpAsyncClient;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
@@ -43,23 +46,40 @@ import com.google.common.collect.Iterables;
 @Test(groups = "unit")
 public class FeatureCoverageTest
 {
+    /** A collection with all async client classes. */
+    private Collection<Class< ? >> featureClasses;
+
+    @BeforeMethod
+    public void setup()
+    {
+        featureClasses = new ArrayList<Class< ? >>();
+        featureClasses.addAll(AbiquoRestClientModule.DELEGATE_MAP.values());
+        featureClasses.add(AbiquoHttpAsyncClient.class);
+    }
+
     public void testAllFeaturesHaveTest() throws ClassNotFoundException
     {
         List<String> missingTests = new ArrayList<String>();
-        Collection<Class< ? >> featureClasses = AbiquoRestClientModule.DELEGATE_MAP.values();
 
         for (Class< ? > featureClass : featureClasses)
         {
-            Class< ? > testClass = loadTestClass(featureClass);
-            Iterable<String> testMethodNames = methodNames(testClass);
-
-            for (Method method : featureClass.getMethods())
+            try
             {
-                if (!hasTest(testMethodNames, method))
+                Class< ? > testClass = loadTestClass(featureClass);
+                Iterable<String> testMethodNames = methodNames(testClass);
+
+                for (Method method : featureClass.getMethods())
                 {
-                    missingTests.add(method.getDeclaringClass().getSimpleName() + "."
-                        + method.getName());
+                    if (!hasTest(testMethodNames, method))
+                    {
+                        missingTests.add(method.getDeclaringClass().getSimpleName() + "."
+                            + method.getName());
+                    }
                 }
+            }
+            catch (ClassNotFoundException ex)
+            {
+                fail("Missing tests for class: " + featureClass.getName());
             }
         }
 
@@ -68,8 +88,7 @@ public class FeatureCoverageTest
 
     private Class< ? > loadTestClass(final Class< ? > featureClass) throws ClassNotFoundException
     {
-        String testClassName =
-            this.getClass().getPackage().getName() + "." + featureClass.getSimpleName() + "Test";
+        String testClassName = featureClass.getName() + "Test";
         return Thread.currentThread().getContextClassLoader().loadClass(testClassName);
     }
 

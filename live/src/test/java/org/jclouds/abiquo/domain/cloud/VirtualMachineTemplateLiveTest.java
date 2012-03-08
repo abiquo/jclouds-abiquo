@@ -24,7 +24,6 @@ import static org.testng.Assert.assertNotNull;
 
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -34,7 +33,7 @@ import org.testng.annotations.Test;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualMachineTemplateLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class VirtualMachineTemplateLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void testGetParent()

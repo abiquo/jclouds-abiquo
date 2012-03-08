@@ -61,9 +61,11 @@ public class Role extends DomainWrapper<RoleDto>
     // Domain operations
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-DeleteanexistingRole">
-     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-DeleteanexistingRole</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-DeleteanexistingRole"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-DeleteanexistingRole
+     *      </a>
      */
     public void delete()
     {
@@ -72,9 +74,10 @@ public class Role extends DomainWrapper<RoleDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-CreateanewRole">
-     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-CreateanewRole</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-CreateanewRole">
+     *      http
+     *      ://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-CreateanewRole</a>
      */
     public void save()
     {
@@ -82,9 +85,11 @@ public class Role extends DomainWrapper<RoleDto>
     }
 
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-UpdateanexistingRole">
-     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-UpdateanexistingRole</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-UpdateanexistingRole"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-UpdateanexistingRole
+     *      </a>
      */
     public void update()
     {
@@ -134,10 +139,12 @@ public class Role extends DomainWrapper<RoleDto>
     }
 
     // Children access
+
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-RetrievealistofprivilegesfromaRole">
-     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-RetrievealistofprivilegesfromaRole</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-RetrievealistofprivilegesfromaRole"
+     *      > http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-
+     *      RetrievealistofprivilegesfromaRole</a>
      */
     public List<Privilege> listPrivileges()
     {

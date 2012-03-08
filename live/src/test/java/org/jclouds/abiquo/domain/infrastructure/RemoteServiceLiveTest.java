@@ -31,7 +31,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -45,7 +44,7 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testUpdate()
     {

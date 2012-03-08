@@ -26,7 +26,6 @@ import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
 import org.testng.annotations.BeforeClass;
@@ -38,8 +37,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListVirtualDatacentersImplLiveTest extends
-    BaseAbiquoStrategyLiveTest<CloudTestEnvironment>
+public class ListVirtualDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListVirtualDatacentersImpl strategy;
 

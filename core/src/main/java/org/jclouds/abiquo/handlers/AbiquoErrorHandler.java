@@ -113,7 +113,8 @@ public class AbiquoErrorHandler implements HttpErrorHandler
 
     private static boolean hasPayload(final HttpResponse response)
     {
-        return response.getPayload() != null
+        return response.getPayload() != null && response.getPayload().getContentMetadata() != null
+            && response.getPayload().getContentMetadata().getContentLength() != null
             && response.getPayload().getContentMetadata().getContentLength() > 0L;
     }
 }
