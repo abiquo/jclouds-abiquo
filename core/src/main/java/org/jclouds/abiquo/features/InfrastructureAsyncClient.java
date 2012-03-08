@@ -633,7 +633,7 @@ public interface InfrastructureAsyncClient
      */
     @EnterpriseEdition
     @PUT
-    // For the most strangest reason in world, compiler does not accept 
+    // For the most strangest reason in world, compiler does not accept
     // constants StoragePoolDto.BASE_MEDIA_TYPE for this method.
     @Consumes("application/vnd.abiquo.storagepool+xml")
     @Produces("application/vnd.abiquo.storagepool+xml")
@@ -666,6 +666,8 @@ public interface InfrastructureAsyncClient
      */
     @EnterpriseEdition
     @GET
+    @Consumes(StoragePoolDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
     ListenableFuture<StoragePoolDto> refreshStoragePool(
         @EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool,
         @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
