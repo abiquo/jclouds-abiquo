@@ -51,11 +51,11 @@ public class BindLinkToPathAndAcceptHeaderTest
         BindLinkToPathAndAcceptHeader binder = new BindLinkToPathAndAcceptHeader();
         HttpRequest updatedRequest =
             binder.addHeader(request, HttpHeaders.ACCEPT,
-                "application/vnd.abiquo.datacentersdto+xml");
+                "application/vnd.abiquo.datacenters+xml");
 
         String accept = updatedRequest.getFirstHeaderOrNull(HttpHeaders.ACCEPT);
 
         assertNotNull(accept);
-        assertEquals(accept, "application/vnd.abiquo.datacentersdto+xml");
+        assertEquals(accept, "application/vnd.abiquo.datacenters+xml");
     }
 }

@@ -60,15 +60,15 @@ public class AppendApiVersionToAbiquoMimeTypeTest
     {
         Function<String, String> function =
             new AppendApiVersionToAbiquoMimeType(AbiquoAsyncClient.API_VERSION);
-        assertEquals(function.apply("application/vnd.abiquo.datacentersdto+xml;version=1.8.5"),
-            "application/vnd.abiquo.datacentersdto+xml;version=1.8.5");
+        assertEquals(function.apply("application/vnd.abiquo.datacenters+xml;version=1.8.5"),
+            "application/vnd.abiquo.datacenters+xml;version=1.8.5");
     }
 
     public void testApplyToAbiquoMediaTypeWithoutVersion()
     {
         Function<String, String> function =
             new AppendApiVersionToAbiquoMimeType(AbiquoAsyncClient.API_VERSION);
-        assertEquals(function.apply("application/vnd.abiquo.datacentersdto+xml"),
-            "application/vnd.abiquo.datacentersdto+xml;version=" + AbiquoAsyncClient.API_VERSION);
+        assertEquals(function.apply("application/vnd.abiquo.datacenters+xml"),
+            "application/vnd.abiquo.datacenters+xml;version=" + AbiquoAsyncClient.API_VERSION);
     }
 }
