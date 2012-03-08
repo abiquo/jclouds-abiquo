@@ -85,4 +85,9 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest
         assertNull(storagePool);
     }
 
+    public void testRefreshStoragePool()
+    {
+        env.storagePool.refresh();
+    }
+
 }
