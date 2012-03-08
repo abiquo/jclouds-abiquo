@@ -23,7 +23,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
@@ -38,7 +37,7 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testGetDevice()
     {
@@ -84,6 +83,11 @@ public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvir
             env.storageDevice.findStoragePool(StoragePoolPredicates.name(env.storagePool.getName()
                 + "FAIL"));
         assertNull(storagePool);
+    }
+
+    public void testRefreshStoragePool()
+    {
+        env.storagePool.refresh();
     }
 
 }

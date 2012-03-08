@@ -34,7 +34,6 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.Test;
@@ -48,7 +47,7 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void testUpdate()

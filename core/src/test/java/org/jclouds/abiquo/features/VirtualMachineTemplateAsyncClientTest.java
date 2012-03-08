@@ -35,6 +35,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -61,7 +62,8 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachineTemplatesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -84,7 +86,8 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates"
                 + "?hypervisorTypeName=XENSERVER&categoryName=Firewalls HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachineTemplatesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -106,7 +109,8 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachineTemplateDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -128,10 +132,11 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertRequestLineEquals(
             request,
             "PUT http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachineTemplateDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request,
-            withHeader(TemplateResources.virtualMachineTemplatePutPayload()), "application/xml",
-            false);
+            withHeader(TemplateResources.virtualMachineTemplatePutPayload()),
+            VirtualMachineTemplateDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -151,7 +156,7 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertRequestLineEquals(
             request,
             "DELETE http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: application/xml\n");
+        assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);

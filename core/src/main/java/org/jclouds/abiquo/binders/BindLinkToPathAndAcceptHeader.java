@@ -17,35 +17,38 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.config;
+package org.jclouds.abiquo.binders;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.util.Arrays;
+import javax.inject.Singleton;
+import javax.ws.rs.core.HttpHeaders;
 
-import org.jclouds.abiquo.domain.config.Icon;
+import org.jclouds.http.HttpRequest;
+import org.jclouds.http.utils.ModifyRequest;
 
-import com.google.common.base.Predicate;
+import com.abiquo.model.rest.RESTLink;
+import com.google.common.annotations.VisibleForTesting;
 
 /**
- * Container for {@link Icon} filters.
+ * Binds the given link to the uri and the Accept header.
  * 
  * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
-public class IconPredicates
+@Singleton
+public class BindLinkToPathAndAcceptHeader extends BindLinkToPath
 {
-    public static Predicate<Icon> name(final String... names)
+    @Override
+    public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkNotNull(names, "names must be defined");
+        R updatedRequest = super.bindToRequest(request, input);
+        return addHeader(updatedRequest, HttpHeaders.ACCEPT, ((RESTLink) input).getType());
+    }
 
-        return new Predicate<Icon>()
-        {
-            @Override
-            public boolean apply(final Icon icon)
-            {
-                return Arrays.asList(names).contains(icon.getName());
-            }
-        };
+    @VisibleForTesting
+    <R extends HttpRequest> R addHeader(final R request, final String header, final String value)
+    {
+        return ModifyRequest.replaceHeader(request, HttpHeaders.ACCEPT,
+            checkNotNull(value, "value"));
     }
 }

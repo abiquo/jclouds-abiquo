@@ -31,7 +31,6 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -45,19 +44,20 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testUpdate()
     {
         // Update the remote service
-        RemoteService rs = env.datacenter.findRemoteService(type(RemoteServiceType.TARANTINO));
+        RemoteService rs =
+            env.datacenter.findRemoteService(type(RemoteServiceType.VIRTUAL_FACTORY));
         rs.setUri(rs.getUri());
         rs.update();
 
         // Recover the updated remote service
         RemoteServiceDto updated =
             env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
-                RemoteServiceType.TARANTINO);
+                RemoteServiceType.VIRTUAL_FACTORY);
 
         assertEquals(updated.getUri(), rs.getUri());
     }
@@ -76,8 +76,8 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnv
 
         // Restore rs
         RemoteService bpm =
-            RemoteService.builder(context, env.datacenter).type(RemoteServiceType.BPM_SERVICE).ip(
-                context.getEndpoint().getHost()).build();
+            RemoteService.builder(context, env.datacenter).type(RemoteServiceType.BPM_SERVICE)
+                .ip(context.getEndpoint().getHost()).build();
         bpm.save();
     }
 

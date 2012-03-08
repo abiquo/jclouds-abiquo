@@ -32,7 +32,6 @@ import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.NicPredicates;
 import org.testng.annotations.Test;
@@ -45,7 +44,7 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
 {
     private Volume volume;
 

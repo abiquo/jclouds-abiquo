@@ -22,7 +22,6 @@ package org.jclouds.abiquo.features.services;
 import java.util.List;
 
 import org.jclouds.abiquo.domain.config.Category;
-import org.jclouds.abiquo.domain.config.Icon;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.config.SystemProperty;
@@ -217,33 +216,6 @@ public interface AdministrationService
      * Get the list of system properties with options.
      */
     Iterable<SystemProperty> listSystemProperties(String component);
-
-    /*********************** Icon ***********************/
-
-    /**
-     * Get the list of icons.
-     */
-    Iterable<Icon> listIcons();
-
-    /**
-     * Get the list of icons matching the given filter.
-     */
-    Iterable<Icon> listIcons(final Predicate<Icon> filter);
-
-    /**
-     * Get the first icon that matches the given filter or <code>null</code> if none is found.
-     */
-    Icon findIcon(final Predicate<Icon> filter);
-
-    /**
-     * Get list of icons by path.
-     */
-    Iterable<Icon> listIcons(String path);
-
-    /**
-     * Get the first icon that matches the given path or <code>null</code> if none is found.
-     */
-    Icon findIcon(String path);
 
     /*********************** Category ***********************/
 

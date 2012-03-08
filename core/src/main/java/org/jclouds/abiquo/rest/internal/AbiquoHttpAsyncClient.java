@@ -16,14 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.jclouds.abiquo.rest.internal;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.core.MediaType;
 
-import org.jclouds.abiquo.binders.BindLinkToPath;
+import org.jclouds.abiquo.binders.BindLinkToPathAndAcceptHeader;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
+import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
@@ -38,8 +38,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @author Ignasi Barrera
  */
-@RequestFilters(AbiquoAuthentication.class)
-@Consumes(MediaType.APPLICATION_XML)
+@RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 public interface AbiquoHttpAsyncClient
 {
     /**
@@ -47,5 +46,6 @@ public interface AbiquoHttpAsyncClient
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    public ListenableFuture<HttpResponse> get(@BinderParam(BindLinkToPath.class) final RESTLink link);
+    public ListenableFuture<HttpResponse> get(
+        @BinderParam(BindLinkToPathAndAcceptHeader.class) final RESTLink link);
 }

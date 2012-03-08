@@ -30,8 +30,6 @@ import com.abiquo.model.rest.RESTLink;
 
 /**
  * Binds the given link to the uri.
- * <p>
- * This method should be used in {@link GET} methods to get parent resources.
  * 
  * @author Francesc Montserrat
  */

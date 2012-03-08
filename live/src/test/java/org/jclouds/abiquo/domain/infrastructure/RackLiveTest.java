@@ -24,7 +24,6 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -37,7 +36,7 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RackLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class RackLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void testUpdate()

@@ -22,7 +22,6 @@ package org.jclouds.abiquo.domain.config;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.config.CategoryPredicates;
 import org.testng.annotations.Test;
@@ -33,7 +32,7 @@ import org.testng.annotations.Test;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class CategoryLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class CategoryLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void testCreateAndGet()

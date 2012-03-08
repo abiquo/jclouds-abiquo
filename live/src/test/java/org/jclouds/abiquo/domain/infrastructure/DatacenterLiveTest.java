@@ -32,7 +32,6 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
@@ -45,7 +44,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class DatacenterLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class DatacenterLiveTest extends BaseAbiquoClientLiveTest
 {
 
     public void testUpdate()

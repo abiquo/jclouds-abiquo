@@ -26,7 +26,6 @@ import static org.testng.Assert.assertNotNull;
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.jclouds.abiquo.util.Config;
@@ -43,7 +42,7 @@ import com.abiquo.server.core.infrastructure.MachineDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class MachineLiveTest extends BaseAbiquoClientLiveTest<CloudTestEnvironment>
+public class MachineLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testDiscoverMachineWithouRemoteService()
     {
