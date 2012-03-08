@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="WIREFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>target/test-data/jclouds-wire.log</file>
+    <appender name="HEADERSFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>target/test-data/jclouds-headers.log</file>
         <append>true</append>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
             <level>TRACE</level>
@@ -16,7 +16,27 @@
         </encoder>
         <!-- Rollover at midnight each day -->
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>target/test-data/jclouds-wire.log.%d</fileNamePattern>
+            <fileNamePattern>target/test-data/jclouds-headers.log.%d</fileNamePattern>
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+    </appender>
+    <appender name="PAYLOADFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>target/test-data/jclouds-payloads.log</file>
+        <append>true</append>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+        <encoder>
+            <!-- The default pattern: Date Priority [Category] (Thread:NDC) Message${symbol_escape}n -->
+            <pattern>%date %level [%logger] \(%thread\) %msg%n</pattern>
+            <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) -->
+            <!-- 
+            <pattern>%date %relative %level [%logger] (%thread) %msg%n</pattern>
+            -->
+        </encoder>
+        <!-- Rollover at midnight each day -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>target/test-data/jclouds-payloads.log.%d</fileNamePattern>
             <maxHistory>5</maxHistory>
         </rollingPolicy>
     </appender>
@@ -40,26 +60,6 @@
             <maxHistory>5</maxHistory>
         </rollingPolicy>
     </appender>
-    <appender name="ABIQUO" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>target/test-data/jclouds-abiquo.log</file>
-        <append>true</append>
-        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>TRACE</level>
-        </filter>
-        <encoder>
-            <!-- The default pattern: Date Priority [Category] (Thread:NDC) Message${symbol_escape}n -->
-            <pattern>%date %level [%logger] \(%thread\) %msg%n</pattern>
-            <!-- The full pattern: Date MS Priority [Category] (Thread:NDC) -->
-            <!-- 
-            <pattern>%date %relative %level [%logger] (%thread) %msg%n</pattern>
-            -->
-        </encoder>
-        <!-- Rollover at midnight each day -->
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>target/test-data/jclouds-abiquo.log.%d</fileNamePattern>
-            <maxHistory>5</maxHistory>
-        </rollingPolicy>
-    </appender>
     
     <!-- ============= -->
     <!-- Limit loggers -->
@@ -71,11 +71,12 @@
     </logger>
     <logger name="jclouds.headers">
         <level value="DEBUG" />
-        <appender-ref ref="WIREFILE" />
+        <appender-ref ref="HEADERSFILE" />
+        <appender-ref ref="PAYLOADFILE" />
     </logger>
-     <logger name="org.jclouds.abiquo">
+    <logger name="jclouds.wire">
         <level value="DEBUG" />
-        <appender-ref ref="ABIQUO" />
+        <appender-ref ref="PAYLOADFILE" />
     </logger>
 
     <!-- ===================== -->
