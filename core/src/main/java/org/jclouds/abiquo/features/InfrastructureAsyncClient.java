@@ -35,6 +35,8 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
+import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
+import org.jclouds.abiquo.binders.infrastructure.ucs.BindOrganizationParameters;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
@@ -65,10 +67,12 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
+import com.abiquo.server.core.infrastructure.OrganizationDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RacksDto;
@@ -290,6 +294,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listManagedRacks(DatacenterDto)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(UcsRacksDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
@@ -299,6 +304,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#createManagedRack(DatacenterDto, UcsRackDto)
      */
+    @EnterpriseEdition
     @POST
     @Produces(UcsRackDto.BASE_MEDIA_TYPE)
     @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
@@ -310,6 +316,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#getManagedRack(DatacenterDto, Integer)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
@@ -321,6 +328,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#updateManagedRack(UcsRackDto)
      */
+    @EnterpriseEdition
     @PUT
     @Consumes(UcsRackDto.BASE_MEDIA_TYPE)
     @Produces(UcsRackDto.BASE_MEDIA_TYPE)
@@ -331,6 +339,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listServiceProfiles(UcsRackDto)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
@@ -340,6 +349,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listServiceProfiles(UcsRackDto, QueryOptions)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
@@ -350,6 +360,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
@@ -359,6 +370,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto, LogicServerOptions)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(LogicServersDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
@@ -369,6 +381,7 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listOrganizations(UcsRackDto)
      */
+    @EnterpriseEdition
     @GET
     @Consumes(OrganizationsDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
@@ -379,11 +392,54 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#listOrganizations(UcsRackDto, OrganizationOptions)
      */
     @GET
+    @EnterpriseEdition
     @Consumes(OrganizationsDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<OrganizationsDto> listOrganizations(
         @EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(AppendOptionsToPath.class) FilterOptions options);
+
+    /**
+     * @see InfrastructureClient#cloneLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
+     *      String)
+     */
+    @POST
+    @EnterpriseEdition
+    ListenableFuture<Void> cloneLogicServer(
+        @EndpointLink("ls-clone") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+        @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+        @QueryParam("newName") String newName);
+
+    /**
+     * @see InfrastructureClient#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
+     *      String, String)
+     */
+    @POST
+    @EnterpriseEdition
+    ListenableFuture<Void> associateLogicServer(
+        @EndpointLink("ls-associate") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+        @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+        @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
+
+    /**
+     * @see InfrastructureClient#dissociateLogicServer(UcsRackDto, LogicServerDto)
+     */
+    @POST
+    @EnterpriseEdition
+    ListenableFuture<Void> dissociateLogicServer(
+        @EndpointLink("ls-dissociate") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
+
+    /**
+     * @see InfrastructureClient#deleteLogicServer(UcsRackDto, LogicServerDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> deleteLogicServer(
+        @EndpointLink("ls-delete") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
 
     /*********************** Remote Service ***********************/
 

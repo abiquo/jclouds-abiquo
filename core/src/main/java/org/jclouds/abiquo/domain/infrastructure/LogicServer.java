@@ -39,6 +39,9 @@ import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
 @EnterpriseEdition
 public class LogicServer extends DomainWrapper<LogicServerDto>
 {
+    /** The rack where the logic server belongs. */
+    private ManagedRack rack;
+
     /**
      * Constructor to be used only by the builder.
      */
@@ -69,19 +72,9 @@ public class LogicServer extends DomainWrapper<LogicServerDto>
         return target.getType();
     }
 
-    public void setAssociated(final String value)
-    {
-        target.setAssociated(value);
-    }
-
     public String getAssociatedTo()
     {
         return target.getAssociatedTo();
-    }
-
-    public void setAssociatedTo(final String value)
-    {
-        target.setAssociatedTo(value);
     }
 
     public String getDescription()

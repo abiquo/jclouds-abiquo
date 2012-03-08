@@ -24,7 +24,9 @@ import static org.jclouds.abiquo.domain.DomainUtils.link;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.OrganizationDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
@@ -167,7 +169,35 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/racks/1/lstemplates"));
         rack.addLink(new RESTLink("organizations",
             "http://localhost/api/admin/datacenters/1/racks/1/organizations"));
+        rack.addLink(new RESTLink("ls-associate",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/associate"));
+        rack.addLink(new RESTLink("ls-clone",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/clone"));
+        rack.addLink(new RESTLink("ls-delete",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/delete"));
+        rack.addLink(new RESTLink("ls-dissociate",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/dissociate"));
         return rack;
+    }
+
+    public static LogicServerDto logicServerPut()
+    {
+        LogicServerDto logicServer = new LogicServerDto();
+        logicServer.setName("server");
+        logicServer.setAssociated("associated");
+        logicServer.setType("instance");
+
+        return logicServer;
+    }
+
+    public static OrganizationDto organizationPut()
+    {
+        OrganizationDto org = new OrganizationDto();
+        org.setName("org");
+        org.setDn("org-root/org-Finance");
+        org.setLevel("1");
+
+        return org;
     }
 
     public static TierDto tierPut()
@@ -413,6 +443,11 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers", "logicservers"));
         buffer.append(link("/admin/datacenters/1/racks/1/lstemplates", "ls-templates"));
         buffer.append(link("/admin/datacenters/1/racks/1/organizations", "organizations"));
+        buffer.append(link("/admin/datacenters/1/racks/1/logicservers/associate", "ls-associate"));
+        buffer.append(link("/admin/datacenters/1/racks/1/logicservers/clone", "ls-clone"));
+        buffer.append(link("/admin/datacenters/1/racks/1/logicservers/delete", "ls-delete"));
+        buffer
+            .append(link("/admin/datacenters/1/racks/1/logicservers/dissociate", "ls-dissociate"));
         buffer.append("<haEnabled>false</haEnabled>");
         buffer.append("<id>1</id>");
         buffer.append("<name>Aloha</name>");

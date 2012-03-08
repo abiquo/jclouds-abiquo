@@ -22,8 +22,12 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
+import java.util.List;
 
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.infrastructure.LogicServerPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.ManagedRackPredicates;
 import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.AfterClass;
@@ -42,6 +46,10 @@ import com.google.common.collect.Iterables;
 public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
 {
     private ManagedRack ucsRack;
+
+    private LogicServer logicServer;
+
+    private Organization organization;
 
     public void testUpdate()
     {
@@ -73,6 +81,40 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
         rack =
             env.datacenter.findManagedRack(ManagedRackPredicates.name(ucsRack.getName() + "FAIL"));
         assertNull(rack);
+    }
+
+    public void testCloneLogicServer()
+    {
+        List<LogicServer> originals = ucsRack.listServiceProfiles();
+        assertNotNull(originals);
+        assertTrue(originals.size() > 0);
+        LogicServer original = originals.get(0);
+
+        List<Organization> organizations = ucsRack.listOrganizations();
+        assertNotNull(organizations);
+        assertTrue(organizations.size() > 0);
+        organization = organizations.get(0);
+
+        ucsRack.cloneLogicServer(original, organization, "jclouds");
+
+        logicServer =
+            ucsRack.findServiceProfile(LogicServerPredicates.name(organization.getDn() + "/"
+                + "ls-jclouds"));
+        assertNotNull(logicServer);
+
+        String name = logicServer.getName();
+        assertEquals(name.substring(name.length() - 7, name.length()), "jclouds");
+    }
+
+    @Test(dependsOnMethods = "testCloneLogicServer")
+    public void testDeleteLogicServer()
+    {
+        String name = logicServer.getName();
+
+        ucsRack.deleteLogicServer(logicServer);
+
+        LogicServer profile = ucsRack.findServiceProfile(LogicServerPredicates.name(name));
+        assertNull(profile);
     }
 
     @BeforeClass
