@@ -467,13 +467,13 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
 
     /**
-     * @see InfrastructureClient#getFSM(UcsRackDto, String)
+     * @see InfrastructureClient#listFsms(UcsRackDto, String)
      */
     @EnterpriseEdition
     @GET
     @Consumes(FsmsDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<FsmsDto> getFSM(
+    ListenableFuture<FsmsDto> listFsms(
         @EndpointLink("fsm") @BinderParam(BindToPath.class) UcsRackDto rack,
         @QueryParam("dn") String dn);
 

@@ -446,7 +446,7 @@ public interface InfrastructureClient
      */
     @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
-    FsmsDto getFSM(UcsRackDto rack, String dn);
+    FsmsDto listFsms(UcsRackDto rack, String dn);
 
     /*********************** Remote Service ********************** */
 

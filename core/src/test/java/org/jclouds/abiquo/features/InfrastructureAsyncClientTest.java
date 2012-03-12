@@ -703,10 +703,10 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    public void testGetFSM() throws SecurityException, NoSuchMethodException, IOException
+    public void testListFsms() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncClient.class.getMethod("getFSM", UcsRackDto.class, String.class);
+            InfrastructureAsyncClient.class.getMethod("listFsms", UcsRackDto.class, String.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(), "dn");
 

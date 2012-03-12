@@ -30,6 +30,7 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
+import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -186,6 +187,18 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public Organization findOrganization(final Predicate<Organization> filter)
     {
         return Iterables.getFirst(filter(listOrganizations(), filter), null);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrieveFSMofanentityinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      RetrieveFSMofanentityinUCS</a>
+     */
+    public List<Fsm> listFsm(final String entityName)
+    {
+        FsmsDto fsms = context.getApi().getInfrastructureClient().listFsms(target, entityName);
+        return wrap(context, Fsm.class, fsms.getCollection());
     }
 
     // Actions

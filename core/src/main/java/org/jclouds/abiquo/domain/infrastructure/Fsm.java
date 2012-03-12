@@ -19,17 +19,14 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
-import java.util.List;
-
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 
-import com.abiquo.server.core.infrastructure.LogicServerDto;
-import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
+import com.abiquo.server.core.infrastructure.FsmDto;
 
 /**
- * Adds high level functionality to {@link LogicServerDto}.
+ * Adds high level functionality to {@link FSMDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -37,64 +34,48 @@ import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
  *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
  */
 @EnterpriseEdition
-public class LogicServer extends DomainWrapper<LogicServerDto>
+public class Fsm extends DomainWrapper<FsmDto>
 {
     /**
      * Constructor to be used only by the builder.
      */
-    protected LogicServer(final AbiquoContext context, final LogicServerDto target)
+    protected Fsm(final AbiquoContext context, final FsmDto target)
     {
         super(context, target);
     }
 
     // Delegate Methods
 
-    public String getName()
-    {
-        return target.getName();
-    }
-
-    public void setType(final String value)
-    {
-        target.setType(value);
-    }
-
-    public String getAssociated()
-    {
-        return target.getAssociated();
-    }
-
-    public String getType()
-    {
-        return target.getType();
-    }
-
-    public String getAssociatedTo()
-    {
-        return target.getAssociatedTo();
-    }
-
     public String getDescription()
     {
         return target.getDescription();
     }
 
-    public void setDescription(final String value)
+    public String getDn()
     {
-        target.setDescription(value);
+        return target.getDn();
     }
 
-    public List<LogicServerPolicyDto> getCollection()
+    public String getError()
     {
-        return target.getCollection();
+        return target.getError();
+    }
+
+    public String getProgress()
+    {
+        return target.getProgress();
+    }
+
+    public String getStatus()
+    {
+        return target.getStatus();
     }
 
     @Override
     public String toString()
     {
-        return "LogicServer [name=" + getName() + ", associated=" + getAssociated() + ", type="
-            + getType() + ", associatedTo=" + getAssociatedTo() + ", description="
-            + getDescription() + "]";
+        return "Fsm [Dn=" + getDn() + ", Description=" + getDescription() + ", Error=" + getError()
+            + ", Progress=" + getProgress() + ", Status=" + getStatus() + "]";
     }
 
 }
