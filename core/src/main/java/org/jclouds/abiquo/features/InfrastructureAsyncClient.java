@@ -67,6 +67,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -391,8 +392,8 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listOrganizations(UcsRackDto, OrganizationOptions)
      */
-    @GET
     @EnterpriseEdition
+    @GET
     @Consumes(OrganizationsDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<OrganizationsDto> listOrganizations(
@@ -403,8 +404,8 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#cloneLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
      *      String)
      */
-    @POST
     @EnterpriseEdition
+    @POST
     ListenableFuture<Void> cloneLogicServer(
         @EndpointLink("ls-clone") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
@@ -415,8 +416,8 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
      *      String)
      */
-    @POST
     @EnterpriseEdition
+    @POST
     ListenableFuture<Void> associateLogicServer(
         @EndpointLink("ls-associate") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
@@ -427,8 +428,8 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#associateTemplate(UcsRackDto, LogicServerDto, OrganizationDto,
      *      String, String)
      */
-    @POST
     @EnterpriseEdition
+    @POST
     ListenableFuture<Void> associateTemplate(
         @EndpointLink("ls-associatetemplate") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
@@ -439,8 +440,8 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#cloneAndAssociateLogicServer(UcsRackDto, LogicServerDto,
      *      OrganizationDto, String, String)
      */
-    @POST
     @EnterpriseEdition
+    @POST
     ListenableFuture<Void> cloneAndAssociateLogicServer(
         @EndpointLink("ls-associateclone") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
@@ -450,8 +451,8 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#dissociateLogicServer(UcsRackDto, LogicServerDto)
      */
-    @POST
     @EnterpriseEdition
+    @POST
     ListenableFuture<Void> dissociateLogicServer(
         @EndpointLink("ls-dissociate") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
@@ -464,6 +465,17 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteLogicServer(
         @EndpointLink("ls-delete") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
+
+    /**
+     * @see InfrastructureClient#getFSM(UcsRackDto, String)
+     */
+    @EnterpriseEdition
+    @GET
+    @Consumes(FsmsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<FsmsDto> getFSM(
+        @EndpointLink("fsm") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @QueryParam("dn") String dn);
 
     /*********************** Remote Service ***********************/
 

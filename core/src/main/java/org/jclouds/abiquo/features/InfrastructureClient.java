@@ -36,6 +36,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -435,6 +436,17 @@ public interface InfrastructureClient
     @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void dissociateLogicServer(UcsRackDto rack, LogicServerDto logicServer);
+
+    /**
+     * Get FSM list of an entity
+     * 
+     * @param rack The managed rack where the entity belongs.
+     * @param dn Distinguished name of the entity.
+     * @param fsm The fsm.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    FsmsDto getFSM(UcsRackDto rack, String dn);
 
     /*********************** Remote Service ********************** */
 

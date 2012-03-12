@@ -161,8 +161,7 @@ public class InfrastructureResources
         rack.setId(1);
         rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
-        rack.addLink(new RESTLink("machines",
-            "http://localhost/api/admin/datacenters/1/racks/1/machines"));
+        rack.addLink(new RESTLink("fsm", "http://localhost/api/admin/datacenters/1/racks/1/fsm"));
         rack.addLink(new RESTLink("logicservers",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers"));
         rack.addLink(new RESTLink("ls-templates",
@@ -443,7 +442,7 @@ public class InfrastructureResources
         buffer.append("<ucsrack>");
         buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append(link("/admin/datacenters/1/racks/1", "edit"));
-        buffer.append(link("/admin/datacenters/1/racks/1/machines", "machines"));
+        buffer.append(link("/admin/datacenters/1/racks/1/fsm", "fsm"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers", "logicservers"));
         buffer.append(link("/admin/datacenters/1/racks/1/lstemplates", "ls-templates"));
         buffer.append(link("/admin/datacenters/1/racks/1/organizations", "organizations"));
