@@ -413,6 +413,20 @@ public interface InfrastructureClient
         OrganizationDto organization, String newName, String bladeName);
 
     /**
+     * Clone a service profile and associate it with a blade.
+     * 
+     * @param rack The managed rack where the service profile is.
+     * @param logicServer The logic server.
+     * @param organization The organization to be associated.
+     * @param newName Name of the new service profile.
+     * @param bladeName The name of the blade.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void cloneAndAssociateLogicServer(UcsRackDto rack, LogicServerDto logicServer,
+        OrganizationDto organization, String newName, String bladeName);
+
+    /**
      * Dissociate a service profile from a blade.
      * 
      * @param rack The managed rack where the service profile is.

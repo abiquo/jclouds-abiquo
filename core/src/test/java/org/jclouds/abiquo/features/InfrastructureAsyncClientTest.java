@@ -607,6 +607,31 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testCloneAndAssociateLogicServer() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("cloneAndAssociateLogicServer",
+                UcsRackDto.class, LogicServerDto.class, OrganizationDto.class, String.class,
+                String.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.managedRackPut(),
+                InfrastructureResources.logicServerPut(),
+                InfrastructureResources.organizationPut(), "newname", "blade");
+
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/admin/datacenters/1/racks/1/logicservers/assocclone?newName=newname&bladeDn=blade&org=org-root%2Forg-Finance&lsName=server HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testDissociateLogicServer() throws SecurityException, NoSuchMethodException,
         IOException
     {

@@ -413,7 +413,7 @@ public interface InfrastructureAsyncClient
 
     /**
      * @see InfrastructureClient#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
-     *      String, String)
+     *      String)
      */
     @POST
     @EnterpriseEdition
@@ -424,13 +424,25 @@ public interface InfrastructureAsyncClient
         @QueryParam("bladeDn") String bladeName);
 
     /**
-     * @see InfrastructureClient#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
+     * @see InfrastructureClient#associateTemplate(UcsRackDto, LogicServerDto, OrganizationDto,
      *      String, String)
      */
     @POST
     @EnterpriseEdition
     ListenableFuture<Void> associateTemplate(
         @EndpointLink("ls-associatetemplate") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+        @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+        @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
+
+    /**
+     * @see InfrastructureClient#cloneAndAssociateLogicServer(UcsRackDto, LogicServerDto,
+     *      OrganizationDto, String, String)
+     */
+    @POST
+    @EnterpriseEdition
+    ListenableFuture<Void> cloneAndAssociateLogicServer(
+        @EndpointLink("ls-associateclone") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
