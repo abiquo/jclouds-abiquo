@@ -107,6 +107,14 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
     }
 
     @Test(dependsOnMethods = "testCloneLogicServer")
+    public void testListFsms()
+    {
+        List<Fsm> fsms = ucsRack.listFsm(logicServer.getName());
+        assertNotNull(fsms);
+        assertTrue(fsms.size() > 0);
+    }
+
+    @Test(dependsOnMethods = {"testCloneLogicServer", "testListFsms"})
     public void testDeleteLogicServer()
     {
         String name = logicServer.getName();

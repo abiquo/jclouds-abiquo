@@ -36,6 +36,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -391,12 +392,39 @@ public interface InfrastructureClient
      * @param rack The managed rack where the service profile is.
      * @param logicServer The logic server.
      * @param organization The organization to be associated.
-     * @param newName The name of the new service profile.
      * @param bladeName The name of the blade.
      */
     @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void associateLogicServer(UcsRackDto rack, LogicServerDto logicServer,
+        OrganizationDto organization, String bladeName);
+
+    /**
+     * Associate a service profile with a blade instantiating a service profile template.
+     * 
+     * @param rack The managed rack where the service profile is.
+     * @param logicServer The logic server.
+     * @param organization The organization to be associated.
+     * @param newName Name of the new service profile.
+     * @param bladeName The name of the blade.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void associateTemplate(UcsRackDto rack, LogicServerDto logicServer,
+        OrganizationDto organization, String newName, String bladeName);
+
+    /**
+     * Clone a service profile and associate it with a blade.
+     * 
+     * @param rack The managed rack where the service profile is.
+     * @param logicServer The logic server.
+     * @param organization The organization to be associated.
+     * @param newName Name of the new service profile.
+     * @param bladeName The name of the blade.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void cloneAndAssociateLogicServer(UcsRackDto rack, LogicServerDto logicServer,
         OrganizationDto organization, String newName, String bladeName);
 
     /**
@@ -408,6 +436,17 @@ public interface InfrastructureClient
     @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void dissociateLogicServer(UcsRackDto rack, LogicServerDto logicServer);
+
+    /**
+     * Get FSM list of an entity
+     * 
+     * @param rack The managed rack where the entity belongs.
+     * @param dn Distinguished name of the entity.
+     * @param fsm The fsm.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    FsmsDto listFsms(UcsRackDto rack, String dn);
 
     /*********************** Remote Service ********************** */
 

@@ -30,6 +30,7 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
+import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -188,6 +189,18 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         return Iterables.getFirst(filter(listOrganizations(), filter), null);
     }
 
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrieveFSMofanentityinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      RetrieveFSMofanentityinUCS</a>
+     */
+    public List<Fsm> listFsm(final String entityName)
+    {
+        FsmsDto fsms = context.getApi().getInfrastructureClient().listFsms(target, entityName);
+        return wrap(context, Fsm.class, fsms.getCollection());
+    }
+
     // Actions
 
     /**
@@ -210,13 +223,45 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      *      AssociateLogicServerwithabladeinUCS</a>
      */
     public void associateLogicServer(final String bladeName, final LogicServer logicServer,
-        final Organization organization, final String newName)
+        final Organization organization)
     {
         context
             .getApi()
             .getInfrastructureClient()
             .associateLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
-                newName, bladeName);
+                bladeName);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CloneandassociateLogicServerwithabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      CloneandassociateLogicServerwithabladeinUCS</a>
+     */
+    public void cloneAndAssociateLogicServer(final String bladeName, final LogicServer logicServer,
+        final Organization organization, final String logicServerName)
+    {
+        context
+            .getApi()
+            .getInfrastructureClient()
+            .cloneAndAssociateLogicServer(this.unwrap(), logicServer.unwrap(),
+                organization.unwrap(), bladeName, logicServerName);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-InstantiateandassociateaLogicServerTemplatewithabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      InstantiateandassociateaLogicServerTemplatewithabladeinUCS</a>
+     */
+    public void associateLogicServerTemplate(final String bladeName, final LogicServer logicServer,
+        final Organization organization, final String logicServerName)
+    {
+        context
+            .getApi()
+            .getInfrastructureClient()
+            .associateTemplate(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
+                bladeName, logicServerName);
     }
 
     /**
