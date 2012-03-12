@@ -171,6 +171,8 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/racks/1/organizations"));
         rack.addLink(new RESTLink("ls-associate",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers/associate"));
+        rack.addLink(new RESTLink("ls-associatetemplate",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/associatetemplate"));
         rack.addLink(new RESTLink("ls-clone",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers/clone"));
         rack.addLink(new RESTLink("ls-delete",
@@ -444,6 +446,8 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks/1/lstemplates", "ls-templates"));
         buffer.append(link("/admin/datacenters/1/racks/1/organizations", "organizations"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers/associate", "ls-associate"));
+        buffer.append(link("/admin/datacenters/1/racks/1/logicservers/associatetemplate",
+            "ls-associatetemplate"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers/clone", "ls-clone"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers/delete", "ls-delete"));
         buffer

@@ -564,15 +564,39 @@ public class InfrastructureAsyncClientTest extends
     {
         Method method =
             InfrastructureAsyncClient.class.getMethod("associateLogicServer", UcsRackDto.class,
+                LogicServerDto.class, OrganizationDto.class, String.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.managedRackPut(),
+                InfrastructureResources.logicServerPut(),
+                InfrastructureResources.organizationPut(), "blade");
+
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/admin/datacenters/1/racks/1/logicservers/associate?bladeDn=blade&org=org-root%2Forg-Finance&lsName=server HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testAssociateTemplate() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("associateTemplate", UcsRackDto.class,
                 LogicServerDto.class, OrganizationDto.class, String.class, String.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(),
                 InfrastructureResources.logicServerPut(),
-                InfrastructureResources.organizationPut(), "name", "blade");
+                InfrastructureResources.organizationPut(), "newname", "blade");
 
         assertRequestLineEquals(
             request,
-            "POST http://localhost/api/admin/datacenters/1/racks/1/logicservers/associate?newName=name&bladeDn=blade&org=org-root%2Forg-Finance&lsName=server HTTP/1.1");
+            "POST http://localhost/api/admin/datacenters/1/racks/1/logicservers/associatetemplate?newName=newname&bladeDn=blade&org=org-root%2Forg-Finance&lsName=server HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 

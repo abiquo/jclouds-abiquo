@@ -421,6 +421,18 @@ public interface InfrastructureAsyncClient
         @EndpointLink("ls-associate") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+        @QueryParam("bladeDn") String bladeName);
+
+    /**
+     * @see InfrastructureClient#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
+     *      String, String)
+     */
+    @POST
+    @EnterpriseEdition
+    ListenableFuture<Void> associateTemplate(
+        @EndpointLink("ls-associatetemplate") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+        @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
 
     /**

@@ -210,13 +210,29 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      *      AssociateLogicServerwithabladeinUCS</a>
      */
     public void associateLogicServer(final String bladeName, final LogicServer logicServer,
-        final Organization organization, final String newName)
+        final Organization organization)
     {
         context
             .getApi()
             .getInfrastructureClient()
             .associateLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
-                newName, bladeName);
+                bladeName);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-InstantiateandassociateaLogicServerTemplatewithabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
+     *      InstantiateandassociateaLogicServerTemplatewithabladeinUCS</a>
+     */
+    public void associateLogicServerTemplate(final String bladeName, final LogicServer logicServer,
+        final Organization organization, final String logicServerName)
+    {
+        context
+            .getApi()
+            .getInfrastructureClient()
+            .associateTemplate(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
+                bladeName, logicServerName);
     }
 
     /**

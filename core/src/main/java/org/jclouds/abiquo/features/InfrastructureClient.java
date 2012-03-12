@@ -391,12 +391,25 @@ public interface InfrastructureClient
      * @param rack The managed rack where the service profile is.
      * @param logicServer The logic server.
      * @param organization The organization to be associated.
-     * @param newName The name of the new service profile.
      * @param bladeName The name of the blade.
      */
     @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void associateLogicServer(UcsRackDto rack, LogicServerDto logicServer,
+        OrganizationDto organization, String bladeName);
+
+    /**
+     * Associate a service profile with a blade instantiating a service profile template.
+     * 
+     * @param rack The managed rack where the service profile is.
+     * @param logicServer The logic server.
+     * @param organization The organization to be associated.
+     * @param newName Name of the new service profile.
+     * @param bladeName The name of the blade.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void associateTemplate(UcsRackDto rack, LogicServerDto logicServer,
         OrganizationDto organization, String newName, String bladeName);
 
     /**
