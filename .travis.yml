@@ -5,6 +5,12 @@ branches:
         - stable
 notifications:
     email:
-        - developers@abiquo.com
+        recipients:
+            - developers@abiquo.com
+        on_success: change
+        on_failure: always
     irc:
-        - "irc.freenode.net#abiquo"
+        channels:
+            - "irc.freenode.net#abiquo"
+        on_success: change
+        on_failure: always
