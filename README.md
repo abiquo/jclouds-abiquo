@@ -30,6 +30,16 @@ If you find any issue, please submit it to the [Bug tracking system](http://jira
 will do our best to fix it.
 
 
+Build status
+------------
+
+The project is built with [Travis CI] (http://travis-ci.org/) and the build history can be checked [here](http://travis-ci.org/#!/abiquo/jclouds-abiquo/builds).
+The last build status for the main branches is:
+
+ * stable [![Build Status](https://secure.travis-ci.org/abiquo/jclouds-abiquo.png?branch=stable)](http://travis-ci.org/#!/abiquo/jclouds-abiquo/branch_summary)
+ * master [![Build Status](https://secure.travis-ci.org/abiquo/jclouds-abiquo.png?branch=master)](http://travis-ci.org/#!/abiquo/jclouds-abiquo/branch_summary)
+
+
 License
 -------
 
