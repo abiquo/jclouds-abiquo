@@ -1,0 +1,10 @@
+language: java
+branches:
+    only:
+        - master
+        - stable
+notifications:
+    email:
+        - ignasi.barrera@abiquo.com
+    irc:
+        - "irc.freenode.net#abiquo"
