@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
@@ -27,6 +28,8 @@ import java.util.StringTokenizer;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -37,11 +40,14 @@ import org.jclouds.http.functions.ParseXMLWithJAXB;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.RackDto;
+import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
 
@@ -127,6 +133,90 @@ public class Machine extends DomainWrapper<MachineDto>
     public Datastore findDatastore(final String name)
     {
         return find(getDatastores(), DatastorePredicates.name(name), null);
+    }
+
+    /**
+     * Gets the list of virtual machines in the physical machine.
+     * 
+     * @return The list of virtual machines in the physical machine.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Machine+Resource#MachineResource-Retrievethelistofvirtualmachinesbymachine'shypervisor"
+     *      > http://community.abiquo.com/display/ABI20/Machine+Resource#MachineResource-
+     *      Retrievethelistofvirtualmachinesbymachine'shypervisor</a>
+     */
+    public List<VirtualMachine> listVirtualMachines()
+    {
+        MachineOptions options = MachineOptions.builder().sync(false).build();
+        VirtualMachinesDto vms =
+            context.getApi().getInfrastructureClient()
+                .listVirtualMachinesByMachine(target, options);
+        return wrap(context, VirtualMachine.class, vms.getCollection());
+    }
+
+    /**
+     * Gets the list of virtual machines in the physical machine matching the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The list of virtual machines in the physical machine matching the given filter.
+     */
+    public List<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter)
+    {
+        return Lists.newLinkedList(filter(listVirtualMachines(), filter));
+    }
+
+    /**
+     * Gets a single virtual machine in the physical machine matching the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The virtual machine or <code>null</code> if none matched the given filter.
+     */
+    public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter)
+    {
+        return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
+    }
+
+    /**
+     * Gets the list of virtual machines in the physical machine sinchronizing virtual machines from
+     * remote hypervisor with abiquo's database.
+     * 
+     * @return The list of virtual machines in the physical machine.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Machine+Resource#MachineResource-Retrievethelistofvirtualmachinesbymachine'shypervisor"
+     *      > http://community.abiquo.com/display/ABI20/Machine+Resource#MachineResource-
+     *      Retrievethelistofvirtualmachinesbymachine'shypervisor</a>
+     */
+    public List<VirtualMachine> listRemoteVirtualMachines()
+    {
+        MachineOptions options = MachineOptions.builder().sync(true).build();
+        VirtualMachinesDto vms =
+            context.getApi().getInfrastructureClient()
+                .listVirtualMachinesByMachine(target, options);
+        return wrap(context, VirtualMachine.class, vms.getCollection());
+    }
+
+    /**
+     * Gets the list of virtual machines in the physical machine matching the given filter
+     * sinchronizing virtual machines from remote hypervisor with abiquo's database.
+     * 
+     * @param filter The filter to apply.
+     * @return The list of remote virtual machines in the physical machine matching the given
+     *         filter.
+     */
+    public List<VirtualMachine> listRemoteVirtualMachines(final Predicate<VirtualMachine> filter)
+    {
+        return Lists.newLinkedList(filter(listVirtualMachines(), filter));
+    }
+
+    /**
+     * Gets a single virtual machine in the physical machine matching the given filter sinchronizing
+     * virtual machines from remote hypervisor with abiquo's database.
+     * 
+     * @param filter The filter to apply.
+     * @return The virtual machine or <code>null</code> if none matched the given filter.
+     */
+    public VirtualMachine findRemoteVirtualMachine(final Predicate<VirtualMachine> filter)
+    {
+        return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
     }
 
     // Builder

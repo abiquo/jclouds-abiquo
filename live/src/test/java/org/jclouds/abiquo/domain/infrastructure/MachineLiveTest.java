@@ -22,9 +22,13 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
+
+import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
@@ -113,5 +117,12 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
         Rack rack = env.machine.getRack();
         assertNotNull(rack);
         assertEquals(rack.getId(), env.rack.getId());
+    }
+
+    public void testListVirtualMachines()
+    {
+        List<VirtualMachine> machines = env.machine.listVirtualMachines();
+        assertNotNull(machines);
+        assertTrue(machines.size() > 0);
     }
 }
