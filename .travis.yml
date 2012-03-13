@@ -5,6 +5,6 @@ branches:
         - stable
 notifications:
     email:
-        - ignasi.barrera@abiquo.com
+        - developers@abiquo.com
     irc:
         - "irc.freenode.net#abiquo"
