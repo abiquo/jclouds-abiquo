@@ -266,6 +266,12 @@ public class InfrastructureResources
         machine.addLink(new RESTLink("rack", "http://localhost/api/admin/datacenters/1/racks/1"));
         machine.addLink(new RESTLink("checkstate",
             "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/checkstate"));
+        machine.addLink(new RESTLink("logicserver",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/logicserver"));
+        machine.addLink(new RESTLink("poweroff",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/poweroff"));
+        machine.addLink(new RESTLink("poweron",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/poweron"));
         machine.setVirtualCpuCores(5);
 
         return machine;
@@ -507,6 +513,9 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks/1", "rack"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/checkstate",
             "checkstate"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/logicserver", "logicserver"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/poweroff", "poweroff"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/poweron", "poweron"));
         buffer.append("<datastores/>");
         buffer.append("<description>A hawaian machine</description>");
         buffer.append("<id>1</id>");
