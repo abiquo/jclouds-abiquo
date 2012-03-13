@@ -621,6 +621,22 @@ public interface InfrastructureAsyncClient
     ListenableFuture<LogicServerDto> getLogicServer(
         @EndpointLink("logicserver") @BinderParam(BindToPath.class) MachineDto machine);
 
+    /**
+     * @see InfrastructureClient#ledOn(MachineDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> ledOn(
+        @EndpointLink("ledon") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#ledOff(MachineDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> ledOff(
+        @EndpointLink("ledoff") @BinderParam(BindToPath.class) MachineDto machine);
+
     /*********************** Storage Device ***********************/
 
     /**

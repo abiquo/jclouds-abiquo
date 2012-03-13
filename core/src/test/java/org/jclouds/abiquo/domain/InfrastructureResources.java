@@ -266,6 +266,10 @@ public class InfrastructureResources
         machine.addLink(new RESTLink("rack", "http://localhost/api/admin/datacenters/1/racks/1"));
         machine.addLink(new RESTLink("checkstate",
             "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/checkstate"));
+        machine.addLink(new RESTLink("ledoff",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/ledoff"));
+        machine.addLink(new RESTLink("ledon",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/ledon"));
         machine.addLink(new RESTLink("logicserver",
             "http://localhost/api/admin/datacenters/1/racks/1/machines/1/logicserver"));
         machine.addLink(new RESTLink("poweroff",
@@ -513,6 +517,8 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks/1", "rack"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/checkstate",
             "checkstate"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/ledoff", "ledoff"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/ledon", "ledon"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/logicserver", "logicserver"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/poweroff", "poweroff"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/poweron", "poweron"));

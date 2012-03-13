@@ -577,6 +577,22 @@ public interface InfrastructureClient
     @EnterpriseEdition
     void getLogicServer(MachineDto machine);
 
+    /**
+     * Turn off locator led of a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void ledOn(MachineDto machine);
+
+    /**
+     * Light locator led of a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void ledOff(MachineDto machine);
+
     /*********************** Storage Device ***********************/
 
     /**
