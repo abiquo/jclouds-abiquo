@@ -39,9 +39,6 @@ import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
 @EnterpriseEdition
 public class LogicServer extends DomainWrapper<LogicServerDto>
 {
-    /** The rack where the logic server belongs. */
-    // private ManagedRack rack;
-
     /**
      * Constructor to be used only by the builder.
      */
