@@ -47,7 +47,7 @@ public interface AbiquoAsyncClient
     /**
      * The supported build version of the Abiquo Api.
      */
-    public static final String BUILD_VERSION = "2908474-8e9e025";
+    public static final String BUILD_VERSION = "7bbfe95-158721b";
 
     /**
      * Provides asynchronous access to Admin features.
