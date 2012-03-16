@@ -37,7 +37,7 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 
 /**
- * Adds high level functionality to {@link MachineDto}. This class defines como methods for
+ * Adds high level functionality to {@link MachineDto}. This class defines common methods for
  * unmanaged {@link Machine} and managed {@link Blade} physical machines.
  * 
  * @author Ignasi Barrera
