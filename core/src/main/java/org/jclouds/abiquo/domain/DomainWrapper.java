@@ -188,7 +188,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      */
     protected AsyncTask getTask(final AcceptedRequestDto<String> acceptedRequest)
     {
-        RESTLink taskLink = acceptedRequest.searchLink("status");
+        RESTLink taskLink = acceptedRequest.getStatusLink();
         checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
 
         // This will return null on untrackable tasks

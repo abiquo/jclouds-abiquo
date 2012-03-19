@@ -1,0 +1,16 @@
+language: java
+branches:
+    only:
+        - master
+        - stable
+notifications:
+    email:
+        recipients:
+            - developers@abiquo.com
+        on_success: change
+        on_failure: always
+    irc:
+        channels:
+            - "irc.freenode.net#abiquo"
+        on_success: change
+        on_failure: always

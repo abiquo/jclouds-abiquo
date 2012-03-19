@@ -553,6 +553,46 @@ public interface InfrastructureClient
      */
     MachinesDto listMachines(RackDto rack);
 
+    /**
+     * Power off a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void powerOff(MachineDto machine);
+
+    /**
+     * Power on a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void powerOn(MachineDto machine);
+
+    /**
+     * Get the logic server associated with a machine in a Cisc UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void getLogicServer(MachineDto machine);
+
+    /**
+     * Turn off locator led of a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void ledOn(MachineDto machine);
+
+    /**
+     * Light locator led of a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void ledOff(MachineDto machine);
+
     /*********************** Storage Device ***********************/
 
     /**

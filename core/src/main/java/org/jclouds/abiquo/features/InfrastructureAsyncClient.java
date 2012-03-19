@@ -595,6 +595,48 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteMachine(
         @EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
 
+    /**
+     * @see InfrastructureClient#powerOff(MachineDto)
+     */
+    @EnterpriseEdition
+    @PUT
+    ListenableFuture<Void> powerOff(
+        @EndpointLink("poweroff") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#powerOn(MachineDto)
+     */
+    @EnterpriseEdition
+    @PUT
+    ListenableFuture<Void> powerOn(
+        @EndpointLink("poweron") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#getLogicServer(MachineDto)
+     */
+    @EnterpriseEdition
+    @GET
+    @Consumes(LogicServerDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<LogicServerDto> getLogicServer(
+        @EndpointLink("logicserver") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#ledOn(MachineDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> ledOn(
+        @EndpointLink("ledon") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#ledOff(MachineDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> ledOff(
+        @EndpointLink("ledoff") @BinderParam(BindToPath.class) MachineDto machine);
+
     /*********************** Storage Device ***********************/
 
     /**

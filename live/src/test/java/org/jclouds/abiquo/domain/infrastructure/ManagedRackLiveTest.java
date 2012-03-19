@@ -29,9 +29,6 @@ import java.util.List;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.LogicServerPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.ManagedRackPredicates;
-import org.jclouds.abiquo.util.Config;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.UcsRackDto;
@@ -45,20 +42,18 @@ import com.google.common.collect.Iterables;
 @Test(groups = "ucs")
 public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
 {
-    private ManagedRack ucsRack;
-
     private LogicServer logicServer;
 
     private Organization organization;
 
     public void testUpdate()
     {
-        ucsRack.setShortDescription("Updated description");
-        ucsRack.update();
+        env.ucsRack.setShortDescription("Updated description");
+        env.ucsRack.update();
 
         // Recover the updated rack
         UcsRackDto updated =
-            env.infrastructureClient.getManagedRack(env.datacenter.unwrap(), ucsRack.getId());
+            env.infrastructureClient.getManagedRack(env.datacenter.unwrap(), env.ucsRack.getId());
 
         assertEquals(updated.getShortDescription(), "Updated description");
     }
@@ -68,37 +63,38 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
         Iterable<ManagedRack> racks = env.datacenter.listManagedRacks();
         assertEquals(Iterables.size(racks), 1);
 
-        racks = env.datacenter.listManagedRacks(ManagedRackPredicates.name(ucsRack.getName()));
+        racks = env.datacenter.listManagedRacks(ManagedRackPredicates.name(env.ucsRack.getName()));
         assertEquals(Iterables.size(racks), 1);
     }
 
     public void testFindRack()
     {
         ManagedRack rack =
-            env.datacenter.findManagedRack(ManagedRackPredicates.name(ucsRack.getName()));
+            env.datacenter.findManagedRack(ManagedRackPredicates.name(env.ucsRack.getName()));
         assertNotNull(rack);
 
         rack =
-            env.datacenter.findManagedRack(ManagedRackPredicates.name(ucsRack.getName() + "FAIL"));
+            env.datacenter.findManagedRack(ManagedRackPredicates.name(env.ucsRack.getName()
+                + "FAIL"));
         assertNull(rack);
     }
 
     public void testCloneLogicServer()
     {
-        List<LogicServer> originals = ucsRack.listServiceProfiles();
+        List<LogicServer> originals = env.ucsRack.listServiceProfiles();
         assertNotNull(originals);
         assertTrue(originals.size() > 0);
         LogicServer original = originals.get(0);
 
-        List<Organization> organizations = ucsRack.listOrganizations();
+        List<Organization> organizations = env.ucsRack.listOrganizations();
         assertNotNull(organizations);
         assertTrue(organizations.size() > 0);
         organization = organizations.get(0);
 
-        ucsRack.cloneLogicServer(original, organization, "jclouds");
+        env.ucsRack.cloneLogicServer(original, organization, "jclouds");
 
         logicServer =
-            ucsRack.findServiceProfile(LogicServerPredicates.name(organization.getDn() + "/"
+            env.ucsRack.findServiceProfile(LogicServerPredicates.name(organization.getDn() + "/"
                 + "ls-jclouds"));
         assertNotNull(logicServer);
 
@@ -109,7 +105,7 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
     @Test(dependsOnMethods = "testCloneLogicServer")
     public void testListFsms()
     {
-        List<Fsm> fsms = ucsRack.listFsm(logicServer.getName());
+        List<Fsm> fsms = env.ucsRack.listFsm(logicServer.getName());
         assertNotNull(fsms);
         assertTrue(fsms.size() > 0);
     }
@@ -119,36 +115,9 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
     {
         String name = logicServer.getName();
 
-        ucsRack.deleteLogicServer(logicServer);
+        env.ucsRack.deleteLogicServer(logicServer);
 
-        LogicServer profile = ucsRack.findServiceProfile(LogicServerPredicates.name(name));
+        LogicServer profile = env.ucsRack.findServiceProfile(LogicServerPredicates.name(name));
         assertNull(profile);
-    }
-
-    @BeforeClass
-    public void setup()
-    {
-        String ip = Config.get("abiquo.ucs.address");
-        Integer port = Integer.parseInt(Config.get("abiquo.ucs.port"));
-        String user = Config.get("abiquo.ucs.user");
-        String pass = Config.get("abiquo.ucs.pass");
-
-        ucsRack =
-            ManagedRack.builder(context, env.datacenter).ipAddress(ip).port(port).user(user)
-                .name("ucs rack").password(pass).build();
-
-        ucsRack.save();
-        assertNotNull(ucsRack.getId());
-    }
-
-    @AfterClass
-    public void tearDown()
-    {
-        if (ucsRack != null && env.datacenter != null)
-        {
-            Integer idRack = ucsRack.getId();
-            ucsRack.delete();
-            assertNull(env.infrastructureClient.getManagedRack(env.datacenter.unwrap(), idRack));
-        }
     }
 }

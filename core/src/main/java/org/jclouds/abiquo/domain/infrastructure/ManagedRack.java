@@ -32,6 +32,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
@@ -120,6 +121,23 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     // Children access
+
+    public List<Blade> listMachines()
+    {
+        MachinesDto machines = context.getApi().getInfrastructureClient().listMachines(target);
+        return wrap(context, Blade.class, machines.getCollection());
+    }
+
+    public List<Blade> listMachines(final Predicate<Blade> filter)
+    {
+        return Lists.newLinkedList(filter(listMachines(), filter));
+    }
+
+    public Blade findMachine(final Predicate<Blade> filter)
+    {
+        return Iterables.getFirst(filter(listMachines(), filter), null);
+    }
+
     /**
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofallServicesProfilesinaUCSRack"
