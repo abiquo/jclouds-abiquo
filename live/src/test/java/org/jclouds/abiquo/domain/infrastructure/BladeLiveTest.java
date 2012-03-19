@@ -27,8 +27,6 @@ import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.abiquo.model.enumerator.MachineState;
-import com.abiquo.server.core.infrastructure.MachineDto;
 import com.google.common.collect.Iterables;
 
 /**
@@ -40,30 +38,6 @@ import com.google.common.collect.Iterables;
 public class BladeLiveTest extends BaseAbiquoClientLiveTest
 {
     Blade blade;
-
-    public void testUpdate()
-    {
-        String description = blade.getDescription();
-        blade.setDescription("jclouds");
-        blade.update();
-
-        // Recover the updated blade
-        MachineDto updated =
-            env.infrastructureClient.getMachine(env.ucsRack.unwrap(), blade.getId());
-        assertEquals(updated.getName(), "jclouds");
-
-        blade.setDescription(description);
-        blade.update();
-    }
-
-    public void testCheck()
-    {
-        MachineState state = blade.check();
-
-        // Recover the machine with same state that has been returned
-        MachineDto machine = env.infrastructureClient.getMachine(env.rack.unwrap(), blade.getId());
-        assertEquals(machine.getState(), state);
-    }
 
     public void testFindAvailableVirtualSwitch()
     {
