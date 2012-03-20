@@ -59,6 +59,29 @@ public class BladeLiveTest extends BaseAbiquoClientLiveTest
         assertTrue(Iterables.size(blades) > 0);
     }
 
+    public void testGetLogicServer()
+    {
+        LogicServer logicServer = blade.getLogicServer();
+        assertNotNull(logicServer);
+        assertNotNull(logicServer.getName());
+    }
+
+    public void testLedOn()
+    {
+        blade.ledOn();
+        BladeLocatorLed led = blade.getLocatorLed();
+        assertNotNull(led);
+        assertEquals(led.getAdminStatus(), "on");
+    }
+
+    public void testLedOff()
+    {
+        blade.ledOff();
+        BladeLocatorLed led = blade.getLocatorLed();
+        assertNotNull(led);
+        assertEquals(led.getAdminStatus(), "off");
+    }
+
     @BeforeClass
     public void setup()
     {

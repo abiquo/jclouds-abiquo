@@ -29,6 +29,8 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
+import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.google.inject.TypeLiteral;
@@ -56,6 +58,11 @@ public class Blade extends AbstractPhysicalMachine
 
     // Parent access
 
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack" >
+     *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack</a>
+     */
     public ManagedRack getRack()
     {
         RESTLink link =
@@ -69,5 +76,71 @@ public class Blade extends AbstractPhysicalMachine
             new ParseXMLWithJAXB<UcsRackDto>(utils.getXml(), TypeLiteral.get(UcsRackDto.class));
 
         return wrap(context, ManagedRack.class, parser.apply(response));
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource-RetrieveslogicserverassociatedwithamachineinaCiscoUCS"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource-
+     *      RetrieveslogicserverassociatedwithamachineinaCiscoUCS</a>
+     */
+    public LogicServer getLogicServer()
+    {
+        LogicServerDto server = context.getApi().getInfrastructureClient().getLogicServer(target);
+
+        return wrap(context, LogicServer.class, server);
+    }
+
+    // Actions
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-PoweroffanexistingmachineinCiscoUCS"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      PoweroffanexistingmachineinCiscoUCS</a>
+     */
+    public void powerOff()
+    {
+        context.getApi().getInfrastructureClient().powerOff(target);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-PoweronanexistingmachineinCiscoUCS"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      PoweronanexistingmachineinCiscoUCS</a>
+     */
+    public void powerOn()
+    {
+        context.getApi().getInfrastructureClient().powerOn(target);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource-LightthelocatorledofanexistingmachineinCiscoUCS"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource-
+     *      LightthelocatorledofanexistingmachineinCiscoUCS</a>
+     */
+    public void ledOn()
+    {
+        context.getApi().getInfrastructureClient().ledOn(target);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource-LightoffthelocatorledofanexistingmachineinaCiscoUCS"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource-
+     *      LightoffthelocatorledofanexistingmachineinaCiscoUCS</a>
+     */
+    public void ledOff()
+    {
+        context.getApi().getInfrastructureClient().ledOff(target);
+    }
+
+    public BladeLocatorLed getLocatorLed()
+    {
+        BladeLocatorLedDto led = context.getApi().getInfrastructureClient().getLocatorLed(target);
+
+        return wrap(context, BladeLocatorLed.class, led);
     }
 }
