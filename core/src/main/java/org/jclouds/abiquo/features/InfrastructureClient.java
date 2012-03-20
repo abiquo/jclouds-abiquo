@@ -34,6 +34,7 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.FsmsDto;
@@ -573,9 +574,10 @@ public interface InfrastructureClient
      * Get the logic server associated with a machine in a Cisc UCS rack.
      * 
      * @param machime The phyisical machine.
+     * @return The logic server.
      */
     @EnterpriseEdition
-    void getLogicServer(MachineDto machine);
+    LogicServerDto getLogicServer(MachineDto machine);
 
     /**
      * Turn off locator led of a physical machine in a UCS rack.
@@ -592,6 +594,15 @@ public interface InfrastructureClient
      */
     @EnterpriseEdition
     void ledOff(MachineDto machine);
+
+    /**
+     * Get led locator info from a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     * @return Led locator information.
+     */
+    @EnterpriseEdition
+    BladeLocatorLedDto getLocatorLed(MachineDto machine);
 
     /*********************** Storage Device ***********************/
 

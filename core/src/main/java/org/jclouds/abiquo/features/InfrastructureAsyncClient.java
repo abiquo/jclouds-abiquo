@@ -65,6 +65,7 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.abiquo.server.core.infrastructure.FsmsDto;
@@ -595,6 +596,8 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteMachine(
         @EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
 
+    /*********************** Blade ***********************/
+
     /**
      * @see InfrastructureClient#powerOff(MachineDto)
      */
@@ -636,6 +639,16 @@ public interface InfrastructureAsyncClient
     @POST
     ListenableFuture<Void> ledOff(
         @EndpointLink("ledoff") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#getLedLocator(MachineDto)
+     */
+    @EnterpriseEdition
+    @GET
+    @Consumes(BladeLocatorLedDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<BladeLocatorLedDto> getLocatorLed(
+        @EndpointLink("led") @BinderParam(BindToPath.class) MachineDto machine);
 
     /*********************** Storage Device ***********************/
 
