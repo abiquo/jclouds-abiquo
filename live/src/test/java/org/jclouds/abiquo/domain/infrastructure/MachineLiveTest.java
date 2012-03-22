@@ -121,8 +121,8 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
 
     public void testListVirtualMachines()
     {
-        List<VirtualMachine> machines = env.machine.listVirtualMachines();
+        List<VirtualMachine> machines = env.machine.listRemoteVirtualMachines();
         assertNotNull(machines);
-        assertTrue(machines.size() > 0);
+        assertTrue(machines.size() >= 0);
     }
 }
