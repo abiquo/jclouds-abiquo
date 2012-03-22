@@ -33,6 +33,7 @@ import org.jclouds.concurrent.Timeout;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
+import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -555,7 +556,7 @@ public interface InfrastructureClient
     MachinesDto listMachines(RackDto rack);
 
     /**
-     * Power off a physical machine in a UCS rack.
+     * <<<<<<< HEAD Power off a physical machine in a UCS rack.
      * 
      * @param machime The phyisical machine.
      */
@@ -603,6 +604,14 @@ public interface InfrastructureClient
      */
     @EnterpriseEdition
     BladeLocatorLedDto getLocatorLed(MachineDto machine);
+
+    /**
+     * List all virtual machines in a physical machine.
+     * 
+     * @param machine The physical machine.
+     * @return The list of virtual machines in the physical machine.
+     */
+    VirtualMachinesDto listVirtualMachinesByMachine(MachineDto machine, MachineOptions options);
 
     /*********************** Storage Device ***********************/
 
