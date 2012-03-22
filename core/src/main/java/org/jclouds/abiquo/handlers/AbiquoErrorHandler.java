@@ -58,35 +58,9 @@ public class AbiquoErrorHandler implements HttpErrorHandler
     public void handleError(final HttpCommand command, final HttpResponse response)
     {
         Exception exception = null;
-        String message = null;
-
-        if (hasPayload(response))
-        {
-            try
-            {
-                ErrorsDto errors = errorParser.apply(response);
-                message = errors.toString();
-                exception = new AbiquoException(fromStatusCode(response.getStatusCode()), errors);
-            }
-            catch (Exception ex)
-            {
-                // If it is not an abiquo Exception (can not be unmarshalled), propagate a standard
-                // one
-                message =
-                    String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
-                        response.getStatusLine());
-                exception = new HttpResponseException(command, response, message);
-            }
-        }
-        else
-        {
-            // If it is not an abiquo Exception propagate a standard
-            // one
-            message =
-                String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
-                    response.getStatusLine());
-            exception = new HttpResponseException(command, response, message);
-        }
+        String defaultMessage =
+            String.format("%s -> %s", command.getCurrentRequest().getRequestLine(),
+                response.getStatusLine());
 
         try
         {
@@ -94,10 +68,19 @@ public class AbiquoErrorHandler implements HttpErrorHandler
             {
                 case 401:
                 case 403:
-                    exception = new AuthorizationException(message, exception);
+                    // Autorization exceptions do not return an errors DTO, so we encapsulate a
+                    // generic exception
+                    exception =
+                        new AuthorizationException(defaultMessage,
+                            new HttpResponseException(command, response, defaultMessage));
                     break;
                 case 404:
-                    exception = new ResourceNotFoundException(message, exception);
+                    exception =
+                        new ResourceNotFoundException(defaultMessage, getExceptionToPropagate(
+                            command, response, defaultMessage));
+                    break;
+                default:
+                    exception = getExceptionToPropagate(command, response, defaultMessage);
                     break;
             }
         }
@@ -109,6 +92,35 @@ public class AbiquoErrorHandler implements HttpErrorHandler
             }
             command.setException(exception);
         }
+    }
+
+    private Exception getExceptionToPropagate(final HttpCommand command,
+        final HttpResponse response, final String defaultMessage)
+    {
+        Exception exception = null;
+
+        if (hasPayload(response))
+        {
+            try
+            {
+                ErrorsDto errors = errorParser.apply(response);
+                exception = new AbiquoException(fromStatusCode(response.getStatusCode()), errors);
+            }
+            catch (Exception ex)
+            {
+                // If it is not an Abiquo Exception (can not be unmarshalled), propagate a standard
+                // HttpResponseException
+                exception = new HttpResponseException(command, response, defaultMessage);
+            }
+        }
+        else
+        {
+            // If it is not an Abiquo Exception (there is not an errors xml in the payload)
+            // propagate a standard HttpResponseException
+            exception = new HttpResponseException(command, response, defaultMessage);
+        }
+
+        return exception;
     }
 
     private static boolean hasPayload(final HttpResponse response)

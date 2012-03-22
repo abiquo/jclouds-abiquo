@@ -4,12 +4,25 @@ JClouds Abiquo Provider
 This is the JClouds Abiquo provider. The project is still under
 development and it only provides access to the Abiquo REST API.
 
-Please, refer to the [Project Wiki](https://github.com/abiquo/jclouds-abiquo/wiki) for further
-details on building and using the **jclouds-abiquo** provider and API client in your own project.
-
-You can also find detailed information
-about the Abiquo REST API in the
+You find detailed information about the Abiquo REST API in the
 [Abiquo API Reference](http://community.abiquo.com/display/ABI20/API+Reference) documentation page.
+
+
+Documentation
+-------------
+
+All information about building and using the **jclouds-abiquo** provider and API client in your own project
+can be found in the [Project Wiki](https://github.com/abiquo/jclouds-abiquo/wiki).
+
+
+Build status
+------------
+
+The project is built with [Travis CI](http://travis-ci.org/) and the build history can be checked [here](http://travis-ci.org/#!/abiquo/jclouds-abiquo/builds).
+The last build status for the main branches is:
+
+ * stable [![Build Status](https://secure.travis-ci.org/abiquo/jclouds-abiquo.png?branch=stable)](http://travis-ci.org/#!/abiquo/jclouds-abiquo/branch_summary)
+ * master [![Build Status](https://secure.travis-ci.org/abiquo/jclouds-abiquo.png?branch=master)](http://travis-ci.org/#!/abiquo/jclouds-abiquo/branch_summary)
 
 
 Note on patches/pull requests
@@ -28,16 +41,6 @@ Issue Tracking
 
 If you find any issue, please submit it to the [Bug tracking system](http://jira.abiquo.com/browse/ABIQUOJC) and we
 will do our best to fix it.
-
-
-Build status
-------------
-
-The project is built with [Travis CI] (http://travis-ci.org/) and the build history can be checked [here](http://travis-ci.org/#!/abiquo/jclouds-abiquo/builds).
-The last build status for the main branches is:
-
- * stable [![Build Status](https://secure.travis-ci.org/abiquo/jclouds-abiquo.png?branch=stable)](http://travis-ci.org/#!/abiquo/jclouds-abiquo/branch_summary)
- * master [![Build Status](https://secure.travis-ci.org/abiquo/jclouds-abiquo.png?branch=master)](http://travis-ci.org/#!/abiquo/jclouds-abiquo/branch_summary)
 
 
 License

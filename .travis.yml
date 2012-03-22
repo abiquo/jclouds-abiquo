@@ -6,7 +6,8 @@ branches:
 notifications:
     email:
         recipients:
-            - developers@abiquo.com
+            - ignasi.barrera@abiquo.com
+            - francesc.montserrat@abiquo.com
         on_success: change
         on_failure: always
     irc:
