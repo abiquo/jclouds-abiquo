@@ -67,8 +67,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see API: <a href="http://community.abiquo.com/display/ABI20/Datacenter+Resource">
- *      http://community.abiquo.com/display/ABI20/Datacenter+Resource</a>
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/DatacenterResource">
+ *      http://community.abiquo.com/display/ABI20/DatacenterResource</a>
  */
 public class Datacenter extends DomainWrapper<DatacenterDto>
 {
@@ -97,9 +97,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     // Domain operations
 
     /**
+     * Delete the datacenter.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-DeleteanexistingDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-DeleteanexistingDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      DeleteanexistingDatacenter</a>
      */
     public void delete()
@@ -109,15 +111,18 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
+     * Create a datacenter in Abiquo. This method will perform several calls to the API if remote
+     * services have been defined in the builder. Different remote services will be created
+     * depending on the {@link AbiquoEdition}.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-CreateanewDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-CreateanewDatacenter"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      CreateanewDatacenter</a>
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
-     *      -CreateanewRemoteService</a>
+     *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-CreateaRemoteService"
+     *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-
+     *      CreateaRemoteService</a>
      */
     public void save()
     {
@@ -132,10 +137,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
+     * Update datacenter information in the server with the data from this datacenter.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-UpdateanexistingDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      UpdateanexistingDatacenter</a>
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Updateanexistingdatacenter"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Updateanexistingdatacenter </a>
      */
     public void update()
     {
@@ -143,11 +150,14 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
+     * The cloud administrator will find it useful to know if a VLAN Tag is already assigned before
+     * creating a new Public or External Network. This method provides this functionality: Check if
+     * a tag is available inside the Datacenter. Please refer link for more information.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-ChecktheTagavailability"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
-     *      -ChecktheTagavailability</a>
+     *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Checkthetagavailability"
+     *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
+     *      Checkthetagavailability</a>
      */
     public VlanTagAvailabilityType checkTagAvailability(final int tag)
     {
@@ -160,11 +170,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     // Children access
 
     /**
+     * Retrieve the list of unmanaged racks in this datacenter.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofRacks
-     *      </a>
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofRacks"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofRacks</a>
      */
     public List<Rack> listRacks()
     {
@@ -172,16 +183,42 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, Rack.class, racks.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of unmanaged racks in this datacenter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofRacks"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofRacks</a>
+     */
     public List<Rack> listRacks(final Predicate<Rack> filter)
     {
         return Lists.newLinkedList(filter(listRacks(), filter));
     }
 
+    /**
+     * Retrieve the first unmanaged rack matching the filter within the list of racks in this
+     * datacenter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofRacks"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofRacks</a>
+     */
     public Rack findRack(final Predicate<Rack> filter)
     {
         return Iterables.getFirst(filter(listRacks(), filter), null);
     }
 
+    /**
+     * Retrieve a single unmanaged rack.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaRack" >
+     *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaRack</a>
+     */
     public Rack getRack(final Integer id)
     {
         RackDto rack = context.getApi().getInfrastructureClient().getRack(target, id);
@@ -189,10 +226,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
+     * Retrieve the list of managed racks in this datacenter.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievethelistofUcsRacks"
-     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
-     *      RetrievethelistofUcsRacks</a>
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofUCSracks</a>
      */
     public List<ManagedRack> listManagedRacks()
     {
@@ -200,16 +239,42 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return wrap(context, ManagedRack.class, racks.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of managed racks in this datacenter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofUCSracks</a>
+     */
     public List<ManagedRack> listManagedRacks(final Predicate<ManagedRack> filter)
     {
         return Lists.newLinkedList(filter(listManagedRacks(), filter));
     }
 
+    /**
+     * Retrieve the first managed rack matching the filter within the list of racks in this
+     * datacenter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofUCSracks</a>
+     */
     public ManagedRack findManagedRack(final Predicate<ManagedRack> filter)
     {
         return Iterables.getFirst(filter(listManagedRacks(), filter), null);
     }
 
+    /**
+     * Retrieve a single managed rack.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack" >
+     *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack</a>
+     */
     public ManagedRack getManagedRack(final Integer id)
     {
         UcsRackDto rack = context.getApi().getInfrastructureClient().getManagedRack(target, id);

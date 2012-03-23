@@ -42,7 +42,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Machine+Resource
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/MachineResource">
+ *      http://community.abiquo.com/display/ABI20/MachineResource</a>
  */
 public abstract class AbstractPhysicalMachine extends DomainWrapper<MachineDto>
 {

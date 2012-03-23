@@ -40,7 +40,8 @@ import com.google.inject.TypeLiteral;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Machine+Resource
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/MachineResource">
+ *      http://community.abiquo.com/display/ABI20/MachineResource</a>
  */
 public class Blade extends AbstractPhysicalMachine
 {
@@ -59,6 +60,8 @@ public class Blade extends AbstractPhysicalMachine
     // Parent access
 
     /**
+     * Retrieve the UCS rack where the blade is.
+     * 
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack" >
      *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack</a>
@@ -79,9 +82,11 @@ public class Blade extends AbstractPhysicalMachine
     }
 
     /**
+     * Retrieve the logic server associated with this machine in the Cisco UCS rack.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/MachineResource-RetrieveslogicserverassociatedwithamachineinaCiscoUCS"
-     *      > http://community.abiquo.com/display/ABI20/MachineResource-
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrieveslogicserverassociatedwithamachineinaCiscoUCS"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
      *      RetrieveslogicserverassociatedwithamachineinaCiscoUCS</a>
      */
     public LogicServer getLogicServer()
@@ -94,6 +99,11 @@ public class Blade extends AbstractPhysicalMachine
     // Actions
 
     /**
+     * Turn the blade associated to the provided logic server off. The blade must belong to a Logic
+     * Server. This action sets the state of a given machine to STOPPED. Also sends a stop request
+     * to Cisco UCS to shut down the machine. The given machine must be a Physical Machine inside a
+     * Cisco UCS.
+     * 
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-PoweroffanexistingmachineinCiscoUCS"
      *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
@@ -105,6 +115,9 @@ public class Blade extends AbstractPhysicalMachine
     }
 
     /**
+     * Turn the blade associated to the provided logic server on. The machine must belong to an UCS
+     * Rack. The blade must belong to a Logic Server.
+     * 
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-PoweronanexistingmachineinCiscoUCS"
      *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
@@ -116,10 +129,13 @@ public class Blade extends AbstractPhysicalMachine
     }
 
     /**
+     * Turn blade led on. The machine must belong to an UCS Rack. The blade must belong to a Logic
+     * Server.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/MachineResource-LightthelocatorledofanexistingmachineinCiscoUCS"
-     *      > http://community.abiquo.com/display/ABI20/MachineResource-
-     *      LightthelocatorledofanexistingmachineinCiscoUCS</a>
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-LightoffthelocatorledofanexistingmachineinaCiscoUCS"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      LightoffthelocatorledofanexistingmachineinaCiscoUCS</a>
      */
     public void ledOn()
     {
@@ -127,6 +143,9 @@ public class Blade extends AbstractPhysicalMachine
     }
 
     /**
+     * Turn blade led off. The machine must belong to an UCS Rack. The blade must belong to a Logic
+     * Server.
+     * 
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/MachineResource-LightoffthelocatorledofanexistingmachineinaCiscoUCS"
      *      > http://community.abiquo.com/display/ABI20/MachineResource-
@@ -137,6 +156,15 @@ public class Blade extends AbstractPhysicalMachine
         context.getApi().getInfrastructureClient().ledOff(target);
     }
 
+    /**
+     * Retrieve the led locator information as a {@link BladeLocatorLed}.
+     * 
+     * @return Blade locator led representation.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-Retrievethelocatorledoftheblade"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      Retrievethelocatorledoftheblade</a>
+     */
     public BladeLocatorLed getLocatorLed()
     {
         BladeLocatorLedDto led = context.getApi().getInfrastructureClient().getLocatorLed(target);

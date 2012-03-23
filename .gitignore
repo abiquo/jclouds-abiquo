@@ -1,6 +1,7 @@
 # use glob syntax.
 syntax: glob
 target
+core/doc
 .settings
 .classpath
 .project
