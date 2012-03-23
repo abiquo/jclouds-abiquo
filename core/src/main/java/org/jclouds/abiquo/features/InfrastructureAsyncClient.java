@@ -651,6 +651,8 @@ public interface InfrastructureAsyncClient
     ListenableFuture<BladeLocatorLedDto> getLocatorLed(
         @EndpointLink("led") @BinderParam(BindToPath.class) MachineDto machine);
 
+    /*********************** Storage Device ***********************/
+
     /**
      * @see InfrastructureClient#listVirtualMachinesByMachine(MachineDto)
      */

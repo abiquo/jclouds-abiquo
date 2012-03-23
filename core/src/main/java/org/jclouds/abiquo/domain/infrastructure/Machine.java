@@ -54,7 +54,8 @@ import com.google.inject.TypeLiteral;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Machine+Resource
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/MachineResource">
+ *      http://community.abiquo.com/display/ABI20/MachineResource</a>
  */
 public class Machine extends AbstractPhysicalMachine
 {
@@ -73,6 +74,21 @@ public class Machine extends AbstractPhysicalMachine
         extractVirtualSwitches();
     }
 
+    /**
+     * Create a new physical machine in Abiquo. The best way to create a machine if first calling
+     * {@link <Datacenter>#<discoverSingleMachine>}. This will return a new {@link Machine}. The
+     * following steps are: enabling a datastore, selecting a virtual switch and choosing a rack.
+     * Refer link for more information.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveremotemachineinformation</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-Createamachine"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      Createamachine</a>
+     */
     public void save()
     {
         target = context.getApi().getInfrastructureClient().createMachine(rack.unwrap(), target);
@@ -89,7 +105,13 @@ public class Machine extends AbstractPhysicalMachine
     }
 
     // Parent access
-
+    /**
+     * Retrieve the unmanaged rack where the machine is.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaRack" >
+     *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaRack</a>
+     */
     public Rack getRack()
     {
         RESTLink link =

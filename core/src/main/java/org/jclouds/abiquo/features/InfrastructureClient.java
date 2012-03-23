@@ -556,7 +556,7 @@ public interface InfrastructureClient
     MachinesDto listMachines(RackDto rack);
 
     /**
-     * <<<<<<< HEAD Power off a physical machine in a UCS rack.
+     * Power off a physical machine in a UCS rack.
      * 
      * @param machime The phyisical machine.
      */
