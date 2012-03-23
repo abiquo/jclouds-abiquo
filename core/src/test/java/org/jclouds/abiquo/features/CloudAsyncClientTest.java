@@ -1500,12 +1500,12 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/cloud/virtualdatacenters/1/volumes/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VolumeManagementDto.BASE_MEDIA_TYPE
+        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.volumePutPayload()),
             VolumeManagementDto.BASE_MEDIA_TYPE, false);
 
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
