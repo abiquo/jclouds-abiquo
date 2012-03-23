@@ -522,6 +522,7 @@ public interface CloudClient
      * @param volumes The new volumes for the virtual machine.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> replaceVolumes(VirtualMachineDto virtualMachine,
         VolumeManagementDto... volumes);
 
@@ -637,12 +638,17 @@ public interface CloudClient
 
     /**
      * Modifies the given volume.
+     * <p>
+     * If the virtual machine is deployed and the size of the volume is changed, then an
+     * asynchronous task will be generated to refresh the resources of the virtual machine in the
+     * hypervisor.
      * 
      * @param volume The volume to modify.
-     * @return The modified volume.
+     * @return The task reference or <code>null</code> if no task was generated.
      */
     @EnterpriseEdition
-    VolumeManagementDto updateVolume(VolumeManagementDto volume);
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    AcceptedRequestDto<String> updateVolume(VolumeManagementDto volume);
 
     /**
      * Delete the given volume.
@@ -650,6 +656,7 @@ public interface CloudClient
      * @param volume The volume to delete.
      */
     @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void deleteVolume(VolumeManagementDto volume);
 
     /**

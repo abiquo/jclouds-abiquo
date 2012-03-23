@@ -24,12 +24,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
 import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -74,9 +76,10 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
         target = context.getApi().getCloudClient().createVolume(virtualDatacenter.unwrap(), target);
     }
 
-    public void update()
+    public AsyncTask update()
     {
-        target = context.getApi().getCloudClient().updateVolume(target);
+        AcceptedRequestDto<String> taskRef = context.getApi().getCloudClient().updateVolume(target);
+        return taskRef == null ? null : getTask(taskRef);
     }
 
     // Parent access
