@@ -522,6 +522,7 @@ public interface CloudClient
      * @param volumes The new volumes for the virtual machine.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> replaceVolumes(VirtualMachineDto virtualMachine,
         VolumeManagementDto... volumes);
 
@@ -646,6 +647,7 @@ public interface CloudClient
      * @return The task reference or <code>null</code> if no task was generated.
      */
     @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> updateVolume(VolumeManagementDto volume);
 
     /**
@@ -654,6 +656,7 @@ public interface CloudClient
      * @param volume The volume to delete.
      */
     @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void deleteVolume(VolumeManagementDto volume);
 
     /**
