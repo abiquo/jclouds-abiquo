@@ -278,6 +278,8 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/poweroff"));
         machine.addLink(new RESTLink("poweron",
             "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/poweron"));
+        machine.addLink(new RESTLink("virtualmachines",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/virtualmachines"));
         machine.setVirtualCpuCores(5);
 
         return machine;
@@ -525,6 +527,8 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/logicserver", "logicserver"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/poweroff", "poweroff"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/poweron", "poweron"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/virtualmachines",
+            "virtualmachines"));
         buffer.append("<datastores/>");
         buffer.append("<description>A hawaian machine</description>");
         buffer.append("<id>1</id>");

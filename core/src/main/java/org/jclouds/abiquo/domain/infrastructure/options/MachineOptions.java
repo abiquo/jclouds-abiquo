@@ -51,12 +51,23 @@ public class MachineOptions extends QueryOptions
     {
         private Integer port;
 
+        private Boolean sync;
+
         /**
          * Set the optional hypervisor port.
          */
         public Builder port(final int port)
         {
             this.port = port;
+            return this;
+        }
+
+        /**
+         * Set the optional sync param.
+         */
+        public Builder sync(final boolean sync)
+        {
+            this.sync = sync;
             return this;
         }
 
@@ -67,6 +78,12 @@ public class MachineOptions extends QueryOptions
             {
                 options.map.put("port", port.toString());
             }
+
+            if (sync != null)
+            {
+                options.map.put("sync", sync.toString());
+            }
+
             return options;
         }
     }
