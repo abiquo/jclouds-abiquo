@@ -508,11 +508,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
+     * Retrieve the list of public, external and unmanaged networks in this datacenter.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource-GetPublic%2CExternalandUnmanagedNetworks"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
-     *      -GetPublic%2CExternalandUnmanagedNetworks</a>
+     *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
+     *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
+     *      Getthelistofpublicnetworks</a>
      */
     public List<Network> listNetworks()
     {
@@ -520,16 +521,43 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return Network.wrapNetworks(context, networks.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of public, external and unmanaged networks in this datacenter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
+     *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
+     *      Getthelistofpublicnetworks</a>
+     */
     public List<Network> listNetworks(final Predicate<Network> filter)
     {
         return Lists.newLinkedList(filter(listNetworks(), filter));
     }
 
+    /**
+     * Retrieve the first network matching the filter within the list of networks.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
+     *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
+     *      Getthelistofpublicnetworks</a>
+     */
     public Network findNetwork(final Predicate<Network> filter)
     {
         return Iterables.getFirst(filter(listNetworks(), filter), null);
     }
 
+    /**
+     * Retrieve the list of networks of this datacenter matching the given type.
+     * 
+     * @param type Network type filter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
+     *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
+     *      Getthelistofpublicnetworks</a>
+     */
     public List<Network> listNetworks(final NetworkType type)
     {
         NetworkOptions options = NetworkOptions.builder().type(type).build();
@@ -538,16 +566,49 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         return Network.wrapNetworks(context, networks.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of networks of this datacenter matching the given type.
+     * 
+     * @param type Network type filter.
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
+     *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
+     *      Getthelistofpublicnetworks</a>
+     */
     public List<Network> listNetworks(final NetworkType type, final Predicate<Network> filter)
     {
         return Lists.newLinkedList(filter(listNetworks(type), filter));
     }
 
+    /**
+     * Retrieve the first network of the given type matching the filter.
+     * 
+     * @param type Network type filter.
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
+     *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
+     *      Getthelistofpublicnetworks</a>
+     */
     public Network findNetwork(final NetworkType type, final Predicate<Network> filter)
     {
         return Iterables.getFirst(filter(listNetworks(type), filter), null);
     }
 
+    /**
+     * Retrieve a single public, external or unmanaged network from this datacenter.
+     * {@link org.jclouds.abiquo.domain.network.Network#toExternalNetwork},
+     * {@link org.jclouds.abiquo.domain.network.Network#toPublicNetwork} and
+     * {@link org.jclouds.abiquo.domain.network.Network#toUnmanagedNetwork} can be used to convert
+     * the Network into the appropiate domain object.
+     * 
+     * @param id Unique ID of the network in this datacenter.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
+     *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#PublicNetworkResource#
+     *      PublicNetworkResource-Getthelistofpublicnetworks</a>
+     */
     public Network getNetwork(final Integer id)
     {
         VLANNetworkDto network = context.getApi().getInfrastructureClient().getNetwork(target, id);
