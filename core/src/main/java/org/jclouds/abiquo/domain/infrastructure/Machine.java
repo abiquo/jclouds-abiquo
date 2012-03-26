@@ -76,9 +76,9 @@ public class Machine extends AbstractPhysicalMachine
 
     /**
      * Create a new physical machine in Abiquo. The best way to create a machine if first calling
-     * {@link <Datacenter>#<discoverSingleMachine>}. This will return a new {@link Machine}. The
-     * following steps are: enabling a datastore, selecting a virtual switch and choosing a rack.
-     * Refer link for more information.
+     * {@link Datacenter#discoverSingleMachine} or {@link Datacenter#discoverMultipleMachines}. This
+     * will return a new {@link Machine}. The following steps are: enabling a datastore, selecting a
+     * virtual switch and choosing a rack. Refer link for more information.
      * 
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveremotemachineinformation"

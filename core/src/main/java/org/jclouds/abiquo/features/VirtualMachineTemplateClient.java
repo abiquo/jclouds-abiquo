@@ -30,7 +30,8 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 /**
  * Provides synchronous access to Abiquo Apps library API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see VirtualMachineTemplateAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

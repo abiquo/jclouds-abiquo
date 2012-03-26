@@ -31,7 +31,8 @@ import com.abiquo.server.core.task.TasksDto;
 /**
  * Provides synchronous access to Abiquo Task API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see TaskAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

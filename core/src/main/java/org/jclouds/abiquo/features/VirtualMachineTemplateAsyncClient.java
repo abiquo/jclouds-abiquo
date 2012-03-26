@@ -45,9 +45,10 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * Provides asynchronous access to Abiquo Abiquo Apps library API.
+ * Provides asynchronous access to Abiquo Abiquo Apps library API. * @see API: <a
+ * href="http://community.abiquo.com/display/ABI20/API+Reference">
+ * http://community.abiquo.com/display/ABI20/API+Reference</a>
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
  * @see VirtualMachineTemplateClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

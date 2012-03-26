@@ -46,8 +46,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see API: <a href="http://community.abiquo.com/display/ABI20/Storage+Device+Resource">
- *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource</a>
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/StorageDeviceResource">
+ *      http://community.abiquo.com/display/ABI20/StorageDeviceResource</a>
  */
 @EnterpriseEdition
 public class StorageDevice extends DomainWrapper<StorageDeviceDto>
@@ -64,11 +64,12 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
+     * Delete the storage device.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-DeleteaStorageDevice"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
-     *      -DeleteaStorageDevice</a>
+     *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Deleteastoragedevice"
+     *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
+     *      Deleteastoragedevice</a>
      */
     public void delete()
     {
@@ -77,11 +78,12 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
+     * Create a new storage device.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-CreateaStorageDevice"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
-     *      -CreateaStorageDevice</a>
+     *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Createastoragedevice"
+     *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
+     *      Createastoragedevice</a>
      */
     public void save()
     {
@@ -91,11 +93,12 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     }
 
     /**
+     * Update storage devices information in the server with the data from this device.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-UpdateaStorageDevice"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
-     *      -UpdateaStorageDevice</a>
+     *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Updateastoragedevice"
+     *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
+     *      Updateastoragedevice</a>
      */
     public void update()
     {
@@ -105,10 +108,12 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     // Parent access
 
     /**
+     * Retrieve the datacenter where this storage device is.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      RetrieveaDatacenter</a>
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveadatacenter"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveadatacenter</a>
      */
     public Datacenter getDatacenter()
     {

@@ -26,7 +26,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import com.abiquo.server.core.infrastructure.FsmDto;
 
 /**
- * Adds high level functionality to {@link FSMDto}.
+ * Adds high level functionality to {@link FsmDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat

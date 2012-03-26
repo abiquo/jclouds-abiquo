@@ -66,7 +66,8 @@ import com.abiquo.server.core.infrastructure.storage.TiersDto;
 /**
  * Provides synchronous access to Abiquo Infrastructure API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see InfrastructureAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -117,8 +118,10 @@ public interface InfrastructureClient
     /**
      * Retrieve remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      Retrieveremotemachineinformation
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveremotemachineinformation</a>
      * @param datacenter The datacenter.
      * @param ip IP address of the remote hypervisor to connect.
      * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
@@ -134,8 +137,10 @@ public interface InfrastructureClient
     /**
      * Retrieve remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      Retrieveremotemachineinformation
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveremotemachineinformation</a>
      * @param datacenter The datacenter.
      * @param ip IP address of the remote hypervisor to connect.
      * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
@@ -152,8 +157,10 @@ public interface InfrastructureClient
     /**
      * Retrieve a list of remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      Retrievealistofremotemachineinformation
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievealistofremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrievealistofremotemachineinformation</a>
      * @param datacenter The datacenter.
      * @param ipFrom IP address of the remote first hypervisor to check.
      * @param ipTo IP address of the remote last hypervisor to check.
@@ -171,8 +178,10 @@ public interface InfrastructureClient
     /**
      * Retrieve a list of remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      Retrievealistofremotemachineinformation
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievealistofremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrievealistofremotemachineinformation</a>
      * @param datacenter The datacenter.
      * @param ipFrom IP address of the remote first hypervisor to check.
      * @param ipTo IP address of the remote last hypervisor to check.
