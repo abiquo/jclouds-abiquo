@@ -38,7 +38,8 @@ import com.abiquo.server.core.enterprise.PrivilegesDto;
 /**
  * Provides synchronous access to Abiquo Admin API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see ConfigAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

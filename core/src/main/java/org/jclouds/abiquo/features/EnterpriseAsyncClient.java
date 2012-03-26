@@ -67,7 +67,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 /**
  * Provides asynchronous access to Abiquo Enterprise API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see EnterpriseClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

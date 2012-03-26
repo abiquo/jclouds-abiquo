@@ -32,7 +32,8 @@ import com.abiquo.server.core.enterprise.UserDto;
 /**
  * Provides synchronous access to Abiquo Admin API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see AdminAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -40,7 +41,7 @@ import com.abiquo.server.core.enterprise.UserDto;
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
 public interface AdminClient
 {
-    /*        ********************** User ********************** */
+    /* ********************** User ********************** */
 
     /**
      * Get the information of the current user.
@@ -49,7 +50,7 @@ public interface AdminClient
      */
     UserDto getCurrentUser();
 
-    /*        ********************** Role ********************** */
+    /* ********************** Role ********************** */
 
     /**
      * List global roles.

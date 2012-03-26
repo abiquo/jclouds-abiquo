@@ -31,7 +31,8 @@ import com.abiquo.server.core.infrastructure.network.NicDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Attached+NICs+Resource
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/VirtualMachineNetworkConfiguration">
+ *      http://community.abiquo.com/display/ABI20/VirtualMachineNetworkConfiguration</a>
  */
 public class Nic extends DomainWrapper<NicDto>
 {

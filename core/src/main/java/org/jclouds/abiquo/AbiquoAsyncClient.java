@@ -33,7 +33,8 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
 /**
  * Provides asynchronous access to Abiquo via their REST API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see InfrastructureAsyncClient
  * @author Ignasi Barrera
  */

@@ -40,7 +40,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Tier+Resource
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/TierResource">
+ *      http://community.abiquo.com/display/ABI20/TierResource</a>
  */
 @EnterpriseEdition
 public class Tier extends DomainWrapper<TierDto>

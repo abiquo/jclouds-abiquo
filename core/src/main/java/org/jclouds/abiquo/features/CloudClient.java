@@ -58,7 +58,8 @@ import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 /**
  * Provides synchronous access to Abiquo Cloud API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see CloudAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -89,7 +90,7 @@ public interface CloudClient
      * 
      * @param virtualDatacenter The virtual datacenter to be created.
      * @param datacenter Datacenter where the virtualdatacenter will be deployed.
-     * @param datacenter Enterprise of the virtual datacenter.
+     * @param enterprise Enterprise of the virtual datacenter.
      * @return The created virtual datacenter.
      */
     VirtualDatacenterDto createVirtualDatacenter(VirtualDatacenterDto virtualDatacenter,

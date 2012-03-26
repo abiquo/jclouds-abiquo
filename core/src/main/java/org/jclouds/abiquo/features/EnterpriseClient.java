@@ -44,7 +44,8 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 /**
  * Provides synchronous access to Abiquo Enterprise API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see EnterpriseAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat

@@ -58,7 +58,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 /**
  * Provides asynchronous access to Abiquo Config API.
  * 
- * @see http://community.abiquo.com/display/ABI18/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see AdminClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -195,7 +196,7 @@ public interface ConfigAsyncClient
         @BinderParam(BindToXMLPayload.class) CategoryDto category);
 
     /**
-     * @see ConfigClient#updateIcon(IconDto)
+     * @see ConfigClient#updateCategory(CategoryDto)
      */
     @PUT
     @Produces(CategoryDto.BASE_MEDIA_TYPE)
