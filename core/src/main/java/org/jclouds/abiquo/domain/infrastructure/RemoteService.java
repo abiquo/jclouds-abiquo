@@ -35,7 +35,7 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Remote+Service+Resource
+ * @see http://community.abiquo.com/display/ABI20/RemoteServiceResource
  */
 public class RemoteService extends DomainWrapper<RemoteServiceDto>
 {
