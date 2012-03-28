@@ -669,6 +669,31 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
+    public void testUpdateTemplateDefinitionList() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        TemplateDefinitionListDto template = EnterpriseResources.templateListPut();
+
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("updateTemplateDefinitionList",
+                TemplateDefinitionListDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, template);
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + TemplateDefinitionListDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, withHeader(EnterpriseResources.templateListPutPayload()),
+            TemplateDefinitionListDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testDeleteTemplateDefinitionList() throws SecurityException, NoSuchMethodException
     {
         Method method =

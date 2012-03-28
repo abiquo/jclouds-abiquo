@@ -138,6 +138,14 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return Iterables.getFirst(filter(listVirtualDatacenters(), filter), null);
     }
 
+    /**
+     * Retrieve the list of template definition lists of the enterprise.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrievealltemplatedefinitionlists"
+     *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
+     *      TemplateDefinitionListResource-Retrievealltemplatedefinitionlists</a>
+     */
     public List<TemplateDefinitionList> listTemplateDefinitionLists()
     {
         TemplateDefinitionListsDto dto =
@@ -145,18 +153,45 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return wrap(context, TemplateDefinitionList.class, dto.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of template definition lists from this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrievealltemplatedefinitionlists"
+     *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
+     *      TemplateDefinitionListResource-Retrievealltemplatedefinitionlists</a>
+     */
     public List<TemplateDefinitionList> listTemplateDefinitionLists(
         final Predicate<TemplateDefinitionList> filter)
     {
         return Lists.newLinkedList(filter(listTemplateDefinitionLists(), filter));
     }
 
+    /**
+     * Retrieve the first template definition list matching the filter within the list.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrievealltemplatedefinitionlists"
+     *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
+     *      TemplateDefinitionListResource-Retrievealltemplatedefinitionlists</a>
+     */
     public TemplateDefinitionList findTemplateDefinitionList(
         final Predicate<TemplateDefinitionList> filter)
     {
         return Iterables.getFirst(filter(listTemplateDefinitionLists(), filter), null);
     }
 
+    /**
+     * Retrieve a template definition list.
+     * 
+     * @param id Unique ID of the template definition list for this enterprise.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrieveatemplatedefinitionlist"
+     *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
+     *      TemplateDefinitionListResource-Retrieveatemplatedefinitionlist</a>
+     */
     public TemplateDefinitionList getTemplateDefinitionList(final Integer id)
     {
         TemplateDefinitionListDto templateList =

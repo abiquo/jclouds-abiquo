@@ -235,7 +235,7 @@ public interface EnterpriseClient
     void deleteUser(UserDto user);
 
     /**
-     * Retreives list of virtual machines by user.
+     * Retrieves list of virtual machines by user.
      * 
      * @param user The user.
      * @return The list of virtual machines of the user.
@@ -299,6 +299,14 @@ public interface EnterpriseClient
      */
     TemplateDefinitionListDto createTemplateDefinitionList(EnterpriseDto enterprise,
         TemplateDefinitionListDto templateList);
+
+    /**
+     * Update an existing template definition list in apps library.
+     * 
+     * @param template The template to be update.
+     * @return The updated template.
+     */
+    TemplateDefinitionListDto updateTemplateDefinitionList(TemplateDefinitionListDto templateList);
 
     /**
      * Deletes existing user.

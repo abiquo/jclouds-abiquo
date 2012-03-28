@@ -25,7 +25,9 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 
 /**
- * Adds high level functionality to {@link TemplateDefinitionListDto}.
+ * Adds high level functionality to {@link TemplateDefinitionListDto}. A Template Definition List
+ * provides a way to organize multiple Template Definitions. A single Template Definition can be
+ * shared by many lists. Its compatible with ovfindex.xml format.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -46,17 +48,47 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
 
     // Domain operations
 
+    /**
+     * Delete the template definition list.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Deleteatemplatedefinitionlist"
+     *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
+     *      TemplateDefinitionListResource-Deleteatemplatedefinitionlist</a>
+     */
     public void delete()
     {
         context.getApi().getEnterpriseClient().deleteTemplateDefinitionList(target);
         target = null;
     }
 
+    /**
+     * Create a template definition list. All the contained Template Definitions will also be
+     * created.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Createatemplatedefinitionlist"
+     *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
+     *      TemplateDefinitionListResource-Createatemplatedefinitionlistr</a>
+     */
     public void save()
     {
         target =
             context.getApi().getEnterpriseClient()
                 .createTemplateDefinitionList(enterprise.unwrap(), target);
+    }
+
+    /**
+     * Update a template definition list with the data from this template definition list.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Modifyatemplatedefinitionlist"
+     *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
+     *      TemplateDefinitionListResource-Modifyatemplatedefinitionlist</a>
+     */
+    public void update()
+    {
+        target = context.getApi().getEnterpriseClient().updateTemplateDefinitionList(target);
     }
 
     // Builder

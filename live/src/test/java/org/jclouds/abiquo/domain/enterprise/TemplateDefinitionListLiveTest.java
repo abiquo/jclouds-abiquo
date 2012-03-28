@@ -37,12 +37,13 @@ import org.testng.annotations.Test;
 @Test(groups = "live")
 public class TemplateDefinitionListLiveTest extends BaseAbiquoClientLiveTest
 {
+    TemplateDefinitionList list;
 
     public void testCreateAndGet()
     {
-        TemplateDefinitionList list =
-            TemplateDefinitionList.builder(context, env.enterprise).name("myList").url(
-                "http://virtualapp-repository.com/vapp1.ovf").build();
+        list =
+            TemplateDefinitionList.builder(context, env.enterprise).name("myList")
+                .url("http://virtualapp-repository.com/vapp1.ovf").build();
 
         list.save();
 
@@ -53,7 +54,24 @@ public class TemplateDefinitionListLiveTest extends BaseAbiquoClientLiveTest
                 .name("myList"));
 
         assertEquals(lists.size(), 1);
+    }
 
+    @Test(dependsOnMethods = "testCreateAndGet")
+    public void testUpdate()
+    {
+        list.setName(list.getName() + "Updated");
+        list.update();
+
+        List<TemplateDefinitionList> lists =
+            env.enterprise.listTemplateDefinitionLists(TemplateDefinitionListPredicates
+                .name("myListUpdated"));
+
+        assertEquals(lists.size(), 1);
+    }
+
+    @Test(dependsOnMethods = {"testCreateAndGet", "testUpdate"})
+    public void testDelete()
+    {
         Integer idTemplateList = list.getId();
         list.delete();
         assertNull(env.enterprise.getTemplateDefinitionList(idTemplateList));

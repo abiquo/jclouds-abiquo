@@ -231,6 +231,18 @@ public class EnterpriseResources
         return buffer.toString();
     }
 
+    public static String templateListPutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<templateDefinitionList>");
+        buffer.append(link("/admin/enterprises/1/appslib/templateDefinitionLists/1", "edit"));
+        buffer.append("<id>1</id>");
+        buffer.append("<name>myList</name>");
+        buffer.append("<url>http://virtualapp-repository.com/vapp1.ovf</url>");
+        buffer.append("</templateDefinitionList>");
+        return buffer.toString();
+    }
+
     public static String datacenterLimitsPutPayload(final EnterpriseDto enterprise)
     {
         StringBuffer buffer = new StringBuffer();
