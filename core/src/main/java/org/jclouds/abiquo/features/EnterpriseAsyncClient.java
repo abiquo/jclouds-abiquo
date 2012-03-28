@@ -352,7 +352,7 @@ public interface EnterpriseAsyncClient
         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#createTemplateDefinitionList(EnterpriseDto)
+     * @see EnterpriseClient#createTemplateDefinitionList(EnterpriseDto, TemplateDefinitionListDto)
      */
     @POST
     @Produces(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
@@ -361,6 +361,16 @@ public interface EnterpriseAsyncClient
     ListenableFuture<TemplateDefinitionListDto> createTemplateDefinitionList(
         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
         @BinderParam(BindToXMLPayload.class) TemplateDefinitionListDto templateList);
+
+    /**
+     * @see EnterpriseClient#updateTemplateDefinitionList(TemplateDefinitionListDto)
+     */
+    @PUT
+    @Produces(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+    @Consumes(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<TemplateDefinitionListDto> updateTemplateDefinitionList(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TemplateDefinitionListDto templateList);
 
     /**
      * @see EnterpriseClient#deleteTemplateDefinitionList(EnterpriseDto)
