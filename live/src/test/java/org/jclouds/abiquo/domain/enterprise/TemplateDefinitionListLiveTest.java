@@ -27,6 +27,8 @@ import java.util.List;
 
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.enterprise.TemplateDefinitionListPredicates;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 /**
@@ -39,24 +41,6 @@ public class TemplateDefinitionListLiveTest extends BaseAbiquoClientLiveTest
 {
     TemplateDefinitionList list;
 
-    public void testCreateAndGet()
-    {
-        list =
-            TemplateDefinitionList.builder(context, env.enterprise).name("myList")
-                .url("http://virtualapp-repository.com/vapp1.ovf").build();
-
-        list.save();
-
-        assertNotNull(list.getId());
-
-        List<TemplateDefinitionList> lists =
-            env.enterprise.listTemplateDefinitionLists(TemplateDefinitionListPredicates
-                .name("myList"));
-
-        assertEquals(lists.size(), 1);
-    }
-
-    @Test(dependsOnMethods = "testCreateAndGet")
     public void testUpdate()
     {
         list.setName(list.getName() + "Updated");
@@ -69,8 +53,26 @@ public class TemplateDefinitionListLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(lists.size(), 1);
     }
 
-    @Test(dependsOnMethods = {"testCreateAndGet", "testUpdate"})
-    public void testDelete()
+    public void testListStates()
+    {
+        List<TemplateState> states = list.listStatus(env.datacenter);
+        assertNotNull(states);
+    }
+
+    @BeforeClass
+    public void setup()
+    {
+        list =
+            TemplateDefinitionList.builder(context, env.enterprise).name("myList")
+                .url("http://virtualapp-repository.com/vapp1.ovf").build();
+
+        list.save();
+
+        assertNotNull(list.getId());
+    }
+
+    @AfterClass
+    public void tearDown()
     {
         Integer idTemplateList = list.getId();
         list.delete();

@@ -47,6 +47,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.appliancemanager.transport.TemplatesStateDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
@@ -389,4 +390,14 @@ public interface EnterpriseAsyncClient
     ListenableFuture<TemplateDefinitionListsDto> getTemplateDefinitionList(
         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
         @BinderParam(AppendToPath.class) Integer templateListId);
+
+    /**
+     * @see EnterpriseClient#getTemplateDefinitionList(EnterpriseDto, Integer)
+     */
+    @GET
+    @Consumes(TemplatesStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<TemplatesStateDto> listTemplateListStatus(
+        @EndpointLink("repositoryStatus") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList,
+        @QueryParam("datacenterId") @ParamParser(ParseDatacenterId.class) DatacenterDto datacenter);
 }
