@@ -35,8 +35,10 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -64,7 +66,8 @@ import com.abiquo.server.core.infrastructure.storage.TiersDto;
 /**
  * Provides synchronous access to Abiquo Infrastructure API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see InfrastructureAsyncClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -115,8 +118,10 @@ public interface InfrastructureClient
     /**
      * Retrieve remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      Retrieveremotemachineinformation
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveremotemachineinformation</a>
      * @param datacenter The datacenter.
      * @param ip IP address of the remote hypervisor to connect.
      * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
@@ -132,8 +137,10 @@ public interface InfrastructureClient
     /**
      * Retrieve remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      Retrieveremotemachineinformation
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveremotemachineinformation</a>
      * @param datacenter The datacenter.
      * @param ip IP address of the remote hypervisor to connect.
      * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
@@ -150,8 +157,10 @@ public interface InfrastructureClient
     /**
      * Retrieve a list of remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      Retrievealistofremotemachineinformation
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievealistofremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrievealistofremotemachineinformation</a>
      * @param datacenter The datacenter.
      * @param ipFrom IP address of the remote first hypervisor to check.
      * @param ipTo IP address of the remote last hypervisor to check.
@@ -169,8 +178,10 @@ public interface InfrastructureClient
     /**
      * Retrieve a list of remote machine information.
      * 
-     * @see http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      Retrievealistofremotemachineinformation
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievealistofremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrievealistofremotemachineinformation</a>
      * @param datacenter The datacenter.
      * @param ipFrom IP address of the remote first hypervisor to check.
      * @param ipTo IP address of the remote last hypervisor to check.
@@ -392,12 +403,39 @@ public interface InfrastructureClient
      * @param rack The managed rack where the service profile is.
      * @param logicServer The logic server.
      * @param organization The organization to be associated.
-     * @param newName The name of the new service profile.
      * @param bladeName The name of the blade.
      */
     @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void associateLogicServer(UcsRackDto rack, LogicServerDto logicServer,
+        OrganizationDto organization, String bladeName);
+
+    /**
+     * Associate a service profile with a blade instantiating a service profile template.
+     * 
+     * @param rack The managed rack where the service profile is.
+     * @param logicServer The logic server.
+     * @param organization The organization to be associated.
+     * @param newName Name of the new service profile.
+     * @param bladeName The name of the blade.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void associateTemplate(UcsRackDto rack, LogicServerDto logicServer,
+        OrganizationDto organization, String newName, String bladeName);
+
+    /**
+     * Clone a service profile and associate it with a blade.
+     * 
+     * @param rack The managed rack where the service profile is.
+     * @param logicServer The logic server.
+     * @param organization The organization to be associated.
+     * @param newName Name of the new service profile.
+     * @param bladeName The name of the blade.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    void cloneAndAssociateLogicServer(UcsRackDto rack, LogicServerDto logicServer,
         OrganizationDto organization, String newName, String bladeName);
 
     /**
@@ -409,6 +447,17 @@ public interface InfrastructureClient
     @EnterpriseEdition
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     void dissociateLogicServer(UcsRackDto rack, LogicServerDto logicServer);
+
+    /**
+     * Get FSM list of an entity
+     * 
+     * @param rack The managed rack where the entity belongs.
+     * @param dn Distinguished name of the entity.
+     * @param fsm The fsm.
+     */
+    @EnterpriseEdition
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    FsmsDto listFsms(UcsRackDto rack, String dn);
 
     /*********************** Remote Service ********************** */
 
@@ -514,6 +563,56 @@ public interface InfrastructureClient
      * @return The list of physical machines for the rack.
      */
     MachinesDto listMachines(RackDto rack);
+
+    /**
+     * Power off a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void powerOff(MachineDto machine);
+
+    /**
+     * Power on a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void powerOn(MachineDto machine);
+
+    /**
+     * Get the logic server associated with a machine in a Cisc UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     * @return The logic server.
+     */
+    @EnterpriseEdition
+    LogicServerDto getLogicServer(MachineDto machine);
+
+    /**
+     * Turn off locator led of a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void ledOn(MachineDto machine);
+
+    /**
+     * Light locator led of a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     */
+    @EnterpriseEdition
+    void ledOff(MachineDto machine);
+
+    /**
+     * Get led locator info from a physical machine in a UCS rack.
+     * 
+     * @param machime The phyisical machine.
+     * @return Led locator information.
+     */
+    @EnterpriseEdition
+    BladeLocatorLedDto getLocatorLed(MachineDto machine);
 
     /**
      * List all virtual machines in a physical machine.

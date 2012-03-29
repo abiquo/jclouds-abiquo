@@ -161,8 +161,7 @@ public class InfrastructureResources
         rack.setId(1);
         rack.addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
         rack.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/racks/1"));
-        rack.addLink(new RESTLink("machines",
-            "http://localhost/api/admin/datacenters/1/racks/1/machines"));
+        rack.addLink(new RESTLink("fsm", "http://localhost/api/admin/datacenters/1/racks/1/fsm"));
         rack.addLink(new RESTLink("logicservers",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers"));
         rack.addLink(new RESTLink("ls-templates",
@@ -171,6 +170,10 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/racks/1/organizations"));
         rack.addLink(new RESTLink("ls-associate",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers/associate"));
+        rack.addLink(new RESTLink("ls-associateclone",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/assocclone"));
+        rack.addLink(new RESTLink("ls-associatetemplate",
+            "http://localhost/api/admin/datacenters/1/racks/1/logicservers/associatetemplate"));
         rack.addLink(new RESTLink("ls-clone",
             "http://localhost/api/admin/datacenters/1/racks/1/logicservers/clone"));
         rack.addLink(new RESTLink("ls-delete",
@@ -263,6 +266,18 @@ public class InfrastructureResources
         machine.addLink(new RESTLink("rack", "http://localhost/api/admin/datacenters/1/racks/1"));
         machine.addLink(new RESTLink("checkstate",
             "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/checkstate"));
+        machine.addLink(new RESTLink("led",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/led"));
+        machine.addLink(new RESTLink("ledoff",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/ledoff"));
+        machine.addLink(new RESTLink("ledon",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/ledon"));
+        machine.addLink(new RESTLink("logicserver",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/logicserver"));
+        machine.addLink(new RESTLink("poweroff",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/poweroff"));
+        machine.addLink(new RESTLink("poweron",
+            "http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/poweron"));
         machine.addLink(new RESTLink("virtualmachines",
             "http://localhost/api/admin/datacenters/1/racks/1/machines/1/virtualmachines"));
         machine.setVirtualCpuCores(5);
@@ -441,11 +456,15 @@ public class InfrastructureResources
         buffer.append("<ucsrack>");
         buffer.append(link("/admin/datacenters/1", "datacenter"));
         buffer.append(link("/admin/datacenters/1/racks/1", "edit"));
-        buffer.append(link("/admin/datacenters/1/racks/1/machines", "machines"));
+        buffer.append(link("/admin/datacenters/1/racks/1/fsm", "fsm"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers", "logicservers"));
         buffer.append(link("/admin/datacenters/1/racks/1/lstemplates", "ls-templates"));
         buffer.append(link("/admin/datacenters/1/racks/1/organizations", "organizations"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers/associate", "ls-associate"));
+        buffer.append(link("/admin/datacenters/1/racks/1/logicservers/assocclone",
+            "ls-associateclone"));
+        buffer.append(link("/admin/datacenters/1/racks/1/logicservers/associatetemplate",
+            "ls-associatetemplate"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers/clone", "ls-clone"));
         buffer.append(link("/admin/datacenters/1/racks/1/logicservers/delete", "ls-delete"));
         buffer
@@ -502,6 +521,12 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/racks/1", "rack"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/checkstate",
             "checkstate"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/led", "led"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/ledoff", "ledoff"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/ledon", "ledon"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/logicserver", "logicserver"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/poweroff", "poweroff"));
+        buffer.append(link("/admin/datacenters/1/racks/1/machines/1/action/poweron", "poweron"));
         buffer.append(link("/admin/datacenters/1/racks/1/machines/1/virtualmachines",
             "virtualmachines"));
         buffer.append("<datastores/>");

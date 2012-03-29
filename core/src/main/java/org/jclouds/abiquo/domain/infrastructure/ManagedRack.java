@@ -30,7 +30,9 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 
+import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
+import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.OrganizationsDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
@@ -43,8 +45,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
- *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/RackResource">
+ *      http://community.abiquo.com/display/ABI20/RackResource</a>
  */
 @EnterpriseEdition
 public class ManagedRack extends DomainWrapper<UcsRackDto>
@@ -74,6 +76,14 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
     // Domain operations
 
+    /**
+     * Delete the managed rack.
+     * 
+     * @see API: <a
+     *      href="http://community.abiquo.com/display/ABI20/RackResource#RackResource-DeleteaRack" >
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource#RackResource-
+     *      DeleteaRack</a>
+     */
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteRack(target);
@@ -81,10 +91,13 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     /**
+     * Create a new managed rack in Abiquo. This method wil discover the blades configured in the
+     * UCS. If the data provided for the connection is invalid a UcsRack will be created in Abiquo
+     * but with no Physical Machines attached to it.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewUcsRack<
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-CreateanewUCSRack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-CreateanewUCSRack<
      *      /a>
      */
     public void save()
@@ -95,10 +108,13 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     /**
+     * Update rack information in the server with the data from this rack. The IP data member cannot
+     * be updated. If changed will be ignored and the old IP will remain.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingUcsRack"
-     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
-     *      UpdateanexistingUcsRack</a>
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource#RackResource-UpdateanexistingUCSrack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource#RackResource-
+     *      UpdateanexistingUCSrack</a>
      */
     public void update()
     {
@@ -107,10 +123,12 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
     // Parent access
     /**
+     * Retrieve the datacenter where this rack is.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      RetrieveaDatacenter</a>
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveadatacenter"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveadatacenter</a>
      */
     public Datacenter getDatacenter()
     {
@@ -119,11 +137,56 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     // Children access
+
     /**
+     * Retrieve the list of blades in this rack.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrievealistofallServicesProfilesinaUCSRack"
-     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
-     *      RetrievealistofallServicesProfilesinaUCSRack</a>
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrievealistofMachines"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      RetrievealistofMachines</a>
+     */
+    public List<Blade> listMachines()
+    {
+        MachinesDto machines = context.getApi().getInfrastructureClient().listMachines(target);
+        return wrap(context, Blade.class, machines.getCollection());
+    }
+
+    /**
+     * Retrieve a filtered list of blades in this rack.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrievealistofMachines"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      RetrievealistofMachines</a>
+     */
+    public List<Blade> listMachines(final Predicate<Blade> filter)
+    {
+        return Lists.newLinkedList(filter(listMachines(), filter));
+    }
+
+    /**
+     * Retrieve the first blade matching the filter within the list of machines in this rack.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrievealistofMachines"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      RetrievealistofMachines</a>
+     */
+    public Blade findMachine(final Predicate<Blade> filter)
+    {
+        return Iterables.getFirst(filter(listMachines(), filter), null);
+    }
+
+    /**
+     * Retrieve the list of service profiles in this UCS rack.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofallservicesprofilesinaUCSrack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofallservicesprofilesinaUCSrack</a>
      */
     public List<LogicServer> listServiceProfiles()
     {
@@ -132,17 +195,38 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         return wrap(context, LogicServer.class, profiles.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of service profiles in this UCS rack.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofallservicesprofilesinaUCSrack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofallservicesprofilesinaUCSrack</a>
+     */
     public List<LogicServer> listServiceProfiles(final Predicate<LogicServer> filter)
     {
         return Lists.newLinkedList(filter(listServiceProfiles(), filter));
     }
 
+    /**
+     * Retrieve the first service profile matching the filter within the list of profiles in this
+     * rack.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofallservicesprofilesinaUCSrack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrievealistofallservicesprofilesinaUCSrack</a>
+     */
     public LogicServer findServiceProfile(final Predicate<LogicServer> filter)
     {
         return Iterables.getFirst(filter(listServiceProfiles(), filter), null);
     }
 
     /**
+     * Retrieve the list of service profile templates in this UCS rack.
+     * 
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/RackResource-RetrievealistofallServicesProfilesTemplatesinaUCSRack"
      *      > http://community.abiquo.com/display/ABI20/RackResource-
@@ -155,21 +239,42 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         return wrap(context, LogicServer.class, templates.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of service profile templates in this UCS rack.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource-RetrievealistofallServicesProfilesTemplatesinaUCSRack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource-
+     *      RetrievealistofallServicesProfilesTemplatesinaUCSRack</a>
+     */
     public List<LogicServer> listServiceProfileTemplates(final Predicate<LogicServer> filter)
     {
         return Lists.newLinkedList(filter(listServiceProfileTemplates(), filter));
     }
 
+    /**
+     * Retrieve the first service profile template matching the filter within the list of templates
+     * in this rack.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource-RetrievealistofallServicesProfilesTemplatesinaUCSRack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource-
+     *      RetrievealistofallServicesProfilesTemplatesinaUCSRack</a>
+     */
     public LogicServer findServiceProfileTemplate(final Predicate<LogicServer> filter)
     {
         return Iterables.getFirst(filter(listServiceProfileTemplates(), filter), null);
     }
 
     /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-RetrieveallOrganizationsfromaUCS"
-     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
-     *      RetrieveallOrganizationsfromaUCS</a>
+     * Retrieve the list of organization in this UCS rack. The credentials in the UcsRack
+     * configuration might not have enough rights in the UCS to retrieve all organizations. Then
+     * only the allowed ones are returned. This data is not persisted in Abiquo.
+     * 
+     * @see API: <a href= "http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrieveallorganizationsfromaUCS"> http://community.abiquo.com/display/ABI20/</a>
      */
     public List<Organization> listOrganizations()
     {
@@ -178,23 +283,60 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
         return wrap(context, Organization.class, organizations.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of organization in this UCS rack. The credentials in the UcsRack
+     * configuration might not have enough rights in the UCS to retrieve all organizations. Then
+     * only the allowed ones are returned. This data is not persisted in Abiquo.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href= "http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrieveallorganizationsfromaUCS" >
+     *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrieveallorganizationsfromaUCS</a>
+     */
     public List<Organization> listOrganizations(final Predicate<Organization> filter)
     {
         return Lists.newLinkedList(filter(listOrganizations(), filter));
     }
 
+    /**
+     * Retrieve the first organization matching the filter within the list of organization in this
+     * rack. The credentials in the UcsRack configuration might not have enough rights in the UCS to
+     * retrieve all organizations. Then only the allowed ones are returned. This data is not
+     * persisted in Abiquo.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href= "http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrieveallorganizationsfromaUCS">
+     *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrieveallorganizationsfromaUCS</a>
+     */
     public Organization findOrganization(final Predicate<Organization> filter)
     {
         return Iterables.getFirst(filter(listOrganizations(), filter), null);
     }
 
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveFSMofanentityinUCS"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      RetrieveFSMofanentityinUCS</a>
+     */
+    public List<Fsm> listFsm(final String entityName)
+    {
+        FsmsDto fsms = context.getApi().getInfrastructureClient().listFsms(target, entityName);
+        return wrap(context, Fsm.class, fsms.getCollection());
+    }
+
     // Actions
 
     /**
+     * Clone a Service Profile this rack. This data is not persisted in Abiquo.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CloneLogicServerinUCS"
-     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#Rack+Resource#RackResource-
-     *      CloneLogicServerinUCS</a>
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-ClonelogicserverinUCS"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      ClonelogicserverinUCS</a>
      */
     public void cloneLogicServer(final LogicServer logicServer, final Organization organization,
         final String newName)
@@ -204,38 +346,87 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     }
 
     /**
+     * Associate a Service Profile and a Blade in UCS. If the Service Profile is already associated
+     * then the request cannot be completed. This data is not persisted in Abiquo.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-AssociateLogicServerwithabladeinUCS"
-     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#Rack+Resource#RackResource-
-     *      AssociateLogicServerwithabladeinUCS</a>
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-AssociatelogicserverwithabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      AssociatelogicserverwithabladeinUCS</a>
      */
     public void associateLogicServer(final String bladeName, final LogicServer logicServer,
-        final Organization organization, final String newName)
+        final Organization organization)
     {
         context
             .getApi()
             .getInfrastructureClient()
             .associateLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
-                newName, bladeName);
+                bladeName);
     }
 
     /**
+     * Clone and associate a Service Profile and a Blade in UCS. If the Blade is already associated
+     * then Abiquo will dissociate it first. If the request cannot be completed successfully the
+     * Blade might be left with no Service Profile associated. This data is not persisted in Abiquo.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-DissociateLogicServerfromabladeinUCS"
-     *      > http://community.abiquo.com/display/ABI20/RackResource-
-     *      DissociateLogicServerfromabladeinUCS</a>
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-CloneandassociateLogicServerwithabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      CloneandassociateLogicServerwithabladeinUCS</a>
      */
-    public void dissociateLogicServer(final LogicServer logicServer)
+    public void cloneAndAssociateLogicServer(final String bladeName, final LogicServer logicServer,
+        final Organization organization, final String logicServerName)
+    {
+        context
+            .getApi()
+            .getInfrastructureClient()
+            .cloneAndAssociateLogicServer(this.unwrap(), logicServer.unwrap(),
+                organization.unwrap(), bladeName, logicServerName);
+    }
+
+    /**
+     * Instantiate and associate a Service Profile Template and a Blade in UCS. If the Service
+     * Profile is already associated the request cannot be successful. If the Blade is already
+     * associated then Abiquo will dissociate it first. If the request cannot be completed
+     * successfully the Blade might be left with no Service Profile associated. This data is not
+     * persisted in Abiquo.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-AssociateabladewithaLogicServerTemplate"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      AssociateabladewithaLogicServerTemplate</a>
+     */
+    public void associateLogicServerTemplate(final String bladeName, final LogicServer logicServer,
+        final Organization organization, final String logicServerName)
+    {
+        context
+            .getApi()
+            .getInfrastructureClient()
+            .associateTemplate(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
+                bladeName, logicServerName);
+    }
+
+    /**
+     * Dissociates a Service Profile and a Blade in UCS. This data is not persisted in Abiquo.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-DisassociatelogicserverfromabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      DisassociatelogicserverfromabladeinUCS</a>
+     */
+    public void disassociateLogicServer(final LogicServer logicServer)
     {
         context.getApi().getInfrastructureClient()
             .dissociateLogicServer(this.unwrap(), logicServer.unwrap());
     }
 
     /**
+     * Deletes a Service Profile in UCS. This data is not persisted in Abiquo.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-DeleteLogicServerwithabladeinUCS"
-     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-
-     *      DeleteLogicServerwithabladeinUCS</a>
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-DeletelogicserverwithabladeinUCS"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
+     *      DeletelogicserverwithabladeinUCS</a>
      */
     public void deleteLogicServer(final LogicServer logicServer)
     {

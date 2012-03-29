@@ -34,7 +34,8 @@ import org.jclouds.rest.annotations.Delegate;
 /**
  * Provides synchronous access to Abiquo.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see AbiquoAsyncClient
  * @author Ignasi Barrera
  */

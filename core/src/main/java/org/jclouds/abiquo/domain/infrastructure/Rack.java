@@ -36,12 +36,13 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * Adds high level functionality to {@link RackDto}.
+ * Adds high level functionality to {@link RackDto}. Represents unmanaged racks in the Abiquo
+ * platform.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
- *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/RackResource">
+ *      http://community.abiquo.com/display/ABI20/RackResource</a>
  */
 public class Rack extends DomainWrapper<RackDto>
 {
@@ -70,6 +71,14 @@ public class Rack extends DomainWrapper<RackDto>
 
     // Domain operations
 
+    /**
+     * Delete the unmanaged rack.
+     * 
+     * @see API: <a
+     *      href="http://community.abiquo.com/display/ABI20/RackResource#RackResource-DeleteaRack" >
+     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource#RackResource-
+     *      DeleteaRack</a>
+     */
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteRack(target);
@@ -77,10 +86,11 @@ public class Rack extends DomainWrapper<RackDto>
     }
 
     /**
+     * Create a new unmanaged rack in Abiquo.
+     * 
      * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-CreateanewRack</a>
+     *      href="http://community.abiquo.com/display/ABI20/RackResource#RackResource-CreateanewRack"
+     *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-CreateanewRack</a>
      */
     public void save()
     {
@@ -88,10 +98,12 @@ public class Rack extends DomainWrapper<RackDto>
     }
 
     /**
+     * Update rack information in the server with the data from this rack.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack"
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-UpdateanexistingRack"
      *      >
-     *      http://community.abiquo.com/display/ABI20/Rack+Resource#RackResource-UpdateanexistingRack
+     *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-UpdateanexistingRack
      *      </a>
      */
     public void update()
@@ -101,10 +113,12 @@ public class Rack extends DomainWrapper<RackDto>
 
     // Parent access
     /**
+     * Retrieve the datacenter where this rack is.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      RetrieveaDatacenter</a>
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveadatacenter"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveadatacenter</a>
      */
     public Datacenter getDatacenter()
     {
@@ -114,17 +128,44 @@ public class Rack extends DomainWrapper<RackDto>
 
     // Children access
 
+    /**
+     * Retrieve the list of physical machines in this rack.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrievealistofMachines"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      RetrievealistofMachines</a>
+     */
     public List<Machine> listMachines()
     {
         MachinesDto machines = context.getApi().getInfrastructureClient().listMachines(target);
         return wrap(context, Machine.class, machines.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of physical machines in this rack.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrievealistofMachines"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      RetrievealistofMachines</a>
+     */
     public List<Machine> listMachines(final Predicate<Machine> filter)
     {
         return Lists.newLinkedList(filter(listMachines(), filter));
     }
 
+    /**
+     * Retrieve the first physical machine matching the filter within the list of machines in this
+     * rack.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrievealistofMachines"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      RetrievealistofMachines</a>
+     */
     public Machine findMachine(final Predicate<Machine> filter)
     {
         return Iterables.getFirst(filter(listMachines(), filter), null);

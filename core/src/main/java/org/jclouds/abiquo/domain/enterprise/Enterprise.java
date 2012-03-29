@@ -421,8 +421,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * Allows the given datacenter to be used by this enterprise. Creates a {@link DatacenterLimits}
-     * object if not exists.
+     * Allows the given datacenter to be used by this enterprise. Creates a {@link Limits} object if
+     * not exists.
      * 
      * @param datacenter The datacenter.
      * @return Default datacenter limits of the enterprise for the given datacenter.

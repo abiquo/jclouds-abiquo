@@ -49,7 +49,7 @@ public abstract class BaseAbiquoClientLiveTest
     protected static CloudTestEnvironment env;
 
     @BeforeSuite(groups = "live")
-    protected static void setupClient(final ITestContext testContext) throws Exception
+    protected static void setupClient() throws Exception
     {
         String identity =
             checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
@@ -75,8 +75,12 @@ public abstract class BaseAbiquoClientLiveTest
 
         env = new CloudTestEnvironment(context);
         env.setup();
+    }
 
-        testContext.setAttribute("environment", env);
+    @BeforeSuite(groups = "ucs", dependsOnMethods = "setupClient")
+    protected static void setupUcs() throws Exception
+    {
+        env.createUcsRack();
     }
 
     @AfterSuite(groups = "live")

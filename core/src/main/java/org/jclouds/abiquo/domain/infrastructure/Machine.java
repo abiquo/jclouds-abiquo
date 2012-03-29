@@ -24,10 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
@@ -46,31 +44,26 @@ import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
 
 /**
- * Adds high level functionality to {@link MachineDto}.
+ * Adds high level functionality to {@link MachineDto}. It defines domain methods for unmanaged
+ * physical machines.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see http://community.abiquo.com/display/ABI20/Machine+Resource
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/MachineResource">
+ *      http://community.abiquo.com/display/ABI20/MachineResource</a>
  */
-public class Machine extends DomainWrapper<MachineDto>
+public class Machine extends AbstractPhysicalMachine
 {
-    /** The default virtual ram used in MB. */
-    private static final int DEFAULT_VRAM_USED = 1;
-
-    /** The default virtual cpu used in MB. */
-    private static final int DEFAULT_VCPU_USED = 1;
-
     /** The rack where the machine belongs. */
-    private Rack rack;
+    protected Rack rack;
 
     /** List of available virtual switches provided by discover operation **/
-    private List<String> virtualSwitches;
+    protected List<String> virtualSwitches;
 
     /**
      * Constructor to be used only by the builder.
@@ -81,22 +74,27 @@ public class Machine extends DomainWrapper<MachineDto>
         extractVirtualSwitches();
     }
 
-    public void delete()
-    {
-        context.getApi().getInfrastructureClient().deleteMachine(target);
-        target = null;
-    }
-
+    /**
+     * Create a new physical machine in Abiquo. The best way to create a machine if first calling
+     * {@link Datacenter#discoverSingleMachine} or {@link Datacenter#discoverMultipleMachines}. This
+     * will return a new {@link Machine}. The following steps are: enabling a datastore, selecting a
+     * virtual switch and choosing a rack. Refer link for more information.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveremotemachineinformation"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveremotemachineinformation</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-Createamachine"
+     *      > http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-
+     *      Createamachine</a>
+     */
     public void save()
     {
         target = context.getApi().getInfrastructureClient().createMachine(rack.unwrap(), target);
     }
 
-    public void update()
-    {
-        target = context.getApi().getInfrastructureClient().updateMachine(target);
-    }
-
+    @Override
     public MachineState check()
     {
         MachineStateDto dto =
@@ -107,7 +105,13 @@ public class Machine extends DomainWrapper<MachineDto>
     }
 
     // Parent access
-
+    /**
+     * Retrieve the unmanaged rack where the machine is.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaRack" >
+     *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaRack</a>
+     */
     public Rack getRack()
     {
         RESTLink link =
@@ -125,11 +129,13 @@ public class Machine extends DomainWrapper<MachineDto>
 
     // Children access
 
+    @Override
     public List<Datastore> getDatastores()
     {
         return wrap(context, Datastore.class, target.getDatastores().getCollection());
     }
 
+    @Override
     public Datastore findDatastore(final String name)
     {
         return find(getDatastores(), DatastorePredicates.name(name), null);
@@ -472,251 +478,8 @@ public class Machine extends DomainWrapper<MachineDto>
 
     // Delegate methods
 
-    public Integer getId()
-    {
-        return target.getId();
-    }
-
-    public String getIp()
-    {
-        return target.getIp();
-    }
-
-    public String getIpmiIp()
-    {
-        return target.getIpmiIP();
-    }
-
-    public String getIpmiPassword()
-    {
-        return target.getIpmiPassword();
-    }
-
-    public Integer getIpmiPort()
-    {
-        return target.getIpmiPort();
-    }
-
-    public String getIpmiUser()
-    {
-        return target.getIpmiUser();
-    }
-
-    public String getIpService()
-    {
-        return target.getIpService();
-    }
-
-    public String getName()
-    {
-        return target.getName();
-    }
-
-    public String getPassword()
-    {
-        return target.getPassword();
-    }
-
-    public Integer getPort()
-    {
-        return target.getPort();
-    }
-
-    public MachineState getState()
-    {
-        return target.getState();
-    }
-
-    public HypervisorType getType()
-    {
-        return target.getType();
-    }
-
-    public String getUser()
-    {
-        return target.getUser();
-    }
-
-    public Integer getVirtualCpuCores()
-    {
-        return target.getVirtualCpuCores();
-    }
-
-    public Integer getVirtualCpusUsed()
-    {
-        return target.getVirtualCpusUsed();
-    }
-
-    public Integer getVirtualRamInMb()
-    {
-        return target.getVirtualRamInMb();
-    }
-
-    public Integer getVirtualRamUsedInMb()
-    {
-        return target.getVirtualRamUsedInMb();
-    }
-
-    public String getVirtualSwitch()
-    {
-        return target.getVirtualSwitch();
-    }
-
-    public void setDatastores(final List<Datastore> datastores)
-    {
-        DatastoresDto datastoresDto = new DatastoresDto();
-        datastoresDto.getCollection().addAll(DomainWrapper.unwrap(datastores));
-        target.setDatastores(datastoresDto);
-    }
-
-    public void setDescription(final String description)
-    {
-        target.setDescription(description);
-    }
-
-    public void setIp(final String ip)
-    {
-        target.setIp(ip);
-    }
-
-    public void setIpmiIp(final String ipmiIp)
-    {
-        target.setIpmiIP(ipmiIp);
-    }
-
-    public void setIpmiPassword(final String ipmiPassword)
-    {
-        target.setIpmiPassword(ipmiPassword);
-    }
-
-    public void setIpmiPort(final Integer ipmiPort)
-    {
-        target.setIpmiPort(ipmiPort);
-    }
-
-    public void setIpmiUser(final String ipmiUser)
-    {
-        target.setIpmiUser(ipmiUser);
-    }
-
-    public void setIpService(final String ipService)
-    {
-        target.setIpService(ipService);
-    }
-
-    public void setName(final String name)
-    {
-        target.setName(name);
-    }
-
-    public void setPassword(final String password)
-    {
-        target.setPassword(password);
-    }
-
-    public void setPort(final Integer port)
-    {
-        target.setPort(port);
-    }
-
-    public void setState(final MachineState state)
-    {
-        target.setState(state);
-    }
-
-    public void setType(final HypervisorType type)
-    {
-        target.setType(type);
-    }
-
-    public void setUser(final String user)
-    {
-        target.setUser(user);
-    }
-
-    public void setVirtualCpuCores(final Integer virtualCpuCores)
-    {
-        target.setVirtualCpuCores(virtualCpuCores);
-    }
-
-    public void setVirtualCpusUsed(final Integer virtualCpusUsed)
-    {
-        target.setVirtualCpusUsed(virtualCpusUsed);
-    }
-
-    public void setVirtualRamInMb(final Integer virtualRamInMb)
-    {
-        target.setVirtualRamInMb(virtualRamInMb);
-    }
-
-    public void setVirtualRamUsedInMb(final Integer virtualRamUsedInMb)
-    {
-        target.setVirtualRamUsedInMb(virtualRamUsedInMb);
-    }
-
-    public void setVirtualSwitch(final String virtualSwitch)
-    {
-        target.setVirtualSwitch(virtualSwitch);
-    }
-
     public void setRack(final Rack rack)
     {
         this.rack = rack;
     }
-
-    public String getDescription()
-    {
-        return target.getDescription();
-    }
-
-    // Aux operations
-
-    /**
-     * Converts the tokenized String provided by the node collector API to a list of Strings and
-     * stores it at the attribute switches.
-     */
-    private void extractVirtualSwitches()
-    {
-        StringTokenizer st = new StringTokenizer(getVirtualSwitch(), "/");
-        this.virtualSwitches = Lists.newArrayList();
-
-        while (st.hasMoreTokens())
-        {
-            this.virtualSwitches.add(st.nextToken());
-        }
-
-        if (virtualSwitches.size() > 0)
-        {
-            this.setVirtualSwitch(virtualSwitches.get(0));
-        }
-    }
-
-    /**
-     * Returns the virtual switches available. One of them needs to be selected.
-     */
-    public List<String> getAvailableVirtualSwitches()
-    {
-        return virtualSwitches;
-    }
-
-    public String findAvailableVirtualSwitch(final String vswitch)
-    {
-        return find(virtualSwitches, Predicates.equalTo(vswitch));
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Machine [id=" + getId() + ", ip=" + getIp() + ", ipmiIp=" + getIpmiIp()
-            + ", ipmiPassword=" + getIpmiPassword() + ", ipmiPort=" + getIpmiPort() + ", ipmiUser="
-            + getIpmiUser() + ", ipService=" + getIpService() + ", name=" + getName()
-            + ", password=" + getPassword() + ", port=" + getPort() + ", state=" + getState()
-            + ", type=" + getType() + ", user=" + getUser() + ", virtualCpuCores="
-            + getVirtualCpuCores() + ", virtualCpusUsed=" + getVirtualCpusUsed()
-            + ", getVirtualRamInMb()=" + getVirtualRamInMb() + ", virtualRamUsedInMb="
-            + getVirtualRamUsedInMb() + ", virtualSwitch=" + getVirtualSwitch() + ", description="
-            + getDescription() + ", availableVirtualSwitches=" + getAvailableVirtualSwitches()
-            + "]";
-    }
-
 }

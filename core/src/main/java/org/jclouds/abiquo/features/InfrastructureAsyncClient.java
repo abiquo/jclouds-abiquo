@@ -66,8 +66,10 @@ import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
+import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -96,7 +98,8 @@ import com.google.common.util.concurrent.ListenableFuture;
 /**
  * Provides asynchronous access to Abiquo Infrastructure API.
  * 
- * @see http://community.abiquo.com/display/ABI20/API+Reference
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
  * @see InfrastructureClient
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -392,8 +395,8 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#listOrganizations(UcsRackDto, OrganizationOptions)
      */
-    @GET
     @EnterpriseEdition
+    @GET
     @Consumes(OrganizationsDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<OrganizationsDto> listOrganizations(
@@ -404,8 +407,8 @@ public interface InfrastructureAsyncClient
      * @see InfrastructureClient#cloneLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
      *      String)
      */
-    @POST
     @EnterpriseEdition
+    @POST
     ListenableFuture<Void> cloneLogicServer(
         @EndpointLink("ls-clone") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
@@ -414,12 +417,36 @@ public interface InfrastructureAsyncClient
 
     /**
      * @see InfrastructureClient#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
-     *      String, String)
+     *      String)
      */
-    @POST
     @EnterpriseEdition
+    @POST
     ListenableFuture<Void> associateLogicServer(
         @EndpointLink("ls-associate") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+        @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+        @QueryParam("bladeDn") String bladeName);
+
+    /**
+     * @see InfrastructureClient#associateTemplate(UcsRackDto, LogicServerDto, OrganizationDto,
+     *      String, String)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> associateTemplate(
+        @EndpointLink("ls-associatetemplate") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
+        @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
+        @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
+
+    /**
+     * @see InfrastructureClient#cloneAndAssociateLogicServer(UcsRackDto, LogicServerDto,
+     *      OrganizationDto, String, String)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> cloneAndAssociateLogicServer(
+        @EndpointLink("ls-associateclone") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer,
         @BinderParam(BindOrganizationParameters.class) OrganizationDto organization,
         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
@@ -427,8 +454,8 @@ public interface InfrastructureAsyncClient
     /**
      * @see InfrastructureClient#dissociateLogicServer(UcsRackDto, LogicServerDto)
      */
-    @POST
     @EnterpriseEdition
+    @POST
     ListenableFuture<Void> dissociateLogicServer(
         @EndpointLink("ls-dissociate") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
@@ -441,6 +468,17 @@ public interface InfrastructureAsyncClient
     ListenableFuture<Void> deleteLogicServer(
         @EndpointLink("ls-delete") @BinderParam(BindToPath.class) UcsRackDto rack,
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
+
+    /**
+     * @see InfrastructureClient#listFsms(UcsRackDto, String)
+     */
+    @EnterpriseEdition
+    @GET
+    @Consumes(FsmsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<FsmsDto> listFsms(
+        @EndpointLink("fsm") @BinderParam(BindToPath.class) UcsRackDto rack,
+        @QueryParam("dn") String dn);
 
     /*********************** Remote Service ***********************/
 
@@ -559,6 +597,62 @@ public interface InfrastructureAsyncClient
     @DELETE
     ListenableFuture<Void> deleteMachine(
         @EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /*********************** Blade ***********************/
+
+    /**
+     * @see InfrastructureClient#powerOff(MachineDto)
+     */
+    @EnterpriseEdition
+    @PUT
+    ListenableFuture<Void> powerOff(
+        @EndpointLink("poweroff") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#powerOn(MachineDto)
+     */
+    @EnterpriseEdition
+    @PUT
+    ListenableFuture<Void> powerOn(
+        @EndpointLink("poweron") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#getLogicServer(MachineDto)
+     */
+    @EnterpriseEdition
+    @GET
+    @Consumes(LogicServerDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<LogicServerDto> getLogicServer(
+        @EndpointLink("logicserver") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#ledOn(MachineDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> ledOn(
+        @EndpointLink("ledon") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#ledOff(MachineDto)
+     */
+    @EnterpriseEdition
+    @POST
+    ListenableFuture<Void> ledOff(
+        @EndpointLink("ledoff") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureClient#getLedLocator(MachineDto)
+     */
+    @EnterpriseEdition
+    @GET
+    @Consumes(BladeLocatorLedDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<BladeLocatorLedDto> getLocatorLed(
+        @EndpointLink("led") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /*********************** Storage Device ***********************/
 
     /**
      * @see InfrastructureClient#listVirtualMachinesByMachine(MachineDto)

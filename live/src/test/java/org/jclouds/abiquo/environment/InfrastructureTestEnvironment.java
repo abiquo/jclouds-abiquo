@@ -40,6 +40,7 @@ import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Datastore;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
+import org.jclouds.abiquo.domain.infrastructure.ManagedRack;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
@@ -116,6 +117,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public Role anotherRole;
 
+    public ManagedRack ucsRack;
+
     public InfrastructureTestEnvironment(final AbiquoContext context)
     {
         super();
@@ -159,6 +162,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         deleteStoragePool();
         deleteStorageDevice();
         deleteMachine();
+        deleteUcsRack();
         deleteRack();
         deleteDatacenter();
         deleteEnterprise();
@@ -217,6 +221,21 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         rack = Rack.builder(context, datacenter).name(PREFIX + "Aloha").build();
         rack.save();
         assertNotNull(rack.getId());
+    }
+
+    public void createUcsRack()
+    {
+        String ip = Config.get("abiquo.ucs.address");
+        Integer port = Integer.parseInt(Config.get("abiquo.ucs.port"));
+        String user = Config.get("abiquo.ucs.user");
+        String pass = Config.get("abiquo.ucs.pass");
+
+        ucsRack =
+            ManagedRack.builder(context, datacenter).ipAddress(ip).port(port).user(user)
+                .name("ucs rack").password(pass).build();
+
+        ucsRack.save();
+        assertNotNull(ucsRack.getId());
     }
 
     protected void createStorageDevice()
@@ -384,6 +403,16 @@ public class InfrastructureTestEnvironment implements TestEnvironment
             Integer idRack = rack.getId();
             rack.delete();
             assertNull(infrastructureClient.getRack(datacenter.unwrap(), idRack));
+        }
+    }
+
+    protected void deleteUcsRack()
+    {
+        if (ucsRack != null && datacenter != null)
+        {
+            Integer idRack = ucsRack.getId();
+            ucsRack.delete();
+            assertNull(infrastructureClient.getManagedRack(datacenter.unwrap(), idRack));
         }
     }
 
