@@ -196,6 +196,9 @@ public class EnterpriseResources
         templateList.setId(1);
         templateList.addLink(new RESTLink("edit",
             "http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1"));
+        templateList
+            .addLink(new RESTLink("actions/repositoryStatus",
+                "http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1/actions/repositoryStatus"));
         return templateList;
     }
 
@@ -236,6 +239,9 @@ public class EnterpriseResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<templateDefinitionList>");
         buffer.append(link("/admin/enterprises/1/appslib/templateDefinitionLists/1", "edit"));
+        buffer.append(link(
+            "/admin/enterprises/1/appslib/templateDefinitionLists/1/actions/repositoryStatus",
+            "actions/repositoryStatus"));
         buffer.append("<id>1</id>");
         buffer.append("<name>myList</name>");
         buffer.append("<url>http://virtualapp-repository.com/vapp1.ovf</url>");
