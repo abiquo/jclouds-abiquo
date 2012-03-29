@@ -25,6 +25,7 @@ import org.jclouds.abiquo.domain.enterprise.options.EnterpriseOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.appliancemanager.transport.TemplatesStateDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
@@ -325,4 +326,14 @@ public interface EnterpriseClient
      */
     TemplateDefinitionListDto getTemplateDefinitionList(final EnterpriseDto enterprise,
         final Integer templateListId);
+
+    /**
+     * Get the list of status of a template definition list in a datacenter.
+     * 
+     * @param templateList The template definition list.
+     * @param datacenter The given datacenter.
+     * @return The list of states.
+     */
+    TemplatesStateDto listTemplateListStatus(TemplateDefinitionListDto templateList,
+        DatacenterDto datacenter);
 }
