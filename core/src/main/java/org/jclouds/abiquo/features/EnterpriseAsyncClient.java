@@ -397,6 +397,6 @@ public interface EnterpriseAsyncClient
     @Consumes(TemplatesStateDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<TemplatesStateDto> listTemplateListStatus(
-        @EndpointLink("actions/repositoryStatus") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList,
+        @EndpointLink("repositoryStatus") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList,
         @QueryParam("datacenterId") @ParamParser(ParseDatacenterId.class) DatacenterDto datacenter);
 }
