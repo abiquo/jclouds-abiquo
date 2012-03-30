@@ -190,11 +190,11 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
         assertNull(env.virtualDatacenter.getHardDisk(id));
     }
 
-    public void testUpdateForcingLimits()
-    {
-        env.virtualMachine.setCpu(100);
-        AsyncTask task = env.virtualMachine.update(true);
-        assertNull(task);
-        assertEquals(env.virtualMachine.getCpu(), 100);
-    }
+//    public void testUpdateForcingLimits()
+//    {
+//        env.virtualMachine.setCpu(100);
+//        AsyncTask task = env.virtualMachine.update(true);
+//        assertNull(task);
+//        assertEquals(env.virtualMachine.getCpu(), 100);
+//    }
 }
