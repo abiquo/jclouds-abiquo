@@ -45,6 +45,7 @@ import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
@@ -106,7 +107,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
+@RequestFilters( {AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/cloud")
 public interface CloudAsyncClient
 {
@@ -505,6 +506,17 @@ public interface CloudAsyncClient
     @Produces(VirtualMachineDto.BASE_MEDIA_TYPE)
     ListenableFuture<AcceptedRequestDto<String>> updateVirtualMachine(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine);
+
+    /**
+     * @see CloudClient#updateVirtualMachine(VirtualMachineDto, VirtualMachineOptions)
+     */
+    @PUT
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineDto.BASE_MEDIA_TYPE)
+    ListenableFuture<AcceptedRequestDto<String>> updateVirtualMachine(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine,
+        @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options);
 
     /**
      * @see CloudClient#changeVirtualMachineState(VirtualMachineDto, VirtualMachineStateDto)

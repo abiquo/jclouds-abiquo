@@ -28,6 +28,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
@@ -106,14 +107,22 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient()
-                .createVirtualMachine(virtualAppliance.unwrap(), target);
+            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
+                target);
     }
 
     public AsyncTask update()
     {
         AcceptedRequestDto<String> taskRef =
             context.getApi().getCloudClient().updateVirtualMachine(target);
+        return taskRef == null ? null : getTask(taskRef);
+    }
+
+    public AsyncTask update(final boolean force)
+    {
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getCloudClient().updateVirtualMachine(target,
+                VirtualMachineOptions.builder().force(force).build());
         return taskRef == null ? null : getTask(taskRef);
     }
 
@@ -141,8 +150,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     // Parent access
 
     /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrieveaVirtualAppliance"
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrieveaVirtualAppliance"
      *      > http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#
      *      VirtualApplianceResource-RetrieveaVirtualAppliance</a>
      */
@@ -156,15 +164,14 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
         ParseXMLWithJAXB<VirtualApplianceDto> parser =
-            new ParseXMLWithJAXB<VirtualApplianceDto>(utils.getXml(),
-                TypeLiteral.get(VirtualApplianceDto.class));
+            new ParseXMLWithJAXB<VirtualApplianceDto>(utils.getXml(), TypeLiteral
+                .get(VirtualApplianceDto.class));
 
         return wrap(context, VirtualAppliance.class, parser.apply(response));
     }
 
     /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter"
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter"
      *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
      *      VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
      */
@@ -177,8 +184,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise"
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise"
      *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
      *      RetrieveaEnterprise</a>
      */
@@ -388,16 +394,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP"
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP"
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusinganinternalIP</a>
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP"
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP"
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusinganexternalIP</a>
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP"
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP"
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusingapublicIP</a>
      */
@@ -409,8 +412,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork"
+     * @see API: <a href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork"
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusinganUnmanagedNetwork</a>
      */
@@ -436,11 +438,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private final AbiquoContext context;
 
         private VirtualAppliance virtualAppliance;
 
-        private VirtualMachineTemplate template;
+        private final VirtualMachineTemplate template;
 
         private String name;
 
@@ -581,10 +583,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
-                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
-                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
+                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+                .vncAddress(in.getVncAddress()).vncPort(in.getVncPort()).idState(in.getIdState())
+                .idType(in.getIdType()).password(in.getPassword());
         }
     }
 

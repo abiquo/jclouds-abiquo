@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -429,6 +430,16 @@ public interface CloudClient
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
     AcceptedRequestDto<String> updateVirtualMachine(VirtualMachineDto virtualMachine);
+
+    /**
+     * Updates an existing virtual machine from the given virtual appliance.
+     * 
+     * @param virtualMachine The new attributes for the virtual machine.
+     * @param options The update options.
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
+    AcceptedRequestDto<String> updateVirtualMachine(VirtualMachineDto virtualMachine,
+        VirtualMachineOptions options);
 
     /**
      * Changes the state an existing virtual machine.
