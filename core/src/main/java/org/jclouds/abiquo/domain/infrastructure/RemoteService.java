@@ -31,7 +31,8 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 
 /**
- * Adds high level functionality to {@link RemoteServiceDto}.
+ * Adds high level functionality to {@link RemoteServiceDto}. The Remote Service resource offers the
+ * functionality of managing the remote services of a datacenter in a logical way.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat

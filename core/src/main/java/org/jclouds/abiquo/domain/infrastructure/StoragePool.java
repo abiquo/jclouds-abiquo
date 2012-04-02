@@ -39,12 +39,13 @@ import com.abiquo.server.core.infrastructure.storage.TierDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Adds high level functionality to {@link StoragePoolDto}.
+ * Adds high level functionality to {@link StoragePoolDto}. The Storage Pool Resource allows you to
+ * perform any administrative task for remote pools.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see API: <a href="http://community.abiquo.com/display/ABI20/Storage+Pool+Resource">
- *      http://community.abiquo.com/display/ABI20/Storage+Pool+Resource</a>
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/StoragePoolResource">
+ *      http://community.abiquo.com/display/ABI20/StoragePoolResource</a>
  */
 @EnterpriseEdition
 public class StoragePool extends DomainWrapper<StoragePoolDto>
@@ -68,10 +69,12 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     // Domain operations
 
     /**
+     * Delete the storage pool.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-DeleteaStoragePool"
-     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
-     *      DeleteaStoragePool</a>
+     *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Deleteastoragepool"
+     *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-
+     *      Deleteastoragepool</a>
      */
     public void delete()
     {
@@ -80,10 +83,14 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
+     * Create a storage pool. Create a storage pool means registering an existing storage pool
+     * obtained from {@link StorageDevice#listRemoteStoragePools} method and saving it. The Storage
+     * Pools must be associated with a Tier using {@link #setTier}.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink"
-     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
-     *      CreateaStoragePoolWithaTierLink</a>
+     *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Createastoragepoolwithatierlink"
+     *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-
+     *      Createastoragepoolwithatierlink</a>
      */
     public void save()
     {
@@ -93,6 +100,11 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
+     * Update pool information in the server with the data from this pool. Storage pool parameters
+     * cannot be updated by a user, so the parameters are only a representation of the remote pool.
+     * Although the whole storage pool entity is sent to the API in the update call, the only thing
+     * a user can change is the tier that the pool belongs to by calling {@link #setTier}.
+     * 
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-UpdateaStoragePool"
      *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
@@ -111,10 +123,12 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     }
 
     /**
+     * Define the tier in which the pool will be added.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-CreateaStoragePoolWithaTierLink"
-     *      > http://community.abiquo.com/display/ABI20/Storage+Pool+Resource#StoragePoolResource-
-     *      CreateaStoragePoolWithaTierLink</a>
+     *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Createastoragepoolwithatierlink"
+     *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-
+     *      Createastoragepoolwithatierlink</a>
      */
     public void setTier(final Tier tier)
     {
@@ -127,11 +141,12 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     // Parent access
 
     /**
+     * Get the device where the pool belongs.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource-RetrieveaStorageDevice"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Storage+Device+Resource#StorageDeviceResource
-     *      -RetrieveaStorageDevice</a>
+     *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrieveastoragedevice"
+     *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
+     *      Retrieveastoragedevice</a>
      */
     public StorageDevice getStorageDevice()
     {
@@ -151,6 +166,11 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
     // Children access
 
+    /**
+     * Get the tier assigned to the pool. The storage pool needs to be persisted in Abiquo first.
+     * 
+     * @return The tier assinged to this storage pool.
+     */
     public Tier getTier()
     {
         RESTLink link =

@@ -42,7 +42,8 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * Adds high level functionality to {@link StorageDeviceDto}.
+ * Adds high level functionality to {@link StorageDeviceDto}. The Storage Device Resource offers the
+ * functionality of managing the external storage.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
