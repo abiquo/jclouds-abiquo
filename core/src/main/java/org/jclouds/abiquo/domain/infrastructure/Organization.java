@@ -30,8 +30,8 @@ import com.abiquo.server.core.infrastructure.OrganizationDto;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see API: <a href="http://community.abiquo.com/display/ABI20/Rack+Resource">
- *      http://community.abiquo.com/display/ABI20/Rack+Resource</a>
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/RackResource">
+ *      http://community.abiquo.com/display/ABI20/RackResource</a>
  */
 @EnterpriseEdition
 public class Organization extends DomainWrapper<OrganizationDto>
