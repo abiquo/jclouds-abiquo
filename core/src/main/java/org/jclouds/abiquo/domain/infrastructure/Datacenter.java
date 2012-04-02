@@ -158,6 +158,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Checkthetagavailability"
      *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
      *      Checkthetagavailability</a>
+     * @return Availability state of the tag.
      */
     public VlanTagAvailabilityType checkTagAvailability(final int tag)
     {
@@ -176,6 +177,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofRacks"
      *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
      *      RetrievealistofRacks</a>
+     * @return List of unmanaged racks in this datacenter.
      */
     public List<Rack> listRacks()
     {
@@ -191,6 +193,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofRacks"
      *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
      *      RetrievealistofRacks</a>
+     * @return Filtered list of unmanaged racks in this datacenter.
      */
     public List<Rack> listRacks(final Predicate<Rack> filter)
     {
@@ -206,6 +209,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofRacks"
      *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
      *      RetrievealistofRacks</a>
+     * @return First unmanaged rack matching the filter or <code>null</code> if the is none.
      */
     public Rack findRack(final Predicate<Rack> filter)
     {
@@ -219,6 +223,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaRack" >
      *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaRack</a>
+     * @return Unmanaged rack with the given id or <code>null</code> if it does not exist.
      */
     public Rack getRack(final Integer id)
     {
@@ -233,6 +238,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
      *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
      *      RetrievealistofUCSracks</a>
+     * @return List of managed racks in this datacenter.
      */
     @EnterpriseEdition
     public List<ManagedRack> listManagedRacks()
@@ -249,6 +255,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
      *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
      *      RetrievealistofUCSracks</a>
+     * @return Filtered list of managed racks in this datacenter.
      */
     @EnterpriseEdition
     public List<ManagedRack> listManagedRacks(final Predicate<ManagedRack> filter)
@@ -265,6 +272,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrievealistofUCSracks"
      *      > http://community.abiquo.com/display/ABI20/RackResource#RackResource-
      *      RetrievealistofUCSracks</a>
+     * @return First managed rack matching the filter or <code>null</code> if there is none.
      */
     @EnterpriseEdition
     public ManagedRack findManagedRack(final Predicate<ManagedRack> filter)
@@ -279,6 +287,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack" >
      *      http://community.abiquo.com/display/ABI20/RackResource#RackResource-RetrieveaUCSRack</a>
+     * @return Unmanaged rack with the given id or <code>null</code> if it does not exist.
      */
     @EnterpriseEdition
     public ManagedRack getManagedRack(final Integer id)
@@ -294,6 +303,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrievethelistofstoragedevices"
      *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
      *      Retrievethelistofstoragedevices</a>
+     * @return List of storage devices in this datacenter.
      */
     @EnterpriseEdition
     public List<StorageDevice> listStorageDevices()
@@ -311,6 +321,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrievethelistofstoragedevices"
      *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
      *      Retrievethelistofstoragedevices</a>
+     * @return Filtered list of storage devices in this datacenter.
      */
     @EnterpriseEdition
     public List<StorageDevice> listStorageDevices(final Predicate<StorageDevice> filter)
@@ -327,6 +338,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrievethelistofstoragedevices"
      *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
      *      Retrievethelistofstoragedevices</a>
+     * @return First storage device matching the filter or <code>null</code> if there is none.
      */
     @EnterpriseEdition
     public StorageDevice findStorageDevice(final Predicate<StorageDevice> filter)
@@ -342,6 +354,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrieveastoragedevice"
      *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
      *      Retrieveastoragedevice</a>
+     * @return Storage device with the given id or <code>null</code> if it does not exist.
      */
     @EnterpriseEdition
     public StorageDevice getStorageDevice(final Integer id)
@@ -358,6 +371,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-RetrievealistofRemoteServices"
      *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-
      *      RetrievealistofRemoteServices</a>
+     * @return List of remote services in this datacenter.
      */
     public List<RemoteService> listRemoteServices()
     {
@@ -374,6 +388,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-RetrievealistofRemoteServices"
      *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-
      *      RetrievealistofRemoteServices</a>
+     * @return Filtered list of remote services in this datacenter.
      */
     public List<RemoteService> listRemoteServices(final Predicate<RemoteService> filter)
     {
@@ -389,6 +404,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-RetrievealistofRemoteServices"
      *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-
      *      RetrievealistofRemoteServices</a>
+     * @return First remote service matching the filter or <code>null</code> if there is none.
      */
     public RemoteService findRemoteService(final Predicate<RemoteService> filter)
     {
@@ -423,6 +439,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievelimitsbydatacenter"
      *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      Retrievelimitsbydatacenter</a>
+     * @return List of datacenter limits by all enterprises.
      */
     public List<Limits> listLimits()
     {
@@ -440,6 +457,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievelimitsbydatacenter"
      *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      Retrievelimitsbydatacenter</a>
+     * @return Filtered list of datacenter limits by all enterprises.
      */
     public List<Limits> listLimits(final Predicate<Limits> filter)
     {
@@ -456,6 +474,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievelimitsbydatacenter"
      *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      Retrievelimitsbydatacenter</a>
+     * @return First datacenter limits matching the filter or <code>null</code> if there is none.
      */
     public Limits findLimits(final Predicate<Limits> filter)
     {
@@ -463,12 +482,14 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * Retrieve the list of tiers of this datacenter.
+     * Retrieve the list of tiers in ths datacenter.
      * 
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/TierResource#TierResource-Retrievethelistoftiers"
-     *      > http://community.abiquo.com/display/ABI20/TierResource#TierResource-
-     *      Retrievethelistoftiers</a>
+     *      >
+     *      http://community.abiquo.com/display/ABI20/TierResource#TierResource-Retrievethelistoftiers
+     *      </a>
+     * @return List of tiers in this datacenter.
      */
     @EnterpriseEdition
     public List<Tier> listTiers()
@@ -483,8 +504,10 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @param filter Filter to be applied to the list.
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/TierResource#TierResource-Retrievethelistoftiers"
-     *      > http://community.abiquo.com/display/ABI20/TierResource#TierResource-
-     *      Retrievethelistoftiers</a>
+     *      >
+     *      http://community.abiquo.com/display/ABI20/TierResource#TierResource-Retrievethelistoftiers
+     *      </a>
+     * @return Filtered list of tiers in this datacenter.
      */
     @EnterpriseEdition
     public List<Tier> listTiers(final Predicate<Tier> filter)
@@ -493,13 +516,14 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
-     * Retrieve the first tier matching the filter within the list of tiers.
+     * Retrieve the first tier matching the filter within the list of tiers in this datacenter.
      * 
      * @param filter Filter to be applied to the list.
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/TierResource#TierResource-Retrievethelistoftiers"
-     *      > http://community.abiquo.com/display/ABI20/TierResource#TierResource-
-     *      Retrievethelistoftiers</a>
+     *      "http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-Retrievethelistofstoragedevices"
+     *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#StorageDeviceResource-
+     *      Retrievethelistofstoragedevices</a>
+     * @return First tier matching the filter or <code>null</code> if there is none.
      */
     @EnterpriseEdition
     public Tier findTier(final Predicate<Tier> filter)
@@ -514,6 +538,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
      *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
      *      Getthelistofpublicnetworks</a>
+     * @return List of public, external and unmanaged networks in this datacenter.
      */
     public List<Network> listNetworks()
     {
@@ -543,6 +568,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
      *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
      *      Getthelistofpublicnetworks</a>
+     * @return Filtered list of public, external and unmanaged networks in this datacenter.
      */
     public Network findNetwork(final Predicate<Network> filter)
     {
@@ -557,6 +583,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
      *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
      *      Getthelistofpublicnetworks</a>
+     * @return List of networks of this datacenter matching the given type.
      */
     public List<Network> listNetworks(final NetworkType type)
     {
@@ -575,6 +602,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
      *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
      *      Getthelistofpublicnetworks</a>
+     * @return Filtered list of networks of this datacenter matching the given type.
      */
     public List<Network> listNetworks(final NetworkType type, final Predicate<Network> filter)
     {
@@ -590,6 +618,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
      *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
      *      Getthelistofpublicnetworks</a>
+     * @return First network of the given type matching the filter or <code>null</code> if there is
+     *         none.
      */
     public Network findNetwork(final NetworkType type, final Predicate<Network> filter)
     {
@@ -608,6 +638,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-Getthelistofpublicnetworks"
      *      > http://community.abiquo.com/display/ABI20/StorageDeviceResource#PublicNetworkResource#
      *      PublicNetworkResource-Getthelistofpublicnetworks</a>
+     * @return Network with the given id or <code>null</code> if it does not exist.
      */
     public Network getNetwork(final Integer id)
     {
@@ -625,6 +656,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrievethehypervisortypefromremotemachine"
      *      http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      Retrievethehypervisortypefromremotemachine</a>
+     * @return Hypervisor type of the remote machine.
+     * @throws Exception If the hypervisor type information cannot be retrieved.
      */
     public HypervisorType getHypervisorType(final String ip)
     {
@@ -644,6 +677,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveavailablehypervisortypes"
      *      http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      Retrieveavailablehypervisortypes</a>
+     * @return List of available hypervisor types in the datacenter.
      */
     @EnterpriseEdition
     public List<HypervisorType> listAvailableHypervisors()
@@ -662,6 +696,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveavailablehypervisortypes"
      *      http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      Retrieveavailablehypervisortypes</a>
+     * @return Filtered list of available hypervisor types in the datacenter.
      */
     @EnterpriseEdition
     public List<HypervisorType> listAvailableHypervisors(final Predicate<HypervisorType> filter)
@@ -677,6 +712,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveavailablehypervisortypes"
      *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
      *      Retrieveavailablehypervisortypes</a>
+     * @return First hypervisor type matching the filter or <code>null</code> if there is none.
      */
     @EnterpriseEdition
     public HypervisorType findHypervisor(final Predicate<HypervisorType> filter)
@@ -815,6 +851,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates"
      *      > http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#
      *      VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates</a>
+     * @return List of virtual machine templates in the repository of this datacenter.
      */
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise)
     {
@@ -833,6 +870,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates"
      *      > http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#
      *      VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates</a>
+     * @return Filtered list of virtual machine templates in the repository of this datacenter.
      */
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise,
         final Predicate<VirtualMachineTemplate> filter)
@@ -850,6 +888,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates"
      *      > http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#
      *      VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates</a>
+     * @return First virtual machine template matching the filter or <code>null</code> if there is
+     *         none.
      */
     public VirtualMachineTemplate findTemplateInRepository(final Enterprise enterprise,
         final Predicate<VirtualMachineTemplate> filter)
@@ -866,6 +906,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      "http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates"
      *      > http://community.abiquo.com/display/ABI20/VirtualMachineTemplateResource#
      *      VirtualMachineTemplateResource-Retrieveallvirtualmachinetemplates</a>
+     * @return Virtual machine template with the given id in the given enterpriess or
+     *         <code>null</code> if it does not exist.
      */
     public VirtualMachineTemplate getTemplateInRepository(final Enterprise enterprise,
         final Integer id)

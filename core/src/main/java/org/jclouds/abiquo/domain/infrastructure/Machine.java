@@ -49,8 +49,8 @@ import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
 
 /**
- * Adds high level functionality to {@link MachineDto}. It defines domain methods for unmanaged
- * physical machines.
+ * Adds high level functionality to {@link MachineDto}. This resource allows you to manage physical
+ * machines in the cloud infrastructure.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat

@@ -31,7 +31,8 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 
 /**
- * Adds high level functionality to {@link RemoteServiceDto}.
+ * Adds high level functionality to {@link RemoteServiceDto}. The Remote Service resource offers the
+ * functionality of managing the remote services of a datacenter in a logical way.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -55,11 +56,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
+     * Delete the remote service.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-DeleteaRemoteService"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
-     *      -DeleteaRemoteService</a>
+     *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-DeleteaRemoteService"
+     *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-
+     *      DeleteaRemoteService</a>
      */
     public void delete()
     {
@@ -68,11 +70,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
+     * Create the remote service.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CreateanewRemoteService"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
-     *      -CreateanewRemoteService</a>
+     *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-CreateaRemoteService"
+     *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-
+     *      CreateaRemoteService</a>
      */
     public void save()
     {
@@ -82,11 +85,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
+     * Update remote service information in the server with the data from this remote service.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-UpdateanexistingRemoteService"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
-     *      -UpdateanexistingRemoteService</a>
+     *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-UpdateanexistingRemoteService"
+     *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-
+     *      UpdateanexistingRemoteService</a>
      */
     public void update()
     {
@@ -94,11 +98,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     }
 
     /**
+     * Check remote service availability.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource-CheckthestatusofaRemoteService"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Remote+Service+Resource#RemoteServiceResource
-     *      -CheckthestatusofaRemoteService</a>
+     *      "http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-CheckthestatusofaRemoteService"
+     *      > http://community.abiquo.com/display/ABI20/RemoteServiceResource#RemoteServiceResource-
+     *      CheckthestatusofaRemoteService</a>
      */
     public boolean isAvailable()
     {
@@ -110,10 +115,12 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     // Parent access
 
     /**
+     * Retrieve the datacenter using this remotes service.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      RetrieveaDatacenter</a>
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveadatacenter"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveadatacenter</a>
      */
     public Datacenter getDatacenter()
     {

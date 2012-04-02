@@ -36,7 +36,8 @@ import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Adds high level functionality to a {@link MachineDto} managed in a UCS rack.
+ * Adds high level functionality to a {@link MachineDto} managed in a UCS rack. This resource allows
+ * you to access blades in managed racks in the cloud infrastructure.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat

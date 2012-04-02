@@ -61,8 +61,8 @@ import com.google.common.collect.Lists;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see API: <a href="http://community.abiquo.com/display/ABI20/Enterprise+Resource">
- *      http://community.abiquo.com/display/ABI20/Enterprise+Resource</a>
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/EnterpriseResource">
+ *      http://community.abiquo.com/display/ABI20/EnterpriseResource</a>
  */
 public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 {
@@ -80,9 +80,11 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     // Domain operations
 
     /**
+     * Delete the enterprise.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-DeleteanexistingEnterprise"
-     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-DeleteanexistingEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
      *      DeleteanexistingEnterprise</a>
      */
     public void delete()
@@ -92,10 +94,12 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
+     * Create a new enterprise in Abiquo.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-CreateanewEnterprise"
-     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
-     *      CreateanewEnterprise</a>
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-CreatesanewEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      CreatesanewEnterprise</a>
      */
     public void save()
     {
@@ -103,10 +107,12 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
+     * Update emterprise information in the server with the data from this enterprise.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-UpdatesanexistingEnterprise"
-     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
-     *      UpdatesanexistingEnterprise</a>
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-Updateanexistingenterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      Updateanexistingenterprise</a>
      */
     public void update()
     {

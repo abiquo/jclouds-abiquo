@@ -36,7 +36,10 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 
 /**
- * Adds high level functionality to {@link TierDto}.
+ * Adds high level functionality to {@link TierDto}. The Tier Resource offers the functionality of
+ * managing the logic of QoS volume management. These are only logical levels of QoS and the real
+ * QoS (networking speed, volume replication, availability) must be configured manually in the
+ * infrastructure.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -60,15 +63,26 @@ public class Tier extends DomainWrapper<TierDto>
     // Domain operations
 
     /**
+     * Update tier information in the server with the data from this tier.
+     * 
      * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-UpdateaTier">
-     *      http://community.abiquo.com/display/ABI20/Tier+Resource#TierResource-UpdateaTier</a>
+     *      href="http://community.abiquo.com/display/ABI20/TierResource#TierResource-Updateatier">
+     *      http://community.abiquo.com/display/ABI20/TierResource#TierResource-Updateatier</a>
      */
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateTier(target);
     }
 
+    /**
+     * Retrieve the list of storage pools in this tier.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
+     *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-
+     *      Retrievestoragepools</a>
+     * @return List of storage pools in this tier.
+     */
     public List<StoragePool> listStoragePools()
     {
         StoragePoolsDto storagePools =
@@ -76,11 +90,31 @@ public class Tier extends DomainWrapper<TierDto>
         return wrap(context, StoragePool.class, storagePools.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of storage pools in this tier.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
+     *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-
+     *      Retrievestoragepools</a>
+     * @return Filtered list of storage pools in this tier.
+     */
     public List<StoragePool> listStoragePools(final Predicate<StoragePool> filter)
     {
         return Lists.newLinkedList(filter(listStoragePools(), filter));
     }
 
+    /**
+     * Retrieve the first storage pool matching the filter within the list of pools in this tier.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-Retrievestoragepools"
+     *      > http://community.abiquo.com/display/ABI20/StoragePoolResource#StoragePoolResource-
+     *      Retrievestoragepools</a>
+     * @return First storage pool matching the filter or <code>null</code> if there is none.
+     */
     public StoragePool findStoragePool(final Predicate<StoragePool> filter)
     {
         return Iterables.getFirst(filter(listStoragePools(), filter), null);
@@ -89,10 +123,12 @@ public class Tier extends DomainWrapper<TierDto>
     // Parent access
 
     /**
+     * Retrieve the datacenter where this tier is.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-RetrieveaDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Resource#DatacenterResource-
-     *      RetrieveaDatacenter</a>
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Retrieveadatacenter"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Retrieveadatacenter</a>
      */
     public Datacenter getDatacenter()
     {
