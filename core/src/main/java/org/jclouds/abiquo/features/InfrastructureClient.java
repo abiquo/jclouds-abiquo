@@ -205,6 +205,35 @@ public interface InfrastructureClient
      */
     DatacentersLimitsDto listLimits(DatacenterDto datacenter);
 
+    /**
+     * Check the state of a remote machine. This machine does not need to be managed by Abiquo.
+     * 
+     * @param datacenter The datacenter.
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @return The physical machine state information.
+     */
+    MachineStateDto checkMachineState(DatacenterDto datacenter, String ip,
+        HypervisorType hypervisorType, String user, String password);
+
+    /**
+     * Check the state of a remote machine. This machine does not need to be managed by Abiquo.
+     * 
+     * @param datacenter The datacenter.
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param hypervisorType Kind of hypervisor we want to connect. Valid values are {vbox, kvm,
+     *            xen-3, vmx-04, hyperv-301, xenserver}.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @param options Optional query params.
+     * @return The physical machine state information.
+     */
+    MachineStateDto checkMachineState(DatacenterDto datacenter, String ip,
+        HypervisorType hypervisorType, String user, String password, MachineOptions options);
+
     /*********************** Hypervisor ***********************/
 
     /**

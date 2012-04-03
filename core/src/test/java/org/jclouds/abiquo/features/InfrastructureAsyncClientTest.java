@@ -987,6 +987,58 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testCheckMachineStateWithoutOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("checkMachineState", DatacenterDto.class,
+                String.class, HypervisorType.class, String.class, String.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
+                HypervisorType.XENSERVER, "user", "pass");
+
+        String baseUrl = "http://localhost/api/admin/datacenters/1/action/checkmachinestate";
+        String query = "hypervisor=XENSERVER&ip=10.60.1.222&user=user&password=pass";
+        String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
+
+        assertRequestLineEquals(request, expectedRequest);
+        assertNonPayloadHeadersEqual(request, "Accept: " + MachineStateDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
+
+        checkFilters(request);
+    }
+
+    public void testCheckMachineStateAllParams() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("checkMachineState", DatacenterDto.class,
+                String.class, HypervisorType.class, String.class, String.class,
+                MachineOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
+                HypervisorType.XENSERVER, "user", "pass", MachineOptions.builder().port(8889)
+                    .build());
+
+        String baseUrl = "http://localhost/api/admin/datacenters/1/action/checkmachinestate";
+        String query = "hypervisor=XENSERVER&ip=10.60.1.222&user=user&password=pass&port=8889";
+        String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
+
+        assertRequestLineEquals(request, expectedRequest);
+        assertNonPayloadHeadersEqual(request, "Accept: " + MachineStateDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
+
+        checkFilters(request);
+    }
+
     public void testListMachines() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncClient.class.getMethod("listMachines", RackDto.class);

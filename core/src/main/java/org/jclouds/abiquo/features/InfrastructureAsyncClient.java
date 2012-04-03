@@ -222,8 +222,34 @@ public interface InfrastructureAsyncClient
     ListenableFuture<DatacentersLimitsDto> listLimits(
         @EndpointLink("getLimits") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
-    /*********************** Hypervisor ***********************/
+    /**
+     * @see InfrastructureClient#checkMachineState(DatacenterDto, String, String, HypervisorType,
+     *      String, String)
+     */
+    @GET
+    @Consumes(MachineStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
+    ListenableFuture<MachineStateDto> checkMachineState(
+        @EndpointLink("checkmachinestate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
+        @QueryParam("user") String user, @QueryParam("password") String password);
 
+    /**
+     * @see InfrastructureClient#checkMachineState(DatacenterDto, String, String, HypervisorType,
+     *      String, String, MachineOptions)
+     */
+    @GET
+    @Consumes(MachineStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
+    ListenableFuture<MachineStateDto> checkMachineState(
+        @EndpointLink("checkmachinestate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
+        @QueryParam("user") String user, @QueryParam("password") String password,
+        @BinderParam(AppendOptionsToPath.class) MachineOptions options);
+
+    /*********************** Hypervisor ***********************/
     /**
      * @see InfrastructureClient#getHypervisorTypeFromMachine(DatacenterDto, DatacenterOptions)
      */
