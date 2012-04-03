@@ -98,6 +98,21 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(machine.getState(), state);
     }
 
+    public void testCheckFromDatacenter()
+    {
+        String ip = Config.get("abiquo.hypervisor.address");
+        HypervisorType type = HypervisorType.valueOf(Config.get("abiquo.hypervisor.type"));
+        String user = Config.get("abiquo.hypervisor.user");
+        String pass = Config.get("abiquo.hypervisor.pass");
+
+        MachineState state = env.datacenter.checkMachineState(ip, type, user, pass);
+
+        // Recover the same machine and compare states
+        MachineDto machine =
+            env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
+        assertEquals(machine.getState(), state);
+    }
+
     public void testFindDatastore()
     {
         Datastore datastore = env.machine.getDatastores().get(0);
