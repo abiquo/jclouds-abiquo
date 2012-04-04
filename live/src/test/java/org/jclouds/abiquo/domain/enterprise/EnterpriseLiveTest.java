@@ -30,6 +30,8 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.Enterprise.Builder;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
@@ -175,6 +177,19 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
         assertTrue(allowed.isEmpty());
 
         env.enterprise.allowDatacenter(env.datacenter);
+    }
+
+    public void testListVirtualMachines()
+    {
+        List<VirtualMachine> machines = env.defaultEnterprise.listVirtualMachines();
+        assertTrue(machines.size() > 0);
+
+    }
+
+    public void testListVirtualAppliances()
+    {
+        List<VirtualAppliance> vapps = env.defaultEnterprise.listVirtualAppliances();
+        assertTrue(vapps.size() > 0);
     }
 
     private void tearDownLimits()

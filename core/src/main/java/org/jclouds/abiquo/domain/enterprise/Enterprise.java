@@ -26,6 +26,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
@@ -41,6 +42,7 @@ import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
+import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
@@ -122,10 +124,13 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     // Children access
 
     /**
+     * Retrieve the list of virtual datacenters by this enterprise.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrievealistofVirtualDatacenters"
-     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
-     *      VirtualDatacenterResource-RetrievealistofVirtualDatacenters</a>
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvitualdatacentersbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievealistofvitualdatacentersbyanEnterprise</a>
+     * @return List of virtual datacenters in this enterprise.
      */
     public List<VirtualDatacenter> listVirtualDatacenters()
     {
@@ -134,11 +139,32 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return wrap(context, VirtualDatacenter.class, dto.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of virtual datacenters by this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvitualdatacentersbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievealistofvitualdatacentersbyanEnterprise</a>
+     * @return Filtered list of virtual datacenters in this enterprise.
+     */
     public List<VirtualDatacenter> listVirtualDatacenters(final Predicate<VirtualDatacenter> filter)
     {
         return Lists.newLinkedList(filter(listVirtualDatacenters(), filter));
     }
 
+    /**
+     * Retrieve a the first virtual datacenter matching the filter within the list of virtual
+     * datacenters by this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvitualdatacentersbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievealistofvitualdatacentersbyanEnterprise</a>
+     * @return First virtual datacenter matching the filter or <code>null</code> if the is none.
+     */
     public VirtualDatacenter findVirtualDatacenter(final Predicate<VirtualDatacenter> filter)
     {
         return Iterables.getFirst(filter(listVirtualDatacenters(), filter), null);
@@ -151,6 +177,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrievealltemplatedefinitionlists"
      *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
      *      TemplateDefinitionListResource-Retrievealltemplatedefinitionlists</a>
+     * @return List of template definition lists of the enterprise.
      */
     public List<TemplateDefinitionList> listTemplateDefinitionLists()
     {
@@ -167,6 +194,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrievealltemplatedefinitionlists"
      *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
      *      TemplateDefinitionListResource-Retrievealltemplatedefinitionlists</a>
+     * @return Filtered list of template definition lists of the enterprise.
      */
     public List<TemplateDefinitionList> listTemplateDefinitionLists(
         final Predicate<TemplateDefinitionList> filter)
@@ -182,6 +210,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrievealltemplatedefinitionlists"
      *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
      *      TemplateDefinitionListResource-Retrievealltemplatedefinitionlists</a>
+     * @return First template definition list matching the filter or <code>null</code> if the is
+     *         none.
      */
     public TemplateDefinitionList findTemplateDefinitionList(
         final Predicate<TemplateDefinitionList> filter)
@@ -190,13 +220,14 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * Retrieve a template definition list.
+     * Retrieve a single template definition list.
      * 
      * @param id Unique ID of the template definition list for this enterprise.
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#TemplateDefinitionListResource-Retrieveatemplatedefinitionlist"
      *      > http://community.abiquo.com/display/ABI20/TemplateDefinitionListResource#
      *      TemplateDefinitionListResource-Retrieveatemplatedefinitionlist</a>
+     * @return Template definition with the given id or <code>null</code> if it does not exist.
      */
     public TemplateDefinitionList getTemplateDefinitionList(final Integer id)
     {
@@ -206,11 +237,13 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
+     * Retrieve the list of datacenter limits by enterprise.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#DatacenterLimitsResource-Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise"
-     *      > http://community.abiquo.com/display/ABI20/Datacenter+Limits+Resource#
-     *      DatacenterLimitsResource
-     *      -Retrievethelistofallocationlimitsinaallthedatacentersforacertainenterprise</a>
+     *      "http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#DatacenterLimitsResource-Retrievelimitsbyenterprise"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#
+     *      DatacenterLimitsResource-Retrievelimitsbyenterprise</a>
+     * @return List of datacenter limits by enterprise.
      */
     public List<Limits> listLimits()
     {
@@ -218,22 +251,46 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return wrap(context, Limits.class, dto.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of datacenter limits by enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#DatacenterLimitsResource-Retrievelimitsbyenterprise"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#
+     *      DatacenterLimitsResource-Retrievelimitsbyenterprise</a>
+     * @return Filtered list of datacenter limits by enterprise.
+     */
     public List<Limits> listLimits(final Predicate<Limits> filter)
     {
         return Lists.newLinkedList(filter(listLimits(), filter));
     }
 
+    /**
+     * Retrieve the first datacenter limits matching the filter within the list of datacenter limits
+     * by enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#DatacenterLimitsResource-Retrievelimitsbyenterprise"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterLimitsResource#
+     *      DatacenterLimitsResource-Retrievelimitsbyenterprise</a>
+     * @return First datacenter limits matching the filter or <code>null</code> if there is none.
+     */
     public Limits findLimits(final Predicate<Limits> filter)
     {
         return Iterables.getFirst(filter(listLimits(), filter), null);
     }
 
     /**
+     * Retrieve the list of users of this enterprise.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers"
+     *      "http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers"
      *      >
-     *      http://community.abiquo.com/display/ABI20/User+resource#Userresource-Retrievealistofusers
+     *      http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers
      *      </a>
+     * @return List of users of this enterprise.
      */
     public List<User> listUsers()
     {
@@ -241,16 +298,47 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return wrap(context, User.class, dto.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of users of this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers
+     *      </a>
+     * @return Filtered list of users of this enterprise.
+     */
     public List<User> listUsers(final Predicate<User> filter)
     {
         return Lists.newLinkedList(filter(listUsers(), filter));
     }
 
+    /**
+     * Retrieve the first user matching the filter within the list of users of this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrievealistofusers
+     *      </a>
+     * @return First user matching the filter or <code>null</code> if there is none.
+     */
     public User findUser(final Predicate<User> filter)
     {
         return Iterables.getFirst(filter(listUsers(), filter), null);
     }
 
+    /**
+     * Retrieve a single user.
+     * 
+     * @param id Unique ID of the user in this enterprise.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrieveauser" >
+     *      http://community.abiquo.com/display/ABI20/UserResource#UserResource-Retrieveauser</a>
+     * @return User with the given id or <code>null</code> if it does not exist.
+     */
     public User getUser(final Integer id)
     {
         UserDto user = context.getApi().getEnterpriseClient().getUser(target, id);
@@ -258,11 +346,9 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles"
-     *      >
-     *      http://community.abiquo.com/display/ABI20/Roles+Resource#RolesResource-Retrievealistofroles
-     *      </a>
+     * Retrieve the list of roles defined by this enterprise.
+     * 
+     * @return List of roles by this enterprise.
      */
     public List<Role> listRoles()
     {
@@ -270,11 +356,24 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return wrap(context, Role.class, dto.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of roles defined by this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @return Filtered list of roles by this enterprise.
+     */
     public List<Role> listRoles(final Predicate<Role> filter)
     {
         return Lists.newLinkedList(filter(listRoles(), filter));
     }
 
+    /**
+     * Retrieve the first role matching the filter within the list of roles defined by this
+     * enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @return First role matching the filter or <code>null</code> if there is none.
+     */
     public Role findRole(final Predicate<Role> filter)
     {
         return Iterables.getFirst(filter(listRoles(), filter), null);
@@ -374,10 +473,60 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
+     * Retrieve the list of virtual appliances by this enterprise.
+     * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrievethelistofvirtualmachinesbyanEnterprise"
-     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
-     *      RetrievethelistofvirtualmachinesbyanEnterprise</a>
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievethelistofvirtualappliancesbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievethelistofvirtualappliancesbyanEnterprise</a>
+     * @return List of virtual appliances by this enterprise.
+     */
+    public List<VirtualAppliance> listVirtualAppliances()
+    {
+        VirtualAppliancesDto virtualAppliances =
+            context.getApi().getEnterpriseClient().listVirtualAppliances(target);
+        return wrap(context, VirtualAppliance.class, virtualAppliances.getCollection());
+    }
+
+    /**
+     * Retrieve a filtered list of virtual appliances by this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievethelistofvirtualappliancesbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievethelistofvirtualappliancesbyanEnterprise</a>
+     * @return Filtered list of virtual appliances by this enterprise.
+     */
+    public List<VirtualAppliance> listVirtualAppliances(final Predicate<VirtualAppliance> filter)
+    {
+        return Lists.newLinkedList(filter(listVirtualAppliances(), filter));
+    }
+
+    /**
+     * Retrieve the first virtual appliance matching the filter within the list of virtual
+     * appliances in this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievethelistofvirtualappliancesbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievethelistofvirtualappliancesbyanEnterprise</a>
+     * @return First virtual machine matching the filter or <code>null</code> if the is none.
+     */
+    public VirtualAppliance findVirtualAppliance(final Predicate<VirtualAppliance> filter)
+    {
+        return Iterables.getFirst(filter(listVirtualAppliances(), filter), null);
+    }
+
+    /**
+     * Retrieve the list of virtual machines by this enterprise.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvirtualmachinesbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievealistofvirtualmachinesbyanEnterprise</a>
+     * @return List of virtual machines by this enterprise.
      */
     public List<VirtualMachine> listVirtualMachines()
     {
@@ -386,11 +535,32 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return wrap(context, VirtualMachine.class, machines.getCollection());
     }
 
+    /**
+     * Retrieve a filtered list of virtual machines by this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvirtualmachinesbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievealistofvirtualmachinesbyanEnterprise</a>
+     * @return Filtered list of virtual machines by this enterprise.
+     */
     public List<VirtualMachine> listVirtualMachines(final Predicate<VirtualMachine> filter)
     {
         return Lists.newLinkedList(filter(listVirtualMachines(), filter));
     }
 
+    /**
+     * Retrieve the first virtual machine matching the filter within the list of virtual machines in
+     * this enterprise.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrievealistofvirtualmachinesbyanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrievealistofvirtualmachinesbyanEnterprise</a>
+     * @return First virtual machine matching the filter or <code>null</code> if the is none.
+     */
     public VirtualMachine findVirtualMachine(final Predicate<VirtualMachine> filter)
     {
         return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
