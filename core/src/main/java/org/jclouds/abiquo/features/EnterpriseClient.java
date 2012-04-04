@@ -28,6 +28,7 @@ import org.jclouds.concurrent.Timeout;
 import com.abiquo.appliancemanager.transport.TemplatesStateDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
+import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
@@ -266,7 +267,15 @@ public interface EnterpriseClient
     @EnterpriseEdition
     VLANNetworksDto listExternalNetworks(EnterpriseDto enterprise);
 
-    /*********************** Virtual Machine ***********************/
+    /*********************** Cloud ***********************/
+
+    /**
+     * Retrieves list of virtual appliances by the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of virtual appliances of the enterprise.
+     */
+    VirtualAppliancesDto listVirtualAppliances(EnterpriseDto enterprise);
 
     /**
      * List virtual machines for the enterprise

@@ -62,6 +62,8 @@ public class EnterpriseResources
             "http://localhost/api/admin/enterprises/1/action/virtualmachines"));
         enterprise.addLink(new RESTLink("cloud/virtualdatacenters",
             "http://localhost/api/admin/enterprises/1/action/virtualdatacenters"));
+        enterprise.addLink(new RESTLink("virtualappliances",
+            "http://localhost/api/admin/enterprises/1/action/virtualappliances"));
         enterprise.addLink(new RESTLink("appslib/templateDefinitionLists",
             "http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists"));
 
@@ -119,6 +121,7 @@ public class EnterpriseResources
         buffer.append(link("/admin/enterprises/1/action/virtualmachines", "virtualmachines"));
         buffer.append(link("/admin/enterprises/1/action/virtualdatacenters",
             "cloud/virtualdatacenters"));
+        buffer.append(link("/admin/enterprises/1/action/virtualappliances", "virtualappliances"));
         buffer.append(link("/admin/enterprises/1/appslib/templateDefinitionLists",
             "appslib/templateDefinitionLists"));
         buffer.append("<cpuHard>0</cpuHard>");

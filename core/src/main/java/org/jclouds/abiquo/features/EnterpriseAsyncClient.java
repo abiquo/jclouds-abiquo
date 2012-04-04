@@ -50,6 +50,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import com.abiquo.appliancemanager.transport.TemplatesStateDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
+import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
@@ -291,6 +292,9 @@ public interface EnterpriseAsyncClient
     ListenableFuture<Void> deleteUser(
         @EndpointLink("edit") @BinderParam(BindToPath.class) UserDto user);
 
+    /**
+     * @see EnterpriseClient#listVirtualMachines(UserDto)
+     */
     @GET
     @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
@@ -319,7 +323,16 @@ public interface EnterpriseAsyncClient
     ListenableFuture<VLANNetworksDto> listExternalNetworks(
         @EndpointLink("externalnetworks") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
-    /*********************** Virtual Machine ***********************/
+    /*********************** Cloud ***********************/
+
+    /**
+     * @see EnterpriseClient#listVirtualAppliances(EnterpriseDto)
+     */
+    @GET
+    @Consumes(VirtualAppliancesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<VirtualAppliancesDto> listVirtualAppliances(
+        @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) final EnterpriseDto enterprise);
 
     /**
      * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
