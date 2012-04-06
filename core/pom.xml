@@ -18,6 +18,11 @@
             <artifactId>jclouds-core</artifactId>
             <version>${jclouds.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.jclouds</groupId>
+            <artifactId>jclouds-compute</artifactId>
+            <version>${jclouds.version}</version>
+        </dependency>
         <!-- Abiquo -->
         <dependency>
             <groupId>com.abiquo</groupId>
@@ -35,6 +40,13 @@
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
+            <version>${jclouds.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jclouds</groupId>
+            <artifactId>jclouds-compute</artifactId>
             <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
