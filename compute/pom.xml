@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.jclouds.provider</groupId>
@@ -7,34 +8,41 @@
         <version>2.1-SNAPSHOT</version>
         <relativePath>../project/pom.xml</relativePath>
     </parent>
-    <artifactId>jclouds-abiquo</artifactId>
-    <packaging>bundle</packaging>
-    <name>JClouds Abiquo :: Core</name>
-    <description>JClouds components to access Abiquo</description>
+    
+    <artifactId>jclouds-abiquo-compute</artifactId>
+    <name>JClouds Abiquo :: Compute</name>
+    <description>JClouds compute provides for Abiquo</description>
+    
     <dependencies>
-        <!-- JClouds -->
+        <dependency>
+            <groupId>org.jclouds</groupId>
+            <artifactId>jclouds-compute</artifactId>
+            <version>${jclouds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jclouds.provider</groupId>
+            <artifactId>jclouds-abiquo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.jclouds.provider</groupId>
+            <artifactId>jclouds-abiquo</artifactId>
+            <version>${project.version}</version>
+            <classifier>tests</classifier>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
             <version>${jclouds.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
         </dependency>
-        <!-- Abiquo -->
-        <dependency>
-            <groupId>com.abiquo</groupId>
-            <artifactId>model</artifactId>
-            <version>${abiquo.version}</version>
-            <classifier>transport</classifier>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.directory.server</groupId>
-                    <artifactId>apacheds-all</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <!-- Test dependencies -->
         <dependency>
             <groupId>org.jclouds</groupId>
-            <artifactId>jclouds-core</artifactId>
+            <artifactId>jclouds-compute</artifactId>
             <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
@@ -64,6 +72,7 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
     <build>
         <plugins>
             <plugin>
@@ -118,4 +127,5 @@
             </plugin>
         </plugins>
     </reporting>
+    
 </project>
