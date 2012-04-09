@@ -12,7 +12,6 @@
     <modules>
         <module>project</module>
         <module>core</module>
-        <module>compute</module>
     </modules>
 
     <build>

@@ -20,13 +20,22 @@ package org.jclouds.abiquo.compute.config;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.compute.functions.DatacenterToLocation;
+import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToHardware;
+import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToImage;
+import org.jclouds.abiquo.compute.functions.VirtualMachineToNodeMetadata;
 import org.jclouds.abiquo.compute.strategy.AbiquoComputeServiceAdapter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.config.ComputeServiceAdapterContextModule;
+import org.jclouds.compute.domain.Hardware;
+import org.jclouds.compute.domain.Image;
+import org.jclouds.compute.domain.NodeMetadata;
+import org.jclouds.domain.Location;
 
+import com.google.common.base.Function;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -51,6 +60,18 @@ public class AbiquoComputeServiceContextModule
             new TypeLiteral<ComputeServiceAdapter<VirtualMachine, VirtualMachineTemplate, VirtualMachineTemplate, Datacenter>>()
             {
             }).to(AbiquoComputeServiceAdapter.class);
+        bind(new TypeLiteral<Function<VirtualMachine, NodeMetadata>>()
+        {
+        }).to(VirtualMachineToNodeMetadata.class);
+        bind(new TypeLiteral<Function<VirtualMachineTemplate, Image>>()
+        {
+        }).to(VirtualMachineTemplateToImage.class);
+        bind(new TypeLiteral<Function<VirtualMachineTemplate, Hardware>>()
+        {
+        }).to(VirtualMachineTemplateToHardware.class);
+        bind(new TypeLiteral<Function<Datacenter, Location>>()
+        {
+        }).to(DatacenterToLocation.class);
     }
 
 }

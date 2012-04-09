@@ -23,12 +23,13 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import java.util.Properties;
 
+import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.abiquo.config.ConfiguresEventBus;
 import org.jclouds.abiquo.config.ConfiguresScheduler;
 import org.jclouds.abiquo.config.EventBusModule;
 import org.jclouds.abiquo.config.SchedulerModule;
-import org.jclouds.rest.RestContextBuilder;
+import org.jclouds.compute.ComputeServiceContextBuilder;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -40,7 +41,8 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-public class AbiquoContextBuilder extends RestContextBuilder<AbiquoClient, AbiquoAsyncClient>
+public class AbiquoContextBuilder extends
+    ComputeServiceContextBuilder<AbiquoClient, AbiquoAsyncClient>
 {
     public AbiquoContextBuilder(final Properties props)
     {
@@ -54,10 +56,16 @@ public class AbiquoContextBuilder extends RestContextBuilder<AbiquoClient, Abiqu
     }
 
     @Override
-    public AbiquoContextBuilder withModules(final Iterable<Module> modules)
+    protected void addContextModule(final List<Module> modules)
     {
-        return (AbiquoContextBuilder) super.withModules(modules);
+        modules.add(new AbiquoComputeServiceContextModule());
     }
+
+    // @Override
+    // public AbiquoContextBuilder withModules(final Iterable<Module> modules)
+    // {
+    // return (AbiquoContextBuilder) super.withModules(modules);
+    // }
 
     @Override
     public Injector buildInjector()
@@ -74,13 +82,13 @@ public class AbiquoContextBuilder extends RestContextBuilder<AbiquoClient, Abiqu
         return super.buildInjector();
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public AbiquoContext buildContext()
-    {
-        Injector injector = buildInjector();
-        return injector.getInstance(AbiquoContext.class);
-    }
+    // @SuppressWarnings("unchecked")
+    // @Override
+    // public AbiquoContext buildContext()
+    // {
+    // Injector injector = buildInjector();
+    // return injector.getInstance(AbiquoContext.class);
+    // }
 
     private boolean isModulePresent(final Class< ? extends Annotation> annotatedWith)
     {

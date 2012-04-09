@@ -9,13 +9,18 @@
     </parent>
     <artifactId>jclouds-abiquo</artifactId>
     <packaging>bundle</packaging>
-    <name>JClouds Abiquo :: Core</name>
+    <name>JClouds Abiquo :: Compute</name>
     <description>JClouds components to access Abiquo</description>
     <dependencies>
         <!-- JClouds -->
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
+            <version>${jclouds.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jclouds</groupId>
+            <artifactId>jclouds-compute</artifactId>
             <version>${jclouds.version}</version>
         </dependency>
         <!-- Abiquo -->
@@ -35,6 +40,13 @@
         <dependency>
             <groupId>org.jclouds</groupId>
             <artifactId>jclouds-core</artifactId>
+            <version>${jclouds.version}</version>
+            <type>test-jar</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jclouds</groupId>
+            <artifactId>jclouds-compute</artifactId>
             <version>${jclouds.version}</version>
             <type>test-jar</type>
             <scope>test</scope>
