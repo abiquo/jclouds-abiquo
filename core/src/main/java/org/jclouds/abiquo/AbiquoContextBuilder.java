@@ -82,13 +82,13 @@ public class AbiquoContextBuilder extends
         return super.buildInjector();
     }
 
-    // @SuppressWarnings("unchecked")
-    // @Override
-    // public AbiquoContext buildContext()
-    // {
-    // Injector injector = buildInjector();
-    // return injector.getInstance(AbiquoContext.class);
-    // }
+    @SuppressWarnings("unchecked")
+    @Override
+    public AbiquoContext buildContext()
+    {
+        Injector injector = buildInjector();
+        return injector.getInstance(AbiquoContext.class);
+    }
 
     private boolean isModulePresent(final Class< ? extends Annotation> annotatedWith)
     {

@@ -38,6 +38,7 @@ import org.jclouds.abiquo.features.TaskClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
+import org.jclouds.abiquo.internal.AbiquoContextImpl;
 import org.jclouds.abiquo.rest.internal.AbiquoHttpAsyncClient;
 import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
@@ -47,11 +48,14 @@ import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
 import org.jclouds.rest.ConfiguresRestClient;
+import org.jclouds.rest.RestContext;
 import org.jclouds.rest.Utils;
 import org.jclouds.rest.config.BinderUtils;
 import org.jclouds.rest.config.RestClientModule;
 
 import com.google.common.collect.ImmutableMap;
+import com.google.inject.Scopes;
+import com.google.inject.TypeLiteral;
 
 /**
  * Configures the Abiquo connection.
@@ -78,10 +82,24 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
         super(AbiquoClient.class, AbiquoAsyncClient.class, DELEGATE_MAP);
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     protected void configure()
     {
-        super.configure();
+        // Override behavior without calling super() method to allow binding the AbiquoContextImpl
+        // to the RestContext. Otherwise the ComputeServiceContextBuilder will inject the wrong type
+        // in the providerSpecificContext property
+        bind(new TypeLiteral<RestContext>()
+        {
+        }).to(AbiquoContextImpl.class).in(Scopes.SINGLETON);
+        bind(new TypeLiteral<RestContext<AbiquoClient, AbiquoAsyncClient>>()
+        {
+        }).to(AbiquoContextImpl.class).in(Scopes.SINGLETON);
+        bindAsyncClient();
+        bindClient();
+        bindErrorHandlers();
+        bindRetryHandlers();
+
         bindAbiquoGenericHttpClient();
         bind(Utils.class).to(ExtendedUtils.class);
     }

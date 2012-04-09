@@ -1,4 +1,3 @@
-package org.jclouds.abiquo;
 /**
  * Licensed to jclouds, Inc. (jclouds) under one or more
  * contributor license agreements.  See the NOTICE file
@@ -17,10 +16,23 @@ package org.jclouds.abiquo;
  * specific language governing permissions and limitations
  * under the License.
  */
-import org.jclouds.abiquo.AbiquoProviderMetadata;
+package org.jclouds.abiquo;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
+import java.util.Properties;
+
+import org.jclouds.abiquo.internal.AbiquoContextImpl;
+import org.jclouds.compute.ComputeServiceContext;
+import org.jclouds.compute.ComputeServiceContextFactory;
+import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.providers.BaseProviderMetadataTest;
 import org.jclouds.providers.ProviderMetadata;
 import org.testng.annotations.Test;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Module;
 
 /**
  * Unit tests for the {@link AbiquoProviderMetadata} class.
@@ -28,12 +40,25 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class AbiquoProviderMetadataTest extends BaseProviderMetadataTest
+public class AbiquoProviderTest extends BaseProviderMetadataTest
 {
 
-    public AbiquoProviderMetadataTest()
+    public AbiquoProviderTest()
     {
         super(new AbiquoProviderMetadata(), ProviderMetadata.COMPUTE_TYPE);
+    }
+
+    public void testProviderConfiguration()
+    {
+        Properties props = new Properties();
+        props.put("abiquo.endpoint", "http://localhost/api");
+        ComputeServiceContext context =
+            new ComputeServiceContextFactory().createContext("abiquo", "admin", "xabiquo",
+                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+
+        assertNotNull(context);
+        assertNotNull(context.getComputeService());
+        assertEquals(context.getProviderSpecificContext().getClass(), AbiquoContextImpl.class);
     }
 
 }
