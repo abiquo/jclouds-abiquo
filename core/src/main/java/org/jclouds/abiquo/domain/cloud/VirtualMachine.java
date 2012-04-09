@@ -26,7 +26,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -40,6 +41,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -85,7 +87,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualMachine(final AbiquoContext context, final VirtualMachineDto target)
+    protected VirtualMachine(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualMachineDto target)
     {
         super(context, target);
     }
@@ -430,7 +432,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context,
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template)
     {
         return new Builder(context, virtualAppliance, template);
@@ -438,7 +440,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     public static class Builder
     {
-        private final AbiquoContext context;
+        private final RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private VirtualAppliance virtualAppliance;
 
@@ -464,7 +466,7 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         private String uuid;
 
-        public Builder(final AbiquoContext context, final VirtualAppliance virtualAppliance,
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualAppliance virtualAppliance,
             final VirtualMachineTemplate template)
         {
             super();

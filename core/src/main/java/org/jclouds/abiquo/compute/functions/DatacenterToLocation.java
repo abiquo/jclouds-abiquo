@@ -18,21 +18,16 @@
  */
 package org.jclouds.abiquo.compute.functions;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationBuilder;
 import org.jclouds.domain.LocationScope;
-import org.jclouds.location.suppliers.JustProvider;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Iterables;
 
 /**
  * Converts a {@link Datacenter} to a {@link Location} one.
@@ -42,13 +37,6 @@ import com.google.common.collect.Iterables;
 @Singleton
 public class DatacenterToLocation implements Function<Datacenter, Location>
 {
-    private final JustProvider provider;
-
-    @Inject
-    public DatacenterToLocation(final JustProvider provider)
-    {
-        this.provider = checkNotNull(provider, "provider");
-    }
 
     @Override
     public Location apply(final Datacenter datacenter)
@@ -57,8 +45,7 @@ public class DatacenterToLocation implements Function<Datacenter, Location>
         builder.id(datacenter.getId().toString());
         builder.description(datacenter.getName() + " - " + datacenter.getLocation());
         builder.metadata(ImmutableMap.<String, Object> of());
-        builder.scope(LocationScope.PROVIDER); // TODO: LocationScope?
-        builder.parent(Iterables.getOnlyElement(provider.get()));
+        builder.scope(LocationScope.ZONE);
         // TODO: Convert to ISO3166 code?
         builder.iso3166Codes(ImmutableSet.<String> of(datacenter.getLocation()));
         return builder.build();

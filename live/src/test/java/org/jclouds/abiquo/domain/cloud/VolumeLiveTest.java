@@ -50,8 +50,8 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
     {
         Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name("Default Tier 1"));
         Volume volume =
-            Volume.builder(context, env.virtualDatacenter, tier).name(PREFIX + "Hawaian volume")
-                .sizeInMb(128).build();
+            Volume.builder(context.getProviderSpecificContext(), env.virtualDatacenter, tier)
+                .name(PREFIX + "Hawaian volume").sizeInMb(128).build();
         volume.save();
 
         assertNotNull(volume.getId());
@@ -97,12 +97,13 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
     {
         // Create the new virtual datacenter
         PrivateNetwork network =
-            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1").address(
-                "192.168.1.0").mask(24).build();
+            PrivateNetwork.builder(context.getProviderSpecificContext()).name("DefaultNetwork")
+                .gateway("192.168.1.1").address("192.168.1.0").mask(24).build();
 
         VirtualDatacenter newVdc =
-            VirtualDatacenter.builder(context, env.datacenter, env.enterprise).name("New VDC")
-                .network(network).hypervisorType(env.machine.getType()).build();
+            VirtualDatacenter
+                .builder(context.getProviderSpecificContext(), env.datacenter, env.enterprise)
+                .name("New VDC").network(network).hypervisorType(env.machine.getType()).build();
         newVdc.save();
         assertNotNull(newVdc.getId());
 
@@ -113,15 +114,15 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
         volume.moveTo(newVdc);
 
         // Check that the underlying Dto has been updated to the new VDC
-        assertTrue(volume.unwrap().getEditLink().getHref().startsWith(
-            newVdc.unwrap().getEditLink().getHref()));
+        assertTrue(volume.unwrap().getEditLink().getHref()
+            .startsWith(newVdc.unwrap().getEditLink().getHref()));
 
         // Move it back to the original VDC
         volume.moveTo(env.virtualDatacenter);
 
         // Check that the underlying Dto has been updated to the new VDC
-        assertTrue(volume.unwrap().getEditLink().getHref().startsWith(
-            env.virtualDatacenter.unwrap().getEditLink().getHref()));
+        assertTrue(volume.unwrap().getEditLink().getHref()
+            .startsWith(env.virtualDatacenter.unwrap().getEditLink().getHref()));
 
         // Tear down the virtual datacenter
         newVdc.delete();

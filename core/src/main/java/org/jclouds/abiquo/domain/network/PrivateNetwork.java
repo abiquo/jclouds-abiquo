@@ -21,9 +21,11 @@ package org.jclouds.abiquo.domain.network;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
@@ -45,7 +47,7 @@ public class PrivateNetwork extends Network
     /**
      * Constructor to be used only by the builder.
      */
-    protected PrivateNetwork(final AbiquoContext context, final VLANNetworkDto target)
+    protected PrivateNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VLANNetworkDto target)
     {
         super(context, target);
     }
@@ -117,7 +119,7 @@ public class PrivateNetwork extends Network
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
     {
         return new Builder(context);
     }
@@ -126,7 +128,7 @@ public class PrivateNetwork extends Network
     {
         private VirtualDatacenter virtualDatacenter;
 
-        public Builder(final AbiquoContext context)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
         {
             super(context);
             this.context = context;

@@ -29,11 +29,13 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.AsyncTaskMonitor;
 import org.jclouds.abiquo.monitor.functions.AsyncTaskStatusMonitor;
+import org.jclouds.rest.RestContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.eventbus.EventBus;
@@ -51,7 +53,7 @@ public class BaseAsyncTaskMonitor extends BaseMonitoringService implements Async
     protected AsyncTaskStatusMonitor taskMonitor;
 
     @Inject
-    public BaseAsyncTaskMonitor(final AbiquoContext context,
+    public BaseAsyncTaskMonitor(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus,
         final AsyncTaskStatusMonitor monitor)

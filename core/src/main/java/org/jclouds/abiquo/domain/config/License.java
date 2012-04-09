@@ -19,9 +19,12 @@
 
 package org.jclouds.abiquo.domain.config;
 
-import org.jclouds.abiquo.AbiquoContext;
+
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.config.LicenseDto;
 
@@ -37,7 +40,7 @@ public class License extends DomainWrapper<LicenseDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected License(final AbiquoContext context, final LicenseDto target)
+    protected License(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final LicenseDto target)
     {
         super(context, target);
     }
@@ -57,18 +60,18 @@ public class License extends DomainWrapper<LicenseDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context, final String code)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final String code)
     {
         return new Builder(context, code);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private String code;
 
-        public Builder(final AbiquoContext context, final String code)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final String code)
         {
             super();
             this.context = context;

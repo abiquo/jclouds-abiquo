@@ -29,13 +29,15 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.abiquo.monitor.functions.VirtualMachineDeployMonitor;
 import org.jclouds.abiquo.monitor.functions.VirtualMachineStateMonitor;
 import org.jclouds.abiquo.monitor.functions.VirtualMachineUndeployMonitor;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.annotations.VisibleForTesting;
@@ -57,7 +59,7 @@ public class BaseVirtualMachineMonitor extends BaseMonitoringService implements
     protected VirtualMachineUndeployMonitor undeployMonitor;
 
     @Inject
-    public BaseVirtualMachineMonitor(final AbiquoContext context,
+    public BaseVirtualMachineMonitor(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus,
         final VirtualMachineDeployMonitor deployMonitor,

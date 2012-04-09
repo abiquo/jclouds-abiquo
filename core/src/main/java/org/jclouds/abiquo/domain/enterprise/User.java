@@ -25,12 +25,15 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.RoleDto;
@@ -69,7 +72,7 @@ public class User extends DomainWrapper<UserDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected User(final AbiquoContext context, final UserDto target)
+    protected User(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final UserDto target)
     {
         super(context, target);
     }
@@ -130,7 +133,9 @@ public class User extends DomainWrapper<UserDto>
             return this.getEnterprise().listVirtualDatacenters();
         }
 
-        return Lists.newArrayList(context.getCloudService().getVirtualDatacenters(ids));
+        ListVirtualDatacenters listVirtualDatacenters =
+            context.getUtils().getInjector().getInstance(ListVirtualDatacenters.class);
+        return Lists.newArrayList(listVirtualDatacenters.execute(ids));
     }
 
     public List<VirtualDatacenter> listPermitedVirtualDatacenters(
@@ -174,7 +179,8 @@ public class User extends DomainWrapper<UserDto>
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return context.getAdministrationService().getEnterprise(enterpriseId);
+        return wrap(context, Enterprise.class, context.getApi().getEnterpriseClient()
+            .getEnterprise(enterpriseId));
     }
 
     // Children access
@@ -209,15 +215,15 @@ public class User extends DomainWrapper<UserDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context, final Enterprise enterprise,
-        final Role role)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final Enterprise enterprise, final Role role)
     {
         return new Builder(context, enterprise, role);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private Enterprise enterprise;
 
@@ -241,7 +247,8 @@ public class User extends DomainWrapper<UserDto>
 
         private String authType = DEFAULT_AUTH_TYPE;
 
-        public Builder(final AbiquoContext context, final Enterprise enterprise, final Role role)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+            final Enterprise enterprise, final Role role)
         {
             super();
             checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);

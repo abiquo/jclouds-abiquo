@@ -22,9 +22,9 @@ package org.jclouds.abiquo.monitor.functions;
 import static org.testng.Assert.assertEquals;
 
 import org.easymock.EasyMock;
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -91,9 +91,10 @@ public class VirtualApplianceDeployMonitorTest
     {
         private VirtualApplianceState state;
 
+        @SuppressWarnings("unchecked")
         public MockVirtualAppliance()
         {
-            super(EasyMock.createMock(AbiquoContext.class), new VirtualApplianceDto());
+            super(EasyMock.createMock(RestContext.class), new VirtualApplianceDto());
         }
 
         @Override

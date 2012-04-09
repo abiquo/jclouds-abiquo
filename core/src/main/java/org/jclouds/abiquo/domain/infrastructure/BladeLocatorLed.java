@@ -19,9 +19,12 @@
 
 package org.jclouds.abiquo.domain.infrastructure;
 
-import org.jclouds.abiquo.AbiquoContext;
+
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 
@@ -41,7 +44,7 @@ public class BladeLocatorLed extends DomainWrapper<BladeLocatorLedDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected BladeLocatorLed(final AbiquoContext context, final BladeLocatorLedDto target)
+    protected BladeLocatorLed(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final BladeLocatorLedDto target)
     {
         super(context, target);
     }

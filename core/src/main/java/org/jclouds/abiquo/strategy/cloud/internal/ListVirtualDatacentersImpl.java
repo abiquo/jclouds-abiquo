@@ -33,12 +33,14 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
@@ -56,10 +58,8 @@ import com.google.inject.Inject;
 @Singleton
 public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
 {
-    // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
 
-    protected final AbiquoContext context;
+    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     protected final ExecutorService userExecutor;
 
@@ -71,7 +71,7 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
     protected Long maxTime;
 
     @Inject
-    ListVirtualDatacentersImpl(final AbiquoContext context,
+    ListVirtualDatacentersImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
         this.context = context;

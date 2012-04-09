@@ -104,6 +104,6 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest
     {
         User user = context.getAdministrationService().getCurrentUserInfo();
         assertNotNull(user);
-        assertEquals(user.getNick(), context.getIdentity());
+        assertEquals(user.getNick(), context.getProviderSpecificContext().getIdentity());
     }
 }

@@ -125,10 +125,11 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         this.context = context;
         this.administrationService = context.getAdministrationService();
         this.context = context;
-        this.enterpriseClient = context.getApi().getEnterpriseClient();
-        this.infrastructureClient = context.getApi().getInfrastructureClient();
-        this.adminClient = context.getApi().getAdminClient();
-        this.configClient = context.getApi().getConfigClient();
+        this.enterpriseClient = context.getProviderSpecificContext().getApi().getEnterpriseClient();
+        this.infrastructureClient =
+            context.getProviderSpecificContext().getApi().getInfrastructureClient();
+        this.adminClient = context.getProviderSpecificContext().getApi().getAdminClient();
+        this.configClient = context.getProviderSpecificContext().getApi().getConfigClient();
     }
 
     @Override
@@ -174,7 +175,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createLicense() throws IOException
     {
-        license = License.builder(context, readLicense()).build();
+        license = License.builder(context.getProviderSpecificContext(), readLicense()).build();
 
         license.add();
         assertNotNull(license.getId());
@@ -183,10 +184,11 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     protected void createDatacenter()
     {
         // Assume a monolithic install
-        String remoteServicesAddress = context.getEndpoint().getHost();
+        String remoteServicesAddress = context.getProviderSpecificContext().getEndpoint().getHost();
 
         datacenter =
-            Datacenter.builder(context).name(randomName()).location("Honolulu")
+            Datacenter.builder(context.getProviderSpecificContext()).name(randomName())
+                .location("Honolulu")
                 .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
@@ -218,7 +220,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createRack()
     {
-        rack = Rack.builder(context, datacenter).name(PREFIX + "Aloha").build();
+        rack =
+            Rack.builder(context.getProviderSpecificContext(), datacenter).name(PREFIX + "Aloha")
+                .build();
         rack.save();
         assertNotNull(rack.getId());
     }
@@ -231,8 +235,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.ucs.pass");
 
         ucsRack =
-            ManagedRack.builder(context, datacenter).ipAddress(ip).port(port).user(user)
-                .name("ucs rack").password(pass).build();
+            ManagedRack.builder(context.getProviderSpecificContext(), datacenter).ipAddress(ip)
+                .port(port).user(user).name("ucs rack").password(pass).build();
 
         ucsRack.save();
         assertNotNull(ucsRack.getId());
@@ -247,8 +251,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.storage.pass");
 
         storageDevice =
-            StorageDevice.builder(context, datacenter).iscsiIp(ip).managementIp(ip)
-                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
+            StorageDevice.builder(context.getProviderSpecificContext(), datacenter).iscsiIp(ip)
+                .managementIp(ip).name(PREFIX + "Storage Device").username(user).password(pass)
+                .type(type).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
@@ -274,18 +279,20 @@ public class InfrastructureTestEnvironment implements TestEnvironment
             administrationService.findRole(RolePredicates.name("ENTERPRISE_ADMIN"));
 
         user =
-            User.builder(context, enterprise, userRole).name(randomName(), randomName())
-                .nick("jclouds").authType("ABIQUO").description(randomName())
-                .email(randomName() + "@abiquo.com").locale("en_US").password("user").build();
+            User.builder(context.getProviderSpecificContext(), enterprise, userRole)
+                .name(randomName(), randomName()).nick("jclouds").authType("ABIQUO")
+                .description(randomName()).email(randomName() + "@abiquo.com").locale("en_US")
+                .password("user").build();
 
         user.save();
         assertNotNull(user.getId());
         assertEquals(userRole.getId(), user.getRole().getId());
 
         enterpriseAdmin =
-            User.builder(context, enterprise, enterpriseAdminRole).name(randomName(), randomName())
-                .nick("jclouds-admin").authType("ABIQUO").description(randomName())
-                .email(randomName() + "@abiquo.com").locale("en_US").password("admin").build();
+            User.builder(context.getProviderSpecificContext(), enterprise, enterpriseAdminRole)
+                .name(randomName(), randomName()).nick("jclouds-admin").authType("ABIQUO")
+                .description(randomName()).email(randomName() + "@abiquo.com").locale("en_US")
+                .password("admin").build();
 
         enterpriseAdmin.save();
         assertNotNull(enterpriseAdmin.getId());
@@ -294,7 +301,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     private void createRoles()
     {
-        role = Role.builder(context).name(randomName()).blocked(false).build();
+        role =
+            Role.builder(context.getProviderSpecificContext()).name(randomName()).blocked(false)
+                .build();
         role.save();
 
         anotherRole = Role.Builder.fromRole(role).build();
@@ -307,7 +316,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createEnterprise()
     {
-        enterprise = Enterprise.builder(context).name(randomName()).build();
+        enterprise =
+            Enterprise.builder(context.getProviderSpecificContext()).name(randomName()).build();
         enterprise.save();
         assertNotNull(enterprise.getId());
         Limits limits = enterprise.allowDatacenter(datacenter);
@@ -317,8 +327,9 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     protected void createPublicNetwork()
     {
         publicNetwork =
-            PublicNetwork.builder(context, datacenter).name("PublicNetwork").gateway("80.80.80.1")
-                .address("80.80.80.0").mask(24).tag(5).build();
+            PublicNetwork.builder(context.getProviderSpecificContext(), datacenter)
+                .name("PublicNetwork").gateway("80.80.80.1").address("80.80.80.0").mask(24).tag(5)
+                .build();
         publicNetwork.save();
         assertNotNull(publicNetwork.getId());
     }

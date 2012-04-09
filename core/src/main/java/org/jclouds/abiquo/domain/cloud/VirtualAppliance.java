@@ -24,12 +24,14 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -62,7 +64,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualAppliance(final AbiquoContext context, final VirtualApplianceDto target)
+    protected VirtualAppliance(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualApplianceDto target)
     {
         super(context, target);
     }
@@ -276,7 +278,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context,
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final VirtualDatacenter virtualDatacenter)
     {
         return new Builder(context, virtualDatacenter);
@@ -284,13 +286,13 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private String name;
 
         private VirtualDatacenter virtualDatacenter;
 
-        public Builder(final AbiquoContext context, final VirtualDatacenter virtualDatacenter)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualDatacenter virtualDatacenter)
         {
             super();
             checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE

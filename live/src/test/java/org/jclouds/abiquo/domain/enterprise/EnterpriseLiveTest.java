@@ -52,7 +52,7 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
 
     public void testUpdate()
     {
-        Enterprise ent = Enterprise.builder(context).name("dummyTestUpdateRS").build();
+        Enterprise ent = Enterprise.builder(context.getProviderSpecificContext()).name("dummyTestUpdateRS").build();
         ent.save();
         ent.setName("Updated Enterprise");
         ent.update();

@@ -19,8 +19,11 @@
 
 package org.jclouds.abiquo.domain.network;
 
-import org.jclouds.abiquo.AbiquoContext;
+
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
@@ -36,7 +39,7 @@ public class Ip extends DomainWrapper<IpPoolManagementDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Ip(final AbiquoContext context, final IpPoolManagementDto target)
+    protected Ip(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final IpPoolManagementDto target)
     {
         super(context, target);
     }

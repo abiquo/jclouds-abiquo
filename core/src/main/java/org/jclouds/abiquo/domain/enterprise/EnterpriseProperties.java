@@ -21,10 +21,12 @@ package org.jclouds.abiquo.domain.enterprise;
 
 import java.util.Map;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 
@@ -41,16 +43,18 @@ public class EnterpriseProperties extends DomainWrapper<EnterprisePropertiesDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected EnterpriseProperties(final AbiquoContext context, final EnterprisePropertiesDto target)
+    protected EnterpriseProperties(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final EnterprisePropertiesDto target)
     {
         super(context, target);
     }
 
     // Domain operations
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource#EnterprisePropertiesResource-UpdatesthepropertiesforanEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource#EnterprisePropertiesResource-UpdatesthepropertiesforanEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource#EnterprisePropertiesResource-UpdatesthepropertiesforanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Properties+Resource#
+     *      EnterprisePropertiesResource-UpdatesthepropertiesforanEnterprise</a>
      */
     public void update()
     {
@@ -59,14 +63,16 @@ public class EnterpriseProperties extends DomainWrapper<EnterprisePropertiesDto>
 
     // Parent access
     /**
-     * @see API: <a
-     *      href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise">
-     *      http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise</a>
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
+     *      RetrieveaEnterprise</a>
      */
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return context.getAdministrationService().getEnterprise(enterpriseId);
+        return wrap(context, Enterprise.class, context.getApi().getEnterpriseClient()
+            .getEnterprise(enterpriseId));
     }
 
     // Delegate methods

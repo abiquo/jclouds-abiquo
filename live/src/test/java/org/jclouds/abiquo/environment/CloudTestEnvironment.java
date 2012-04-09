@@ -73,7 +73,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     public CloudTestEnvironment(final AbiquoContext context)
     {
         super(context);
-        this.cloudClient = context.getApi().getCloudClient();
+        this.cloudClient = context.getProviderSpecificContext().getApi().getCloudClient();
     }
 
     @Override
@@ -133,11 +133,12 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     protected void createVirtualDatacenter()
     {
         network =
-            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1")
-                .address("192.168.1.0").mask(24).build();
+            PrivateNetwork.builder(context.getProviderSpecificContext()).name("DefaultNetwork")
+                .gateway("192.168.1.1").address("192.168.1.0").mask(24).build();
 
         virtualDatacenter =
-            VirtualDatacenter.builder(context, datacenter, defaultEnterprise)
+            VirtualDatacenter
+                .builder(context.getProviderSpecificContext(), datacenter, defaultEnterprise)
                 .name(PREFIX + "Virtual Aloha").cpuCountLimits(18, 20)
                 .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
                 .storageLimits(289910292, 322122547).vlansLimits(1, 2)
@@ -150,8 +151,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     protected void createVirtualAppliance()
     {
         virtualAppliance =
-            VirtualAppliance.builder(context, virtualDatacenter).name(PREFIX + "Virtual AppAloha")
-                .build();
+            VirtualAppliance.builder(context.getProviderSpecificContext(), virtualDatacenter)
+                .name(PREFIX + "Virtual AppAloha").build();
 
         virtualAppliance.save();
         assertNotNull(virtualAppliance.getId());
@@ -175,7 +176,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         template = templates.get(0);
 
         virtualMachine =
-            VirtualMachine.builder(context, virtualAppliance, template).cpu(2)
+            VirtualMachine
+                .builder(context.getProviderSpecificContext(), virtualAppliance, template).cpu(2)
                 .name(PREFIX + "VM Aloha").ram(128).build();
 
         virtualMachine.save();

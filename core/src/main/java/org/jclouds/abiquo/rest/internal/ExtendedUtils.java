@@ -37,6 +37,7 @@ import org.jclouds.rest.Utils;
 import org.jclouds.rest.internal.UtilsImpl;
 import org.jclouds.xml.XMLParser;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Injector;
 import com.google.inject.Singleton;
 
@@ -59,11 +60,11 @@ public class ExtendedUtils extends UtilsImpl implements Utils
         final HttpAsyncClient simpleAsyncClient, final Crypto encryption, final DateService date,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userThreads,
         @Named(Constants.PROPERTY_IO_WORKER_THREADS) final ExecutorService ioThreads,
-        final LoggerFactory loggerFactory, final XMLParser xml,
-        final AbiquoHttpClient abiquoHttpClient, final AbiquoHttpAsyncClient abiquoHttpAsyncClient)
+        final EventBus eventBus, final LoggerFactory loggerFactory, final XMLParser xml,
+        final AbiquoHttpClient abiquoHttpClien, final AbiquoHttpAsyncClient abiquoHttpAsyncClient)
     {
         super(injector, json, simpleClient, simpleAsyncClient, encryption, date, userThreads,
-            ioThreads, loggerFactory);
+            ioThreads, eventBus, loggerFactory);
         this.xml = checkNotNull(xml, "xml");
         this.abiquoHttpClient = checkNotNull(abiquoHttpClient, "abiquoHttpClient");
         this.abiquoHttpAsyncClient = checkNotNull(abiquoHttpAsyncClient, "abiquoHttpAsyncClient");

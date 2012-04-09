@@ -25,10 +25,10 @@ import java.util.Properties;
 
 import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
-import org.jclouds.abiquo.config.ConfiguresEventBus;
 import org.jclouds.abiquo.config.ConfiguresScheduler;
-import org.jclouds.abiquo.config.EventBusModule;
 import org.jclouds.abiquo.config.SchedulerModule;
+import org.jclouds.abiquo.internal.AbiquoContextImpl;
+import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.ComputeServiceContextBuilder;
 
 import com.google.common.base.Predicate;
@@ -61,11 +61,11 @@ public class AbiquoContextBuilder extends
         modules.add(new AbiquoComputeServiceContextModule());
     }
 
-    // @Override
-    // public AbiquoContextBuilder withModules(final Iterable<Module> modules)
-    // {
-    // return (AbiquoContextBuilder) super.withModules(modules);
-    // }
+    @Override
+    public ComputeServiceContext buildComputeServiceContext()
+    {
+        return buildInjector().getInstance(AbiquoContextImpl.class);
+    }
 
     @Override
     public Injector buildInjector()
@@ -74,20 +74,13 @@ public class AbiquoContextBuilder extends
         {
             modules.add(new SchedulerModule());
         }
-        if (!isModulePresent(ConfiguresEventBus.class))
-        {
-            modules.add(new EventBusModule());
-        }
+        // TODO: Re-enable when the EventBusModule is merged in the trunk
+        // if (!isModulePresent(ConfiguresEventBus.class))
+        // {
+        // modules.add(new EventBusModule());
+        // }
 
         return super.buildInjector();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public AbiquoContext buildContext()
-    {
-        Injector injector = buildInjector();
-        return injector.getInstance(AbiquoContext.class);
     }
 
     private boolean isModulePresent(final Class< ? extends Annotation> annotatedWith)

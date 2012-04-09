@@ -32,13 +32,15 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
@@ -54,7 +56,7 @@ import com.google.inject.Inject;
 @Singleton
 public class ListVirtualMachineTemplatesImpl implements ListVirtualMachineTemplates
 {
-    protected AbiquoContext context;
+    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     protected final ExecutorService userExecutor;
 
@@ -66,7 +68,7 @@ public class ListVirtualMachineTemplatesImpl implements ListVirtualMachineTempla
     protected Long maxTime;
 
     @Inject
-    ListVirtualMachineTemplatesImpl(final AbiquoContext context,
+    ListVirtualMachineTemplatesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
         super();

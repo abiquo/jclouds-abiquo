@@ -24,7 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
@@ -38,6 +39,7 @@ import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
@@ -81,7 +83,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualDatacenter(final AbiquoContext context, final VirtualDatacenterDto target)
+    protected VirtualDatacenter(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final VirtualDatacenterDto target)
     {
         super(context, target);
     }
@@ -144,7 +147,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        return context.getAdministrationService().getDatacenter(datacenterId);
+        return wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
+            .getDatacenter(datacenterId));
     }
 
     /**
@@ -159,7 +163,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return context.getAdministrationService().getEnterprise(enterpriseId);
+        return wrap(context, Enterprise.class, context.getApi().getEnterpriseClient()
+            .getEnterprise(enterpriseId));
     }
 
     // Children access
@@ -520,15 +525,15 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context, final Datacenter datacenter,
-        final Enterprise enterprise)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final Datacenter datacenter, final Enterprise enterprise)
     {
         return new Builder(context, datacenter, enterprise);
     }
 
     public static class Builder extends LimitsBuilder<Builder>
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private String name;
 
@@ -540,8 +545,8 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         private PrivateNetwork network;
 
-        public Builder(final AbiquoContext context, final Datacenter datacenter,
-            final Enterprise enterprise)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+            final Datacenter datacenter, final Enterprise enterprise)
         {
             super();
             checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);

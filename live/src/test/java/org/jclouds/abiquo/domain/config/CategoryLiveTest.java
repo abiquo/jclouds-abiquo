@@ -37,7 +37,7 @@ public class CategoryLiveTest extends BaseAbiquoClientLiveTest
 
     public void testCreateAndGet()
     {
-        Category category = Category.builder(context).name("Fake category").build();
+        Category category = Category.builder(context.getProviderSpecificContext()).name("Fake category").build();
         category.save();
 
         Category apiCategory =

@@ -24,10 +24,12 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -64,7 +66,7 @@ public class Rack extends DomainWrapper<RackDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Rack(final AbiquoContext context, final RackDto target)
+    protected Rack(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final RackDto target)
     {
         super(context, target);
     }
@@ -123,7 +125,8 @@ public class Rack extends DomainWrapper<RackDto>
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        return context.getAdministrationService().getDatacenter(datacenterId);
+        return wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
+            .getDatacenter(datacenterId));
     }
 
     // Children access
@@ -173,14 +176,15 @@ public class Rack extends DomainWrapper<RackDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context, final Datacenter datacenter)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private Integer id;
 
@@ -202,7 +206,8 @@ public class Rack extends DomainWrapper<RackDto>
 
         private Datacenter datacenter;
 
-        public Builder(final AbiquoContext context, final Datacenter datacenter)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+            final Datacenter datacenter)
         {
             super();
             checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);

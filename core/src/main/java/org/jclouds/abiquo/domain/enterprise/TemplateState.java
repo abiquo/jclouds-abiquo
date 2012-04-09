@@ -19,8 +19,11 @@
 
 package org.jclouds.abiquo.domain.enterprise;
 
-import org.jclouds.abiquo.AbiquoContext;
+
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.appliancemanager.transport.TemplateStateDto;
 import com.abiquo.appliancemanager.transport.TemplateStatusEnumType;
@@ -36,7 +39,7 @@ public class TemplateState extends DomainWrapper<TemplateStateDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected TemplateState(final AbiquoContext context, final TemplateStateDto target)
+    protected TemplateState(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final TemplateStateDto target)
     {
         super(context, target);
     }

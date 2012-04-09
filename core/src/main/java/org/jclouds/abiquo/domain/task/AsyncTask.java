@@ -21,8 +21,10 @@ package org.jclouds.abiquo.domain.task;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.task.TaskDto;
 import com.abiquo.server.core.task.enums.TaskState;
@@ -38,7 +40,7 @@ public class AsyncTask extends DomainWrapper<TaskDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected AsyncTask(final AbiquoContext context, final TaskDto target)
+    protected AsyncTask(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final TaskDto target)
     {
         super(context, target);
     }

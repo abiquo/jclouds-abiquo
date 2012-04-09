@@ -19,8 +19,11 @@
 
 package org.jclouds.abiquo.domain.config;
 
-import org.jclouds.abiquo.AbiquoContext;
+
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.config.SystemPropertyDto;
 
@@ -38,7 +41,7 @@ public class SystemProperty extends DomainWrapper<SystemPropertyDto>
     /**
      * Constructor to be used only by the builder. This resource cannot be created.
      */
-    private SystemProperty(final AbiquoContext context, final SystemPropertyDto target)
+    private SystemProperty(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final SystemPropertyDto target)
     {
         super(context, target);
     }

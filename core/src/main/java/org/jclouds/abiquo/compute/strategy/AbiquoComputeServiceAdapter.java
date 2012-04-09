@@ -26,12 +26,14 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.features.services.AdministrationService;
+import org.jclouds.abiquo.features.services.CloudService;
+import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceAdapter;
@@ -57,13 +59,20 @@ public class AbiquoComputeServiceAdapter
     @Named(ComputeServiceConstants.COMPUTE_LOGGER)
     protected Logger logger = Logger.NULL;
 
-    private final AbiquoContext context;
+    private final AdministrationService adminService;
+
+    private final CloudService cloudService;
+
+    private final MonitoringService monitoringService;
 
     @Inject
-    public AbiquoComputeServiceAdapter(final AbiquoContext context)
+    public AbiquoComputeServiceAdapter(final AdministrationService adminService,
+        final CloudService cloudService, final MonitoringService monitoringService)
     {
         super();
-        this.context = checkNotNull(context, "context");
+        this.adminService = checkNotNull(adminService, "adminService");
+        this.cloudService = checkNotNull(cloudService, "cloudService");
+        this.monitoringService = checkNotNull(monitoringService, "monitoringService");
     }
 
     @Override
@@ -85,7 +94,7 @@ public class AbiquoComputeServiceAdapter
     @Override
     public Iterable<VirtualMachineTemplate> listImages()
     {
-        User user = context.getAdministrationService().getCurrentUserInfo();
+        User user = adminService.getCurrentUserInfo();
         Enterprise enterprise = user.getEnterprise();
         return enterprise.listTemplates();
     }
@@ -93,7 +102,7 @@ public class AbiquoComputeServiceAdapter
     @Override
     public Iterable<Datacenter> listLocations()
     {
-        User user = context.getAdministrationService().getCurrentUserInfo();
+        User user = adminService.getCurrentUserInfo();
         Enterprise enterprise = user.getEnterprise();
         return enterprise.listAllowedDatacenters();
     }
@@ -103,7 +112,7 @@ public class AbiquoComputeServiceAdapter
     {
         // FIXME: Try to avoid calling the cloudService.findVirtualMachine. Navigate the hierarchy
         // instead.
-        return context.getCloudService().findVirtualMachine(vmId(id));
+        return cloudService.findVirtualMachine(vmId(id));
     }
 
     @Override
@@ -116,7 +125,7 @@ public class AbiquoComputeServiceAdapter
     @Override
     public void rebootNode(final String id)
     {
-        VirtualMachineMonitor monitor = context.getMonitoringService().getVirtualMachineMonitor();
+        VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
         VirtualMachine vm = getNode(id);
 
         // TODO: Implement the reboot method in jclouds-abiquo core
@@ -129,7 +138,7 @@ public class AbiquoComputeServiceAdapter
     @Override
     public void resumeNode(final String id)
     {
-        VirtualMachineMonitor monitor = context.getMonitoringService().getVirtualMachineMonitor();
+        VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
         VirtualMachine vm = getNode(id);
         vm.changeState(VirtualMachineState.ON);
         monitor.awaitState(VirtualMachineState.ON, vm);
@@ -138,7 +147,7 @@ public class AbiquoComputeServiceAdapter
     @Override
     public void suspendNode(final String id)
     {
-        VirtualMachineMonitor monitor = context.getMonitoringService().getVirtualMachineMonitor();
+        VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
         VirtualMachine vm = getNode(id);
         vm.changeState(VirtualMachineState.PAUSED);
         monitor.awaitState(VirtualMachineState.PAUSED, vm);
@@ -147,7 +156,7 @@ public class AbiquoComputeServiceAdapter
     @Override
     public Iterable<VirtualMachine> listNodes()
     {
-        return context.getCloudService().listVirtualMachines();
+        return cloudService.listVirtualMachines();
     }
 
     private static Predicate<VirtualMachine> vmId(final String id)

@@ -23,9 +23,11 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.appliancemanager.transport.TemplatesStateDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
@@ -48,7 +50,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
     /**
      * Constructor to be used only by the builder.
      */
-    protected TemplateDefinitionList(final AbiquoContext context,
+    protected TemplateDefinitionList(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final TemplateDefinitionListDto target)
     {
         super(context, target);
@@ -143,14 +145,14 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context, final Enterprise enterprise)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Enterprise enterprise)
     {
         return new Builder(context, enterprise);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private Enterprise enterprise;
 
@@ -158,7 +160,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
 
         private String url;
 
-        public Builder(final AbiquoContext context, final Enterprise enterprise)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Enterprise enterprise)
         {
             super();
             this.context = context;

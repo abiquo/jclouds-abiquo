@@ -28,7 +28,6 @@ import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.ComputeServiceContextFactory;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.providers.BaseProviderMetadataTest;
-import org.jclouds.providers.ProviderMetadata;
 import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableSet;
@@ -45,7 +44,7 @@ public class AbiquoProviderTest extends BaseProviderMetadataTest
 
     public AbiquoProviderTest()
     {
-        super(new AbiquoProviderMetadata(), ProviderMetadata.COMPUTE_TYPE);
+        super(new AbiquoProviderMetadata(), new AbiquoApiMetadata());
     }
 
     public void testProviderConfiguration()
@@ -58,7 +57,7 @@ public class AbiquoProviderTest extends BaseProviderMetadataTest
 
         assertNotNull(context);
         assertNotNull(context.getComputeService());
-        assertEquals(context.getProviderSpecificContext().getClass(), AbiquoContextImpl.class);
+        assertEquals(context.getClass(), AbiquoContextImpl.class);
     }
 
 }

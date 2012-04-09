@@ -27,7 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
@@ -50,6 +51,7 @@ import org.jclouds.abiquo.strategy.config.ListProperties;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
@@ -70,7 +72,7 @@ import com.google.common.collect.Iterables;
 public class BaseAdministrationService implements AdministrationService
 {
     @VisibleForTesting
-    protected AbiquoContext context;
+    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     @VisibleForTesting
     protected final ListDatacenters listDatacenters;
@@ -97,7 +99,7 @@ public class BaseAdministrationService implements AdministrationService
     protected final ListCategories listCategories;
 
     @Inject
-    protected BaseAdministrationService(final AbiquoContext context,
+    protected BaseAdministrationService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final ListDatacenters listDatacenters, final ListMachines listMachines,
         final ListEnterprises listEnterprises, final ListRoles listRoles,
         final ListLicenses listLicenses, final ListPrivileges listPrivileges,
@@ -132,7 +134,8 @@ public class BaseAdministrationService implements AdministrationService
     public Datacenter getDatacenter(final Integer datacenterId)
     {
         DatacenterDto datacenter =
-            context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+            context.getApi().getInfrastructureClient()
+                .getDatacenter(datacenterId);
         return wrap(context, Datacenter.class, datacenter);
     }
 

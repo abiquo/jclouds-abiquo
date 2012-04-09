@@ -25,7 +25,8 @@ import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
@@ -34,6 +35,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
@@ -68,7 +70,7 @@ public class Machine extends AbstractPhysicalMachine
     /**
      * Constructor to be used only by the builder.
      */
-    protected Machine(final AbiquoContext context, final MachineDto target)
+    protected Machine(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final MachineDto target)
     {
         super(context, target);
         extractVirtualSwitches();
@@ -227,14 +229,14 @@ public class Machine extends AbstractPhysicalMachine
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context, final Rack rack)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Rack rack)
     {
         return new Builder(context, rack);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private String name, description;
 
@@ -274,7 +276,7 @@ public class Machine extends AbstractPhysicalMachine
 
         private Rack rack;
 
-        public Builder(final AbiquoContext context, final Rack rack)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Rack rack)
         {
             super();
             checkNotNull(rack, ValidationErrors.NULL_RESOURCE + Rack.class);

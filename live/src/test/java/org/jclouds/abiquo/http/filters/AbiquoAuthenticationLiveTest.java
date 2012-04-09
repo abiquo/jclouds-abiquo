@@ -88,7 +88,9 @@ public class AbiquoAuthenticationLiveTest
         try
         {
             // Perform a call to get the logged user and verify the identity
-            UserDto user = tokenContext.getApi().getAdminClient().getCurrentUser();
+            UserDto user =
+                tokenContext.getProviderSpecificContext().getApi().getAdminClient()
+                    .getCurrentUser();
             assertNotNull(user);
             assertEquals(user.getNick(), identity);
         }
@@ -117,7 +119,7 @@ public class AbiquoAuthenticationLiveTest
         // Perform a call to get the logged user. It should fail
         try
         {
-            tokenContext.getApi().getAdminClient().getCurrentUser();
+            tokenContext.getProviderSpecificContext().getApi().getAdminClient().getCurrentUser();
         }
         catch (AuthorizationException ex)
         {

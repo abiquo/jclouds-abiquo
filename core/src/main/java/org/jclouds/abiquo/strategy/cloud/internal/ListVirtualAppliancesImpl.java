@@ -32,12 +32,15 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
+import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -53,7 +56,9 @@ import com.google.inject.Inject;
 @Singleton
 public class ListVirtualAppliancesImpl implements ListVirtualAppliances
 {
-    protected AbiquoContext context;
+    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+
+    protected final ListVirtualDatacenters listVirtualDatacenters;
 
     protected final ExecutorService userExecutor;
 
@@ -65,11 +70,14 @@ public class ListVirtualAppliancesImpl implements ListVirtualAppliances
     protected Long maxTime;
 
     @Inject
-    ListVirtualAppliancesImpl(final AbiquoContext context,
-        @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
+    ListVirtualAppliancesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
+        final ListVirtualDatacenters listVirtualDatacenters)
     {
         super();
         this.context = checkNotNull(context, "context");
+        this.listVirtualDatacenters =
+            checkNotNull(listVirtualDatacenters, "listVirtualDatacenters");
         this.userExecutor = checkNotNull(userExecutor, "userExecutor");
     }
 
@@ -77,7 +85,7 @@ public class ListVirtualAppliancesImpl implements ListVirtualAppliances
     public Iterable<VirtualAppliance> execute()
     {
         // Find virtual appliances in concurrent requests
-        Iterable<VirtualDatacenter> vdcs = context.getCloudService().listVirtualDatacenters();
+        Iterable<VirtualDatacenter> vdcs = listVirtualDatacenters.execute();
         Iterable<VirtualApplianceDto> vapps = listConcurrentVirtualAppliances(vdcs);
 
         return wrap(context, VirtualAppliance.class, vapps);

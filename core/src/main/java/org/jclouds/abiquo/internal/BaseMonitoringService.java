@@ -30,7 +30,9 @@ import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.config.SchedulerModule;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
 import org.jclouds.abiquo.events.monitor.CompletedEvent;
@@ -42,6 +44,7 @@ import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.RestContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
@@ -59,7 +62,7 @@ import com.google.inject.Inject;
 public class BaseMonitoringService implements MonitoringService
 {
     @VisibleForTesting
-    protected AbiquoContext context;
+    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     /** The scheduler used to perform monitoring tasks. */
     @VisibleForTesting
@@ -81,7 +84,7 @@ public class BaseMonitoringService implements MonitoringService
     private Logger logger = Logger.NULL;
 
     @Inject
-    public BaseMonitoringService(final AbiquoContext context,
+    public BaseMonitoringService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus)
     {

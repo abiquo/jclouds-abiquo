@@ -24,9 +24,11 @@ import static com.google.common.collect.Iterables.find;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
@@ -59,7 +61,7 @@ public abstract class AbstractPhysicalMachine extends DomainWrapper<MachineDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected AbstractPhysicalMachine(final AbiquoContext context, final MachineDto target)
+    protected AbstractPhysicalMachine(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final MachineDto target)
     {
         super(context, target);
         extractVirtualSwitches();

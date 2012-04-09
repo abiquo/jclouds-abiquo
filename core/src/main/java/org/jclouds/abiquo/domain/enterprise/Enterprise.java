@@ -23,7 +23,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
@@ -37,6 +38,7 @@ import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
@@ -74,7 +76,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Enterprise(final AbiquoContext context, final EnterpriseDto target)
+    protected Enterprise(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final EnterpriseDto target)
     {
         super(context, target);
     }
@@ -684,14 +686,14 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
     {
         return new Builder(context);
     }
 
     public static class Builder extends LimitsBuilder<Builder>
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private String name;
 
@@ -711,7 +713,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         private String chefValidatorCertificate;
 
-        public Builder(final AbiquoContext context)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
         {
             super();
             this.context = context;

@@ -63,8 +63,8 @@ public class TemplateDefinitionListLiveTest extends BaseAbiquoClientLiveTest
     public void setup()
     {
         list =
-            TemplateDefinitionList.builder(context, env.enterprise).name("myList")
-                .url("http://virtualapp-repository.com/vapp1.ovf").build();
+            TemplateDefinitionList.builder(context.getProviderSpecificContext(), env.enterprise)
+                .name("myList").url("http://virtualapp-repository.com/vapp1.ovf").build();
 
         list.save();
 

@@ -21,12 +21,14 @@ package org.jclouds.abiquo.domain.cloud;
 
 import java.util.Date;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.server.core.appslibrary.CategoryDto;
@@ -45,7 +47,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualMachineTemplate(final AbiquoContext context,
+    protected VirtualMachineTemplate(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final VirtualMachineTemplateDto target)
     {
         super(context, target);
@@ -91,7 +93,8 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return context.getAdministrationService().getEnterprise(enterpriseId);
+        return wrap(context, Enterprise.class, context.getApi().getEnterpriseClient()
+            .getEnterprise(enterpriseId));
     }
 
     /**
@@ -103,7 +106,8 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public Datacenter getDatacenter()
     {
         Integer repositoryId = target.getIdFromLink(ParentLinkName.DATACENTER_REPOSITORY);
-        return context.getAdministrationService().getDatacenter(repositoryId);
+        return wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
+            .getDatacenter(repositoryId));
     }
 
     // Delegate methods

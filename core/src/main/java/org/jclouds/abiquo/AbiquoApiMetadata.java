@@ -20,27 +20,28 @@ package org.jclouds.abiquo;
 
 import java.net.URI;
 
-import org.jclouds.providers.BaseProviderMetadata;
-import org.jclouds.providers.ProviderMetadata;
+import org.jclouds.apis.ApiMetadata;
+import org.jclouds.apis.ApiType;
+import org.jclouds.apis.BaseApiMetadata;
 
 /**
- * Implementation of {@link ProviderMetadata} for Abiquo.
+ * Implementation of {@link ApiMetadata} for Abiquo API.
  * 
  * @author Ignasi Barrera
  */
-public class AbiquoProviderMetadata extends BaseProviderMetadata
+public class AbiquoApiMetadata extends BaseApiMetadata
 {
-    public AbiquoProviderMetadata()
+    public AbiquoApiMetadata()
     {
-        this(builder().id("abiquo").name("abiquo").api(new AbiquoApiMetadata())
-            .homepage(URI.create("http://www.abiquo.com"))
-            .console(URI.create("https://abiquo.com")));
+        this(builder().id("abiquo").type(ApiType.COMPUTE).name("Abiquo API")
+            .identityName("API Username").credentialName("API Password")
+            .documentation(URI.create("http://community.abiquo.com")));
     }
 
     // below are so that we can reuse builders, toString, hashCode, etc.
     // we have to set concrete classes here, as our base class cannot be
     // concrete due to serviceLoader
-    protected AbiquoProviderMetadata(final ConcreteBuilder builder)
+    protected AbiquoApiMetadata(final Builder< ? > builder)
     {
         super(builder);
     }
@@ -49,9 +50,9 @@ public class AbiquoProviderMetadata extends BaseProviderMetadata
     {
 
         @Override
-        public AbiquoProviderMetadata build()
+        public AbiquoApiMetadata build()
         {
-            return new AbiquoProviderMetadata(this);
+            return new AbiquoApiMetadata(this);
         }
     }
 
@@ -63,7 +64,6 @@ public class AbiquoProviderMetadata extends BaseProviderMetadata
     @Override
     public ConcreteBuilder toBuilder()
     {
-        return builder().fromProviderMetadata(this);
+        return builder().fromApiMetadata(this);
     }
-
 }
