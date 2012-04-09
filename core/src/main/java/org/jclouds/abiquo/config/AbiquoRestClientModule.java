@@ -99,7 +99,6 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
         bindClient();
         bindErrorHandlers();
         bindRetryHandlers();
-
         bindAbiquoGenericHttpClient();
         bind(Utils.class).to(ExtendedUtils.class);
     }
