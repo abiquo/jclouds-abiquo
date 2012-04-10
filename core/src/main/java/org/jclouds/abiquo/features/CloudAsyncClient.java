@@ -324,7 +324,6 @@ public interface CloudAsyncClient
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(LinksDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindIpRefToPayload.class) IpPoolManagementDto ip);
@@ -336,7 +335,6 @@ public interface CloudAsyncClient
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(LinksDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> createNic(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindUnmanagedIpRefToPayload.class) VLANNetworkDto network);
@@ -347,7 +345,6 @@ public interface CloudAsyncClient
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> deleteNic(
         @EndpointLink("edit") @BinderParam(BindToPath.class) NicDto nic);
 
@@ -358,7 +355,6 @@ public interface CloudAsyncClient
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(LinksDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> replaceNics(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindIpRefsToPayload.class) IpPoolManagementDto... ips);
@@ -508,7 +504,6 @@ public interface CloudAsyncClient
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(VirtualMachineDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> updateVirtualMachine(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine);
 
@@ -587,7 +582,6 @@ public interface CloudAsyncClient
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> detachAllVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -598,7 +592,6 @@ public interface CloudAsyncClient
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(LinksDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> replaceVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
@@ -618,7 +611,6 @@ public interface CloudAsyncClient
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> detachAllHardDisks(
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
@@ -629,7 +621,6 @@ public interface CloudAsyncClient
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(LinksDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> replaceHardDisks(
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindHardDiskRefsToPayload.class) DiskManagementDto... hardDisks);
@@ -748,10 +739,10 @@ public interface CloudAsyncClient
      */
     @EnterpriseEdition
     @PUT
-    @Consumes(VolumeManagementDto.BASE_MEDIA_TYPE)
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(VolumeManagementDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<VolumeManagementDto> updateVolume(
+    ListenableFuture<AcceptedRequestDto<String>> updateVolume(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VolumeManagementDto volume);
 
     /**

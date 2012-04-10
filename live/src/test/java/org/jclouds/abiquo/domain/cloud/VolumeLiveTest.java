@@ -30,6 +30,7 @@ import java.util.List;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.cloud.VolumePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
@@ -85,7 +86,8 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
         assertNotNull(volume);
 
         volume.setName("Hawaian volume updated");
-        volume.update();
+        AsyncTask task = volume.update();
+        assertNull(task);
 
         // Reload the volume to check
         Volume updated = env.virtualDatacenter.getVolume(volume.getId());
