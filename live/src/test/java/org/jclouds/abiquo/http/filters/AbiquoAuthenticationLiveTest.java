@@ -146,8 +146,8 @@ public class AbiquoAuthenticationLiveTest
         props.setProperty("abiquo.endpoint", endpoint);
 
         AbiquoContext context =
-            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", token, null,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", identity,
+                credential, ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         try
         {
