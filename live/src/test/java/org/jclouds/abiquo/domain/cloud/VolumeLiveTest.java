@@ -30,6 +30,7 @@ import java.util.List;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.cloud.VolumePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
@@ -85,7 +86,8 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
         assertNotNull(volume);
 
         volume.setName("Hawaian volume updated");
-        volume.update();
+        AsyncTask task = volume.update();
+        assertNull(task);
 
         // Reload the volume to check
         Volume updated = env.virtualDatacenter.getVolume(volume.getId());
@@ -97,8 +99,8 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
     {
         // Create the new virtual datacenter
         PrivateNetwork network =
-            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1").address(
-                "192.168.1.0").mask(24).build();
+            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1")
+                .address("192.168.1.0").mask(24).build();
 
         VirtualDatacenter newVdc =
             VirtualDatacenter.builder(context, env.datacenter, env.enterprise).name("New VDC")
@@ -113,15 +115,15 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
         volume.moveTo(newVdc);
 
         // Check that the underlying Dto has been updated to the new VDC
-        assertTrue(volume.unwrap().getEditLink().getHref().startsWith(
-            newVdc.unwrap().getEditLink().getHref()));
+        assertTrue(volume.unwrap().getEditLink().getHref()
+            .startsWith(newVdc.unwrap().getEditLink().getHref()));
 
         // Move it back to the original VDC
         volume.moveTo(env.virtualDatacenter);
 
         // Check that the underlying Dto has been updated to the new VDC
-        assertTrue(volume.unwrap().getEditLink().getHref().startsWith(
-            env.virtualDatacenter.unwrap().getEditLink().getHref()));
+        assertTrue(volume.unwrap().getEditLink().getHref()
+            .startsWith(env.virtualDatacenter.unwrap().getEditLink().getHref()));
 
         // Tear down the virtual datacenter
         newVdc.delete();
