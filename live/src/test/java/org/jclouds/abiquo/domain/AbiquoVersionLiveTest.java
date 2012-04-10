@@ -29,8 +29,8 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
+import org.jclouds.compute.ComputeServiceContextFactory;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -64,8 +64,8 @@ public class AbiquoVersionLiveTest
         props.setProperty(Constants.PROPERTY_API_VERSION, "0.0");
 
         context =
-            new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", identity,
+                credential, ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
     }
 
     @AfterMethod

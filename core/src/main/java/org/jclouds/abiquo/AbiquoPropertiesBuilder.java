@@ -22,6 +22,7 @@ package org.jclouds.abiquo;
 import static org.jclouds.Constants.PROPERTY_API_VERSION;
 import static org.jclouds.Constants.PROPERTY_BUILD_VERSION;
 import static org.jclouds.Constants.PROPERTY_MAX_REDIRECTS;
+import static org.jclouds.Constants.PROPERTY_PRETTY_PRINT_PAYLOADS;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 import static org.jclouds.abiquo.reference.AbiquoConstants.MAX_SCHEDULER_THREADS;
 
@@ -54,6 +55,8 @@ public class AbiquoPropertiesBuilder extends PropertiesBuilder
         properties.setProperty(ASYNC_TASK_MONITOR_DELAY, "5000");
         // The default number of concurrent scheduler threads to be used
         properties.setProperty(MAX_SCHEDULER_THREADS, "10");
+        // Do not pretty print payloads
+        properties.setProperty(PROPERTY_PRETTY_PRINT_PAYLOADS, "false");
         return properties;
     }
 

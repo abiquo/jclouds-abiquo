@@ -23,12 +23,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Properties;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.AbiquoContextFactory;
+import org.jclouds.compute.ComputeServiceContextFactory;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.jclouds.rest.RestContextFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -56,10 +53,10 @@ public class BaseInjectionTest
             checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
 
         injector =
-            new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
-                AbiquoContextFactory.PROVIDER_NAME, identity, credential,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), buildProperties())
-                .buildInjector();
+            new ComputeServiceContextFactory()
+                .createContext("abiquo", identity, credential,
+                    ImmutableSet.<Module> of(new SLF4JLoggingModule()), buildProperties())
+                .getUtils().getInjector();
     }
 
     protected Properties buildProperties()

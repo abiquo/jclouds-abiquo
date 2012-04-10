@@ -74,11 +74,6 @@ public class AbiquoContextBuilder extends
         {
             modules.add(new SchedulerModule());
         }
-        // TODO: Re-enable when the EventBusModule is merged in the trunk
-        // if (!isModulePresent(ConfiguresEventBus.class))
-        // {
-        // modules.add(new EventBusModule());
-        // }
 
         return super.buildInjector();
     }

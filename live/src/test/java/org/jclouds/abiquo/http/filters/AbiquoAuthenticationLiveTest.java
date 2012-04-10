@@ -36,7 +36,7 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoContextFactory;
+import org.jclouds.compute.ComputeServiceContextFactory;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.utils.ModifyRequest;
@@ -82,7 +82,7 @@ public class AbiquoAuthenticationLiveTest
         props.setProperty("abiquo.endpoint", endpoint);
 
         AbiquoContext tokenContext =
-            new AbiquoContextFactory().createContext(token,
+            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", token, null,
                 ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         try
@@ -113,7 +113,7 @@ public class AbiquoAuthenticationLiveTest
         props.setProperty("abiquo.endpoint", endpoint);
 
         AbiquoContext tokenContext =
-            new AbiquoContextFactory().createContext(token,
+            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", token, null,
                 ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         // Perform a call to get the logged user. It should fail
@@ -146,7 +146,7 @@ public class AbiquoAuthenticationLiveTest
         props.setProperty("abiquo.endpoint", endpoint);
 
         AbiquoContext context =
-            new AbiquoContextFactory().createContext(identity, credential,
+            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", token, null,
                 ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         try

@@ -43,7 +43,7 @@ public class BindHardDiskRefsToPayloadTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -52,7 +52,7 @@ public class BindHardDiskRefsToPayloadTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -60,7 +60,7 @@ public class BindHardDiskRefsToPayloadTest
 
     public void testBindEmptyArray()
     {
-        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new DiskManagementDto[] {});
@@ -71,7 +71,7 @@ public class BindHardDiskRefsToPayloadTest
     public void testBindSingleHardDisk()
     {
         DiskManagementDto hardDisk = CloudResources.hardDiskPut();
-        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new DiskManagementDto[] {hardDisk});
@@ -84,7 +84,7 @@ public class BindHardDiskRefsToPayloadTest
     public void testBindMultipleHardDisks()
     {
         DiskManagementDto hardDisk = CloudResources.hardDiskPut();
-        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser());
+        BindHardDiskRefsToPayload binder = new BindHardDiskRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new DiskManagementDto[] {hardDisk, hardDisk});

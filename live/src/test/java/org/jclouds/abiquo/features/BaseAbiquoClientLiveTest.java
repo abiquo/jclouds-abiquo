@@ -25,8 +25,8 @@ import java.util.Properties;
 
 import org.jclouds.Constants;
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
+import org.jclouds.compute.ComputeServiceContextFactory;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterSuite;
@@ -70,8 +70,8 @@ public abstract class BaseAbiquoClientLiveTest
         props.put("jclouds.timeouts.InfrastructureClient.checkMachineState", "60000");
 
         context =
-            new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", identity,
+                credential, ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
 
         env = new CloudTestEnvironment(context);
         env.setup();

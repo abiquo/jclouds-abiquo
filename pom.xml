@@ -22,7 +22,7 @@
     <properties>
         <maven.compile.source>1.6</maven.compile.source>
         <maven.compile.target>1.6</maven.compile.target>
-        <jclouds.version>1.5.0-alpha.3</jclouds.version>
+        <jclouds.version>1.5.0-SNAPSHOT</jclouds.version>
         <abiquo.version>2.0-HF1-SNAPSHOT</abiquo.version>
         <abiquo.build>700d56a-297f43b</abiquo.build>
         <easymock.version>3.1</easymock.version>
@@ -45,11 +45,13 @@
             <name>Sonatype Repository</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
+        <!--
         <repository>
             <id>jclouds-test</id>
             <name>Sonatype Test Repository</name>
             <url>https://oss.sonatype.org/content/repositories/orgjclouds-184/</url>
         </repository>
+        -->
         <repository>
             <id>abiquo-repo</id>
             <name>Abiquo Maven Repository</name>
@@ -152,7 +154,7 @@
                 <groupId>com.mycila.maven-license-plugin</groupId>
                 <artifactId>maven-license-plugin</artifactId>
                 <configuration>
-                    <header>LICENSE</header>
+                    <header>./LICENSE</header>
                     <strictCheck>true</strictCheck>
                     <failIfMissing>true</failIfMissing>
                     <aggregate>true</aggregate>

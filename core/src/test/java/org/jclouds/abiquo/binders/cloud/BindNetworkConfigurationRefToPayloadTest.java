@@ -52,7 +52,7 @@ public class BindNetworkConfigurationRefToPayloadTest
     public void testInvalidNullRequest() throws SecurityException, NoSuchMethodException
     {
         BindNetworkConfigurationRefToPayload binder =
-            new BindNetworkConfigurationRefToPayload(new JAXBParser());
+            new BindNetworkConfigurationRefToPayload(new JAXBParser("false"));
         binder.bindToRequest(null, new Object());
     }
 
@@ -60,7 +60,7 @@ public class BindNetworkConfigurationRefToPayloadTest
     public void testInvalidRequestType() throws SecurityException, NoSuchMethodException
     {
         BindNetworkConfigurationRefToPayload binder =
-            new BindNetworkConfigurationRefToPayload(new JAXBParser());
+            new BindNetworkConfigurationRefToPayload(new JAXBParser("false"));
         binder.bindToRequest(new HttpRequest("m", URI.create("http://localhost")), new Object());
     }
 
@@ -79,7 +79,7 @@ public class BindNetworkConfigurationRefToPayloadTest
                 .endpoint(URI.create("http://localhost")).build();
 
         BindNetworkConfigurationRefToPayload binder =
-            new BindNetworkConfigurationRefToPayload(new JAXBParser());
+            new BindNetworkConfigurationRefToPayload(new JAXBParser("false"));
         binder.bindToRequest(request, null);
     }
 
@@ -99,7 +99,7 @@ public class BindNetworkConfigurationRefToPayloadTest
                 .endpoint(URI.create("http://localhost")).build();
 
         BindNetworkConfigurationRefToPayload binder =
-            new BindNetworkConfigurationRefToPayload(new JAXBParser());
+            new BindNetworkConfigurationRefToPayload(new JAXBParser("false"));
         binder.bindToRequest(request, network);
     }
 
@@ -118,7 +118,7 @@ public class BindNetworkConfigurationRefToPayloadTest
                 .endpoint(URI.create("http://localhost")).build();
 
         BindNetworkConfigurationRefToPayload binder =
-            new BindNetworkConfigurationRefToPayload(new JAXBParser());
+            new BindNetworkConfigurationRefToPayload(new JAXBParser("false"));
         binder.bindToRequest(request, network);
     }
 
@@ -137,7 +137,7 @@ public class BindNetworkConfigurationRefToPayloadTest
                 .endpoint(URI.create("http://localhost")).build();
 
         BindNetworkConfigurationRefToPayload binder =
-            new BindNetworkConfigurationRefToPayload(new JAXBParser());
+            new BindNetworkConfigurationRefToPayload(new JAXBParser("false"));
 
         String configLink = vm.searchLink("configurations").getHref() + "/" + network.getId();
 

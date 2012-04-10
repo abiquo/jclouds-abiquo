@@ -44,7 +44,7 @@ public class BindUnmanagedIpRefToPayloadTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser());
+        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -53,7 +53,7 @@ public class BindUnmanagedIpRefToPayloadTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser());
+        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -63,7 +63,7 @@ public class BindUnmanagedIpRefToPayloadTest
     {
         VLANNetworkDto network = NetworkResources.unmanagedNetworkPut();
         RESTLink ipsLink = network.searchLink("ips");
-        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser());
+        BindUnmanagedIpRefToPayload binder = new BindUnmanagedIpRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, network);

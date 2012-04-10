@@ -44,7 +44,7 @@ public class BindVirtualDatacenterRefToPayloadTest
     public void testInvalidNullInput()
     {
         BindVirtualDatacenterRefToPayload binder =
-            new BindVirtualDatacenterRefToPayload(new JAXBParser());
+            new BindVirtualDatacenterRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -54,7 +54,7 @@ public class BindVirtualDatacenterRefToPayloadTest
     public void testInvalidTypeInput()
     {
         BindVirtualDatacenterRefToPayload binder =
-            new BindVirtualDatacenterRefToPayload(new JAXBParser());
+            new BindVirtualDatacenterRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -64,7 +64,7 @@ public class BindVirtualDatacenterRefToPayloadTest
     {
         VirtualDatacenterDto vdc = CloudResources.virtualDatacenterPut();
         BindVirtualDatacenterRefToPayload binder =
-            new BindVirtualDatacenterRefToPayload(new JAXBParser());
+            new BindVirtualDatacenterRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, vdc);

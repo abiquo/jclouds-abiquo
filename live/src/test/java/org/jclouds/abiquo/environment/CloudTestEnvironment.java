@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -39,9 +38,12 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
+import org.jclouds.compute.ComputeServiceContextFactory;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
+import com.google.inject.Module;
 
 /**
  * Test environment for cloud live tests.
@@ -110,7 +112,9 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
         Properties props = new Properties();
         props.put("abiquo.endpoint", endpoint);
-        plainUserContext = new AbiquoContextFactory().createContext("jclouds", "user", props);
+        plainUserContext =
+            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", "jclouds",
+                "user", ImmutableSet.<Module> of(), props);
     }
 
     private void createEnterpriseAdminContext()
@@ -121,7 +125,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         Properties props = new Properties();
         props.put("abiquo.endpoint", endpoint);
         enterpriseAdminContext =
-            new AbiquoContextFactory().createContext("jclouds-admin", "admin", props);
+            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo",
+                "jclouds-admin", "admin", ImmutableSet.<Module> of(), props);
     }
 
     protected void findDefaultEnterprise()

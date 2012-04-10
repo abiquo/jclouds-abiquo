@@ -52,7 +52,7 @@ public class ReturnMovedVolumeTest
     public void testReturnOriginalExceptionIfNotHttpResponseException()
     {
         Function<Exception, VolumeManagementDto> function =
-            new ReturnMovedVolume(new ReturnMoveVolumeReference(new JAXBParser(),
+            new ReturnMovedVolume(new ReturnMoveVolumeReference(new JAXBParser("false"),
                 TypeLiteral.get(MovedVolumeDto.class)));
 
         RuntimeException exception = new RuntimeException();
@@ -69,9 +69,9 @@ public class ReturnMovedVolumeTest
 
     public void testReturnVolume() throws IOException
     {
-        JAXBParser xmlParser = new JAXBParser();
+        JAXBParser xmlParser = new JAXBParser("false");
         Function<Exception, VolumeManagementDto> function =
-            new ReturnMovedVolume(new ReturnMoveVolumeReference(new JAXBParser(),
+            new ReturnMovedVolume(new ReturnMoveVolumeReference(new JAXBParser("false"),
                 TypeLiteral.get(MovedVolumeDto.class)));
 
         VolumeManagementDto volume = new VolumeManagementDto();
