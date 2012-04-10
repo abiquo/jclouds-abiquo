@@ -25,6 +25,7 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.ImageBuilder;
+import org.jclouds.compute.domain.OperatingSystem;
 
 import com.google.common.base.Function;
 
@@ -45,7 +46,8 @@ public class VirtualMachineTemplateToImage implements Function<VirtualMachineTem
         builder.name(template.getName());
         builder.description(template.getDescription());
         builder.uri(URI.create(template.getPath())); // TODO: Should be the public download URI
-        builder.operatingSystem(null); // TODO: Operating system not implemented in Abiquo Templates
+        // TODO: Operating system not implemented in Abiquo Templates
+        builder.operatingSystem(OperatingSystem.builder().description(template.getName()).build());
         // TODO: image credentials
         return builder.build();
     }
