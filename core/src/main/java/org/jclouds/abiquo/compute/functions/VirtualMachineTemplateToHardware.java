@@ -18,6 +18,8 @@
  */
 package org.jclouds.abiquo.compute.functions;
 
+import java.net.URI;
+
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
@@ -45,6 +47,7 @@ public class VirtualMachineTemplateToHardware implements Function<VirtualMachine
     {
         HardwareBuilder builder = new HardwareBuilder();
         builder.ids(template.getId().toString());
+        builder.uri(URI.create(template.unwrap().getEditLink().getHref()));
         builder.name(template.getName());
         builder.processor(new Processor(template.getCpuRequired(), DEFAULT_CORE_SPEED));
         builder.ram(template.getRamRequired());

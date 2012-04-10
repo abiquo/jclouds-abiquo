@@ -21,6 +21,8 @@ package org.jclouds.abiquo.compute.functions;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
 
+import java.net.URI;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
@@ -66,6 +68,7 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
     {
         NodeMetadataBuilder builder = new NodeMetadataBuilder();
         builder.ids(vm.getId().toString());
+        builder.uri(URI.create(vm.unwrap().getEditLink().getHref()));
         builder.name(vm.getName());
         builder.hostname(vm.getName()); // TODO: Abiquo does not set the hostname
 
