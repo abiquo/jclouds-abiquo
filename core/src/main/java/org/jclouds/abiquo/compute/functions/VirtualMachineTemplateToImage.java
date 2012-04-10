@@ -27,6 +27,7 @@ import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.ImageBuilder;
 import org.jclouds.compute.domain.OperatingSystem;
 
+import com.abiquo.model.rest.RESTLink;
 import com.google.common.base.Function;
 
 /**
@@ -45,7 +46,10 @@ public class VirtualMachineTemplateToImage implements Function<VirtualMachineTem
         builder.ids(template.getId().toString());
         builder.name(template.getName());
         builder.description(template.getDescription());
-        builder.uri(URI.create(template.getPath())); // TODO: Should be the public download URI
+
+        RESTLink downloadLink = template.unwrap().searchLink("diskfile");
+        builder.uri(URI.create(downloadLink.getHref()));
+
         // TODO: Operating system not implemented in Abiquo Templates
         builder.operatingSystem(OperatingSystem.builder().description(template.getName()).build());
         // TODO: image credentials

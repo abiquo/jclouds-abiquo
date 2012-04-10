@@ -58,6 +58,8 @@ public class AbiquoProviderTest extends BaseProviderMetadataTest
         assertNotNull(context);
         assertNotNull(context.getComputeService());
         assertEquals(context.getClass(), AbiquoContextImpl.class);
+
+        context.close();
     }
 
 }

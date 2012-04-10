@@ -25,6 +25,7 @@ import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToHardware;
 import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToImage;
 import org.jclouds.abiquo.compute.functions.VirtualMachineToNodeMetadata;
 import org.jclouds.abiquo.compute.strategy.AbiquoComputeServiceAdapter;
+import org.jclouds.abiquo.compute.suppliers.AllowedDatacentersSupplier;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
@@ -35,6 +36,7 @@ import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.domain.Location;
 import org.jclouds.location.suppliers.ImplicitLocationSupplier;
+import org.jclouds.location.suppliers.LocationsSupplier;
 import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstZone;
 
 import com.google.common.base.Function;
@@ -75,6 +77,7 @@ public class AbiquoComputeServiceContextModule
         bind(new TypeLiteral<Function<Datacenter, Location>>()
         {
         }).to(DatacenterToLocation.class);
+        bind(LocationsSupplier.class).to(AllowedDatacentersSupplier.class).in(Scopes.SINGLETON);
         bind(ImplicitLocationSupplier.class).to(OnlyLocationOrFirstZone.class).in(Scopes.SINGLETON);
     }
 

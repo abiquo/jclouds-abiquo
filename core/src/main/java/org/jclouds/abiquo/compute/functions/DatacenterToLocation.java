@@ -43,11 +43,11 @@ public class DatacenterToLocation implements Function<Datacenter, Location>
     {
         LocationBuilder builder = new LocationBuilder();
         builder.id(datacenter.getId().toString());
-        builder.description(datacenter.getName() + " - " + datacenter.getLocation());
+        builder.description(datacenter.getName() + " [" + datacenter.getLocation() + "]");
         builder.metadata(ImmutableMap.<String, Object> of());
         builder.scope(LocationScope.ZONE);
         // TODO: Convert to ISO3166 code?
-        builder.iso3166Codes(ImmutableSet.<String> of(datacenter.getLocation()));
+        builder.iso3166Codes(ImmutableSet.<String> of());
         return builder.build();
     }
 
