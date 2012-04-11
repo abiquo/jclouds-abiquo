@@ -23,8 +23,6 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.domain.enterprise.User;
-import org.jclouds.collect.Memoized;
 
 import com.google.common.base.Supplier;
 
@@ -35,10 +33,10 @@ import com.google.common.base.Supplier;
  */
 public class GetCurrentEnterprise implements Supplier<Enterprise>
 {
-    private final Supplier<User> currentUserSupplier;
+    private final GetCurrentUser currentUserSupplier;
 
     @Inject
-    public GetCurrentEnterprise(@Memoized final Supplier<User> currentUserSupplier)
+    public GetCurrentEnterprise(final GetCurrentUser currentUserSupplier)
     {
         this.currentUserSupplier = checkNotNull(currentUserSupplier, "currentUserSupplier");
     }
