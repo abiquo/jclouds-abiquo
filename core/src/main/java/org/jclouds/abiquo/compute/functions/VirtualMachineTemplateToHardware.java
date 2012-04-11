@@ -54,11 +54,16 @@ public class VirtualMachineTemplateToHardware implements Function<VirtualMachine
 
         VolumeBuilder volumeBuilder = new VolumeBuilder();
         volumeBuilder.bootDevice(true);
-        volumeBuilder.size(Long.valueOf(template.getDiskFileSize()).floatValue());
+        volumeBuilder.size(toGb(template.getHdRequired()));
         volumeBuilder.type(Volume.Type.LOCAL);
         volumeBuilder.durable(false);
         builder.volume(volumeBuilder.build());
 
         return builder.build();
+    }
+
+    private static float toGb(final long bytes)
+    {
+        return bytes / 1024 / 1024 / (float) 1024;
     }
 }
