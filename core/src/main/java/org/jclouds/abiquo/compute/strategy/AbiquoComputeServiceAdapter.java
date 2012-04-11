@@ -28,6 +28,7 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.compute.exception.NotEnoughResourcesException;
+import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -35,12 +36,13 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
+import org.jclouds.abiquo.suppliers.GetCurrentEnterprise;
+import org.jclouds.abiquo.suppliers.GetCurrentUser;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.domain.Hardware;
@@ -70,33 +72,38 @@ public class AbiquoComputeServiceAdapter
 
     private final RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
-    private final AdministrationService adminService;
-
     private final CloudService cloudService;
 
     private final MonitoringService monitoringService;
 
     private AbiquoComputeServiceHelper helper;
 
+    private GetCurrentUser currentUserSupplier;
+
+    private GetCurrentEnterprise currentEnterpriseSupplier;
+
     @Inject
     public AbiquoComputeServiceAdapter(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
-        final AdministrationService adminService, final CloudService cloudService,
-        final MonitoringService monitoringService, final AbiquoComputeServiceHelper helper)
+        final CloudService cloudService, final MonitoringService monitoringService,
+        final AbiquoComputeServiceHelper helper, final GetCurrentUser currentUserSupplier,
+        final GetCurrentEnterprise currentEnterpriseSupplier)
     {
         super();
         this.context = checkNotNull(context, "context");
-        this.adminService = checkNotNull(adminService, "adminService");
         this.cloudService = checkNotNull(cloudService, "cloudService");
         this.monitoringService = checkNotNull(monitoringService, "monitoringService");
         this.helper = checkNotNull(helper, "helper");
+        this.currentUserSupplier = checkNotNull(currentUserSupplier, "currentUserSupplier");
+        this.currentEnterpriseSupplier =
+            checkNotNull(currentEnterpriseSupplier, "currentEnterpriseSupplier");
     }
 
     @Override
     public NodeAndInitialCredentials<VirtualMachine> createNodeWithGroupEncodedIntoName(
         final String tag, final String name, final Template template)
     {
-        User user = adminService.getCurrentUserInfo();
-        Enterprise enterprise = user.getEnterprise();
+        User user = currentUserSupplier.get();
+        Enterprise enterprise = currentEnterpriseSupplier.get();
 
         Datacenter datacenter =
             enterprise.findAllowedDatacenter(DatacenterPredicates.id(Integer.valueOf(template
@@ -122,10 +129,17 @@ public class AbiquoComputeServiceAdapter
             vapp.save();
         }
 
-        VirtualMachine vm =
-            VirtualMachine.builder(context, vapp, virtualMachineTemplate).name(name)
-                .cpu(totalCores(template.getHardware())).ram(template.getHardware().getRam())
-                .build();
+        AbiquoTemplateOptions options = template.getOptions().as(AbiquoTemplateOptions.class);
+        Integer overrideCores = options.getOverrideCores();
+        Integer overrideRam = options.getOverrideRam();
+
+        VirtualMachine vm = VirtualMachine.builder(context, vapp, virtualMachineTemplate) //
+            .name(name) //
+            .cpu(overrideCores != null ? overrideCores : totalCores(template.getHardware())) //
+            .ram(overrideRam != null ? overrideRam : template.getHardware().getRam()) //
+            .password(options.getVncPassword()) // Can be null
+            .build();
+
         vm.save();
 
         VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
@@ -147,16 +161,14 @@ public class AbiquoComputeServiceAdapter
     @Override
     public Iterable<VirtualMachineTemplate> listImages()
     {
-        User user = adminService.getCurrentUserInfo();
-        Enterprise enterprise = user.getEnterprise();
+        Enterprise enterprise = currentEnterpriseSupplier.get();
         return enterprise.listTemplates();
     }
 
     @Override
     public Iterable<Datacenter> listLocations()
     {
-        User user = adminService.getCurrentUserInfo();
-        Enterprise enterprise = user.getEnterprise();
+        Enterprise enterprise = currentEnterpriseSupplier.get();
         return enterprise.listAllowedDatacenters();
     }
 
