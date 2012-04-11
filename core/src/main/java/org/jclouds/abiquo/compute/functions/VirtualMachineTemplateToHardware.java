@@ -28,6 +28,7 @@ import org.jclouds.compute.domain.HardwareBuilder;
 import org.jclouds.compute.domain.Processor;
 import org.jclouds.compute.domain.Volume;
 import org.jclouds.compute.domain.VolumeBuilder;
+import org.jclouds.compute.predicates.ImagePredicates;
 
 import com.google.common.base.Function;
 
@@ -51,6 +52,9 @@ public class VirtualMachineTemplateToHardware implements Function<VirtualMachine
         builder.name(template.getName());
         builder.processor(new Processor(template.getCpuRequired(), DEFAULT_CORE_SPEED));
         builder.ram(template.getRamRequired());
+
+        // Currently we consider each template as a hardware profile
+        builder.supportsImage(ImagePredicates.idEquals(template.getId().toString()));
 
         VolumeBuilder volumeBuilder = new VolumeBuilder();
         volumeBuilder.bootDevice(true);

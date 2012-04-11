@@ -27,6 +27,7 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.compute.exception.NotEnoughResourcesException;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -108,6 +109,10 @@ public class AbiquoComputeServiceAdapter
         VirtualDatacenter vdc =
             helper.getOrCreateVirtualDatacenterFor(user, enterprise, datacenter,
                 virtualMachineTemplate);
+        if (vdc == null)
+        {
+            throw new NotEnoughResourcesException("There are not resources to deploy the given template");
+        }
 
         // Load the virtual appliance or create it
         VirtualAppliance vapp = vdc.findVirtualAppliance(VirtualAppliancePredicates.name(tag));
@@ -117,11 +122,10 @@ public class AbiquoComputeServiceAdapter
             vapp.save();
         }
 
-        VirtualMachine vm = VirtualMachine.builder(context, vapp, virtualMachineTemplate) //
-            .name(name) // TODO: Will not be used: http://jira.abiquo.com/browse/ABIQUOJC-4
-            .cpu(totalCores(template.getHardware())) //
-            .ram(template.getHardware().getRam()) //
-            .build();
+        VirtualMachine vm =
+            VirtualMachine.builder(context, vapp, virtualMachineTemplate).name(name)
+                .cpu(totalCores(template.getHardware())).ram(template.getHardware().getRam())
+                .build();
         vm.save();
 
         VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();

@@ -53,7 +53,8 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
     public VirtualMachineToNodeMetadata(
         final VirtualMachineTemplateToImage virtualMachineTemplateToImage,
         final VirtualMachineTemplateToHardware virtualMachineTemplateToHardware,
-        final VirtualMachineStateToNodeState virtualMachineStateToNodeState)
+        final VirtualMachineStateToNodeState virtualMachineStateToNodeState,
+        final DatacenterToLocation datacenterToLocation)
     {
         this.virtualMachineTemplateToImage =
             checkNotNull(virtualMachineTemplateToImage, "virtualMachineTemplateToImage");
@@ -71,9 +72,9 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
         builder.uri(URI.create(vm.unwrap().getEditLink().getHref()));
         builder.name(vm.getName());
         builder.hostname(vm.getName()); // TODO: Abiquo does not set the hostname
+        builder.group(vm.getVirtualAppliance().getName());
 
-        // TODO: builder.location()
-        // TODO: builder.group()
+        // TODO: builder.location() Only cloud admins have access to the datacenter link of the VDC
         // TODO: builder.credentials()
 
         VirtualMachineTemplate template = vm.getTemplate();
