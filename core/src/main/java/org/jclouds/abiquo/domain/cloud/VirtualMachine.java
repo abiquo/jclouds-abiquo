@@ -71,8 +71,8 @@ import com.google.inject.TypeLiteral;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Resource">
- *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Resource</a>
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/VirtualMachineResource">
+ *      http://community.abiquo.com/display/ABI20/VirtualMachineResource</a>
  */
 public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 {
@@ -92,12 +92,29 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
     // Domain operations
 
+    /**
+     * Delete the virtual machine.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualMachineResource#VirtualMachineResource-Deleteavirtualmachine"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/VirtualMachineResource#VirtualMachineResource
+     *      -Deleteavirtualmachine</a>
+     */
     public void delete()
     {
         context.getApi().getCloudClient().deleteVirtualMachine(target);
         target = null;
     }
 
+    /**
+     * Create a new virtual machine in Abiquo.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualMachineResource#VirtualMachineResource-Createavirtualmachine"
+     *      > http://community.abiquo.com/display/ABI20/VirtualMachineResource#
+     *      VirtualMachineResource-Createavirtualmachine</a>
+     */
     public void save()
     {
         checkNotNull(template, ValidationErrors.NULL_RESOURCE + VirtualMachineTemplate.class);
@@ -107,10 +124,25 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient().createVirtualMachine(virtualAppliance.unwrap(),
-                target);
+            context.getApi().getCloudClient()
+                .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
+    /**
+     * Update virtual machine information in the server with the data from this virtual machine.
+     * This is an asynchronous call. This method returns a
+     * {@link org.jclouds.abiquo.domain.task.AsyncTask} object that keeps track of the task
+     * completion. Please refer to the documentation for details.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualMachineResource#VirtualMachineResource-Modifyavirtualmachine"
+     *      > http://community.abiquo.com/display/ABI20/VirtualMachineResource#
+     *      VirtualMachineResource-Modifyavirtualmachine</a>
+     * @see github: <a href=
+     *      "https://github.com/abiquo/jclouds-abiquo/wiki/Asynchronous-monitor-example" >
+     *      https://github.com/abiquo/jclouds-abiquo/wiki/Asynchronous-monitor-example</a>
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
     public AsyncTask update()
     {
         AcceptedRequestDto<String> taskRef =
@@ -118,14 +150,45 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return taskRef == null ? null : getTask(taskRef);
     }
 
+    /**
+     * Update virtual machine information in the server with the data from this virtual machine.
+     * This is an asynchronous call. This method returns a
+     * {@link org.jclouds.abiquo.domain.task.AsyncTask} object that keeps track of the task
+     * completion. Please refer to the documentation for details.
+     * 
+     * @param force Force update.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualMachineResource#VirtualMachineResource-Modifyavirtualmachine"
+     *      > http://community.abiquo.com/display/ABI20/VirtualMachineResource#
+     *      VirtualMachineResource-Modifyavirtualmachine</a>
+     * @see github: <a href=
+     *      "https://github.com/abiquo/jclouds-abiquo/wiki/Asynchronous-monitor-example" >
+     *      https://github.com/abiquo/jclouds-abiquo/wiki/Asynchronous-monitor-example</a>
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
     public AsyncTask update(final boolean force)
     {
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().updateVirtualMachine(target,
-                VirtualMachineOptions.builder().force(force).build());
+            context.getApi().getCloudClient()
+                .updateVirtualMachine(target, VirtualMachineOptions.builder().force(force).build());
         return taskRef == null ? null : getTask(taskRef);
     }
 
+    /**
+     * Change the state of the virtual machine. This is an asynchronous call. This method returns a
+     * {@link org.jclouds.abiquo.domain.task.AsyncTask} object that keeps track of the task
+     * completion. Please refer to the documentation for details.
+     * 
+     * @param state The new state of the virtual machine.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualMachineResource#VirtualMachineResource-Changethestateofavirtualmachine"
+     *      > http://community.abiquo.com/display/ABI20/VirtualMachineResource#
+     *      VirtualMachineResource-Changethestateofavirtualmachine</a>
+     * @see github: <a href=
+     *      "https://github.com/abiquo/jclouds-abiquo/wiki/Asynchronous-monitor-example" >
+     *      https://github.com/abiquo/jclouds-abiquo/wiki/Asynchronous-monitor-example</a>
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
     public AsyncTask changeState(final VirtualMachineState state)
     {
         VirtualMachineStateDto dto = new VirtualMachineStateDto();
@@ -137,6 +200,15 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return getTask(taskRef);
     }
 
+    /**
+     * Retrieve the state of the virtual machine.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualMachineResource#VirtualMachineResource-Retrievethestateofthevirtualmachine"
+     *      > http://community.abiquo.com/display/ABI20/VirtualMachineResource#
+     *      VirtualMachineResource-Retrievethestateofthevirtualmachine</a>
+     * @return Current state of the virtual machine.
+     */
     public VirtualMachineState getState()
     {
         VirtualMachineStateDto stateDto =
@@ -150,9 +222,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     // Parent access
 
     /**
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#VirtualApplianceResource-RetrieveaVirtualAppliance"
-     *      > http://community.abiquo.com/display/ABI20/Virtual+Appliance+Resource#
-     *      VirtualApplianceResource-RetrieveaVirtualAppliance</a>
+     * Retrieve the virtual appliance where this virtual machine is.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualApplianceResource#VirtualApplianceResource-Retrieveavirtualappliance"
+     *      > http://community.abiquo.com/display/ABI20/VirtualApplianceResource#
+     *      VirtualApplianceResource-Retrieveavirtualappliance</a>
+     * @return The virtual appliance where this virtual machine is.
      */
     public VirtualAppliance getVirtualAppliance()
     {
@@ -164,16 +240,20 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
         ParseXMLWithJAXB<VirtualApplianceDto> parser =
-            new ParseXMLWithJAXB<VirtualApplianceDto>(utils.getXml(), TypeLiteral
-                .get(VirtualApplianceDto.class));
+            new ParseXMLWithJAXB<VirtualApplianceDto>(utils.getXml(),
+                TypeLiteral.get(VirtualApplianceDto.class));
 
         return wrap(context, VirtualAppliance.class, parser.apply(response));
     }
 
     /**
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#VirtualDatacenterResource-RetrieveaVirtualDatacenter"
-     *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
-     *      VirtualDatacenterResource-RetrieveaVirtualDatacenter</a>
+     * Retrieve the virtual datacenter where this virtual machine is.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualDatacenterResource#VirtualDatacenterResource-Retireveavirtualdatacenter"
+     *      > http://community.abiquo.com/display/ABI20/VirtualDatacenterResource#
+     *      VirtualDatacenterResource-Retireveavirtualdatacenter</a>
+     * @return The virtual datacenter where this virtual machine is.
      */
     public VirtualDatacenter getVirtualDatacenter()
     {
@@ -184,9 +264,13 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-RetrieveaEnterprise"
-     *      > http://community.abiquo.com/display/ABI20/Enterprise+Resource#EnterpriseResource-
-     *      RetrieveaEnterprise</a>
+     * Retrieve the enterprise of this virtual machine.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrieveanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrieveanEnterprise</a>
+     * @return Enterprise of this virtual machine.
      */
     public Enterprise getEnterprise()
     {
@@ -195,6 +279,11 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return wrap(context, Enterprise.class, dto);
     }
 
+    /**
+     * Retrieve the template of this virtual machine.
+     * 
+     * @return Template of this virtual machine.
+     */
     public VirtualMachineTemplate getTemplate()
     {
         VirtualMachineTemplateDto dto =
@@ -317,6 +406,28 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return getTask(response);
     }
 
+    /**
+     * Reboot a virtual machine. This is an asynchronous call. This method returns a
+     * {@link org.jclouds.abiquo.domain.task.AsyncTask} object that keeps track of the task
+     * completion. Please refer to the documentation for details.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/VirtualMachineResource#VirtualMachineResource-Resetavirtualmachine"
+     *      > http://community.abiquo.com/display/ABI20/Rack+Resource#/VirtualMachineResource#
+     *      VirtualMachineResource-Resetavirtualmachine</a>
+     * @see github: <a href=
+     *      "https://github.com/abiquo/jclouds-abiquo/wiki/Asynchronous-monitor-example" >
+     *      https://github.com/abiquo/jclouds-abiquo/wiki/Asynchronous-monitor-example</a>
+     * @return The task reference or <code>null</code> if the operation completed synchronously.
+     */
+    public AsyncTask reboot()
+    {
+        AcceptedRequestDto<String> response =
+            context.getApi().getCloudClient().rebootVirtualMachine(unwrap());
+
+        return getTask(response);
+    }
+
     public AsyncTask attachHardDisks(final HardDisk... hardDisks)
     {
         List<HardDisk> expected = listAttachedHardDisks();
@@ -394,13 +505,16 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP"
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP"
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusinganinternalIP</a>
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP"
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP"
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusinganexternalIP</a>
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP"
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP"
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusingapublicIP</a>
      */
@@ -412,7 +526,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     }
 
     /**
-     * @see API: <a href="http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork"
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork"
      *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
      *      CreateaNICusinganUnmanagedNetwork</a>
      */
@@ -583,10 +698,10 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
-            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template).name(
-                in.getName()).description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
-                .vncAddress(in.getVncAddress()).vncPort(in.getVncPort()).idState(in.getIdState())
-                .idType(in.getIdType()).password(in.getPassword());
+            return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
+                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
+                .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
+                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
         }
     }
 
