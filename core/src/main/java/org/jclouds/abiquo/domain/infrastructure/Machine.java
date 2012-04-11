@@ -24,7 +24,6 @@ import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
-import java.util.StringTokenizer;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -45,7 +44,6 @@ import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
@@ -64,16 +62,12 @@ public class Machine extends AbstractPhysicalMachine
     /** The rack where the machine belongs. */
     protected Rack rack;
 
-    /** List of available virtual switches provided by discover operation **/
-    protected List<String> virtualSwitches;
-
     /**
      * Constructor to be used only by the builder.
      */
     protected Machine(final AbiquoContext context, final MachineDto target)
     {
         super(context, target);
-        extractVirtualSwitches();
     }
 
     /**
@@ -147,6 +141,10 @@ public class Machine extends AbstractPhysicalMachine
      * Gets the list of virtual machines in the physical machine.
      * 
      * @return The list of virtual machines in the physical machine.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Machine+Resource#MachineResource-Retrievethelistofvirtualmachinesbymachine'shypervisor"
+     *      > http://community.abiquo.com/display/ABI20/Machine+Resource#MachineResource-
+     *      Retrievethelistofvirtualmachinesbymachine'shypervisor</a>
      */
     public List<VirtualMachine> listVirtualMachines()
     {
@@ -184,6 +182,10 @@ public class Machine extends AbstractPhysicalMachine
      * remote hypervisor with abiquo's database.
      * 
      * @return The list of virtual machines in the physical machine.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Machine+Resource#MachineResource-Retrievethelistofvirtualmachinesbymachine'shypervisor"
+     *      > http://community.abiquo.com/display/ABI20/Machine+Resource#MachineResource-
+     *      Retrievethelistofvirtualmachinesbymachine'shypervisor</a>
      */
     public List<VirtualMachine> listRemoteVirtualMachines()
     {
@@ -217,41 +219,6 @@ public class Machine extends AbstractPhysicalMachine
     public VirtualMachine findRemoteVirtualMachine(final Predicate<VirtualMachine> filter)
     {
         return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
-    }
-
-    // Aux operations
-
-    /**
-     * Converts the tokenized String provided by the node collector API to a list of Strings and
-     * stores it at the attribute switches.
-     */
-    protected void extractVirtualSwitches()
-    {
-        StringTokenizer st = new StringTokenizer(getVirtualSwitch(), "/");
-        this.virtualSwitches = Lists.newArrayList();
-
-        while (st.hasMoreTokens())
-        {
-            this.virtualSwitches.add(st.nextToken());
-        }
-
-        if (virtualSwitches.size() > 0)
-        {
-            this.setVirtualSwitch(virtualSwitches.get(0));
-        }
-    }
-
-    /**
-     * Returns the virtual switches available. One of them needs to be selected.
-     */
-    public List<String> getAvailableVirtualSwitches()
-    {
-        return virtualSwitches;
-    }
-
-    public String findAvailableVirtualSwitch(final String vswitch)
-    {
-        return find(virtualSwitches, Predicates.equalTo(vswitch));
     }
 
     // Builder

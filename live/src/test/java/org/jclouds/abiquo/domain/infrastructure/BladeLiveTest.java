@@ -39,6 +39,13 @@ public class BladeLiveTest extends BaseAbiquoClientLiveTest
 {
     Blade blade;
 
+    public void testFindAvailableVirtualSwitch()
+    {
+        String vswitch = blade.getAvailableVirtualSwitches().get(0);
+        String found = blade.findAvailableVirtualSwitch(vswitch);
+        assertEquals(found, vswitch);
+    }
+
     public void testGetRack()
     {
         ManagedRack rack = blade.getRack();
