@@ -25,7 +25,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -35,11 +38,16 @@ import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
+import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
+import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceAdapter;
+import org.jclouds.compute.domain.Hardware;
+import org.jclouds.compute.domain.Processor;
 import org.jclouds.compute.domain.Template;
 import org.jclouds.compute.reference.ComputeServiceConstants;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Predicate;
@@ -59,28 +67,69 @@ public class AbiquoComputeServiceAdapter
     @Named(ComputeServiceConstants.COMPUTE_LOGGER)
     protected Logger logger = Logger.NULL;
 
+    private final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+
     private final AdministrationService adminService;
 
     private final CloudService cloudService;
 
     private final MonitoringService monitoringService;
 
+    private AbiquoComputeServiceHelper helper;
+
     @Inject
-    public AbiquoComputeServiceAdapter(final AdministrationService adminService,
-        final CloudService cloudService, final MonitoringService monitoringService)
+    public AbiquoComputeServiceAdapter(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final AdministrationService adminService, final CloudService cloudService,
+        final MonitoringService monitoringService, final AbiquoComputeServiceHelper helper)
     {
         super();
+        this.context = checkNotNull(context, "context");
         this.adminService = checkNotNull(adminService, "adminService");
         this.cloudService = checkNotNull(cloudService, "cloudService");
         this.monitoringService = checkNotNull(monitoringService, "monitoringService");
+        this.helper = checkNotNull(helper, "helper");
     }
 
     @Override
     public NodeAndInitialCredentials<VirtualMachine> createNodeWithGroupEncodedIntoName(
         final String tag, final String name, final Template template)
     {
-        // TODO Auto-generated method stub
-        return null;
+        User user = adminService.getCurrentUserInfo();
+        Enterprise enterprise = user.getEnterprise();
+
+        Datacenter datacenter =
+            enterprise.findAllowedDatacenter(DatacenterPredicates.id(Integer.valueOf(template
+                .getLocation().getId())));
+
+        VirtualMachineTemplate virtualMachineTemplate =
+            enterprise.getTemplateInRepository(datacenter,
+                Integer.valueOf(template.getImage().getId()));
+
+        VirtualDatacenter vdc =
+            helper.getOrCreateVirtualDatacenterFor(user, enterprise, datacenter,
+                virtualMachineTemplate);
+
+        // Load the virtual appliance or create it
+        VirtualAppliance vapp = vdc.findVirtualAppliance(VirtualAppliancePredicates.name(tag));
+        if (vapp == null)
+        {
+            vapp = VirtualAppliance.builder(context, vdc).name(tag).build();
+            vapp.save();
+        }
+
+        VirtualMachine vm = VirtualMachine.builder(context, vapp, virtualMachineTemplate) //
+            .name(name) // TODO: Will not be used: http://jira.abiquo.com/browse/ABIQUOJC-4
+            .cpu(totalCores(template.getHardware())) //
+            .ram(template.getHardware().getRam()) //
+            .build();
+        vm.save();
+
+        VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
+        vm.deploy();
+        monitor.awaitCompletionDeploy(vm);
+
+        // TODO: Node default credentials
+        return new NodeAndInitialCredentials<VirtualMachine>(vm, vm.getId().toString(), null);
     }
 
     @Override
@@ -169,6 +218,16 @@ public class AbiquoComputeServiceAdapter
                 return Integer.valueOf(id).equals(input.getId());
             }
         };
+    }
+
+    private static int totalCores(final Hardware hardware)
+    {
+        double cores = 0;
+        for (Processor processor : hardware.getProcessors())
+        {
+            cores += processor.getCores();
+        }
+        return Double.valueOf(cores).intValue();
     }
 
 }
