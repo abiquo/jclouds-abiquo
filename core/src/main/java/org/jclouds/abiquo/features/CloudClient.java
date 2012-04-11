@@ -497,6 +497,14 @@ public interface CloudClient
      */
     void setGatewayNetwork(final VirtualMachineDto virtualMachine, final VLANNetworkDto network);
 
+    /**
+     * Reboot a virtual machine.
+     * 
+     * @param virtualMachine The virtual machine to reboot.
+     * @return Response message to the reset request.
+     */
+    AcceptedRequestDto<String> rebootVirtualMachine(VirtualMachineDto virtualMachine);
+
     /******************* Virtual Machine Template ***********************/
 
     /**

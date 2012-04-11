@@ -107,7 +107,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters( {AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
+@RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/cloud")
 public interface CloudAsyncClient
 {
@@ -555,6 +555,15 @@ public interface CloudAsyncClient
     ListenableFuture<Void> setGatewayNetwork(
         @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
         @BinderParam(BindNetworkConfigurationRefToPayload.class) VLANNetworkDto network);
+
+    /**
+     * @see CloudClient#rebootVirtualMachine(VirtualMachineDto)
+     */
+    @POST
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<AcceptedRequestDto<String>> rebootVirtualMachine(
+        @EndpointLink("reset") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /*********************** Virtual Machine Template ***********************/
 
