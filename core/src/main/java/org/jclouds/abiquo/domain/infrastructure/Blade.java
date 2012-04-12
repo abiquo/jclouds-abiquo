@@ -55,7 +55,6 @@ public class Blade extends AbstractPhysicalMachine
     protected Blade(final AbiquoContext context, final MachineDto target)
     {
         super(context, target);
-        extractVirtualSwitches();
     }
 
     // Parent access
