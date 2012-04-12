@@ -469,7 +469,7 @@ public class User extends DomainWrapper<UserDto>
 
     private void setAvailableVirtualDatacenters(final List<Integer> ids)
     {
-        if (ids.size() == 0)
+        if (ids == null || ids.size() == 0)
         {
             target.setAvailableVirtualDatacenters("");
         }
