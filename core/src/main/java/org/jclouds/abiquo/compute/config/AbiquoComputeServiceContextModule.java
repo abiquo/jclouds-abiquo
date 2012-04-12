@@ -33,7 +33,6 @@ import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToImage;
 import org.jclouds.abiquo.compute.functions.VirtualMachineToNodeMetadata;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.compute.strategy.AbiquoComputeServiceAdapter;
-import org.jclouds.abiquo.compute.suppliers.AllowedDatacentersSupplier;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -50,7 +49,6 @@ import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.domain.Location;
 import org.jclouds.location.suppliers.ImplicitLocationSupplier;
-import org.jclouds.location.suppliers.LocationsSupplier;
 import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstZone;
 import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.suppliers.MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier;
@@ -95,9 +93,11 @@ public class AbiquoComputeServiceContextModule
         bind(new TypeLiteral<Function<Datacenter, Location>>()
         {
         }).to(DatacenterToLocation.class);
-        bind(LocationsSupplier.class).to(AllowedDatacentersSupplier.class).in(Scopes.SINGLETON);
         bind(ImplicitLocationSupplier.class).to(OnlyLocationOrFirstZone.class).in(Scopes.SINGLETON);
         bind(TemplateOptions.class).to(AbiquoTemplateOptions.class);
+        install(new LocationsFromComputeServiceAdapterModule<VirtualMachine, VirtualMachineTemplate, VirtualMachineTemplate, Datacenter>()
+        {
+        });
     }
 
     @Provides

@@ -45,13 +45,6 @@
             <name>Sonatype Repository</name>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </repository>
-        <!--
-        <repository>
-            <id>jclouds-test</id>
-            <name>Sonatype Test Repository</name>
-            <url>https://oss.sonatype.org/content/repositories/orgjclouds-184/</url>
-        </repository>
-        -->
         <repository>
             <id>abiquo-repo</id>
             <name>Abiquo Maven Repository</name>
