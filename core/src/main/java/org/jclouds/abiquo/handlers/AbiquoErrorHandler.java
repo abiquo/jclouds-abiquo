@@ -79,6 +79,11 @@ public class AbiquoErrorHandler implements HttpErrorHandler
                         new ResourceNotFoundException(defaultMessage, getExceptionToPropagate(
                             command, response, defaultMessage));
                     break;
+                case 301:
+                    // Moved resources in Abiquo should be handled with the ReturnMovedResource
+                    // exception parser to return the moved entity.
+                    exception = new HttpResponseException(command, response, defaultMessage);
+                    break;
                 default:
                     exception = getExceptionToPropagate(command, response, defaultMessage);
                     break;
