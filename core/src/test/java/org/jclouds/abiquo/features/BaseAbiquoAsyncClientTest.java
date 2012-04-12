@@ -19,19 +19,19 @@
 
 package org.jclouds.abiquo.features;
 
+import static org.jclouds.Constants.PROPERTY_PRETTY_PRINT_PAYLOADS;
 import static org.testng.Assert.assertEquals;
 
 import java.util.Properties;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.rest.RestClientTest;
-import org.jclouds.rest.RestContextFactory;
-import org.jclouds.rest.RestContextSpec;
+import org.jclouds.providers.ProviderMetadata;
+import org.jclouds.rest.AnonymousProviderMetadata;
+import org.jclouds.rest.internal.BaseAsyncClientTest;
 
 import com.google.inject.Module;
 
@@ -40,7 +40,7 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoAsyncClientTest<T> extends RestClientTest<T>
+public abstract class BaseAbiquoAsyncClientTest<T> extends BaseAsyncClientTest<T>
 {
 
     @Override
@@ -58,10 +58,19 @@ public abstract class BaseAbiquoAsyncClientTest<T> extends RestClientTest<T>
     }
 
     @Override
-    public RestContextSpec<AbiquoClient, AbiquoAsyncClient> createContextSpec()
+    protected ProviderMetadata< ? , ? , ? , ? > createProviderMetadata()
     {
-        Properties props = new Properties();
-        props.put("abiquo.endpoint", "http://localhost/api");
-        return new RestContextFactory().createContextSpec("abiquo", "admin", "xabiquo", props);
+        return AnonymousProviderMetadata.forApiWithEndpoint(new AbiquoApiMetadata(),
+            "http://localhost/api");
     }
+
+    @Override
+    protected Properties setupProperties()
+    {
+        Properties props = super.setupProperties();
+        // Do not pretty print payloads in tests
+        props.setProperty(PROPERTY_PRETTY_PRINT_PAYLOADS, "false");
+        return props;
+    }
+
 }

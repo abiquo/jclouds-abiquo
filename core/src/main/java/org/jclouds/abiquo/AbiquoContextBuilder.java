@@ -21,15 +21,13 @@ package org.jclouds.abiquo;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
-import java.util.Properties;
 
 import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.abiquo.config.ConfiguresScheduler;
 import org.jclouds.abiquo.config.SchedulerModule;
-import org.jclouds.abiquo.internal.AbiquoContextImpl;
-import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.compute.ComputeServiceContextBuilder;
+import org.jclouds.providers.ProviderMetadata;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -42,11 +40,17 @@ import com.google.inject.Module;
  * @author Ignasi Barrera
  */
 public class AbiquoContextBuilder extends
-    ComputeServiceContextBuilder<AbiquoClient, AbiquoAsyncClient>
+    ComputeServiceContextBuilder<AbiquoClient, AbiquoAsyncClient, AbiquoContext, AbiquoApiMetadata>
 {
-    public AbiquoContextBuilder(final Properties props)
+    public AbiquoContextBuilder(
+        final ProviderMetadata<AbiquoClient, AbiquoAsyncClient, AbiquoContext, AbiquoApiMetadata> providerMetadata)
     {
-        super(AbiquoClient.class, AbiquoAsyncClient.class, props);
+        super(providerMetadata);
+    }
+
+    public AbiquoContextBuilder(final AbiquoApiMetadata apiMetadata)
+    {
+        super(apiMetadata);
     }
 
     @Override
@@ -59,12 +63,6 @@ public class AbiquoContextBuilder extends
     protected void addContextModule(final List<Module> modules)
     {
         modules.add(new AbiquoComputeServiceContextModule());
-    }
-
-    @Override
-    public ComputeServiceContext buildComputeServiceContext()
-    {
-        return buildInjector().getInstance(AbiquoContextImpl.class);
     }
 
     @Override

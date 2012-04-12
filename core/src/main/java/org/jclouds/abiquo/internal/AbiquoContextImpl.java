@@ -49,8 +49,6 @@ import org.jclouds.rest.internal.RestContextImpl;
 public class AbiquoContextImpl extends ComputeServiceContextImpl<AbiquoClient, AbiquoAsyncClient>
     implements AbiquoContext
 {
-    private final RestContext<AbiquoClient, AbiquoAsyncClient> providerSpecificContext;
-
     private final AdministrationService administrationService;
 
     private final CloudService cloudService;
@@ -67,19 +65,10 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl<AbiquoClient, A
         final SearchService searchService, final MonitoringService monitoringService)
     {
         super(computeService, credentialStore, utils, providerSpecificContext);
-        this.providerSpecificContext =
-            checkNotNull(providerSpecificContext, "providerSpecificContext");
         this.administrationService = checkNotNull(administrationService, "administrationService");
         this.cloudService = checkNotNull(cloudService, "cloudService");
         this.searchService = checkNotNull(searchService, "searchService");
         this.monitoringService = checkNotNull(monitoringService, "monitoringService");
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public RestContext<AbiquoClient, AbiquoAsyncClient> getProviderSpecificContext()
-    {
-        return providerSpecificContext;
     }
 
     @Override

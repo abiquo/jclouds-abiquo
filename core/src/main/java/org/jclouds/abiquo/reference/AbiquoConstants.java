@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.reference;
 
+import org.jclouds.abiquo.features.services.MonitoringService;
+
 /**
  * Global constants used in the Abiquo provider.
  * 
@@ -26,6 +28,7 @@ package org.jclouds.abiquo.reference;
  */
 public interface AbiquoConstants
 {
+
     /**
      * The delay (in ms) used between requests by the {@link MonitoringService} when monitoring
      * asynchronous task state.

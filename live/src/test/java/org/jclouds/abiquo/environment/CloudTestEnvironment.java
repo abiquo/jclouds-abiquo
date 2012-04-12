@@ -27,8 +27,8 @@ import static org.testng.Assert.assertNull;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 
+import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -38,12 +38,10 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
-import org.jclouds.compute.ComputeServiceContextFactory;
+import org.jclouds.rest.internal.ContextBuilder;
 
-import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
-import com.google.inject.Module;
 
 /**
  * Test environment for cloud live tests.
@@ -110,11 +108,10 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         String endpoint =
             checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
 
-        Properties props = new Properties();
-        props.put("abiquo.endpoint", endpoint);
-        plainUserContext =
-            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo", "jclouds",
-                "user", ImmutableSet.<Module> of(), props);
+        plainUserContext = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
+            .endpoint(endpoint) //
+            .credentials("abiquo", "jclouds") //
+            .build();
     }
 
     private void createEnterpriseAdminContext()
@@ -122,11 +119,10 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         String endpoint =
             checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
 
-        Properties props = new Properties();
-        props.put("abiquo.endpoint", endpoint);
-        enterpriseAdminContext =
-            (AbiquoContext) new ComputeServiceContextFactory().createContext("abiquo",
-                "jclouds-admin", "admin", ImmutableSet.<Module> of(), props);
+        enterpriseAdminContext = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
+            .endpoint(endpoint) //
+            .credentials("jclouds-admin", "admin") //
+            .build();
     }
 
     protected void findDefaultEnterprise()

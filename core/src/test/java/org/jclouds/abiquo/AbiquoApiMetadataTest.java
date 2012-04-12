@@ -16,29 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
 package org.jclouds.abiquo;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.rest.Providers;
+import org.jclouds.apis.ApiMetadata;
+import org.jclouds.apis.ApiType;
+import org.jclouds.apis.Apis;
+import org.jclouds.apis.internal.BaseApiMetadataTest;
 import org.testng.annotations.Test;
 
-import com.google.common.collect.Iterables;
-
 /**
- * Checks that the Abiquo provider is registered in the providers list.
+ * Unit tests for the {@link AbiquoApiMetadata} class.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class ProvidersInPropertiesTest
+public class AbiquoApiMetadataTest extends BaseApiMetadataTest
 {
-    @Test
-    public void testSupportedProviders()
+
+    public AbiquoApiMetadataTest()
     {
-        Iterable<String> providers = Providers.getSupportedProviders();
-        assertTrue(Iterables.contains(providers, "abiquo"));
+        super(new AbiquoApiMetadata(), ApiType.COMPUTE);
+    }
+
+    @SuppressWarnings("rawtypes")
+    public void testAbiquoApiRegistered()
+    {
+        ApiMetadata api = Apis.withId("abiquo");
+
+        assertNotNull(api);
+        assertTrue(api instanceof AbiquoApiMetadata);
+        assertEquals(api.getId(), "abiquo");
     }
 
 }
