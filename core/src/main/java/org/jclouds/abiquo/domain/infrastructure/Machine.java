@@ -64,16 +64,12 @@ public class Machine extends AbstractPhysicalMachine
     /** The rack where the machine belongs. */
     protected Rack rack;
 
-    /** List of available virtual switches provided by discover operation **/
-    protected List<String> virtualSwitches;
-
     /**
      * Constructor to be used only by the builder.
      */
     protected Machine(final AbiquoContext context, final MachineDto target)
     {
         super(context, target);
-        extractVirtualSwitches();
     }
 
     /**
