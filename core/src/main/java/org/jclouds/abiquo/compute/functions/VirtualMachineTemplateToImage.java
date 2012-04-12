@@ -48,7 +48,7 @@ public class VirtualMachineTemplateToImage implements Function<VirtualMachineTem
         builder.description(template.getDescription());
 
         RESTLink downloadLink = template.unwrap().searchLink("diskfile");
-        builder.uri(URI.create(downloadLink.getHref()));
+        builder.uri(downloadLink == null ? null : URI.create(downloadLink.getHref()));
 
         // TODO: Operating system not implemented in Abiquo Templates
         builder.operatingSystem(OperatingSystem.builder().description(template.getName()).build());

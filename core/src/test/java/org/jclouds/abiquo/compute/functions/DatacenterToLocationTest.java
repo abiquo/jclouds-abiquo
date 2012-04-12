@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
 public class DatacenterToLocationTest
 {
     @SuppressWarnings("unchecked")
-    public void testApply()
+    public void testDatacenterToLocation()
     {
         RestContext<AbiquoClient, AbiquoAsyncClient> context =
             EasyMock.createMock(RestContext.class);

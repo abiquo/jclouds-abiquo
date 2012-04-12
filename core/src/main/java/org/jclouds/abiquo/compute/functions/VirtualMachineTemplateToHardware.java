@@ -30,6 +30,7 @@ import org.jclouds.compute.domain.Volume;
 import org.jclouds.compute.domain.VolumeBuilder;
 import org.jclouds.compute.predicates.ImagePredicates;
 
+import com.abiquo.model.rest.RESTLink;
 import com.google.common.base.Function;
 
 /**
@@ -41,14 +42,16 @@ import com.google.common.base.Function;
 public class VirtualMachineTemplateToHardware implements Function<VirtualMachineTemplate, Hardware>
 {
     /** The default core speed, 2.0Ghz. */
-    private static final double DEFAULT_CORE_SPEED = 2.0;
+    public static final double DEFAULT_CORE_SPEED = 2.0;
 
     @Override
     public Hardware apply(final VirtualMachineTemplate template)
     {
         HardwareBuilder builder = new HardwareBuilder();
         builder.ids(template.getId().toString());
-        builder.uri(URI.create(template.unwrap().getEditLink().getHref()));
+        RESTLink editLink = template.unwrap().getEditLink();
+        builder.uri(editLink == null ? null : URI.create(editLink.getHref()));
+
         builder.name(template.getName());
         builder.processor(new Processor(template.getCpuRequired(), DEFAULT_CORE_SPEED));
         builder.ram(template.getRamRequired());
