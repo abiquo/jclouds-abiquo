@@ -79,7 +79,7 @@ public class AbiquoAuthenticationLiveTest
 
         // Create a new context that uses the generated token to perform the API calls
         AbiquoContext tokenContext =
-            ContextBuilder.newBuilder(AbiquoApiMetadata.builder().useTokenAuth().build()) //
+            ContextBuilder.newBuilder(new AbiquoApiMetadata().toBuilder().useTokenAuth().build()) //
                 .endpoint(endpoint) //
                 .credentials(token, null) //
                 .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
@@ -110,7 +110,7 @@ public class AbiquoAuthenticationLiveTest
 
         // Create a new context that uses the generated token to perform the API calls
         AbiquoContext tokenContext =
-            ContextBuilder.newBuilder(AbiquoApiMetadata.builder().useTokenAuth().build()) //
+            ContextBuilder.newBuilder(new AbiquoApiMetadata().toBuilder().useTokenAuth().build()) //
                 .endpoint(endpoint) //
                 .credentials(token, null) //
                 .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //

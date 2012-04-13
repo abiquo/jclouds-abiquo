@@ -85,7 +85,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
     public void testCreateFromEnterprise()
     {
         Enterprise enterprise =
-            env.enterpriseAdminContext.getAdministrationService().getCurrentUserInfo()
+            env.enterpriseAdminContext.getAdministrationService().getCurrentUser()
                 .getEnterprise();
         assertNotNull(enterprise);
 

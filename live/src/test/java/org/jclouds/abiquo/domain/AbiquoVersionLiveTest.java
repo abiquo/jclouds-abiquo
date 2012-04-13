@@ -78,7 +78,7 @@ public class AbiquoVersionLiveTest
     {
         try
         {
-            context.getAdministrationService().getCurrentUserInfo();
+            context.getAdministrationService().getCurrentUser();
             fail("Unsupported versions in mime types should not be allowed");
         }
         catch (AbiquoException ex)

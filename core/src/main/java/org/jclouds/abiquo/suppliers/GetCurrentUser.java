@@ -19,12 +19,16 @@
 package org.jclouds.abiquo.suppliers;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Inject;
 
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.enterprise.User;
-import org.jclouds.abiquo.features.services.AdministrationService;
+import org.jclouds.rest.RestContext;
 
+import com.abiquo.server.core.enterprise.UserDto;
 import com.google.common.base.Supplier;
 
 /**
@@ -34,18 +38,19 @@ import com.google.common.base.Supplier;
  */
 public class GetCurrentUser implements Supplier<User>
 {
-    private final AdministrationService adminService;
+    private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     @Inject
-    public GetCurrentUser(final AdministrationService adminService)
+    public GetCurrentUser(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
     {
-        this.adminService = checkNotNull(adminService, "adminService");
+        this.context = checkNotNull(context, "context");
     }
 
     @Override
     public User get()
     {
-        return adminService.getCurrentUserInfo();
+        UserDto user = context.getApi().getAdminClient().getCurrentUser();
+        return wrap(context, User.class, user);
     }
 
 }

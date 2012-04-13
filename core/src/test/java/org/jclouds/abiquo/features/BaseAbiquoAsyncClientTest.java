@@ -29,8 +29,8 @@ import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.http.HttpRequest;
+import org.jclouds.providers.AnonymousProviderMetadata;
 import org.jclouds.providers.ProviderMetadata;
-import org.jclouds.rest.AnonymousProviderMetadata;
 import org.jclouds.rest.internal.BaseAsyncClientTest;
 
 import com.google.inject.Module;

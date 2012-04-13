@@ -43,7 +43,7 @@ public class AbiquoApiMetadata
 {
     public AbiquoApiMetadata()
     {
-        this(builder());
+        this(new Builder());
     }
 
     protected AbiquoApiMetadata(final Builder builder)
@@ -64,15 +64,10 @@ public class AbiquoApiMetadata
         return properties;
     }
 
-    public static Builder builder()
-    {
-        return new Builder();
-    }
-
     @Override
     public Builder toBuilder()
     {
-        return builder().fromApiMetadata(this);
+        return new Builder().fromApiMetadata(this);
     }
 
     public static class Builder

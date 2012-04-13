@@ -18,13 +18,6 @@
  */
 package org.jclouds.abiquo.compute.config;
 
-import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
-
-import java.util.concurrent.atomic.AtomicReference;
-
-import javax.inject.Named;
-import javax.inject.Singleton;
-
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.compute.functions.DatacenterToLocation;
@@ -35,12 +28,7 @@ import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.compute.strategy.AbiquoComputeServiceAdapter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
-import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.suppliers.GetCurrentEnterprise;
-import org.jclouds.abiquo.suppliers.GetCurrentUser;
-import org.jclouds.collect.Memoized;
 import org.jclouds.compute.ComputeServiceAdapter;
 import org.jclouds.compute.config.ComputeServiceAdapterContextModule;
 import org.jclouds.compute.domain.Hardware;
@@ -50,12 +38,8 @@ import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.domain.Location;
 import org.jclouds.location.suppliers.ImplicitLocationSupplier;
 import org.jclouds.location.suppliers.implicit.OnlyLocationOrFirstZone;
-import org.jclouds.rest.AuthorizationException;
-import org.jclouds.rest.suppliers.MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier;
 
 import com.google.common.base.Function;
-import com.google.common.base.Supplier;
-import com.google.inject.Provides;
 import com.google.inject.Scopes;
 import com.google.inject.TypeLiteral;
 
@@ -98,31 +82,6 @@ public class AbiquoComputeServiceContextModule
         install(new LocationsFromComputeServiceAdapterModule<VirtualMachine, VirtualMachineTemplate, VirtualMachineTemplate, Datacenter>()
         {
         });
-    }
-
-    @Provides
-    @Singleton
-    @Memoized
-    public Supplier<User> getCurrentUser(
-        final AtomicReference<AuthorizationException> authException,
-        @Named(PROPERTY_SESSION_INTERVAL) final long seconds, final GetCurrentUser getCurrentUser)
-    {
-        return new MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier<User>(authException,
-            seconds,
-            getCurrentUser);
-    }
-
-    @Provides
-    @Singleton
-    @Memoized
-    public Supplier<Enterprise> getCurrentEnterprise(
-        final AtomicReference<AuthorizationException> authException,
-        @Named(PROPERTY_SESSION_INTERVAL) final long seconds,
-        final GetCurrentEnterprise getCurrentEnterprise)
-    {
-        return new MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier<Enterprise>(authException,
-            seconds,
-            getCurrentEnterprise);
     }
 
 }
