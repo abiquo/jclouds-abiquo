@@ -18,6 +18,7 @@
  */
 package org.jclouds.abiquo.compute.options;
 
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.options.TemplateOptions;
 
@@ -39,6 +40,10 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
 
     private String vncPassword;
 
+    private String virtualDatacenter;
+
+    private Ip[] ips;
+
     @Override
     public TemplateOptions clone()
     {
@@ -57,6 +62,8 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
             options.overrideCores(overrideCores);
             options.overrideRam(overrideRam);
             options.vncPassword(vncPassword);
+            options.virtualDatacenter(virtualDatacenter);
+            options.ips(ips);
         }
     }
 
@@ -110,6 +117,38 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
         return vncPassword;
     }
 
+    /**
+     * Set the virtual datacenter where the virtual machine must be deployed.
+     * 
+     * @return The template options with the virtual machine must be deployed.
+     */
+    public AbiquoTemplateOptions virtualDatacenter(final String virtualDatacenter)
+    {
+        this.virtualDatacenter = virtualDatacenter;
+        return this;
+    }
+
+    public String getVirtualDatacenter()
+    {
+        return virtualDatacenter;
+    }
+
+    /**
+     * Set the ip addresses for the virtual machine.
+     * 
+     * @return The template options with the ip addresses configuration
+     */
+    public AbiquoTemplateOptions ips(final Ip... ips)
+    {
+        this.ips = ips;
+        return this;
+    }
+
+    public Ip[] getIps()
+    {
+        return ips;
+    }
+
     public static class Builder
     {
         /**
@@ -137,6 +176,24 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
         {
             AbiquoTemplateOptions options = new AbiquoTemplateOptions();
             return options.vncPassword(vncPassword);
+        }
+
+        /**
+         * @see AbiquoTemplateOptions#virtualDatacenter(String)
+         */
+        public static AbiquoTemplateOptions virtualDatacenter(final String virtualDatacenter)
+        {
+            AbiquoTemplateOptions options = new AbiquoTemplateOptions();
+            return options.virtualDatacenter(virtualDatacenter);
+        }
+
+        /**
+         * @see AbiquoTemplateOptions#ips(Ip...)
+         */
+        public static AbiquoTemplateOptions ips(final Ip... ips)
+        {
+            AbiquoTemplateOptions options = new AbiquoTemplateOptions();
+            return options.ips(ips);
         }
     }
 }

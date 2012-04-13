@@ -27,7 +27,6 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.compute.exception.NotEnoughResourcesException;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -96,6 +95,8 @@ public class AbiquoComputeServiceAdapter
     public NodeAndInitialCredentials<VirtualMachine> createNodeWithGroupEncodedIntoName(
         final String tag, final String name, final Template template)
     {
+        AbiquoTemplateOptions options = template.getOptions().as(AbiquoTemplateOptions.class);
+
         User user = adminService.getCurrentUser();
         Enterprise enterprise = adminService.getCurrentEnterprise();
 
@@ -108,12 +109,8 @@ public class AbiquoComputeServiceAdapter
                 Integer.valueOf(template.getImage().getId()));
 
         VirtualDatacenter vdc =
-            helper.getOrCreateVirtualDatacenterFor(user, enterprise, datacenter,
-                virtualMachineTemplate);
-        if (vdc == null)
-        {
-            throw new NotEnoughResourcesException("There are not resources to deploy the given template");
-        }
+            helper.getOrCreateVirtualDatacenter(user, enterprise, datacenter,
+                virtualMachineTemplate, options);
 
         // Load the virtual appliance or create it
         VirtualAppliance vapp = vdc.findVirtualAppliance(VirtualAppliancePredicates.name(tag));
@@ -123,7 +120,6 @@ public class AbiquoComputeServiceAdapter
             vapp.save();
         }
 
-        AbiquoTemplateOptions options = template.getOptions().as(AbiquoTemplateOptions.class);
         Integer overrideCores = options.getOverrideCores();
         Integer overrideRam = options.getOverrideRam();
 
@@ -135,6 +131,9 @@ public class AbiquoComputeServiceAdapter
             .build();
 
         vm.save();
+
+        // Once the virtual machine is created, override the default network settings if needed
+        helper.configureNetwork(vm, options.getIps());
 
         VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
         vm.deploy();

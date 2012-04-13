@@ -48,7 +48,8 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Network(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VLANNetworkDto target)
+    protected Network(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final VLANNetworkDto target)
     {
         super(context, target);
     }
@@ -324,7 +325,8 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
             + ", unmanaged=" + getUnmanaged() + "]";
     }
 
-    public static Network wrapNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VLANNetworkDto dto)
+    public static Network wrapNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final VLANNetworkDto dto)
     {
         if (dto == null)
         {
@@ -355,8 +357,8 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
         return network;
     }
 
-    public static List<Network> wrapNetworks(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
-        final List<VLANNetworkDto> dtos)
+    public static List<Network> wrapNetworks(
+        final RestContext<AbiquoClient, AbiquoAsyncClient> context, final List<VLANNetworkDto> dtos)
     {
         List<Network> networks = Lists.newLinkedList();
         for (VLANNetworkDto dto : dtos)

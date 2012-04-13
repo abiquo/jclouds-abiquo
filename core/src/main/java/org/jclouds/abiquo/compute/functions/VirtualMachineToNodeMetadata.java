@@ -73,20 +73,21 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
         builder.name(vm.getName());
         builder.hostname(vm.getName()); // TODO: Abiquo does not set the hostname
         builder.group(vm.getVirtualAppliance().getName());
+        builder.loginPort(22); // TODO: Login port in the template
+                               // (http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3647)
 
         // TODO: builder.location() Only cloud admins have access to the datacenter link of the VDC
-        // TODO: builder.credentials()
+        // TODO: builder.credentials() (http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3647)
 
         VirtualMachineTemplate template = vm.getTemplate();
-
         Image image = virtualMachineTemplateToImage.apply(template);
         builder.imageId(image.getId().toString());
         builder.operatingSystem(image.getOperatingSystem());
 
         builder.hardware(virtualMachineTemplateToHardware.apply(template));
-        builder.loginPort(vm.getVncPort()); // TODO: Is VNC or SSH port ?
 
         // TODO: Add a method to NIC domain object to determine its type
+        // (http://jira.abiquo.com/browse/ABIQUOJC-3)
         builder.privateAddresses(privateIps(vm.listAttachedNics()));
 
         builder.state(virtualMachineStateToNodeState.apply(vm.getState()));

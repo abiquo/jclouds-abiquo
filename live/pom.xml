@@ -16,6 +16,12 @@
     <dependencies>
         <!-- JClouds Abiquo -->
         <dependency>
+            <groupId>org.jclouds.driver</groupId>
+            <artifactId>jclouds-jsch</artifactId>
+            <version>${jclouds.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jclouds.provider</groupId>
             <artifactId>jclouds-abiquo</artifactId>
             <version>${project.version}</version>

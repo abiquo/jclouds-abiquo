@@ -29,21 +29,27 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.compute.exception.NotEnoughResourcesException;
+import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
 import org.jclouds.compute.reference.ComputeServiceConstants;
+import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
 
 /**
  * Helper methods to perform {@link AbiquoComputeServiceAdapter} operations.
@@ -79,20 +85,36 @@ public class AbiquoComputeServiceHelper
      * @param enterprise The enterprise of the current user.
      * @param datacenter The datacenter of the template.
      * @param template The template to deploy.
+     * @param options The template options
      * @return The virtual datacenter to be used to deploy the template or <code>null</code> if none
      *         was found and a compatible one could not be created.
      */
-    public VirtualDatacenter getOrCreateVirtualDatacenterFor(final User user,
+    public VirtualDatacenter getOrCreateVirtualDatacenter(final User user,
         final Enterprise enterprise, final Datacenter datacenter,
-        final VirtualMachineTemplate template)
+        final VirtualMachineTemplate template, final AbiquoTemplateOptions options)
     {
+        VirtualDatacenter vdc = null;
+
         Iterable<VirtualDatacenter> compatibles =
             findCompatibleVirtualDatacenters(datacenter, template);
 
-        VirtualDatacenter vdc = getFirst(compatibles, null);
-        if (vdc == null)
+        if (options.getVirtualDatacenter() == null)
         {
-            vdc = createCompatibleVirtualDatacenter(user, enterprise, datacenter, template);
+            vdc = getFirst(compatibles, null);
+            if (vdc == null)
+            {
+                vdc = createCompatibleVirtualDatacenter(user, enterprise, datacenter, template);
+                if (vdc == null)
+                {
+                    throw new NotEnoughResourcesException("There are not resources to deploy the given template");
+                }
+            }
+        }
+        else
+        {
+            vdc =
+                Iterables.find(compatibles,
+                    VirtualDatacenterPredicates.name(options.getVirtualDatacenter()));
         }
 
         return vdc;
@@ -122,6 +144,22 @@ public class AbiquoComputeServiceHelper
     }
 
     /**
+     * Configure networking resources for the given virtual machine.
+     * 
+     * @param vm The virtual machine to configure.
+     * @param networkConfig The network configuration.
+     */
+    public void configureNetwork(final VirtualMachine vm, @Nullable final Ip... ips)
+    {
+        if (ips != null)
+        {
+            // TODO: External ips don't have the right link
+            // (http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3650)
+            vm.replaceNics(ips);
+        }
+    }
+
+    /**
      * Create a new virtual datacenter compatible with the given template.
      * 
      * @param user The current user.
@@ -134,7 +172,6 @@ public class AbiquoComputeServiceHelper
         final Enterprise enterprise, final Datacenter datacenter,
         final VirtualMachineTemplate template)
     {
-        // TODO: configurable default network
         PrivateNetwork defaultNetwork =
             PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1")
                 .address("192.168.1.0").mask(24).build();
@@ -181,4 +218,5 @@ public class AbiquoComputeServiceHelper
 
         return null;
     }
+
 }
