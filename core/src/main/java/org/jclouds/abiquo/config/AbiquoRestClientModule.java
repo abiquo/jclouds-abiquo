@@ -53,7 +53,6 @@ import org.jclouds.abiquo.suppliers.GetCurrentEnterprise;
 import org.jclouds.abiquo.suppliers.GetCurrentUser;
 import org.jclouds.collect.Memoized;
 import org.jclouds.http.HttpErrorHandler;
-import org.jclouds.http.RequiresHttp;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
@@ -73,7 +72,6 @@ import com.google.inject.Provides;
  * 
  * @author Ignasi Barrera
  */
-@RequiresHttp
 @ConfiguresRestClient
 public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, AbiquoAsyncClient>
 {
@@ -94,19 +92,26 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
     }
 
     @Override
-    protected void configure()
+    protected void bindAsyncClient()
     {
-        super.configure();
-        bindAbiquoGenericHttpClient();
-        bind(Utils.class).to(ExtendedUtils.class);
+        super.bindAsyncClient();
+        BinderUtils.bindAsyncClient(binder(), AbiquoHttpAsyncClient.class);
     }
 
-    protected void bindAbiquoGenericHttpClient()
+    @Override
+    protected void bindClient()
     {
-        BinderUtils.bindAsyncClient(binder(), AbiquoHttpAsyncClient.class);
+        super.bindClient();
         BinderUtils.bindClient(binder(), AbiquoHttpClient.class, AbiquoHttpAsyncClient.class,
             ImmutableMap.<Class< ? >, Class< ? >> of(AbiquoHttpClient.class,
                 AbiquoHttpAsyncClient.class));
+    }
+
+    @Override
+    protected void configure()
+    {
+        super.configure();
+        bind(Utils.class).to(ExtendedUtils.class);
     }
 
     @Override

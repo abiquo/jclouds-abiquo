@@ -18,8 +18,6 @@
  */
 package org.jclouds.abiquo.compute.config;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.compute.functions.DatacenterToLocation;
 import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToHardware;
 import org.jclouds.abiquo.compute.functions.VirtualMachineTemplateToImage;
@@ -50,12 +48,8 @@ import com.google.inject.TypeLiteral;
  */
 public class AbiquoComputeServiceContextModule
     extends
-    ComputeServiceAdapterContextModule<AbiquoClient, AbiquoAsyncClient, VirtualMachine, VirtualMachineTemplate, VirtualMachineTemplate, Datacenter>
+    ComputeServiceAdapterContextModule<VirtualMachine, VirtualMachineTemplate, VirtualMachineTemplate, Datacenter>
 {
-    public AbiquoComputeServiceContextModule()
-    {
-        super(AbiquoClient.class, AbiquoAsyncClient.class);
-    }
 
     @Override
     protected void configure()

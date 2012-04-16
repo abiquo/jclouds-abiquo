@@ -155,7 +155,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
     {
         Tier tier = env.virtualDatacenter.listStorageTiers().get(0);
         Volume volume =
-            Volume.builder(context.getProviderSpecificContext(), env.virtualDatacenter, tier)
+            Volume.builder(context.getApiContext(), env.virtualDatacenter, tier)
                 .name(PREFIX + "Hawaian volume").sizeInMb(128).build();
         volume.save();
 
@@ -175,8 +175,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
     private HardDisk createHardDisk()
     {
         HardDisk hardDisk =
-            HardDisk.builder(context.getProviderSpecificContext(), env.virtualDatacenter)
-                .sizeInMb(64L).build();
+            HardDisk.builder(context.getApiContext(), env.virtualDatacenter).sizeInMb(64L).build();
         hardDisk.save();
 
         assertNotNull(hardDisk.getId());

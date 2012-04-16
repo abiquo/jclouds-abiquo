@@ -24,11 +24,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Properties;
 
 import org.jclouds.Constants;
+import org.jclouds.ContextBuilder;
 import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.jclouds.rest.internal.ContextBuilder;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -74,7 +74,7 @@ public abstract class BaseAbiquoClientLiveTest
             .credentials(identity, credential) //
             .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
             .overrides(props) //
-            .build();
+            .build(AbiquoContext.class);
 
         env = new CloudTestEnvironment(context);
         env.setup();

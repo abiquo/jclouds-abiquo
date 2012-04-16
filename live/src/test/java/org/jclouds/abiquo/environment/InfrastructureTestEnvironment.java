@@ -125,11 +125,10 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         this.context = context;
         this.administrationService = context.getAdministrationService();
         this.context = context;
-        this.enterpriseClient = context.getProviderSpecificContext().getApi().getEnterpriseClient();
-        this.infrastructureClient =
-            context.getProviderSpecificContext().getApi().getInfrastructureClient();
-        this.adminClient = context.getProviderSpecificContext().getApi().getAdminClient();
-        this.configClient = context.getProviderSpecificContext().getApi().getConfigClient();
+        this.enterpriseClient = context.getApiContext().getApi().getEnterpriseClient();
+        this.infrastructureClient = context.getApiContext().getApi().getInfrastructureClient();
+        this.adminClient = context.getApiContext().getApi().getAdminClient();
+        this.configClient = context.getApiContext().getApi().getConfigClient();
     }
 
     @Override
@@ -175,7 +174,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createLicense() throws IOException
     {
-        license = License.builder(context.getProviderSpecificContext(), readLicense()).build();
+        license = License.builder(context.getApiContext(), readLicense()).build();
 
         license.add();
         assertNotNull(license.getId());
@@ -184,11 +183,10 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     protected void createDatacenter()
     {
         // Assume a monolithic install
-        String remoteServicesAddress = context.getProviderSpecificContext().getEndpoint().getHost();
+        String remoteServicesAddress = context.getApiContext().getEndpoint().getHost();
 
         datacenter =
-            Datacenter.builder(context.getProviderSpecificContext()).name(randomName())
-                .location("Honolulu")
+            Datacenter.builder(context.getApiContext()).name(randomName()).location("Honolulu")
                 .remoteServices(remoteServicesAddress, AbiquoEdition.ENTERPRISE).build();
         datacenter.save();
         assertNotNull(datacenter.getId());
@@ -220,9 +218,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createRack()
     {
-        rack =
-            Rack.builder(context.getProviderSpecificContext(), datacenter).name(PREFIX + "Aloha")
-                .build();
+        rack = Rack.builder(context.getApiContext(), datacenter).name(PREFIX + "Aloha").build();
         rack.save();
         assertNotNull(rack.getId());
     }
@@ -235,8 +231,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.ucs.pass");
 
         ucsRack =
-            ManagedRack.builder(context.getProviderSpecificContext(), datacenter).ipAddress(ip)
-                .port(port).user(user).name("ucs rack").password(pass).build();
+            ManagedRack.builder(context.getApiContext(), datacenter).ipAddress(ip).port(port)
+                .user(user).name("ucs rack").password(pass).build();
 
         ucsRack.save();
         assertNotNull(ucsRack.getId());
@@ -251,9 +247,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String pass = Config.get("abiquo.storage.pass");
 
         storageDevice =
-            StorageDevice.builder(context.getProviderSpecificContext(), datacenter).iscsiIp(ip)
-                .managementIp(ip).name(PREFIX + "Storage Device").username(user).password(pass)
-                .type(type).build();
+            StorageDevice.builder(context.getApiContext(), datacenter).iscsiIp(ip).managementIp(ip)
+                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
@@ -279,7 +274,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
             administrationService.findRole(RolePredicates.name("ENTERPRISE_ADMIN"));
 
         user =
-            User.builder(context.getProviderSpecificContext(), enterprise, userRole)
+            User.builder(context.getApiContext(), enterprise, userRole)
                 .name(randomName(), randomName()).nick("jclouds").authType("ABIQUO")
                 .description(randomName()).email(randomName() + "@abiquo.com").locale("en_US")
                 .password("user").build();
@@ -289,7 +284,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertEquals(userRole.getId(), user.getRole().getId());
 
         enterpriseAdmin =
-            User.builder(context.getProviderSpecificContext(), enterprise, enterpriseAdminRole)
+            User.builder(context.getApiContext(), enterprise, enterpriseAdminRole)
                 .name(randomName(), randomName()).nick("jclouds-admin").authType("ABIQUO")
                 .description(randomName()).email(randomName() + "@abiquo.com").locale("en_US")
                 .password("admin").build();
@@ -301,9 +296,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     private void createRoles()
     {
-        role =
-            Role.builder(context.getProviderSpecificContext()).name(randomName()).blocked(false)
-                .build();
+        role = Role.builder(context.getApiContext()).name(randomName()).blocked(false).build();
         role.save();
 
         anotherRole = Role.Builder.fromRole(role).build();
@@ -316,8 +309,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     protected void createEnterprise()
     {
-        enterprise =
-            Enterprise.builder(context.getProviderSpecificContext()).name(randomName()).build();
+        enterprise = Enterprise.builder(context.getApiContext()).name(randomName()).build();
         enterprise.save();
         assertNotNull(enterprise.getId());
         Limits limits = enterprise.allowDatacenter(datacenter);
@@ -327,9 +319,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     protected void createPublicNetwork()
     {
         publicNetwork =
-            PublicNetwork.builder(context.getProviderSpecificContext(), datacenter)
-                .name("PublicNetwork").gateway("80.80.80.1").address("80.80.80.0").mask(24).tag(5)
-                .build();
+            PublicNetwork.builder(context.getApiContext(), datacenter).name("PublicNetwork")
+                .gateway("80.80.80.1").address("80.80.80.0").mask(24).tag(5).build();
         publicNetwork.save();
         assertNotNull(publicNetwork.getId());
     }

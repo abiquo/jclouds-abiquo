@@ -76,9 +76,9 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest
 
         // Restore rs
         RemoteService bpm =
-            RemoteService.builder(context.getProviderSpecificContext(), env.datacenter)
+            RemoteService.builder(context.getApiContext(), env.datacenter)
                 .type(RemoteServiceType.BPM_SERVICE)
-                .ip(context.getProviderSpecificContext().getEndpoint().getHost()).build();
+                .ip(context.getApiContext().getEndpoint().getHost()).build();
         bpm.save();
     }
 

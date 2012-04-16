@@ -72,9 +72,9 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
 
         // Restore rs
         nc =
-            RemoteService.builder(context.getProviderSpecificContext(), env.datacenter)
+            RemoteService.builder(context.getApiContext(), env.datacenter)
                 .type(RemoteServiceType.NODE_COLLECTOR)
-                .ip(context.getProviderSpecificContext().getEndpoint().getHost()).build();
+                .ip(context.getApiContext().getEndpoint().getHost()).build();
         nc.save();
     }
 

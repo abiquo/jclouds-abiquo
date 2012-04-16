@@ -23,9 +23,8 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.apis.ApiType;
 import org.jclouds.apis.Apis;
-import org.jclouds.apis.internal.BaseApiMetadataTest;
+import org.jclouds.compute.internal.BaseComputeServiceApiMetadataTest;
 import org.testng.annotations.Test;
 
 /**
@@ -33,16 +32,15 @@ import org.testng.annotations.Test;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "unit")
-public class AbiquoApiMetadataTest extends BaseApiMetadataTest
+@Test(groups = "unit", testName = "AbiquoApiMetadataTest")
+public class AbiquoApiMetadataTest extends BaseComputeServiceApiMetadataTest
 {
 
     public AbiquoApiMetadataTest()
     {
-        super(new AbiquoApiMetadata(), ApiType.COMPUTE);
+        super(new AbiquoApiMetadata());
     }
 
-    @SuppressWarnings("rawtypes")
     public void testAbiquoApiRegistered()
     {
         ApiMetadata api = Apis.withId("abiquo");

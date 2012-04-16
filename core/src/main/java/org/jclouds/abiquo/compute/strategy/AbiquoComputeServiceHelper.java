@@ -20,6 +20,7 @@ package org.jclouds.abiquo.compute.strategy;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.getFirst;
 
 import javax.annotation.Resource;
@@ -49,7 +50,6 @@ import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 
 /**
  * Helper methods to perform {@link AbiquoComputeServiceAdapter} operations.
@@ -93,28 +93,22 @@ public class AbiquoComputeServiceHelper
         final Enterprise enterprise, final Datacenter datacenter,
         final VirtualMachineTemplate template, final AbiquoTemplateOptions options)
     {
-        VirtualDatacenter vdc = null;
-
         Iterable<VirtualDatacenter> compatibles =
             findCompatibleVirtualDatacenters(datacenter, template);
 
-        if (options.getVirtualDatacenter() == null)
-        {
-            vdc = getFirst(compatibles, null);
-            if (vdc == null)
-            {
-                vdc = createCompatibleVirtualDatacenter(user, enterprise, datacenter, template);
-                if (vdc == null)
-                {
-                    throw new NotEnoughResourcesException("There are not resources to deploy the given template");
-                }
-            }
-        }
-        else
+        VirtualDatacenter vdc =
+            options.getVirtualDatacenter() == null ? getFirst(compatibles, null) : find(
+                compatibles, VirtualDatacenterPredicates.name(options.getVirtualDatacenter()));
+
+        if (vdc == null)
         {
             vdc =
-                Iterables.find(compatibles,
-                    VirtualDatacenterPredicates.name(options.getVirtualDatacenter()));
+                createCompatibleVirtualDatacenter(user, enterprise, datacenter, template,
+                    options.getVirtualDatacenter());
+            if (vdc == null)
+            {
+                throw new NotEnoughResourcesException("There are not resources to deploy the given template");
+            }
         }
 
         return vdc;
@@ -170,13 +164,12 @@ public class AbiquoComputeServiceHelper
      */
     private VirtualDatacenter createCompatibleVirtualDatacenter(final User user,
         final Enterprise enterprise, final Datacenter datacenter,
-        final VirtualMachineTemplate template)
+        final VirtualMachineTemplate template, final String name)
     {
         PrivateNetwork defaultNetwork =
             PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1")
                 .address("192.168.1.0").mask(24).build();
 
-        // TODO: Configurable name and lookup
         VirtualDatacenter vdc =
             VirtualDatacenter.builder(context, datacenter, enterprise).network(defaultNetwork)
                 .build();
@@ -189,7 +182,7 @@ public class AbiquoComputeServiceHelper
                 try
                 {
                     logger.info("Trying to create a virtual datacenter of type %s", type.name());
-                    vdc.setName("JC-" + type.name());
+                    vdc.setName(name != null ? name : "JC-" + type.name());
                     vdc.setHypervisorType(type);
                     vdc.save();
 

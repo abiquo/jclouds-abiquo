@@ -23,10 +23,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Properties;
 
+import org.jclouds.ContextBuilder;
 import org.jclouds.abiquo.AbiquoApiMetadata;
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.jclouds.rest.internal.ContextBuilder;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -57,7 +58,7 @@ public class BaseInjectionTest
             .credentials(identity, credential) //
             .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
             .overrides(buildProperties()) //
-            .build().getUtils().getInjector();
+            .build(AbiquoContext.class).getUtils().getInjector();
     }
 
     protected Properties buildProperties()

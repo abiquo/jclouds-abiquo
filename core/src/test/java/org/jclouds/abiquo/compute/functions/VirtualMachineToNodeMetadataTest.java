@@ -152,7 +152,6 @@ public class VirtualMachineToNodeMetadataTest
         expect(mockVm.getName()).andReturn(vm.getName());
         expect(mockVm.getName()).andReturn(vm.getName());
         expect(mockVm.unwrap()).andReturn(vm);
-        expect(mockVm.getVncPort()).andReturn(22);
         expect(mockVm.getTemplate()).andReturn(null);
         expect(mockVm.getState()).andReturn(vm.getState());
         expect(mockVm.listAttachedNics()).andReturn(ImmutableList.<Nic> of(mockNic));

@@ -58,7 +58,7 @@ public abstract class BaseAbiquoAsyncClientTest<T> extends BaseAsyncClientTest<T
     }
 
     @Override
-    protected ProviderMetadata< ? , ? , ? , ? > createProviderMetadata()
+    protected ProviderMetadata createProviderMetadata()
     {
         return AnonymousProviderMetadata.forApiWithEndpoint(new AbiquoApiMetadata(),
             "http://localhost/api");

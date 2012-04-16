@@ -32,6 +32,7 @@ import java.util.concurrent.ThreadFactory;
 import javax.annotation.Resource;
 import javax.inject.Named;
 
+import org.jclouds.concurrent.config.ExecutorServiceModule;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.Logger;
 
@@ -49,7 +50,6 @@ import com.google.inject.Singleton;
  * @author Ignasi Barrera
  * @see ExecutorServiceModule
  */
-@ConfiguresScheduler
 public class SchedulerModule extends AbstractModule
 {
     @Provides
@@ -58,8 +58,8 @@ public class SchedulerModule extends AbstractModule
         final Closer closer)
     {
         ThreadFactory factory =
-            new ThreadFactoryBuilder().setNameFormat("scheduler-thread-%d").setThreadFactory(
-                Executors.defaultThreadFactory()).build();
+            new ThreadFactoryBuilder().setNameFormat("scheduler-thread-%d")
+                .setThreadFactory(Executors.defaultThreadFactory()).build();
 
         if (count == 0)
         {

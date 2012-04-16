@@ -22,6 +22,7 @@ import static com.google.common.collect.Iterables.getOnlyElement;
 
 import java.io.File;
 
+import org.jclouds.ContextBuilder;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.RunNodesException;
@@ -31,7 +32,6 @@ import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.domain.LoginCredentials;
 import org.jclouds.io.Payloads;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.jclouds.rest.internal.ContextBuilder;
 import org.jclouds.ssh.SshClient;
 import org.jclouds.ssh.jsch.config.JschSshClientModule;
 
@@ -51,7 +51,7 @@ public class AbiquoComputeExample
             .endpoint("http://mothership.bcn.abiquo.com/api") //
             .credentials("ibarrera", "ibarrera") //
             .modules(ImmutableSet.<Module> of(new JschSshClientModule(), new SLF4JLoggingModule())) //
-            .build();
+            .build(AbiquoContext.class);
 
         ComputeService compute = context.getComputeService();
 

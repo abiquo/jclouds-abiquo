@@ -25,22 +25,35 @@ import static org.jclouds.abiquo.reference.AbiquoConstants.MAX_SCHEDULER_THREADS
 import java.net.URI;
 import java.util.Properties;
 
+import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
+import org.jclouds.abiquo.config.AbiquoRestClientModule;
+import org.jclouds.abiquo.config.SchedulerModule;
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.apis.ApiType;
-import org.jclouds.compute.internal.BaseComputeServiceApiMetadata;
+import org.jclouds.apis.internal.BaseApiMetadata;
+import org.jclouds.rest.RestContext;
+import org.jclouds.rest.internal.BaseRestApiMetadata;
 
 import com.google.common.base.CharMatcher;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.reflect.TypeToken;
+import com.google.inject.Module;
 
 /**
  * Implementation of {@link ApiMetadata} for Abiquo API.
  * 
  * @author Ignasi Barrera
  */
-public class AbiquoApiMetadata
-    extends
-    BaseComputeServiceApiMetadata<AbiquoClient, AbiquoAsyncClient, AbiquoContext, AbiquoApiMetadata>
+public class AbiquoApiMetadata extends BaseApiMetadata
 {
+    /** Serial UID. */
+    private static final long serialVersionUID = -8355533493674898171L;
+
+    public static final TypeToken<RestContext<AbiquoClient, AbiquoAsyncClient>> CONTEXT_TOKEN =
+        new TypeToken<RestContext<AbiquoClient, AbiquoAsyncClient>>()
+        {
+            private static final long serialVersionUID = -5070937833892503232L;
+        };
+
     public AbiquoApiMetadata()
     {
         this(new Builder());
@@ -51,10 +64,9 @@ public class AbiquoApiMetadata
         super(builder);
     }
 
-    protected static Properties defaultProperties()
+    public static Properties defaultProperties()
     {
-        Properties properties =
-            org.jclouds.apis.internal.BaseApiMetadata.Builder.defaultProperties();
+        Properties properties = BaseRestApiMetadata.defaultProperties();
         // By default redirects will be handled in the domain objects
         properties.setProperty(PROPERTY_MAX_REDIRECTS, "0");
         // The default polling delay between AsyncTask monitor requests
@@ -70,24 +82,27 @@ public class AbiquoApiMetadata
         return new Builder().fromApiMetadata(this);
     }
 
-    public static class Builder
-        extends
-        BaseComputeServiceApiMetadata.Builder<AbiquoClient, AbiquoAsyncClient, AbiquoContext, AbiquoApiMetadata>
+    public static class Builder extends BaseRestApiMetadata.Builder
     {
         private static final String DOCUMENTATION_ROOT = "http://community.abiquo.com/display/ABI"
             + CharMatcher.DIGIT.retainFrom(AbiquoAsyncClient.API_VERSION);
 
         protected Builder()
         {
-            id("abiquo").name("Abiquo API").type(ApiType.COMPUTE).identityName("API Username")
+            super(AbiquoClient.class, AbiquoAsyncClient.class);
+            id("abiquo")
+                .name("Abiquo API")
+                .identityName("API Username")
                 .credentialName("API Password")
                 .documentation(URI.create(DOCUMENTATION_ROOT + "/API+Reference"))
-                .defaultEndpoint("http://localhost/api").version(AbiquoAsyncClient.API_VERSION)
+                .defaultEndpoint("http://localhost/api")
+                .version(AbiquoAsyncClient.API_VERSION)
                 .buildVersion(AbiquoAsyncClient.BUILD_VERSION)
+                .wrapper(TypeToken.of(AbiquoContext.class))
                 .defaultProperties(AbiquoApiMetadata.defaultProperties())
-                .javaApi(AbiquoClient.class, AbiquoAsyncClient.class)
-                .context(TypeToken.of(AbiquoContext.class))
-                .contextBuilder(TypeToken.of(AbiquoContextBuilder.class));
+                .defaultModules(
+                    ImmutableSet.<Class< ? extends Module>> of(AbiquoRestClientModule.class,
+                        AbiquoComputeServiceContextModule.class, SchedulerModule.class));
         }
 
         public Builder useTokenAuth()
@@ -108,7 +123,7 @@ public class AbiquoApiMetadata
         }
 
         @Override
-        public Builder fromApiMetadata(final AbiquoApiMetadata in)
+        public Builder fromApiMetadata(final ApiMetadata in)
         {
             super.fromApiMetadata(in);
             return this;

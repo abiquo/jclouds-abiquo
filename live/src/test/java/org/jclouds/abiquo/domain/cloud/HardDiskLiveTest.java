@@ -38,8 +38,7 @@ public class HardDiskLiveTest extends BaseAbiquoClientLiveTest
     public void createHardDisk()
     {
         hardDisk =
-            HardDisk.builder(context.getProviderSpecificContext(), env.virtualDatacenter)
-                .sizeInMb(64L).build();
+            HardDisk.builder(context.getApiContext(), env.virtualDatacenter).sizeInMb(64L).build();
         hardDisk.save();
 
         assertNotNull(hardDisk.getId());

@@ -25,11 +25,11 @@ import static org.testng.Assert.fail;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.jclouds.ContextBuilder;
 import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.jclouds.rest.internal.ContextBuilder;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -62,7 +62,7 @@ public class AbiquoVersionLiveTest
             .credentials(identity, credential) //
             .apiVersion("0.0") //
             .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
-            .build();
+            .build(AbiquoContext.class);
     }
 
     @AfterMethod

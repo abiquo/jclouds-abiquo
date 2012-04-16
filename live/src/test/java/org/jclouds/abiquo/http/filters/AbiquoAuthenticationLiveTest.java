@@ -34,6 +34,7 @@ import java.util.Collection;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.jclouds.ContextBuilder;
 import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.http.HttpRequest;
@@ -41,7 +42,6 @@ import org.jclouds.http.HttpResponse;
 import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.rest.AuthorizationException;
-import org.jclouds.rest.internal.ContextBuilder;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -83,14 +83,12 @@ public class AbiquoAuthenticationLiveTest
                 .endpoint(endpoint) //
                 .credentials(token, null) //
                 .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
-                .build();
+                .build(AbiquoContext.class);
 
         try
         {
             // Perform a call to get the logged user and verify the identity
-            UserDto user =
-                tokenContext.getProviderSpecificContext().getApi().getAdminClient()
-                    .getCurrentUser();
+            UserDto user = tokenContext.getApiContext().getApi().getAdminClient().getCurrentUser();
             assertNotNull(user);
             assertEquals(user.getNick(), identity);
         }
@@ -114,12 +112,12 @@ public class AbiquoAuthenticationLiveTest
                 .endpoint(endpoint) //
                 .credentials(token, null) //
                 .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
-                .build();
+                .build(AbiquoContext.class);
 
         // Perform a call to get the logged user. It should fail
         try
         {
-            tokenContext.getProviderSpecificContext().getApi().getAdminClient().getCurrentUser();
+            tokenContext.getApiContext().getApi().getAdminClient().getCurrentUser();
         }
         catch (AuthorizationException ex)
         {
@@ -145,7 +143,7 @@ public class AbiquoAuthenticationLiveTest
             .endpoint(endpoint) //
             .credentials(identity, credential) //
             .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
-            .build();
+            .build(AbiquoContext.class);
 
         try
         {
