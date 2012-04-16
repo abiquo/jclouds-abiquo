@@ -20,16 +20,15 @@ package org.jclouds.abiquo;
 
 import static org.jclouds.Constants.PROPERTY_MAX_REDIRECTS;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
-import static org.jclouds.abiquo.reference.AbiquoConstants.MAX_SCHEDULER_THREADS;
 
 import java.net.URI;
 import java.util.Properties;
 
 import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
-import org.jclouds.abiquo.config.SchedulerModule;
 import org.jclouds.apis.ApiMetadata;
 import org.jclouds.apis.internal.BaseApiMetadata;
+import org.jclouds.concurrent.config.ScheduledExecutorServiceModule;
 import org.jclouds.rest.RestContext;
 import org.jclouds.rest.internal.BaseRestApiMetadata;
 
@@ -72,8 +71,6 @@ public class AbiquoApiMetadata extends BaseApiMetadata
         properties.setProperty(PROPERTY_MAX_REDIRECTS, "0");
         // The default polling delay between AsyncTask monitor requests
         properties.setProperty(ASYNC_TASK_MONITOR_DELAY, "5000");
-        // The default number of concurrent scheduler threads to be used
-        properties.setProperty(MAX_SCHEDULER_THREADS, "10");
         return properties;
     }
 
@@ -103,7 +100,8 @@ public class AbiquoApiMetadata extends BaseApiMetadata
                 .defaultProperties(AbiquoApiMetadata.defaultProperties())
                 .defaultModules(
                     ImmutableSet.<Class< ? extends Module>> of(AbiquoRestClientModule.class,
-                        AbiquoComputeServiceContextModule.class, SchedulerModule.class));
+                        AbiquoComputeServiceContextModule.class,
+                        ScheduledExecutorServiceModule.class));
         }
 
         public Builder useTokenAuth()

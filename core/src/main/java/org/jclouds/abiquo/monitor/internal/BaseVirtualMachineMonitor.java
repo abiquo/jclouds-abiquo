@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.monitor.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.Constants.PROPERTY_SCHEDULER_THREADS;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
 import java.util.concurrent.ScheduledExecutorService;
@@ -60,7 +61,7 @@ public class BaseVirtualMachineMonitor extends BaseMonitoringService implements
 
     @Inject
     public BaseVirtualMachineMonitor(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
-        final ScheduledExecutorService scheduler,
+        @Named(PROPERTY_SCHEDULER_THREADS) final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus,
         final VirtualMachineDeployMonitor deployMonitor,
         final VirtualMachineUndeployMonitor undeployMonitor)

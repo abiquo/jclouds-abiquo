@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.Constants.PROPERTY_SCHEDULER_THREADS;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
 import java.util.concurrent.Future;
@@ -32,7 +33,6 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.config.SchedulerModule;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
 import org.jclouds.abiquo.events.monitor.CompletedEvent;
@@ -56,7 +56,6 @@ import com.google.inject.Inject;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see SchedulerModule
  */
 @Singleton
 public class BaseMonitoringService implements MonitoringService
@@ -85,7 +84,7 @@ public class BaseMonitoringService implements MonitoringService
 
     @Inject
     public BaseMonitoringService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
-        final ScheduledExecutorService scheduler,
+        @Named(PROPERTY_SCHEDULER_THREADS) final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus)
     {
         this.context = checkNotNull(context, "context");
@@ -166,15 +165,17 @@ public class BaseMonitoringService implements MonitoringService
     @Override
     public VirtualMachineMonitor getVirtualMachineMonitor()
     {
-        return checkNotNull(context.getUtils().getInjector().getInstance(
-            VirtualMachineMonitor.class), "virtualMachineMonitor");
+        return checkNotNull(
+            context.getUtils().getInjector().getInstance(VirtualMachineMonitor.class),
+            "virtualMachineMonitor");
     }
 
     @Override
     public VirtualApplianceMonitor getVirtualApplianceMonitor()
     {
-        return checkNotNull(context.getUtils().getInjector().getInstance(
-            VirtualApplianceMonitor.class), "virtualApplianceMonitor");
+        return checkNotNull(
+            context.getUtils().getInjector().getInstance(VirtualApplianceMonitor.class),
+            "virtualApplianceMonitor");
     }
 
     @Override
