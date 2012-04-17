@@ -62,6 +62,7 @@ public abstract class AbstractPhysicalMachine extends DomainWrapper<MachineDto>
     protected AbstractPhysicalMachine(final AbiquoContext context, final MachineDto target)
     {
         super(context, target);
+        extractVirtualSwitches();
     }
 
     public void delete()
