@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
+import java.util.StringTokenizer;
 
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.DomainWrapper;
@@ -32,6 +33,8 @@ import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link MachineDto}. This class defines common methods for
@@ -49,6 +52,9 @@ public abstract class AbstractPhysicalMachine extends DomainWrapper<MachineDto>
 
     /** The default virtual cpu used in MB. */
     protected static final int DEFAULT_VCPU_USED = 1;
+
+    /** List of available virtual switches provided by discover operation **/
+    protected List<String> virtualSwitches;
 
     /**
      * Constructor to be used only by the builder.
@@ -88,6 +94,41 @@ public abstract class AbstractPhysicalMachine extends DomainWrapper<MachineDto>
     public Datastore findDatastore(final String name)
     {
         return find(getDatastores(), DatastorePredicates.name(name), null);
+    }
+
+    // Aux operations
+
+    /**
+     * Converts the tokenized String provided by the node collector API to a list of Strings and
+     * stores it at the attribute switches.
+     */
+    protected void extractVirtualSwitches()
+    {
+        StringTokenizer st = new StringTokenizer(getVirtualSwitch(), "/");
+        this.virtualSwitches = Lists.newArrayList();
+
+        while (st.hasMoreTokens())
+        {
+            this.virtualSwitches.add(st.nextToken());
+        }
+
+        if (virtualSwitches.size() > 0)
+        {
+            this.setVirtualSwitch(virtualSwitches.get(0));
+        }
+    }
+
+    /**
+     * Returns the virtual switches available. One of them needs to be selected.
+     */
+    public List<String> getAvailableVirtualSwitches()
+    {
+        return virtualSwitches;
+    }
+
+    public String findAvailableVirtualSwitch(final String vswitch)
+    {
+        return find(virtualSwitches, Predicates.equalTo(vswitch));
     }
 
     // Delegate methods
