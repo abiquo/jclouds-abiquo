@@ -27,7 +27,6 @@ import java.util.Properties;
 import org.jclouds.abiquo.compute.config.AbiquoComputeServiceContextModule;
 import org.jclouds.abiquo.config.AbiquoRestClientModule;
 import org.jclouds.apis.ApiMetadata;
-import org.jclouds.apis.internal.BaseApiMetadata;
 import org.jclouds.concurrent.config.ScheduledExecutorServiceModule;
 import org.jclouds.rest.RestContext;
 import org.jclouds.rest.internal.BaseRestApiMetadata;
@@ -42,7 +41,7 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-public class AbiquoApiMetadata extends BaseApiMetadata
+public class AbiquoApiMetadata extends BaseRestApiMetadata
 {
     /** Serial UID. */
     private static final long serialVersionUID = -8355533493674898171L;
