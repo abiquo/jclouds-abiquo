@@ -100,7 +100,7 @@ public class ListDatacentersImpl implements ListDatacenters
     private Iterable<Datacenter> listConcurrentDatacenters(final List<Integer> ids)
     {
         Iterable<DatacenterDto> dcs =
-            transformParallel(ids, new Function<Integer, Future<DatacenterDto>>()
+            transformParallel(ids, new Function<Integer, Future< ? extends DatacenterDto>>()
             {
                 @Override
                 public Future<DatacenterDto> apply(final Integer input)

@@ -101,15 +101,16 @@ public class ListVirtualAppliancesImpl implements ListVirtualAppliances
         final Iterable<VirtualDatacenter> vdcs)
     {
         Iterable<VirtualAppliancesDto> vapps =
-            transformParallel(vdcs, new Function<VirtualDatacenter, Future<VirtualAppliancesDto>>()
-            {
-                @Override
-                public Future<VirtualAppliancesDto> apply(final VirtualDatacenter input)
+            transformParallel(vdcs,
+                new Function<VirtualDatacenter, Future< ? extends VirtualAppliancesDto>>()
                 {
-                    return context.getAsyncApi().getCloudClient()
-                        .listVirtualAppliances(input.unwrap());
-                }
-            }, userExecutor, maxTime, logger, "getting virtual appliances");
+                    @Override
+                    public Future<VirtualAppliancesDto> apply(final VirtualDatacenter input)
+                    {
+                        return context.getAsyncApi().getCloudClient()
+                            .listVirtualAppliances(input.unwrap());
+                    }
+                }, userExecutor, maxTime, logger, "getting virtual appliances");
 
         return DomainWrapper.join(vapps);
     }

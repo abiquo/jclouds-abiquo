@@ -119,7 +119,7 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
     private Iterable<VirtualDatacenter> listConcurrentVirtualDatacenters(final List<Integer> ids)
     {
         Iterable<VirtualDatacenterDto> vdcs =
-            transformParallel(ids, new Function<Integer, Future<VirtualDatacenterDto>>()
+            transformParallel(ids, new Function<Integer, Future< ? extends VirtualDatacenterDto>>()
             {
                 @Override
                 public Future<VirtualDatacenterDto> apply(final Integer input)

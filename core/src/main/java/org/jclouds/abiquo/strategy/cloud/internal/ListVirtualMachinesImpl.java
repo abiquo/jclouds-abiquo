@@ -100,15 +100,16 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
         final Iterable<VirtualAppliance> vapps)
     {
         Iterable<VirtualMachinesDto> vms =
-            transformParallel(vapps, new Function<VirtualAppliance, Future<VirtualMachinesDto>>()
-            {
-                @Override
-                public Future<VirtualMachinesDto> apply(final VirtualAppliance input)
+            transformParallel(vapps,
+                new Function<VirtualAppliance, Future< ? extends VirtualMachinesDto>>()
                 {
-                    return context.getAsyncApi().getCloudClient()
-                        .listVirtualMachines(input.unwrap());
-                }
-            }, userExecutor, maxTime, logger, "getting virtual machines");
+                    @Override
+                    public Future<VirtualMachinesDto> apply(final VirtualAppliance input)
+                    {
+                        return context.getAsyncApi().getCloudClient()
+                            .listVirtualMachines(input.unwrap());
+                    }
+                }, userExecutor, maxTime, logger, "getting virtual machines");
 
         return DomainWrapper.join(vms);
     }

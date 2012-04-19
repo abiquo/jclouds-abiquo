@@ -97,15 +97,16 @@ public class ListVirtualMachineTemplatesImpl implements ListVirtualMachineTempla
         final Iterable<Datacenter> dcs)
     {
         Iterable<VirtualMachineTemplatesDto> templates =
-            transformParallel(dcs, new Function<Datacenter, Future<VirtualMachineTemplatesDto>>()
-            {
-                @Override
-                public Future<VirtualMachineTemplatesDto> apply(final Datacenter input)
+            transformParallel(dcs,
+                new Function<Datacenter, Future< ? extends VirtualMachineTemplatesDto>>()
                 {
-                    return context.getAsyncApi().getVirtualMachineTemplateClient()
-                        .listVirtualMachineTemplates(parent.getId(), input.getId());
-                }
-            }, userExecutor, maxTime, logger, "getting virtual machine templates");
+                    @Override
+                    public Future<VirtualMachineTemplatesDto> apply(final Datacenter input)
+                    {
+                        return context.getAsyncApi().getVirtualMachineTemplateClient()
+                            .listVirtualMachineTemplates(parent.getId(), input.getId());
+                    }
+                }, userExecutor, maxTime, logger, "getting virtual machine templates");
 
         return DomainWrapper.join(templates);
     }

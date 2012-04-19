@@ -102,7 +102,7 @@ public class ListMachinesImpl implements ListMachines
     private Iterable<RackDto> listConcurrentRacks(final Iterable<Datacenter> datacenters)
     {
         Iterable<RacksDto> racks =
-            transformParallel(datacenters, new Function<Datacenter, Future<RacksDto>>()
+            transformParallel(datacenters, new Function<Datacenter, Future< ? extends RacksDto>>()
             {
                 @Override
                 public Future<RacksDto> apply(final Datacenter input)
@@ -118,7 +118,7 @@ public class ListMachinesImpl implements ListMachines
     private Iterable<MachineDto> listConcurrentMachines(final Iterable<RackDto> racks)
     {
         Iterable<MachinesDto> machines =
-            transformParallel(racks, new Function<RackDto, Future<MachinesDto>>()
+            transformParallel(racks, new Function<RackDto, Future< ? extends MachinesDto>>()
             {
                 @Override
                 public Future<MachinesDto> apply(final RackDto input)
