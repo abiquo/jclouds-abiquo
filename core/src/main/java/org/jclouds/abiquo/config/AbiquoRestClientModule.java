@@ -88,7 +88,7 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
 
     public AbiquoRestClientModule()
     {
-        super(AbiquoClient.class, AbiquoAsyncClient.class, DELEGATE_MAP);
+        super(DELEGATE_MAP);
     }
 
     @Override
