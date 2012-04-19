@@ -7,8 +7,8 @@ Documentation
 -------------
 
 Detailed information about using jclouds compute features can be found at [jclouds homepage](http://www.jclouds.org).
-Ddetailed information about the Abiquo REST API can be found in the
-[Abiquo documentation page](http://community.abiquo.com)..
+Detailed information about the Abiquo REST API can be found in the
+[Abiquo documentation page](http://community.abiquo.com).
 
 All information about building and using the **jclouds-abiquo** provider in your own project
 can be found in the [Project Wiki](https://github.com/abiquo/jclouds-abiquo/wiki).
