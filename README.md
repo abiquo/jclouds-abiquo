@@ -39,8 +39,7 @@ Note on patches/pull requests
 Issue Tracking
 --------------
 
-If you find any issue, please submit it to the [Bug tracking system](http://jira.abiquo.com/browse/ABIQUOJC) and we
-will do our best to fix it.
+If you find any issue, please submit it to the [Bug tracking system](http://jira.abiquo.com/browse/ABIQUOJC) and we will do our best to fix it.
 
 
 License
