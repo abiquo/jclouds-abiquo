@@ -97,6 +97,41 @@ public abstract class AbstractPhysicalMachine extends DomainWrapper<MachineDto>
         return find(getDatastores(), DatastorePredicates.name(name), null);
     }
 
+    // Aux operations
+
+    /**
+     * Converts the tokenized String provided by the node collector API to a list of Strings and
+     * stores it at the attribute switches.
+     */
+    protected void extractVirtualSwitches()
+    {
+        StringTokenizer st = new StringTokenizer(getVirtualSwitch(), "/");
+        this.virtualSwitches = Lists.newArrayList();
+
+        while (st.hasMoreTokens())
+        {
+            this.virtualSwitches.add(st.nextToken());
+        }
+
+        if (virtualSwitches.size() > 0)
+        {
+            this.setVirtualSwitch(virtualSwitches.get(0));
+        }
+    }
+
+    /**
+     * Returns the virtual switches available. One of them needs to be selected.
+     */
+    public List<String> getAvailableVirtualSwitches()
+    {
+        return virtualSwitches;
+    }
+
+    public String findAvailableVirtualSwitch(final String vswitch)
+    {
+        return find(virtualSwitches, Predicates.equalTo(vswitch));
+    }
+
     // Delegate methods
 
     public Integer getId()
