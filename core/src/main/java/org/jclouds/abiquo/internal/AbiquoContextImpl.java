@@ -21,13 +21,10 @@ package org.jclouds.abiquo.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.io.Closeable;
-import java.util.Map;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoApiMetadata;
+import org.jclouds.Context;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContext;
@@ -38,7 +35,6 @@ import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.Utils;
 import org.jclouds.compute.internal.ComputeServiceContextImpl;
-import org.jclouds.domain.Credentials;
 import org.jclouds.location.Provider;
 import org.jclouds.rest.RestContext;
 import org.jclouds.rest.internal.RestContextImpl;
@@ -62,15 +58,14 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
     private final MonitoringService monitoringService;
 
     @Inject
-    public AbiquoContextImpl(@Provider final Closeable wrapped,
-        @Provider final TypeToken< ? extends Closeable> wrappedType,
-        final ComputeService computeService, final Map<String, Credentials> credentialStore,
-        final Utils utils,
+    public AbiquoContextImpl(@Provider final Context wrapped,
+        @Provider final TypeToken< ? extends Context> wrappedType,
+        final ComputeService computeService, final Utils utils,
         final RestContext<AbiquoClient, AbiquoAsyncClient> providerSpecificContext,
         final AdministrationService administrationService, final CloudService cloudService,
         final SearchService searchService, final MonitoringService monitoringService)
     {
-        super(wrapped, wrappedType, computeService, credentialStore, utils);
+        super(wrapped, wrappedType, computeService, utils);
         this.administrationService = checkNotNull(administrationService, "administrationService");
         this.cloudService = checkNotNull(cloudService, "cloudService");
         this.searchService = checkNotNull(searchService, "searchService");
@@ -80,7 +75,7 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
     @Override
     public RestContext<AbiquoClient, AbiquoAsyncClient> getApiContext()
     {
-        return unwrap(AbiquoApiMetadata.CONTEXT_TOKEN);
+        return unwrap();
     }
 
     @Override

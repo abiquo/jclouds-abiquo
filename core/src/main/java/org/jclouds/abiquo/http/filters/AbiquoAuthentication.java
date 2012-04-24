@@ -20,11 +20,11 @@
 package org.jclouds.abiquo.http.filters;
 
 import static com.google.common.base.Preconditions.checkNotNull;
-import static org.jclouds.Constants.PROPERTY_CREDENTIAL;
-import static org.jclouds.Constants.PROPERTY_IDENTITY;
+import static org.jclouds.abiquo.reference.AbiquoConstants.CREDENTIAL_IS_TOKEN;
 
 import java.io.UnsupportedEncodingException;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.ws.rs.core.HttpHeaders;
@@ -34,9 +34,10 @@ import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
 import org.jclouds.http.utils.ModifyRequest;
+import org.jclouds.rest.annotations.Credential;
+import org.jclouds.rest.annotations.Identity;
 
 import com.google.common.annotations.VisibleForTesting;
-import com.google.inject.Inject;
 
 /**
  * Authenticates using Basic Authentication or a generated token from previous API sessions.
@@ -49,25 +50,31 @@ public class AbiquoAuthentication implements HttpRequestFilter
     /** The name of the authentication token. */
     public static final String AUTH_TOKEN_NAME = "auth";
 
-    /** The identity or the authentication token. */
-    @Inject
-    @Named(PROPERTY_IDENTITY)
-    protected String identityOrToken;
+    protected String identity;
 
-    @Inject(optional = true)
-    @Named(PROPERTY_CREDENTIAL)
     protected String credential;
+
+    protected boolean credentialIsToken;
+
+    @Inject
+    public AbiquoAuthentication(@Identity final String identity,
+        @Credential final String credential,
+        @Named(CREDENTIAL_IS_TOKEN) final String credentialIsToken)
+    {
+        this.identity = checkNotNull(identity, "identity");
+        this.credential = checkNotNull(credential, "credential");
+        this.credentialIsToken = Boolean.valueOf(credentialIsToken);
+    }
 
     @Override
     public HttpRequest filter(final HttpRequest request) throws HttpException
     {
         try
         {
-            boolean isBasicAuth = credential != null;
             String header =
-                isBasicAuth ? basicAuth(identityOrToken, credential) : tokenAuth(identityOrToken);
-            return ModifyRequest.replaceHeader(request, isBasicAuth ? HttpHeaders.AUTHORIZATION
-                : HttpHeaders.COOKIE, header);
+                credentialIsToken ? tokenAuth(credential) : basicAuth(identity, credential);
+            return ModifyRequest.replaceHeader(request, credentialIsToken ? HttpHeaders.COOKIE
+                : HttpHeaders.AUTHORIZATION, header);
         }
         catch (UnsupportedEncodingException ex)
         {

@@ -26,6 +26,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.List;
@@ -183,7 +184,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     protected void createDatacenter()
     {
         // Assume a monolithic install
-        String remoteServicesAddress = context.getApiContext().getEndpoint().getHost();
+        URI endpoint = URI.create(context.getApiContext().getProviderMetadata().getEndpoint());
+        String remoteServicesAddress = endpoint.getHost();
 
         datacenter =
             Datacenter.builder(context.getApiContext()).name(randomName()).location("Honolulu")

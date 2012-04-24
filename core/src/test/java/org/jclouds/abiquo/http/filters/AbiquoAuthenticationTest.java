@@ -48,11 +48,11 @@ public class AbiquoAuthenticationTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
 
-        AbiquoAuthentication filter = basicAuthFilter();
+        AbiquoAuthentication filter = new AbiquoAuthentication("identity", "credential", "false");
         HttpRequest filtered = filter.filter(request);
         HttpRequest expected =
             ModifyRequest.replaceHeader(request, HttpHeaders.AUTHORIZATION,
-                AbiquoAuthentication.basicAuth("user", "password"));
+                AbiquoAuthentication.basicAuth("identity", "credential"));
 
         assertFalse(filtered.getHeaders().containsKey(HttpHeaders.COOKIE));
         assertEquals(filtered, expected);
@@ -65,9 +65,18 @@ public class AbiquoAuthenticationTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
 
-        AbiquoAuthentication filter = basicAuthFilter();
-        filter.identityOrToken = null;
+        AbiquoAuthentication filter = new AbiquoAuthentication(null, "credential", "false");
+        filter.filter(request);
+    }
 
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testBasicAuthenticationWithoutCredential() throws UnsupportedEncodingException,
+        NoSuchAlgorithmException, CertificateException
+    {
+        HttpRequest request =
+            HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
+
+        AbiquoAuthentication filter = new AbiquoAuthentication("identity", null, "false");
         filter.filter(request);
     }
 
@@ -77,7 +86,7 @@ public class AbiquoAuthenticationTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
 
-        AbiquoAuthentication filter = tokenFilter();
+        AbiquoAuthentication filter = new AbiquoAuthentication("token-identity", "token", "true");
         HttpRequest filtered = filter.filter(request);
         HttpRequest expected =
             ModifyRequest.replaceHeader(request, HttpHeaders.COOKIE,
@@ -85,35 +94,5 @@ public class AbiquoAuthenticationTest
 
         assertFalse(filtered.getHeaders().containsKey(HttpHeaders.AUTHORIZATION));
         assertEquals(filtered, expected);
-    }
-
-    @Test(expectedExceptions = NullPointerException.class)
-    public void testTokenAuthenticationWithoutToken() throws UnsupportedEncodingException,
-        NoSuchAlgorithmException, CertificateException
-    {
-        HttpRequest request =
-            HttpRequest.builder().method("GET").endpoint(URI.create("http://foo")).build();
-
-        AbiquoAuthentication filter = tokenFilter();
-        filter.identityOrToken = null;
-
-        filter.filter(request);
-    }
-
-    private static AbiquoAuthentication basicAuthFilter() throws UnsupportedEncodingException,
-        NoSuchAlgorithmException, CertificateException
-    {
-        AbiquoAuthentication filter = new AbiquoAuthentication();
-        filter.identityOrToken = "user";
-        filter.credential = "password";
-        return filter;
-    }
-
-    private static AbiquoAuthentication tokenFilter() throws UnsupportedEncodingException,
-        NoSuchAlgorithmException, CertificateException
-    {
-        AbiquoAuthentication filter = new AbiquoAuthentication();
-        filter.identityOrToken = "token";
-        return filter;
     }
 }

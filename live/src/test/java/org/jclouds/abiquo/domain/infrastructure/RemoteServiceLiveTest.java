@@ -27,6 +27,8 @@ import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+import java.net.URI;
+
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
@@ -74,11 +76,12 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest
 
         assertNull(deleted);
 
+        URI endpoint = URI.create(context.getApiContext().getProviderMetadata().getEndpoint());
+
         // Restore rs
         RemoteService bpm =
             RemoteService.builder(context.getApiContext(), env.datacenter)
-                .type(RemoteServiceType.BPM_SERVICE)
-                .ip(context.getApiContext().getEndpoint().getHost()).build();
+                .type(RemoteServiceType.BPM_SERVICE).ip(endpoint.getHost()).build();
         bpm.save();
     }
 

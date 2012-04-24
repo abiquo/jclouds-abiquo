@@ -24,6 +24,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
@@ -70,11 +71,12 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
             assertHasError(ex, Status.NOT_FOUND, "RS-2");
         }
 
+        URI endpoint = URI.create(context.getApiContext().getProviderMetadata().getEndpoint());
+
         // Restore rs
         nc =
             RemoteService.builder(context.getApiContext(), env.datacenter)
-                .type(RemoteServiceType.NODE_COLLECTOR)
-                .ip(context.getApiContext().getEndpoint().getHost()).build();
+                .type(RemoteServiceType.NODE_COLLECTOR).ip(endpoint.getHost()).build();
         nc.save();
     }
 

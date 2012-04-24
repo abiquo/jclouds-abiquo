@@ -20,6 +20,7 @@ package org.jclouds.abiquo;
 
 import static org.jclouds.Constants.PROPERTY_MAX_REDIRECTS;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
+import static org.jclouds.abiquo.reference.AbiquoConstants.CREDENTIAL_IS_TOKEN;
 
 import java.net.URI;
 import java.util.Properties;
@@ -70,6 +71,8 @@ public class AbiquoApiMetadata extends BaseRestApiMetadata
         properties.setProperty(PROPERTY_MAX_REDIRECTS, "0");
         // The default polling delay between AsyncTask monitor requests
         properties.setProperty(ASYNC_TASK_MONITOR_DELAY, "5000");
+        // By default the provided credential is not a token
+        properties.setProperty(CREDENTIAL_IS_TOKEN, "false");
         return properties;
     }
 
@@ -95,23 +98,12 @@ public class AbiquoApiMetadata extends BaseRestApiMetadata
                 .defaultEndpoint("http://localhost/api")
                 .version(AbiquoAsyncClient.API_VERSION)
                 .buildVersion(AbiquoAsyncClient.BUILD_VERSION)
-                .wrapper(TypeToken.of(AbiquoContext.class))
+                .view(TypeToken.of(AbiquoContext.class))
                 .defaultProperties(AbiquoApiMetadata.defaultProperties())
                 .defaultModules(
                     ImmutableSet.<Class< ? extends Module>> of(AbiquoRestClientModule.class,
                         AbiquoComputeServiceContextModule.class,
                         ScheduledExecutorServiceModule.class));
-        }
-
-        public Builder useTokenAuth()
-        {
-            // Token auth has the credential coded in the token, so we should not ask for it
-            return (Builder) this.credentialName(null);
-        }
-
-        public Builder useBase64Auth()
-        {
-            return (Builder) this.credentialName("API Password");
         }
 
         @Override

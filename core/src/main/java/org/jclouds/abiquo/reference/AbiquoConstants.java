@@ -28,6 +28,12 @@ import org.jclouds.abiquo.features.services.MonitoringService;
  */
 public interface AbiquoConstants
 {
+    /**
+     * Boolean property indicating if the provided credential is an api token.
+     * <p>
+     * Default value: false
+     */
+    public static final String CREDENTIAL_IS_TOKEN = "abiquo.credential-is-token";
 
     /**
      * The delay (in ms) used between requests by the {@link MonitoringService} when monitoring

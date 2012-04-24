@@ -21,6 +21,7 @@ package org.jclouds.abiquo.rest.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import javax.inject.Inject;
@@ -29,6 +30,7 @@ import javax.inject.Named;
 import org.jclouds.Constants;
 import org.jclouds.crypto.Crypto;
 import org.jclouds.date.DateService;
+import org.jclouds.domain.Credentials;
 import org.jclouds.json.Json;
 import org.jclouds.logging.Logger.LoggerFactory;
 import org.jclouds.rest.HttpAsyncClient;
@@ -59,11 +61,12 @@ public class ExtendedUtils extends UtilsImpl implements Utils
         final Crypto encryption, final DateService date,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userThreads,
         @Named(Constants.PROPERTY_IO_WORKER_THREADS) final ExecutorService ioThreads,
-        final EventBus eventBus, final LoggerFactory loggerFactory,
-        final AbiquoHttpClient abiquoHttpClient, final AbiquoHttpAsyncClient abiquoHttpAsyncClient)
+        final EventBus eventBus, final Map<String, Credentials> credentialStore,
+        final LoggerFactory loggerFactory, final AbiquoHttpClient abiquoHttpClient,
+        final AbiquoHttpAsyncClient abiquoHttpAsyncClient)
     {
         super(injector, json, xml, simpleClient, simpleAsyncClient, encryption, date, userThreads,
-            ioThreads, eventBus, loggerFactory);
+            ioThreads, eventBus, credentialStore, loggerFactory);
         this.abiquoHttpClient = checkNotNull(abiquoHttpClient, "abiquoHttpClient");
         this.abiquoHttpAsyncClient = checkNotNull(abiquoHttpAsyncClient, "abiquoHttpAsyncClient");
     }
