@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-    
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.jclouds.provider</groupId>
@@ -8,11 +9,12 @@
         <version>2.2-SNAPSHOT</version>
         <relativePath>../project/pom.xml</relativePath>
     </parent>
-    
+
     <artifactId>jclouds-abiquo-live</artifactId>
+    <packaging>jar</packaging>
     <name>JClouds Abiquo :: Live Tests</name>
     <description>JClouds live tests to access Abiquo</description>
-    
+
     <dependencies>
         <!-- JClouds Abiquo -->
         <dependency>
@@ -28,7 +30,7 @@
             <classifier>tests</classifier>
             <scope>test</scope>
         </dependency>
-        
+
         <!-- Test dependencies -->
         <dependency>
             <groupId>org.jclouds</groupId>
@@ -62,48 +64,78 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-    
+
     <build>
-        <plugins>
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>integration</id>
-                        <phase>integration-test</phase>
-                        <goals>
-                            <goal>test</goal>
-                        </goals>
-                        <configuration>
-                            <groups>live,integration</groups>
-                            <excludedGroups>unit,performance</excludedGroups>
-                            <properties>
-                                <property>
-                                    <name>listener</name>
-                                    <value>org.jclouds.abiquo.testng.TestOutputListener</value>
-                                </property>
-                                <property>
-                                    <name>suitename</name>
-                                    <value>Live Integration Tests</value>
-                                </property>
-                            </properties>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>abiquo-live.properties</include>
+                </includes>
+                <excludes>
+                    <exclude>rest.properties</exclude>
+                </excludes>
+                <filtering>true</filtering>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <excludes>
+                    <exclude>abiquo-live.properties</exclude>
+                </excludes>
+                <includes>
+                    <include>rest.properties</include>
+                </includes>
+                <filtering>false</filtering>
+            </testResource>
+        </testResources>
     </build>
-    
     <profiles>
         <profile>
             <id>live</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <build>
+                <filters>
+                    <filter>src/test/resources/filters/filters.properties</filter>
+                </filters>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>integration</id>
+                                <phase>integration-test</phase>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                                <configuration>
+                                    <groups>live,integration</groups>
+                                    <excludedGroups>unit,performance</excludedGroups>
+                                    <properties>
+                                        <property>
+                                            <name>listener</name>
+                                            <value>org.jclouds.abiquo.testng.TestOutputListener</value>
+                                        </property>
+                                        <property>
+                                            <name>suitename</name>
+                                            <value>Live Integration
+                                                Tests</value>
+                                        </property>
+                                    </properties>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
         <profile>
             <id>ucs</id>
             <build>
+                <filters>
+                    <filter>src/test/resources/filters/filters.properties</filter>
+                </filters>
                 <plugins>
                     <plugin>
                         <artifactId>maven-surefire-plugin</artifactId>
@@ -134,6 +166,25 @@
                 </plugins>
             </build>
         </profile>
+        <profile>
+            <id>jenkins</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>attach-sources</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>test-jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
-    
 </project>

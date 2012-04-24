@@ -40,5 +40,11 @@
                 <module>live</module>
             </modules>
         </profile>
+        <profile>
+            <id>jenkins</id>
+            <modules>
+                <module>live</module>
+            </modules>
+        </profile>
     </profiles>
 </project>
