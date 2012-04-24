@@ -119,8 +119,7 @@
                                         </property>
                                         <property>
                                             <name>suitename</name>
-                                            <value>Live Integration
-                                                Tests</value>
+                                            <value>Live Integration Tests</value>
                                         </property>
                                     </properties>
                                 </configuration>
@@ -156,7 +155,8 @@
                                         </property>
                                         <property>
                                             <name>suitename</name>
-                                            <value>Live Integration Tests</value>
+                                            <value>Live Integration
+                                                Tests</value>
                                         </property>
                                     </properties>
                                 </configuration>
