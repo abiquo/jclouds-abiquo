@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
+import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -27,6 +28,9 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response.Status;
+
+import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
@@ -114,6 +118,21 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
         assertTrue(attached.isEmpty());
 
         deleteVolume(volume);
+    }
+
+    public void testRebootVirtualMachine()
+    {
+        // Since the virtual machine is not deployed, this should not generate a task
+
+        try
+        {
+            AsyncTask task = env.virtualMachine.reboot();
+            assertNull(task);
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.CONFLICT, "VM-11");
+        }
     }
 
     public void testAttachHardDisks()
