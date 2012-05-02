@@ -44,7 +44,6 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
-import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -248,38 +247,6 @@ public interface CloudClient
     IpsPoolManagementDto listPrivateNetworkIps(VLANNetworkDto network, IpOptions options);
 
     /*********************** Attached Nic ***********************/
-
-    /**
-     * Create a new nic using an ip address.
-     * <p>
-     * If the virtual machine is deployed, the operation will be executed asynchronously.
-     * 
-     * @param virtualMachine The virtual machine where the nic will be created.
-     * @param ip The ip to attach as a new Nic.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
-     */
-    AcceptedRequestDto<String> createNic(VirtualMachineDto virtuaMachine, IpPoolManagementDto ip);
-
-    /**
-     * Create a new nic choosing a free ip address from an unmanaged network.
-     * <p>
-     * If the virtual machine is deployed, the operation will be executed asynchronously.
-     * 
-     * @param virtualMachine The virtual machine where the nic will be created.
-     * @param network The unmanaged network.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
-     */
-    AcceptedRequestDto<String> createNic(VirtualMachineDto virtuaMachine, VLANNetworkDto network);
-
-    /**
-     * Deletes an existing nic.
-     * <p>
-     * If the virtual machine is deployed, the operation will be executed asynchronously.
-     * 
-     * @param nic The nic to delete.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
-     */
-    AcceptedRequestDto<String> deleteNic(NicDto nic);
 
     /**
      * Replace the attached nics in the given virtual machine by new ones created based on the given

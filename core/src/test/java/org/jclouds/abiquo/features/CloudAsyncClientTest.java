@@ -59,7 +59,6 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
-import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -566,59 +565,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
     /*********************** Attached Nic ***********************/
 
-    public void testCreateNicFromIp() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("createNic", VirtualMachineDto.class,
-                IpPoolManagementDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(),
-                NetworkResources.privateIpPut());
-
-        RESTLink ipLink = NetworkResources.privateIpPut().searchLink("self");
-
-        assertRequestLineEquals(
-            request,
-            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
-            + "\n");
-        assertPayloadEquals(request, withHeader("<links><link href=\"" + ipLink.getHref()
-            + "\" rel=\"" + ipLink.getTitle() + "\"/></links>"), LinksDto.BASE_MEDIA_TYPE, false);
-
-        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testCreateNicFromUnmanagedNetwork() throws SecurityException,
-        NoSuchMethodException, IOException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("createNic", VirtualMachineDto.class,
-                VLANNetworkDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(),
-                NetworkResources.unmanagedNetworkPut());
-
-        RESTLink ipsLink = NetworkResources.unmanagedNetworkPut().searchLink("ips");
-
-        assertRequestLineEquals(
-            request,
-            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
-            + "\n");
-        assertPayloadEquals(request, withHeader("<links><link href=\"" + ipsLink.getHref()
-            + "\" rel=\"unmanagedip\"/></links>"), LinksDto.BASE_MEDIA_TYPE, false);
-
-        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
     public void testListAttachedNics() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
@@ -633,26 +579,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testDeleteNic() throws SecurityException, NoSuchMethodException
-    {
-        Method method = CloudAsyncClient.class.getMethod("deleteNic", NicDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, NetworkResources.nicPut());
-
-        assertRequestLineEquals(
-            request,
-            "DELETE http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
-            + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

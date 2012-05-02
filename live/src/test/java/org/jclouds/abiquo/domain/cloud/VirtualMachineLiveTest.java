@@ -32,12 +32,8 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
-import org.jclouds.abiquo.domain.network.Ip;
-import org.jclouds.abiquo.domain.network.Network;
-import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
-import org.jclouds.abiquo.predicates.network.NicPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
@@ -71,18 +67,6 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
         VirtualAppliance vapp = env.virtualMachine.getVirtualAppliance();
         assertNotNull(vapp);
         assertEquals(vapp.getId(), env.virtualAppliance.getId());
-    }
-
-    public void testAttachNic()
-    {
-        Network network = env.virtualDatacenter.getDefaultNetwork();
-        Ip ip = network.listAvailableIps().get(0);
-
-        env.virtualMachine.attachNic(ip);
-
-        Nic nic = env.virtualMachine.findAttachedNic(NicPredicates.ip(ip.getIp()));
-        assertNotNull(nic);
-        assertNotNull(nic.getId());
     }
 
     public void testAttachVolumes()

@@ -33,7 +33,6 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.Nic;
-import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -502,45 +501,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     public void setGatewayNetwork(final Network network)
     {
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
-    }
-
-    /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganinternalIP"
-     *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
-     *      CreateaNICusinganinternalIP</a>
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganexternalIP"
-     *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
-     *      CreateaNICusinganexternalIP</a>
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusingapublicIP"
-     *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
-     *      CreateaNICusingapublicIP</a>
-     */
-    public AsyncTask attachNic(final Ip ip)
-    {
-        AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().createNic(target, ip.unwrap());
-        return taskRef == null ? null : getTask(taskRef);
-    }
-
-    /**
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-CreateaNICusinganUnmanagedNetwork"
-     *      > http://community.abiquo.com/display/ABI20/Attached+NICs+Resource#AttachedNICsResource-
-     *      CreateaNICusinganUnmanagedNetwork</a>
-     */
-    public AsyncTask attachNicFromUnmanagedNetwork(final UnmanagedNetwork network)
-    {
-        AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().createNic(target, network.unwrap());
-        return taskRef == null ? null : getTask(taskRef);
-    }
-
-    public AsyncTask detachNic(final Nic nic)
-    {
-        return nic.delete();
     }
 
     // Builder
