@@ -34,12 +34,10 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.cloud.BindHardDiskRefsToPayload;
-import org.jclouds.abiquo.binders.cloud.BindIpRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindIpRefsToPayload;
 import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
 import org.jclouds.abiquo.binders.cloud.BindNetworkConfigurationRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindNetworkRefToPayload;
-import org.jclouds.abiquo.binders.cloud.BindUnmanagedIpRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindVirtualDatacenterRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindVolumeRefsToPayload;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -83,7 +81,6 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
-import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -107,7 +104,7 @@ import com.google.common.util.concurrent.ListenableFuture;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-@RequestFilters( {AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
+@RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/cloud")
 public interface CloudAsyncClient
 {
@@ -316,37 +313,6 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /*********************** Attached Nic ***********************/
-
-    /**
-     * @see CloudClient#createNic(VirtualMachineDto, IpPoolManagementDto)
-     */
-    @POST
-    @ResponseParser(ReturnTaskReferenceOrNull.class)
-    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @Produces(LinksDto.BASE_MEDIA_TYPE)
-    ListenableFuture<AcceptedRequestDto<String>> createNic(
-        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(BindIpRefToPayload.class) IpPoolManagementDto ip);
-
-    /**
-     * @see CloudClient#createNic(VirtualMachineDto, VLANNetworkDto)
-     */
-    @POST
-    @ResponseParser(ReturnTaskReferenceOrNull.class)
-    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @Produces(LinksDto.BASE_MEDIA_TYPE)
-    ListenableFuture<AcceptedRequestDto<String>> createNic(
-        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(BindUnmanagedIpRefToPayload.class) VLANNetworkDto network);
-
-    /**
-     * @see CloudClient#deleteNic(NicDto)
-     */
-    @DELETE
-    @ResponseParser(ReturnTaskReferenceOrNull.class)
-    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    ListenableFuture<AcceptedRequestDto<String>> deleteNic(
-        @EndpointLink("edit") @BinderParam(BindToPath.class) NicDto nic);
 
     /**
      * @see CloudClient#replaceVolumes(VirtualMachineDto, VolumeManagementDto...)

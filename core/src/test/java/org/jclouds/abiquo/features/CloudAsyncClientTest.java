@@ -59,7 +59,6 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
-import com.abiquo.server.core.infrastructure.network.NicDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -369,8 +368,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("setDefaultNetwork", VirtualDatacenterDto.class,
                 VLANNetworkDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), NetworkResources
-                .privateNetworkPut());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                NetworkResources.privateNetworkPut());
 
         RESTLink netLink = NetworkResources.privateNetworkPut().getEditLink();
 
@@ -394,8 +393,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("setDefaultNetwork", VirtualDatacenterDto.class,
                 VLANNetworkDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), NetworkResources
-                .externalNetworkPut());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                NetworkResources.externalNetworkPut());
 
         RESTLink netLink = NetworkResources.externalNetworkPut().getEditLink();
 
@@ -462,8 +461,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createPrivateNetwork", VirtualDatacenterDto.class,
                 VLANNetworkDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), NetworkResources
-                .vlanPost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                NetworkResources.vlanPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/privatenetworks HTTP/1.1");
@@ -566,59 +565,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
     /*********************** Attached Nic ***********************/
 
-    public void testCreateNicFromIp() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("createNic", VirtualMachineDto.class,
-                IpPoolManagementDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(), NetworkResources
-                .privateIpPut());
-
-        RESTLink ipLink = NetworkResources.privateIpPut().searchLink("self");
-
-        assertRequestLineEquals(
-            request,
-            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
-            + "\n");
-        assertPayloadEquals(request, withHeader("<links><link href=\"" + ipLink.getHref()
-            + "\" rel=\"" + ipLink.getTitle() + "\"/></links>"), LinksDto.BASE_MEDIA_TYPE, false);
-
-        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testCreateNicFromUnmanagedNetwork() throws SecurityException,
-        NoSuchMethodException, IOException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("createNic", VirtualMachineDto.class,
-                VLANNetworkDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(), NetworkResources
-                .unmanagedNetworkPut());
-
-        RESTLink ipsLink = NetworkResources.unmanagedNetworkPut().searchLink("ips");
-
-        assertRequestLineEquals(
-            request,
-            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
-            + "\n");
-        assertPayloadEquals(request, withHeader("<links><link href=\"" + ipsLink.getHref()
-            + "\" rel=\"unmanagedip\"/></links>"), LinksDto.BASE_MEDIA_TYPE, false);
-
-        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
     public void testListAttachedNics() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
@@ -633,26 +579,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testDeleteNic() throws SecurityException, NoSuchMethodException
-    {
-        Method method = CloudAsyncClient.class.getMethod("deleteNic", NicDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, NetworkResources.nicPut());
-
-        assertRequestLineEquals(
-            request,
-            "DELETE http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
-            + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 
@@ -763,8 +689,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVirtualAppliance", VirtualDatacenterDto.class,
                 VirtualApplianceDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), CloudResources
-                .virtualAppliancePost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                CloudResources.virtualAppliancePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances HTTP/1.1");
@@ -828,8 +754,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("deployVirtualAppliance", VirtualApplianceDto.class,
                 VirtualMachineTaskDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualAppliancePut(), CloudResources
-                .deployOptions());
+            processor.createRequest(method, CloudResources.virtualAppliancePut(),
+                CloudResources.deployOptions());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/deploy HTTP/1.1");
@@ -852,8 +778,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("undeployVirtualAppliance", VirtualApplianceDto.class,
                 VirtualMachineTaskDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualAppliancePut(), CloudResources
-                .undeployOptions());
+            processor.createRequest(method, CloudResources.virtualAppliancePut(),
+                CloudResources.undeployOptions());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/action/undeploy HTTP/1.1");
@@ -921,8 +847,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVirtualMachine", VirtualApplianceDto.class,
                 VirtualMachineDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualAppliancePut(), CloudResources
-                .virtualMachinePost());
+            processor.createRequest(method, CloudResources.virtualAppliancePut(),
+                CloudResources.virtualMachinePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines HTTP/1.1");
@@ -992,8 +918,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("changeVirtualMachineState", VirtualMachineDto.class,
                 VirtualMachineStateDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(), CloudResources
-                .virtualMachineState());
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                CloudResources.virtualMachineState());
 
         assertRequestLineEquals(
             request,
@@ -1059,8 +985,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("deployVirtualMachine", VirtualMachineDto.class,
                 VirtualMachineTaskDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(), CloudResources
-                .deployOptions());
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                CloudResources.deployOptions());
 
         assertRequestLineEquals(
             request,
@@ -1084,8 +1010,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("undeployVirtualMachine", VirtualMachineDto.class,
                 VirtualMachineTaskDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(), CloudResources
-                .undeployOptions());
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                CloudResources.undeployOptions());
 
         assertRequestLineEquals(
             request,
@@ -1372,8 +1298,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createHardDisk", VirtualDatacenterDto.class,
                 DiskManagementDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), CloudResources
-                .hardDiskPost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                CloudResources.hardDiskPost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/disks HTTP/1.1");
@@ -1501,8 +1427,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("createVolume", VirtualDatacenterDto.class,
                 VolumeManagementDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualDatacenterPut(), CloudResources
-                .volumePost());
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                CloudResources.volumePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/volumes HTTP/1.1");
@@ -1562,8 +1488,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             CloudAsyncClient.class.getMethod("moveVolume", VolumeManagementDto.class,
                 VirtualDatacenterDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.volumePut(), CloudResources
-                .virtualDatacenterPut());
+            processor.createRequest(method, CloudResources.volumePut(),
+                CloudResources.virtualDatacenterPut());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/volumes/1/action/move HTTP/1.1");

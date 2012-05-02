@@ -62,7 +62,7 @@ public class BindOrganizationParametersTest
         OrganizationDto dto = new OrganizationDto();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        HttpRequest newRequest = binder.bindToRequest(request, dto);
+        binder.bindToRequest(request, dto);
     }
 
     public void testBindLogicServer()

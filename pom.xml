@@ -6,7 +6,7 @@
     <artifactId>abiquo-project</artifactId>
     <name>JClouds Abiquo :: Project POM</name>
     <description>JClouds Abiquo top level project pom for builds</description>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
