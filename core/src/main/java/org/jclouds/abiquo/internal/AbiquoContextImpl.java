@@ -19,12 +19,12 @@
 
 package org.jclouds.abiquo.internal;
 
-import java.net.URI;
-import java.util.Map;
+import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jclouds.Context;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContext;
@@ -32,17 +32,14 @@ import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.features.services.SearchService;
-import org.jclouds.domain.Credentials;
-import org.jclouds.lifecycle.Closer;
+import org.jclouds.compute.ComputeService;
+import org.jclouds.compute.Utils;
+import org.jclouds.compute.internal.ComputeServiceContextImpl;
 import org.jclouds.location.Provider;
-import org.jclouds.rest.Utils;
-import org.jclouds.rest.annotations.ApiVersion;
-import org.jclouds.rest.annotations.BuildVersion;
-import org.jclouds.rest.annotations.Identity;
+import org.jclouds.rest.RestContext;
 import org.jclouds.rest.internal.RestContextImpl;
 
-import com.google.inject.Injector;
-import com.google.inject.TypeLiteral;
+import com.google.common.reflect.TypeToken;
 
 /**
  * Abiquo {@link RestContextImpl} implementation to expose high level Abiquo functionalities.
@@ -50,8 +47,7 @@ import com.google.inject.TypeLiteral;
  * @author Ignasi Barrera
  */
 @Singleton
-public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsyncClient> implements
-    AbiquoContext
+public class AbiquoContextImpl extends ComputeServiceContextImpl implements AbiquoContext
 {
     private final AdministrationService administrationService;
 
@@ -62,21 +58,24 @@ public class AbiquoContextImpl extends RestContextImpl<AbiquoClient, AbiquoAsync
     private final MonitoringService monitoringService;
 
     @Inject
-    protected AbiquoContextImpl(final Closer closer,
-        final Map<String, Credentials> credentialStore, final Utils utils, final Injector injector,
-        final TypeLiteral<AbiquoClient> syncApi, final TypeLiteral<AbiquoAsyncClient> asyncApi,
-        @Provider final URI endpoint, @Provider final String provider,
-        @Identity final String identity, @ApiVersion final String apiVersion,
-        @BuildVersion final String buildVersion, final AdministrationService administrationService,
-        final CloudService cloudService, final SearchService searchService,
-        final MonitoringService monitoringService)
+    public AbiquoContextImpl(@Provider final Context wrapped,
+        @Provider final TypeToken< ? extends Context> wrappedType,
+        final ComputeService computeService, final Utils utils,
+        final RestContext<AbiquoClient, AbiquoAsyncClient> providerSpecificContext,
+        final AdministrationService administrationService, final CloudService cloudService,
+        final SearchService searchService, final MonitoringService monitoringService)
     {
-        super(closer, credentialStore, utils, injector, syncApi, asyncApi, endpoint, provider,
-            identity, apiVersion, buildVersion, null);
-        this.administrationService = administrationService;
-        this.cloudService = cloudService;
-        this.searchService = searchService;
-        this.monitoringService = monitoringService;
+        super(wrapped, wrappedType, computeService, utils);
+        this.administrationService = checkNotNull(administrationService, "administrationService");
+        this.cloudService = checkNotNull(cloudService, "cloudService");
+        this.searchService = checkNotNull(searchService, "searchService");
+        this.monitoringService = checkNotNull(monitoringService, "monitoringService");
+    }
+
+    @Override
+    public RestContext<AbiquoClient, AbiquoAsyncClient> getApiContext()
+    {
+        return unwrap();
     }
 
     @Override

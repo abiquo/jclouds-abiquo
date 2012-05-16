@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.internal;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.Constants.PROPERTY_SCHEDULER_THREADS;
 import static org.jclouds.abiquo.reference.AbiquoConstants.ASYNC_TASK_MONITOR_DELAY;
 
 import java.util.concurrent.Future;
@@ -30,7 +31,8 @@ import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
 import org.jclouds.abiquo.events.monitor.CompletedEvent;
@@ -42,6 +44,7 @@ import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.RestContext;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Function;
@@ -53,13 +56,12 @@ import com.google.inject.Inject;
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
- * @see SchedulerModule
  */
 @Singleton
 public class BaseMonitoringService implements MonitoringService
 {
     @VisibleForTesting
-    protected AbiquoContext context;
+    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     /** The scheduler used to perform monitoring tasks. */
     @VisibleForTesting
@@ -81,8 +83,8 @@ public class BaseMonitoringService implements MonitoringService
     private Logger logger = Logger.NULL;
 
     @Inject
-    public BaseMonitoringService(final AbiquoContext context,
-        final ScheduledExecutorService scheduler,
+    public BaseMonitoringService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        @Named(PROPERTY_SCHEDULER_THREADS) final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus)
     {
         this.context = checkNotNull(context, "context");
@@ -163,15 +165,17 @@ public class BaseMonitoringService implements MonitoringService
     @Override
     public VirtualMachineMonitor getVirtualMachineMonitor()
     {
-        return checkNotNull(context.getUtils().getInjector().getInstance(
-            VirtualMachineMonitor.class), "virtualMachineMonitor");
+        return checkNotNull(
+            context.getUtils().getInjector().getInstance(VirtualMachineMonitor.class),
+            "virtualMachineMonitor");
     }
 
     @Override
     public VirtualApplianceMonitor getVirtualApplianceMonitor()
     {
-        return checkNotNull(context.getUtils().getInjector().getInstance(
-            VirtualApplianceMonitor.class), "virtualApplianceMonitor");
+        return checkNotNull(
+            context.getUtils().getInjector().getInstance(VirtualApplianceMonitor.class),
+            "virtualApplianceMonitor");
     }
 
     @Override

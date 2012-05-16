@@ -21,12 +21,14 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
@@ -52,7 +54,7 @@ public class Blade extends AbstractPhysicalMachine
     /**
      * Constructor to be used only by the builder.
      */
-    protected Blade(final AbiquoContext context, final MachineDto target)
+    protected Blade(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final MachineDto target)
     {
         super(context, target);
     }

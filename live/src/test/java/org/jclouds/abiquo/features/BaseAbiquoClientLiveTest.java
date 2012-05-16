@@ -24,8 +24,9 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import java.util.Properties;
 
 import org.jclouds.Constants;
+import org.jclouds.ContextBuilder;
+import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.environment.CloudTestEnvironment;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.testng.ITestContext;
@@ -59,7 +60,6 @@ public abstract class BaseAbiquoClientLiveTest
             checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
 
         Properties props = new Properties();
-        props.setProperty("abiquo.endpoint", endpoint);
         props.put(Constants.PROPERTY_MAX_RETRIES, "0");
         props.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
         // Wait at most one minute in Machine discovery
@@ -69,9 +69,12 @@ public abstract class BaseAbiquoClientLiveTest
         props.put("jclouds.timeouts.InfrastructureClient.updateMachine", "60000");
         props.put("jclouds.timeouts.InfrastructureClient.checkMachineState", "60000");
 
-        context =
-            new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+        context = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
+            .endpoint(endpoint) //
+            .credentials(identity, credential) //
+            .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
+            .overrides(props) //
+            .build(AbiquoContext.class);
 
         env = new CloudTestEnvironment(context);
         env.setup();

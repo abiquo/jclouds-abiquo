@@ -16,38 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jclouds.abiquo;
 
-package org.jclouds.abiquo.events.handlers;
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
-import javax.annotation.Resource;
-import javax.inject.Singleton;
-
-import org.jclouds.logging.Logger;
-
-import com.google.common.eventbus.DeadEvent;
-import com.google.common.eventbus.Subscribe;
+import org.jclouds.apis.ApiMetadata;
+import org.jclouds.apis.Apis;
+import org.jclouds.compute.internal.BaseComputeServiceApiMetadataTest;
+import org.testng.annotations.Test;
 
 /**
- * Default handler for dead events.
- * <p>
- * It simply logs all dead events to allow debugging and troubleshooting.
+ * Unit tests for the {@link AbiquoApiMetadata} class.
  * 
  * @author Ignasi Barrera
  */
-@Singleton
-public class DeadEventLoggingHandler
+@Test(groups = "unit", testName = "AbiquoApiMetadataTest")
+public class AbiquoApiMetadataTest extends BaseComputeServiceApiMetadataTest
 {
-    @Resource
-    private Logger logger = Logger.NULL;
 
-    /**
-     * Due to <a href="http://code.google.com/p/guava-libraries/issues/detail?id=783">Guava Issue
-     * 786</a> {@link #handleDeadEvent(DeadEvent)} is marked <code>final</code>to avoid having
-     * duplicate events.
-     */
-    @Subscribe
-    public final void handleDeadEvent(DeadEvent deadEvent)
+    public AbiquoApiMetadataTest()
     {
-        logger.warn("detected dead event %s", deadEvent.getEvent());
+        super(new AbiquoApiMetadata());
     }
+
+    public void testAbiquoApiRegistered()
+    {
+        ApiMetadata api = Apis.withId("abiquo");
+
+        assertNotNull(api);
+        assertTrue(api instanceof AbiquoApiMetadata);
+        assertEquals(api.getId(), "abiquo");
+    }
+
 }

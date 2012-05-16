@@ -32,12 +32,15 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
+import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
@@ -55,7 +58,9 @@ import com.google.inject.Inject;
 @Singleton
 public class ListMachinesImpl implements ListMachines
 {
-    protected AbiquoContext context;
+    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+
+    protected ListDatacenters listDatacenters;
 
     protected final ExecutorService userExecutor;
 
@@ -67,11 +72,13 @@ public class ListMachinesImpl implements ListMachines
     protected Long maxTime;
 
     @Inject
-    ListMachinesImpl(AbiquoContext context,
-        @Named(Constants.PROPERTY_USER_THREADS) ExecutorService userExecutor)
+    ListMachinesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
+        final ListDatacenters listDatacenters)
     {
         super();
         this.context = checkNotNull(context, "context");
+        this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
         this.userExecutor = checkNotNull(userExecutor, "userExecutor");
     }
 
@@ -79,7 +86,7 @@ public class ListMachinesImpl implements ListMachines
     public Iterable<Machine> execute()
     {
         // Find machines in concurrent requests
-        Iterable<Datacenter> datacenters = context.getAdministrationService().listDatacenters();
+        Iterable<Datacenter> datacenters = listDatacenters.execute();
         Iterable<RackDto> racks = listConcurrentRacks(datacenters);
         Iterable<MachineDto> machines = listConcurrentMachines(racks);
 
@@ -87,18 +94,18 @@ public class ListMachinesImpl implements ListMachines
     }
 
     @Override
-    public Iterable<Machine> execute(Predicate<Machine> selector)
+    public Iterable<Machine> execute(final Predicate<Machine> selector)
     {
         return filter(execute(), selector);
     }
 
-    private Iterable<RackDto> listConcurrentRacks(Iterable<Datacenter> datacenters)
+    private Iterable<RackDto> listConcurrentRacks(final Iterable<Datacenter> datacenters)
     {
         Iterable<RacksDto> racks =
-            transformParallel(datacenters, new Function<Datacenter, Future<RacksDto>>()
+            transformParallel(datacenters, new Function<Datacenter, Future< ? extends RacksDto>>()
             {
                 @Override
-                public Future<RacksDto> apply(Datacenter input)
+                public Future<RacksDto> apply(final Datacenter input)
                 {
                     return context.getAsyncApi().getInfrastructureClient()
                         .listRacks(input.unwrap());
@@ -108,13 +115,13 @@ public class ListMachinesImpl implements ListMachines
         return DomainWrapper.join(racks);
     }
 
-    private Iterable<MachineDto> listConcurrentMachines(Iterable<RackDto> racks)
+    private Iterable<MachineDto> listConcurrentMachines(final Iterable<RackDto> racks)
     {
         Iterable<MachinesDto> machines =
-            transformParallel(racks, new Function<RackDto, Future<MachinesDto>>()
+            transformParallel(racks, new Function<RackDto, Future< ? extends MachinesDto>>()
             {
                 @Override
-                public Future<MachinesDto> apply(RackDto input)
+                public Future<MachinesDto> apply(final RackDto input)
                 {
                     return context.getAsyncApi().getInfrastructureClient().listMachines(input);
                 }

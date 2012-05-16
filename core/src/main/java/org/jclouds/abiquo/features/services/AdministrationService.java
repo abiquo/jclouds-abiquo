@@ -162,7 +162,12 @@ public interface AdministrationService
     /**
      * Get the current user.
      */
-    User getCurrentUserInfo();
+    User getCurrentUser();
+
+    /**
+     * Get the enterprise of the current user.
+     */
+    Enterprise getCurrentEnterprise();
 
     /*********************** License ***********************/
 

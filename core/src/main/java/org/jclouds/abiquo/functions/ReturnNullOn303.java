@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.functions;
 
-import static org.jclouds.util.Throwables2.propagateOrNull;
-
 import javax.inject.Singleton;
 import javax.ws.rs.core.Response.Status;
 
@@ -57,7 +55,7 @@ public class ReturnNullOn303 implements Function<Exception, Object>
             }
         }
 
-        return Object.class.cast(propagateOrNull(from));
+        throw Throwables.propagate(from);
     }
 
     private static Predicate<Throwable> hasResponse(final Throwable exception)

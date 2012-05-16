@@ -24,18 +24,26 @@ import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.abiquo.internal.AbiquoContextImpl;
+import org.jclouds.compute.ComputeServiceContext;
 import org.jclouds.rest.RestContext;
 
 import com.google.inject.ImplementedBy;
 
 /**
- * Abiquo {@link RestContext} implementation to expose high level Abiquo functionalities.
+ * Abiquo {@link ComputeServiceContext} implementation to expose high level Abiquo functionalities.
  * 
  * @author Ignasi Barrera
  */
 @ImplementedBy(AbiquoContextImpl.class)
-public interface AbiquoContext extends RestContext<AbiquoClient, AbiquoAsyncClient>
+public interface AbiquoContext extends ComputeServiceContext
 {
+    /**
+     * Returns the Abiquo API context, providing direct access to the Abiquo Rest API.
+     * 
+     * @return The Abiquo API context.
+     */
+    RestContext<AbiquoClient, AbiquoAsyncClient> getApiContext();
+
     /**
      * Returns the administration service.
      * <p>

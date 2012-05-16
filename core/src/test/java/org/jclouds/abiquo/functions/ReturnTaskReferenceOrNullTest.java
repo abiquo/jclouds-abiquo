@@ -51,7 +51,7 @@ public class ReturnTaskReferenceOrNullTest
     public void testReturnNullIfNoContent()
     {
         Function<HttpResponse, AcceptedRequestDto<String>> function =
-            new ReturnTaskReferenceOrNull(new JAXBParser(), createTypeLiteral());
+            new ReturnTaskReferenceOrNull(new JAXBParser("false"), createTypeLiteral());
 
         HttpResponse response = EasyMock.createMock(HttpResponse.class);
 
@@ -67,7 +67,7 @@ public class ReturnTaskReferenceOrNullTest
 
     public void testReturnTaskIfAccepted() throws IOException
     {
-        JAXBParser parser = new JAXBParser();
+        JAXBParser parser = new JAXBParser("false");
         AcceptedRequestDto< ? > task = new AcceptedRequestDto<String>();
         Payload payload = Payloads.newPayload(parser.toXML(task));
 

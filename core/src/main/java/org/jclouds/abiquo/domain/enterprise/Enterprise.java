@@ -23,7 +23,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
@@ -36,8 +37,13 @@ import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.rest.RestContext;
 
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
@@ -57,6 +63,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link EnterpriseDto}.
@@ -74,7 +81,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Enterprise(final AbiquoContext context, final EnterpriseDto target)
+    protected Enterprise(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final EnterpriseDto target)
     {
         super(context, target);
     }
@@ -453,23 +461,46 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      *      Getthelistofexternalnetworks</a>
      */
     @EnterpriseEdition
-    public List<ExternalNetwork> listExternalNetworks()
+    public List<ExternalNetwork> listExternalNetworks(final Datacenter datacenter)
     {
-        VLANNetworksDto networks =
-            context.getApi().getEnterpriseClient().listExternalNetworks(target);
-        return wrap(context, ExternalNetwork.class, networks.getCollection());
+        DatacentersLimitsDto limits = context.getApi().getEnterpriseClient().listLimits(target);
+
+        DatacenterLimitsDto limitForDatacenter =
+            Iterables.find(limits.getCollection(), new Predicate<DatacenterLimitsDto>()
+            {
+                @Override
+                public boolean apply(final DatacenterLimitsDto input)
+                {
+                    RESTLink datacenterLink = input.searchLink("datacenter");
+                    return datacenterLink != null
+                        && datacenterLink.getHref().equals(
+                            datacenter.unwrap().getEditLink().getHref());
+                }
+            });
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response =
+            utils.getAbiquoHttpClient().get(limitForDatacenter.searchLink("externalnetworks"));
+
+        ParseXMLWithJAXB<VLANNetworksDto> parser =
+            new ParseXMLWithJAXB<VLANNetworksDto>(utils.getXml(),
+                TypeLiteral.get(VLANNetworksDto.class));
+
+        return wrap(context, ExternalNetwork.class, parser.apply(response).getCollection());
     }
 
     @EnterpriseEdition
-    public List<ExternalNetwork> listExternalNetworks(final Predicate<Network> filter)
+    public List<ExternalNetwork> listExternalNetworks(final Datacenter datacenter,
+        final Predicate<Network> filter)
     {
-        return Lists.newLinkedList(filter(listExternalNetworks(), filter));
+        return Lists.newLinkedList(filter(listExternalNetworks(datacenter), filter));
     }
 
     @EnterpriseEdition
-    public ExternalNetwork findExternalNetwork(final Predicate<Network> filter)
+    public ExternalNetwork findExternalNetwork(final Datacenter datacenter,
+        final Predicate<Network> filter)
     {
-        return Iterables.getFirst(filter(listExternalNetworks(), filter), null);
+        return Iterables.getFirst(filter(listExternalNetworks(datacenter), filter), null);
     }
 
     /**
@@ -684,14 +715,14 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
     {
         return new Builder(context);
     }
 
     public static class Builder extends LimitsBuilder<Builder>
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private String name;
 
@@ -711,7 +742,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         private String chefValidatorCertificate;
 
-        public Builder(final AbiquoContext context)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
         {
             super();
             this.context = context;

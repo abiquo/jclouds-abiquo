@@ -24,9 +24,11 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.strategy.config.ListPrivileges;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.google.common.base.Predicate;
@@ -44,10 +46,10 @@ public class ListPrivilegesImpl implements ListPrivileges
     // This strategy does not have still an Executor instance because the current methods call
     // single client methods
 
-    protected final AbiquoContext context;
+    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     @Inject
-    ListPrivilegesImpl(final AbiquoContext context)
+    ListPrivilegesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
     {
         this.context = context;
     }

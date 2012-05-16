@@ -21,9 +21,11 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServerPolicyDto;
@@ -42,7 +44,7 @@ public class LogicServer extends DomainWrapper<LogicServerDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected LogicServer(final AbiquoContext context, final LogicServerDto target)
+    protected LogicServer(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final LogicServerDto target)
     {
         super(context, target);
     }

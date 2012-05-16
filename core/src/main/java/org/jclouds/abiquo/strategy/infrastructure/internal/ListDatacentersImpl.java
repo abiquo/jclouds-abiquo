@@ -33,11 +33,13 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
@@ -55,10 +57,8 @@ import com.google.inject.Inject;
 @Singleton
 public class ListDatacentersImpl implements ListDatacenters
 {
-    // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
 
-    protected final AbiquoContext context;
+    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     protected final ExecutorService userExecutor;
 
@@ -70,7 +70,7 @@ public class ListDatacentersImpl implements ListDatacenters
     protected Long maxTime;
 
     @Inject
-    ListDatacentersImpl(final AbiquoContext context,
+    ListDatacentersImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
         this.context = context;
@@ -100,7 +100,7 @@ public class ListDatacentersImpl implements ListDatacenters
     private Iterable<Datacenter> listConcurrentDatacenters(final List<Integer> ids)
     {
         Iterable<DatacenterDto> dcs =
-            transformParallel(ids, new Function<Integer, Future<DatacenterDto>>()
+            transformParallel(ids, new Function<Integer, Future< ? extends DatacenterDto>>()
             {
                 @Override
                 public Future<DatacenterDto> apply(final Integer input)

@@ -43,7 +43,7 @@ public class BindNetworkRefToPayloadTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindNetworkRefToPayload binder = new BindNetworkRefToPayload(new JAXBParser());
+        BindNetworkRefToPayload binder = new BindNetworkRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -52,7 +52,7 @@ public class BindNetworkRefToPayloadTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindNetworkRefToPayload binder = new BindNetworkRefToPayload(new JAXBParser());
+        BindNetworkRefToPayload binder = new BindNetworkRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -61,7 +61,7 @@ public class BindNetworkRefToPayloadTest
     public void testBindNetworkRef()
     {
         VLANNetworkDto network = NetworkResources.privateNetworkPut();
-        BindNetworkRefToPayload binder = new BindNetworkRefToPayload(new JAXBParser());
+        BindNetworkRefToPayload binder = new BindNetworkRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, network);

@@ -43,7 +43,7 @@ public class BindVolumeRefsToPayloadTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -52,7 +52,7 @@ public class BindVolumeRefsToPayloadTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -60,7 +60,7 @@ public class BindVolumeRefsToPayloadTest
 
     public void testBindEmptyArray()
     {
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new VolumeManagementDto[] {});
@@ -71,7 +71,7 @@ public class BindVolumeRefsToPayloadTest
     public void testBindSingleVolume()
     {
         VolumeManagementDto volume = CloudResources.volumePut();
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new VolumeManagementDto[] {volume});
@@ -83,7 +83,7 @@ public class BindVolumeRefsToPayloadTest
     public void testBindMultipleVolumes()
     {
         VolumeManagementDto volume = CloudResources.volumePut();
-        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser());
+        BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new VolumeManagementDto[] {volume, volume});

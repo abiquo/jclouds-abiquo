@@ -44,7 +44,7 @@ public class BindIpRefToPayloadTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindIpRefToPayload binder = new BindIpRefToPayload(new JAXBParser());
+        BindIpRefToPayload binder = new BindIpRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -53,7 +53,7 @@ public class BindIpRefToPayloadTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindIpRefToPayload binder = new BindIpRefToPayload(new JAXBParser());
+        BindIpRefToPayload binder = new BindIpRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -63,7 +63,7 @@ public class BindIpRefToPayloadTest
     {
         IpPoolManagementDto ip = NetworkResources.privateIpPut();
         RESTLink selfLink = ip.searchLink("self");
-        BindIpRefToPayload binder = new BindIpRefToPayload(new JAXBParser());
+        BindIpRefToPayload binder = new BindIpRefToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, ip);

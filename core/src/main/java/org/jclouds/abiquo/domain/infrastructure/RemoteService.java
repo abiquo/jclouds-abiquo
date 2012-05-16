@@ -21,10 +21,12 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -50,7 +52,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected RemoteService(final AbiquoContext context, final RemoteServiceDto target)
+    protected RemoteService(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final RemoteServiceDto target)
     {
         super(context, target);
     }
@@ -130,14 +132,14 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         return datacenter;
     }
 
-    public static Builder builder(final AbiquoContext context, final Datacenter datacenter)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private Integer id;
 
@@ -154,7 +156,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         // To be used only internally by the builder
         private String uri;
 
-        public Builder(final AbiquoContext context, final Datacenter datacenter)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter)
         {
             super();
             checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);

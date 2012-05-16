@@ -23,11 +23,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
@@ -54,7 +56,7 @@ public class ExternalNetwork extends Network
     /**
      * Constructor to be used only by the builder.
      */
-    protected ExternalNetwork(final AbiquoContext context, final VLANNetworkDto target)
+    protected ExternalNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VLANNetworkDto target)
     {
         super(context, target);
     }
@@ -127,7 +129,7 @@ public class ExternalNetwork extends Network
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context, final Datacenter datacenter,
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter,
         final Enterprise enterprise)
     {
         return new Builder(context, datacenter, enterprise);
@@ -139,7 +141,7 @@ public class ExternalNetwork extends Network
 
         private Enterprise enterprise;
 
-        public Builder(final AbiquoContext context, final Datacenter datacenter,
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter,
             final Enterprise enterprise)
         {
             super(context);

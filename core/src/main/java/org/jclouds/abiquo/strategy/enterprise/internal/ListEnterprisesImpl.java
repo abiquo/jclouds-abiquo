@@ -24,9 +24,11 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.enterprise.EnterprisesDto;
 import com.google.common.base.Predicate;
@@ -44,10 +46,10 @@ public class ListEnterprisesImpl implements ListEnterprises
     // This strategy does not have still an Executor instance because the current methods call
     // single client methods
 
-    protected final AbiquoContext context;
+    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     @Inject
-    ListEnterprisesImpl(final AbiquoContext context)
+    ListEnterprisesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
     {
         this.context = context;
     }

@@ -43,7 +43,7 @@ public class BindIpRefsToPayloadTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -52,7 +52,7 @@ public class BindIpRefsToPayloadTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -60,7 +60,7 @@ public class BindIpRefsToPayloadTest
 
     public void testBindEmptyArray()
     {
-        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new IpPoolManagementDto[] {});
@@ -71,7 +71,7 @@ public class BindIpRefsToPayloadTest
     public void testBindSingleIp()
     {
         IpPoolManagementDto ip = NetworkResources.privateIpPut();
-        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new IpPoolManagementDto[] {ip});
@@ -83,7 +83,7 @@ public class BindIpRefsToPayloadTest
     public void testBindMultipleIps()
     {
         IpPoolManagementDto ip = NetworkResources.privateIpPut();
-        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser());
+        BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new IpPoolManagementDto[] {ip, ip});

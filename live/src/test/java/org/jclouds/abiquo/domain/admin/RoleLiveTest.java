@@ -51,7 +51,9 @@ public class RoleLiveTest extends BaseAbiquoClientLiveTest
 
     public void testUpdate()
     {
-        Role role = Role.builder(context).name("dummyRoleUpdateRole").blocked(false).build();
+        Role role =
+            Role.builder(context.getApiContext()).name("dummyRoleUpdateRole").blocked(false)
+                .build();
         role.save();
 
         role.setName("UPDATED_ROLE");
@@ -95,7 +97,7 @@ public class RoleLiveTest extends BaseAbiquoClientLiveTest
     public void testAddPrivilege()
     {
         PrivilegeDto dto = env.configClient.getPrivilege(8);
-        Privilege privilege = DomainWrapper.wrap(context, Privilege.class, dto);
+        Privilege privilege = DomainWrapper.wrap(context.getApiContext(), Privilege.class, dto);
         List<Privilege> privileges = env.role.listPrivileges();
         privileges.add(privilege);
 

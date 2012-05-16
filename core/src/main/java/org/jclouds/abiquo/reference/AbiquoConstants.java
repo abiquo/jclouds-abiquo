@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.reference;
 
+import org.jclouds.abiquo.features.services.MonitoringService;
+
 /**
  * Global constants used in the Abiquo provider.
  * 
@@ -27,18 +29,17 @@ package org.jclouds.abiquo.reference;
 public interface AbiquoConstants
 {
     /**
+     * Boolean property indicating if the provided credential is an api token.
+     * <p>
+     * Default value: false
+     */
+    public static final String CREDENTIAL_IS_TOKEN = "abiquo.credential-is-token";
+
+    /**
      * The delay (in ms) used between requests by the {@link MonitoringService} when monitoring
      * asynchronous task state.
      * <p>
      * Default value: 5000 ms
      */
     public static final String ASYNC_TASK_MONITOR_DELAY = "abiquo.monitor-delay";
-
-    /**
-     * The maximum number of scheduler threads used to perform periodical tasks.
-     * <p>
-     * Default value: 5 (a 0 value will configure a single threaded executor service that will not
-     * be able to execute tasks concurrently).
-     */
-    public static final String MAX_SCHEDULER_THREADS = "abiquo.scheduler-max-threads";
 }

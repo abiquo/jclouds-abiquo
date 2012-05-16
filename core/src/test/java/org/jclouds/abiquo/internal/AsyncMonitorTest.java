@@ -35,10 +35,10 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.easymock.EasyMock;
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.events.monitor.MonitorEvent;
 import org.jclouds.abiquo.internal.BaseMonitoringService.AsyncMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
@@ -469,11 +469,12 @@ public class AsyncMonitorTest
         mockMonitor(null, new Object(), null, new EventBus());
     }
 
+    @SuppressWarnings("unchecked")
     private AsyncMonitor<Object> mockMonitor(final ScheduledExecutorService scheduler,
         final Object object, final Function<Object, MonitorStatus> function, final EventBus eventBus)
     {
         BaseMonitoringService monitorService =
-            new BaseMonitoringService(EasyMock.createMock(AbiquoContext.class),
+            new BaseMonitoringService(EasyMock.createMock(RestContext.class),
                 scheduler,
                 100L,
                 eventBus);

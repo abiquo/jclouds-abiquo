@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.jclouds.provider</groupId>
-        <artifactId>abiquo-parent</artifactId>
+        <artifactId>abiquo-project</artifactId>
         <version>2.3-SNAPSHOT</version>
-        <relativePath>../project/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>jclouds-abiquo-live</artifactId>
@@ -17,6 +17,12 @@
 
     <dependencies>
         <!-- JClouds Abiquo -->
+        <dependency>
+            <groupId>org.jclouds.driver</groupId>
+            <artifactId>jclouds-jsch</artifactId>
+            <version>${jclouds.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.jclouds.provider</groupId>
             <artifactId>jclouds-abiquo</artifactId>
@@ -72,20 +78,7 @@
                 <includes>
                     <include>abiquo-live.properties</include>
                 </includes>
-                <excludes>
-                    <exclude>rest.properties</exclude>
-                </excludes>
                 <filtering>true</filtering>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources</directory>
-                <excludes>
-                    <exclude>abiquo-live.properties</exclude>
-                </excludes>
-                <includes>
-                    <include>rest.properties</include>
-                </includes>
-                <filtering>false</filtering>
             </testResource>
         </testResources>
     </build>

@@ -19,10 +19,18 @@
 
 package org.jclouds.abiquo.config;
 
+import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
+
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
+
+import javax.inject.Named;
+import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.features.AdminAsyncClient;
 import org.jclouds.abiquo.features.AdminClient;
 import org.jclouds.abiquo.features.CloudAsyncClient;
@@ -41,24 +49,29 @@ import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
 import org.jclouds.abiquo.rest.internal.AbiquoHttpAsyncClient;
 import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.abiquo.suppliers.GetCurrentEnterprise;
+import org.jclouds.abiquo.suppliers.GetCurrentUser;
+import org.jclouds.collect.Memoized;
 import org.jclouds.http.HttpErrorHandler;
-import org.jclouds.http.RequiresHttp;
 import org.jclouds.http.annotation.ClientError;
 import org.jclouds.http.annotation.Redirection;
 import org.jclouds.http.annotation.ServerError;
+import org.jclouds.rest.AuthorizationException;
 import org.jclouds.rest.ConfiguresRestClient;
 import org.jclouds.rest.Utils;
 import org.jclouds.rest.config.BinderUtils;
 import org.jclouds.rest.config.RestClientModule;
+import org.jclouds.rest.suppliers.MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier;
 
+import com.google.common.base.Supplier;
 import com.google.common.collect.ImmutableMap;
+import com.google.inject.Provides;
 
 /**
  * Configures the Abiquo connection.
  * 
  * @author Ignasi Barrera
  */
-@RequiresHttp
 @ConfiguresRestClient
 public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, AbiquoAsyncClient>
 {
@@ -75,23 +88,30 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
 
     public AbiquoRestClientModule()
     {
-        super(AbiquoClient.class, AbiquoAsyncClient.class, DELEGATE_MAP);
+        super(DELEGATE_MAP);
+    }
+
+    @Override
+    protected void bindAsyncClient()
+    {
+        super.bindAsyncClient();
+        BinderUtils.bindAsyncClient(binder(), AbiquoHttpAsyncClient.class);
+    }
+
+    @Override
+    protected void bindClient()
+    {
+        super.bindClient();
+        BinderUtils.bindClient(binder(), AbiquoHttpClient.class, AbiquoHttpAsyncClient.class,
+            ImmutableMap.<Class< ? >, Class< ? >> of(AbiquoHttpClient.class,
+                AbiquoHttpAsyncClient.class));
     }
 
     @Override
     protected void configure()
     {
         super.configure();
-        bindAbiquoGenericHttpClient();
         bind(Utils.class).to(ExtendedUtils.class);
-    }
-
-    protected void bindAbiquoGenericHttpClient()
-    {
-        BinderUtils.bindAsyncClient(binder(), AbiquoHttpAsyncClient.class);
-        BinderUtils.bindClient(binder(), AbiquoHttpClient.class, AbiquoHttpAsyncClient.class,
-            ImmutableMap.<Class< ? >, Class< ? >> of(AbiquoHttpClient.class,
-                AbiquoHttpAsyncClient.class));
     }
 
     @Override
@@ -100,6 +120,31 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoClient, Abiqu
         bind(HttpErrorHandler.class).annotatedWith(Redirection.class).to(AbiquoErrorHandler.class);
         bind(HttpErrorHandler.class).annotatedWith(ClientError.class).to(AbiquoErrorHandler.class);
         bind(HttpErrorHandler.class).annotatedWith(ServerError.class).to(AbiquoErrorHandler.class);
+    }
+
+    @Provides
+    @Singleton
+    @Memoized
+    public Supplier<User> getCurrentUser(
+        final AtomicReference<AuthorizationException> authException,
+        @Named(PROPERTY_SESSION_INTERVAL) final long seconds, final GetCurrentUser getCurrentUser)
+    {
+        return new MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier<User>(authException,
+            seconds,
+            getCurrentUser);
+    }
+
+    @Provides
+    @Singleton
+    @Memoized
+    public Supplier<Enterprise> getCurrentEnterprise(
+        final AtomicReference<AuthorizationException> authException,
+        @Named(PROPERTY_SESSION_INTERVAL) final long seconds,
+        final GetCurrentEnterprise getCurrentEnterprise)
+    {
+        return new MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier<Enterprise>(authException,
+            seconds,
+            getCurrentEnterprise);
     }
 
 }

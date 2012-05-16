@@ -24,12 +24,14 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.StorageTechnologyType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -59,7 +61,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected StorageDevice(final AbiquoContext context, final StorageDeviceDto target)
+    protected StorageDevice(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final StorageDeviceDto target)
     {
         super(context, target);
     }
@@ -311,14 +313,14 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
         return Iterables.getFirst(filter(listTiersFromDatacenter(), filter), null);
     }
 
-    public static Builder builder(final AbiquoContext context, final Datacenter datacenter)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private Datacenter datacenter;
 
@@ -338,7 +340,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
 
         private String username;
 
-        public Builder(final AbiquoContext context, final Datacenter datacenter)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter)
         {
             super();
             checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);

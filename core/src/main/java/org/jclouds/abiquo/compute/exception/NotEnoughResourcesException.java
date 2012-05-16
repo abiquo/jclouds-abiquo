@@ -16,22 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.jclouds.abiquo.config;
-
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+package org.jclouds.abiquo.compute.exception;
 
 /**
- * Designates the module configures a scheduler.
+ * Exception thrown when there are not enough resources in the infrastructure to deploy the desired
+ * template.
  * 
  * @author Ignasi Barrera
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface ConfiguresScheduler
+public class NotEnoughResourcesException extends RuntimeException
 {
+    /** Serial UID. */
+    private static final long serialVersionUID = 1L;
+
+    public NotEnoughResourcesException()
+    {
+        super();
+    }
+
+    public NotEnoughResourcesException(final String arg0, final Throwable arg1)
+    {
+        super(arg0, arg1);
+    }
+
+    public NotEnoughResourcesException(final String arg0)
+    {
+        super(arg0);
+    }
+
+    public NotEnoughResourcesException(final Throwable arg0)
+    {
+        super(arg0);
+    }
 
 }

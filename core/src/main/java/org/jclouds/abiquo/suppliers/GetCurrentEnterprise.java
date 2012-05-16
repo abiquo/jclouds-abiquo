@@ -16,24 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jclouds.abiquo.suppliers;
 
-package org.jclouds.abiquo.config;
+import static com.google.common.base.Preconditions.checkNotNull;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.inject.Inject;
 
-import com.google.common.eventbus.EventBus;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
+
+import com.google.common.base.Supplier;
 
 /**
- * Designates the module configures an {@link EventBus}.
+ * Gets the current enterprise.
  * 
  * @author Ignasi Barrera
  */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface ConfiguresEventBus
+public class GetCurrentEnterprise implements Supplier<Enterprise>
 {
+    private final GetCurrentUser currentUserSupplier;
 
+    @Inject
+    public GetCurrentEnterprise(final GetCurrentUser currentUserSupplier)
+    {
+        this.currentUserSupplier = checkNotNull(currentUserSupplier, "currentUserSupplier");
+    }
+
+    @Override
+    public Enterprise get()
+    {
+        return currentUserSupplier.get().getEnterprise();
+    }
 }

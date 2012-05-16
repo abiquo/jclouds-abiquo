@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.functions;
 
-import static org.jclouds.util.Throwables2.propagateOrNull;
-
 import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
@@ -66,7 +64,7 @@ public class ReturnFalseIfNotAvailable implements Function<Exception, Object>
             }
         }
 
-        return Object.class.cast(propagateOrNull(from));
+        throw Throwables.propagate(from);
     }
 
     private static Predicate<Throwable> isNotAvailableException(final Throwable exception)

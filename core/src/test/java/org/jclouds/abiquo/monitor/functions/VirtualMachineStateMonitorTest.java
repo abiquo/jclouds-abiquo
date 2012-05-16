@@ -22,9 +22,9 @@ package org.jclouds.abiquo.monitor.functions;
 import static org.testng.Assert.assertEquals;
 
 import org.easymock.EasyMock;
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.monitor.MonitorStatus;
+import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineDto;
@@ -90,9 +90,10 @@ public class VirtualMachineStateMonitorTest
     {
         private VirtualMachineState state;
 
+        @SuppressWarnings("unchecked")
         public MockVirtualMachine()
         {
-            super(EasyMock.createMock(AbiquoContext.class), new VirtualMachineDto());
+            super(EasyMock.createMock(RestContext.class), new VirtualMachineDto());
         }
 
         @Override

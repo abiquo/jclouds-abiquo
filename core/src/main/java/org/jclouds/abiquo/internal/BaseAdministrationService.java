@@ -27,7 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
@@ -50,14 +51,16 @@ import org.jclouds.abiquo.strategy.config.ListProperties;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
 import org.jclouds.abiquo.strategy.infrastructure.ListMachines;
+import org.jclouds.collect.Memoized;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
-import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Predicate;
+import com.google.common.base.Supplier;
 import com.google.common.collect.Iterables;
 
 /**
@@ -70,7 +73,7 @@ import com.google.common.collect.Iterables;
 public class BaseAdministrationService implements AdministrationService
 {
     @VisibleForTesting
-    protected AbiquoContext context;
+    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     @VisibleForTesting
     protected final ListDatacenters listDatacenters;
@@ -96,12 +99,20 @@ public class BaseAdministrationService implements AdministrationService
     @VisibleForTesting
     protected final ListCategories listCategories;
 
+    @VisibleForTesting
+    protected final Supplier<User> currentUser;
+
+    @VisibleForTesting
+    protected final Supplier<Enterprise> currentEnterprise;
+
     @Inject
-    protected BaseAdministrationService(final AbiquoContext context,
+    protected BaseAdministrationService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final ListDatacenters listDatacenters, final ListMachines listMachines,
         final ListEnterprises listEnterprises, final ListRoles listRoles,
         final ListLicenses listLicenses, final ListPrivileges listPrivileges,
-        final ListProperties listProperties, final ListCategories listCategories)
+        final ListProperties listProperties, final ListCategories listCategories,
+        @Memoized final Supplier<User> currentUser,
+        @Memoized final Supplier<Enterprise> currentEnterprise)
     {
         this.context = checkNotNull(context, "context");
         this.listDatacenters = checkNotNull(listDatacenters, "listDatacenters");
@@ -112,6 +123,8 @@ public class BaseAdministrationService implements AdministrationService
         this.listPrivileges = checkNotNull(listPrivileges, "listPrivileges");
         this.listProperties = checkNotNull(listProperties, "listProperties");
         this.listCategories = checkNotNull(listCategories, "listCategories");
+        this.currentUser = checkNotNull(currentUser, "currentUser");
+        this.currentEnterprise = checkNotNull(currentEnterprise, "currentEnterprise");
     }
 
     /*********************** Datacenter ********************** */
@@ -259,10 +272,15 @@ public class BaseAdministrationService implements AdministrationService
     /*********************** User ***********************/
 
     @Override
-    public User getCurrentUserInfo()
+    public User getCurrentUser()
     {
-        UserDto result = context.getApi().getAdminClient().getCurrentUser();
-        return wrap(context, User.class, result);
+        return currentUser.get();
+    }
+
+    @Override
+    public Enterprise getCurrentEnterprise()
+    {
+        return currentEnterprise.get();
     }
 
     /*********************** License ***********************/

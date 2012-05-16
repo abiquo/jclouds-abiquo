@@ -23,12 +23,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Properties;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.AbiquoContextFactory;
+import org.jclouds.ContextBuilder;
+import org.jclouds.abiquo.AbiquoApiMetadata;
+import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.lifecycle.Closer;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.jclouds.rest.RestContextFactory;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -55,18 +54,16 @@ public class BaseInjectionTest
         String credential =
             checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
 
-        injector =
-            new RestContextFactory().<AbiquoClient, AbiquoAsyncClient> createContextBuilder(
-                AbiquoContextFactory.PROVIDER_NAME, identity, credential,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), buildProperties())
-                .buildInjector();
+        injector = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
+            .credentials(identity, credential) //
+            .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
+            .overrides(buildProperties()) //
+            .build(AbiquoContext.class).getUtils().getInjector();
     }
 
     protected Properties buildProperties()
     {
-        Properties props = new Properties();
-        props.setProperty("abiquo.endpoint", "http://localhost/api");
-        return props;
+        return new Properties();
     }
 
     @AfterClass

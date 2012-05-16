@@ -23,8 +23,12 @@ import static org.testng.Assert.assertNotNull;
 
 import java.util.concurrent.ScheduledExecutorService;
 
+import org.jclouds.Constants;
 import org.jclouds.abiquo.internal.BaseInjectionTest;
 import org.testng.annotations.Test;
+
+import com.google.inject.Key;
+import com.google.inject.name.Names;
 
 /**
  * Unit tests for the {@link SchedulerModule} class.
@@ -36,6 +40,7 @@ public class SchedulerModuleTest extends BaseInjectionTest
 {
     public void testScheduledExecutorIsProvided()
     {
-        assertNotNull(injector.getInstance(ScheduledExecutorService.class));
+        assertNotNull(injector.getInstance(Key.get(ScheduledExecutorService.class,
+            Names.named(Constants.PROPERTY_SCHEDULER_THREADS))));
     }
 }

@@ -1,17 +1,16 @@
-JClouds Abiquo Provider
+Jclouds Abiquo Provider
 =======================
 
-This is the JClouds Abiquo provider. The project is still under
-development and it only provides access to the Abiquo REST API.
-
-You find detailed information about the Abiquo REST API in the
-[Abiquo API Reference](http://community.abiquo.com/display/ABI20/API+Reference) documentation page.
-
+This is the jclouds Abiquo provider. It enables compute features for the Abiquo cloud platform.
 
 Documentation
 -------------
 
-All information about building and using the **jclouds-abiquo** provider and API client in your own project
+Detailed information about using jclouds compute features can be found at [jclouds homepage](http://www.jclouds.org).
+Detailed information about the Abiquo REST API can be found in the
+[Abiquo documentation page](http://community.abiquo.com).
+
+All information about building and using the **jclouds-abiquo** provider in your own project
 can be found in the [Project Wiki](https://github.com/abiquo/jclouds-abiquo/wiki).
 
 
@@ -29,12 +28,14 @@ Note on patches/pull requests
 -----------------------------
  
  * Fork the project.
+ * Checkout the **stable** branch.
  * Start a topic branch for your feature or bugfix.
  * Make your changes/additions in the topic branch.
  * Add tests for it. This is important so I don't break it in a future version unintentionally.
  * Commit to the topic branch.
  * Send me a pull request.
 
+You can take as an example the process explained in the [Diaspora Git workflow](https://github.com/diaspora/diaspora/wiki/Git-Workflow).
 
 Issue Tracking
 --------------

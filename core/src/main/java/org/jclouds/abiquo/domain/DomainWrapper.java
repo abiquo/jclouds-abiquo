@@ -26,10 +26,12 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.exception.WrapperException;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
@@ -48,12 +50,13 @@ import com.google.common.collect.Lists;
 public abstract class DomainWrapper<T extends SingleResourceTransportDto>
 {
     /** The rest context. */
-    protected AbiquoContext context;
+    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     /** The wrapped object. */
     protected T target;
 
-    protected DomainWrapper(final AbiquoContext context, final T target)
+    protected DomainWrapper(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final T target)
     {
         super();
         this.context = checkNotNull(context, "context");
@@ -83,7 +86,8 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      * Wraps an object in the given wrapper class.
      */
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> W wrap(
-        final AbiquoContext context, final Class<W> wrapperClass, final T target)
+        final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Class<W> wrapperClass,
+        final T target)
     {
         if (target == null)
         {
@@ -93,7 +97,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         try
         {
             Constructor<W> cons =
-                wrapperClass.getDeclaredConstructor(AbiquoContext.class, target.getClass());
+                wrapperClass.getDeclaredConstructor(RestContext.class, target.getClass());
             if (!cons.isAccessible())
             {
                 cons.setAccessible(true);
@@ -110,7 +114,8 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      * Wrap a collection of objects to the given wrapper class.
      */
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<W> wrap(
-        final AbiquoContext context, final Class<W> wrapperClass, final Iterable<T> targets)
+        final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Class<W> wrapperClass,
+        final Iterable<T> targets)
     {
         if (targets == null)
         {

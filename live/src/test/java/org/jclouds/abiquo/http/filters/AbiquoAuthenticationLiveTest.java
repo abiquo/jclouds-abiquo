@@ -35,8 +35,10 @@ import java.util.Properties;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.HttpHeaders;
 
+import org.jclouds.ContextBuilder;
+import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoContextFactory;
+import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.utils.ModifyRequest;
@@ -77,18 +79,21 @@ public class AbiquoAuthenticationLiveTest
     {
         String token = getAuthtenticationToken();
 
-        // Create a new context that uses the generated token to perform the API calls
         Properties props = new Properties();
-        props.setProperty("abiquo.endpoint", endpoint);
+        props.setProperty(AbiquoConstants.CREDENTIAL_IS_TOKEN, "true");
 
-        AbiquoContext tokenContext =
-            new AbiquoContextFactory().createContext(token,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+        // Create a new context that uses the generated token to perform the API calls
+        AbiquoContext tokenContext = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
+            .endpoint(endpoint) //
+            .credentials("token", token) //
+            .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
+            .overrides(props) //
+            .build(AbiquoContext.class);
 
         try
         {
             // Perform a call to get the logged user and verify the identity
-            UserDto user = tokenContext.getApi().getAdminClient().getCurrentUser();
+            UserDto user = tokenContext.getApiContext().getApi().getAdminClient().getCurrentUser();
             assertNotNull(user);
             assertEquals(user.getNick(), identity);
         }
@@ -106,18 +111,21 @@ public class AbiquoAuthenticationLiveTest
     {
         String token = getAuthtenticationToken() + "INVALID";
 
-        // Create a new context that uses the generated token to perform the API calls
         Properties props = new Properties();
-        props.setProperty("abiquo.endpoint", endpoint);
+        props.setProperty(AbiquoConstants.CREDENTIAL_IS_TOKEN, "true");
 
-        AbiquoContext tokenContext =
-            new AbiquoContextFactory().createContext(token,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+        // Create a new context that uses the generated token to perform the API calls
+        AbiquoContext tokenContext = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
+            .endpoint(endpoint) //
+            .credentials("token", token) //
+            .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
+            .overrides(props) //
+            .build(AbiquoContext.class);
 
         // Perform a call to get the logged user. It should fail
         try
         {
-            tokenContext.getApi().getAdminClient().getCurrentUser();
+            tokenContext.getApiContext().getApi().getAdminClient().getCurrentUser();
         }
         catch (AuthorizationException ex)
         {
@@ -139,13 +147,11 @@ public class AbiquoAuthenticationLiveTest
     {
         String token = null;
 
-        // Create a standard context with the configured credentials
-        Properties props = new Properties();
-        props.setProperty("abiquo.endpoint", endpoint);
-
-        AbiquoContext context =
-            new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+        AbiquoContext context = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
+            .endpoint(endpoint) //
+            .credentials(identity, credential) //
+            .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
+            .build(AbiquoContext.class);
 
         try
         {

@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.functions;
 
-import static org.jclouds.util.Throwables2.propagateOrNull;
-
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
@@ -46,8 +44,8 @@ public class ReturnAbiquoExceptionOnNotFoundOr4xx implements Function<Exception,
             Iterables.find(Throwables.getCausalChain(from), isNotFoundAndHasAbiquoException(from),
                 null);
 
-        return Object.class.cast(propagateOrNull(exception == null ? from
-            : (AbiquoException) exception.getCause()));
+        throw Throwables.propagate(exception == null ? from : (AbiquoException) exception
+            .getCause());
     }
 
     private static Predicate<Throwable> isNotFoundAndHasAbiquoException(final Throwable exception)

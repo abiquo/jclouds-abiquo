@@ -21,13 +21,15 @@ package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.VolumeState;
 import com.abiquo.model.rest.RESTLink;
@@ -58,7 +60,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Volume(final AbiquoContext context, final VolumeManagementDto target)
+    protected Volume(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VolumeManagementDto target)
     {
         super(context, target);
     }
@@ -126,7 +128,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context,
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         final VirtualDatacenter virtualDatacenter, final Tier tier)
     {
         return new Builder(context, virtualDatacenter, tier);
@@ -134,7 +136,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private String name;
 
@@ -146,7 +148,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
 
         private Tier tier;
 
-        public Builder(final AbiquoContext context, final VirtualDatacenter virtualDatacenter,
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualDatacenter virtualDatacenter,
             final Tier tier)
         {
             super();

@@ -51,8 +51,8 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
     {
         Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name("Default Tier 1"));
         Volume volume =
-            Volume.builder(context, env.virtualDatacenter, tier).name(PREFIX + "Hawaian volume")
-                .sizeInMb(128).build();
+            Volume.builder(context.getApiContext(), env.virtualDatacenter, tier)
+                .name(PREFIX + "Hawaian volume").sizeInMb(128).build();
         volume.save();
 
         assertNotNull(volume.getId());
@@ -99,12 +99,12 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
     {
         // Create the new virtual datacenter
         PrivateNetwork network =
-            PrivateNetwork.builder(context).name("DefaultNetwork").gateway("192.168.1.1")
-                .address("192.168.1.0").mask(24).build();
+            PrivateNetwork.builder(context.getApiContext()).name("DefaultNetwork")
+                .gateway("192.168.1.1").address("192.168.1.0").mask(24).build();
 
         VirtualDatacenter newVdc =
-            VirtualDatacenter.builder(context, env.datacenter, env.enterprise).name("New VDC")
-                .network(network).hypervisorType(env.machine.getType()).build();
+            VirtualDatacenter.builder(context.getApiContext(), env.datacenter, env.enterprise)
+                .name("New VDC").network(network).hypervisorType(env.machine.getType()).build();
         newVdc.save();
         assertNotNull(newVdc.getId());
 

@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.functions;
 
-import static org.jclouds.util.Throwables2.propagateOrNull;
-
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.http.HttpResponse;
@@ -39,7 +37,6 @@ import com.google.common.collect.Iterables;
 public abstract class ReturnMovedResource<T> implements Function<Exception, T>
 {
 
-    @SuppressWarnings("unchecked")
     @Override
     public T apply(final Exception from)
     {
@@ -54,7 +51,7 @@ public abstract class ReturnMovedResource<T> implements Function<Exception, T>
             return getMovedEntity(response);
         }
 
-        return (T) propagateOrNull(from);
+        throw Throwables.propagate(from);
     }
 
     protected abstract T getMovedEntity(HttpResponse response);

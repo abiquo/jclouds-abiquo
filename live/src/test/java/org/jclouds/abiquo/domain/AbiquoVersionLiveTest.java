@@ -23,13 +23,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.fail;
 
-import java.util.Properties;
-
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.Constants;
+import org.jclouds.ContextBuilder;
+import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.AbiquoContextFactory;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.testng.annotations.AfterMethod;
@@ -59,13 +57,12 @@ public class AbiquoVersionLiveTest
         String endpoint =
             checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
 
-        Properties props = new Properties();
-        props.setProperty("abiquo.endpoint", endpoint);
-        props.setProperty(Constants.PROPERTY_API_VERSION, "0.0");
-
-        context =
-            new AbiquoContextFactory().createContext(identity, credential,
-                ImmutableSet.<Module> of(new SLF4JLoggingModule()), props);
+        context = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
+            .endpoint(endpoint) //
+            .credentials(identity, credential) //
+            .apiVersion("0.0") //
+            .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
+            .build(AbiquoContext.class);
     }
 
     @AfterMethod
@@ -81,7 +78,7 @@ public class AbiquoVersionLiveTest
     {
         try
         {
-            context.getAdministrationService().getCurrentUserInfo();
+            context.getAdministrationService().getCurrentUser();
             fail("Unsupported versions in mime types should not be allowed");
         }
         catch (AbiquoException ex)

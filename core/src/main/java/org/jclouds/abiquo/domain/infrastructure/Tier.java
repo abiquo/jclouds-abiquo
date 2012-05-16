@@ -23,10 +23,12 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
@@ -55,7 +57,7 @@ public class Tier extends DomainWrapper<TierDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Tier(final AbiquoContext context, final TierDto target)
+    protected Tier(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final TierDto target)
     {
         super(context, target);
     }

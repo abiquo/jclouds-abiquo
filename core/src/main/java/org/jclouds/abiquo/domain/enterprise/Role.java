@@ -24,11 +24,13 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.PrivilegesDto;
@@ -53,7 +55,7 @@ public class Role extends DomainWrapper<RoleDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Role(final AbiquoContext context, final RoleDto target)
+    protected Role(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final RoleDto target)
     {
         super(context, target);
     }
@@ -165,20 +167,20 @@ public class Role extends DomainWrapper<RoleDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
     {
         return new Builder(context);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private String name;
 
         private boolean blocked = DEFAULT_BLOCKED;
 
-        public Builder(final AbiquoContext context)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
         {
             super();
             this.context = context;

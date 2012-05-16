@@ -21,7 +21,8 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
@@ -31,6 +32,7 @@ import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
+import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
@@ -61,7 +63,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected StoragePool(final AbiquoContext context, final StoragePoolDto target)
+    protected StoragePool(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final StoragePoolDto target)
     {
         super(context, target);
     }
@@ -188,14 +190,14 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
     // Builder
 
-    public static Builder builder(final AbiquoContext context, final StorageDevice storageDevice)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final StorageDevice storageDevice)
     {
         return new Builder(context, storageDevice);
     }
 
     public static class Builder
     {
-        private AbiquoContext context;
+        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
         private StorageDevice storageDevice;
 
@@ -212,7 +214,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
         private Long usedSizeInMb = DEFAULT_USED_SIZE;
 
-        public Builder(final AbiquoContext context, final StorageDevice storageDevice)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final StorageDevice storageDevice)
         {
             super();
             checkNotNull(storageDevice, ValidationErrors.NULL_RESOURCE + StorageDevice.class);

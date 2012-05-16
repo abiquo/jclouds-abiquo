@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.functions;
 
-import static org.jclouds.util.Throwables2.propagateOrNull;
-
 import javax.inject.Singleton;
 
 import org.jclouds.http.HttpResponse;
@@ -57,7 +55,7 @@ public class ReturnFalseOn5xx implements Function<Exception, Object>
             }
         }
 
-        return Object.class.cast(propagateOrNull(from));
+        throw Throwables.propagate(from);
     }
 
     private static Predicate<Throwable> hasResponse(final Throwable exception)
