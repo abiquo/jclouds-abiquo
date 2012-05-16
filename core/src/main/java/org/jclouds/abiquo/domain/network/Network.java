@@ -56,6 +56,12 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
 
     // Domain operations
 
+    public abstract void save();
+
+    public abstract void update();
+
+    public abstract void delete();
+
     public abstract List<Ip> listIps();
 
     public List<Ip> listIps(final Predicate<Ip> filter)
