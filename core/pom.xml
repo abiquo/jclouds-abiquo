@@ -7,10 +7,12 @@
         <version>2.3-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+    
     <artifactId>jclouds-abiquo</artifactId>
     <packaging>bundle</packaging>
     <name>JClouds Abiquo :: Compute</name>
     <description>JClouds components to access Abiquo</description>
+    
     <dependencies>
         <!-- JClouds -->
         <dependency>
