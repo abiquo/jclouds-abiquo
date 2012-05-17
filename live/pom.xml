@@ -80,6 +80,21 @@
                 <filtering>true</filtering>
             </testResource>
         </testResources>
+        <plugins>
+        	<plugin>
+				<groupId>com.mycila.maven-license-plugin</groupId>
+				<artifactId>maven-license-plugin</artifactId>
+				<configuration self.combine="override">
+					<header>../LICENSE</header>
+					<strictCheck>true</strictCheck>
+					<failIfMissing>true</failIfMissing>
+					<aggregate>true</aggregate>
+					<includes>
+						<include>**/*.java</include>
+					</includes>
+				</configuration>
+			</plugin>
+        </plugins>
     </build>
     <profiles>
         <profile>
