@@ -22,6 +22,7 @@ package org.jclouds.abiquo.features;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -38,8 +39,11 @@ import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -112,4 +116,16 @@ public interface VirtualMachineTemplateAsyncClient
     @DELETE
     ListenableFuture<Void> deleteVirtualMachineTemplate(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
+
+    /**
+     * @see VirtualMachineTemplateClient#requestConversion(ConversionRequestDto)
+     */
+    @POST
+    @Produces(AcceptedRequestDto.MEDIA_TYPE)
+    @Consumes(ConversionRequestDto.MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<AcceptedRequestDto<String>> requestConversion(
+        @EndpointLink("convert") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template,
+        @BinderParam(BindToXMLPayload.class) ConversionRequestDto conversionRequest);
+
 }

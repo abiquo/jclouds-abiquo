@@ -34,6 +34,8 @@ import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.inject.TypeLiteral;
@@ -160,6 +162,33 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testRequestConversion() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("requestConversion",
+                VirtualMachineTemplateDto.class);
+
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
+                TemplateResources.conversionRequestPut());
+
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/action/convert HTTP/1.1");
+
+        assertNonPayloadHeadersEqual(request, "Accept: " //
+            + AcceptedRequestDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, withHeader(TemplateResources.conversionRequestPutPlayload()),
+            ConversionRequestDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

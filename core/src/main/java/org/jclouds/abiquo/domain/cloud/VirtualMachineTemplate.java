@@ -42,7 +42,7 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource">
  *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource</a>
  */
-public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplateDto>
+public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplateDto>// DomainWithTasksWrapper<VirtualMachineTemplateDto>
 {
     /**
      * Constructor to be used only by the builder.

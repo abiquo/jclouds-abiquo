@@ -23,12 +23,11 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Ip;
@@ -58,13 +57,10 @@ import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
-import com.abiquo.server.core.task.TasksDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Longs;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -75,7 +71,7 @@ import com.google.inject.TypeLiteral;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/VirtualMachineResource">
  *      http://community.abiquo.com/display/ABI20/VirtualMachineResource</a>
  */
-public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
+public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 {
     /** The virtual appliance where the virtual machine belongs. */
     private VirtualAppliance virtualAppliance;
@@ -86,7 +82,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualMachine(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualMachineDto target)
+    protected VirtualMachine(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final VirtualMachineDto target)
     {
         super(context, target);
     }
@@ -328,34 +325,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
     }
 
-    public List<AsyncTask> listTasks()
-    {
-        TasksDto result = context.getApi().getTaskClient().listTasks(target);
-        List<AsyncTask> tasks = wrap(context, AsyncTask.class, result.getCollection());
-
-        // Return the most recent task first
-        Collections.sort(tasks, new Ordering<AsyncTask>()
-        {
-            @Override
-            public int compare(final AsyncTask left, final AsyncTask right)
-            {
-                return Longs.compare(left.getTimestamp(), right.getTimestamp());
-            }
-        }.reverse());
-
-        return tasks;
-    }
-
-    public List<AsyncTask> listTasks(final Predicate<AsyncTask> filter)
-    {
-        return Lists.newLinkedList(filter(listTasks(), filter));
-    }
-
-    public AsyncTask findTask(final Predicate<AsyncTask> filter)
-    {
-        return Iterables.getFirst(filter(listTasks(), filter), null);
-    }
-
     public List<Nic> listAttachedNics()
     {
         NicsDto nics = context.getApi().getCloudClient().listAttachedNics(target);
@@ -541,8 +510,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         private String uuid;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualAppliance virtualAppliance,
-            final VirtualMachineTemplate template)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+            final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template)
         {
             super();
             checkNotNull(virtualAppliance, ValidationErrors.NULL_RESOURCE + VirtualAppliance.class);
@@ -855,5 +824,4 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
             + ", vncPort=" + getVncPort() + "]";
     }
-
 }

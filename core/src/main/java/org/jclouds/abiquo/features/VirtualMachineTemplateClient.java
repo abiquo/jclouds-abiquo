@@ -24,6 +24,9 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.model.enumerator.DiskFormatType;
+import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 
@@ -89,4 +92,14 @@ public interface VirtualMachineTemplateClient
      * @param template The virtual machine template to delete.
      */
     void deleteVirtualMachineTemplate(VirtualMachineTemplateDto template);
+
+    /**
+     * Starts a V2V conversion of the current virtual machine template.
+     * 
+     * @param conversionRequest The requested target {@link DiskFormatType} of the conversion.
+     * @return an accepted request with a link to track the progress of the conversion tasks.
+     */
+    AcceptedRequestDto<String> requestConversion(VirtualMachineTemplateDto template,
+        ConversionRequestDto conversionRequest);
+
 }
