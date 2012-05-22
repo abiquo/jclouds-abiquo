@@ -173,7 +173,7 @@ public class VirtualMachineTemplateAsyncClientTest extends
     {
         Method method =
             VirtualMachineTemplateAsyncClient.class.getMethod("requestConversion",
-                VirtualMachineTemplateDto.class);
+                VirtualMachineTemplateDto.class, ConversionRequestDto.class);
 
         GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
@@ -183,8 +183,8 @@ public class VirtualMachineTemplateAsyncClientTest extends
             request,
             "POST http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/action/convert HTTP/1.1");
 
-        assertNonPayloadHeadersEqual(request, "Accept: " //
-            + AcceptedRequestDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, withHeader(TemplateResources.conversionRequestPutPlayload()),
             ConversionRequestDto.BASE_MEDIA_TYPE, false);
 

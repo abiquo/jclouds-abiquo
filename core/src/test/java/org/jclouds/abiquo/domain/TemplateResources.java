@@ -46,6 +46,9 @@ public class TemplateResources
         template.addLink(new RESTLink("enterprise", "http://localhost/api/admin/enterprises/1"));
         template.addLink(new RESTLink("convert", "http://localhost/api/admin/enterprises/1"
             + "/datacenterrepositories/1/virtualmachinetemplates/1/action/convert"));
+        template.addLink(new RESTLink("tasks", "http://localhost/api/admin/enterprises/1"
+            + "/datacenterrepositories/1/virtualmachinetemplates/1/tasks"));
+
         return template;
     }
 
@@ -58,6 +61,8 @@ public class TemplateResources
         buffer.append(link("/admin/enterprises/1", "enterprise"));
         buffer.append(link("/admin/enterprises/1"
             + "/datacenterrepositories/1/virtualmachinetemplates/1/action/convert", "convert"));
+        buffer.append(link("/admin/enterprises/1"
+            + "/datacenterrepositories/1/virtualmachinetemplates/1/tasks", "tasks"));
         buffer.append("<id>1</id>");
         buffer.append("<name>Template</name>");
         buffer.append("<description>Description</description>");

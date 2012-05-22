@@ -121,8 +121,8 @@ public interface VirtualMachineTemplateAsyncClient
      * @see VirtualMachineTemplateClient#requestConversion(ConversionRequestDto)
      */
     @POST
-    @Produces(AcceptedRequestDto.MEDIA_TYPE)
-    @Consumes(ConversionRequestDto.MEDIA_TYPE)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(ConversionRequestDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> requestConversion(
         @EndpointLink("convert") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template,
