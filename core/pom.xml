@@ -28,15 +28,8 @@
         <!-- Abiquo -->
         <dependency>
             <groupId>com.abiquo</groupId>
-            <artifactId>model</artifactId>
+            <artifactId>api-model-transport</artifactId>
             <version>${abiquo.version}</version>
-            <classifier>transport</classifier>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.directory.server</groupId>
-                    <artifactId>apacheds-all</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <!-- Test dependencies -->
         <dependency>
