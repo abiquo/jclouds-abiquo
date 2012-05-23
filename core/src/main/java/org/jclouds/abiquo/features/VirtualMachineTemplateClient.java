@@ -21,12 +21,15 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 
@@ -96,10 +99,38 @@ public interface VirtualMachineTemplateClient
     /**
      * Starts a V2V conversion of the current virtual machine template.
      * 
+     * @param template The virtual machine template to convert
      * @param conversionRequest The requested target {@link DiskFormatType} of the conversion.
      * @return an accepted request with a link to track the progress of the conversion tasks.
      */
     AcceptedRequestDto<String> requestConversion(VirtualMachineTemplateDto template,
         ConversionRequestDto conversionRequest);
 
+    /**
+     * List all the conversions for a virtual machine template.
+     * 
+     * @param template, The virtual machine template of the conversions.
+     * @return The list of conversions for the virtual machine template.
+     */
+    ConversionsDto listConversions(VirtualMachineTemplateDto template);
+
+    /**
+     * List conversions for a virtual machine template.
+     * 
+     * @param template, The virtual machine template of the conversions
+     * @param options, Optionally filter compatible conversions with a provided hypervisor or with
+     *            the desired state.
+     * @return The list of conversions for the virtual machine template with the applied constrains.
+     */
+    ConversionsDto listConversions(VirtualMachineTemplateDto template, ConversionOptions options);
+
+    /**
+     * Get the conversions for a virtual machine template and the desired target format.
+     * 
+     * @param template, The virtual machine template of the conversion
+     * @param targetFormat The disk format type of the requested conversion
+     * @return The conversions for the virtual machine template with the desired target disk format
+     *         type.
+     */
+    ConversionDto getConversion(VirtualMachineTemplateDto template, DiskFormatType targetFormat);
 }

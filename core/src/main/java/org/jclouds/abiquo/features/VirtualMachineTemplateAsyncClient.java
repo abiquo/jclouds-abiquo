@@ -29,8 +29,10 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
 import org.jclouds.abiquo.binders.AppendOptionsToPath;
+import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
@@ -42,8 +44,11 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -117,6 +122,8 @@ public interface VirtualMachineTemplateAsyncClient
     ListenableFuture<Void> deleteVirtualMachineTemplate(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
+    /*********************** Conversions ***********************/
+
     /**
      * @see VirtualMachineTemplateClient#requestConversion(ConversionRequestDto)
      */
@@ -128,4 +135,34 @@ public interface VirtualMachineTemplateAsyncClient
         @EndpointLink("convert") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template,
         @BinderParam(BindToXMLPayload.class) ConversionRequestDto conversionRequest);
 
+    /**
+     * @see VirtualMachineTemplateClient#listConversions(VirtualMachineTemplateDto)
+     */
+    @GET
+    @Consumes(ConversionsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<ConversionsDto> listConversions(
+        @EndpointLink("conversions") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
+
+    /**
+     * @see VirtualMachineTemplateClient#listConversions(VirtualMachineTemplateDto,
+     *      ConversionOptions)
+     */
+    @GET
+    @Consumes(ConversionsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<ConversionsDto> listConversions(
+        @EndpointLink("conversions") @BinderParam(BindToPath.class) final VirtualMachineTemplateDto template,
+        @BinderParam(AppendOptionsToPath.class) ConversionOptions options);
+
+    /**
+     * @see VirtualMachineTemplateClient#getConversion(VirtualMachineTemplateDto, DiskFormatType)
+     */
+    @GET
+    @Consumes(ConversionDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<ConversionDto> getConversion(
+        @EndpointLink("conversions") @BinderParam(BindToPath.class) final VirtualMachineTemplateDto template,
+        @BinderParam(AppendToPath.class) DiskFormatType targetFormat);
 }

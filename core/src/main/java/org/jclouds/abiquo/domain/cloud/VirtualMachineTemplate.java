@@ -20,18 +20,23 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import java.util.Date;
+import java.util.List;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
+import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.RestContext;
 
+import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.server.core.appslibrary.CategoryDto;
+import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
 /**
@@ -42,7 +47,7 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource">
  *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource</a>
  */
-public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplateDto>// DomainWithTasksWrapper<VirtualMachineTemplateDto>
+public class VirtualMachineTemplate extends DomainWithTasksWrapper<VirtualMachineTemplateDto>
 {
     /**
      * Constructor to be used only by the builder.
@@ -108,6 +113,47 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
         Integer repositoryId = target.getIdFromLink(ParentLinkName.DATACENTER_REPOSITORY);
         return wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
             .getDatacenter(repositoryId));
+    }
+
+    /**
+     * List all the conversions for the virtual machine template.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Conversion+Resource#ConversionResource-ListConversions"
+     *      > http://community.abiquo.com/display/ABI20/Conversion+Resource#ConversionResource-
+     *      ListConversions</a>
+     * @return all the conversions of the virtual machine template
+     */
+    public List<Conversion> listConversions()
+    {
+        ConversionsDto convs =
+            context.getApi().getVirtualMachineTemplateClient().listConversions(target);
+        return wrap(context, Conversion.class, convs.getCollection());
+    }
+
+    /**
+     * List conversions for a virtual machine template.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Conversion+Resource#ConversionResource-ListConversions"
+     *      > http://community.abiquo.com/display/ABI20/Conversion+Resource#ConversionResource-
+     *      ListConversions</a>
+     * @param hypervisor, Optionally filter conversions compatible with the provided hypervisor
+     * @param state, Optionally filter conversions with the desired state
+     * @return all the conversions of the virtual machine template applying the constrains
+     */
+    public List<Conversion> listConversions(final HypervisorType hypervisor,
+        final ConversionState state)
+    {
+        ConversionsDto convs =
+            context
+                .getApi()
+                .getVirtualMachineTemplateClient()
+                .listConversions(
+                    target,
+                    ConversionOptions.builder().hypervisorType(hypervisor).conversionState(state)
+                        .build());
+        return wrap(context, Conversion.class, convs.getCollection());
     }
 
     // Delegate methods
