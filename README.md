@@ -20,7 +20,6 @@ Build status
 The project is built with [Travis CI](http://travis-ci.org/) and the build history can be checked [here](http://travis-ci.org/#!/abiquo/jclouds-abiquo/builds).
 The last build status for the main branches is:
 
- * stable [![Build Status](https://secure.travis-ci.org/abiquo/jclouds-abiquo.png?branch=stable)](http://travis-ci.org/#!/abiquo/jclouds-abiquo/branch_summary)
  * master [![Build Status](https://secure.travis-ci.org/abiquo/jclouds-abiquo.png?branch=master)](http://travis-ci.org/#!/abiquo/jclouds-abiquo/branch_summary)
 
 
@@ -28,7 +27,7 @@ Note on patches/pull requests
 -----------------------------
  
  * Fork the project.
- * Checkout the **stable** branch.
+ * Checkout the **master** branch.
  * Start a topic branch for your feature or bugfix.
  * Make your changes/additions in the topic branch.
  * Add tests for it. This is important so I don't break it in a future version unintentionally.
