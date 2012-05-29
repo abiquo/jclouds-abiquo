@@ -59,7 +59,27 @@ public class Conversion extends DomainWrapper<ConversionDto>
         super(context, target);
     }
 
+    // Domain methods
+
+    public void refresh()
+    {
+        // TODO must be 'self'
+        RESTLink link =
+            checkNotNull(target.searchLink("conversion"), ValidationErrors.MISSING_REQUIRED_LINK
+                + "conversion");
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = checkNotNull(utils.getAbiquoHttpClient().get(link), "conversion");
+
+        ParseXMLWithJAXB<ConversionDto> parser =
+            new ParseXMLWithJAXB<ConversionDto>(utils.getXml(),
+                TypeLiteral.get(ConversionDto.class));
+
+        target = parser.apply(response);
+    }
+
     // Parent access
+
     /**
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource" >
@@ -83,6 +103,7 @@ public class Conversion extends DomainWrapper<ConversionDto>
     }
 
     // Delegate methods
+
     public String getSourcePath()
     {
         return target.getSourcePath();
