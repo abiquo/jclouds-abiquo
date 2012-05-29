@@ -27,7 +27,7 @@ import org.jclouds.ContextBuilder;
 import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.lifecycle.Closer;
-import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
+import org.jclouds.logging.config.NullLoggingModule;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -56,7 +56,7 @@ public class BaseInjectionTest
 
         injector = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
             .credentials(identity, credential) //
-            .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
+            .modules(ImmutableSet.<Module> of(new NullLoggingModule())) //
             .overrides(buildProperties()) //
             .build(AbiquoContext.class).getUtils().getInjector();
     }
