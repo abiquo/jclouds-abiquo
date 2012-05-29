@@ -111,7 +111,7 @@ public class TemplateResources
         conversion.setTargetSizeInBytes(1000000l);
 
         conversion
-            .addLink(new RESTLink("edit",
+            .addLink(new RESTLink("conversion",
                 "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW"));
 
         return conversion;
@@ -124,7 +124,7 @@ public class TemplateResources
         buffer
             .append(link(
                 "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW",
-                "edit"));
+                "conversion"));
         buffer.append("<state>ENQUEUED</state>");
         buffer.append("<sourceFormat>VMDK_STREAM_OPTIMIZED</sourceFormat>");
         buffer.append("<sourcePath>source/path.vmkd</sourcePath>");

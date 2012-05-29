@@ -26,6 +26,7 @@ import java.util.Date;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
@@ -36,6 +37,7 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.google.inject.TypeLiteral;
@@ -100,6 +102,23 @@ public class Conversion extends DomainWrapper<ConversionDto>
                 TypeLiteral.get(VirtualMachineTemplateDto.class));
 
         return wrap(context, VirtualMachineTemplate.class, parser.apply(response));
+    }
+
+    /**
+     * Starts a new BPM task to regenerate a failed conversion.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Conversion+Resource#ConversionResource-UpdateConversion"
+     *      > http://community.abiquo.com/display/ABI20/Conversion+Resource#ConversionResource-
+     *      UpdateConversion</a>
+     * @return The task reference to track its progress
+     */
+    public AsyncTask restartFailedConversion()
+    {
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getVirtualMachineTemplateClient().updateConversion(target);
+
+        return taskRef == null ? null : getTask(taskRef);
     }
 
     // Delegate methods

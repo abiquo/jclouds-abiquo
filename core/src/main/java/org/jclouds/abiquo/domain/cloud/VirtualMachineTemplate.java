@@ -29,13 +29,16 @@ import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
+import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
@@ -154,6 +157,27 @@ public class VirtualMachineTemplate extends DomainWithTasksWrapper<VirtualMachin
                     ConversionOptions.builder().hypervisorType(hypervisor).conversionState(state)
                         .build());
         return wrap(context, Conversion.class, convs.getCollection());
+    }
+
+    /**
+     * Starts a new conversion for a virtual machine template.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/Conversion+Resource#ConversionResource-RequestConversion"
+     *      > http://community.abiquo.com/display/ABI20/Conversion+Resource#ConversionResource-
+     *      RequestConversion</a>
+     * @param diskFormat, desired target format for the request template
+     * @return The task reference to track its progress
+     */
+    public AsyncTask requestConversion(final DiskFormatType diskFormat)
+    {
+        ConversionRequestDto request = new ConversionRequestDto();
+        request.setFormat(diskFormat);
+
+        AcceptedRequestDto<String> taskRef =
+            context.getApi().getVirtualMachineTemplateClient().requestConversion(target, request);
+
+        return taskRef == null ? null : getTask(taskRef);
     }
 
     // Delegate methods

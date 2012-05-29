@@ -176,5 +176,5 @@ public interface VirtualMachineTemplateAsyncClient
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(ConversionDto.BASE_MEDIA_TYPE)
     ListenableFuture<AcceptedRequestDto<String>> updateConversion(
-        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) ConversionDto conversion);
+        @EndpointLink("conversion") @BinderParam(BindToXMLPayloadAndPath.class) ConversionDto conversion);
 }
