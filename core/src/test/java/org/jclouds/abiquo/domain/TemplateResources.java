@@ -21,8 +21,10 @@ package org.jclouds.abiquo.domain;
 
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
+import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
@@ -95,6 +97,41 @@ public class TemplateResources
         buffer.append("<conversionRequest>");
         buffer.append("<format>RAW</format>");
         buffer.append("</conversionRequest>");
+        return buffer.toString();
+    }
+
+    public static ConversionDto conversionPut()
+    {
+        ConversionDto conversion = new ConversionDto();
+        conversion.setState(ConversionState.ENQUEUED);
+        conversion.setSourceFormat(DiskFormatType.VMDK_STREAM_OPTIMIZED);
+        conversion.setSourcePath("source/path.vmkd");
+        conversion.setTargetFormat(DiskFormatType.RAW);
+        conversion.setTargetPath("target/path.raw");
+        conversion.setTargetSizeInBytes(1000000l);
+
+        conversion
+            .addLink(new RESTLink("edit",
+                "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW"));
+
+        return conversion;
+    }
+
+    public static String conversionPutPlayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<conversion>");
+        buffer
+            .append(link(
+                "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW",
+                "edit"));
+        buffer.append("<state>ENQUEUED</state>");
+        buffer.append("<sourceFormat>VMDK_STREAM_OPTIMIZED</sourceFormat>");
+        buffer.append("<sourcePath>source/path.vmkd</sourcePath>");
+        buffer.append("<targetFormat>RAW</targetFormat>");
+        buffer.append("<targetPath>target/path.raw</targetPath>");
+        buffer.append("<targetSizeInBytes>1000000</targetSizeInBytes>");
+        buffer.append("</conversion>");
         return buffer.toString();
     }
 }

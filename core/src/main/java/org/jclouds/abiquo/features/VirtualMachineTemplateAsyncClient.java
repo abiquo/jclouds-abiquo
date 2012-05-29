@@ -34,6 +34,7 @@ import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
+import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
@@ -41,6 +42,7 @@ import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.RequestFilters;
+import org.jclouds.rest.annotations.ResponseParser;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
@@ -165,4 +167,14 @@ public interface VirtualMachineTemplateAsyncClient
     ListenableFuture<ConversionDto> getConversion(
         @EndpointLink("conversions") @BinderParam(BindToPath.class) final VirtualMachineTemplateDto template,
         @BinderParam(AppendToPath.class) DiskFormatType targetFormat);
+
+    /**
+     * @see VirtualMachineTemplateClient#updateConversion(ConversinoDto)
+     */
+    @PUT
+    @ResponseParser(ReturnTaskReferenceOrNull.class)
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(ConversionDto.BASE_MEDIA_TYPE)
+    ListenableFuture<AcceptedRequestDto<String>> updateConversion(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) ConversionDto conversion);
 }

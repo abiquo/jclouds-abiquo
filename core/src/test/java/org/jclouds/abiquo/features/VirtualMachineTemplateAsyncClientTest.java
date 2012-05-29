@@ -27,6 +27,7 @@ import java.lang.reflect.Method;
 import org.jclouds.abiquo.domain.TemplateResources;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
+import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -266,6 +267,31 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateConversion() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("updateConversion",
+                ConversionDto.class);
+
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.conversionPut());
+
+        assertRequestLineEquals(
+            request,
+            "PUT http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW HTTP/1.1");
+
+        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, withHeader(TemplateResources.conversionPutPlayload()),
+            ConversionDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }

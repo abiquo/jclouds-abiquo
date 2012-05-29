@@ -25,6 +25,7 @@ import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
@@ -133,4 +134,12 @@ public interface VirtualMachineTemplateClient
      *         type.
      */
     ConversionDto getConversion(VirtualMachineTemplateDto template, DiskFormatType targetFormat);
+
+    /**
+     * Updates a failed conversion.
+     * 
+     * @param the requested conversion (state = {@link ConversionState.ENQUEUED}).
+     * @return the taskId to track it's progress.
+     */
+    AcceptedRequestDto<String> updateConversion(ConversionDto conversion);
 }
