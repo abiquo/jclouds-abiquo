@@ -49,6 +49,7 @@ import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
+import com.abiquo.server.core.event.EventsDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -150,4 +151,15 @@ public interface AdminAsyncClient
     @JAXBResponseParser
     ListenableFuture<PrivilegesDto> listPrivileges(
         @EndpointLink("privileges") @BinderParam(BindToPath.class) RoleDto role);
+
+    /*********************** Event ***********************/
+
+    /**
+     * @see AdminClient#listEvents()
+     */
+    @GET
+    @Path("/admin/events")
+    @Consumes(EventsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<EventsDto> listEvents();
 }
