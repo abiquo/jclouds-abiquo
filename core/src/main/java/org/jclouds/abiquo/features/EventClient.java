@@ -16,22 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jclouds.abiquo.features;
 
-package org.jclouds.abiquo.strategy.admin;
+import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.domain.Event.Event;
-import org.jclouds.abiquo.strategy.ListRootEntities;
-import org.jclouds.abiquo.strategy.admin.internal.ListEventsImpl;
+import org.jclouds.concurrent.Timeout;
 
-import com.google.inject.ImplementedBy;
+import com.abiquo.server.core.event.EventsDto;
 
 /**
- * List events.
+ * Provides synchronous access to Abiquo Event API.
  * 
+ * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
+ *      http://community.abiquo.com/display/ABI20/API+Reference</a>
+ * @see EventAsyncClient
+ * @author Ignasi Barrera
  * @author Vivien Mahé
  */
-@ImplementedBy(ListEventsImpl.class)
-public interface ListEvents extends ListRootEntities<Event>
+@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
+public interface EventClient
 {
-
+    /**
+     * List events.
+     * 
+     * @return The list of events.
+     */
+    EventsDto listEvents();
 }

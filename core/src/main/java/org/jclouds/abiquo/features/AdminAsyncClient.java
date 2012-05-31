@@ -49,11 +49,10 @@ import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
-import com.abiquo.server.core.event.EventsDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * Provides asynchronous access to Abiquo Infrastructure API.
+ * Provides asynchronous access to Abiquo Admin API.
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
@@ -151,15 +150,4 @@ public interface AdminAsyncClient
     @JAXBResponseParser
     ListenableFuture<PrivilegesDto> listPrivileges(
         @EndpointLink("privileges") @BinderParam(BindToPath.class) RoleDto role);
-
-    /*********************** Event ***********************/
-
-    /**
-     * @see AdminClient#listEvents()
-     */
-    @GET
-    @Path("/admin/events")
-    @Consumes(EventsDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<EventsDto> listEvents();
 }

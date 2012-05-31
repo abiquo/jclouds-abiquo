@@ -28,7 +28,6 @@ import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
-import com.abiquo.server.core.event.EventsDto;
 
 /**
  * Provides synchronous access to Abiquo Admin API.
@@ -113,13 +112,4 @@ public interface AdminClient
      * @return The list of privileges.
      */
     PrivilegesDto listPrivileges(RoleDto role);
-
-    /* ********************** Event ********************** */
-
-    /**
-     * List events.
-     * 
-     * @return The list of events.
-     */
-    EventsDto listEvents();
 }
