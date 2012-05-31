@@ -663,6 +663,15 @@ public interface InfrastructureClient
     StorageDevicesDto listStorageDevices(DatacenterDto datacenter);
 
     /**
+     * List all supported storage devices.
+     * 
+     * @param datacenter The datacenter.
+     * @return The list of supported storage devices.
+     */
+    @EnterpriseEdition
+    StorageDevicesDto listSupportedStorageDevices(DatacenterDto datacenter);
+
+    /**
      * Get the storage device.
      * 
      * @param storageDeviceId The id of the storage device.

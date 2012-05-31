@@ -62,4 +62,18 @@ public class StorageDevicePredicates
             }
         };
     }
+
+    public static Predicate<StorageDevice> type(final String... types)
+    {
+        checkNotNull(types, "types must be defined");
+
+        return new Predicate<StorageDevice>()
+        {
+            @Override
+            public boolean apply(final StorageDevice storageDevice)
+            {
+                return Arrays.asList(types).contains(storageDevice.getType());
+            }
+        };
+    }
 }

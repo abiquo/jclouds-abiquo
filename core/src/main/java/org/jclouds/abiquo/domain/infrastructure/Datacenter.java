@@ -302,6 +302,19 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
+     * Retrieve the list of supported storage devices.
+     * 
+     * @return List of supported storage devices.
+     */
+    @EnterpriseEdition
+    public List<StorageDevice> listSupportedStorageDevices()
+    {
+        StorageDevicesDto devices =
+            context.getApi().getInfrastructureClient().listSupportedStorageDevices(target);
+        return wrap(context, StorageDevice.class, devices.getCollection());
+    }
+
+    /**
      * Retrieve the list of storage devices in this datacenter.
      * 
      * @see API: <a href=

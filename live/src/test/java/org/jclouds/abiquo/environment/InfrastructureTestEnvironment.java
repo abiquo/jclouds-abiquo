@@ -56,6 +56,7 @@ import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
+import org.jclouds.abiquo.predicates.infrastructure.StorageDevicePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.jclouds.abiquo.reference.AbiquoEdition;
@@ -63,7 +64,7 @@ import org.jclouds.abiquo.util.Config;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
-import com.abiquo.model.enumerator.StorageTechnologyType;
+import com.google.common.collect.Iterables;
 import com.google.common.io.Resources;
 
 /**
@@ -243,14 +244,18 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     protected void createStorageDevice()
     {
         String ip = Config.get("abiquo.storage.address");
-        StorageTechnologyType type =
-            StorageTechnologyType.valueOf(Config.get("abiquo.storage.type"));
+        String type = Config.get("abiquo.storage.type");
         String user = Config.get("abiquo.storage.user");
         String pass = Config.get("abiquo.storage.pass");
 
+        List<StorageDevice> devices = datacenter.listSupportedStorageDevices();
+        StorageDevice device = Iterables.find(devices, StorageDevicePredicates.type(type));
+
         storageDevice =
             StorageDevice.builder(context.getApiContext(), datacenter).iscsiIp(ip).managementIp(ip)
-                .name(PREFIX + "Storage Device").username(user).password(pass).type(type).build();
+                .name(PREFIX + "Storage Device").username(user).password(pass).type(type)
+                .managementPort(device.getManagementPort()).iscsiPort(device.getIscsiPort())
+                .username(user).password(pass).build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
