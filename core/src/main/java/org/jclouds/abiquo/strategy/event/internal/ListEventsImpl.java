@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.strategy.admin.internal;
+package org.jclouds.abiquo.strategy.event.internal;
 
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.Event.Event;
-import org.jclouds.abiquo.strategy.admin.ListEvents;
+import org.jclouds.abiquo.domain.event.Event;
+import org.jclouds.abiquo.strategy.event.ListEvents;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.event.EventsDto;

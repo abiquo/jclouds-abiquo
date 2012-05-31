@@ -21,6 +21,7 @@ package org.jclouds.abiquo;
 
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
+import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.abiquo.internal.AbiquoContextImpl;
@@ -72,4 +73,10 @@ public interface AbiquoContext extends ComputeServiceContext
      */
     MonitoringService getMonitoringService();
 
+    /**
+     * Returns the event service.
+     * <p>
+     * This service provides an entry point to event management tasks.
+     */
+    EventService getEventService();
 }

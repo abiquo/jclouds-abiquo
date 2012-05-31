@@ -16,22 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jclouds.abiquo.features.services;
 
-package org.jclouds.abiquo.strategy.admin;
-
-import org.jclouds.abiquo.domain.Event.Event;
-import org.jclouds.abiquo.strategy.ListRootEntities;
-import org.jclouds.abiquo.strategy.admin.internal.ListEventsImpl;
+import org.jclouds.abiquo.domain.event.Event;
+import org.jclouds.abiquo.internal.BaseEventService;
 
 import com.google.inject.ImplementedBy;
 
 /**
- * List events.
+ * Provides high level Abiquo event operations.
  * 
+ * @author Ignasi Barrera
  * @author Vivien Mahé
  */
-@ImplementedBy(ListEventsImpl.class)
-public interface ListEvents extends ListRootEntities<Event>
+@ImplementedBy(BaseEventService.class)
+public interface EventService
 {
-
+    /**
+     * Get the list of all events.
+     */
+    Iterable<Event> listEvents();
 }
