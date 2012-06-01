@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
 
 import java.lang.reflect.Constructor;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,6 +62,17 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         super();
         this.context = checkNotNull(context, "context");
         this.target = checkNotNull(target, "target");
+    }
+
+    /**
+     * Returns the URI that identifies the transport object
+     * 
+     * @return The URI identifying the transport object
+     */
+    public URI getURI()
+    {
+        return URI.create(target.searchLink("self") == null ? target.searchLink("edit").getHref()
+            : target.searchLink("self").getHref());
     }
 
     /**
@@ -224,4 +236,5 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         AsyncTask[] taskArr = new AsyncTask[tasks.size()];
         return tasks.toArray(taskArr);
     }
+
 }

@@ -115,6 +115,7 @@ public class Conversion extends DomainWrapper<ConversionDto>
      */
     public AsyncTask restartFailedConversion()
     {
+        target.setState(ConversionState.ENQUEUED);
         AcceptedRequestDto<String> taskRef =
             context.getApi().getVirtualMachineTemplateClient().updateConversion(target);
 

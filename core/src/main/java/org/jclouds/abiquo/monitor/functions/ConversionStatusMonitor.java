@@ -48,6 +48,7 @@ public class ConversionStatusMonitor implements Function<Conversion, MonitorStat
 
         try
         {
+            logger.info(conversion.getState().name());
             conversion.refresh();
 
             switch (conversion.getState())

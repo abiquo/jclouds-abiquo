@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.filter;
+
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +43,9 @@ import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterables;
+import com.google.common.collect.Lists;
 
 /**
  * Adds high level functionality to {@link VirtualMachineTemplateDto}.
@@ -132,6 +137,29 @@ public class VirtualMachineTemplate extends DomainWithTasksWrapper<VirtualMachin
         ConversionsDto convs =
             context.getApi().getVirtualMachineTemplateClient().listConversions(target);
         return wrap(context, Conversion.class, convs.getCollection());
+    }
+
+    /**
+     * List all the conversions for the virtual machine template matching the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The list all the conversions for the virtual machine template matching the given
+     *         filter.
+     */
+    public List<Conversion> listConversions(final Predicate<Conversion> filter)
+    {
+        return Lists.newLinkedList(filter(listConversions(), filter));
+    }
+
+    /**
+     * Gets a single conversion in the virtual machine template matching the given filter.
+     * 
+     * @param filter The filter to apply.
+     * @return The conversion or <code>null</code> if none matched the given filter.
+     */
+    public Conversion findConversion(final Predicate<Conversion> filter)
+    {
+        return Iterables.getFirst(filter(listConversions(), filter), null);
     }
 
     /**
