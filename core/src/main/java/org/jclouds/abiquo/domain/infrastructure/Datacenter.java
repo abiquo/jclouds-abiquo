@@ -303,8 +303,12 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
     /**
      * Retrieve the list of supported storage devices.
+     * <p>
+     * This method will get the list of the storage devices that are supported in the datacenter.
      * 
-     * @return List of supported storage devices.
+     * @return List of supported storage devices. This list has only the default information for the
+     *         storage devices, such as the management and iscsi ports, or the default credentials
+     *         to access the device.
      */
     @EnterpriseEdition
     public List<StorageDevice> listSupportedStorageDevices()
