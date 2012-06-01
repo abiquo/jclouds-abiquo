@@ -1543,7 +1543,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.persistentPayload()),
-            VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
+            VirtualMachinePersistentDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

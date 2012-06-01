@@ -30,6 +30,7 @@ import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.Nic;
@@ -43,10 +44,12 @@ import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
@@ -472,6 +475,46 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
     public void setGatewayNetwork(final Network network)
     {
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
+    }
+
+    /**
+     * Makes the virtual machine persistent
+     * 
+     * @param persistentName new name of the persistent virtual machine
+     * @param tier tier where persist the virtual machine
+     * @return
+     */
+    public AsyncTask makePersistent(final String persistentName, final Tier tier)
+    {
+        return makePersistent(persistentName, tier.unwrap(), "tier");
+    }
+
+    /**
+     * Makes the virtual machine persistent
+     * 
+     * @param persistentName new name of the persistent virtual machine
+     * @param volume volume where persist the virtual machine
+     * @return
+     */
+    public AsyncTask makePersistent(final String persistentName, final Volume volume)
+    {
+        return makePersistent(persistentName, volume.unwrap(), "volume");
+    }
+
+    private AsyncTask makePersistent(final String persistentName,
+        final SingleResourceTransportDto dto, final String storageLinkName)
+    {
+        VirtualMachinePersistentDto persistentOptions = new VirtualMachinePersistentDto();
+        persistentOptions.setPersistentName(persistentName);
+        RESTLink storageLink = dto.searchLink("self");
+        storageLink.setRel(storageLinkName);
+        persistentOptions.addLink(storageLink);
+
+        AcceptedRequestDto<String> response =
+            context.getApi().getCloudClient()
+                .makePersistentVirtualMachine(unwrap(), persistentOptions);
+
+        return getTask(response);
     }
 
     // Builder

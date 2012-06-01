@@ -747,7 +747,7 @@ public interface CloudAsyncClient
      */
     @POST
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @Produces(VirtualMachineTaskDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachinePersistentDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> makePersistentVirtualMachine(
         @EndpointLink("persistent") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
