@@ -251,11 +251,14 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         List<StorageDevice> devices = datacenter.listSupportedStorageDevices();
         StorageDevice device = Iterables.find(devices, StorageDevicePredicates.type(type));
 
-        storageDevice =
-            StorageDevice.builder(context.getApiContext(), datacenter).iscsiIp(ip).managementIp(ip)
-                .name(PREFIX + "Storage Device").username(user).password(pass).type(type)
-                .managementPort(device.getManagementPort()).iscsiPort(device.getIscsiPort())
-                .username(user).password(pass).build();
+        storageDevice = StorageDevice.builder(context.getApiContext(), datacenter) //
+            .name(PREFIX + "Storage Device")//
+            .type(type)//
+            .managementIp(ip).managementPort(device.getManagementPort())//
+            .iscsiIp(ip).iscsiPort(device.getIscsiPort()) //
+            .username(user)//
+            .password(pass) //
+            .build();
 
         storageDevice.save();
         assertNotNull(storageDevice.getId());
