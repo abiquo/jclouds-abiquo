@@ -33,7 +33,6 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.RestContext;
 
-import com.abiquo.model.enumerator.StorageTechnologyType;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
@@ -61,7 +60,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected StorageDevice(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final StorageDeviceDto target)
+    protected StorageDevice(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final StorageDeviceDto target)
     {
         super(context, target);
     }
@@ -313,7 +313,8 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
         return Iterables.getFirst(filter(listTiersFromDatacenter(), filter), null);
     }
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
     }
@@ -336,11 +337,12 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
 
         private String password;
 
-        private StorageTechnologyType type;
+        private String type;
 
         private String username;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+            final Datacenter datacenter)
         {
             super();
             checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
@@ -391,20 +393,9 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
             return this;
         }
 
-        public Builder type(final StorageTechnologyType type)
+        public Builder type(final String type)
         {
             this.type = type;
-
-            // Set default values
-            if (managementPort == null)
-            {
-                managementPort = type.getManagementPort();
-            }
-            if (iscsiPort == null)
-            {
-                iscsiPort = type.getISCSIPort();
-            }
-
             return this;
         }
 
@@ -479,7 +470,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
         return target.getPassword();
     }
 
-    public StorageTechnologyType getType()
+    public String getType()
     {
         return target.getStorageTechnology();
     }
@@ -519,7 +510,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
         target.setPassword(password);
     }
 
-    public void setType(final StorageTechnologyType type)
+    public void setType(final String type)
     {
         target.setStorageTechnology(type);
     }

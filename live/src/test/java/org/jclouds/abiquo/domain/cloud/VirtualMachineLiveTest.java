@@ -25,6 +25,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
 
 import java.util.List;
 
@@ -104,14 +105,14 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
         deleteVolume(volume);
     }
 
-    public void testRebootVirtualMachine()
+    public void testRebootVirtualMachineFailsWhenNotAllocated()
     {
         // Since the virtual machine is not deployed, this should not generate a task
 
         try
         {
-            AsyncTask task = env.virtualMachine.reboot();
-            assertNull(task);
+            env.virtualMachine.reboot();
+            fail("Reboot should have failed for the NOT_ALLOCATED virtual machine");
         }
         catch (AbiquoException ex)
         {

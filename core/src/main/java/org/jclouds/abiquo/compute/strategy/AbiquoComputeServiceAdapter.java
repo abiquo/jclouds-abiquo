@@ -186,11 +186,7 @@ public class AbiquoComputeServiceAdapter
     {
         VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
         VirtualMachine vm = getNode(id);
-
-        // TODO: Implement the reboot method in jclouds-abiquo core
-        vm.changeState(VirtualMachineState.OFF);
-        monitor.awaitState(VirtualMachineState.OFF, vm);
-        vm.changeState(VirtualMachineState.ON);
+        vm.reboot();
         monitor.awaitState(VirtualMachineState.ON, vm);
     }
 
