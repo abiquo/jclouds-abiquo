@@ -25,6 +25,7 @@ import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
+import com.abiquo.model.enumerator.SeverityType;
 import com.abiquo.server.core.event.EventDto;
 
 /**
@@ -208,12 +209,12 @@ public class Event extends DomainWrapper<EventDto>
         target.setIdPhysicalMachine(idPhysicalMachine);
     }
 
-    public String getSeverity()
+    public SeverityType getSeverity()
     {
         return target.getSeverity();
     }
 
-    public void setSeverity(final String severity)
+    public void setSeverity(final SeverityType severity)
     {
         target.setSeverity(severity);
     }

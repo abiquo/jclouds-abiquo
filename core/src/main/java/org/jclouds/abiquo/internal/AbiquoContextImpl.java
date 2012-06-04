@@ -30,6 +30,7 @@ import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
+import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.compute.ComputeService;
@@ -57,19 +58,23 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
 
     private final MonitoringService monitoringService;
 
+    private final EventService eventService;
+
     @Inject
     public AbiquoContextImpl(@Provider final Context wrapped,
         @Provider final TypeToken< ? extends Context> wrappedType,
         final ComputeService computeService, final Utils utils,
         final RestContext<AbiquoClient, AbiquoAsyncClient> providerSpecificContext,
         final AdministrationService administrationService, final CloudService cloudService,
-        final SearchService searchService, final MonitoringService monitoringService)
+        final SearchService searchService, final MonitoringService monitoringService,
+        final EventService eventService)
     {
         super(wrapped, wrappedType, computeService, utils);
         this.administrationService = checkNotNull(administrationService, "administrationService");
         this.cloudService = checkNotNull(cloudService, "cloudService");
         this.searchService = checkNotNull(searchService, "searchService");
         this.monitoringService = checkNotNull(monitoringService, "monitoringService");
+        this.eventService = checkNotNull(eventService, "eventService");
     }
 
     @Override
@@ -102,4 +107,9 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
         return monitoringService;
     }
 
+    @Override
+    public EventService getEventService()
+    {
+        return eventService;
+    }
 }
