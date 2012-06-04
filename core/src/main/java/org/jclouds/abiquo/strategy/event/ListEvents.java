@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.strategy.event;
 
 import org.jclouds.abiquo.domain.event.Event;
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.strategy.ListRootEntities;
 import org.jclouds.abiquo.strategy.event.internal.ListEventsImpl;
 
@@ -33,5 +34,5 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(ListEventsImpl.class)
 public interface ListEvents extends ListRootEntities<Event>
 {
-
+    Iterable<Event> execute(FilterOptions options);
 }

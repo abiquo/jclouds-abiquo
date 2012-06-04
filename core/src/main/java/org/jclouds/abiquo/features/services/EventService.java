@@ -19,6 +19,7 @@
 package org.jclouds.abiquo.features.services;
 
 import org.jclouds.abiquo.domain.event.Event;
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.internal.BaseEventService;
 
 import com.google.inject.ImplementedBy;
@@ -36,4 +37,9 @@ public interface EventService
      * Get the list of all events.
      */
     Iterable<Event> listEvents();
+
+    /**
+     * Get the list of all events using filters.
+     */
+    Iterable<Event> listEvents(FilterOptions options);
 }

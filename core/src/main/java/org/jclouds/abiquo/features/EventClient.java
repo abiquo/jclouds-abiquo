@@ -20,6 +20,7 @@ package org.jclouds.abiquo.features;
 
 import java.util.concurrent.TimeUnit;
 
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.server.core.event.EventsDto;
@@ -42,4 +43,11 @@ public interface EventClient
      * @return The list of events.
      */
     EventsDto listEvents();
+
+    /**
+     * List events using filters.
+     * 
+     * @return The list of events using filters.
+     */
+    EventsDto listEvents(FilterOptions options);
 }

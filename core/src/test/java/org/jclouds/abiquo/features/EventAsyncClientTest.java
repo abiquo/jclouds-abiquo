@@ -43,7 +43,7 @@ public class EventAsyncClientTest extends BaseAbiquoAsyncClientTest<EventAsyncCl
         Method method = EventAsyncClient.class.getMethod("listEvents");
         GeneratedHttpRequest<EventAsyncClient> request = processor.createRequest(method);
 
-        assertRequestLineEquals(request, "GET http://localhost/api/admin/events HTTP/1.1");
+        assertRequestLineEquals(request, "GET http://localhost/api/events HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + EventsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 

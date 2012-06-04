@@ -22,8 +22,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 
+import org.jclouds.abiquo.binders.AppendOptionsToPath;
+import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
+import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.JAXBResponseParser;
 import org.jclouds.rest.annotations.RequestFilters;
 
@@ -46,8 +49,18 @@ public interface EventAsyncClient
      * @see EventClient#listEvents()
      */
     @GET
-    @Path("/admin/events")
+    @Path("/events")
     @Consumes(EventsDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<EventsDto> listEvents();
+
+    /**
+     * @see EventClient#listEvents()
+     */
+    @GET
+    @Path("/events")
+    @Consumes(EventsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<EventsDto> listEvents(
+        @BinderParam(AppendOptionsToPath.class) FilterOptions options);
 }
