@@ -75,4 +75,24 @@ public class BindSupportedDevicesLinkToPathTest
 
         assertEquals(binder.getNewEndpoint(request, datacenter), "http://foo/bar/action/supported");
     }
+
+    @Test(expectedExceptions = NullPointerException.class)
+    public void testGetNewEnpointWithoutLink() throws Exception
+    {
+        DatacenterDto datacenter = new DatacenterDto();
+
+        BindSupportedDevicesLinkToPath binder = new BindSupportedDevicesLinkToPath();
+
+        Method withEndpointLink =
+            InfrastructureAsyncClient.class.getMethod("listSupportedStorageDevices",
+                DatacenterDto.class);
+
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            GeneratedHttpRequest.<InfrastructureAsyncClient> requestBuilder()
+                .declaring(InfrastructureAsyncClient.class).javaMethod(withEndpointLink)
+                .args(ImmutableList.<Object> of(datacenter)).method(HttpMethod.GET)
+                .endpoint(URI.create("http://foo/bar")).build();
+
+        assertEquals(binder.getNewEndpoint(request, datacenter), "http://foo/bar/action/supported");
+    }
 }

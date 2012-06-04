@@ -319,6 +319,35 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     }
 
     /**
+     * Retrieve the list of supported storage devices matching the filter.
+     * <p>
+     * This method will get the list of the storage devices that are supported in the datacenter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @return List of supported storage devices. This list has only the default information for the
+     *         storage devices, such as the management and iscsi ports, or the default credentials
+     *         to access the device.
+     */
+    @EnterpriseEdition
+    public List<StorageDevice> listSupportedStorageDevices(final Predicate<StorageDevice> filter)
+    {
+        return Lists.newLinkedList(filter(listSupportedStorageDevices(), filter));
+    }
+
+    /**
+     * Retrieve a single supported storage devices matching the filter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @return First supported storage device matching the filter or <code>null</code> if there is
+     *         none.
+     */
+    @EnterpriseEdition
+    public StorageDevice findSupportedStorageDevice(final Predicate<StorageDevice> filter)
+    {
+        return Iterables.getFirst(filter(listSupportedStorageDevices(), filter), null);
+    }
+
+    /**
      * Retrieve the list of storage devices in this datacenter.
      * 
      * @see API: <a href=
