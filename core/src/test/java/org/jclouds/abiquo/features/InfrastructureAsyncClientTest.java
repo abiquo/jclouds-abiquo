@@ -1317,6 +1317,27 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testListSupportedStorageDevices() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listSupportedStorageDevices",
+                DatacenterDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/storage/devices/action/supported HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + StorageDevicesDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testCreateStorageDevice() throws SecurityException, NoSuchMethodException,
         IOException
     {

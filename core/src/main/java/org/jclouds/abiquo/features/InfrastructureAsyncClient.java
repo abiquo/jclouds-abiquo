@@ -35,6 +35,7 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
+import org.jclouds.abiquo.binders.infrastructure.BindSupportedDevicesLinkToPath;
 import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
 import org.jclouds.abiquo.binders.infrastructure.ucs.BindOrganizationParameters;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
@@ -691,6 +692,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
     /*********************** Storage Device ***********************/
+
     /**
      * @see InfrastructureClient#listStorageDevices(DatacenterDto)
      */
@@ -700,6 +702,16 @@ public interface InfrastructureAsyncClient
     @JAXBResponseParser
     ListenableFuture<StorageDevicesDto> listStorageDevices(
         @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
+
+    /**
+     * @see InfrastructureClient#listSupportedStorageDevices(DatacenterDto)
+     */
+    @EnterpriseEdition
+    @GET
+    @Consumes(StorageDevicesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<StorageDevicesDto> listSupportedStorageDevices(
+        @EndpointLink("devices") @BinderParam(BindSupportedDevicesLinkToPath.class) DatacenterDto datacenter);
 
     /**
      * @see InfrastructureClient#getStorageDevice(DatacenterDto, Integer)
