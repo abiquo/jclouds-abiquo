@@ -20,8 +20,9 @@
 package org.jclouds.abiquo.binders.cloud;
 
 import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
-import static org.testng.Assert.assertEquals;
+import static org.jclouds.abiquo.util.Assert.assertPayloadEquals;
 
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.util.NoSuchElementException;
@@ -36,6 +37,7 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.google.common.collect.ImmutableList;
@@ -122,7 +124,8 @@ public class BindNetworkConfigurationRefToPayloadTest
         binder.bindToRequest(request, network);
     }
 
-    public void testBindNetworkConfigurationRef() throws SecurityException, NoSuchMethodException
+    public void testBindNetworkConfigurationRef() throws SecurityException, NoSuchMethodException,
+        IOException
     {
         VirtualMachineDto vm = CloudResources.virtualMachinePut();
         VLANNetworkDto network = NetworkResources.privateNetworkPut();
@@ -142,8 +145,8 @@ public class BindNetworkConfigurationRefToPayloadTest
         String configLink = vm.searchLink("configurations").getHref() + "/" + network.getId();
 
         GeneratedHttpRequest<TestNetworkConfig> newRequest = binder.bindToRequest(request, network);
-        assertEquals(newRequest.getPayload().getRawContent(), withHeader("<links><link href=\""
-            + configLink + "\" rel=\"network_configuration\"/></links>"));
+        assertPayloadEquals(newRequest.getPayload(), withHeader("<links><link href=\"" + configLink
+            + "\" rel=\"network_configuration\"/></links>"), LinksDto.class);
     }
 
     static interface TestNetworkConfig

@@ -99,7 +99,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertRequestLineEquals(request, "POST http://localhost/api/config/licenses HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + LicenseDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.licensePostPayload()),
-            LicenseDto.BASE_MEDIA_TYPE, false);
+            LicenseDto.class, LicenseDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -211,7 +211,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertRequestLineEquals(request, "PUT http://localhost/api/config/properties/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertyDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.propertyPutPayload()),
-            SystemPropertyDto.BASE_MEDIA_TYPE, false);
+            SystemPropertyDto.class, SystemPropertyDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -263,7 +263,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertRequestLineEquals(request, "POST http://localhost/api/config/categories HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + CategoryDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.categoryPostPayload()),
-            CategoryDto.BASE_MEDIA_TYPE, false);
+            CategoryDto.class, CategoryDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -281,7 +281,7 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         assertRequestLineEquals(request, "PUT http://localhost/api/config/categories/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + CategoryDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(ConfigResources.categoryPutPayload()),
-            CategoryDto.BASE_MEDIA_TYPE, false);
+            CategoryDto.class, CategoryDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

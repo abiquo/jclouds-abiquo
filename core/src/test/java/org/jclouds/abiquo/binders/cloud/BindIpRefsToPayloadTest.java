@@ -19,16 +19,18 @@
 
 package org.jclouds.abiquo.binders.cloud;
 
-import static org.testng.Assert.assertEquals;
+import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
+import static org.jclouds.abiquo.util.Assert.assertPayloadEquals;
 
+import java.io.IOException;
 import java.net.URI;
 
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.xml.XMLParser;
 import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
@@ -58,37 +60,36 @@ public class BindIpRefsToPayloadTest
         binder.bindToRequest(request, new Object());
     }
 
-    public void testBindEmptyArray()
+    public void testBindEmptyArray() throws IOException
     {
         BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new IpPoolManagementDto[] {});
-        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
-            + "<links/>");
+        assertPayloadEquals(request.getPayload(), withHeader("<links/>"), LinksDto.class);
     }
 
-    public void testBindSingleIp()
+    public void testBindSingleIp() throws IOException
     {
         IpPoolManagementDto ip = NetworkResources.privateIpPut();
         BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new IpPoolManagementDto[] {ip});
-        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
-            + "<links><link href=\"" + ip.searchLink("self").getHref() + "\" rel=\""
-            + ip.searchLink("self").getTitle() + "\"/></links>");
+        assertPayloadEquals(request.getPayload(), withHeader("<links><link href=\""
+            + ip.searchLink("self").getHref() + "\" rel=\"" + ip.searchLink("self").getTitle()
+            + "\"/></links>"), LinksDto.class);
     }
 
-    public void testBindMultipleIps()
+    public void testBindMultipleIps() throws IOException
     {
         IpPoolManagementDto ip = NetworkResources.privateIpPut();
         BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new IpPoolManagementDto[] {ip, ip});
-        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
-            + "<links><link href=\"" + ip.searchLink("self").getHref() + "\" rel=\""
-            + ip.searchLink("self").getTitle() + "\"/></links>");
+        assertPayloadEquals(request.getPayload(), withHeader("<links><link href=\""
+            + ip.searchLink("self").getHref() + "\" rel=\"" + ip.searchLink("self").getTitle()
+            + "\"/></links>"), LinksDto.class);
     }
 }

@@ -22,10 +22,16 @@ package org.jclouds.abiquo.util;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
+import java.io.IOException;
+
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
+import org.jclouds.io.Payload;
+import org.jclouds.xml.XMLParser;
+import org.jclouds.xml.internal.JAXBParser;
 
+import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.model.transport.error.ErrorDto;
 
 /**
@@ -50,4 +56,22 @@ public class Assert
         assertNotNull(error);
     }
 
+    /**
+     * Assert that the given payload matches the given string.
+     * 
+     * @param payload The payload to check.
+     * @param expected The expected string.
+     * @param entityClass The entity class for the payload.
+     * @throws IOException If there is an error during serialization.
+     */
+    public static void assertPayloadEquals(final Payload payload, final String expected,
+        final Class< ? extends SingleResourceTransportDto> entityClass) throws IOException
+    {
+        // Serialize and deserialize to avoid formatting issues
+        XMLParser xml = new JAXBParser("false");
+        SingleResourceTransportDto entity = xml.fromXML(expected, entityClass);
+        String toMatch = xml.toXML(entity, entityClass);
+
+        assertEquals(payload.getRawContent(), toMatch);
+    }
 }

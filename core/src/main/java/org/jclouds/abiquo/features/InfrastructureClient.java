@@ -58,6 +58,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -669,7 +670,7 @@ public interface InfrastructureClient
      * @return The list of supported storage devices.
      */
     @EnterpriseEdition
-    StorageDevicesDto listSupportedStorageDevices(DatacenterDto datacenter);
+    StorageDevicesMetadataDto listSupportedStorageDevices(DatacenterDto datacenter);
 
     /**
      * Get the storage device.

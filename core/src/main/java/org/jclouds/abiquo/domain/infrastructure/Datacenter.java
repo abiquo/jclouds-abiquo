@@ -61,6 +61,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
 import com.abiquo.server.core.infrastructure.storage.TiersDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -311,11 +312,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *         to access the device.
      */
     @EnterpriseEdition
-    public List<StorageDevice> listSupportedStorageDevices()
+    public List<StorageDeviceMetadata> listSupportedStorageDevices()
     {
-        StorageDevicesDto devices =
+        StorageDevicesMetadataDto devices =
             context.getApi().getInfrastructureClient().listSupportedStorageDevices(target);
-        return wrap(context, StorageDevice.class, devices.getCollection());
+        return wrap(context, StorageDeviceMetadata.class, devices.getCollection());
     }
 
     /**
@@ -329,7 +330,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *         to access the device.
      */
     @EnterpriseEdition
-    public List<StorageDevice> listSupportedStorageDevices(final Predicate<StorageDevice> filter)
+    public List<StorageDeviceMetadata> listSupportedStorageDevices(
+        final Predicate<StorageDeviceMetadata> filter)
     {
         return Lists.newLinkedList(filter(listSupportedStorageDevices(), filter));
     }
@@ -342,7 +344,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *         none.
      */
     @EnterpriseEdition
-    public StorageDevice findSupportedStorageDevice(final Predicate<StorageDevice> filter)
+    public StorageDeviceMetadata findSupportedStorageDevice(
+        final Predicate<StorageDeviceMetadata> filter)
     {
         return Iterables.getFirst(filter(listSupportedStorageDevices(), filter), null);
     }

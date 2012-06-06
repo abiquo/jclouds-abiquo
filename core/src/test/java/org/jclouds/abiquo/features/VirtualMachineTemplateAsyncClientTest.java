@@ -136,7 +136,7 @@ public class VirtualMachineTemplateAsyncClientTest extends
             + VirtualMachineTemplateDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request,
             withHeader(TemplateResources.virtualMachineTemplatePutPayload()),
-            VirtualMachineTemplateDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineTemplateDto.class, VirtualMachineTemplateDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

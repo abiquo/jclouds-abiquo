@@ -90,6 +90,7 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
+import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolsDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -708,9 +709,9 @@ public interface InfrastructureAsyncClient
      */
     @EnterpriseEdition
     @GET
-    @Consumes(StorageDevicesDto.BASE_MEDIA_TYPE)
+    @Consumes(StorageDevicesMetadataDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<StorageDevicesDto> listSupportedStorageDevices(
+    ListenableFuture<StorageDevicesMetadataDto> listSupportedStorageDevices(
         @EndpointLink("devices") @BinderParam(BindSupportedDevicesLinkToPath.class) DatacenterDto datacenter);
 
     /**
