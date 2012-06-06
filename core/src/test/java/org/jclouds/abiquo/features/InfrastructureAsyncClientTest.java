@@ -119,7 +119,7 @@ public class InfrastructureAsyncClientTest extends
         assertRequestLineEquals(request, "POST http://localhost/api/admin/datacenters HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.datacenterPostPayload()),
-            DatacenterDto.BASE_MEDIA_TYPE, false);
+            DatacenterDto.class, DatacenterDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -155,7 +155,7 @@ public class InfrastructureAsyncClientTest extends
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.datacenterPutPayload()),
-            DatacenterDto.BASE_MEDIA_TYPE, false);
+            DatacenterDto.class, DatacenterDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -281,7 +281,7 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RackDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.rackPostPayload()),
-            RackDto.BASE_MEDIA_TYPE, false);
+            RackDto.class, RackDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -320,7 +320,7 @@ public class InfrastructureAsyncClientTest extends
             "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RackDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.rackPutPayload()),
-            RackDto.BASE_MEDIA_TYPE, false);
+            RackDto.class, RackDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -382,7 +382,7 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/racks HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + UcsRackDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.managedRackPostPayload()),
-            UcsRackDto.BASE_MEDIA_TYPE, false);
+            UcsRackDto.class, UcsRackDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -424,7 +424,7 @@ public class InfrastructureAsyncClientTest extends
             "PUT http://localhost/api/admin/datacenters/1/racks/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + UcsRackDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.managedRackPutPayload()),
-            UcsRackDto.BASE_MEDIA_TYPE, false);
+            UcsRackDto.class, UcsRackDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -761,7 +761,7 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/remoteservices HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RemoteServiceDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request,
-            withHeader(InfrastructureResources.remoteServicePostPayload()),
+            withHeader(InfrastructureResources.remoteServicePostPayload()), RemoteServiceDto.class,
             RemoteServiceDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -805,7 +805,7 @@ public class InfrastructureAsyncClientTest extends
             "PUT http://localhost/api/admin/datacenters/1/remoteservices/nodecollector HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RemoteServiceDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.remoteServicePutPayload()),
-            RemoteServiceDto.BASE_MEDIA_TYPE, false);
+            RemoteServiceDto.class, RemoteServiceDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1112,7 +1112,7 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/racks/1/machines HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + MachineDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.machinePostPayload()),
-            MachineDto.BASE_MEDIA_TYPE, false);
+            MachineDto.class, MachineDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1132,7 +1132,7 @@ public class InfrastructureAsyncClientTest extends
             "PUT http://localhost/api/admin/datacenters/1/racks/1/machines/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + MachineDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.machinePutPayload()),
-            MachineDto.BASE_MEDIA_TYPE, false);
+            MachineDto.class, MachineDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1354,7 +1354,7 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/storage/devices HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + StorageDeviceDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request,
-            withHeader(InfrastructureResources.storageDevicePostPayload()),
+            withHeader(InfrastructureResources.storageDevicePostPayload()), StorageDeviceDto.class,
             StorageDeviceDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -1397,7 +1397,7 @@ public class InfrastructureAsyncClientTest extends
             "PUT http://localhost/api/admin/datacenters/1/storage/devices/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + StorageDeviceDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.storageDevicePutPayload()),
-            StorageDeviceDto.BASE_MEDIA_TYPE, false);
+            StorageDeviceDto.class, StorageDeviceDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1456,7 +1456,7 @@ public class InfrastructureAsyncClientTest extends
             "PUT http://localhost/api/admin/datacenters/1/storage/tiers/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + TierDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.tierPutPayload()),
-            TierDto.BASE_MEDIA_TYPE, false);
+            TierDto.class, TierDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1566,7 +1566,7 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/storage/devices/1/pools HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + StoragePoolDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.storagePoolPostPayload()),
-            StoragePoolDto.BASE_MEDIA_TYPE, false);
+            StoragePoolDto.class, StoragePoolDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1587,7 +1587,7 @@ public class InfrastructureAsyncClientTest extends
             "PUT http://localhost/api/admin/datacenters/1/storage/devices/1/pools/tururututu HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + StoragePoolDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(InfrastructureResources.storagePoolPutPayload()),
-            StoragePoolDto.BASE_MEDIA_TYPE, false);
+            StoragePoolDto.class, StoragePoolDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1736,7 +1736,7 @@ public class InfrastructureAsyncClientTest extends
             "POST http://localhost/api/admin/datacenters/1/network HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + VLANNetworkDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(NetworkResources.vlanNetworkPostPayload()),
-            VLANNetworkDto.BASE_MEDIA_TYPE, false);
+            VLANNetworkDto.class, VLANNetworkDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1756,7 +1756,7 @@ public class InfrastructureAsyncClientTest extends
             "PUT http://localhost/api/admin/datacenters/1/network/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + VLANNetworkDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(NetworkResources.publicNetworkPutPayload()),
-            VLANNetworkDto.BASE_MEDIA_TYPE, false);
+            VLANNetworkDto.class, VLANNetworkDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
