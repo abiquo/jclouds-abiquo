@@ -45,6 +45,7 @@ import org.jclouds.abiquo.domain.infrastructure.ManagedRack;
 import org.jclouds.abiquo.domain.infrastructure.Rack;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
+import org.jclouds.abiquo.domain.infrastructure.StorageDeviceMetadata;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.PublicNetwork;
@@ -56,7 +57,7 @@ import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
-import org.jclouds.abiquo.predicates.infrastructure.StorageDevicePredicates;
+import org.jclouds.abiquo.predicates.infrastructure.StorageDeviceMetadataPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.jclouds.abiquo.reference.AbiquoEdition;
@@ -248,14 +249,15 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         String user = Config.get("abiquo.storage.user");
         String pass = Config.get("abiquo.storage.pass");
 
-        List<StorageDevice> devices = datacenter.listSupportedStorageDevices();
-        StorageDevice device = Iterables.find(devices, StorageDevicePredicates.type(type));
+        List<StorageDeviceMetadata> devices = datacenter.listSupportedStorageDevices();
+        StorageDeviceMetadata metadata =
+            Iterables.find(devices, StorageDeviceMetadataPredicates.type(type));
 
         storageDevice = StorageDevice.builder(context.getApiContext(), datacenter) //
             .name(PREFIX + "Storage Device")//
             .type(type)//
-            .managementIp(ip).managementPort(device.getManagementPort())//
-            .iscsiIp(ip).iscsiPort(device.getIscsiPort()) //
+            .managementIp(ip).managementPort(metadata.getDefaultManagementPort())//
+            .iscsiIp(ip).iscsiPort(metadata.getDefaultIscsiPort()) //
             .username(user)//
             .password(pass) //
             .build();
