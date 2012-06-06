@@ -19,16 +19,18 @@
 
 package org.jclouds.abiquo.binders.cloud;
 
-import static org.testng.Assert.assertEquals;
+import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
+import static org.jclouds.abiquo.util.Assert.assertPayloadEquals;
 
+import java.io.IOException;
 import java.net.URI;
 
 import org.jclouds.abiquo.domain.CloudResources;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.xml.XMLParser;
 import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 
 /**
@@ -60,7 +62,7 @@ public class BindVirtualDatacenterRefToPayloadTest
         binder.bindToRequest(request, new Object());
     }
 
-    public void testBindSingleVolume()
+    public void testBindSingleVolume() throws IOException
     {
         VirtualDatacenterDto vdc = CloudResources.virtualDatacenterPut();
         BindVirtualDatacenterRefToPayload binder =
@@ -68,8 +70,8 @@ public class BindVirtualDatacenterRefToPayloadTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, vdc);
-        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
-            + "<links><link href=\"" + vdc.getEditLink().getHref()
-            + "\" rel=\"virtualdatacenter\"/></links>");
+        assertPayloadEquals(request.getPayload(), withHeader("<links><link href=\""
+            + vdc.getEditLink().getHref() + "\" rel=\"virtualdatacenter\"/></links>"),
+            LinksDto.class);
     }
 }
