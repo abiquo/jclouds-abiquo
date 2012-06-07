@@ -18,10 +18,15 @@
  */
 package org.jclouds.abiquo.domain.event;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
+
+import com.abiquo.model.enumerator.ComponentType;
+import com.abiquo.model.enumerator.EventType;
+import com.abiquo.model.enumerator.SeverityType;
+import com.google.common.collect.Maps;
 
 /**
  * Available options to query events.
@@ -51,11 +56,131 @@ public class EventOptions extends QueryOptions
 
     public static class Builder extends QueryOptionsBuilder<Builder>
     {
-        private HashMap<String, String> filters;
+        private Map<String, String> filters = Maps.newHashMap();
 
-        public Builder filters(final HashMap<String, String> filters)
+        public Builder filters(final Map<String, String> filters)
         {
             this.filters = filters;
+            return this;
+        }
+
+        public Builder severity(final SeverityType severity)
+        {
+            this.filters.put("severity", severity.name());
+            return this;
+        }
+
+        public Builder component(final ComponentType component)
+        {
+            this.filters.put("component", component.getDescription());
+            return this;
+        }
+
+        public Builder actionPerformed(final EventType action)
+        {
+            this.filters.put("actionperformed", action.getDescription());
+            return this;
+        }
+
+        public Builder datacenter(final String dc)
+        {
+            this.filters.put("datacenter", dc);
+            return this;
+        }
+
+        public Builder rack(final String rack)
+        {
+            this.filters.put("rack", rack);
+            return this;
+        }
+
+        public Builder physicalMachine(final String pm)
+        {
+            this.filters.put("physicalmachine", pm);
+            return this;
+        }
+
+        public Builder storageSystem(final String ss)
+        {
+            this.filters.put("storagesystem", ss);
+            return this;
+        }
+
+        public Builder storagePool(final String sp)
+        {
+            this.filters.put("storagepool", sp);
+            return this;
+        }
+
+        public Builder volume(final String volume)
+        {
+            this.filters.put("volume", volume);
+            return this;
+        }
+
+        public Builder network(final String network)
+        {
+            this.filters.put("network", network);
+            return this;
+        }
+
+        public Builder subnet(final String subnet)
+        {
+            this.filters.put("subnet", subnet);
+            return this;
+        }
+
+        public Builder enterprise(final String ent)
+        {
+            this.filters.put("enterprise", ent);
+            return this;
+        }
+
+        public Builder user(final String user)
+        {
+            this.filters.put("user", user);
+            return this;
+        }
+
+        public Builder virtualDatacenter(final String vdc)
+        {
+            this.filters.put("virtualdatacenter", vdc);
+            return this;
+        }
+
+        public Builder virtualApp(final String vapp)
+        {
+            this.filters.put("virtualapp", vapp);
+            return this;
+        }
+
+        public Builder virtualMachine(final String vm)
+        {
+            this.filters.put("virtualMachine", vm);
+            return this;
+        }
+
+        public Builder performedBy(final String pb)
+        {
+            this.filters.put("performedBy", pb);
+            return this;
+        }
+
+        public Builder stacktrace(final String stacktrace)
+        {
+            this.filters.put("stacktrace", stacktrace);
+            return this;
+        }
+
+        public Builder dateFrom(final String date)
+        {
+            this.filters.put("datefrom", date);
+            return this;
+        }
+
+        public Builder dateTo(final String date)
+        {
+            this.filters.put("dateTo", date);
             return this;
         }
 
@@ -64,12 +189,9 @@ public class EventOptions extends QueryOptions
         {
             EventOptions options = new EventOptions();
 
-            if (filters != null)
+            for (Entry<String, String> filter : filters.entrySet())
             {
-                for (Entry<String, String> filter : filters.entrySet())
-                {
-                    options.map.put(filter.getKey(), filter.getValue());
-                }
+                options.map.put(filter.getKey(), filter.getValue());
             }
 
             // Add FilterOptions options

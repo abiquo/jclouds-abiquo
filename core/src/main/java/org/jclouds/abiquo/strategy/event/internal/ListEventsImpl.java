@@ -24,7 +24,7 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.event.Event;
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.event.EventOptions;
 import org.jclouds.abiquo.strategy.event.ListEvents;
 import org.jclouds.rest.RestContext;
 
@@ -53,7 +53,7 @@ public class ListEventsImpl implements ListEvents
     }
 
     @Override
-    public Iterable<Event> execute(final QueryOptions options)
+    public Iterable<Event> execute(final EventOptions options)
     {
         EventsDto result = context.getApi().getEventClient().listEvents(options);
         return wrap(context, Event.class, result.getCollection());

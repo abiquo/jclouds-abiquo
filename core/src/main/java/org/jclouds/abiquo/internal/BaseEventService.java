@@ -26,7 +26,7 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.event.Event;
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.event.EventOptions;
 import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.strategy.event.ListEvents;
 import org.jclouds.rest.RestContext;
@@ -63,7 +63,7 @@ public class BaseEventService implements EventService
     }
 
     @Override
-    public Iterable<Event> listEvents(final QueryOptions options)
+    public Iterable<Event> listEvents(final EventOptions options)
     {
         return listEvents.execute(options);
     }
