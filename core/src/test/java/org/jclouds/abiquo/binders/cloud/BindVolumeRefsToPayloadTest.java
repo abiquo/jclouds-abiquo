@@ -19,16 +19,18 @@
 
 package org.jclouds.abiquo.binders.cloud;
 
-import static org.testng.Assert.assertEquals;
+import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
+import static org.jclouds.abiquo.util.Assert.assertPayloadEquals;
 
+import java.io.IOException;
 import java.net.URI;
 
 import org.jclouds.abiquo.domain.CloudResources;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.xml.XMLParser;
 import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 
 /**
@@ -58,37 +60,36 @@ public class BindVolumeRefsToPayloadTest
         binder.bindToRequest(request, new Object());
     }
 
-    public void testBindEmptyArray()
+    public void testBindEmptyArray() throws IOException
     {
         BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new VolumeManagementDto[] {});
-        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
-            + "<links/>");
+        assertPayloadEquals(request.getPayload(), withHeader("<links/>"), LinksDto.class);
     }
 
-    public void testBindSingleVolume()
+    public void testBindSingleVolume() throws IOException
     {
         VolumeManagementDto volume = CloudResources.volumePut();
         BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new VolumeManagementDto[] {volume});
-        assertEquals(request.getPayload().getRawContent(),
-            XMLParser.DEFAULT_XML_HEADER + "<links><link href=\"" + volume.getEditLink().getHref()
-                + "\" rel=\"" + binder.getRelToUse(volume) + "\"/></links>");
+        assertPayloadEquals(request.getPayload(), withHeader("<links><link href=\""
+            + volume.getEditLink().getHref() + "\" rel=\"" + binder.getRelToUse(volume)
+            + "\"/></links>"), LinksDto.class);
     }
 
-    public void testBindMultipleVolumes()
+    public void testBindMultipleVolumes() throws IOException
     {
         VolumeManagementDto volume = CloudResources.volumePut();
         BindVolumeRefsToPayload binder = new BindVolumeRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, new VolumeManagementDto[] {volume, volume});
-        assertEquals(request.getPayload().getRawContent(),
-            XMLParser.DEFAULT_XML_HEADER + "<links><link href=\"" + volume.getEditLink().getHref()
-                + "\" rel=\"" + binder.getRelToUse(volume) + "\"/></links>");
+        assertPayloadEquals(request.getPayload(), withHeader("<links><link href=\""
+            + volume.getEditLink().getHref() + "\" rel=\"" + binder.getRelToUse(volume)
+            + "\"/></links>"), LinksDto.class);
     }
 }

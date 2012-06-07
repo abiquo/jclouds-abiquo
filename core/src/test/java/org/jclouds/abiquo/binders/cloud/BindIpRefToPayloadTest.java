@@ -19,17 +19,19 @@
 
 package org.jclouds.abiquo.binders.cloud;
 
-import static org.testng.Assert.assertEquals;
+import static org.jclouds.abiquo.domain.DomainUtils.withHeader;
+import static org.jclouds.abiquo.util.Assert.assertPayloadEquals;
 
+import java.io.IOException;
 import java.net.URI;
 
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.xml.XMLParser;
 import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 
 /**
@@ -59,7 +61,7 @@ public class BindIpRefToPayloadTest
         binder.bindToRequest(request, new Object());
     }
 
-    public void testBindIpRef()
+    public void testBindIpRef() throws IOException
     {
         IpPoolManagementDto ip = NetworkResources.privateIpPut();
         RESTLink selfLink = ip.searchLink("self");
@@ -67,8 +69,10 @@ public class BindIpRefToPayloadTest
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         request = binder.bindToRequest(request, ip);
-        assertEquals(request.getPayload().getRawContent(), XMLParser.DEFAULT_XML_HEADER
-            + "<links><link href=\"" + selfLink.getHref() + "\" rel=\"" + selfLink.getTitle()
-            + "\"/></links>");
+        assertPayloadEquals(
+            request.getPayload(),
+            withHeader("<links><link href=\"" + selfLink.getHref() + "\" rel=\""
+                + selfLink.getTitle() + "\"/></links>"), LinksDto.class);
+
     }
 }

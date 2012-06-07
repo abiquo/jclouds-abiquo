@@ -91,7 +91,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
         assertRequestLineEquals(request, "POST http://localhost/api/admin/roles HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RoleDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, withHeader(AdminResources.rolePostPayload()),
+        assertPayloadEquals(request, withHeader(AdminResources.rolePostPayload()), RoleDto.class,
             RoleDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -118,7 +118,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
         checkFilters(request);
     }
 
-    public void testUpdateRole() throws SecurityException, NoSuchMethodException
+    public void testUpdateRole() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = AdminAsyncClient.class.getMethod("updateRole", RoleDto.class);
         GeneratedHttpRequest<AdminAsyncClient> request =
@@ -126,7 +126,7 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/roles/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RoleDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, withHeader(AdminResources.rolePutPayload()),
+        assertPayloadEquals(request, withHeader(AdminResources.rolePutPayload()), RoleDto.class,
             RoleDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

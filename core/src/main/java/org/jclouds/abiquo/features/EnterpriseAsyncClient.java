@@ -47,7 +47,7 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
-import com.abiquo.appliancemanager.transport.TemplatesStateDto;
+import com.abiquo.am.model.TemplatesStateDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;

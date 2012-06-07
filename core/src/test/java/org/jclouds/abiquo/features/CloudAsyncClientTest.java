@@ -144,7 +144,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + VirtualDatacenterDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualDatacenterPostPayload()),
-            VirtualDatacenterDto.BASE_MEDIA_TYPE, false);
+            VirtualDatacenterDto.class, VirtualDatacenterDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -185,7 +185,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + VirtualDatacenterDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualDatacenterPutPayload()),
-            VirtualDatacenterDto.BASE_MEDIA_TYPE, false);
+            VirtualDatacenterDto.class, VirtualDatacenterDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -378,7 +378,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "PUT http://localhost/api/cloud/virtualdatacenters/1/action/defaultvlan HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, withHeader("<links><link href=\"" + netLink.getHref()
-            + "\" rel=\"internalnetwork\"/></links>"), LinksDto.BASE_MEDIA_TYPE, false);
+            + "\" rel=\"internalnetwork\"/></links>"), LinksDto.class, LinksDto.BASE_MEDIA_TYPE,
+            false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -403,7 +404,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "PUT http://localhost/api/cloud/virtualdatacenters/1/action/defaultvlan HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, withHeader("<links><link href=\"" + netLink.getHref()
-            + "\" rel=\"externalnetwork\"/></links>"), LinksDto.BASE_MEDIA_TYPE, false);
+            + "\" rel=\"externalnetwork\"/></links>"), LinksDto.class, LinksDto.BASE_MEDIA_TYPE,
+            false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -469,7 +471,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "POST http://localhost/api/cloud/virtualdatacenters/1/privatenetworks HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + VLANNetworkDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(NetworkResources.vlanNetworkPostPayload()),
-            VLANNetworkDto.BASE_MEDIA_TYPE, false);
+            VLANNetworkDto.class, VLANNetworkDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -490,7 +492,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "PUT http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + VLANNetworkDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(NetworkResources.privateNetworkPutPayload()),
-            VLANNetworkDto.BASE_MEDIA_TYPE, false);
+            VLANNetworkDto.class, VLANNetworkDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -607,8 +609,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             + "\n");
         assertPayloadEquals(request, withHeader("<links><link href=\"" + selfLink.getHref()
             + "\" rel=\"" + selfLink.getTitle() + "\"/><link href=\"" + selfLink.getHref()
-            + "second\" rel=\"" + selfLink.getTitle() + "\"/></links>"), LinksDto.BASE_MEDIA_TYPE,
-            false);
+            + "second\" rel=\"" + selfLink.getTitle() + "\"/></links>"), LinksDto.class,
+            LinksDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -698,7 +700,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + VirtualApplianceDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualAppliancePostPayload()),
-            VirtualApplianceDto.BASE_MEDIA_TYPE, false);
+            VirtualApplianceDto.class, VirtualApplianceDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -720,7 +722,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + VirtualApplianceDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualAppliancePutPayload()),
-            VirtualApplianceDto.BASE_MEDIA_TYPE, false);
+            VirtualApplianceDto.class, VirtualApplianceDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -763,7 +765,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.deployPayload()),
-            VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineTaskDto.class, VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -787,7 +789,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.undeployPayload()),
-            VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineTaskDto.class, VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -855,7 +857,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualMachinePostPayload()),
-            VirtualMachineDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineDto.class, VirtualMachineDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -878,7 +880,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualMachinePutPayload()),
-            VirtualMachineDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineDto.class, VirtualMachineDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -903,7 +905,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualMachinePutPayload()),
-            VirtualMachineDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineDto.class, VirtualMachineDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -928,7 +930,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualMachineStatePayload()),
-            VirtualMachineStateDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineStateDto.class, VirtualMachineStateDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -995,7 +997,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.deployPayload()),
-            VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineTaskDto.class, VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1020,7 +1022,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.undeployPayload()),
-            VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineTaskDto.class, VirtualMachineTaskDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1093,7 +1095,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "PUT http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/configurations HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, withHeader("<links><link href=\"" + configLink
-            + "\" rel=\"network_configuration\"/></links>"), LinksDto.BASE_MEDIA_TYPE, false);
+            + "\" rel=\"network_configuration\"/></links>"), LinksDto.class,
+            LinksDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1190,7 +1193,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             + "\n");
         assertPayloadEquals(request, withHeader("<links><link href=\"" + editLink
             + "\" rel=\"volume\"/><link href=\"" + editLink + "second\" rel=\"volume\"/></links>"),
-            LinksDto.BASE_MEDIA_TYPE, false);
+            LinksDto.class, LinksDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1264,7 +1267,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             + "\n");
         assertPayloadEquals(request, withHeader("<links><link href=\"" + editLink
             + "\" rel=\"disk\"/><link href=\"" + editLink + "second\" rel=\"disk\"/></links>"),
-            LinksDto.BASE_MEDIA_TYPE, false);
+            LinksDto.class, LinksDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1328,7 +1331,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "POST http://localhost/api/cloud/virtualdatacenters/1/disks HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + DiskManagementDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.hardDiskPostPayload()),
-            DiskManagementDto.BASE_MEDIA_TYPE, false);
+            DiskManagementDto.class, DiskManagementDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1458,7 +1461,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + VolumeManagementDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.volumePostPayload()),
-            VolumeManagementDto.BASE_MEDIA_TYPE, false);
+            VolumeManagementDto.class, VolumeManagementDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1478,7 +1481,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.volumePutPayload()),
-            VolumeManagementDto.BASE_MEDIA_TYPE, false);
+            VolumeManagementDto.class, VolumeManagementDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -1518,7 +1521,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "POST http://localhost/api/cloud/virtualdatacenters/1/volumes/1/action/move HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + MovedVolumeDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualDatacenterRefPayload()),
-            LinksDto.BASE_MEDIA_TYPE, false);
+            LinksDto.class, LinksDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

@@ -16,66 +16,51 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-package org.jclouds.abiquo.domain.enterprise;
+package org.jclouds.abiquo.domain.infrastructure;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
-import com.abiquo.am.model.TemplateStateDto;
-import com.abiquo.am.model.TemplateStatusEnumType;
+import com.abiquo.server.core.infrastructure.storage.StorageDeviceMetadataDto;
 
 /**
- * Adds high level functionality to {@link TemplateStateDto}.
+ * metadata describing a Storage Device.
  * 
  * @author Ignasi Barrera
- * @author Francesc Montserrat
  */
-public class TemplateState extends DomainWrapper<TemplateStateDto>
+public class StorageDeviceMetadata extends DomainWrapper<StorageDeviceMetadataDto>
 {
     /**
      * Constructor to be used only by the builder.
      */
-    protected TemplateState(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
-        final TemplateStateDto target)
+    protected StorageDeviceMetadata(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final StorageDeviceMetadataDto target)
     {
         super(context, target);
     }
 
-    // Domain operations
+    // Delegate methods
 
-    public Double getDownloadingProgress()
+    public String getType()
     {
-        return target.getDownloadingProgress();
+        return target.getType();
     }
 
-    public String getErrorCause()
+    public int getDefaultManagementPort()
     {
-        return target.getErrorCause();
+        return target.getDefaultManagementPort();
     }
 
-    public String getMasterOvf()
+    public int getDefaultIscsiPort()
     {
-        return target.getMasterOvf();
+        return target.getDefaultIscsiPort();
     }
 
-    public String getOvfId()
+    public boolean requiresAuthentication()
     {
-        return target.getOvfId();
+        return target.isRequiresAuthentication();
     }
 
-    public TemplateStatusEnumType getStatus()
-    {
-        return target.getStatus();
-    }
-
-    @Override
-    public String toString()
-    {
-        return "TemplateState [getDownloadingProgress()=" + getDownloadingProgress()
-            + ", getErrorCause()=" + getErrorCause() + ", getMasterOvf()=" + getMasterOvf()
-            + ", getOvfId()=" + getOvfId() + ", getStatus()=" + getStatus() + "]";
-    }
 }
