@@ -65,10 +65,8 @@ public class Conversion extends DomainWrapper<ConversionDto>
 
     public void refresh()
     {
-        // TODO must be 'self'
         RESTLink link =
-            checkNotNull(target.searchLink("conversion"), ValidationErrors.MISSING_REQUIRED_LINK
-                + "conversion");
+            checkNotNull(target.searchLink("edit"), ValidationErrors.MISSING_REQUIRED_LINK + "edit");
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = checkNotNull(utils.getAbiquoHttpClient().get(link), "conversion");
