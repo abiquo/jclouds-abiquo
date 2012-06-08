@@ -19,10 +19,15 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
+
+import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.config.Category;
+import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
@@ -54,4 +59,19 @@ public class VirtualMachineTemplateLiveTest extends BaseAbiquoClientLiveTest
         String iconUrl = env.virtualMachine.getTemplate().getIconUrl();
         assertNotNull(iconUrl);
     }
+
+    public void testRequestConversionToSameFormat()
+    {
+        try
+        {
+            env.virtualMachine.getTemplate().requestConversion(
+                env.virtualMachine.getTemplate().getDiskFormatType());
+            fail("Should not be able to create create a conversion to the base format");
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.CONFLICT, "CONVERSION-3");
+        }
+    }
+
 }

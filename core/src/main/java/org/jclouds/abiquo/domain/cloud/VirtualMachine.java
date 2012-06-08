@@ -23,14 +23,14 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.Nic;
@@ -44,10 +44,12 @@ import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
@@ -58,13 +60,10 @@ import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
-import com.abiquo.server.core.task.TasksDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Longs;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -75,7 +74,7 @@ import com.google.inject.TypeLiteral;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/VirtualMachineResource">
  *      http://community.abiquo.com/display/ABI20/VirtualMachineResource</a>
  */
-public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
+public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 {
     /** The virtual appliance where the virtual machine belongs. */
     private VirtualAppliance virtualAppliance;
@@ -86,7 +85,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualMachine(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualMachineDto target)
+    protected VirtualMachine(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final VirtualMachineDto target)
     {
         super(context, target);
     }
@@ -328,34 +328,6 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
     }
 
-    public List<AsyncTask> listTasks()
-    {
-        TasksDto result = context.getApi().getTaskClient().listTasks(target);
-        List<AsyncTask> tasks = wrap(context, AsyncTask.class, result.getCollection());
-
-        // Return the most recent task first
-        Collections.sort(tasks, new Ordering<AsyncTask>()
-        {
-            @Override
-            public int compare(final AsyncTask left, final AsyncTask right)
-            {
-                return Longs.compare(left.getTimestamp(), right.getTimestamp());
-            }
-        }.reverse());
-
-        return tasks;
-    }
-
-    public List<AsyncTask> listTasks(final Predicate<AsyncTask> filter)
-    {
-        return Lists.newLinkedList(filter(listTasks(), filter));
-    }
-
-    public AsyncTask findTask(final Predicate<AsyncTask> filter)
-    {
-        return Iterables.getFirst(filter(listTasks(), filter), null);
-    }
-
     public List<Nic> listAttachedNics()
     {
         NicsDto nics = context.getApi().getCloudClient().listAttachedNics(target);
@@ -505,6 +477,46 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
     }
 
+    /**
+     * Makes the virtual machine persistent
+     * 
+     * @param persistentName new name of the persistent virtual machine
+     * @param tier tier where persist the virtual machine
+     * @return
+     */
+    public AsyncTask makePersistent(final String persistentName, final Tier tier)
+    {
+        return makePersistent(persistentName, tier.unwrap(), "tier");
+    }
+
+    /**
+     * Makes the virtual machine persistent
+     * 
+     * @param persistentName new name of the persistent virtual machine
+     * @param volume volume where persist the virtual machine
+     * @return
+     */
+    public AsyncTask makePersistent(final String persistentName, final Volume volume)
+    {
+        return makePersistent(persistentName, volume.unwrap(), "volume");
+    }
+
+    private AsyncTask makePersistent(final String persistentName,
+        final SingleResourceTransportDto dto, final String storageLinkName)
+    {
+        VirtualMachinePersistentDto persistentOptions = new VirtualMachinePersistentDto();
+        persistentOptions.setPersistentName(persistentName);
+        RESTLink storageLink = dto.searchLink("self");
+        storageLink.setRel(storageLinkName);
+        persistentOptions.addLink(storageLink);
+
+        AcceptedRequestDto<String> response =
+            context.getApi().getCloudClient()
+                .makePersistentVirtualMachine(unwrap(), persistentOptions);
+
+        return getTask(response);
+    }
+
     // Builder
 
     public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
@@ -541,8 +553,8 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
 
         private String uuid;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualAppliance virtualAppliance,
-            final VirtualMachineTemplate template)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+            final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template)
         {
             super();
             checkNotNull(virtualAppliance, ValidationErrors.NULL_RESOURCE + VirtualAppliance.class);
@@ -855,5 +867,4 @@ public class VirtualMachine extends DomainWrapper<VirtualMachineDto>
             + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
             + ", vncPort=" + getVncPort() + "]";
     }
-
 }

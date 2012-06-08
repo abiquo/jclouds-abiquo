@@ -29,6 +29,7 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
@@ -143,6 +144,9 @@ public class CloudResources
         virtualMachine
             .addLink(new RESTLink("undeploy",
                 "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy"));
+        virtualMachine
+            .addLink(new RESTLink("persistent",
+                "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/persistent"));
         virtualMachine.addLink(new RESTLink("virtualappliance",
             "http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1"));
         virtualMachine
@@ -252,6 +256,14 @@ public class CloudResources
         VirtualMachineTaskDto deploy = new VirtualMachineTaskDto();
         deploy.setForceUndeploy(true);
         return deploy;
+    }
+
+    public static VirtualMachinePersistentDto persistentData()
+    {
+        VirtualMachinePersistentDto dto = new VirtualMachinePersistentDto();
+        dto.setPersistentName("New persistent name");
+        dto.addLink(new RESTLink("tier", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        return dto;
     }
 
     public static String virtualDatacenterPostPayload()
@@ -394,6 +406,9 @@ public class CloudResources
         buffer.append(link(
             "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/undeploy",
             "undeploy"));
+        buffer.append(link(
+            "/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/persistent",
+            "persistent"));
         buffer.append(link("/cloud/virtualdatacenters/1/virtualappliances/1", "virtualappliance"));
         buffer.append(link(
             "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1",
@@ -478,6 +493,16 @@ public class CloudResources
         buffer.append("<forceEnterpriseSoftLimits>false</forceEnterpriseSoftLimits>");
         buffer.append("<forceUndeploy>true</forceUndeploy>");
         buffer.append("</virtualmachinetask>");
+        return buffer.toString();
+    }
+
+    public static String persistentPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualmachinepersistent>");
+        buffer.append(link("/cloud/virtualdatacenters/1/tiers/1", "tier"));
+        buffer.append("<persistentName>New persistent name</persistentName>");
+        buffer.append("</virtualmachinepersistent>");
         return buffer.toString();
     }
 

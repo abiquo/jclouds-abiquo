@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.CloudResources;
+import org.jclouds.abiquo.domain.TemplateResources;
 import org.jclouds.abiquo.functions.ReturnNullOn303;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
@@ -46,7 +47,8 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
 {
     /*********************** Task ***********************/
 
-    public void testGetTask() throws SecurityException, NoSuchMethodException, IOException
+    public void testGetTaskVirtualMachine() throws SecurityException, NoSuchMethodException,
+        IOException
     {
         Method method = TaskAsyncClient.class.getMethod("getTask", RESTLink.class);
         GeneratedHttpRequest<TaskAsyncClient> request =
@@ -59,7 +61,7 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks/169f1877-5f17-4f62-9563-974001295c54 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request,"Accept: " + TaskDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + TaskDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -69,7 +71,8 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
         checkFilters(request);
     }
 
-    public void testListTasks() throws SecurityException, NoSuchMethodException, IOException
+    public void testListTasksVirtualMachine() throws SecurityException, NoSuchMethodException,
+        IOException
     {
         Method method =
             TaskAsyncClient.class.getMethod("listTasks", SingleResourceTransportDto.class);
@@ -79,6 +82,51 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/tasks HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + TasksDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetTaskVirtualMachineTemplate() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method = TaskAsyncClient.class.getMethod("getTask", RESTLink.class);
+        GeneratedHttpRequest<TaskAsyncClient> request =
+            processor
+                .createRequest(
+                    method,
+                    new RESTLink("task",
+                        "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/tasks/169f1877-5f17-4f62-9563-974001295c54"));
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/tasks/169f1877-5f17-4f62-9563-974001295c54 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + TaskDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOn303.class);
+
+        checkFilters(request);
+    }
+
+    public void testListTasksVirtualMachineTemplate() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            TaskAsyncClient.class.getMethod("listTasks", SingleResourceTransportDto.class);
+        GeneratedHttpRequest<TaskAsyncClient> request =
+            processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/tasks HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + TasksDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
