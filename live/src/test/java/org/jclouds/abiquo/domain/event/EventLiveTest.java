@@ -30,7 +30,7 @@ import java.util.List;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.cloud.Volume;
-import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -50,7 +50,7 @@ import com.google.common.primitives.Longs;
  * @author Vivien Mahé
  */
 @Test(groups = "live")
-public class EventLivetest extends BaseAbiquoClientLiveTest
+public class EventLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testListEventsFilteredByDatacenter()
     {
@@ -118,37 +118,39 @@ public class EventLivetest extends BaseAbiquoClientLiveTest
         assertEvents(options);
     }
 
-    /**
-     * XXX: Cannot filter by enterprise because the user's enterprise used to perform API requests
-     * is Abiquo
-     **/
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void testListEventsFilteredByEnterprise()
     {
         String currentDate = String.valueOf(new Date().getTime());
 
-        Enterprise ent =
-            Enterprise.builder(context.getApiContext()).name("dummyTestUpdateRS").build();
-        ent.save();
-        ent.setName("Enterprise updated");
-        ent.update();
+        String entName = env.enterprise.getName();
+        env.enterprise.setName("Abiquo updated");
+        env.enterprise.update();
+
+        // Enterprise current =
+        // env.enterpriseAdminContext.getAdministrationService().getCurrentEnterprise();
+        // current.setName("Enterprise updated");
+        // current.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(currentDate).enterprise("Enterprise updated").build();
+            EventOptions.builder().dateFrom(currentDate).enterprise("Abiquo updated").build();
         assertEvents(options);
+
+        env.enterprise.setName(entName);
+        env.enterprise.update();
     }
 
-    /** XXX: Cannot filter by user because the user used to perform API requests is admin/xabiquo **/
-    @Test(enabled = false)
+    @Test(enabled = true)
     public void testListEventsFilteredByUser()
     {
         String currentDate = String.valueOf(new Date().getTime());
 
-        env.user.setName("User updated");
-        env.user.update();
+        User current = env.plainUserContext.getAdministrationService().getCurrentUser();
+        current.setEmail("test@test.com");
+        current.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(currentDate).user("User updated").build();
+            EventOptions.builder().dateFrom(currentDate).user(current.getName()).build();
         assertEvents(options);
     }
 
