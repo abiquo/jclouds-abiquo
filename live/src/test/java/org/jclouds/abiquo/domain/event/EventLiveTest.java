@@ -20,29 +20,21 @@ package org.jclouds.abiquo.domain.event;
 
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 
-import java.util.Collections;
 import java.util.Date;
-import java.util.List;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
-import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
-import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.ComponentType;
 import com.abiquo.model.enumerator.EventType;
 import com.abiquo.model.enumerator.SeverityType;
-import com.abiquo.server.core.event.EventDto;
-import com.google.common.collect.Ordering;
-import com.google.common.primitives.Longs;
+import com.google.common.collect.Iterables;
 
 /**
  * Live integration tests for the {@link Event} domain class.
@@ -89,7 +81,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
         assertEvents(options);
     }
 
-    /** XXX: The tracer does not save the storage device **/
+    /** TODO: The tracer does not save the storage device **/
     @Test(enabled = false)
     public void testListEventsFilteredByStorageDevice()
     {
@@ -104,7 +96,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
         assertEvents(options);
     }
 
-    /** XXX: The tracer does not save the storage pool **/
+    /** TODO: The tracer does not save the storage pool **/
     @Test(enabled = false)
     public void testListEventsFilteredByStoragePool()
     {
@@ -118,7 +110,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
         assertEvents(options);
     }
 
-    /** XXX: The tracer does not save the enterprise event **/
+    /** TODO: The tracer does not save the enterprise event **/
     @Test(enabled = false)
     public void testListEventsFilteredByEnterprise()
     {
@@ -142,7 +134,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
     }
 
     /**
-     * XXX: Using the painUserContext, modifiing the user returns this error: HTTP/1.1 401
+     * TODO: Using the painUserContext, modifiing the user returns this error: HTTP/1.1 401
      * Unauthorized
      **/
     @Test(enabled = false)
@@ -159,7 +151,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
         assertEvents(options);
     }
 
-    /** XXX: The tracer does not save the virtual datacenter **/
+    /** TODO: The tracer does not save the virtual datacenter **/
     @Test(enabled = false)
     public void testListEventsFilteredByVDC()
     {
@@ -206,12 +198,11 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
         Volume volume = createVolume();
         volume.setName(PREFIX + "Event volume");
         volume.update();
+        volume.delete(); // We don't it any more. events already exist
 
         EventOptions options =
             EventOptions.builder().dateFrom(currentDate).volume(PREFIX + "Event volume").build();
         assertEvents(options);
-
-        volume.delete();
     }
 
     public void testListEventsFilteredBySeverity()
@@ -271,38 +262,24 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
 
     private static void assertEvents(final EventOptions options)
     {
-        List<EventDto> events = env.eventClient.listEvents(options).getCollection();
-        assertEquals(events.size(), 1);
+        Iterable<Event> events = env.eventService.listEvents(options);
+        assertEquals(Iterables.size(events), 1);
     }
 
     private Volume createVolume()
     {
-        Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name("Default Tier 1"));
         Volume volume =
-            Volume.builder(context.getApiContext(), env.virtualDatacenter, tier)
+            Volume.builder(context.getApiContext(), env.virtualDatacenter, env.tier)
                 .name(PREFIX + "Event vol").sizeInMb(128).build();
+
         volume.save();
+        assertNotNull(volume.getId());
 
         return volume;
     }
 
     protected VirtualMachine createVirtualMachine()
     {
-        List<VirtualMachineTemplate> templates = env.virtualDatacenter.listAvailableTemplates();
-        assertFalse(templates.isEmpty());
-
-        // Sort by size to use the smallest one
-        Collections.sort(templates, new Ordering<VirtualMachineTemplate>()
-        {
-            @Override
-            public int compare(final VirtualMachineTemplate left, final VirtualMachineTemplate right)
-            {
-                return Longs.compare(left.getDiskFileSize(), right.getDiskFileSize());
-            }
-        });
-
-        env.template = templates.get(0);
-
         VirtualMachine virtualMachine =
             VirtualMachine.builder(context.getApiContext(), env.virtualAppliance, env.template)
                 .cpu(2).name(PREFIX + "Second VirtualMachine").ram(128).build();
