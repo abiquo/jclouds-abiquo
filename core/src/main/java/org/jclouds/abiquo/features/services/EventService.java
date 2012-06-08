@@ -19,7 +19,7 @@
 package org.jclouds.abiquo.features.services;
 
 import org.jclouds.abiquo.domain.event.Event;
-import org.jclouds.abiquo.domain.event.EventOptions;
+import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.internal.BaseEventService;
 
 import com.google.inject.ImplementedBy;

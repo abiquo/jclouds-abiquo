@@ -24,7 +24,7 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.event.Event;
-import org.jclouds.abiquo.domain.event.EventOptions;
+import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.strategy.event.ListEvents;
 import org.jclouds.rest.RestContext;
 

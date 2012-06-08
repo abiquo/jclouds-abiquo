@@ -27,7 +27,7 @@ import org.jclouds.Constants;
 import org.jclouds.ContextBuilder;
 import org.jclouds.abiquo.AbiquoApiMetadata;
 import org.jclouds.abiquo.AbiquoContext;
-import org.jclouds.abiquo.environment.CloudTestEnvironment;
+import org.jclouds.abiquo.environment.EventTestEnvironment;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.testng.ITestContext;
 import org.testng.annotations.AfterSuite;
@@ -47,7 +47,7 @@ public abstract class BaseAbiquoClientLiveTest
     protected static AbiquoContext context;
 
     /** The test environment. */
-    protected static CloudTestEnvironment env;
+    protected static EventTestEnvironment env;
 
     @BeforeSuite(groups = "live")
     protected static void setupClient() throws Exception
@@ -76,7 +76,7 @@ public abstract class BaseAbiquoClientLiveTest
             .overrides(props) //
             .build(AbiquoContext.class);
 
-        env = new CloudTestEnvironment(context);
+        env = new EventTestEnvironment(context);
         env.setup();
     }
 

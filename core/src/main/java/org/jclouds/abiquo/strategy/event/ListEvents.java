@@ -20,7 +20,7 @@
 package org.jclouds.abiquo.strategy.event;
 
 import org.jclouds.abiquo.domain.event.Event;
-import org.jclouds.abiquo.domain.event.EventOptions;
+import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.strategy.ListRootEntities;
 import org.jclouds.abiquo.strategy.event.internal.ListEventsImpl;
 

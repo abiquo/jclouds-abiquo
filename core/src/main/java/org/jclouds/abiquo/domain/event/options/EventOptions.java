@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.domain.event;
+package org.jclouds.abiquo.domain.event.options;
 
 import java.util.Map;
 import java.util.Map.Entry;
@@ -72,13 +72,13 @@ public class EventOptions extends QueryOptions
 
         public Builder component(final ComponentType component)
         {
-            this.filters.put("component", component.getDescription());
+            this.filters.put("component", component.name());
             return this;
         }
 
         public Builder actionPerformed(final EventType action)
         {
-            this.filters.put("actionperformed", action.getDescription());
+            this.filters.put("actionperformed", action.name());
             return this;
         }
 

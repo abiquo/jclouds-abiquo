@@ -16,38 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jclouds.abiquo.features;
+package org.jclouds.abiquo.environment;
 
-import java.util.concurrent.TimeUnit;
-
-import org.jclouds.abiquo.domain.event.options.EventOptions;
-import org.jclouds.concurrent.Timeout;
-
-import com.abiquo.server.core.event.EventsDto;
+import org.jclouds.abiquo.AbiquoContext;
+import org.jclouds.abiquo.features.EventClient;
 
 /**
- * Provides synchronous access to Abiquo Event API.
+ * Test environment for event live tests.
  * 
- * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
- *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see EventAsyncClient
- * @author Ignasi Barrera
  * @author Vivien Mahé
  */
-@Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface EventClient
+public class EventTestEnvironment extends CloudTestEnvironment
 {
-    /**
-     * List events.
-     * 
-     * @return The list of events.
-     */
-    EventsDto listEvents();
+    public EventClient eventClient;
 
-    /**
-     * List events using filters.
-     * 
-     * @return The list of events using filters.
-     */
-    EventsDto listEvents(EventOptions options);
+    public EventTestEnvironment(final AbiquoContext context)
+    {
+        super(context);
+        this.eventClient = context.getApiContext().getApi().getEventClient();
+    }
 }
