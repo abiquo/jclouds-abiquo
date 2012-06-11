@@ -27,7 +27,6 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
@@ -49,7 +48,6 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
-import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
@@ -551,6 +549,8 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
         private String password;
 
+        private String keymap;
+
         private String uuid;
 
         public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
@@ -590,6 +590,12 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         public Builder password(final String password)
         {
             this.password = password;
+            return this;
+        }
+
+        public Builder keymap(final String keymap)
+        {
+            this.keymap = keymap;
             return this;
         }
 
@@ -661,6 +667,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
             }
 
             dto.setPassword(password);
+            dto.setKeymap(keymap);
             dto.setUuid(uuid);
 
             VirtualMachine virtualMachine = new VirtualMachine(context, dto);
@@ -675,7 +682,8 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
             return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
                 .name(in.getName()).description(in.getDescription()).ram(in.getRam())
                 .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
-                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword());
+                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword())
+                .keymap(in.getKeymap());
         }
     }
 
@@ -742,6 +750,11 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return target.getVdrpPort();
     }
 
+    public String getKeymap()
+    {
+        return target.getKeymap();
+    }
+
     public void setCpu(final int cpu)
     {
         target.setCpu(cpu);
@@ -765,6 +778,11 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
     public void setRam(final int ram)
     {
         target.setRam(ram);
+    }
+
+    public void setKeymap(final String keymap)
+    {
+        target.setKeymap(keymap);
     }
 
     private static VolumeManagementDto[] toVolumeDto(final Volume... volumes)
@@ -865,6 +883,6 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
             + getCpu() + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes()
             + ", idType=" + getIdType() + ", name=" + getName() + ", password=" + getPassword()
             + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
-            + ", vncPort=" + getVncPort() + "]";
+            + ", vncPort=" + getVncPort() + ", keymap=" + getKeymap() + "]";
     }
 }
