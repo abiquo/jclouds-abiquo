@@ -18,6 +18,7 @@
  */
 package org.jclouds.abiquo.domain.event.options;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -82,79 +83,79 @@ public class EventOptions extends QueryOptions
             return this;
         }
 
-        public Builder datacenter(final String dc)
+        public Builder datacenterName(final String dc)
         {
             this.filters.put("datacenter", dc);
             return this;
         }
 
-        public Builder rack(final String rack)
+        public Builder rackName(final String rack)
         {
             this.filters.put("rack", rack);
             return this;
         }
 
-        public Builder physicalMachine(final String pm)
+        public Builder physicalMachineName(final String pm)
         {
             this.filters.put("physicalmachine", pm);
             return this;
         }
 
-        public Builder storageSystem(final String ss)
+        public Builder storageSystemName(final String ss)
         {
             this.filters.put("storagesystem", ss);
             return this;
         }
 
-        public Builder storagePool(final String sp)
+        public Builder storagePoolName(final String sp)
         {
             this.filters.put("storagepool", sp);
             return this;
         }
 
-        public Builder volume(final String volume)
+        public Builder volumeName(final String volume)
         {
             this.filters.put("volume", volume);
             return this;
         }
 
-        public Builder network(final String network)
+        public Builder networkName(final String network)
         {
             this.filters.put("network", network);
             return this;
         }
 
-        public Builder subnet(final String subnet)
+        public Builder subnetName(final String subnet)
         {
             this.filters.put("subnet", subnet);
             return this;
         }
 
-        public Builder enterprise(final String ent)
+        public Builder enterpriseName(final String ent)
         {
             this.filters.put("enterprise", ent);
             return this;
         }
 
-        public Builder user(final String user)
+        public Builder userName(final String user)
         {
             this.filters.put("user", user);
             return this;
         }
 
-        public Builder virtualDatacenter(final String vdc)
+        public Builder virtualDatacenterName(final String vdc)
         {
             this.filters.put("virtualdatacenter", vdc);
             return this;
         }
 
-        public Builder virtualApp(final String vapp)
+        public Builder virtualAppName(final String vapp)
         {
             this.filters.put("virtualapp", vapp);
             return this;
         }
 
-        public Builder virtualMachine(final String vm)
+        public Builder virtualMachineName(final String vm)
         {
             this.filters.put("virtualMachine", vm);
             return this;
@@ -166,21 +167,21 @@ public class EventOptions extends QueryOptions
             return this;
         }
 
-        public Builder stacktrace(final String stacktrace)
+        public Builder description(final String description)
         {
-            this.filters.put("stacktrace", stacktrace);
+            this.filters.put("stacktrace", description);
             return this;
         }
 
-        public Builder dateFrom(final String date)
+        public Builder dateFrom(final Date date)
         {
-            this.filters.put("datefrom", date);
+            this.filters.put("datefrom", String.valueOf(date.getTime()));
             return this;
         }
 
-        public Builder dateTo(final String date)
+        public Builder dateTo(final Date date)
         {
-            this.filters.put("dateTo", date);
+            this.filters.put("dateTo", String.valueOf(date.getTime()));
             return this;
         }
 
