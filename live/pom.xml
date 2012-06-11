@@ -175,13 +175,35 @@
                                         </property>
                                         <property>
                                             <name>suitename</name>
-                                            <value>Live Integration
-                                                Tests</value>
+                                            <value>Live Integration Tests</value>
                                         </property>
                                     </properties>
                                 </configuration>
                             </execution>
                         </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>jenkins</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludedGroups>unit,performance,live,ucs</excludedGroups>
+                            <properties>
+                                <property>
+                                    <name>listener</name>
+                                    <value>org.jclouds.abiquo.testng.TestOutputListener</value>
+                                </property>
+                                <property>
+                                    <name>suitename</name>
+                                    <value>Live Integration Tests</value>
+                                </property>
+                            </properties>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
