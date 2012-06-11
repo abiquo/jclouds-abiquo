@@ -38,6 +38,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudClient;
+import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
 
 import com.google.common.collect.Ordering;
@@ -53,6 +54,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     // Environment data made public so tests can use them easily
     public CloudClient cloudClient;
+
+    public EventService eventService;
 
     public VirtualDatacenter virtualDatacenter;
 
@@ -74,6 +77,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     {
         super(context);
         this.cloudClient = context.getApiContext().getApi().getCloudClient();
+        this.eventService = context.getEventService();
     }
 
     @Override

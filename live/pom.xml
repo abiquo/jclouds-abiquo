@@ -94,11 +94,13 @@
 					</includes>
 				</configuration>
 			</plugin>
-              <plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>test-jar</id>
+                        <id>attach-sources</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>test-jar</goal>
                         </goals>
@@ -173,8 +175,7 @@
                                         </property>
                                         <property>
                                             <name>suitename</name>
-                                            <value>Live Integration
-                                                Tests</value>
+                                            <value>Live Integration Tests</value>
                                         </property>
                                     </properties>
                                 </configuration>
@@ -189,17 +190,20 @@
             <build>
                 <plugins>
                     <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-jar-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>attach-sources</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>test-jar</goal>
-                                </goals>
-                            </execution>
-                        </executions>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <excludedGroups>unit,performance,live,ucs</excludedGroups>
+                            <properties>
+                                <property>
+                                    <name>listener</name>
+                                    <value>org.jclouds.abiquo.testng.TestOutputListener</value>
+                                </property>
+                                <property>
+                                    <name>suitename</name>
+                                    <value>Live Integration Tests</value>
+                                </property>
+                            </properties>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>

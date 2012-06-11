@@ -25,7 +25,9 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 
 import org.jclouds.abiquo.domain.TemplateResources;
+import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
+import org.jclouds.abiquo.functions.ReturnTaskReferenceOrNull;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.http.functions.ReleasePayloadAndReturn;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
@@ -33,7 +35,13 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.ConversionState;
+import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.transport.AcceptedRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionDto;
+import com.abiquo.server.core.appslibrary.ConversionRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.inject.TypeLiteral;
@@ -160,6 +168,128 @@ public class VirtualMachineTemplateAsyncClientTest extends
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Conversions ***********************/
+
+    public void testRequestConversion() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("requestConversion",
+                VirtualMachineTemplateDto.class, ConversionRequestDto.class);
+
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
+                TemplateResources.conversionRequestPut());
+
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/action/convert HTTP/1.1");
+
+        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, withHeader(TemplateResources.conversionRequestPutPlayload()),
+            ConversionRequestDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListConversions() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("listConversions",
+                VirtualMachineTemplateDto.class);
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + ConversionsDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListConversionsWithOptions() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("listConversions",
+                VirtualMachineTemplateDto.class, ConversionOptions.class);
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
+                ConversionOptions.builder().hypervisorType(HypervisorType.XENSERVER)
+                    .conversionState(ConversionState.FINISHED).build());
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions"
+                + "?hypervisor=XENSERVER&state=FINISHED HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + ConversionsDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetConversion() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("getConversion",
+                VirtualMachineTemplateDto.class, DiskFormatType.class);
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
+                DiskFormatType.RAW);
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + ConversionDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateConversion() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncClient.class.getMethod("updateConversion",
+                ConversionDto.class);
+
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+            processor.createRequest(method, TemplateResources.conversionPut());
+
+        assertRequestLineEquals(
+            request,
+            "PUT http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW HTTP/1.1");
+
+        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, withHeader(TemplateResources.conversionPutPlayload()),
+            ConversionDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

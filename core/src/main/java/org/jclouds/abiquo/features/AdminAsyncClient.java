@@ -52,7 +52,7 @@ import com.abiquo.server.core.enterprise.UserDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * Provides asynchronous access to Abiquo Infrastructure API.
+ * Provides asynchronous access to Abiquo Admin API.
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>

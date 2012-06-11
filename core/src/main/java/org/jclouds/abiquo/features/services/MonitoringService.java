@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.AsyncTaskMonitor;
+import org.jclouds.abiquo.monitor.ConversionMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
@@ -126,4 +127,11 @@ public interface MonitoringService
      * @return The asynchronous task monitor service.
      */
     public AsyncTaskMonitor getAsyncTaskMonitor();
+
+    /**
+     * Gets the conversion monitor service.
+     * 
+     * @return The conversion monitor service.
+     */
+    public ConversionMonitor getConversionMonitor();
 }

@@ -40,6 +40,7 @@ import org.jclouds.abiquo.events.monitor.FailedEvent;
 import org.jclouds.abiquo.events.monitor.TimeoutEvent;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.AsyncTaskMonitor;
+import org.jclouds.abiquo.monitor.ConversionMonitor;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.abiquo.monitor.VirtualApplianceMonitor;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
@@ -183,6 +184,13 @@ public class BaseMonitoringService implements MonitoringService
     {
         return checkNotNull(context.getUtils().getInjector().getInstance(AsyncTaskMonitor.class),
             "asyncTaskMonitor");
+    }
+
+    @Override
+    public ConversionMonitor getConversionMonitor()
+    {
+        return checkNotNull(context.getUtils().getInjector().getInstance(ConversionMonitor.class),
+            "conversionMonitor");
     }
 
     /**

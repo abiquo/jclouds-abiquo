@@ -25,6 +25,7 @@ import org.jclouds.abiquo.features.AdminClient;
 import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
+import org.jclouds.abiquo.features.EventClient;
 import org.jclouds.abiquo.features.InfrastructureClient;
 import org.jclouds.abiquo.features.TaskClient;
 import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
@@ -83,4 +84,10 @@ public interface AbiquoClient
      */
     @Delegate
     TaskClient getTaskClient();
+
+    /**
+     * Provides synchronous access to Event features.
+     */
+    @Delegate
+    EventClient getEventClient();
 }
