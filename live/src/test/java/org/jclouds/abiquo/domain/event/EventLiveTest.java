@@ -24,6 +24,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import java.util.Date;
+import java.util.UUID;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.Volume;
@@ -49,68 +50,62 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testListEventsFilteredByDatacenter()
     {
-        env.datacenter.setName("Datacenter updated");
+        String name = randomName();
+        env.datacenter.setName(name);
         env.datacenter.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).datacenterName("Datacenter updated")
-                .build();
+            EventOptions.builder().dateFrom(new Date()).datacenterName(name).build();
         assertEvents(options);
     }
 
     public void testListEventsFilteredByRack()
     {
-        env.rack.setName("Rack updated");
+        String name = randomName();
+        env.rack.setName(name);
         env.rack.update();
 
-        EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).rackName("Rack updated").build();
+        EventOptions options = EventOptions.builder().dateFrom(new Date()).rackName(name).build();
         assertEvents(options);
     }
 
     public void testListEventsFilteredByPM()
     {
-        env.machine.setName("PhysicalMachine updated");
+        String name = randomName();
+        env.machine.setName(name);
         env.machine.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date())
-                .physicalMachineName("PhysicalMachine updated").build();
+            EventOptions.builder().dateFrom(new Date()).physicalMachineName(name).build();
         assertEvents(options);
     }
 
-    /** TODO: The tracer does not save the storage device **/
-    @Test(enabled = false)
     public void testListEventsFilteredByStorageDevice()
     {
-        env.storageDevice.setName("StorageDevice updated");
+        String name = randomName();
+        env.storageDevice.setName(name);
         env.storageDevice.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).storageSystemName("StorageDevice updated")
-                .build();
+            EventOptions.builder().dateFrom(new Date()).storageSystemName(name).build();
         assertEvents(options);
     }
 
-    /** TODO: The tracer does not save the storage pool **/
-    @Test(enabled = false)
     public void testListEventsFilteredByStoragePool()
     {
-        env.storagePool.setName("StoragePool updated");
+        String name = env.storagePool.getName();
         env.storagePool.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).storagePoolName("StoragePool updated")
-                .build();
+            EventOptions.builder().dateFrom(new Date()).storagePoolName(name).build();
         assertEvents(options);
     }
 
-    /** TODO: The tracer does not save the enterprise event **/
-    @Test(enabled = false)
     public void testListEventsFilteredByEnterprise()
     {
         String entName = env.enterprise.getName();
-        env.enterprise.setName("Abiquo updated");
+        String name = randomName();
+        env.enterprise.setName(name);
         env.enterprise.update();
 
         // Enterprise current =
@@ -119,7 +114,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
         // current.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).enterpriseName("Abiquo updated").build();
+            EventOptions.builder().dateFrom(new Date()).enterpriseName(name).build();
         assertEvents(options);
 
         env.enterprise.setName(entName);
@@ -127,7 +122,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
     }
 
     /**
-     * TODO: Using the painUserContext, modifiing the user returns this error: HTTP/1.1 401
+     * TODO: Using the painUserContext, modifying the user returns this error: HTTP/1.1 401
      * Unauthorized
      **/
     @Test(enabled = false)
@@ -142,26 +137,25 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
         assertEvents(options);
     }
 
-    /** TODO: The tracer does not save the virtual datacenter **/
-    @Test(enabled = false)
     public void testListEventsFilteredByVDC()
     {
-        env.virtualDatacenter.setName("VirtualDatacenter updated");
+        String name = randomName();
+        env.virtualDatacenter.setName(name);
         env.virtualDatacenter.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date())
-                .virtualDatacenterName("VirtualDatacenter updated").build();
+            EventOptions.builder().dateFrom(new Date()).virtualDatacenterName(name).build();
         assertEvents(options);
     }
 
     public void testListEventsFilteredByVapp()
     {
-        env.virtualAppliance.setName("VirtualApp test");
+        String name = randomName();
+        env.virtualAppliance.setName(name);
         env.virtualAppliance.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).virtualAppName("VirtualApp test").build();
+            EventOptions.builder().dateFrom(new Date()).virtualAppName(name).build();
         assertEvents(options);
     }
 
@@ -171,65 +165,68 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
         vm.delete();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).virtualMachineName("Second VirtualMachine")
-                .actionPerformed(EventType.VM_DELETE).build();
+            EventOptions.builder().dateFrom(new Date()).actionPerformed(EventType.VM_DELETE)
+                .build();
         assertEvents(options);
     }
 
     public void testListEventsFilteredByVolume()
     {
+        String name = randomName();
         Volume volume = createVolume();
-        volume.setName(PREFIX + "Event volume");
+        volume.setName(name);
         volume.update();
-        volume.delete(); // We don't it any more. events already exist
+        volume.delete(); // We don't need it any more. events already exist
 
-        EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).volumeName(PREFIX + "Event volume").build();
+        EventOptions options = EventOptions.builder().dateFrom(new Date()).volumeName(name).build();
         assertEvents(options);
     }
 
     public void testListEventsFilteredBySeverity()
     {
-        env.virtualAppliance.setName("VirtualApp severity");
+        String name = randomName();
+        env.virtualAppliance.setName(name);
         env.virtualAppliance.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).virtualAppName("VirtualApp severity")
+            EventOptions.builder().dateFrom(new Date()).virtualAppName(name)
                 .severity(SeverityType.INFO).build();
         assertEvents(options);
     }
 
     public void testListEventsFilteredByActionPerformed()
     {
-        env.virtualAppliance.setName("VirtualApp updated");
+        String name = randomName();
+        env.virtualAppliance.setName(name);
         env.virtualAppliance.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).virtualAppName("VirtualApp updated")
+            EventOptions.builder().dateFrom(new Date()).virtualAppName(name)
                 .actionPerformed(EventType.VAPP_MODIFY).build();
         assertEvents(options);
     }
 
     public void testListEventsFilteredByComponent()
     {
-        env.virtualAppliance.setName("VirtualApp component");
+        String name = randomName();
+        env.virtualAppliance.setName(name);
         env.virtualAppliance.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).virtualAppName("VirtualApp component")
+            EventOptions.builder().dateFrom(new Date()).virtualAppName(name)
                 .component(ComponentType.VIRTUAL_APPLIANCE).build();
         assertEvents(options);
     }
 
     public void testListEventsFilteredByDescription()
     {
-        env.virtualAppliance.setName("VirtualApp description");
+        String name = randomName();
+        env.virtualAppliance.setName(name);
         env.virtualAppliance.update();
 
         EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).virtualAppName("VirtualApp description")
-                .description("Virtual appliance 'VirtualApp description' has been modified.")
-                .build();
+            EventOptions.builder().dateFrom(new Date()).virtualAppName(name)
+                .description("Virtual appliance '" + name + "' has been modified.").build();
         assertEvents(options);
     }
 
@@ -258,11 +255,16 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
     {
         VirtualMachine virtualMachine =
             VirtualMachine.builder(context.getApiContext(), env.virtualAppliance, env.template)
-                .cpu(2).name(PREFIX + "Second VirtualMachine").ram(128).build();
+                .cpu(2).ram(128).build();
 
         virtualMachine.save();
         assertNotNull(virtualMachine.getId());
 
         return virtualMachine;
+    }
+
+    private static String randomName()
+    {
+        return PREFIX + UUID.randomUUID().toString().substring(0, 12);
     }
 }
