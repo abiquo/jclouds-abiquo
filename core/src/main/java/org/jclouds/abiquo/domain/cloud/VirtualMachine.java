@@ -478,11 +478,31 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
     }
 
     /**
-     * Makes the virtual machine persistent
+     * Checks if the virtual machine is persistent.
+     * <p>
+     * Persistent virtual machines have the system disc in an external volume. This way, when the
+     * virtual machine is undeployed, the contents of the system disk remain in the storage device
+     * and the user can deploy the virtual machine again without losing the data in the system disk.
      * 
-     * @param persistentName new name of the persistent virtual machine
-     * @param tier tier where persist the virtual machine
-     * @return
+     * @return Boolean indicating if the virtual machine is persistent.
+     */
+    public boolean isPersistent()
+    {
+        return getTemplate().unwrap().searchLink("volume") != null;
+    }
+
+    /**
+     * Makes the virtual machine persistent.
+     * <p>
+     * When making a virtual machine persistent, an external volume will be created in the provided
+     * {@link Tier}, and the system disk of the virtual machine will be dumped to it. The virtual
+     * machine will then be configured to boot the volume in order to keep all changes made to the
+     * system disk even if the virtual machine is undeployed.
+     * 
+     * @param persistentName The name of the persistent virtual machine.
+     * @param tier The tier where the volume that will be used as the system disk will be created.
+     * @return A task reference that can be used to track the progress of the persistent conversion
+     *         process.
      */
     public AsyncTask makePersistent(final String persistentName, final Tier tier)
     {
@@ -490,11 +510,19 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
     }
 
     /**
-     * Makes the virtual machine persistent
+     * Makes the virtual machine persistent.
+     * <p>
+     * When making a virtual machine persistent, an external volume will be created in the provided
+     * {@link Volume}, and the system disk of the virtual machine will be dumped to it. The virtual
+     * machine will then be configured to boot the volume in order to keep all changes made to the
+     * system disk even if the virtual machine is undeployed.
+     * <p>
+     * The volume must be big enough to contain the entire system disk.
      * 
      * @param persistentName new name of the persistent virtual machine
      * @param volume volume where persist the virtual machine
-     * @return
+     * @return A task reference that can be used to track the progress of the persistent conversion
+     *         process.
      */
     public AsyncTask makePersistent(final String persistentName, final Volume volume)
     {
