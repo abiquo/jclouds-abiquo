@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain.cloud;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
@@ -61,6 +62,11 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
     {
         VirtualMachineState state = env.virtualMachine.getState();
         assertEquals(state, VirtualMachineState.NOT_ALLOCATED);
+    }
+
+    public void testIsPersistent()
+    {
+        assertFalse(env.virtualMachine.isPersistent());
     }
 
     public void testGetVirtualAppliance()
