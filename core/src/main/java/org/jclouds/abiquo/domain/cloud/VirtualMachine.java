@@ -885,6 +885,6 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
             + getCpu() + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes()
             + ", idType=" + getIdType() + ", name=" + getName() + ", password=" + getPassword()
             + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
-            + ", vncPort=" + getVncPort() + "]";
+            + ", vncPort=" + getVncPort() + ", keymap=" + getKeymap() + "]";
     }
 }
