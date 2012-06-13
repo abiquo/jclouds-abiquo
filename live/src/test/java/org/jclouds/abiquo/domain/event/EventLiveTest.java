@@ -240,7 +240,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
 
     private Volume createVolume()
     {
-        Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name("Default Tier 1"));
+        Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name(env.tier.getName()));
         Volume volume =
             Volume.builder(context.getApiContext(), env.virtualDatacenter, tier)
                 .name(PREFIX + "Event vol").sizeInMb(32).build();
