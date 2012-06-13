@@ -122,7 +122,7 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
         }
 
         @SuppressWarnings("unchecked")
-        public T tag(final int tag)
+        public T tag(final Integer tag)
         {
             this.tag = tag;
             return (T) this;
@@ -171,7 +171,7 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
         }
 
         @SuppressWarnings("unchecked")
-        public T defaultNetwork(final boolean defaultNetwork)
+        public T defaultNetwork(final Boolean defaultNetwork)
         {
             this.defaultNetwork = defaultNetwork;
             return (T) this;
