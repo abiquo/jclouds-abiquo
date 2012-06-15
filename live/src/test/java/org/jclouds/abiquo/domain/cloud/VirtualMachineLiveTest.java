@@ -203,4 +203,11 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
         assertNull(task);
         assertEquals(vm.getCpu(), 100);
     }
+
+    public void testAttachDvd()
+    {
+        env.virtualMachine.attachDvd();
+        assertTrue(env.virtualMachine.hasDvd());
+
+    }
 }
