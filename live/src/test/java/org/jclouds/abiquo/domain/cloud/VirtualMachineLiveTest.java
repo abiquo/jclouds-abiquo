@@ -37,6 +37,7 @@ import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 
 /**
@@ -206,8 +207,14 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
 
     public void testAttachDvd()
     {
-        env.virtualMachine.attachDvd();
-        assertTrue(env.virtualMachine.hasDvd());
+        VirtualMachine vm =
+            VirtualMachine.Builder.fromVirtualMachine(env.virtualMachine).dvd(true).build();
+        vm.save();
+
+        VirtualMachineDto updated =
+            env.cloudClient.getVirtualMachine(env.virtualAppliance.unwrap(), vm.getId());
+
+        assertNotNull(updated.getDvd());
 
     }
 }
