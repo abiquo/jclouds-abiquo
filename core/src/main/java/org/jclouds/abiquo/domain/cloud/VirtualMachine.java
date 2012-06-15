@@ -58,6 +58,7 @@ import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
+import com.abiquo.server.core.infrastructure.storage.DvdManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.google.common.base.Function;
@@ -517,6 +518,24 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return getTask(response);
     }
 
+    public boolean hasDvd()
+    {
+        return target.getDvd() != null;
+    }
+
+    public void attachDvd()
+    {
+        DvdManagementDto dvd = new DvdManagementDto();
+        RESTLink link = new RESTLink("image", "");
+        dvd.addLink(link);
+        target.setDvd(dvd);
+    }
+
+    public void detachDvd()
+    {
+        target.setDvd(null);
+    }
+
     // Builder
 
     public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
@@ -554,6 +573,8 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         private String keymap;
 
         private String uuid;
+
+        private boolean dvd;
 
         public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
             final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template)
@@ -598,6 +619,12 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         public Builder keymap(final String keymap)
         {
             this.keymap = keymap;
+            return this;
+        }
+
+        public Builder dvd(final boolean dvd)
+        {
+            this.dvd = dvd;
             return this;
         }
 
@@ -672,6 +699,15 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
             dto.setKeymap(keymap);
             dto.setUuid(uuid);
 
+            // DVD
+            if (dvd)
+            {
+                DvdManagementDto dvd = new DvdManagementDto();
+                RESTLink link = new RESTLink("image", "");
+                dvd.addLink(link);
+                dto.setDvd(dvd);
+            }
+
             VirtualMachine virtualMachine = new VirtualMachine(context, dto);
             virtualMachine.virtualAppliance = virtualAppliance;
             virtualMachine.template = template;
@@ -685,7 +721,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
                 .name(in.getName()).description(in.getDescription()).ram(in.getRam())
                 .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
                 .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword())
-                .keymap(in.getKeymap());
+                .keymap(in.getKeymap()).dvd(in.hasDvd());
         }
     }
 
@@ -885,6 +921,6 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
             + getCpu() + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes()
             + ", idType=" + getIdType() + ", name=" + getName() + ", password=" + getPassword()
             + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
-            + ", vncPort=" + getVncPort() + ", keymap=" + getKeymap() + "]";
+            + ", vncPort=" + getVncPort() + ", keymap=" + getKeymap() + ", dvd=" + hasDvd() + "]";
     }
 }
