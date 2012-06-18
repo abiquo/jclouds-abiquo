@@ -21,41 +21,40 @@ package org.jclouds.abiquo.compute.functions;
 
 import javax.inject.Singleton;
 
-import org.jclouds.compute.domain.NodeState;
+import org.jclouds.compute.domain.NodeMetadata.Status;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
 
 /**
- * Converts a {@link VirtualMachineState} object to a {@link NodeState} one.
+ * Converts a {@link VirtualMachineState} object to a {@link Status} one.
  * 
  * @author Ignasi Barrera
  */
 @Singleton
-public class VirtualMachineStateToNodeState implements Function<VirtualMachineState, NodeState>
+public class VirtualMachineStateToNodeState implements Function<VirtualMachineState, Status>
 {
 
     @Override
-    public NodeState apply(final VirtualMachineState state)
+    public Status apply(final VirtualMachineState state)
     {
         switch (state)
         {
             case ALLOCATED:
             case LOCKED:
             case CONFIGURED:
-                return NodeState.PENDING;
+                return Status.PENDING;
             case ON:
-                return NodeState.RUNNING;
+                return Status.RUNNING;
             case OFF:
             case PAUSED:
-                return NodeState.SUSPENDED;
+                return Status.SUSPENDED;
             case NOT_ALLOCATED:
                 // TODO: What about nodes created but still not deployed?
-                return NodeState.TERMINATED;
+                return Status.TERMINATED;
             case UNKNOWN:
             default:
-                return NodeState.UNRECOGNIZED;
+                return Status.UNRECOGNIZED;
         }
     }
-
 }

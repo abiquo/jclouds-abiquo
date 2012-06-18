@@ -34,6 +34,7 @@ import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.NodeMetadataBuilder;
 
+import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
 
 /**
@@ -89,7 +90,9 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
         // (http://jira.abiquo.com/browse/ABIQUOJC-3)
         builder.privateAddresses(privateIps(vm.listAttachedNics()));
 
-        builder.state(virtualMachineStateToNodeState.apply(vm.getState()));
+        VirtualMachineState state = vm.getState();
+        builder.status(virtualMachineStateToNodeState.apply(state));
+        builder.backendStatus(state.name());
 
         return builder.build();
     }

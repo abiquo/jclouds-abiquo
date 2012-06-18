@@ -36,7 +36,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
-import org.jclouds.compute.domain.NodeState;
+import org.jclouds.compute.domain.NodeMetadata.Status;
 import org.jclouds.rest.RestContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -136,7 +136,7 @@ public class VirtualMachineToNodeMetadataTest
         VirtualMachineStateToNodeState stateToNodeState =
             EasyMock.createMock(VirtualMachineStateToNodeState.class);
         expect(stateToNodeState.apply(anyObject(VirtualMachineState.class))).andReturn(
-            NodeState.RUNNING);
+            Status.RUNNING);
         replay(stateToNodeState);
         return stateToNodeState;
     }

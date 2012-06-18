@@ -21,7 +21,7 @@ package org.jclouds.abiquo.compute.functions;
 
 import static org.testng.Assert.assertEquals;
 
-import org.jclouds.compute.domain.NodeState;
+import org.jclouds.compute.domain.NodeMetadata.Status;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
@@ -38,13 +38,13 @@ public class VirtualMachineStateToNodeStateTest
     {
         VirtualMachineStateToNodeState function = new VirtualMachineStateToNodeState();
 
-        assertEquals(function.apply(VirtualMachineState.ALLOCATED), NodeState.PENDING);
-        assertEquals(function.apply(VirtualMachineState.LOCKED), NodeState.PENDING);
-        assertEquals(function.apply(VirtualMachineState.CONFIGURED), NodeState.PENDING);
-        assertEquals(function.apply(VirtualMachineState.ON), NodeState.RUNNING);
-        assertEquals(function.apply(VirtualMachineState.OFF), NodeState.SUSPENDED);
-        assertEquals(function.apply(VirtualMachineState.PAUSED), NodeState.SUSPENDED);
-        assertEquals(function.apply(VirtualMachineState.NOT_ALLOCATED), NodeState.TERMINATED);
-        assertEquals(function.apply(VirtualMachineState.UNKNOWN), NodeState.UNRECOGNIZED);
+        assertEquals(function.apply(VirtualMachineState.ALLOCATED), Status.PENDING);
+        assertEquals(function.apply(VirtualMachineState.LOCKED), Status.PENDING);
+        assertEquals(function.apply(VirtualMachineState.CONFIGURED), Status.PENDING);
+        assertEquals(function.apply(VirtualMachineState.ON), Status.RUNNING);
+        assertEquals(function.apply(VirtualMachineState.OFF), Status.SUSPENDED);
+        assertEquals(function.apply(VirtualMachineState.PAUSED), Status.SUSPENDED);
+        assertEquals(function.apply(VirtualMachineState.NOT_ALLOCATED), Status.TERMINATED);
+        assertEquals(function.apply(VirtualMachineState.UNKNOWN), Status.UNRECOGNIZED);
     }
 }
