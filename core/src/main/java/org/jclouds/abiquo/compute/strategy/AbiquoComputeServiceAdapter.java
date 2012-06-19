@@ -41,6 +41,7 @@ import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.MonitoringService;
 import org.jclouds.abiquo.monitor.VirtualMachineMonitor;
 import org.jclouds.abiquo.predicates.cloud.VirtualAppliancePredicates;
+import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.ComputeServiceAdapter;
@@ -157,6 +158,13 @@ public class AbiquoComputeServiceAdapter
     {
         Enterprise enterprise = adminService.getCurrentEnterprise();
         return enterprise.listTemplates();
+    }
+
+    @Override
+    public VirtualMachineTemplate getImage(final String id)
+    {
+        Enterprise enterprise = adminService.getCurrentEnterprise();
+        return enterprise.findTemplate(VirtualMachineTemplatePredicates.id(Integer.valueOf(id)));
     }
 
     @Override
