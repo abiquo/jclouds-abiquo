@@ -25,6 +25,7 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.compute.domain.Image;
+import org.jclouds.compute.domain.Image.Status;
 import org.jclouds.compute.domain.ImageBuilder;
 import org.jclouds.compute.domain.OperatingSystem;
 
@@ -47,6 +48,10 @@ public class VirtualMachineTemplateToImage implements Function<VirtualMachineTem
         builder.ids(template.getId().toString());
         builder.name(template.getName());
         builder.description(template.getDescription());
+
+        // Only conversions have a status
+        builder.status(Status.AVAILABLE);
+        builder.backendStatus(Status.AVAILABLE.name()); // Abiquo images do not have a status
 
         RESTLink downloadLink = template.unwrap().searchLink("diskfile");
         builder.uri(downloadLink == null ? null : URI.create(downloadLink.getHref()));
