@@ -31,6 +31,7 @@ import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.RestContext;
 
+import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.google.common.base.Predicate;
@@ -172,6 +173,23 @@ public class Rack extends DomainWrapper<RackDto>
     public Machine findMachine(final Predicate<Machine> filter)
     {
         return Iterables.getFirst(filter(listMachines(), filter), null);
+    }
+
+    /**
+     * Retrieve a single physical machine.
+     * 
+     * @param id Unique ID of the physical machine in this rack.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrieveaMachine"
+     *      >
+     *      http://community.abiquo.com/display/ABI20/MachineResource#MachineResource-RetrieveaMachine
+     *      </a>
+     * @return Unmanaged rack with the given id or <code>null</code> if it does not exist.
+     */
+    public Machine getMachine(final Integer id)
+    {
+        MachineDto machine = context.getApi().getInfrastructureClient().getMachine(target, id);
+        return wrap(context, Machine.class, machine);
     }
 
     // Builder
