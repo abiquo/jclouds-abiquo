@@ -25,7 +25,7 @@ import java.util.Date;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -37,7 +37,6 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.rest.RESTLink;
-import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.google.inject.TypeLiteral;
@@ -50,7 +49,7 @@ import com.google.inject.TypeLiteral;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Conversion+Resource">
  *      http://community.abiquo.com/display/ABI20/Conversion+Resource</a>
  */
-public class Conversion extends DomainWrapper<ConversionDto>
+public class Conversion extends DomainWithTasksWrapper<ConversionDto>
 {
     /**
      * Constructor to be used only by the builder.
@@ -113,11 +112,7 @@ public class Conversion extends DomainWrapper<ConversionDto>
      */
     public AsyncTask restartFailedConversion()
     {
-        target.setState(ConversionState.ENQUEUED);
-        AcceptedRequestDto<String> taskRef =
-            context.getApi().getVirtualMachineTemplateClient().updateConversion(target);
-
-        return taskRef == null ? null : getTask(taskRef);
+        return getVirtualMachineTemplate().requestConversion(getTargetFormat());
     }
 
     // Delegate methods

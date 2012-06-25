@@ -26,7 +26,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
+import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -40,7 +40,7 @@ import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
-import com.abiquo.server.core.appslibrary.ConversionRequestDto;
+import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.google.common.base.Predicate;
@@ -55,7 +55,7 @@ import com.google.common.collect.Lists;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource">
  *      http://community.abiquo.com/display/ABI20/Virtual+Machine+Template+Resource</a>
  */
-public class VirtualMachineTemplate extends DomainWithTasksWrapper<VirtualMachineTemplateDto>
+public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplateDto>
 {
     /**
      * Constructor to be used only by the builder.
@@ -199,11 +199,12 @@ public class VirtualMachineTemplate extends DomainWithTasksWrapper<VirtualMachin
      */
     public AsyncTask requestConversion(final DiskFormatType diskFormat)
     {
-        ConversionRequestDto request = new ConversionRequestDto();
-        request.setFormat(diskFormat);
+        ConversionDto request = new ConversionDto();
+        request.setTargetFormat(diskFormat);
 
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getVirtualMachineTemplateClient().requestConversion(target, request);
+            context.getApi().getVirtualMachineTemplateClient()
+                .requestConversion(target, diskFormat, request);
 
         return taskRef == null ? null : getTask(taskRef);
     }

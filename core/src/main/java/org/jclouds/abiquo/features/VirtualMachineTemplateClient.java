@@ -25,11 +25,9 @@ import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.concurrent.Timeout;
 
-import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
-import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
@@ -98,16 +96,6 @@ public interface VirtualMachineTemplateClient
     void deleteVirtualMachineTemplate(VirtualMachineTemplateDto template);
 
     /**
-     * Starts a V2V conversion of the current virtual machine template.
-     * 
-     * @param template The virtual machine template to convert
-     * @param conversionRequest The requested target {@link DiskFormatType} of the conversion.
-     * @return an accepted request with a link to track the progress of the conversion tasks.
-     */
-    AcceptedRequestDto<String> requestConversion(VirtualMachineTemplateDto template,
-        ConversionRequestDto conversionRequest);
-
-    /**
      * List all the conversions for a virtual machine template.
      * 
      * @param template, The virtual machine template of the conversions.
@@ -136,10 +124,14 @@ public interface VirtualMachineTemplateClient
     ConversionDto getConversion(VirtualMachineTemplateDto template, DiskFormatType targetFormat);
 
     /**
-     * Updates a failed conversion.
+     * Starts a V2V conversion of the current virtual machine template, or updates a failed
+     * conversion.
      * 
-     * @param the requested conversion (state = {@link ConversionState.ENQUEUED}).
-     * @return the taskId to track it's progress.
+     * @param template The virtual machine template to convert
+     * @param targetFormat The requested target {@link DiskFormatType} of the conversion.
+     * @param conversion, the dto representing the conversion
+     * @return an accepted request with a link to track the progress of the conversion tasks.
      */
-    AcceptedRequestDto<String> updateConversion(ConversionDto conversion);
+    AcceptedRequestDto<String> requestConversion(VirtualMachineTemplateDto template,
+        DiskFormatType targetFormat, ConversionDto conversion);
 }

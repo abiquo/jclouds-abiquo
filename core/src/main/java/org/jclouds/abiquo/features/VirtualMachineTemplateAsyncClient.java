@@ -22,7 +22,6 @@ package org.jclouds.abiquo.features;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -49,7 +48,6 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
-import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
@@ -127,17 +125,6 @@ public interface VirtualMachineTemplateAsyncClient
     /*********************** Conversions ***********************/
 
     /**
-     * @see VirtualMachineTemplateClient#requestConversion(ConversionRequestDto)
-     */
-    @POST
-    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @Produces(ConversionRequestDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<AcceptedRequestDto<String>> requestConversion(
-        @EndpointLink("convert") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template,
-        @BinderParam(BindToXMLPayload.class) ConversionRequestDto conversionRequest);
-
-    /**
      * @see VirtualMachineTemplateClient#listConversions(VirtualMachineTemplateDto)
      */
     @GET
@@ -175,6 +162,8 @@ public interface VirtualMachineTemplateAsyncClient
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(ConversionDto.BASE_MEDIA_TYPE)
-    ListenableFuture<AcceptedRequestDto<String>> updateConversion(
-        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) ConversionDto conversion);
+    ListenableFuture<AcceptedRequestDto<String>> requestConversion(
+        @EndpointLink("conversions") @BinderParam(BindToPath.class) final VirtualMachineTemplateDto template,
+        @BinderParam(AppendToPath.class) DiskFormatType targetFormat,
+        @BinderParam(BindToXMLPayload.class) ConversionDto conversion);
 }

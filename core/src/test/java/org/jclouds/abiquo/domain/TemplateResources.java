@@ -25,7 +25,6 @@ import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.ConversionDto;
-import com.abiquo.server.core.appslibrary.ConversionRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
 /**
@@ -46,8 +45,6 @@ public class TemplateResources
             .addLink(new RESTLink("edit",
                 "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1"));
         template.addLink(new RESTLink("enterprise", "http://localhost/api/admin/enterprises/1"));
-        template.addLink(new RESTLink("convert", "http://localhost/api/admin/enterprises/1"
-            + "/datacenterrepositories/1/virtualmachinetemplates/1/action/convert"));
         template.addLink(new RESTLink("conversions", "http://localhost/api/admin/enterprises/1"
             + "/datacenterrepositories/1/virtualmachinetemplates/1/conversions"));
         template.addLink(new RESTLink("tasks", "http://localhost/api/admin/enterprises/1"
@@ -63,8 +60,6 @@ public class TemplateResources
         buffer.append(link(
             "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1", "edit"));
         buffer.append(link("/admin/enterprises/1", "enterprise"));
-        buffer.append(link("/admin/enterprises/1"
-            + "/datacenterrepositories/1/virtualmachinetemplates/1/action/convert", "convert"));
         buffer.append(link("/admin/enterprises/1"
             + "/datacenterrepositories/1/virtualmachinetemplates/1/conversions", "conversions"));
 
@@ -84,22 +79,6 @@ public class TemplateResources
         return buffer.toString();
     }
 
-    public static ConversionRequestDto conversionRequestPut()
-    {
-        ConversionRequestDto req = new ConversionRequestDto();
-        req.setFormat(DiskFormatType.RAW);
-        return req;
-    }
-
-    public static String conversionRequestPutPlayload()
-    {
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("<conversionRequest>");
-        buffer.append("<format>RAW</format>");
-        buffer.append("</conversionRequest>");
-        return buffer.toString();
-    }
-
     public static ConversionDto conversionPut()
     {
         ConversionDto conversion = new ConversionDto();
@@ -109,10 +88,12 @@ public class TemplateResources
         conversion.setTargetFormat(DiskFormatType.RAW);
         conversion.setTargetPath("target/path.raw");
         conversion.setTargetSizeInBytes(1000000l);
-
         conversion
             .addLink(new RESTLink("edit",
                 "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW"));
+        conversion
+            .addLink(new RESTLink("tasks",
+                "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW/tasks"));
 
         return conversion;
     }
@@ -125,6 +106,11 @@ public class TemplateResources
             .append(link(
                 "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW",
                 "edit"));
+        buffer
+            .append(link(
+                "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1/conversions/RAW/tasks",
+                "tasks"));
+
         buffer.append("<state>ENQUEUED</state>");
         buffer.append("<sourceFormat>VMDK_STREAM_OPTIMIZED</sourceFormat>");
         buffer.append("<sourcePath>source/path.vmkd</sourcePath>");
