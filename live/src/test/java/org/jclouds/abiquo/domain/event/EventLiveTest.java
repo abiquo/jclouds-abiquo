@@ -93,12 +93,25 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
 
     public void testListEventsFilteredByStoragePool()
     {
-        String name = env.storagePool.getName();
-        env.storagePool.update();
+        Tier tier = env.datacenter.findTier(TierPredicates.name("Default Tier 2"));
+        assertNotNull(tier);
 
-        EventOptions options =
-            EventOptions.builder().dateFrom(new Date()).storagePoolName(name).build();
-        assertEvents(options);
+        try
+        {
+            env.storagePool.setTier(tier);
+            env.storagePool.update();
+
+            EventOptions options =
+                EventOptions.builder().dateFrom(new Date())
+                    .storagePoolName(env.storagePool.getName()).build();
+            assertEvents(options);
+        }
+        finally
+        {
+            // Restore the original tier
+            env.storagePool.setTier(env.tier);
+            env.storagePool.update();
+        }
     }
 
     public void testListEventsFilteredByEnterprise()
