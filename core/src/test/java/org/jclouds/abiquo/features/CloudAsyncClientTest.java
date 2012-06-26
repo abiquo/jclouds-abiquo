@@ -821,6 +821,30 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
+    public void testListVirtualMachinesWithOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("listVirtualMachines", VirtualApplianceDto.class,
+                VirtualMachineOptions.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualAppliancePut(),
+                VirtualMachineOptions.builder().disablePagination().build());
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines?limit=0 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testGetVirtualMachine() throws SecurityException, NoSuchMethodException,
         IOException
     {

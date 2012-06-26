@@ -47,7 +47,7 @@ public class VirtualMachineOptions extends QueryOptions
         return this.map.toString();
     }
 
-    public static class Builder
+    public static class Builder extends QueryOptionsBuilder<Builder>
     {
         private Boolean force;
 
@@ -57,6 +57,7 @@ public class VirtualMachineOptions extends QueryOptions
             return this;
         }
 
+        @Override
         public VirtualMachineOptions build()
         {
             VirtualMachineOptions options = new VirtualMachineOptions();
@@ -65,6 +66,9 @@ public class VirtualMachineOptions extends QueryOptions
             {
                 options.map.put("force", String.valueOf(force));
             }
+
+            // Add FilterOptions options
+            options.map.putAll(super.build().getOptions());
 
             return options;
         }

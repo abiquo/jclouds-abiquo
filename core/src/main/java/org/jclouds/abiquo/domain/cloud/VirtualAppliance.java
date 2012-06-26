@@ -27,6 +27,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -64,7 +65,8 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualAppliance(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualApplianceDto target)
+    protected VirtualAppliance(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final VirtualApplianceDto target)
     {
         super(context, target);
     }
@@ -160,7 +162,23 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
      */
     public List<VirtualMachine> listVirtualMachines()
     {
-        VirtualMachinesDto vms = context.getApi().getCloudClient().listVirtualMachines(target);
+        return listVirtualMachines(VirtualMachineOptions.builder().disablePagination().build());
+    }
+
+    /**
+     * Gets the list of virtual machines in the virtual appliance.
+     * 
+     * @return The list of virtual machines in the virtual appliance.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource-RetrievethelistofVirtualMachines."
+     *      >
+     *      http://community.abiquo.com/display/ABI18/Virtual+Machine+Resource#VirtualMachineResource
+     *      -RetrievethelistofVirtualMachines.</a>
+     */
+    public List<VirtualMachine> listVirtualMachines(final VirtualMachineOptions options)
+    {
+        VirtualMachinesDto vms =
+            context.getApi().getCloudClient().listVirtualMachines(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());
     }
 
@@ -292,7 +310,8 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
         private VirtualDatacenter virtualDatacenter;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualDatacenter virtualDatacenter)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+            final VirtualDatacenter virtualDatacenter)
         {
             super();
             checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE

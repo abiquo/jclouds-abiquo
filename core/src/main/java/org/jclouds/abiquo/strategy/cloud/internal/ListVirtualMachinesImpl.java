@@ -37,6 +37,7 @@ import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualAppliances;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
 import org.jclouds.logging.Logger;
@@ -83,9 +84,15 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
     @Override
     public Iterable<VirtualMachine> execute()
     {
+        return execute(VirtualMachineOptions.builder().disablePagination().build());
+    }
+
+    @Override
+    public Iterable<VirtualMachine> execute(final VirtualMachineOptions options)
+    {
         // Find virtual machines in concurrent requests
         Iterable<VirtualAppliance> vapps = listVirtualAppliances.execute();
-        Iterable<VirtualMachineDto> vms = listConcurrentVirtualMachines(vapps);
+        Iterable<VirtualMachineDto> vms = listConcurrentVirtualMachines(vapps, options);
 
         return wrap(context, VirtualMachine.class, vms);
     }
@@ -97,7 +104,7 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
     }
 
     private Iterable<VirtualMachineDto> listConcurrentVirtualMachines(
-        final Iterable<VirtualAppliance> vapps)
+        final Iterable<VirtualAppliance> vapps, final VirtualMachineOptions options)
     {
         Iterable<VirtualMachinesDto> vms =
             transformParallel(vapps,
@@ -107,7 +114,7 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
                     public Future<VirtualMachinesDto> apply(final VirtualAppliance input)
                     {
                         return context.getAsyncApi().getCloudClient()
-                            .listVirtualMachines(input.unwrap());
+                            .listVirtualMachines(input.unwrap(), options);
                     }
                 }, userExecutor, maxTime, logger, "getting virtual machines");
 

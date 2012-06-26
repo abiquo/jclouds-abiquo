@@ -68,6 +68,7 @@ public abstract class BaseAbiquoClientLiveTest
         props.put("jclouds.timeouts.InfrastructureClient.createMachine", "60000");
         props.put("jclouds.timeouts.InfrastructureClient.updateMachine", "60000");
         props.put("jclouds.timeouts.InfrastructureClient.checkMachineState", "60000");
+        props.put("jclouds.timeouts.CloudClient.listVirtualMachines", "60000");
 
         context = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
             .endpoint(endpoint) //

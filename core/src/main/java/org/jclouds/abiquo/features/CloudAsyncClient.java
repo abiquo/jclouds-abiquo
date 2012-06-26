@@ -436,6 +436,16 @@ public interface CloudAsyncClient
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
+     * @see CloudClient#listVirtualMachines(VirtualApplianceDto, VirtualMachineOptions)
+     */
+    @GET
+    @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<VirtualMachinesDto> listVirtualMachines(
+        @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
+        @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options);
+
+    /**
      * @see CloudClient#getVirtualMachine(VirtualApplianceDto, Integer)
      */
     @GET
