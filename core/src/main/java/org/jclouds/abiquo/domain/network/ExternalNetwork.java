@@ -27,6 +27,7 @@ import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.rest.RestContext;
@@ -56,7 +57,8 @@ public class ExternalNetwork extends Network
     /**
      * Constructor to be used only by the builder.
      */
-    protected ExternalNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VLANNetworkDto target)
+    protected ExternalNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final VLANNetworkDto target)
     {
         super(context, target);
     }
@@ -68,6 +70,7 @@ public class ExternalNetwork extends Network
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
      *      -DeleteanExternalNetwork</a>
      */
+    @Override
     public void delete()
     {
         context.getApi().getInfrastructureClient().deleteNetwork(target);
@@ -81,6 +84,7 @@ public class ExternalNetwork extends Network
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
      *      -CreateanewExternalNetwork</a>
      */
+    @Override
     public void save()
     {
         this.addEnterpriseLink();
@@ -95,6 +99,7 @@ public class ExternalNetwork extends Network
      *      http://community.abiquo.com/display/ABI20/Public+Network+Resource#PublicNetworkResource
      *      -UpdateanExternalNetwork</a>
      */
+    @Override
     public void update()
     {
         target = context.getApi().getInfrastructureClient().updateNetwork(target);
@@ -107,10 +112,10 @@ public class ExternalNetwork extends Network
      *      ReturnthelistofIPsforaPublicNetwork</a>
      */
     @Override
-    public List<Ip> listIps()
+    public List<Ip> listIps(final IpOptions options)
     {
         IpsPoolManagementDto nics =
-            context.getApi().getInfrastructureClient().listNetworkIps(target);
+            context.getApi().getInfrastructureClient().listNetworkIps(target, options);
         return wrap(context, Ip.class, nics.getCollection());
     }
 
@@ -129,8 +134,8 @@ public class ExternalNetwork extends Network
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter,
-        final Enterprise enterprise)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final Datacenter datacenter, final Enterprise enterprise)
     {
         return new Builder(context, datacenter, enterprise);
     }
@@ -141,8 +146,8 @@ public class ExternalNetwork extends Network
 
         private Enterprise enterprise;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter,
-            final Enterprise enterprise)
+        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+            final Datacenter datacenter, final Enterprise enterprise)
         {
             super(context);
             checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);

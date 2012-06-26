@@ -27,6 +27,7 @@ import java.util.List;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.rest.RestContext;
@@ -62,7 +63,13 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
 
     public abstract void delete();
 
-    public abstract List<Ip> listIps();
+    public abstract List<Ip> listIps(IpOptions options);
+
+    public List<Ip> listIps()
+    {
+        // Disable pagination by default
+        return listIps(IpOptions.builder().disablePagination().build());
+    }
 
     public List<Ip> listIps(final Predicate<Ip> filter)
     {

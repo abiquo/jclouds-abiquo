@@ -40,6 +40,7 @@ import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
+import org.jclouds.abiquo.predicates.network.NetworkPredicates;
 
 import com.google.common.collect.Ordering;
 import com.google.common.primitives.Longs;
@@ -65,7 +66,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     public VirtualMachineTemplate template;
 
-    public PrivateNetwork network;
+    public PrivateNetwork privateNetwork;
 
     public Enterprise defaultEnterprise;
 
@@ -137,7 +138,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
     protected void createVirtualDatacenter()
     {
-        network =
+        privateNetwork =
             PrivateNetwork.builder(context.getApiContext()).name("DefaultNetwork")
                 .gateway("192.168.1.1").address("192.168.1.0").mask(24).build();
 
@@ -146,10 +147,13 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
                 .name(PREFIX + "Virtual Aloha").cpuCountLimits(18, 20)
                 .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
                 .storageLimits(289910292, 322122547).vlansLimits(1, 2)
-                .hypervisorType(machine.getType()).network(network).build();
+                .hypervisorType(machine.getType()).network(privateNetwork).build();
 
         virtualDatacenter.save();
         assertNotNull(virtualDatacenter.getId());
+
+        privateNetwork =
+            virtualDatacenter.findPrivateNetwork(NetworkPredicates.name(privateNetwork.getName()));
     }
 
     protected void createVirtualAppliance()

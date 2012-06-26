@@ -97,6 +97,13 @@ public abstract class QueryOptions
             return (T) this;
         }
 
+        @SuppressWarnings("unchecked")
+        public T disablePagination()
+        {
+            this.limit = 0;
+            return (T) this;
+        }
+
         public QueryOptions build()
         {
             FilterOptions options = new FilterOptions();

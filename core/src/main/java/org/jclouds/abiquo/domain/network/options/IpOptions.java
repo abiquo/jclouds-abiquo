@@ -58,6 +58,14 @@ public class IpOptions extends QueryOptions
         }
 
         @Override
+        public Builder disablePagination()
+        {
+            // FIXME [ABICLOUDPREMIUM-4025] Does not allow a limit=0 parameter
+            this.limit = Integer.MAX_VALUE;
+            return this;
+        }
+
+        @Override
         public IpOptions build()
         {
             IpOptions options = new IpOptions();
