@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 
 import java.util.Date;
@@ -31,21 +32,30 @@ import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
+import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
+import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
+import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link VirtualMachineTemplateDto}.
@@ -78,6 +88,69 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     {
         target =
             context.getApi().getVirtualMachineTemplateClient().updateVirtualMachineTemplate(target);
+    }
+
+    /**
+     * TODO
+     * 
+     * @param vdc
+     * @param volume
+     * @param persistentTemplateName
+     * @param persistentVolumeName
+     * @return
+     */
+    public AsyncTask makePersistent(final VirtualDatacenter vdc, final Volume volume,
+        final String persistentTemplateName)
+    {
+        RESTLink storageLink = volume.unwrap().getEditLink();
+        storageLink.setRel("volume");
+        return makePeristent(vdc, storageLink, persistentTemplateName, null);
+    }
+
+    public AsyncTask makePersistent(final VirtualDatacenter vdc, final Tier tier,
+        final String persistentTemplateName, final String persistentVolumeName)
+    {
+        RESTLink storageLink = tier.unwrap().getEditLink();
+        storageLink.setRel(ParentLinkName.TIER);
+        return makePeristent(vdc, storageLink, persistentTemplateName, persistentVolumeName);
+    }
+
+    private AsyncTask makePeristent(final VirtualDatacenter vdc, final RESTLink storageLink,
+        final String persistentTemplateName, final String persistentVolumeName)
+    {
+        VirtualMachineTemplatePersistentDto persistentData =
+            new VirtualMachineTemplatePersistentDto();
+        persistentData.setPersistentTemplateName(persistentTemplateName);
+        persistentData.setPersistentVolumeName(persistentVolumeName);
+        RESTLink vdcLink = vdc.unwrap().getEditLink();
+        vdcLink.setRel(ParentLinkName.VIRTUAL_DATACENTER);
+        RESTLink templateLink = target.getEditLink();
+        templateLink.setRel(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE);
+
+        persistentData.addLink(vdcLink);
+        persistentData.addLink(storageLink);
+        persistentData.addLink(templateLink);
+
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.DATACENTER_REPOSITORY),
+                ValidationErrors.MISSING_REQUIRED_LINK + ParentLinkName.DATACENTER_REPOSITORY);
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse rp =
+            checkNotNull(utils.getAbiquoHttpClient().get(link),
+                ParentLinkName.DATACENTER_REPOSITORY);
+
+        ParseXMLWithJAXB<DatacenterRepositoryDto> parser =
+            new ParseXMLWithJAXB<DatacenterRepositoryDto>(utils.getXml(),
+                TypeLiteral.get(DatacenterRepositoryDto.class));
+
+        DatacenterRepositoryDto dcRepository = parser.apply(rp);
+
+        AcceptedRequestDto<String> response =
+            context.getApi().getVirtualMachineTemplateClient()
+                .createPersistentVirtualMachineTemplate(dcRepository, persistentData);
+
+        return getTask(response);
     }
 
     // Children access

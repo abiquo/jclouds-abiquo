@@ -22,6 +22,7 @@ package org.jclouds.abiquo.features;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -49,7 +50,9 @@ import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
+import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -121,6 +124,18 @@ public interface VirtualMachineTemplateAsyncClient
     @DELETE
     ListenableFuture<Void> deleteVirtualMachineTemplate(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
+
+    /**
+     * @see VirtualMachineTemplateClient#createPersistentVirtualMachineTemplate(DatacenterRepositoryDto,
+     *      VirtualMachineTemplatePersistentDto)
+     */
+    @POST
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineTemplatePersistentDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<AcceptedRequestDto<String>> createPersistentVirtualMachineTemplate(
+        @EndpointLink("virtualmachinetemplates") @BinderParam(BindToPath.class) DatacenterRepositoryDto dcRepository,
+        @BinderParam(BindToXMLPayload.class) VirtualMachineTemplatePersistentDto persistentOptions);
 
     /*********************** Conversions ***********************/
 

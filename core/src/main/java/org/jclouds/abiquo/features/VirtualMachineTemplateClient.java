@@ -29,7 +29,9 @@ import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
+import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 
 /**
@@ -94,6 +96,19 @@ public interface VirtualMachineTemplateClient
      * @param template The virtual machine template to delete.
      */
     void deleteVirtualMachineTemplate(VirtualMachineTemplateDto template);
+
+    /**
+     * Creates a persistent virtual machine template from other virtual machine template.
+     * 
+     * @param dcRepository The repository where the persistent virtual machine template will be
+     *            created.
+     * @param options The persistent options like name, volume/tier, virtual datacenter and original
+     *            template.
+     * @return Response message to the persistent request.
+     */
+    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
+    AcceptedRequestDto<String> createPersistentVirtualMachineTemplate(
+        DatacenterRepositoryDto dcRepository, VirtualMachineTemplatePersistentDto persistentOptions);
 
     /**
      * List all the conversions for a virtual machine template.

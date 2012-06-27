@@ -37,7 +37,6 @@ import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
-import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
@@ -661,14 +660,4 @@ public interface CloudClient
     VolumeManagementDto moveVolume(VolumeManagementDto volume,
         VirtualDatacenterDto newVirtualDatacenter);
 
-    /**
-     * Makes a virtual machine persistent into a volume.
-     * 
-     * @param virtualMachine The virtual machine to make persistent.
-     * @param options The persistent options like name and volume/tier.
-     * @return Response message to the persistent request.
-     */
-    @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
-    AcceptedRequestDto<String> makePersistentVirtualMachine(VirtualMachineDto virtualMachine,
-        VirtualMachinePersistentDto persistentOptions);
 }

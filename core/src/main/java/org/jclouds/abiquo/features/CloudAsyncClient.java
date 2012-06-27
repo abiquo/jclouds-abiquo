@@ -74,7 +74,6 @@ import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
-import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
@@ -742,14 +741,4 @@ public interface CloudAsyncClient
         @BinderParam(BindMoveVolumeToPath.class) VolumeManagementDto volume,
         @BinderParam(BindVirtualDatacenterRefToPayload.class) VirtualDatacenterDto newVirtualDatacenter);
 
-    /**
-     * @see CloudClient#makePersistentVirtualMachine(VirtualMachineDto, VirtualMachinePersistentDto)
-     */
-    @POST
-    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @Produces(VirtualMachinePersistentDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<AcceptedRequestDto<String>> makePersistentVirtualMachine(
-        @EndpointLink("persistent") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(BindToXMLPayload.class) VirtualMachinePersistentDto persistentOptions);
 }

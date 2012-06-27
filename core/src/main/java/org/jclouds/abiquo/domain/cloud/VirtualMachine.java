@@ -30,7 +30,6 @@ import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
-import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.Nic;
@@ -44,12 +43,10 @@ import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
-import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
-import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
@@ -490,60 +487,6 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
     public boolean isPersistent()
     {
         return getTemplate().unwrap().searchLink("volume") != null;
-    }
-
-    /**
-     * Makes the virtual machine persistent.
-     * <p>
-     * When making a virtual machine persistent, an external volume will be created in the provided
-     * {@link Tier}, and the system disk of the virtual machine will be dumped to it. The virtual
-     * machine will then be configured to boot the volume in order to keep all changes made to the
-     * system disk even if the virtual machine is undeployed.
-     * 
-     * @param persistentName The name of the persistent virtual machine.
-     * @param tier The tier where the volume that will be used as the system disk will be created.
-     * @return A task reference that can be used to track the progress of the persistent conversion
-     *         process.
-     */
-    public AsyncTask makePersistent(final String persistentName, final Tier tier)
-    {
-        return makePersistent(persistentName, tier.unwrap(), "tier");
-    }
-
-    /**
-     * Makes the virtual machine persistent.
-     * <p>
-     * When making a virtual machine persistent, an external volume will be created in the provided
-     * {@link Volume}, and the system disk of the virtual machine will be dumped to it. The virtual
-     * machine will then be configured to boot the volume in order to keep all changes made to the
-     * system disk even if the virtual machine is undeployed.
-     * <p>
-     * The volume must be big enough to contain the entire system disk.
-     * 
-     * @param persistentName new name of the persistent virtual machine
-     * @param volume volume where persist the virtual machine
-     * @return A task reference that can be used to track the progress of the persistent conversion
-     *         process.
-     */
-    public AsyncTask makePersistent(final String persistentName, final Volume volume)
-    {
-        return makePersistent(persistentName, volume.unwrap(), "volume");
-    }
-
-    private AsyncTask makePersistent(final String persistentName,
-        final SingleResourceTransportDto dto, final String storageLinkName)
-    {
-        VirtualMachinePersistentDto persistentOptions = new VirtualMachinePersistentDto();
-        persistentOptions.setPersistentName(persistentName);
-        RESTLink storageLink = dto.searchLink("self");
-        storageLink.setRel(storageLinkName);
-        persistentOptions.addLink(storageLink);
-
-        AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient()
-                .makePersistentVirtualMachine(unwrap(), persistentOptions);
-
-        return getTask(response);
     }
 
     public boolean hasDvd()

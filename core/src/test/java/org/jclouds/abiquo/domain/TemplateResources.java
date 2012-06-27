@@ -25,7 +25,9 @@ import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.ConversionDto;
+import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
 
 /**
  * VM template domain utilities.
@@ -35,6 +37,31 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
  */
 public class TemplateResources
 {
+    public static DatacenterRepositoryDto datacenterRepositoryPut()
+    {
+        DatacenterRepositoryDto dcRepository = new DatacenterRepositoryDto();
+        dcRepository.setId(1);
+        dcRepository.setName("Datacenter Repo");
+        dcRepository.setRepositoryCapacityMb(0);
+        dcRepository.setRepositoryLocation("10.60.1.104:/volume1/nfs-devel");
+        dcRepository.setRepositoryRemainingMb(0);
+        dcRepository.addLink(new RESTLink("applianceManagerRepositoryUri",
+            "http://localhost/am/erepos/1"));
+        dcRepository
+            .addLink(new RESTLink("datacenter", "http://localhost/api/admin/datacenters/1"));
+        dcRepository.addLink(new RESTLink("edit",
+            "http://localhost/api/admin/enterprises/1/datacenterrepositories/1"));
+        dcRepository
+            .addLink(new RESTLink("enterprise", "http://localhost/api/admin/enterprises/1"));
+        dcRepository.addLink(new RESTLink("refresh",
+            "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/actions/refresh"));
+        dcRepository
+            .addLink(new RESTLink("virtualmachinetemplates",
+                "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates"));
+
+        return dcRepository;
+    }
+
     public static VirtualMachineTemplateDto virtualMachineTemplatePut()
     {
         VirtualMachineTemplateDto template = new VirtualMachineTemplateDto();
@@ -76,6 +103,35 @@ public class TemplateResources
         buffer.append("<costCode>0</costCode>");
         buffer.append("<chefEnabled>false</chefEnabled>");
         buffer.append("</virtualMachineTemplate>");
+        return buffer.toString();
+    }
+
+    public static VirtualMachineTemplatePersistentDto persistentData()
+    {
+        VirtualMachineTemplatePersistentDto dto = new VirtualMachineTemplatePersistentDto();
+        dto.setPersistentTemplateName("New persistent template name");
+        dto.setPersistentVolumeName("New persistent volume name");
+        dto.addLink(new RESTLink("tier", "http://localhost/api/cloud/virtualdatacenters/1/tiers/1"));
+        dto.addLink(new RESTLink("virtualdatacenter",
+            "http://localhost/api/cloud/virtualdatacenters/1"));
+        dto.addLink(new RESTLink("virtualmachinetemplate",
+            "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1"));
+        return dto;
+    }
+
+    public static String persistentPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualmachinetemplatepersistent>");
+        buffer.append(link("/cloud/virtualdatacenters/1/tiers/1", "tier"));
+        buffer.append(link("/cloud/virtualdatacenters/1", "virtualdatacenter"));
+        buffer.append(link(
+            "/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1",
+            "virtualmachinetemplate"));
+        buffer
+            .append("<persistentTemplateName>New persistent template name</persistentTemplateName>");
+        buffer.append("<persistentVolumeName>New persistent volume name</persistentVolumeName>");
+        buffer.append("</virtualmachinetemplatepersistent>");
         return buffer.toString();
     }
 

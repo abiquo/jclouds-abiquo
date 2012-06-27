@@ -37,6 +37,7 @@ import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
 import com.abiquo.am.model.TemplatesStateDto;
+import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -531,6 +532,29 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
     }
 
     /*********************** Datacenter Repository ********************** */
+
+    public void testGetDatacenterRepository() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            EnterpriseAsyncClient.class.getMethod("getDatacenterRepository", EnterpriseDto.class,
+                Integer.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut(),
+                InfrastructureResources.datacenterPut().getId());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/datacenterrepositories/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterRepositoryDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
 
     public void testRefreshTemplateRepository() throws SecurityException, NoSuchMethodException,
         IOException

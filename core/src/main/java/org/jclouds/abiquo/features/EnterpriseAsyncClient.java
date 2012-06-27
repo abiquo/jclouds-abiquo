@@ -48,6 +48,7 @@ import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.am.model.TemplatesStateDto;
+import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -302,6 +303,17 @@ public interface EnterpriseAsyncClient
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) final UserDto user);
 
     /*********************** Datacenter Repository ***********************/
+
+    /**
+     * @see EnterpriseClient#getDatacenterRepository(EnterpriseDto, Integer)
+     */
+    @GET
+    @Consumes(DatacenterRepositoryDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<UserDto> getDatacenterRepository(
+        @EndpointLink("datacenterrepositories") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+        @BinderParam(AppendToPath.class) Integer datacenterRepositoryId);
 
     /**
      * @see EnterpriseClient#refreshTemplateRepository(Integer, Integer)

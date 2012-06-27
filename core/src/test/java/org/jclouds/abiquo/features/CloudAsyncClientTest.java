@@ -52,7 +52,6 @@ import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
-import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
@@ -1526,31 +1525,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, ReturnMovedVolume.class);
-
-        checkFilters(request);
-    }
-
-    public void testMakePersistentVirtualMachine() throws SecurityException, NoSuchMethodException,
-        IOException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("makePersistentVirtualMachine",
-                VirtualMachineDto.class, VirtualMachinePersistentDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(),
-                CloudResources.persistentData());
-
-        assertRequestLineEquals(
-            request,
-            "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/action/persistent HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
-            + "\n");
-        assertPayloadEquals(request, withHeader(CloudResources.persistentPayload()),
-            VirtualMachinePersistentDto.BASE_MEDIA_TYPE, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
 
         checkFilters(request);
     }

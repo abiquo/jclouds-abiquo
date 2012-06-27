@@ -26,6 +26,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.am.model.TemplatesStateDto;
+import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -246,6 +247,16 @@ public interface EnterpriseClient
     MachinesDto listVirtualMachines(final UserDto user);
 
     /*********************** Datacenter Repository ***********************/
+
+    /**
+     * Get the given datacenter repository from the given enterprise.
+     * 
+     * @param enterprise The enterprise.
+     * @param datacenterRepositoryId The id of the datacenter repository.
+     * @return The datacenter repository or <code>null</code> if it does not exist.
+     */
+    DatacenterRepositoryDto getDatacenterRepository(final EnterpriseDto enterprise,
+        final Integer datacenterRepositoryId);
 
     /**
      * Refreshes database with virtual machine templates existing in the repository filesystem.
