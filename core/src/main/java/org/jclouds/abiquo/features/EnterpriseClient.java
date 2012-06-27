@@ -131,10 +131,10 @@ public interface EnterpriseClient
     VirtualDatacentersDto listVirtualDatacenters(EnterpriseDto enterprise);
 
     /**
-     * Get the list of status of a template definition list in a datacenter.
+     * Get the list of template's icons of the given enterprise
      * 
      * @param enterprise The enterprise.
-     * @return The list of VirtualMachineTemplates' icons of the enterprise.
+     * @return The list of template's icons of the given enterprise.
      */
     IconsDto getIcons(EnterpriseDto enterprise);
 

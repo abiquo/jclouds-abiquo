@@ -308,13 +308,13 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     }
 
     /**
-     * Retrieve the list of icons of the templates of this enterprise.
+     * Retrieve the defined properties of the given enterprise.
      * 
      * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrivealistoficonsofanEnterprise"
-     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
-     *      RetrivealistoficonsofanEnterprise </a>
-     * @return List of icons of the templates of this enterprise.
+     *      "http://community.abiquo.com/display/ABI20/EnterprisePropertiesResource#EnterprisePropertiesResource-Retrievethepropertiesforanenterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterprisePropertiesResource#
+     *      EnterprisePropertiesResource-Retrievethepropertiesforanenterprise</a>
+     * @return The defined properties of the given enterprise.
      */
     public EnterpriseProperties getEnterpriseProperties()
     {

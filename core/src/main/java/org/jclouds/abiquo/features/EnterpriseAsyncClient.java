@@ -169,7 +169,7 @@ public interface EnterpriseAsyncClient
         @EndpointLink("cloud/virtualdatacenters") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#getIcons(Integer)
+     * @see EnterpriseClient#getIcons(EnterpriseDto)
      */
     @GET
     @Consumes(IconsDto.BASE_MEDIA_TYPE)
