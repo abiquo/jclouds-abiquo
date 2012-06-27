@@ -48,6 +48,7 @@ import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
 import com.abiquo.am.model.TemplatesStateDto;
+import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -413,4 +414,13 @@ public interface EnterpriseAsyncClient
     ListenableFuture<TemplatesStateDto> listTemplateListStatus(
         @EndpointLink("repositoryStatus") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList,
         @QueryParam("datacenterId") @ParamParser(ParseDatacenterId.class) DatacenterDto datacenter);
+
+    /**
+     * @see EnterpriseClient#getIcons(Integer)
+     */
+    @GET
+    @Path("/enterprises/{enterprise}/action/icons")
+    @Consumes(IconsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<IconsDto> getIcons(@PathParam("enterprise") Integer enterpriseId);
 }
