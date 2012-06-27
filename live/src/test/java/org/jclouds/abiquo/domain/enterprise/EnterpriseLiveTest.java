@@ -26,18 +26,21 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise.Builder;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 
@@ -191,6 +194,26 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
     {
         List<VirtualAppliance> vapps = env.defaultEnterprise.listVirtualAppliances();
         assertTrue(vapps.size() > 0);
+    }
+
+    public void testGetIcons()
+    {
+        IconsDto icons = env.enterpriseClient.getIcons(env.defaultEnterprise.getId());
+
+        // Calculate the number of url icons of the templates found for this enterprise
+        List<String> iconUrls = new ArrayList<String>();
+        List<VirtualMachineTemplate> templates =
+            env.datacenter.listTemplatesInRepository(env.defaultEnterprise);
+        for (VirtualMachineTemplate template : templates)
+        {
+            String url = template.getIconUrl();
+            if (url != null && !url.isEmpty() && !iconUrls.contains(url))
+            {
+                iconUrls.add(url);
+            }
+        }
+
+        assertEquals(icons.getCollection().size(), iconUrls.size());
     }
 
     private void tearDownLimits()
