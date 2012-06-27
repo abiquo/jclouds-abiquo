@@ -243,14 +243,33 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
+    public void testGetIcons() throws SecurityException, NoSuchMethodException
+    {
+        Method method = EnterpriseAsyncClient.class.getMethod("getIcons", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/enterprises/1/action/icons HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + IconsDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     /*********************** Enterprise Properties ********************** */
 
     public void testGetEnterpriseProperties() throws SecurityException, NoSuchMethodException,
         IOException
     {
         Method method =
-            EnterpriseAsyncClient.class.getMethod("getEnterpriseProperties", Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncClient> request = processor.createRequest(method, 1);
+            EnterpriseAsyncClient.class.getMethod("getEnterpriseProperties", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/properties HTTP/1.1");
@@ -774,23 +793,6 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
             request,
             "GET http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1/actions/repositoryStatus?datacenterId=1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + TemplatesStateDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testGetIcons() throws SecurityException, NoSuchMethodException
-    {
-        Method method = EnterpriseAsyncClient.class.getMethod("getIcons", Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncClient> request = processor.createRequest(method, 1);
-
-        assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/enterprises/1/action/icons HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IconsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

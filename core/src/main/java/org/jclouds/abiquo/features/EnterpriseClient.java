@@ -130,6 +130,14 @@ public interface EnterpriseClient
      */
     VirtualDatacentersDto listVirtualDatacenters(EnterpriseDto enterprise);
 
+    /**
+     * Get the list of status of a template definition list in a datacenter.
+     * 
+     * @param enterprise The enterprise.
+     * @return The list of VirtualMachineTemplates' icons of the enterprise.
+     */
+    IconsDto getIcons(EnterpriseDto enterprise);
+
     /*********************** Enterprise Properties ***********************/
 
     /**
@@ -139,7 +147,7 @@ public interface EnterpriseClient
      * @return Set of enterprise properties.
      */
     @EnterpriseEdition
-    EnterprisePropertiesDto getEnterpriseProperties(Integer enterpriseId);
+    EnterprisePropertiesDto getEnterpriseProperties(EnterpriseDto enterprise);
 
     /**
      * Updates the given enterprise properties set.
@@ -346,12 +354,4 @@ public interface EnterpriseClient
      */
     TemplatesStateDto listTemplateListStatus(TemplateDefinitionListDto templateList,
         DatacenterDto datacenter);
-
-    /**
-     * Get the list of status of a template definition list in a datacenter.
-     * 
-     * @param enterpriseId Id of the enterprise.
-     * @return The list of VirtualMachineTemplates' icons of the enterprise.
-     */
-    IconsDto getIcons(Integer enterpriseId);
 }

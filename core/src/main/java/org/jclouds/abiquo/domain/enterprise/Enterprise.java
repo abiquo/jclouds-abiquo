@@ -44,6 +44,7 @@ import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
@@ -54,6 +55,7 @@ import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
@@ -288,6 +290,37 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public Limits findLimits(final Predicate<Limits> filter)
     {
         return Iterables.getFirst(filter(listLimits(), filter), null);
+    }
+
+    /**
+     * Retrieve the list of icons of the templates of this enterprise.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrivealistoficonsofanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrivealistoficonsofanEnterprise </a>
+     * @return List of icons of the templates of this enterprise.
+     */
+    public List<Icon> getIcons()
+    {
+        IconsDto dto = context.getApi().getEnterpriseClient().getIcons(this.unwrap());
+        return wrap(context, Icon.class, dto.getCollection());
+    }
+
+    /**
+     * Retrieve the list of icons of the templates of this enterprise.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrivealistoficonsofanEnterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
+     *      RetrivealistoficonsofanEnterprise </a>
+     * @return List of icons of the templates of this enterprise.
+     */
+    public EnterpriseProperties getEnterpriseProperties()
+    {
+        EnterprisePropertiesDto dto =
+            context.getApi().getEnterpriseClient().getEnterpriseProperties(this.unwrap());
+        return wrap(context, EnterpriseProperties.class, dto);
     }
 
     /**

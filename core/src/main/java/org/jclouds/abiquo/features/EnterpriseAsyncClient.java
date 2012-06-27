@@ -168,6 +168,15 @@ public interface EnterpriseAsyncClient
     ListenableFuture<VirtualDatacentersDto> listVirtualDatacenters(
         @EndpointLink("cloud/virtualdatacenters") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
+    /**
+     * @see EnterpriseClient#getIcons(Integer)
+     */
+    @GET
+    @Consumes(IconsDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<IconsDto> getIcons(
+        @EndpointLink("action/icons") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
+
     /*********************** Enterprise Properties ***********************/
 
     /**
@@ -175,11 +184,10 @@ public interface EnterpriseAsyncClient
      */
     @EnterpriseEdition
     @GET
-    @Path("/enterprises/{enterprise}/properties")
     @Consumes(EnterprisePropertiesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<EnterprisePropertiesDto> getEnterpriseProperties(
-        @PathParam("enterprise") Integer enterpriseId);
+        @EndpointLink("properties") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /**
      * @see EnterpriseClient#updateEnterpriseProperties(EnterprisePropertiesDto)
@@ -414,13 +422,4 @@ public interface EnterpriseAsyncClient
     ListenableFuture<TemplatesStateDto> listTemplateListStatus(
         @EndpointLink("repositoryStatus") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList,
         @QueryParam("datacenterId") @ParamParser(ParseDatacenterId.class) DatacenterDto datacenter);
-
-    /**
-     * @see EnterpriseClient#getIcons(Integer)
-     */
-    @GET
-    @Path("/enterprises/{enterprise}/action/icons")
-    @Consumes(IconsDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<IconsDto> getIcons(@PathParam("enterprise") Integer enterpriseId);
 }
