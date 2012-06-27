@@ -47,7 +47,7 @@ public class EnterprisePropertiesLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated properties
         EnterprisePropertiesDto updated =
-            env.enterpriseClient.getEnterpriseProperties(env.enterprise.getId());
+            env.enterpriseClient.getEnterpriseProperties(env.enterprise.unwrap());
 
         assertEquals(updated.getProperties().size(), size + 1);
         assertTrue(updated.getProperties().containsKey("Prop"));

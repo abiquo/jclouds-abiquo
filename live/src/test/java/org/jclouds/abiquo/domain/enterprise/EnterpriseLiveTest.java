@@ -198,7 +198,7 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
 
     public void testGetIcons()
     {
-        IconsDto icons = env.enterpriseClient.getIcons(env.defaultEnterprise.getId());
+        IconsDto icons = env.enterpriseClient.getIcons(env.defaultEnterprise.unwrap());
 
         // Calculate the number of url icons of the templates found for this enterprise
         List<String> iconUrls = new ArrayList<String>();
