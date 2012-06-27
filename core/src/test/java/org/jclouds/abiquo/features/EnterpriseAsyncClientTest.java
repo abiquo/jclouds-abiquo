@@ -783,12 +783,10 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         checkFilters(request);
     }
 
-    public void testIcons() throws SecurityException, NoSuchMethodException
+    public void testGetIcons() throws SecurityException, NoSuchMethodException
     {
-        Method method = EnterpriseAsyncClient.class.getMethod("getIcons");
-        GeneratedHttpRequest<EnterpriseAsyncClient> request =
-            processor.createRequest(method, EnterpriseResources.templateListPut(),
-                InfrastructureResources.datacenterPut());
+        Method method = EnterpriseAsyncClient.class.getMethod("getIcons", Integer.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/action/icons HTTP/1.1");
