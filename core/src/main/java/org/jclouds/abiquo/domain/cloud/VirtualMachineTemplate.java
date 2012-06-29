@@ -110,7 +110,13 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public AsyncTask makePersistent(final VirtualDatacenter vdc, final Tier tier,
         final String persistentTemplateName, final String persistentVolumeName)
     {
+        // infrastructure
         RESTLink storageLink = tier.unwrap().getEditLink();
+        if (storageLink == null)
+        {
+            // cloud
+            storageLink = tier.unwrap().searchLink("self");
+        }
         storageLink.setRel(ParentLinkName.TIER);
         return makePeristent(vdc, storageLink, persistentTemplateName, persistentVolumeName);
     }
