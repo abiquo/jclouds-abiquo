@@ -37,7 +37,6 @@ import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
 import com.abiquo.am.model.TemplatesStateDto;
-import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -234,24 +233,6 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
             "GET http://localhost/api/admin/enterprises/1/action/virtualdatacenters HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + VirtualDatacentersDto.BASE_MEDIA_TYPE
             + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testGetIcons() throws SecurityException, NoSuchMethodException
-    {
-        Method method = EnterpriseAsyncClient.class.getMethod("getIcons", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncClient> request =
-            processor.createRequest(method, EnterpriseResources.enterprisePut());
-
-        assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/enterprises/1/action/icons HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IconsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
