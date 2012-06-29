@@ -44,7 +44,6 @@ import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
-import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
@@ -290,21 +289,6 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public Limits findLimits(final Predicate<Limits> filter)
     {
         return Iterables.getFirst(filter(listLimits(), filter), null);
-    }
-
-    /**
-     * Retrieve the list of icons of the templates of this enterprise.
-     * 
-     * @see API: <a href=
-     *      "http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-RetrivealistoficonsofanEnterprise"
-     *      > http://community.abiquo.com/display/ABI20/EnterpriseResource#EnterpriseResource-
-     *      RetrivealistoficonsofanEnterprise </a>
-     * @return List of icons of the templates of this enterprise.
-     */
-    public List<Icon> getIcons()
-    {
-        IconsDto dto = context.getApi().getEnterpriseClient().getIcons(this.unwrap());
-        return wrap(context, Icon.class, dto.getCollection());
     }
 
     /**
