@@ -175,11 +175,10 @@ public interface EnterpriseAsyncClient
      */
     @EnterpriseEdition
     @GET
-    @Path("/enterprises/{enterprise}/properties")
     @Consumes(EnterprisePropertiesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<EnterprisePropertiesDto> getEnterpriseProperties(
-        @PathParam("enterprise") Integer enterpriseId);
+        @EndpointLink("properties") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /**
      * @see EnterpriseClient#updateEnterpriseProperties(EnterprisePropertiesDto)

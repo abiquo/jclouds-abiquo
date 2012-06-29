@@ -48,6 +48,7 @@ import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StorageDeviceMetadata;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
+import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.PublicNetwork;
 import org.jclouds.abiquo.features.AdminClient;
 import org.jclouds.abiquo.features.ConfigClient;
@@ -97,6 +98,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     public Datacenter datacenter;
 
     public PublicNetwork publicNetwork;
+
+    public ExternalNetwork externalNetwork;
 
     public List<RemoteService> remoteServices;
 
@@ -152,6 +155,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         createEnterprise();
         createRoles();
         createUsers();
+
+        createExternalNetwork();
     }
 
     @Override
@@ -161,6 +166,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         deleteRole(role);
         deleteRole(anotherRole);
 
+        deleteExternalNetwork();
         deletePublicNetwork();
         deleteStoragePool();
         deleteStorageDevice();
@@ -175,7 +181,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     // Setup
 
-    protected void createLicense() throws IOException
+    private void createLicense() throws IOException
     {
         license = License.builder(context.getApiContext(), readLicense()).build();
 
@@ -183,7 +189,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(license.getId());
     }
 
-    protected void createDatacenter()
+    private void createDatacenter()
     {
         // Assume a monolithic install
         URI endpoint = URI.create(context.getApiContext().getProviderMetadata().getEndpoint());
@@ -199,7 +205,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertEquals(remoteServices.size(), 7);
     }
 
-    protected void createMachine()
+    private void createMachine()
     {
         String ip = Config.get("abiquo.hypervisor.address");
         HypervisorType type = HypervisorType.valueOf(Config.get("abiquo.hypervisor.type"));
@@ -220,7 +226,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(machine.getId());
     }
 
-    protected void createRack()
+    private void createRack()
     {
         rack = Rack.builder(context.getApiContext(), datacenter).name(PREFIX + "Aloha").build();
         rack.save();
@@ -242,7 +248,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(ucsRack.getId());
     }
 
-    protected void createStorageDevice()
+    private void createStorageDevice()
     {
         String ip = Config.get("abiquo.storage.address");
         String type = Config.get("abiquo.storage.type");
@@ -266,7 +272,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(storageDevice.getId());
     }
 
-    protected void createStoragePool()
+    private void createStoragePool()
     {
         String pool = Config.get("abiquo.storage.pool");
 
@@ -319,7 +325,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(anotherRole.getId());
     }
 
-    protected void createEnterprise()
+    private void createEnterprise()
     {
         enterprise = Enterprise.builder(context.getApiContext()).name(randomName()).build();
         enterprise.save();
@@ -328,7 +334,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(limits);
     }
 
-    protected void createPublicNetwork()
+    private void createPublicNetwork()
     {
         publicNetwork =
             PublicNetwork.builder(context.getApiContext(), datacenter).name("PublicNetwork")
@@ -337,7 +343,27 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(publicNetwork.getId());
     }
 
+    private void createExternalNetwork()
+    {
+        externalNetwork =
+            ExternalNetwork.builder(context.getApiContext(), datacenter, enterprise)
+                .name("ExternalNetwork").gateway("10.0.0.1").address("10.0.0.0").mask(24).tag(7)
+                .build();
+        externalNetwork.save();
+        assertNotNull(externalNetwork.getId());
+    }
+
     // Tear down
+
+    private void deleteExternalNetwork()
+    {
+        if (externalNetwork != null)
+        {
+            Integer id = externalNetwork.getId();
+            externalNetwork.delete();
+            assertNull(datacenter.getNetwork(id));
+        }
+    }
 
     private void deletePublicNetwork()
     {
@@ -345,7 +371,6 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer id = publicNetwork.getId();
             publicNetwork.delete();
-            // Nick is unique in an enterprise
             assertNull(datacenter.getNetwork(id));
         }
     }
@@ -379,7 +404,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    protected void deleteStoragePool()
+    private void deleteStoragePool()
     {
         if (storagePool != null)
         {
@@ -390,7 +415,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     }
 
-    protected void deleteStorageDevice()
+    private void deleteStorageDevice()
     {
         if (storageDevice != null)
         {
@@ -400,7 +425,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    protected void deleteMachine()
+    private void deleteMachine()
     {
         if (machine != null && rack != null)
         {
@@ -410,7 +435,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    protected void deleteRack()
+    private void deleteRack()
     {
         if (rack != null && datacenter != null)
         {
@@ -420,7 +445,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    protected void deleteUcsRack()
+    private void deleteUcsRack()
     {
         if (ucsRack != null && datacenter != null)
         {
@@ -430,7 +455,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    protected void deleteDatacenter()
+    private void deleteDatacenter()
     {
         if (datacenter != null)
         {
@@ -443,7 +468,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         }
     }
 
-    protected void deleteEnterprise()
+    private void deleteEnterprise()
     {
         if (enterprise != null)
         {

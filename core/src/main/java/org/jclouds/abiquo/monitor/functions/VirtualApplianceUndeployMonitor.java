@@ -27,6 +27,7 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.ResourceNotFoundException;
 
 import com.abiquo.server.core.cloud.VirtualApplianceState;
 import com.google.common.base.Function;
@@ -63,6 +64,12 @@ public class VirtualApplianceUndeployMonitor implements Function<VirtualApplianc
                 default:
                     return MonitorStatus.CONTINUE;
             }
+        }
+        catch (ResourceNotFoundException nfe)
+        {
+            logger.warn("virtual appliance %s not found, assuming it was undeployed successfully, "
+                + "stop monitor with DONE", virtualAppliance);
+            return MonitorStatus.DONE;
         }
         catch (Exception ex)
         {

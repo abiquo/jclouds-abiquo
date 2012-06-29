@@ -54,6 +54,7 @@ import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
 import com.abiquo.server.core.enterprise.RolesDto;
 import com.abiquo.server.core.enterprise.UserDto;
 import com.abiquo.server.core.enterprise.UsersDto;
@@ -288,6 +289,22 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public Limits findLimits(final Predicate<Limits> filter)
     {
         return Iterables.getFirst(filter(listLimits(), filter), null);
+    }
+
+    /**
+     * Retrieve the defined properties of the given enterprise.
+     * 
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/EnterprisePropertiesResource#EnterprisePropertiesResource-Retrievethepropertiesforanenterprise"
+     *      > http://community.abiquo.com/display/ABI20/EnterprisePropertiesResource#
+     *      EnterprisePropertiesResource-Retrievethepropertiesforanenterprise</a>
+     * @return The defined properties of the given enterprise.
+     */
+    public EnterpriseProperties getEnterpriseProperties()
+    {
+        EnterprisePropertiesDto dto =
+            context.getApi().getEnterpriseClient().getEnterpriseProperties(this.unwrap());
+        return wrap(context, EnterpriseProperties.class, dto);
     }
 
     /**

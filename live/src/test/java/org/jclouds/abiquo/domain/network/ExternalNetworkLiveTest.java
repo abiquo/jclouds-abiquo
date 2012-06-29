@@ -17,40 +17,35 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.domain.enterprise;
+package org.jclouds.abiquo.domain.network;
 
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
 
+import java.util.List;
+
+import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
+import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 
 /**
- * Live integration tests for the {@link Enterprise} domain class.
+ * Live integration tests for the {@link ExternalNetwork} domain class.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class EnterprisePropertiesLiveTest extends BaseAbiquoClientLiveTest
+public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
 {
-
-    public void testUpdate()
+    public void testListIps()
     {
-        EnterpriseProperties properties =
-            env.administrationService.getEnterpriseProperties(env.enterprise);
+        IpsPoolManagementDto ipsDto =
+            context.getApiContext().getApi().getInfrastructureClient()
+                .listNetworkIps(env.publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
+        int totalIps = ipsDto.getTotalSize();
 
-        Integer size = properties.getProperties().size();
-        properties.getProperties().put("Prop", "Value");
-        properties.update();
+        List<Ip> ips = env.publicNetwork.listIps();
 
-        // Recover the updated properties
-        EnterprisePropertiesDto updated =
-            env.enterpriseClient.getEnterpriseProperties(env.enterprise.unwrap());
-
-        assertEquals(updated.getProperties().size(), size + 1);
-        assertTrue(updated.getProperties().containsKey("Prop"));
-        assertTrue(updated.getProperties().containsValue("Value"));
+        assertEquals(ips.size(), totalIps);
     }
 }

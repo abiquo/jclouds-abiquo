@@ -139,7 +139,7 @@ public interface EnterpriseClient
      * @return Set of enterprise properties.
      */
     @EnterpriseEdition
-    EnterprisePropertiesDto getEnterpriseProperties(Integer enterpriseId);
+    EnterprisePropertiesDto getEnterpriseProperties(EnterpriseDto enterprise);
 
     /**
      * Updates the given enterprise properties set.

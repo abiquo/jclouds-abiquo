@@ -364,6 +364,16 @@ public interface CloudClient
     VirtualMachinesDto listVirtualMachines(VirtualApplianceDto virtualAppliance);
 
     /**
+     * List all virtual machines for a virtual appliance.
+     * 
+     * @param virtualAppliance The virtual appliance.
+     * @param options The options to filter the list of virtual machines.
+     * @return The list of virtual machines for the virtual appliance.
+     */
+    VirtualMachinesDto listVirtualMachines(VirtualApplianceDto virtualAppliance,
+        VirtualMachineOptions options);
+
+    /**
      * Get the given virtual machine from the given virtual machine.
      * 
      * @param virtualAppliance The virtual appliance.

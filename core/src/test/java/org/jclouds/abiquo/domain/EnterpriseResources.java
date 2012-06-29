@@ -54,6 +54,8 @@ public class EnterpriseResources
         enterprise
             .addLink(new RESTLink("limits", "http://localhost/api/admin/enterprises/1/limits"));
         enterprise.addLink(new RESTLink("users", "http://localhost/api/admin/enterprises/1/users"));
+        enterprise.addLink(new RESTLink("properties",
+            "http://localhost/api/admin/enterprises/1/properties"));
         enterprise.addLink(new RESTLink("reservedmachines",
             "http://localhost/api/admin/enterprises/1/reservedmachines"));
         enterprise.addLink(new RESTLink("datacenterrepositories",
@@ -118,6 +120,7 @@ public class EnterpriseResources
         buffer.append(link("/admin/enterprises/1", "edit"));
         buffer.append(link("/admin/enterprises/1/limits", "limits"));
         buffer.append(link("/admin/enterprises/1/users", "users"));
+        buffer.append(link("/admin/enterprises/1/properties", "properties"));
         buffer.append(link("/admin/enterprises/1/reservedmachines", "reservedmachines"));
         buffer
             .append(link("/admin/enterprises/1/datacenterrepositories", "datacenterrepositories"));

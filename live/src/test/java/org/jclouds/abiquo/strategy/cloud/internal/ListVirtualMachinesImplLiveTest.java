@@ -24,6 +24,9 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachinePredicates;
 import org.jclouds.abiquo.strategy.BaseAbiquoStrategyLiveTest;
@@ -36,8 +39,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListVirtualMachinesImplLiveTest extends
-    BaseAbiquoStrategyLiveTest
+public class ListVirtualMachinesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListVirtualMachinesImpl strategy;
 
@@ -69,5 +71,37 @@ public class ListVirtualMachinesImplLiveTest extends
             strategy.execute(VirtualMachinePredicates.name(env.virtualMachine.getName()));
         assertNotNull(vms);
         assertEquals(size(vms), 1);
+    }
+
+    public void testExecuteWhenExceedsPagination()
+    {
+        List<VirtualMachine> vms = new ArrayList<VirtualMachine>();
+
+        // Pagination by default is set to 25 items per page, so create a few more to verify that
+        // all are returned when listing
+        int numVms = 30;
+
+        for (int i = 0; i < numVms; i++)
+        {
+            VirtualMachine vm =
+                VirtualMachine.Builder.fromVirtualMachine(env.virtualMachine).build();
+            vm.save();
+            vms.add(vm);
+        }
+
+        try
+        {
+            Iterable<VirtualMachine> all = strategy.execute();
+
+            assertNotNull(all);
+            assertTrue(size(all) >= numVms);
+        }
+        finally
+        {
+            for (VirtualMachine vm : vms)
+            {
+                vm.delete();
+            }
+        }
     }
 }

@@ -218,7 +218,7 @@ public class BaseAdministrationService implements AdministrationService
             + Enterprise.class);
 
         EnterprisePropertiesDto properties =
-            context.getApi().getEnterpriseClient().getEnterpriseProperties(enterprise.getId());
+            context.getApi().getEnterpriseClient().getEnterpriseProperties(enterprise.unwrap());
         return wrap(context, EnterpriseProperties.class, properties);
     }
 

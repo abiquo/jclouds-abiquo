@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.strategy.cloud;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.strategy.ListRootEntities;
 import org.jclouds.abiquo.strategy.cloud.internal.ListVirtualMachinesImpl;
 
@@ -33,5 +34,5 @@ import com.google.inject.ImplementedBy;
 @ImplementedBy(ListVirtualMachinesImpl.class)
 public interface ListVirtualMachines extends ListRootEntities<VirtualMachine>
 {
-
+    Iterable<VirtualMachine> execute(VirtualMachineOptions options);
 }

@@ -47,7 +47,8 @@ public class PrivateNetwork extends Network
     /**
      * Constructor to be used only by the builder.
      */
-    protected PrivateNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VLANNetworkDto target)
+    protected PrivateNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final VLANNetworkDto target)
     {
         super(context, target);
     }
@@ -61,6 +62,7 @@ public class PrivateNetwork extends Network
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource
      *      -DeleteaPrivateNetwork</a>
      */
+    @Override
     public void delete()
     {
         context.getApi().getCloudClient().deletePrivateNetwork(target);
@@ -74,6 +76,7 @@ public class PrivateNetwork extends Network
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource
      *      -CreateaPrivateNetwork</a>
      */
+    @Override
     public void save()
     {
         target =
@@ -88,6 +91,7 @@ public class PrivateNetwork extends Network
      *      http://community.abiquo.com/display/ABI20/Private+Network+Resource#PrivateNetworkResource
      *      -UpdateaPrivateNetwork</a>
      */
+    @Override
     public void update()
     {
         target = context.getApi().getCloudClient().updatePrivateNetwork(target);
@@ -101,9 +105,10 @@ public class PrivateNetwork extends Network
      *      -RetrievethelistofIPSofthePrivateNetwork</a>
      */
     @Override
-    public List<Ip> listIps()
+    public List<Ip> listIps(final IpOptions options)
     {
-        IpsPoolManagementDto nics = context.getApi().getCloudClient().listPrivateNetworkIps(target);
+        IpsPoolManagementDto nics =
+            context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
         return wrap(context, Ip.class, nics.getCollection());
     }
 

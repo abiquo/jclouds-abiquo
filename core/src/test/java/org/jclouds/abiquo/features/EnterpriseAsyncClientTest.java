@@ -249,8 +249,9 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
         IOException
     {
         Method method =
-            EnterpriseAsyncClient.class.getMethod("getEnterpriseProperties", Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncClient> request = processor.createRequest(method, 1);
+            EnterpriseAsyncClient.class.getMethod("getEnterpriseProperties", EnterpriseDto.class);
+        GeneratedHttpRequest<EnterpriseAsyncClient> request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/properties HTTP/1.1");

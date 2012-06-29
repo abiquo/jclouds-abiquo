@@ -27,6 +27,7 @@ import javax.inject.Singleton;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.logging.Logger;
+import org.jclouds.rest.ResourceNotFoundException;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
@@ -66,6 +67,12 @@ public class VirtualMachineUndeployMonitor implements Function<VirtualMachine, M
                 default:
                     return MonitorStatus.CONTINUE;
             }
+        }
+        catch (ResourceNotFoundException nfe)
+        {
+            logger.warn("virtual machine %s not found, assuming it was undeployed successfully, "
+                + "stop monitor with DONE", virtualMachine);
+            return MonitorStatus.DONE;
         }
         catch (Exception ex)
         {

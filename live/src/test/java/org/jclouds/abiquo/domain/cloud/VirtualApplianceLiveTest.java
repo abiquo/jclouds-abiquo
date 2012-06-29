@@ -19,8 +19,12 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.collect.Iterables.size;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
@@ -68,5 +72,37 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest
     public void testGetState()
     {
         assertEquals(env.virtualAppliance.getState(), VirtualApplianceState.NOT_DEPLOYED);
+    }
+
+    public void testListVirtualMachinesReturnsAll()
+    {
+        List<VirtualMachine> vms = new ArrayList<VirtualMachine>();
+
+        // Pagination by default is set to 25 items per page, so create a few more to verify that
+        // all are returned when listing
+        int numVms = 30;
+
+        for (int i = 0; i < numVms; i++)
+        {
+            VirtualMachine vm =
+                VirtualMachine.Builder.fromVirtualMachine(env.virtualMachine).build();
+            vm.save();
+            vms.add(vm);
+        }
+
+        try
+        {
+            Iterable<VirtualMachine> all = env.virtualAppliance.listVirtualMachines();
+
+            assertNotNull(all);
+            assertTrue(size(all) >= numVms);
+        }
+        finally
+        {
+            for (VirtualMachine vm : vms)
+            {
+                vm.delete();
+            }
+        }
     }
 }
