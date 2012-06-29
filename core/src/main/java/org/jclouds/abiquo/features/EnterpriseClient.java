@@ -26,7 +26,6 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.am.model.TemplatesStateDto;
-import com.abiquo.server.core.appslibrary.IconsDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -129,14 +128,6 @@ public interface EnterpriseClient
      * @return The list of Datacenters.
      */
     VirtualDatacentersDto listVirtualDatacenters(EnterpriseDto enterprise);
-
-    /**
-     * Get the list of template's icons of the given enterprise
-     * 
-     * @param enterprise The enterprise.
-     * @return The list of template's icons of the given enterprise.
-     */
-    IconsDto getIcons(EnterpriseDto enterprise);
 
     /*********************** Enterprise Properties ***********************/
 
