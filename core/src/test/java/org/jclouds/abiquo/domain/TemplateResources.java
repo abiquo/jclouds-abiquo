@@ -40,7 +40,6 @@ public class TemplateResources
     public static DatacenterRepositoryDto datacenterRepositoryPut()
     {
         DatacenterRepositoryDto dcRepository = new DatacenterRepositoryDto();
-        dcRepository.setId(1);
         dcRepository.setName("Datacenter Repo");
         dcRepository.setRepositoryCapacityMb(0);
         dcRepository.setRepositoryLocation("10.60.1.104:/volume1/nfs-devel");
