@@ -19,14 +19,13 @@
 
 package org.jclouds.abiquo.domain.network;
 
-
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
-import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
 
 /**
  * Adds generic high level functionality to {IpPoolManagementDto}.
@@ -34,12 +33,13 @@ import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public class Ip extends DomainWrapper<IpPoolManagementDto>
+public class Ip extends DomainWrapper<IpPoolManagementDto20>
 {
     /**
      * Constructor to be used only by the builder.
      */
-    protected Ip(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final IpPoolManagementDto target)
+    protected Ip(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final IpPoolManagementDto20 target)
     {
         super(context, target);
     }

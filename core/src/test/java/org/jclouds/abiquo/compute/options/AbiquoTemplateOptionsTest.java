@@ -31,7 +31,7 @@ import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
 
 /**
  * Unit tests for the {@link AbiquoTemplateOptions} class.
@@ -84,9 +84,9 @@ public class AbiquoTemplateOptionsTest
         RestContext<AbiquoClient, AbiquoAsyncClient> context =
             EasyMock.createMock(RestContext.class);
 
-        IpPoolManagementDto dto1 = new IpPoolManagementDto();
+        IpPoolManagementDto20 dto1 = new IpPoolManagementDto20();
         dto1.setIp("10.60.0.1");
-        IpPoolManagementDto dto2 = new IpPoolManagementDto();
+        IpPoolManagementDto20 dto2 = new IpPoolManagementDto20();
         dto2.setIp("10.60.0.2");
 
         Ip ip1 = wrap(context, Ip.class, dto1);

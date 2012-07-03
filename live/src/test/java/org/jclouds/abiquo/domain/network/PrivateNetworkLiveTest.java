@@ -26,7 +26,7 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 
 /**
  * Live integration tests for the {@link PrivateNetwork} domain class.
@@ -38,7 +38,7 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testListIps()
     {
-        IpsPoolManagementDto ipsDto =
+        IpsPoolManagementDto20 ipsDto =
             context
                 .getApiContext()
                 .getApi()

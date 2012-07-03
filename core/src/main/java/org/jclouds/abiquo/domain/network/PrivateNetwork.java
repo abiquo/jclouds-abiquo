@@ -28,8 +28,8 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
-import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 
 /**
  * Adds high level functionality to private {@link VLANNetworkDto}.
@@ -107,7 +107,7 @@ public class PrivateNetwork extends Network
     @Override
     public List<Ip> listIps(final IpOptions options)
     {
-        IpsPoolManagementDto nics =
+        IpsPoolManagementDto20 nics =
             context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
         return wrap(context, Ip.class, nics.getCollection());
     }
@@ -117,7 +117,7 @@ public class PrivateNetwork extends Network
     public List<Ip> listAvailableIps()
     {
         IpOptions options = IpOptions.builder().free(true).build();
-        IpsPoolManagementDto nics =
+        IpsPoolManagementDto20 nics =
             context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
         return wrap(context, Ip.class, nics.getCollection());
     }

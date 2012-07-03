@@ -54,8 +54,8 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
-import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DvdManagementDto;
@@ -877,11 +877,11 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return dtos;
     }
 
-    private static IpPoolManagementDto[] toIpDto(final Ip... ips)
+    private static IpPoolManagementDto20[] toIpDto(final Ip... ips)
     {
         checkNotNull(ips, "must provide at least one ip");
 
-        IpPoolManagementDto[] dtos = new IpPoolManagementDto[ips.length];
+        IpPoolManagementDto20[] dtos = new IpPoolManagementDto20[ips.length];
         for (int i = 0; i < ips.length; i++)
         {
             dtos[i] = ips[i].unwrap();
