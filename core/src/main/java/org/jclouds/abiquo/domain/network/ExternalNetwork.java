@@ -34,8 +34,8 @@ import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
-import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 
 /**
  * Adds high level functionality to external {@link VLANNetworkDto}.
@@ -114,7 +114,7 @@ public class ExternalNetwork extends Network
     @Override
     public List<Ip> listIps(final IpOptions options)
     {
-        IpsPoolManagementDto nics =
+        IpsPoolManagementDto20 nics =
             context.getApi().getInfrastructureClient().listNetworkIps(target, options);
         return wrap(context, Ip.class, nics.getCollection());
     }

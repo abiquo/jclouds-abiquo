@@ -32,7 +32,7 @@ import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
-import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
 
 /**
  * Unit tests for the {@link BindIpRefToPayload} binder.
@@ -63,7 +63,7 @@ public class BindIpRefToPayloadTest
 
     public void testBindIpRef() throws IOException
     {
-        IpPoolManagementDto ip = NetworkResources.privateIpPut();
+        IpPoolManagementDto20 ip = NetworkResources.privateIpPut();
         RESTLink selfLink = ip.searchLink("self");
         BindIpRefToPayload binder = new BindIpRefToPayload(new JAXBParser("false"));
         HttpRequest request =

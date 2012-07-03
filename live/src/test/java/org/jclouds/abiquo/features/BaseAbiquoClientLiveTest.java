@@ -58,6 +58,7 @@ public abstract class BaseAbiquoClientLiveTest
             checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
         String endpoint =
             checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
+        String apiVersion = System.getProperty("test.abiquo.api-version");
 
         Properties props = new Properties();
         props.put(Constants.PROPERTY_MAX_RETRIES, "0");
@@ -69,6 +70,11 @@ public abstract class BaseAbiquoClientLiveTest
         props.put("jclouds.timeouts.InfrastructureClient.updateMachine", "60000");
         props.put("jclouds.timeouts.InfrastructureClient.checkMachineState", "60000");
         props.put("jclouds.timeouts.CloudClient.listVirtualMachines", "60000");
+
+        if (apiVersion != null)
+        {
+            props.put(Constants.PROPERTY_API_VERSION, apiVersion);
+        }
 
         context = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
             .endpoint(endpoint) //

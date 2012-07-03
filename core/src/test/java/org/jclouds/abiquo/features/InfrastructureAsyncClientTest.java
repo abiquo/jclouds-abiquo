@@ -69,10 +69,10 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.UcsRacksDto;
-import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
@@ -1817,7 +1817,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/network/1/ips HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto.BASE_MEDIA_TYPE
+        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto20.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -1840,7 +1840,7 @@ public class InfrastructureAsyncClientTest extends
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/network/1/ips?startwith=10 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto.BASE_MEDIA_TYPE
+        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto20.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, null, null, false);
 
