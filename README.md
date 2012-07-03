@@ -46,4 +46,3 @@ License
 -------
 
 See LICENSE and NOTICE file for details.
-
