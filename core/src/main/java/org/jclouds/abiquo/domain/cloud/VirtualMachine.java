@@ -806,6 +806,11 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         return target.getNodeName();
     }
 
+    public String getOwnerName()
+    {
+        return target.getUserName() + " " + target.getUserSurname();
+    }
+
     public String getInternalName()
     {
         return target.getName();
