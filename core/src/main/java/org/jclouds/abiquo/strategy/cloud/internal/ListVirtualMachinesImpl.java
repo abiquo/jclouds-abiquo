@@ -43,8 +43,8 @@ import org.jclouds.abiquo.strategy.cloud.ListVirtualMachines;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.RestContext;
 
-import com.abiquo.server.core.cloud.VirtualMachineDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.inject.Inject;
@@ -92,7 +92,8 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
     {
         // Find virtual machines in concurrent requests
         Iterable<VirtualAppliance> vapps = listVirtualAppliances.execute();
-        Iterable<VirtualMachineDto> vms = listConcurrentVirtualMachines(vapps, options);
+        Iterable<VirtualMachineWithNodeExtendedDto> vms =
+            listConcurrentVirtualMachines(vapps, options);
 
         return wrap(context, VirtualMachine.class, vms);
     }
@@ -103,15 +104,17 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
         return filter(execute(), selector);
     }
 
-    private Iterable<VirtualMachineDto> listConcurrentVirtualMachines(
+    private Iterable<VirtualMachineWithNodeExtendedDto> listConcurrentVirtualMachines(
         final Iterable<VirtualAppliance> vapps, final VirtualMachineOptions options)
     {
-        Iterable<VirtualMachinesDto> vms =
-            transformParallel(vapps,
-                new Function<VirtualAppliance, Future< ? extends VirtualMachinesDto>>()
+        Iterable<VirtualMachinesWithNodeExtendedDto> vms =
+            transformParallel(
+                vapps,
+                new Function<VirtualAppliance, Future< ? extends VirtualMachinesWithNodeExtendedDto>>()
                 {
                     @Override
-                    public Future<VirtualMachinesDto> apply(final VirtualAppliance input)
+                    public Future<VirtualMachinesWithNodeExtendedDto> apply(
+                        final VirtualAppliance input)
                     {
                         return context.getAsyncApi().getCloudClient()
                             .listVirtualMachines(input.unwrap(), options);

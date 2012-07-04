@@ -126,7 +126,7 @@ public class AbiquoComputeServiceAdapter
         Integer overrideRam = options.getOverrideRam();
 
         VirtualMachine vm = VirtualMachine.builder(context, vapp, virtualMachineTemplate) //
-            .name(name) //
+            .nameLabel(name) //
             .cpu(overrideCores != null ? overrideCores : totalCores(template.getHardware())) //
             .ram(overrideRam != null ? overrideRam : template.getHardware().getRam()) //
             .password(options.getVncPassword()) // Can be null

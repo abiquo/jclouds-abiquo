@@ -39,9 +39,9 @@ import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceState;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -177,7 +177,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
      */
     public List<VirtualMachine> listVirtualMachines(final VirtualMachineOptions options)
     {
-        VirtualMachinesDto vms =
+        VirtualMachinesWithNodeExtendedDto vms =
             context.getApi().getCloudClient().listVirtualMachines(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());
     }
@@ -212,7 +212,8 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
      */
     public VirtualMachine getVirtualMachine(final Integer id)
     {
-        VirtualMachineDto vm = context.getApi().getCloudClient().getVirtualMachine(target, id);
+        VirtualMachineWithNodeExtendedDto vm =
+            context.getApi().getCloudClient().getVirtualMachine(target, id);
         return wrap(context, VirtualMachine.class, vm);
     }
 

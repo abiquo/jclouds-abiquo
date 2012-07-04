@@ -55,7 +55,8 @@ import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
@@ -810,8 +811,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -834,8 +835,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines?limit=0 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -857,7 +858,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -872,16 +874,18 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
     {
         Method method =
             CloudAsyncClient.class.getMethod("createVirtualMachine", VirtualApplianceDto.class,
-                VirtualMachineDto.class);
+                VirtualMachineWithNodeExtendedDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, CloudResources.virtualAppliancePut(),
                 CloudResources.virtualMachinePost());
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineDto.BASE_MEDIA_TYPE + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualMachinePostPayload()),
-            VirtualMachineDto.class, VirtualMachineDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineWithNodeExtendedDto.class,
+            VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -894,7 +898,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         IOException
     {
         Method method =
-            CloudAsyncClient.class.getMethod("updateVirtualMachine", VirtualMachineDto.class);
+            CloudAsyncClient.class.getMethod("updateVirtualMachine",
+                VirtualMachineWithNodeExtendedDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, CloudResources.virtualMachinePut());
 
@@ -904,7 +909,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualMachinePutPayload()),
-            VirtualMachineDto.class, VirtualMachineDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineWithNodeExtendedDto.class,
+            VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
@@ -917,8 +923,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         NoSuchMethodException, IOException
     {
         Method method =
-            CloudAsyncClient.class.getMethod("updateVirtualMachine", VirtualMachineDto.class,
-                VirtualMachineOptions.class);
+            CloudAsyncClient.class.getMethod("updateVirtualMachine",
+                VirtualMachineWithNodeExtendedDto.class, VirtualMachineOptions.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, CloudResources.virtualMachinePut(),
                 VirtualMachineOptions.builder().force(true).build());
@@ -929,7 +935,8 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader(CloudResources.virtualMachinePutPayload()),
-            VirtualMachineDto.class, VirtualMachineDto.BASE_MEDIA_TYPE, false);
+            VirtualMachineWithNodeExtendedDto.class,
+            VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);

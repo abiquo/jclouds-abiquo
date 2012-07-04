@@ -41,7 +41,7 @@ import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -520,8 +520,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/users/1/action/virtualmachines HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -589,8 +589,8 @@ public class EnterpriseAsyncClientTest extends BaseAbiquoAsyncClientTest<Enterpr
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises/1/action/virtualmachines HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

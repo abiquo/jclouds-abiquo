@@ -185,7 +185,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 
         virtualMachine =
             VirtualMachine.builder(context.getApiContext(), virtualAppliance, template).cpu(2)
-                .name(PREFIX + "VM Aloha").ram(128).build();
+                .nameLabel(PREFIX + "VM Aloha").ram(128).build();
 
         virtualMachine.save();
         assertNotNull(virtualMachine.getId());

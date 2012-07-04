@@ -40,7 +40,8 @@ import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
@@ -362,7 +363,7 @@ public interface CloudClient
      * @param virtualAppliance The virtual appliance.
      * @return The list of virtual machines for the virtual appliance.
      */
-    VirtualMachinesDto listVirtualMachines(VirtualApplianceDto virtualAppliance);
+    VirtualMachinesWithNodeExtendedDto listVirtualMachines(VirtualApplianceDto virtualAppliance);
 
     /**
      * List all virtual machines for a virtual appliance.
@@ -371,7 +372,7 @@ public interface CloudClient
      * @param options The options to filter the list of virtual machines.
      * @return The list of virtual machines for the virtual appliance.
      */
-    VirtualMachinesDto listVirtualMachines(VirtualApplianceDto virtualAppliance,
+    VirtualMachinesWithNodeExtendedDto listVirtualMachines(VirtualApplianceDto virtualAppliance,
         VirtualMachineOptions options);
 
     /**
@@ -381,7 +382,7 @@ public interface CloudClient
      * @param virtualMachineId The id of the virtual machine.
      * @return The virtual machine or <code>null</code> if it does not exist.
      */
-    VirtualMachineDto getVirtualMachine(VirtualApplianceDto virtualAppliance,
+    VirtualMachineWithNodeExtendedDto getVirtualMachine(VirtualApplianceDto virtualAppliance,
         Integer virtualMachineId);
 
     /**
@@ -391,8 +392,8 @@ public interface CloudClient
      * @param virtualMachine The virtual machine to be created.
      * @return The created virtual machine.
      */
-    VirtualMachineDto createVirtualMachine(VirtualApplianceDto virtualAppliance,
-        VirtualMachineDto virtualMachine);
+    VirtualMachineWithNodeExtendedDto createVirtualMachine(VirtualApplianceDto virtualAppliance,
+        VirtualMachineWithNodeExtendedDto virtualMachine);
 
     /**
      * Deletes an existing virtual machine.
@@ -407,7 +408,7 @@ public interface CloudClient
      * @param virtualMachine The new attributes for the virtual machine.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    AcceptedRequestDto<String> updateVirtualMachine(VirtualMachineDto virtualMachine);
+    AcceptedRequestDto<String> updateVirtualMachine(VirtualMachineWithNodeExtendedDto virtualMachine);
 
     /**
      * Updates an existing virtual machine from the given virtual appliance.
@@ -416,8 +417,8 @@ public interface CloudClient
      * @param options The update options.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    AcceptedRequestDto<String> updateVirtualMachine(VirtualMachineDto virtualMachine,
-        VirtualMachineOptions options);
+    AcceptedRequestDto<String> updateVirtualMachine(
+        VirtualMachineWithNodeExtendedDto virtualMachine, VirtualMachineOptions options);
 
     /**
      * Changes the state an existing virtual machine.

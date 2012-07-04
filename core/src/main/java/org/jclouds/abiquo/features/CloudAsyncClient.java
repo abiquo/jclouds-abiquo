@@ -77,7 +77,8 @@ import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachinePersistentDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
@@ -430,18 +431,18 @@ public interface CloudAsyncClient
      * @see CloudClient#listVirtualMachines(VirtualApplianceDto)
      */
     @GET
-    @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
+    @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<VirtualMachinesDto> listVirtualMachines(
+    ListenableFuture<VirtualMachinesWithNodeExtendedDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
      * @see CloudClient#listVirtualMachines(VirtualApplianceDto, VirtualMachineOptions)
      */
     @GET
-    @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
+    @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<VirtualMachinesDto> listVirtualMachines(
+    ListenableFuture<VirtualMachinesWithNodeExtendedDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options);
 
@@ -450,22 +451,22 @@ public interface CloudAsyncClient
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    @Consumes(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @Consumes(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<VirtualMachineDto> getVirtualMachine(
+    ListenableFuture<VirtualMachineWithNodeExtendedDto> getVirtualMachine(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(AppendToPath.class) Integer virtualMachineId);
 
     /**
-     * @see CloudClient#createVirtualMachine(VirtualApplianceDto, VirtualMachineDto)
+     * @see CloudClient#createVirtualMachine(VirtualApplianceDto, VirtualMachineWithNodeExtendedDto)
      */
     @POST
-    @Consumes(VirtualMachineDto.BASE_MEDIA_TYPE)
-    @Produces(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @Consumes(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<VirtualMachineDto> createVirtualMachine(
+    ListenableFuture<VirtualMachineWithNodeExtendedDto> createVirtualMachine(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
-        @BinderParam(BindToXMLPayload.class) VirtualMachineDto virtualMachine);
+        @BinderParam(BindToXMLPayload.class) VirtualMachineWithNodeExtendedDto virtualMachine);
 
     /**
      * @see CloudClient#deleteVirtualMachine(VirtualMachineDto)
@@ -475,14 +476,14 @@ public interface CloudAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#updateVirtualMachine(VirtualMachineDto)
+     * @see CloudClient#updateVirtualMachine(VirtualMachineWithNodeExtendedDto)
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @Produces(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
     ListenableFuture<AcceptedRequestDto<String>> updateVirtualMachine(
-        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine);
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineWithNodeExtendedDto virtualMachine);
 
     /**
      * @see CloudClient#updateVirtualMachine(VirtualMachineDto, VirtualMachineOptions)
@@ -490,9 +491,9 @@ public interface CloudAsyncClient
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @Produces(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
     ListenableFuture<AcceptedRequestDto<String>> updateVirtualMachine(
-        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineDto virtualMachine,
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineWithNodeExtendedDto virtualMachine,
         @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options);
 
     /**

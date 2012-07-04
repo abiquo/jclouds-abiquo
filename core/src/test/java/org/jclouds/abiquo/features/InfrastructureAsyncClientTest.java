@@ -50,7 +50,7 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
@@ -1285,8 +1285,8 @@ public class InfrastructureAsyncClientTest extends
         assertRequestLineEquals(
             request,
             "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/virtualmachines?sync=true HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachinesDto.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
