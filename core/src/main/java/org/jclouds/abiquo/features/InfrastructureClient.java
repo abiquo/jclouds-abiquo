@@ -33,6 +33,7 @@ import org.jclouds.concurrent.Timeout;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
+import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
@@ -651,6 +652,15 @@ public interface InfrastructureClient
      * @return The list of virtual machines in the physical machine.
      */
     VirtualMachinesDto listVirtualMachinesByMachine(MachineDto machine, MachineOptions options);
+
+    /**
+     * Get the given virtual machine
+     * 
+     * @param machine
+     * @param virtualMachineId
+     * @return
+     */
+    VirtualMachineDto getVirtualMachine(MachineDto machine, Integer virtualMachineId);
 
     /*********************** Storage Device ***********************/
 

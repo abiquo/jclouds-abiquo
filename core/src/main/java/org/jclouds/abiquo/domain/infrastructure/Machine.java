@@ -40,6 +40,7 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -67,7 +68,8 @@ public class Machine extends AbstractPhysicalMachine
     /**
      * Constructor to be used only by the builder.
      */
-    protected Machine(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final MachineDto target)
+    protected Machine(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final MachineDto target)
     {
         super(context, target);
     }
@@ -225,7 +227,8 @@ public class Machine extends AbstractPhysicalMachine
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Rack rack)
+    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final Rack rack)
     {
         return new Builder(context, rack);
     }
@@ -480,4 +483,12 @@ public class Machine extends AbstractPhysicalMachine
     {
         this.rack = rack;
     }
+
+    public VirtualMachine getVirtualMachine(final Integer virtualMachineId)
+    {
+        VirtualMachineDto vm =
+            context.getApi().getInfrastructureClient().getVirtualMachine(target, virtualMachineId);
+        return wrap(context, VirtualMachine.class, vm);
+    }
+
 }
