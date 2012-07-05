@@ -33,6 +33,7 @@ import org.jclouds.concurrent.Timeout;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
+import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
@@ -52,10 +53,10 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.UcsRacksDto;
-import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
@@ -652,6 +653,15 @@ public interface InfrastructureClient
      */
     VirtualMachinesDto listVirtualMachinesByMachine(MachineDto machine, MachineOptions options);
 
+    /**
+     * Get the given virtual machine
+     * 
+     * @param machine
+     * @param virtualMachineId
+     * @return
+     */
+    VirtualMachineDto getVirtualMachine(MachineDto machine, Integer virtualMachineId);
+
     /*********************** Storage Device ***********************/
 
     /**
@@ -881,7 +891,7 @@ public interface InfrastructureClient
      * @param network The network.
      * @return The list of ips for the network.
      */
-    IpsPoolManagementDto listNetworkIps(VLANNetworkDto network);
+    IpsPoolManagementDto20 listNetworkIps(VLANNetworkDto network);
 
     /**
      * List all ips for a network with options.
@@ -890,5 +900,5 @@ public interface InfrastructureClient
      * @param options Filtering options.
      * @return The list of ips for the network.
      */
-    IpsPoolManagementDto listNetworkIps(VLANNetworkDto network, IpOptions options);
+    IpsPoolManagementDto20 listNetworkIps(VLANNetworkDto network, IpOptions options);
 }

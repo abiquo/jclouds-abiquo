@@ -49,7 +49,7 @@ import org.jclouds.rest.RestContext;
 
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
-import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.common.annotations.VisibleForTesting;
@@ -125,7 +125,7 @@ public class BaseSearchService implements SearchService
     @Override
     public Iterable<Ip> searchPrivateIps(final PrivateNetwork network, final IpOptions options)
     {
-        List<IpPoolManagementDto> ips =
+        List<IpPoolManagementDto20> ips =
             context.getApi().getCloudClient().listPrivateNetworkIps(network.unwrap(), options)
                 .getCollection();
 
@@ -136,7 +136,7 @@ public class BaseSearchService implements SearchService
     public Iterable<Ip> searchPublicIpsToPurchase(final VirtualDatacenter virtualDatacenter,
         final IpOptions options)
     {
-        List<IpPoolManagementDto> ips =
+        List<IpPoolManagementDto20> ips =
             context.getApi().getCloudClient()
                 .listAvailablePublicIps(virtualDatacenter.unwrap(), options).getCollection();
 
@@ -147,7 +147,7 @@ public class BaseSearchService implements SearchService
     public Iterable<Ip> searchPurchasedPublicIps(final VirtualDatacenter virtualDatacenter,
         final IpOptions options)
     {
-        List<IpPoolManagementDto> ips =
+        List<IpPoolManagementDto20> ips =
             context.getApi().getCloudClient()
                 .listPurchasedPublicIps(virtualDatacenter.unwrap(), options).getCollection();
 

@@ -79,13 +79,13 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.abiquo.server.core.infrastructure.network.IpPoolManagementDto;
-import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
+import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
@@ -189,9 +189,9 @@ public interface CloudAsyncClient
      * @see CloudClient#listAvailablePublicIps(VirtualDatacenterDto, IpOptions)
      */
     @GET
-    @Consumes(IpsPoolManagementDto.BASE_MEDIA_TYPE)
+    @Consumes(IpsPoolManagementDto20.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<IpsPoolManagementDto> listAvailablePublicIps(
+    ListenableFuture<IpsPoolManagementDto20> listAvailablePublicIps(
         @EndpointLink("topurchase") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
@@ -199,9 +199,9 @@ public interface CloudAsyncClient
      * @see CloudClient#listPurchasedPublicIps(VirtualDatacenterDto, IpOptions)
      */
     @GET
-    @Consumes(IpsPoolManagementDto.BASE_MEDIA_TYPE)
+    @Consumes(IpsPoolManagementDto20.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<IpsPoolManagementDto> listPurchasedPublicIps(
+    ListenableFuture<IpsPoolManagementDto20> listPurchasedPublicIps(
         @EndpointLink("purchased") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
@@ -209,19 +209,19 @@ public interface CloudAsyncClient
      * @see CloudClient#purchasePublicIp(IpsPoolManagementDto)
      */
     @PUT
-    @Consumes(IpPoolManagementDto.BASE_MEDIA_TYPE)
+    @Consumes(IpPoolManagementDto20.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<IpPoolManagementDto> purchasePublicIp(
-        @EndpointLink("purchase") @BinderParam(BindToPath.class) IpPoolManagementDto publicIp);
+    ListenableFuture<IpPoolManagementDto20> purchasePublicIp(
+        @EndpointLink("purchase") @BinderParam(BindToPath.class) IpPoolManagementDto20 publicIp);
 
     /**
      * @see CloudClient#releasePublicIp(IpsPoolManagementDto)
      */
     @PUT
-    @Consumes(IpPoolManagementDto.BASE_MEDIA_TYPE)
+    @Consumes(IpPoolManagementDto20.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<IpPoolManagementDto> releasePublicIp(
-        @EndpointLink("release") @BinderParam(BindToPath.class) IpPoolManagementDto publicIp);
+    ListenableFuture<IpPoolManagementDto20> releasePublicIp(
+        @EndpointLink("release") @BinderParam(BindToPath.class) IpPoolManagementDto20 publicIp);
 
     /*********************** Private Network ***********************/
 
@@ -297,18 +297,18 @@ public interface CloudAsyncClient
      * @see CloudClient#listPrivateNetworkIps(VLANNetworkDto)
      */
     @GET
-    @Consumes(IpsPoolManagementDto.BASE_MEDIA_TYPE)
+    @Consumes(IpsPoolManagementDto20.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<IpsPoolManagementDto> listPrivateNetworkIps(
+    ListenableFuture<IpsPoolManagementDto20> listPrivateNetworkIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
     /**
      * @see CloudClient#listPrivateNetworkIps(VLANNetworkDto, IpOptions)
      */
     @GET
-    @Consumes(IpsPoolManagementDto.BASE_MEDIA_TYPE)
+    @Consumes(IpsPoolManagementDto20.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<IpsPoolManagementDto> listPrivateNetworkIps(
+    ListenableFuture<IpsPoolManagementDto20> listPrivateNetworkIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
@@ -323,7 +323,7 @@ public interface CloudAsyncClient
     @Produces(LinksDto.BASE_MEDIA_TYPE)
     ListenableFuture<AcceptedRequestDto<String>> replaceNics(
         @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(BindIpRefsToPayload.class) IpPoolManagementDto... ips);
+        @BinderParam(BindIpRefsToPayload.class) IpPoolManagementDto20... ips);
 
     /**
      * @see CloudClient#listAttachedNics(VirtualMachineDto)

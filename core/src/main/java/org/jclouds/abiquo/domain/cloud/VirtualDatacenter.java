@@ -48,9 +48,9 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.infrastructure.network.IpsPoolManagementDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
+import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -462,7 +462,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         IpOptions options = IpOptions.builder().build();
 
-        IpsPoolManagementDto ips =
+        IpsPoolManagementDto20 ips =
             context.getApi().getCloudClient().listAvailablePublicIps(target, options);
 
         return wrap(context, Ip.class, ips.getCollection());
@@ -488,7 +488,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         IpOptions options = IpOptions.builder().build();
 
-        IpsPoolManagementDto ips =
+        IpsPoolManagementDto20 ips =
             context.getApi().getCloudClient().listPurchasedPublicIps(target, options);
 
         return wrap(context, Ip.class, ips.getCollection());
