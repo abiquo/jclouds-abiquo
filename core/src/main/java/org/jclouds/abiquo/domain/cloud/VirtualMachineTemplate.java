@@ -52,6 +52,7 @@ import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
+import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -172,6 +173,35 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
         Integer categoryId = target.getIdFromLink(ParentLinkName.CATEGORY);
         CategoryDto category = context.getApi().getConfigClient().getCategory(categoryId);
         return wrap(context, Category.class, category);
+    }
+
+    /**
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/Abiquo/Volume+Resource#VolumeResource-Retrieveavolume"
+     *      > http://community.abiquo.com/display/Abiquo/Volume+Resource#VolumeResource-
+     *      Retrieveavolume</a>
+     */
+    public Volume getVolume()
+    {
+        if (this.isPersistent())
+        {
+            ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+            HttpResponse rp =
+                checkNotNull(utils.getAbiquoHttpClient().get(target.searchLink("volume")), "volume");
+
+            ParseXMLWithJAXB<VolumeManagementDto> parser =
+                new ParseXMLWithJAXB<VolumeManagementDto>(utils.getXml(),
+                    TypeLiteral.get(VolumeManagementDto.class));
+
+            VolumeManagementDto dto = parser.apply(rp);
+            return new Volume(context, dto);
+        }
+        return null;
+    }
+
+    public boolean isPersistent()
+    {
+        return target.searchLink("volume") != null;
     }
 
     // Parent access
