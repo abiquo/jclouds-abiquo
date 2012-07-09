@@ -471,14 +471,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
     public AsyncTask replaceVolumes(final Volume... volumes)
     {
-        AcceptedRequestDto<String> taskRef =
-            context
-                .getApi()
-                .getCloudClient()
-                .replaceVolumes(target, VirtualMachineOptions.builder().force(true).build(),
-                    toVolumeDto(volumes));
-
-        return taskRef == null ? null : getTask(taskRef);
+        return replaceVolumes(true, volumes);
     }
 
     public AsyncTask replaceNics(final Ip... ips)
