@@ -462,8 +462,25 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
     public AsyncTask replaceVolumes(final Boolean forceSoftLimits, final Volume... volumes)
     {
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient()
-                .replaceVolumes(target, forceSoftLimits, toVolumeDto(volumes));
+            context
+                .getApi()
+                .getCloudClient()
+                .replaceVolumes(target,
+                    VirtualMachineOptions.builder().force(forceSoftLimits).build(),
+                    toVolumeDto(volumes));
+
+        return taskRef == null ? null : getTask(taskRef);
+    }
+
+    public AsyncTask replaceVolumes(final Volume... volumes)
+    {
+        AcceptedRequestDto<String> taskRef =
+            context
+                .getApi()
+                .getCloudClient()
+                .replaceVolumes(target, VirtualMachineOptions.builder().force(true).build(),
+                    toVolumeDto(volumes));
+
         return taskRef == null ? null : getTask(taskRef);
     }
 
