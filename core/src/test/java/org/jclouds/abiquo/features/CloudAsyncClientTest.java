@@ -1203,15 +1203,15 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         Method method =
             CloudAsyncClient.class.getMethod("replaceVolumes", VirtualMachineDto.class,
-                VolumeManagementDto[].class);
+                Boolean.class, VolumeManagementDto[].class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(),
+            processor.createRequest(method, CloudResources.virtualMachinePut(), Boolean.TRUE,
                 new VolumeManagementDto[] {first, second});
 
         String editLink = CloudResources.volumePut().getEditLink().getHref();
         assertRequestLineEquals(
             request,
-            "PUT http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes HTTP/1.1");
+            "PUT http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/storage/volumes?force=true HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, withHeader("<links><link href=\"" + editLink
