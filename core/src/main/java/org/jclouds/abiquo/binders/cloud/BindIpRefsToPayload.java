@@ -34,7 +34,7 @@ import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
 
 /**
- * Bind the link reference to an {@link IpPoolManagementDto} object into the payload.
+ * Bind the link reference to an {@link AbstractIpDto} object into the payload.
  * 
  * @author Ignasi Barrera
  */
