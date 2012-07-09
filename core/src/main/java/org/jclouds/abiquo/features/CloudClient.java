@@ -517,12 +517,13 @@ public interface CloudClient
      * If the virtual machine is deployed, the operation will be executed asynchronously.
      * 
      * @param virtualMachine The virtual machine.
+     * @param forceSoftLimits
      * @param volumes The new volumes for the virtual machine.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> replaceVolumes(VirtualMachineDto virtualMachine,
-        VolumeManagementDto... volumes);
+        Boolean forceSoftLimits, VolumeManagementDto... volumes);
 
     /**
      * List all hard disks attached to the given virtual machine.

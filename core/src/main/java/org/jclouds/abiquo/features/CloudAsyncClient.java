@@ -580,6 +580,7 @@ public interface CloudAsyncClient
     @Produces(LinksDto.BASE_MEDIA_TYPE)
     ListenableFuture<AcceptedRequestDto<String>> replaceVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
+        @QueryParam("force") Boolean forceSoftLimits,
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
     /**
