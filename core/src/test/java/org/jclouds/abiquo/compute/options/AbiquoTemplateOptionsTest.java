@@ -27,11 +27,12 @@ import org.easymock.EasyMock;
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.compute.options.TemplateOptions;
 import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
+import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 
 /**
  * Unit tests for the {@link AbiquoTemplateOptions} class.
@@ -84,17 +85,17 @@ public class AbiquoTemplateOptionsTest
         RestContext<AbiquoClient, AbiquoAsyncClient> context =
             EasyMock.createMock(RestContext.class);
 
-        IpPoolManagementDto20 dto1 = new IpPoolManagementDto20();
+        PrivateIpDto dto1 = new PrivateIpDto();
         dto1.setIp("10.60.0.1");
-        IpPoolManagementDto20 dto2 = new IpPoolManagementDto20();
+        PrivateIpDto dto2 = new PrivateIpDto();
         dto2.setIp("10.60.0.2");
 
-        Ip ip1 = wrap(context, Ip.class, dto1);
-        Ip ip2 = wrap(context, Ip.class, dto2);
+        PrivateIp ip1 = wrap(context, PrivateIp.class, dto1);
+        PrivateIp ip2 = wrap(context, PrivateIp.class, dto2);
 
         TemplateOptions options = new AbiquoTemplateOptions().ips(ip1, ip2);
 
-        Ip[] ips = options.as(AbiquoTemplateOptions.class).getIps();
+        Ip< ? , ? >[] ips = options.as(AbiquoTemplateOptions.class).getIps();
         assertNotNull(ips);
         assertEquals(ips[0].getIp(), "10.60.0.1");
         assertEquals(ips[1].getIp(), "10.60.0.2");

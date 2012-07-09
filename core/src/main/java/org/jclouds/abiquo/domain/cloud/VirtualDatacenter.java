@@ -33,9 +33,10 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
-import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -48,9 +49,9 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -376,7 +377,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
      *      VirtualDatacenterResource-GetdefaultVLANusedbydefaultinVirtualDatacenter</a>
      */
-    public Network getDefaultNetwork()
+    public Network< ? > getDefaultNetwork()
     {
         VLANNetworkDto network = context.getApi().getCloudClient().getDefaultNetwork(target);
         return wrap(context, network.getType() == NetworkType.INTERNAL ? PrivateNetwork.class
@@ -396,12 +397,12 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, PrivateNetwork.class, networks.getCollection());
     }
 
-    public List<PrivateNetwork> listPrivateNetworks(final Predicate<Network> filter)
+    public List<PrivateNetwork> listPrivateNetworks(final Predicate<Network<PrivateIp>> filter)
     {
         return Lists.newLinkedList(filter(listPrivateNetworks(), filter));
     }
 
-    public PrivateNetwork findPrivateNetwork(final Predicate<Network> filter)
+    public PrivateNetwork findPrivateNetwork(final Predicate<Network<PrivateIp>> filter)
     {
         return Iterables.getFirst(filter(listPrivateNetworks(), filter), null);
     }
@@ -458,22 +459,22 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
      *      VirtualDatacenterResource-ListofPublicIPstopurchasebyVirtualDatacenter</a>
      */
-    public List<Ip> listAvailablePublicIps()
+    public List<PublicIp> listAvailablePublicIps()
     {
         IpOptions options = IpOptions.builder().build();
 
-        IpsPoolManagementDto20 ips =
+        PublicIpsDto ips =
             context.getApi().getCloudClient().listAvailablePublicIps(target, options);
 
-        return wrap(context, Ip.class, ips.getCollection());
+        return wrap(context, PublicIp.class, ips.getCollection());
     }
 
-    public List<Ip> listAvailablePublicIps(final Predicate<Ip> filter)
+    public List<PublicIp> listAvailablePublicIps(final Predicate<PublicIp> filter)
     {
         return Lists.newLinkedList(filter(listAvailablePublicIps(), filter));
     }
 
-    public Ip findAvailablePublicIp(final Predicate<Ip> filter)
+    public PublicIp findAvailablePublicIp(final Predicate<PublicIp> filter)
     {
         return Iterables.getFirst(filter(listAvailablePublicIps(), filter), null);
     }
@@ -484,33 +485,33 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      *      > http://community.abiquo.com/display/ABI20/Virtual+Datacenter+Resource#
      *      VirtualDatacenterResource-ListofpurchasedPublicIPsbyVirtualDatacenter</a>
      */
-    public List<Ip> listPurchasedPublicIps()
+    public List<PublicIp> listPurchasedPublicIps()
     {
         IpOptions options = IpOptions.builder().build();
 
-        IpsPoolManagementDto20 ips =
+        PublicIpsDto ips =
             context.getApi().getCloudClient().listPurchasedPublicIps(target, options);
 
-        return wrap(context, Ip.class, ips.getCollection());
+        return wrap(context, PublicIp.class, ips.getCollection());
     }
 
-    public List<Ip> listPurchasedPublicIps(final Predicate<Ip> filter)
+    public List<PublicIp> listPurchasedPublicIps(final Predicate<PublicIp> filter)
     {
         return Lists.newLinkedList(filter(listPurchasedPublicIps(), filter));
     }
 
-    public Ip findPurchasedPublicIp(final Predicate<Ip> filter)
+    public PublicIp findPurchasedPublicIp(final Predicate<PublicIp> filter)
     {
         return Iterables.getFirst(filter(listPurchasedPublicIps(), filter), null);
     }
 
-    public void purchasePublicIp(final Ip ip)
+    public void purchasePublicIp(final PublicIp ip)
     {
         checkNotNull(ip.unwrap().searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
         context.getApi().getCloudClient().purchasePublicIp(ip.unwrap());
     }
 
-    public void releaseePublicIp(final Ip ip)
+    public void releaseePublicIp(final PublicIp ip)
     {
         checkNotNull(ip.unwrap().searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
         context.getApi().getCloudClient().releasePublicIp(ip.unwrap());
@@ -518,7 +519,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     // Actions
 
-    public void setDefaultNetwork(final Network network)
+    public void setDefaultNetwork(final Network< ? > network)
     {
         context.getApi().getCloudClient().setDefaultNetwork(target, network.unwrap());
     }

@@ -594,7 +594,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      Getthelistofpublicnetworks</a>
      * @return List of public, external and unmanaged networks in this datacenter.
      */
-    public List<Network> listNetworks()
+    public List<Network< ? >> listNetworks()
     {
         VLANNetworksDto networks = context.getApi().getInfrastructureClient().listNetworks(target);
         return Network.wrapNetworks(context, networks.getCollection());
@@ -609,7 +609,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      > http://community.abiquo.com/display/ABI20/PublicNetworkResource#PublicNetworkResource-
      *      Getthelistofpublicnetworks</a>
      */
-    public List<Network> listNetworks(final Predicate<Network> filter)
+    public List<Network< ? >> listNetworks(final Predicate<Network< ? >> filter)
     {
         return Lists.newLinkedList(filter(listNetworks(), filter));
     }
@@ -624,7 +624,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      Getthelistofpublicnetworks</a>
      * @return Filtered list of public, external and unmanaged networks in this datacenter.
      */
-    public Network findNetwork(final Predicate<Network> filter)
+    public Network< ? > findNetwork(final Predicate<Network< ? >> filter)
     {
         return Iterables.getFirst(filter(listNetworks(), filter), null);
     }
@@ -639,7 +639,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      Getthelistofpublicnetworks</a>
      * @return List of networks of this datacenter matching the given type.
      */
-    public List<Network> listNetworks(final NetworkType type)
+    public List<Network< ? >> listNetworks(final NetworkType type)
     {
         NetworkOptions options = NetworkOptions.builder().type(type).build();
         VLANNetworksDto networks =
@@ -658,7 +658,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      Getthelistofpublicnetworks</a>
      * @return Filtered list of networks of this datacenter matching the given type.
      */
-    public List<Network> listNetworks(final NetworkType type, final Predicate<Network> filter)
+    public List<Network< ? >> listNetworks(final NetworkType type,
+        final Predicate<Network< ? >> filter)
     {
         return Lists.newLinkedList(filter(listNetworks(type), filter));
     }
@@ -675,7 +676,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      * @return First network of the given type matching the filter or <code>null</code> if there is
      *         none.
      */
-    public Network findNetwork(final NetworkType type, final Predicate<Network> filter)
+    public Network< ? > findNetwork(final NetworkType type, final Predicate<Network< ? >> filter)
     {
         return Iterables.getFirst(filter(listNetworks(type), filter), null);
     }
@@ -694,7 +695,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      PublicNetworkResource-Getthelistofpublicnetworks</a>
      * @return Network with the given id or <code>null</code> if it does not exist.
      */
-    public Network getNetwork(final Integer id)
+    public Network< ? > getNetwork(final Integer id)
     {
         VLANNetworkDto network = context.getApi().getInfrastructureClient().getNetwork(target, id);
         return Network.wrapNetwork(context, network);

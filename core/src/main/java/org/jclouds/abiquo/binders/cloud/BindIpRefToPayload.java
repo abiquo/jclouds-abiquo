@@ -31,7 +31,7 @@ import org.jclouds.xml.XMLParser;
 
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
+import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
 
 /**
  * Bind the link reference to an {@link IpPoolManagementDto} object into the payload.
@@ -50,12 +50,12 @@ public class BindIpRefToPayload extends BindToXMLPayload
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof IpPoolManagementDto20,
-            "this binder is only valid for IpPoolManagementDto objects");
+        checkArgument(checkNotNull(input, "input") instanceof AbstractIpDto,
+            "this binder is only valid for AbstractIpDto objects");
 
-        IpPoolManagementDto20 ip = (IpPoolManagementDto20) input;
+        AbstractIpDto ip = (AbstractIpDto) input;
         RESTLink selfLink =
-            checkNotNull(ip.searchLink("self"), "IpPoolManagementDto must have an self link");
+            checkNotNull(ip.searchLink("self"), "AbstractIpDto must have an self link");
 
         LinksDto refs = new LinksDto();
         refs.addLink(new RESTLink(selfLink.getTitle(), selfLink.getHref()));

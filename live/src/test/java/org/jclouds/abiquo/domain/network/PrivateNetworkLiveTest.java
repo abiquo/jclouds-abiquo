@@ -27,7 +27,7 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
+import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 
 /**
  * Live integration tests for the {@link PrivateNetwork} domain class.
@@ -39,7 +39,7 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testListIps()
     {
-        IpsPoolManagementDto20 ipsDto =
+        PrivateIpsDto ipsDto =
             context
                 .getApiContext()
                 .getApi()
@@ -48,7 +48,7 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
                     IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
-        List<Ip> ips = env.privateNetwork.listIps();
+        List<PrivateIp> ips = env.privateNetwork.listIps();
 
         assertEquals(ips.size(), totalIps);
     }

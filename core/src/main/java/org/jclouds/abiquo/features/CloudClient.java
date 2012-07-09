@@ -42,12 +42,15 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
+import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
+import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -118,8 +121,7 @@ public interface CloudClient
      * @param options Filtering options.
      * @return The list of available ips.
      */
-    IpsPoolManagementDto20 listAvailablePublicIps(VirtualDatacenterDto virtualDatacenter,
-        IpOptions options);
+    PublicIpsDto listAvailablePublicIps(VirtualDatacenterDto virtualDatacenter, IpOptions options);
 
     /**
      * List all purchased public ip addresses in the virtual datacenter.
@@ -128,8 +130,7 @@ public interface CloudClient
      * @param options Filtering options.
      * @return The list of purchased ips.
      */
-    IpsPoolManagementDto20 listPurchasedPublicIps(VirtualDatacenterDto virtualDatacenter,
-        IpOptions options);
+    PublicIpsDto listPurchasedPublicIps(VirtualDatacenterDto virtualDatacenter, IpOptions options);
 
     /**
      * Purchase a public IP.
@@ -137,7 +138,7 @@ public interface CloudClient
      * @param ip The public ip address to purchase.
      * @return The purchased public ip.
      */
-    IpPoolManagementDto20 purchasePublicIp(IpPoolManagementDto20 publicIp);
+    PublicIpDto purchasePublicIp(PublicIpDto publicIp);
 
     /**
      * Release a public IP.
@@ -145,7 +146,7 @@ public interface CloudClient
      * @param ip The public ip address to purchase.
      * @return The release public ip.
      */
-    IpPoolManagementDto20 releasePublicIp(IpPoolManagementDto20 publicIp);
+    PublicIpDto releasePublicIp(PublicIpDto publicIp);
 
     /**
      * List the storage tiers available for the given virtual datacenter.
@@ -235,7 +236,7 @@ public interface CloudClient
      * @param network The private network.
      * @return The list of ips for the private network.
      */
-    IpsPoolManagementDto20 listPrivateNetworkIps(VLANNetworkDto network);
+    PrivateIpsDto listPrivateNetworkIps(VLANNetworkDto network);
 
     /**
      * List all ips for a private network with options.
@@ -244,7 +245,16 @@ public interface CloudClient
      * @param options Filtering options.
      * @return The list of ips for the private network.
      */
-    IpsPoolManagementDto20 listPrivateNetworkIps(VLANNetworkDto network, IpOptions options);
+    PrivateIpsDto listPrivateNetworkIps(VLANNetworkDto network, IpOptions options);
+
+    /**
+     * Get the requested ip from the given private network.
+     * 
+     * @param network The private network.
+     * @param ipId The id of the ip to get.
+     * @return The requested ip.
+     */
+    PrivateIpDto getPrivateNetworkIp(VLANNetworkDto network, Integer ipId);
 
     /*********************** Attached Nic ***********************/
 
@@ -258,8 +268,7 @@ public interface CloudClient
      * @param ips The nics to attach.
      * @return The task reference or <code>null</code> if the operation completed synchronously.
      */
-    AcceptedRequestDto<String> replaceNics(VirtualMachineDto virtualMachine,
-        IpPoolManagementDto20... ips);
+    AcceptedRequestDto<String> replaceNics(VirtualMachineDto virtualMachine, AbstractIpDto... ips);
 
     /**
      * List nics attached to a virtual machine.

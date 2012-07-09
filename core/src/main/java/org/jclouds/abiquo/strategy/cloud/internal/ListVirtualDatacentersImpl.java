@@ -58,7 +58,6 @@ import com.google.inject.Inject;
 @Singleton
 public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
 {
-
     protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
 
     protected final ExecutorService userExecutor;
@@ -74,7 +73,7 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
     ListVirtualDatacentersImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
-        this.context = context;
+        this.context = checkNotNull(context, "context");
         this.userExecutor = checkNotNull(userExecutor, "userExecutor");
     }
 

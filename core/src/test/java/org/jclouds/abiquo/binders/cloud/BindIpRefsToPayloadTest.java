@@ -31,7 +31,8 @@ import org.jclouds.xml.internal.JAXBParser;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.transport.LinksDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
+import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
+import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 
 /**
  * Unit tests for the {@link BindIpRefsToPayload} binder.
@@ -65,17 +66,17 @@ public class BindIpRefsToPayloadTest
         BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new IpPoolManagementDto20[] {});
+        request = binder.bindToRequest(request, new AbstractIpDto[] {});
         assertPayloadEquals(request.getPayload(), withHeader("<links/>"), LinksDto.class);
     }
 
     public void testBindSingleIp() throws IOException
     {
-        IpPoolManagementDto20 ip = NetworkResources.privateIpPut();
+        PrivateIpDto ip = NetworkResources.privateIpPut();
         BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new IpPoolManagementDto20[] {ip});
+        request = binder.bindToRequest(request, new AbstractIpDto[] {ip});
         assertPayloadEquals(request.getPayload(), withHeader("<links><link href=\""
             + ip.searchLink("self").getHref() + "\" rel=\"" + ip.searchLink("self").getTitle()
             + "\"/></links>"), LinksDto.class);
@@ -83,11 +84,11 @@ public class BindIpRefsToPayloadTest
 
     public void testBindMultipleIps() throws IOException
     {
-        IpPoolManagementDto20 ip = NetworkResources.privateIpPut();
+        PrivateIpDto ip = NetworkResources.privateIpPut();
         BindIpRefsToPayload binder = new BindIpRefsToPayload(new JAXBParser("false"));
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
-        request = binder.bindToRequest(request, new IpPoolManagementDto20[] {ip, ip});
+        request = binder.bindToRequest(request, new AbstractIpDto[] {ip, ip});
         assertPayloadEquals(request.getPayload(), withHeader("<links><link href=\""
             + ip.searchLink("self").getHref() + "\" rel=\"" + ip.searchLink("self").getTitle()
             + "\"/></links>"), LinksDto.class);

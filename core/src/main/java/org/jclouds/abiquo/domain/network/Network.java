@@ -44,7 +44,7 @@ import com.google.common.collect.Lists;
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public abstract class Network extends DomainWrapper<VLANNetworkDto>
+public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANNetworkDto>
 {
     /**
      * Constructor to be used only by the builder.
@@ -63,32 +63,32 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
 
     public abstract void delete();
 
-    public abstract List<Ip> listIps(IpOptions options);
+    public abstract List<T> listIps(IpOptions options);
 
-    public List<Ip> listIps()
+    public List<T> listIps()
     {
         // Disable pagination by default
         return listIps(IpOptions.builder().disablePagination().build());
     }
 
-    public List<Ip> listIps(final Predicate<Ip> filter)
+    public List<T> listIps(final Predicate<T> filter)
     {
         return Lists.newLinkedList(filter(listIps(), filter));
     }
 
-    public Ip findIp(final Predicate<Ip> filter)
+    public T findIp(final Predicate<T> filter)
     {
         return Iterables.getFirst(filter(listIps(), filter), null);
     }
 
-    public List<Ip> listAvailableIps()
+    public List<T> listUnusedIps()
     {
-        return listIps(IpPredicates.available());
+        return listIps(IpPredicates.<T> notUsed());
     }
 
-    public Ip findAvailableIp(final Predicate<Ip> filter)
+    public T findUnusedIp(final Predicate<T> filter)
     {
-        return Iterables.getFirst(filter(listAvailableIps(), filter), null);
+        return Iterables.getFirst(filter(listUnusedIps(), filter), null);
     }
 
     // Builder
@@ -338,15 +338,15 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
             + ", unmanaged=" + getUnmanaged() + "]";
     }
 
-    public static Network wrapNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
-        final VLANNetworkDto dto)
+    public static Network< ? > wrapNetwork(
+        final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VLANNetworkDto dto)
     {
         if (dto == null)
         {
             return null;
         }
 
-        Network network = null;
+        Network< ? > network = null;
 
         switch (dto.getType())
         {
@@ -370,10 +370,10 @@ public abstract class Network extends DomainWrapper<VLANNetworkDto>
         return network;
     }
 
-    public static List<Network> wrapNetworks(
+    public static List<Network< ? >> wrapNetworks(
         final RestContext<AbiquoClient, AbiquoAsyncClient> context, final List<VLANNetworkDto> dtos)
     {
-        List<Network> networks = Lists.newLinkedList();
+        List<Network< ? >> networks = Lists.newLinkedList();
         for (VLANNetworkDto dto : dtos)
         {
             networks.add(wrapNetwork(context, dto));

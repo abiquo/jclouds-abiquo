@@ -30,8 +30,9 @@ import org.jclouds.abiquo.domain.infrastructure.ManagedRack;
 import org.jclouds.abiquo.domain.infrastructure.StorageDevice;
 import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.internal.BaseSearchService;
@@ -99,7 +100,7 @@ public interface SearchService
      * @param network The given private network.
      * @param options The set of filtering and pagination options of the search.
      */
-    Iterable<Ip> searchPrivateIps(final PrivateNetwork network, final IpOptions options);
+    Iterable<PrivateIp> searchPrivateIps(final PrivateNetwork network, final IpOptions options);
 
     /*********************** Public IPs ***********************/
 
@@ -109,7 +110,7 @@ public interface SearchService
      * @param virtualDatacenter The given virtual datacenter.
      * @param options The set of filtering and pagination options of the search.
      */
-    Iterable<Ip> searchPublicIpsToPurchase(final VirtualDatacenter virtualDatacenter,
+    Iterable<PublicIp> searchPublicIpsToPurchase(final VirtualDatacenter virtualDatacenter,
         final IpOptions options);
 
     /**
@@ -118,7 +119,7 @@ public interface SearchService
      * @param virtualDatacenter The given virtual datacenter.
      * @param options The set of filtering and pagination options of the search.
      */
-    Iterable<Ip> searchPurchasedPublicIps(final VirtualDatacenter virtualDatacenter,
+    Iterable<PublicIp> searchPurchasedPublicIps(final VirtualDatacenter virtualDatacenter,
         final IpOptions options);
 
     /*********************** Logic Server ***********************/

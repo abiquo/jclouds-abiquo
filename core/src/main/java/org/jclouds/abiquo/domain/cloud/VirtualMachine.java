@@ -32,11 +32,11 @@ import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
-import org.jclouds.abiquo.domain.network.Nic;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.abiquo.strategy.cloud.ListAttachedNics;
 import org.jclouds.http.HttpResponse;
 import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.RestContext;
@@ -51,8 +51,7 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
-import com.abiquo.server.core.infrastructure.network.NicsDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
+import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DvdManagementDto;
@@ -326,19 +325,19 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return Iterables.getFirst(filter(listAttachedVolumes(), filter), null);
     }
 
-    public List<Nic> listAttachedNics()
+    public List<Ip< ? , ? >> listAttachedNics()
     {
-        NicsDto nics = context.getApi().getCloudClient().listAttachedNics(target);
-
-        return wrap(context, Nic.class, nics.getCollection());
+        ListAttachedNics strategy =
+            context.getUtils().getInjector().getInstance(ListAttachedNics.class);
+        return Lists.newLinkedList(strategy.execute(this));
     }
 
-    public List<Nic> listAttachedNics(final Predicate<Nic> filter)
+    public List<Ip< ? , ? >> listAttachedNics(final Predicate<Ip< ? , ? >> filter)
     {
         return Lists.newLinkedList(filter(listAttachedNics(), filter));
     }
 
-    public Nic findAttachedNic(final Predicate<Nic> filter)
+    public Ip< ? , ? > findAttachedNic(final Predicate<Ip< ? , ? >> filter)
     {
         return Iterables.getFirst(filter(listAttachedNics(), filter), null);
     }
@@ -474,14 +473,14 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return replaceVolumes(true, volumes);
     }
 
-    public AsyncTask replaceNics(final Ip... ips)
+    public AsyncTask replaceNics(final Ip< ? , ? >... ips)
     {
         AcceptedRequestDto<String> taskRef =
             context.getApi().getCloudClient().replaceNics(target, toIpDto(ips));
         return taskRef == null ? null : getTask(taskRef);
     }
 
-    public void setGatewayNetwork(final Network network)
+    public void setGatewayNetwork(final Network< ? > network)
     {
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
     }
@@ -831,11 +830,11 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return dtos;
     }
 
-    private static IpPoolManagementDto20[] toIpDto(final Ip... ips)
+    private static AbstractIpDto[] toIpDto(final Ip< ? , ? >... ips)
     {
         checkNotNull(ips, "must provide at least one ip");
 
-        IpPoolManagementDto20[] dtos = new IpPoolManagementDto20[ips.length];
+        AbstractIpDto[] dtos = new AbstractIpDto[ips.length];
         for (int i = 0; i < ips.length; i++)
         {
             dtos[i] = ips[i].unwrap();

@@ -33,7 +33,8 @@ import org.easymock.EasyMock;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
-import org.jclouds.abiquo.domain.network.Nic;
+import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.NodeMetadata.Status;
@@ -44,7 +45,7 @@ import org.testng.annotations.Test;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
-import com.abiquo.server.core.infrastructure.network.NicDto;
+import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -59,7 +60,7 @@ public class VirtualMachineToNodeMetadataTest
 
     private VirtualMachineDto vm;
 
-    private NicDto nic;
+    private PrivateIpDto nic;
 
     @BeforeMethod
     public void setup()
@@ -77,9 +78,8 @@ public class VirtualMachineToNodeMetadataTest
         vm.setState(VirtualMachineState.ON);
         vm.addLink(new RESTLink("edit", "http://foo/bar"));
 
-        nic = new NicDto();
+        nic = new PrivateIpDto();
         nic.setIp("192.168.1.2");
-        nic.setSequence(0);
         nic.setMac("2a:6e:40:69:84:e0");
     }
 
@@ -147,7 +147,7 @@ public class VirtualMachineToNodeMetadataTest
         VirtualMachine mockVm = EasyMock.createMock(VirtualMachine.class);
 
         // Nic domain object does not have a builder, it is read only
-        Nic mockNic = wrap(EasyMock.createMock(RestContext.class), Nic.class, nic);
+        Ip< ? , ? > mockNic = wrap(EasyMock.createMock(RestContext.class), PrivateIp.class, nic);
 
         expect(mockVm.getId()).andReturn(vm.getId());
         expect(mockVm.getName()).andReturn(vm.getName());
@@ -155,7 +155,7 @@ public class VirtualMachineToNodeMetadataTest
         expect(mockVm.unwrap()).andReturn(vm);
         expect(mockVm.getTemplate()).andReturn(null);
         expect(mockVm.getState()).andReturn(vm.getState());
-        expect(mockVm.listAttachedNics()).andReturn(ImmutableList.<Nic> of(mockNic));
+        expect(mockVm.listAttachedNics()).andReturn(ImmutableList.<Ip< ? , ? >> of(mockNic));
         expect(mockVm.getVirtualAppliance()).andReturn(vapp);
         expect(vapp.getName()).andReturn("VAPP");
 

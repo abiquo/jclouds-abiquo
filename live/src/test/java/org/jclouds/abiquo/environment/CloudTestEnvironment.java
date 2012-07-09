@@ -36,6 +36,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
+import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.CloudClient;
 import org.jclouds.abiquo.features.services.EventService;
@@ -153,7 +154,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         assertNotNull(virtualDatacenter.getId());
 
         privateNetwork =
-            virtualDatacenter.findPrivateNetwork(NetworkPredicates.name(privateNetwork.getName()));
+            virtualDatacenter.findPrivateNetwork(NetworkPredicates.<PrivateIp> name(privateNetwork
+                .getName()));
     }
 
     protected void createVirtualAppliance()

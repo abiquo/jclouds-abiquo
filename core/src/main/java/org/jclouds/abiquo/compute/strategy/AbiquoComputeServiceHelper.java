@@ -144,7 +144,7 @@ public class AbiquoComputeServiceHelper
      * @param vm The virtual machine to configure.
      * @param networkConfig The network configuration.
      */
-    public void configureNetwork(final VirtualMachine vm, @Nullable final Ip... ips)
+    public void configureNetwork(final VirtualMachine vm, @Nullable final Ip< ? , ? >... ips)
     {
         if (ips != null)
         {

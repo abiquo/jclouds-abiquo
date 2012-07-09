@@ -25,8 +25,9 @@ import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.infrastructure.network.NicDto;
+import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
 
 /**
  * Network domain utilities.
@@ -48,9 +49,9 @@ public class NetworkResources
         return vlan;
     }
 
-    public static IpPoolManagementDto20 privateIpPut()
+    public static PrivateIpDto privateIpPut()
     {
-        IpPoolManagementDto20 ip = new IpPoolManagementDto20();
+        PrivateIpDto ip = new PrivateIpDto();
         ip.setId(1);
         ip.setName("private ip");
         ip.setMac("00:58:5A:c0:C3:01");
@@ -62,9 +63,9 @@ public class NetworkResources
         return ip;
     }
 
-    public static IpPoolManagementDto20 publicIpToPurchase()
+    public static PublicIpDto publicIpToPurchase()
     {
-        IpPoolManagementDto20 ip = new IpPoolManagementDto20();
+        PublicIpDto ip = new PublicIpDto();
         RESTLink self =
             new RESTLink("purchase",
                 "http://localhost/api/cloud/virtualdatacenters/5/publicips/purchased/1");
@@ -72,9 +73,9 @@ public class NetworkResources
         return ip;
     }
 
-    public static IpPoolManagementDto20 publicIpToRelease()
+    public static PublicIpDto publicIpToRelease()
     {
-        IpPoolManagementDto20 ip = new IpPoolManagementDto20();
+        PublicIpDto ip = new PublicIpDto();
         RESTLink self =
             new RESTLink("release",
                 "http://localhost/api/cloud/virtualdatacenters/5/publicips/topurchase/1");

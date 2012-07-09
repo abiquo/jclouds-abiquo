@@ -53,10 +53,12 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.UcsRacksDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
@@ -886,19 +888,59 @@ public interface InfrastructureClient
     /*********************** Network IPs ***********************/
 
     /**
-     * List all ips for a network.
+     * List all the IPs in the given public network.
      * 
-     * @param network The network.
-     * @return The list of ips for the network.
+     * @param network The public network.
+     * @return The IPs in the given public network.
+     * @since 2.3
      */
-    IpsPoolManagementDto20 listNetworkIps(VLANNetworkDto network);
+    PublicIpsDto listPublicIps(VLANNetworkDto network);
 
     /**
-     * List all ips for a network with options.
+     * List all the IPs in the given public network.
      * 
-     * @param network The network.
-     * @param options Filtering options.
-     * @return The list of ips for the network.
+     * @param network The public network.
+     * @param options The filtering options.
+     * @return The IPs in the given public network.
+     * @since 2.3
      */
-    IpsPoolManagementDto20 listNetworkIps(VLANNetworkDto network, IpOptions options);
+    PublicIpsDto listPublicIps(VLANNetworkDto network, IpOptions options);
+
+    /**
+     * List all the IPs in the given external network.
+     * 
+     * @param network The external network.
+     * @return The IPs in the given external network.
+     * @since 2.3
+     */
+    ExternalIpsDto listExternalIps(VLANNetworkDto network);
+
+    /**
+     * List all the IPs in the given external network.
+     * 
+     * @param network The external network.
+     * @param options The filtering options.
+     * @return The IPs in the given external network.
+     * @since 2.3
+     */
+    ExternalIpsDto listExternalIps(VLANNetworkDto network, IpOptions options);
+
+    /**
+     * List all the IPs in the given unmanaged network.
+     * 
+     * @param network The unmanaged network.
+     * @return The IPs in the given unmanaged network.
+     * @since 2.3
+     */
+    UnmanagedIpsDto listUnmanagedIps(VLANNetworkDto network);
+
+    /**
+     * List all the IPs in the given unmanaged network.
+     * 
+     * @param network The unmanaged network.
+     * @param options The filtering options.
+     * @return The IPs in the given unmanaged network.
+     * @since 2.3
+     */
+    UnmanagedIpsDto listUnmanagedIps(VLANNetworkDto network, IpOptions options);
 }

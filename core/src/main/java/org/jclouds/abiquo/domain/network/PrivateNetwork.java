@@ -28,8 +28,8 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
+import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 
 /**
  * Adds high level functionality to private {@link VLANNetworkDto}.
@@ -39,7 +39,7 @@ import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/Private+Network+Resource">
  *      http://community.abiquo.com/display/ABI20/Private+Network+Resource</a>
  */
-public class PrivateNetwork extends Network
+public class PrivateNetwork extends Network<PrivateIp>
 {
     /** The virtual datacenter where the network belongs. */
     private VirtualDatacenter virtualDatacenter;
@@ -105,21 +105,21 @@ public class PrivateNetwork extends Network
      *      -RetrievethelistofIPSofthePrivateNetwork</a>
      */
     @Override
-    public List<Ip> listIps(final IpOptions options)
+    public List<PrivateIp> listIps(final IpOptions options)
     {
-        IpsPoolManagementDto20 nics =
+        PrivateIpsDto PrivateIp =
             context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
-        return wrap(context, Ip.class, nics.getCollection());
+        return wrap(context, PrivateIp.class, PrivateIp.getCollection());
     }
 
     // Override to apply the filter in the server side
     @Override
-    public List<Ip> listAvailableIps()
+    public List<PrivateIp> listUnusedIps()
     {
         IpOptions options = IpOptions.builder().free(true).build();
-        IpsPoolManagementDto20 nics =
+        PrivateIpsDto PrivateIp =
             context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
-        return wrap(context, Ip.class, nics.getCollection());
+        return wrap(context, PrivateIp.class, PrivateIp.getCollection());
     }
 
     // Builder

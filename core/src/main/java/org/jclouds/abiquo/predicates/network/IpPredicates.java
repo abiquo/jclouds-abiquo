@@ -23,6 +23,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Arrays;
 
+import org.jclouds.abiquo.domain.network.AbstractPublicIp;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 
@@ -35,42 +36,54 @@ import com.google.common.base.Predicate;
  */
 public class IpPredicates
 {
-    public static Predicate<Ip> name(final String... names)
+    public static <T extends Ip< ? , ? >> Predicate<T> name(final String... names)
     {
         checkNotNull(names, "names must be defined");
 
-        return new Predicate<Ip>()
+        return new Predicate<T>()
         {
             @Override
-            public boolean apply(final Ip address)
+            public boolean apply(final T address)
             {
                 return Arrays.asList(names).contains(address.getName());
             }
         };
     }
 
-    public static Predicate<Ip> address(final String... addresses)
+    public static <T extends Ip< ? , ? >> Predicate<T> address(final String... addresses)
     {
         checkNotNull(addresses, "addresses must be defined");
 
-        return new Predicate<Ip>()
+        return new Predicate<T>()
         {
             @Override
-            public boolean apply(final Ip address)
+            public boolean apply(final T address)
             {
                 return Arrays.asList(addresses).contains(address.getIp());
             }
         };
     }
 
-    public static Predicate<Ip> available()
+    public static <T extends AbstractPublicIp< ? , ? >> Predicate<T> available()
     {
-        return new Predicate<Ip>()
+        return new Predicate<T>()
         {
             @Override
-            public boolean apply(final Ip address)
+            public boolean apply(final T address)
             {
-                return address.getAvailable();
+                return address.isAvailable();
+            }
+        };
+    }
+
+    public static <T extends Ip< ? , ? >> Predicate<T> notUsed()
+    {
+        return new Predicate<T>()
+        {
+            @Override
+            public boolean apply(final T address)
+            {
+                return address.unwrap().searchLink("virtualmachine") == null;
             }
         };
     }

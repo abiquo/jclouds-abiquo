@@ -34,6 +34,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
+import org.jclouds.abiquo.domain.network.ExternalIp;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -508,14 +509,14 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
     @EnterpriseEdition
     public List<ExternalNetwork> listExternalNetworks(final Datacenter datacenter,
-        final Predicate<Network> filter)
+        final Predicate<Network<ExternalIp>> filter)
     {
         return Lists.newLinkedList(filter(listExternalNetworks(datacenter), filter));
     }
 
     @EnterpriseEdition
     public ExternalNetwork findExternalNetwork(final Datacenter datacenter,
-        final Predicate<Network> filter)
+        final Predicate<Network<ExternalIp>> filter)
     {
         return Iterables.getFirst(filter(listExternalNetworks(datacenter), filter), null);
     }

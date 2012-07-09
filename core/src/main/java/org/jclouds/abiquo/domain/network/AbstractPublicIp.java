@@ -21,65 +21,48 @@ package org.jclouds.abiquo.domain.network;
 
 import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
-import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
-import com.abiquo.model.enumerator.NetworkType;
-import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
+import com.abiquo.server.core.infrastructure.network.AbstractInfrastructureIpDto;
 
 /**
- * Adds generic high level functionality to {@link AbstractIpDto}.
+ * Adds generic high level functionality to {@link AbstractInfrastructureIpDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
-public abstract class Ip<T extends AbstractIpDto, N extends Network< ? >> extends DomainWrapper<T>
+public abstract class AbstractPublicIp<T extends AbstractInfrastructureIpDto, N extends Network< ? >>
+    extends Ip<T, N>
 {
     /**
      * Constructor to be used only by the builder.
      */
-    protected Ip(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final T target)
+    protected AbstractPublicIp(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        final T target)
     {
         super(context, target);
     }
 
-    // Domain operations
-
-    public abstract N getNetwork();
-
-    public abstract NetworkType getNetworkType();
-
     // Delegate methods
 
-    public Integer getId()
+    public boolean isAvailable()
     {
-        return target.getId();
+        return target.isAvailable();
     }
 
-    public String getIp()
+    public boolean isQuarantine()
     {
-        return target.getIp();
+        return target.isQuarantine();
     }
 
-    public String getMac()
+    public void setAvailable(final boolean available)
     {
-        return target.getMac();
+        target.setAvailable(available);
     }
 
-    public String getName()
+    public void setQuarantine(final boolean quarantine)
     {
-        return target.getName();
+        target.setQuarantine(quarantine);
     }
 
-    public String getNetworkName()
-    {
-        return target.getNetworkName();
-    }
-
-    @Override
-    public String toString()
-    {
-        return "Ip [id=" + getId() + ", ip=" + getIp() + ", mac=" + getMac() + ", name="
-            + getName() + ", networkName=" + getNetworkName() + "]";
-    }
 }

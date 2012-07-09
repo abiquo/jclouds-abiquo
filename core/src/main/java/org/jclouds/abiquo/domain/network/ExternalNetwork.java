@@ -30,12 +30,18 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to external {@link VLANNetworkDto}.
@@ -46,7 +52,7 @@ import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 @EnterpriseEdition
-public class ExternalNetwork extends Network
+public class ExternalNetwork extends Network<ExternalIp>
 {
     /** The datacenter where the network belongs. */
     private Datacenter datacenter;
@@ -112,11 +118,27 @@ public class ExternalNetwork extends Network
      *      ReturnthelistofIPsforaPublicNetwork</a>
      */
     @Override
-    public List<Ip> listIps(final IpOptions options)
+    public List<ExternalIp> listIps(final IpOptions options)
     {
-        IpsPoolManagementDto20 nics =
-            context.getApi().getInfrastructureClient().listNetworkIps(target, options);
-        return wrap(context, Ip.class, nics.getCollection());
+        ExternalIpsDto ips =
+            context.getApi().getInfrastructureClient().listExternalIps(target, options);
+        return wrap(context, ExternalIp.class, ips.getCollection());
+    }
+
+    public Enterprise getEnterprise()
+    {
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.ENTERPRISE),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.ENTERPRISE);
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<EnterpriseDto> parser =
+            new ParseXMLWithJAXB<EnterpriseDto>(utils.getXml(),
+                TypeLiteral.get(EnterpriseDto.class));
+
+        return wrap(context, Enterprise.class, parser.apply(response));
     }
 
     private void addEnterpriseLink()
@@ -125,8 +147,7 @@ public class ExternalNetwork extends Network
         checkNotNull(enterprise.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
             + Enterprise.class);
 
-        RESTLink link = enterprise.unwrap().searchLink("edit");
-
+        RESTLink link = enterprise.unwrap().getEditLink();
         checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
 
         target.addLink(new RESTLink("enterprise", link.getHref()));

@@ -27,7 +27,7 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
+import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
 
 /**
  * Live integration tests for the {@link ExternalNetwork} domain class.
@@ -39,12 +39,15 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
 {
     public void testListIps()
     {
-        IpsPoolManagementDto20 ipsDto =
-            context.getApiContext().getApi().getInfrastructureClient()
-                .listNetworkIps(env.publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
+        ExternalIpsDto ipsDto =
+            context
+                .getApiContext()
+                .getApi()
+                .getInfrastructureClient()
+                .listExternalIps(env.externalNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
-        List<Ip> ips = env.publicNetwork.listIps();
+        List<ExternalIp> ips = env.externalNetwork.listIps();
 
         assertEquals(ips.size(), totalIps);
     }

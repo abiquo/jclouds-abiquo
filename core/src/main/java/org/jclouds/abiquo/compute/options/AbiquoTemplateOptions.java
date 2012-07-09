@@ -43,7 +43,7 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
 
     private String virtualDatacenter;
 
-    private Ip[] ips;
+    private Ip< ? , ? >[] ips;
 
     @Override
     public TemplateOptions clone()
@@ -139,13 +139,13 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
      * 
      * @return The template options with the ip addresses configuration
      */
-    public AbiquoTemplateOptions ips(final Ip... ips)
+    public AbiquoTemplateOptions ips(final Ip< ? , ? >... ips)
     {
         this.ips = ips;
         return this;
     }
 
-    public Ip[] getIps()
+    public Ip< ? , ? >[] getIps()
     {
         return ips;
     }
@@ -191,7 +191,7 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
         /**
          * @see AbiquoTemplateOptions#ips(Ip...)
          */
-        public static AbiquoTemplateOptions ips(final Ip... ips)
+        public static AbiquoTemplateOptions ips(final Ip< ? , ? >... ips)
         {
             AbiquoTemplateOptions options = new AbiquoTemplateOptions();
             return options.ips(ips);

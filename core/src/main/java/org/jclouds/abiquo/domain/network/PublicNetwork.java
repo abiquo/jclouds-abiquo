@@ -33,8 +33,8 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
+import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 
 /**
  * Adds high level functionality to public {@link VLANNetworkDto}.
@@ -45,7 +45,7 @@ import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
  *      http://community.abiquo.com/display/ABI20/Public+Network+Resource</a>
  */
 @EnterpriseEdition
-public class PublicNetwork extends Network
+public class PublicNetwork extends Network<PublicIp>
 {
     /** The datacenter where the network belongs. */
     private Datacenter datacenter;
@@ -107,11 +107,11 @@ public class PublicNetwork extends Network
      *      ReturnthelistofIPsforaPublicNetwork</a>
      */
     @Override
-    public List<Ip> listIps(final IpOptions options)
+    public List<PublicIp> listIps(final IpOptions options)
     {
-        IpsPoolManagementDto20 nics =
-            context.getApi().getInfrastructureClient().listNetworkIps(target, options);
-        return wrap(context, Ip.class, nics.getCollection());
+        PublicIpsDto ips =
+            context.getApi().getInfrastructureClient().listPublicIps(target, options);
+        return wrap(context, PublicIp.class, ips.getCollection());
     }
 
     // Builder

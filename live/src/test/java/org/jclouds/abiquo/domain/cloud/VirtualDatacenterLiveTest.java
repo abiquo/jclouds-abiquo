@@ -32,8 +32,8 @@ import org.jclouds.abiquo.domain.cloud.VirtualDatacenter.Builder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.Test;
@@ -148,16 +148,19 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
 
     public void testPurchaseIp()
     {
-        Ip publicIp = env.virtualDatacenter.listAvailablePublicIps().get(0);
+        PublicIp publicIp = env.virtualDatacenter.listAvailablePublicIps().get(0);
         assertNotNull(publicIp);
         env.virtualDatacenter.purchasePublicIp(publicIp);
 
-        Ip apiIp =
-            env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.address(publicIp.getIp()));
+        PublicIp apiIp =
+            env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.<PublicIp> address(publicIp
+                .getIp()));
         assertNotNull(apiIp);
 
         env.virtualDatacenter.releaseePublicIp(apiIp);
-        apiIp = env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.address(publicIp.getIp()));
+        apiIp =
+            env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.<PublicIp> address(publicIp
+                .getIp()));
         assertNull(apiIp);
     }
 

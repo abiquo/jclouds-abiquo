@@ -29,7 +29,7 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
-import org.jclouds.abiquo.domain.network.Nic;
+import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.NodeMetadataBuilder;
@@ -97,12 +97,12 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
         return builder.build();
     }
 
-    private static Iterable<String> privateIps(final Iterable<Nic> nics)
+    private static Iterable<String> privateIps(final Iterable<Ip< ? , ? >> nics)
     {
-        return transform(nics, new Function<Nic, String>()
+        return transform(nics, new Function<Ip< ? , ? >, String>()
         {
             @Override
-            public String apply(final Nic nic)
+            public String apply(final Ip< ? , ? > nic)
             {
                 return nic.getIp();
             }

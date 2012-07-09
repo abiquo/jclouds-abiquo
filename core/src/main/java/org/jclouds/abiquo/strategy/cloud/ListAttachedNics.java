@@ -17,35 +17,22 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.predicates.network;
+package org.jclouds.abiquo.strategy.cloud;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-
-import java.util.Arrays;
-
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.network.Ip;
-import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.strategy.ListEntities;
+import org.jclouds.abiquo.strategy.cloud.internal.ListAttachedNicsImpl;
 
-import com.google.common.base.Predicate;
+import com.google.inject.ImplementedBy;
 
 /**
- * Container for {@link Network} filters.
+ * List all NICs attached to a given virtual machine.
  * 
- * @author Francesc Montserrat
+ * @author Ignasi Barrera
  */
-public class NetworkPredicates
+@ImplementedBy(ListAttachedNicsImpl.class)
+public interface ListAttachedNics extends ListEntities<Ip< ? , ? >, VirtualMachine>
 {
-    public static <T extends Ip< ? , ? >> Predicate<Network<T>> name(final String... names)
-    {
-        checkNotNull(names, "names must be defined");
 
-        return new Predicate<Network<T>>()
-        {
-            @Override
-            public boolean apply(final Network<T> network)
-            {
-                return Arrays.asList(names).contains(network.getName());
-            }
-        };
-    }
 }

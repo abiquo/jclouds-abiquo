@@ -51,4 +51,12 @@ public class ParentLinkName
     public final static String CATEGORY = "category";
 
     public final static String ICON = "icon";
+
+    public final static String PRIVATE_NETWORK = "privatenetwork";
+
+    public final static String PUBLIC_NETWORK = "publicnetwork";
+
+    public final static String EXTERNAL_NETWORK = "externalnetwork";
+
+    public final static String UNMANAGED_NETWORK = "unmanagednetwork";
 }

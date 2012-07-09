@@ -74,7 +74,6 @@ public class ListVirtualAppliancesImpl implements ListVirtualAppliances
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
         final ListVirtualDatacenters listVirtualDatacenters)
     {
-        super();
         this.context = checkNotNull(context, "context");
         this.listVirtualDatacenters =
             checkNotNull(listVirtualDatacenters, "listVirtualDatacenters");

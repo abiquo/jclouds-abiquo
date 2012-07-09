@@ -58,11 +58,13 @@ import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
+import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
+import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VMNetworkConfigurationsDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpPoolManagementDto20;
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.MovedVolumeDto;
@@ -226,8 +228,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/publicips/topurchase?limit=5 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto20.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -249,8 +250,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/publicips/purchased?limit=5 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto20.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -262,15 +262,13 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
     public void testPurchasePublicIp() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            CloudAsyncClient.class.getMethod("purchasePublicIp", IpPoolManagementDto20.class);
+        Method method = CloudAsyncClient.class.getMethod("purchasePublicIp", PublicIpDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, NetworkResources.publicIpToPurchase());
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/cloud/virtualdatacenters/5/publicips/purchased/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpPoolManagementDto20.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -282,15 +280,13 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
     public void testReleasePublicIp() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            CloudAsyncClient.class.getMethod("releasePublicIp", IpPoolManagementDto20.class);
+        Method method = CloudAsyncClient.class.getMethod("releasePublicIp", PublicIpDto.class);
         GeneratedHttpRequest<CloudAsyncClient> request =
             processor.createRequest(method, NetworkResources.publicIpToRelease());
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/cloud/virtualdatacenters/5/publicips/topurchase/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpPoolManagementDto20.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -531,8 +527,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto20.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PrivateIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -554,8 +549,7 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips?startwith=10 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto20.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PrivateIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -589,16 +583,16 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
     public void testReplaceNics() throws SecurityException, NoSuchMethodException, IOException
     {
-        IpPoolManagementDto20 first = NetworkResources.privateIpPut();
-        IpPoolManagementDto20 second = NetworkResources.privateIpPut();
+        PrivateIpDto first = NetworkResources.privateIpPut();
+        PrivateIpDto second = NetworkResources.privateIpPut();
         second.searchLink("self").setHref(second.searchLink("self").getHref() + "second");
 
         Method method =
             CloudAsyncClient.class.getMethod("replaceNics", VirtualMachineDto.class,
-                IpPoolManagementDto20[].class);
+                PrivateIpDto[].class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(),
-                new IpPoolManagementDto20[] {first, second});
+            processor.createRequest(method, CloudResources.virtualMachinePut(), new PrivateIpDto[] {
+            first, second});
 
         RESTLink selfLink = first.searchLink("self");
         assertRequestLineEquals(
