@@ -436,7 +436,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         expected.addAll(Arrays.asList(volumes));
 
         Volume[] vols = new Volume[expected.size()];
-        return replaceVolumes(true, expected.toArray(vols));
+        return setVolumes(true, expected.toArray(vols));
     }
 
     public AsyncTask detachAllVolumes()
@@ -452,10 +452,10 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         Iterables.removeIf(expected, volumeIdIn(volumes));
 
         Volume[] vols = new Volume[expected.size()];
-        return replaceVolumes(true, expected.toArray(vols));
+        return setVolumes(true, expected.toArray(vols));
     }
 
-    public AsyncTask replaceVolumes(final Boolean forceSoftLimits, final Volume... volumes)
+    public AsyncTask setVolumes(final Boolean forceSoftLimits, final Volume... volumes)
     {
         AcceptedRequestDto<String> taskRef =
             context
@@ -468,12 +468,12 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return taskRef == null ? null : getTask(taskRef);
     }
 
-    public AsyncTask replaceVolumes(final Volume... volumes)
+    public AsyncTask setVolumes(final Volume... volumes)
     {
-        return replaceVolumes(true, volumes);
+        return setVolumes(true, volumes);
     }
 
-    public AsyncTask replaceNics(final Ip< ? , ? >... ips)
+    public AsyncTask setNics(final Ip< ? , ? >... ips)
     {
         AcceptedRequestDto<String> taskRef =
             context.getApi().getCloudClient().replaceNics(target, toIpDto(ips));

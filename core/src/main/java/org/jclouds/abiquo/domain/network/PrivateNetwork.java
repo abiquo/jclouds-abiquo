@@ -28,6 +28,7 @@ import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
+import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
@@ -107,9 +108,9 @@ public class PrivateNetwork extends Network<PrivateIp>
     @Override
     public List<PrivateIp> listIps(final IpOptions options)
     {
-        PrivateIpsDto PrivateIp =
+        PrivateIpsDto ips =
             context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
-        return wrap(context, PrivateIp.class, PrivateIp.getCollection());
+        return wrap(context, PrivateIp.class, ips.getCollection());
     }
 
     // Override to apply the filter in the server side
@@ -117,9 +118,16 @@ public class PrivateNetwork extends Network<PrivateIp>
     public List<PrivateIp> listUnusedIps()
     {
         IpOptions options = IpOptions.builder().free(true).build();
-        PrivateIpsDto PrivateIp =
+        PrivateIpsDto ips =
             context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
-        return wrap(context, PrivateIp.class, PrivateIp.getCollection());
+        return wrap(context, PrivateIp.class, ips.getCollection());
+    }
+
+    @Override
+    public PrivateIp getIp(final Integer id)
+    {
+        PrivateIpDto ip = context.getApi().getCloudClient().getPrivateNetworkIp(target, id);
+        return wrap(context, PrivateIp.class, ip);
     }
 
     // Builder

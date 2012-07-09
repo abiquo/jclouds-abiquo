@@ -65,6 +65,8 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
 
     public abstract List<T> listIps(IpOptions options);
 
+    public abstract T getIp(Integer id);
+
     public List<T> listIps()
     {
         // Disable pagination by default

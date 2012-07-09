@@ -85,8 +85,11 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.UcsRacksDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -985,6 +988,16 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
+     * @see InfrastructureClient#getPublicIp(VLANNetworkDto, Integer)
+     */
+    @GET
+    @Consumes(PublicIpDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<PublicIpDto> getPublicIp(
+        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+        @BinderParam(AppendToPath.class) Integer ipId);
+
+    /**
      * @see InfrastructureClient#listExternalIps(VLANNetworkDto)
      */
     @GET
@@ -994,7 +1007,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
     /**
-     * @see @see InfrastructureClient#listExternalIps(VLANNetworkDto, IpOptions)
+     * @see InfrastructureClient#listExternalIps(VLANNetworkDto, IpOptions)
      */
     @GET
     @Consumes(ExternalIpsDto.BASE_MEDIA_TYPE)
@@ -1002,6 +1015,16 @@ public interface InfrastructureAsyncClient
     ListenableFuture<ExternalIpsDto> listExternalIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
+
+    /**
+     * @see InfrastructureClient#getExternalIp(VLANNetworkDto, Integer)
+     */
+    @GET
+    @Consumes(ExternalIpDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<ExternalIpDto> getExternalIp(
+        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+        @BinderParam(AppendToPath.class) Integer ipId);
 
     /**
      * @see InfrastructureClient#listUnmanagedIps(VLANNetworkDto)
@@ -1021,4 +1044,14 @@ public interface InfrastructureAsyncClient
     ListenableFuture<UnmanagedIpsDto> listUnmanagedIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
+
+    /**
+     * @see InfrastructureClient#getUnmanagedIp(VLANNetworkDto, Integer)
+     */
+    @GET
+    @Consumes(UnmanagedIpDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<UnmanagedIpDto> getUnmanagedIp(
+        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+        @BinderParam(AppendToPath.class) Integer ipId);
 }

@@ -150,7 +150,7 @@ public class AbiquoComputeServiceHelper
         {
             // TODO: External ips don't have the right link
             // (http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3650)
-            vm.replaceNics(ips);
+            vm.setNics(ips);
         }
     }
 

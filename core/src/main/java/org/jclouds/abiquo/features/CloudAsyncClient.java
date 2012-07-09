@@ -322,7 +322,8 @@ public interface CloudAsyncClient
     @Consumes(PrivateIpDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<PrivateIpDto> getPrivateNetworkIp(
-        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network, Integer ipId);
+        @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
+        @BinderParam(AppendToPath.class) Integer ipId);
 
     /*********************** Attached Nic ***********************/
 

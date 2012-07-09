@@ -39,6 +39,7 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.google.inject.TypeLiteral;
@@ -123,6 +124,13 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
         UnmanagedIpsDto ips =
             context.getApi().getInfrastructureClient().listUnmanagedIps(target, options);
         return wrap(context, UnmanagedIp.class, ips.getCollection());
+    }
+
+    @Override
+    public UnmanagedIp getIp(final Integer id)
+    {
+        UnmanagedIpDto ip = context.getApi().getInfrastructureClient().getUnmanagedIp(target, id);
+        return wrap(context, UnmanagedIp.class, ip);
     }
 
     public Enterprise getEnterprise()

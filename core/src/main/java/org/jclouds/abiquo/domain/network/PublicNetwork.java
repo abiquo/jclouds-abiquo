@@ -33,6 +33,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 
@@ -112,6 +113,13 @@ public class PublicNetwork extends Network<PublicIp>
         PublicIpsDto ips =
             context.getApi().getInfrastructureClient().listPublicIps(target, options);
         return wrap(context, PublicIp.class, ips.getCollection());
+    }
+
+    @Override
+    public PublicIp getIp(final Integer id)
+    {
+        PublicIpDto ip = context.getApi().getInfrastructureClient().getPublicIp(target, id);
+        return wrap(context, PublicIp.class, ip);
     }
 
     // Builder

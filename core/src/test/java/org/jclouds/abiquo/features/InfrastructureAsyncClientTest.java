@@ -70,10 +70,15 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.UcsRacksDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
-import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDevicesMetadataDto;
@@ -1809,17 +1814,16 @@ public class InfrastructureAsyncClientTest extends
 
     /*********************** Network IPs ***********************/
 
-    public void testListNetworkIps() throws SecurityException, NoSuchMethodException, IOException
+    public void testListPublicIps() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncClient.class.getMethod("listNetworkIps", VLANNetworkDto.class);
+            InfrastructureAsyncClient.class.getMethod("listPublicIps", VLANNetworkDto.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, NetworkResources.publicNetworkPut());
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/network/1/ips HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto20.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
@@ -1829,20 +1833,161 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
-    public void testListNetworkIpsWithOptions() throws SecurityException, NoSuchMethodException,
+    public void testListPublicIpsWithOptions() throws SecurityException, NoSuchMethodException,
         IOException
     {
         IpOptions options = IpOptions.builder().startWith(10).build();
         Method method =
-            InfrastructureAsyncClient.class.getMethod("listNetworkIps", VLANNetworkDto.class,
+            InfrastructureAsyncClient.class.getMethod("listPublicIps", VLANNetworkDto.class,
                 IpOptions.class);
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, NetworkResources.publicNetworkPut(), options);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters/1/network/1/ips?startwith=10 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + IpsPoolManagementDto20.BASE_MEDIA_TYPE
-            + "\n");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpsDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetPublicIp() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getPublicIp", VLANNetworkDto.class,
+                Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, NetworkResources.publicNetworkPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/network/1/ips/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PublicIpDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListExternalIps() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listExternalIps", VLANNetworkDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, NetworkResources.externalNetworkPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/network/1/ips HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + ExternalIpsDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListExternalIpsWithOptions() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        IpOptions options = IpOptions.builder().startWith(10).build();
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listExternalIps", VLANNetworkDto.class,
+                IpOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, NetworkResources.externalNetworkPut(), options);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/network/1/ips?startwith=10 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + ExternalIpsDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetExternalIp() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getExternalIp", VLANNetworkDto.class,
+                Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, NetworkResources.externalNetworkPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/network/1/ips/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + ExternalIpDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListUnmanagedIps() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listUnmanagedIps", VLANNetworkDto.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, NetworkResources.unmanagedNetworkPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/network/1/ips HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + UnmanagedIpsDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListUnmanagedIpsWithOptions() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        IpOptions options = IpOptions.builder().startWith(10).build();
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("listUnmanagedIps", VLANNetworkDto.class,
+                IpOptions.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, NetworkResources.unmanagedNetworkPut(), options);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/network/1/ips?startwith=10 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + UnmanagedIpsDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetUnmanagedIp() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getUnmanagedIp", VLANNetworkDto.class,
+                Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, NetworkResources.externalNetworkPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/network/1/ips/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + UnmanagedIpDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

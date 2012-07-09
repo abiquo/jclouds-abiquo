@@ -53,8 +53,11 @@ import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.UcsRacksDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
+import com.abiquo.server.core.infrastructure.network.PublicIpDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
@@ -907,6 +910,16 @@ public interface InfrastructureClient
     PublicIpsDto listPublicIps(VLANNetworkDto network, IpOptions options);
 
     /**
+     * Get the given public ip.
+     * 
+     * @param network The public network.
+     * @param ipId The id of the ip to get.
+     * @return The requested ip.
+     * @since 2.3
+     */
+    PublicIpDto getPublicIp(VLANNetworkDto network, Integer ipId);
+
+    /**
      * List all the IPs in the given external network.
      * 
      * @param network The external network.
@@ -926,6 +939,16 @@ public interface InfrastructureClient
     ExternalIpsDto listExternalIps(VLANNetworkDto network, IpOptions options);
 
     /**
+     * Get the given external ip.
+     * 
+     * @param network The external network.
+     * @param ipId The id of the ip to get.
+     * @return The requested ip.
+     * @since 2.3
+     */
+    ExternalIpDto getExternalIp(VLANNetworkDto network, Integer ipId);
+
+    /**
      * List all the IPs in the given unmanaged network.
      * 
      * @param network The unmanaged network.
@@ -943,4 +966,14 @@ public interface InfrastructureClient
      * @since 2.3
      */
     UnmanagedIpsDto listUnmanagedIps(VLANNetworkDto network, IpOptions options);
+
+    /**
+     * Get the given unmanaged ip.
+     * 
+     * @param network The unmanaged network.
+     * @param ipId The id of the ip to get.
+     * @return The requested ip.
+     * @since 2.3
+     */
+    UnmanagedIpDto getUnmanagedIp(VLANNetworkDto network, Integer ipId);
 }

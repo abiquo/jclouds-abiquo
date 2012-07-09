@@ -57,6 +57,7 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
+import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
 import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
@@ -559,6 +560,27 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         checkFilters(request);
     }
 
+    public void testGetPrivateNetworkIp() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("getPrivateNetworkIp", VLANNetworkDto.class,
+                Integer.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, NetworkResources.privateNetworkPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/privatenetworks/1/ips/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PrivateIpDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     /*********************** Attached Nic ***********************/
 
     public void testListAttachedNics() throws SecurityException, NoSuchMethodException, IOException
@@ -589,10 +611,10 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
 
         Method method =
             CloudAsyncClient.class.getMethod("replaceNics", VirtualMachineDto.class,
-                PrivateIpDto[].class);
+                AbstractIpDto[].class);
         GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(), new PrivateIpDto[] {
-            first, second});
+            processor.createRequest(method, CloudResources.virtualMachinePut(),
+                new AbstractIpDto[] {first, second});
 
         RESTLink selfLink = first.searchLink("self");
         assertRequestLineEquals(

@@ -39,6 +39,7 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.network.ExternalIpDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.google.inject.TypeLiteral;
@@ -123,6 +124,13 @@ public class ExternalNetwork extends Network<ExternalIp>
         ExternalIpsDto ips =
             context.getApi().getInfrastructureClient().listExternalIps(target, options);
         return wrap(context, ExternalIp.class, ips.getCollection());
+    }
+
+    @Override
+    public ExternalIp getIp(final Integer id)
+    {
+        ExternalIpDto ip = context.getApi().getInfrastructureClient().getExternalIp(target, id);
+        return wrap(context, ExternalIp.class, ip);
     }
 
     public Enterprise getEnterprise()
