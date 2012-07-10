@@ -37,6 +37,8 @@ import org.jclouds.abiquo.domain.infrastructure.Machine;
 import org.jclouds.abiquo.domain.network.ExternalIp;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.domain.network.UnmanagedIp;
+import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.abiquo.strategy.enterprise.ListVirtualMachineTemplates;
@@ -481,20 +483,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     @EnterpriseEdition
     public List<ExternalNetwork> listExternalNetworks(final Datacenter datacenter)
     {
-        DatacentersLimitsDto limits = context.getApi().getEnterpriseClient().listLimits(target);
-
-        DatacenterLimitsDto limitForDatacenter =
-            Iterables.find(limits.getCollection(), new Predicate<DatacenterLimitsDto>()
-            {
-                @Override
-                public boolean apply(final DatacenterLimitsDto input)
-                {
-                    RESTLink datacenterLink = input.searchLink("datacenter");
-                    return datacenterLink != null
-                        && datacenterLink.getHref().equals(
-                            datacenter.unwrap().getEditLink().getHref());
-                }
-            });
+        DatacenterLimitsDto limitForDatacenter = getLimits(datacenter);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response =
@@ -519,6 +508,36 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         final Predicate<Network<ExternalIp>> filter)
     {
         return Iterables.getFirst(filter(listExternalNetworks(datacenter), filter), null);
+    }
+
+    @EnterpriseEdition
+    public List<UnmanagedNetwork> listUnmanagedNetworks(final Datacenter datacenter)
+    {
+        DatacenterLimitsDto limitForDatacenter = getLimits(datacenter);
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response =
+            utils.getAbiquoHttpClient().get(limitForDatacenter.searchLink("unmanagednetworks"));
+
+        ParseXMLWithJAXB<VLANNetworksDto> parser =
+            new ParseXMLWithJAXB<VLANNetworksDto>(utils.getXml(),
+                TypeLiteral.get(VLANNetworksDto.class));
+
+        return wrap(context, UnmanagedNetwork.class, parser.apply(response).getCollection());
+    }
+
+    @EnterpriseEdition
+    public List<UnmanagedNetwork> listUnmanagedNetworks(final Datacenter datacenter,
+        final Predicate<Network<UnmanagedIp>> filter)
+    {
+        return Lists.newLinkedList(filter(listUnmanagedNetworks(datacenter), filter));
+    }
+
+    @EnterpriseEdition
+    public UnmanagedNetwork findUnmanagedNetwork(final Datacenter datacenter,
+        final Predicate<Network<UnmanagedIp>> filter)
+    {
+        return Iterables.getFirst(filter(listUnmanagedNetworks(datacenter), filter), null);
     }
 
     /**
@@ -961,5 +980,21 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     {
         return "Enterprise [id=" + getId() + ", isReservationRestricted="
             + getIsReservationRestricted() + ", name=" + getName() + "]";
+    }
+
+    private DatacenterLimitsDto getLimits(final Datacenter datacenter)
+    {
+        DatacentersLimitsDto limits = context.getApi().getEnterpriseClient().listLimits(target);
+
+        return Iterables.find(limits.getCollection(), new Predicate<DatacenterLimitsDto>()
+        {
+            @Override
+            public boolean apply(final DatacenterLimitsDto input)
+            {
+                RESTLink datacenterLink = input.searchLink("datacenter");
+                return datacenterLink != null
+                    && datacenterLink.getHref().equals(datacenter.unwrap().getEditLink().getHref());
+            }
+        });
     }
 }

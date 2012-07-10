@@ -50,6 +50,7 @@ import org.jclouds.abiquo.domain.infrastructure.StoragePool;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.PublicNetwork;
+import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.features.AdminClient;
 import org.jclouds.abiquo.features.ConfigClient;
 import org.jclouds.abiquo.features.EnterpriseClient;
@@ -100,6 +101,8 @@ public class InfrastructureTestEnvironment implements TestEnvironment
     public PublicNetwork publicNetwork;
 
     public ExternalNetwork externalNetwork;
+
+    public UnmanagedNetwork unmanagedNetwork;
 
     public List<RemoteService> remoteServices;
 
@@ -157,6 +160,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         createUsers();
 
         createExternalNetwork();
+        createUnmanagedNetwork();
     }
 
     @Override
@@ -166,6 +170,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         deleteRole(role);
         deleteRole(anotherRole);
 
+        deleteUnmanagedNetwork();
         deleteExternalNetwork();
         deletePublicNetwork();
         deleteStoragePool();
@@ -353,7 +358,27 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         assertNotNull(externalNetwork.getId());
     }
 
+    private void createUnmanagedNetwork()
+    {
+        unmanagedNetwork =
+            UnmanagedNetwork.builder(context.getApiContext(), datacenter, enterprise)
+                .name("UnmanagedNetwork").gateway("10.0.1.1").address("10.0.1.0").mask(24).tag(8)
+                .build();
+        unmanagedNetwork.save();
+        assertNotNull(unmanagedNetwork.getId());
+    }
+
     // Tear down
+
+    private void deleteUnmanagedNetwork()
+    {
+        if (unmanagedNetwork != null)
+        {
+            Integer id = unmanagedNetwork.getId();
+            unmanagedNetwork.delete();
+            assertNull(datacenter.getNetwork(id));
+        }
+    }
 
     private void deleteExternalNetwork()
     {

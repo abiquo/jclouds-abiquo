@@ -63,7 +63,7 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
     }
 
     @AfterClass
-    public void teardownEnterprise()
+    public void tearDownEnterprise()
     {
         enterprise.delete();
     }

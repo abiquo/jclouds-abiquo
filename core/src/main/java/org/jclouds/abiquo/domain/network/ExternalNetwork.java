@@ -39,6 +39,7 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
@@ -133,6 +134,8 @@ public class ExternalNetwork extends Network<ExternalIp>
         return wrap(context, ExternalIp.class, ip);
     }
 
+    // Parent access
+
     public Enterprise getEnterprise()
     {
         RESTLink link =
@@ -146,7 +149,25 @@ public class ExternalNetwork extends Network<ExternalIp>
             new ParseXMLWithJAXB<EnterpriseDto>(utils.getXml(),
                 TypeLiteral.get(EnterpriseDto.class));
 
-        return wrap(context, Enterprise.class, parser.apply(response));
+        enterprise = wrap(context, Enterprise.class, parser.apply(response));
+        return enterprise;
+    }
+
+    public Datacenter getDatacenter()
+    {
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.DATACENTER),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.DATACENTER);
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<DatacenterDto> parser =
+            new ParseXMLWithJAXB<DatacenterDto>(utils.getXml(),
+                TypeLiteral.get(DatacenterDto.class));
+
+        datacenter = wrap(context, Datacenter.class, parser.apply(response));
+        return datacenter;
     }
 
     private void addEnterpriseLink()
@@ -209,8 +230,8 @@ public class ExternalNetwork extends Network<ExternalIp>
             dto.setPrimaryDNS(primaryDNS);
             dto.setSecondaryDNS(secondaryDNS);
             dto.setSufixDNS(sufixDNS);
-            dto.setDefaultNetwork(defaultNetwork);
-            dto.setUnmanaged(false);
+            dto.setDefaultNetwork(defaultNetwork == null ? Boolean.FALSE : defaultNetwork);
+            dto.setUnmanaged(Boolean.FALSE);
             dto.setType(NetworkType.EXTERNAL);
 
             ExternalNetwork network = new ExternalNetwork(context, dto);

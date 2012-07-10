@@ -38,81 +38,82 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 
 /**
- * Live integration tests for the {@link ExternalNetwork} domain class.
+ * Live integration tests for the {@link UnmanagedNetwork} domain class.
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "live")
-public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
+@Test(groups = "live", enabled = false)
+public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
 {
-    private ExternalNetwork externalNetwork;
+    private UnmanagedNetwork unmanagedNetwork;
 
     @BeforeClass
     public void setupNetwork()
     {
-        externalNetwork = ExternalNetwork.Builder.fromExternalNetwork(env.externalNetwork).build();
-        externalNetwork.setName(PREFIX + "-externalnetwork-test");
-        externalNetwork.save();
+        unmanagedNetwork =
+            UnmanagedNetwork.Builder.fromUnmanagedNetwork(env.unmanagedNetwork).build();
+        unmanagedNetwork.setName(PREFIX + "-unmanagednetwork-test");
+        unmanagedNetwork.save();
 
-        assertNotNull(externalNetwork.getId());
+        assertNotNull(unmanagedNetwork.getId());
     }
 
     @AfterClass
     public void tearDownNetwork()
     {
-        externalNetwork.delete();
+        unmanagedNetwork.delete();
     }
 
     public void testListIps()
     {
-        ExternalIpsDto ipsDto =
+        UnmanagedIpsDto ipsDto =
             context.getApiContext().getApi().getInfrastructureClient()
-                .listExternalIps(externalNetwork.unwrap(), IpOptions.builder().limit(1).build());
+                .listUnmanagedIps(unmanagedNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
-        List<ExternalIp> ips = externalNetwork.listIps();
+        List<UnmanagedIp> ips = unmanagedNetwork.listIps();
 
         assertEquals(ips.size(), totalIps);
     }
 
     public void testListIpsWithOptions()
     {
-        List<ExternalIp> ips = externalNetwork.listIps(IpOptions.builder().limit(5).build());
+        List<UnmanagedIp> ips = unmanagedNetwork.listIps(IpOptions.builder().limit(5).build());
         assertEquals(ips.size(), 5);
     }
 
     public void testListUnusedIps()
     {
-        ExternalIpsDto ipsDto =
+        UnmanagedIpsDto ipsDto =
             context.getApiContext().getApi().getInfrastructureClient()
-                .listExternalIps(externalNetwork.unwrap(), IpOptions.builder().limit(1).build());
+                .listUnmanagedIps(unmanagedNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
-        List<ExternalIp> ips = externalNetwork.listUnusedIps();
+        List<UnmanagedIp> ips = unmanagedNetwork.listUnusedIps();
         assertEquals(ips.size(), totalIps);
     }
 
     public void testUpdateBasicInfo()
     {
-        externalNetwork.setName("External network Updated");
-        externalNetwork.setPrimaryDNS("8.8.8.8");
-        externalNetwork.setSecondaryDNS("8.8.8.8");
-        externalNetwork.update();
+        unmanagedNetwork.setName("Unmanaged network Updated");
+        unmanagedNetwork.setPrimaryDNS("8.8.8.8");
+        unmanagedNetwork.setSecondaryDNS("8.8.8.8");
+        unmanagedNetwork.update();
 
-        assertEquals(externalNetwork.getName(), "External network Updated");
-        assertEquals(externalNetwork.getPrimaryDNS(), "8.8.8.8");
-        assertEquals(externalNetwork.getSecondaryDNS(), "8.8.8.8");
+        assertEquals(unmanagedNetwork.getName(), "Unmanaged network Updated");
+        assertEquals(unmanagedNetwork.getPrimaryDNS(), "8.8.8.8");
+        assertEquals(unmanagedNetwork.getSecondaryDNS(), "8.8.8.8");
 
-        // Refresh the external network
-        ExternalNetwork en =
-            env.enterprise.findExternalNetwork(env.datacenter,
-                NetworkPredicates.<ExternalIp> name(externalNetwork.getName()));
+        // Refresh the unmanaged network
+        UnmanagedNetwork en =
+            env.enterprise.findUnmanagedNetwork(env.datacenter,
+                NetworkPredicates.<UnmanagedIp> name(unmanagedNetwork.getName()));
 
-        assertEquals(en.getId(), externalNetwork.getId());
-        assertEquals(en.getName(), "External network Updated");
+        assertEquals(en.getId(), unmanagedNetwork.getId());
+        assertEquals(en.getName(), "Unmanaged network Updated");
         assertEquals(en.getPrimaryDNS(), "8.8.8.8");
         assertEquals(en.getSecondaryDNS(), "8.8.8.8");
     }
@@ -121,10 +122,10 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
     {
         try
         {
-            externalNetwork.setTag(20);
-            externalNetwork.setAddress("10.1.0.0");
-            externalNetwork.setMask(16);
-            externalNetwork.update();
+            unmanagedNetwork.setTag(20);
+            unmanagedNetwork.setAddress("10.2.0.0");
+            unmanagedNetwork.setMask(16);
+            unmanagedNetwork.update();
 
             fail("Tag field should not be editable");
         }
@@ -138,8 +139,8 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
     {
         try
         {
-            externalNetwork.setMask(60);
-            externalNetwork.update();
+            unmanagedNetwork.setMask(60);
+            unmanagedNetwork.update();
 
             fail("Invalid mask value");
         }
@@ -151,19 +152,19 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
 
     public void testGetEnterprise()
     {
-        assertEquals(externalNetwork.getEnterprise().getId(), env.enterprise.getId());
+        assertEquals(unmanagedNetwork.getEnterprise().getId(), env.enterprise.getId());
     }
 
     public void testGetDatacenter()
     {
-        assertEquals(externalNetwork.getDatacenter().getId(), env.datacenter.getId());
+        assertEquals(unmanagedNetwork.getDatacenter().getId(), env.datacenter.getId());
     }
 
     public void testGetNetworkFromIp()
     {
-        ExternalIp ip = externalNetwork.findIp(IpPredicates.<ExternalIp> notUsed());
-        ExternalNetwork network = ip.getNetwork();
+        UnmanagedIp ip = unmanagedNetwork.findIp(IpPredicates.<UnmanagedIp> notUsed());
+        UnmanagedNetwork network = ip.getNetwork();
 
-        assertEquals(network.getId(), externalNetwork.getId());
+        assertEquals(network.getId(), unmanagedNetwork.getId());
     }
 }

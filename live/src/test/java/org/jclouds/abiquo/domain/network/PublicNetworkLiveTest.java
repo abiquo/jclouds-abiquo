@@ -19,12 +19,22 @@
 
 package org.jclouds.abiquo.domain.network;
 
+import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
+import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.fail;
 
 import java.util.List;
 
+import javax.ws.rs.core.Response.Status;
+
+import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.network.IpPredicates;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
@@ -37,15 +47,115 @@ import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 @Test(groups = "live")
 public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
 {
+    private PublicNetwork publicNetwork;
+
+    @BeforeClass
+    public void setupNetwork()
+    {
+        publicNetwork = PublicNetwork.Builder.fromPublicNetwork(env.publicNetwork).build();
+        publicNetwork.setName(PREFIX + "-publicnetwork-test");
+        publicNetwork.save();
+
+        assertNotNull(publicNetwork.getId());
+    }
+
+    @AfterClass
+    public void tearDownNetwork()
+    {
+        publicNetwork.delete();
+    }
+
     public void testListIps()
     {
         PublicIpsDto ipsDto =
             context.getApiContext().getApi().getInfrastructureClient()
-                .listPublicIps(env.publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
+                .listPublicIps(publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
-        List<PublicIp> ips = env.publicNetwork.listIps();
+        List<PublicIp> ips = publicNetwork.listIps();
 
         assertEquals(ips.size(), totalIps);
+    }
+
+    public void testListIpsWithOptions()
+    {
+        List<PublicIp> ips = publicNetwork.listIps(IpOptions.builder().limit(5).build());
+        assertEquals(ips.size(), 5);
+    }
+
+    public void testListUnusedIps()
+    {
+        PublicIpsDto ipsDto =
+            context.getApiContext().getApi().getInfrastructureClient()
+                .listPublicIps(publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
+        int totalIps = ipsDto.getTotalSize();
+
+        List<PublicIp> ips = publicNetwork.listUnusedIps();
+        assertEquals(ips.size(), totalIps);
+    }
+
+    public void testUpdateBasicInfo()
+    {
+        publicNetwork.setName("Public network Updated");
+        publicNetwork.setPrimaryDNS("8.8.8.8");
+        publicNetwork.setSecondaryDNS("8.8.8.8");
+        publicNetwork.update();
+
+        assertEquals(publicNetwork.getName(), "Public network Updated");
+        assertEquals(publicNetwork.getPrimaryDNS(), "8.8.8.8");
+        assertEquals(publicNetwork.getSecondaryDNS(), "8.8.8.8");
+
+        // Refresh the public network
+        PublicNetwork pn = env.datacenter.getNetwork(publicNetwork.getId()).toPublicNetwork();
+
+        assertEquals(pn.getId(), publicNetwork.getId());
+        assertEquals(pn.getName(), "Public network Updated");
+        assertEquals(pn.getPrimaryDNS(), "8.8.8.8");
+        assertEquals(pn.getSecondaryDNS(), "8.8.8.8");
+    }
+
+    public void testUpdateReadOnlyFields()
+    {
+        try
+        {
+            publicNetwork.setTag(20);
+            publicNetwork.setAddress("80.81.81.0");
+            publicNetwork.setMask(16);
+            publicNetwork.update();
+
+            fail("Tag field should not be editable");
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.CONFLICT, "VLAN-19");
+        }
+    }
+
+    public void testUpdateWithInvalidValues()
+    {
+        try
+        {
+            publicNetwork.setMask(60);
+            publicNetwork.update();
+
+            fail("Invalid mask value");
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.BAD_REQUEST, "CONSTR-MAX");
+        }
+    }
+
+    public void testGetDatacenter()
+    {
+        assertEquals(publicNetwork.getDatacenter().getId(), env.datacenter.getId());
+    }
+
+    public void testGetNetworkFromIp()
+    {
+        PublicIp ip = publicNetwork.findIp(IpPredicates.<PublicIp> notUsed());
+        PublicNetwork network = ip.getNetwork();
+
+        assertEquals(network.getId(), publicNetwork.getId());
     }
 }

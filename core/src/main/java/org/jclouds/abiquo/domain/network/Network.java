@@ -280,11 +280,6 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
         return target.getType();
     }
 
-    public Boolean getUnmanaged()
-    {
-        return target.getUnmanaged();
-    }
-
     public void setAddress(final String address)
     {
         target.setAddress(address);
@@ -336,8 +331,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
         return "Network [id=" + getId() + ", address=" + getAddress() + ", defaultNetwork="
             + getDefaultNetwork() + ", gateway=" + getGateway() + ", mask=" + getMask() + ", name="
             + getName() + ", primaryDNS=" + getPrimaryDNS() + ", secondaryDNS=" + getSecondaryDNS()
-            + ", suffixDNS=" + getSufixDNS() + ", tag=" + getTag() + ", type=" + getType()
-            + ", unmanaged=" + getUnmanaged() + "]";
+            + ", suffixDNS=" + getSufixDNS() + ", tag=" + getTag() + ", type=" + getType() + "]";
     }
 
     public static Network< ? > wrapNetwork(

@@ -39,6 +39,7 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
@@ -133,6 +134,8 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
         return wrap(context, UnmanagedIp.class, ip);
     }
 
+    // Parent access
+
     public Enterprise getEnterprise()
     {
         RESTLink link =
@@ -146,7 +149,25 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
             new ParseXMLWithJAXB<EnterpriseDto>(utils.getXml(),
                 TypeLiteral.get(EnterpriseDto.class));
 
-        return wrap(context, Enterprise.class, parser.apply(response));
+        enterprise = wrap(context, Enterprise.class, parser.apply(response));
+        return enterprise;
+    }
+
+    public Datacenter getDatacenter()
+    {
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.DATACENTER),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.DATACENTER);
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<DatacenterDto> parser =
+            new ParseXMLWithJAXB<DatacenterDto>(utils.getXml(),
+                TypeLiteral.get(DatacenterDto.class));
+
+        datacenter = wrap(context, Datacenter.class, parser.apply(response));
+        return datacenter;
     }
 
     private void addEnterpriseLink()

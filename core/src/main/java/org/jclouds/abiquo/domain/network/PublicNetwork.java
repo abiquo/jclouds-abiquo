@@ -30,12 +30,19 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.abiquo.reference.rest.ParentLinkName;
+import org.jclouds.abiquo.rest.internal.ExtendedUtils;
+import org.jclouds.http.HttpResponse;
+import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
+import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
+import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to public {@link VLANNetworkDto}.
@@ -120,6 +127,25 @@ public class PublicNetwork extends Network<PublicIp>
     {
         PublicIpDto ip = context.getApi().getInfrastructureClient().getPublicIp(target, id);
         return wrap(context, PublicIp.class, ip);
+    }
+
+    // Parent access
+
+    public Datacenter getDatacenter()
+    {
+        RESTLink link =
+            checkNotNull(target.searchLink(ParentLinkName.DATACENTER),
+                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.DATACENTER);
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<DatacenterDto> parser =
+            new ParseXMLWithJAXB<DatacenterDto>(utils.getXml(),
+                TypeLiteral.get(DatacenterDto.class));
+
+        datacenter = wrap(context, Datacenter.class, parser.apply(response));
+        return datacenter;
     }
 
     // Builder

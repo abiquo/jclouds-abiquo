@@ -117,7 +117,7 @@ public class PrivateNetwork extends Network<PrivateIp>
     @Override
     public List<PrivateIp> listUnusedIps()
     {
-        IpOptions options = IpOptions.builder().free(true).build();
+        IpOptions options = IpOptions.builder().disablePagination().free(true).build();
         PrivateIpsDto ips =
             context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
         return wrap(context, PrivateIp.class, ips.getCollection());
