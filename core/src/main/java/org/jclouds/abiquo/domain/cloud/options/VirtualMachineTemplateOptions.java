@@ -23,6 +23,7 @@ import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.StatefulInclusion;
 
 /**
  * Available options to query virtual machine templates.
@@ -52,7 +53,7 @@ public class VirtualMachineTemplateOptions extends QueryOptions
 
     public static class Builder
     {
-        private Boolean persistent;
+        private StatefulInclusion persistent;
 
         private HypervisorType hypervisorType;
 
@@ -60,7 +61,9 @@ public class VirtualMachineTemplateOptions extends QueryOptions
 
         private String categoryName;
 
-        public Builder persistent(final Boolean persistent)
+        private Integer idTemplate;
+
+        public Builder persistent(final StatefulInclusion persistent)
         {
             this.persistent = persistent;
             return this;
@@ -84,13 +87,19 @@ public class VirtualMachineTemplateOptions extends QueryOptions
             return this;
         }
 
+        public Builder idTemplate(final Integer idTemplate)
+        {
+            this.idTemplate = idTemplate;
+            return this;
+        }
+
         public VirtualMachineTemplateOptions build()
         {
             VirtualMachineTemplateOptions options = new VirtualMachineTemplateOptions();
 
             if (persistent != null)
             {
-                options.map.put("stateful", String.valueOf(persistent));
+                options.map.put("stateful", persistent.name());
             }
             if (hypervisorType != null)
             {
@@ -104,6 +113,11 @@ public class VirtualMachineTemplateOptions extends QueryOptions
             if (category == null && categoryName != null)
             {
                 options.map.put("categoryName", categoryName);
+            }
+
+            if (idTemplate != null)
+            {
+                options.map.put("idTemplate", String.valueOf(idTemplate));
             }
 
             return options;

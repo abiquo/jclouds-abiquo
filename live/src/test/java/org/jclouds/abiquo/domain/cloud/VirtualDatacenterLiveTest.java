@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain.cloud;
 import static com.google.common.collect.Iterables.size;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
@@ -35,6 +36,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.Test;
 
@@ -168,6 +170,28 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
         assertNotNull(network);
         assertEquals(network.getName(), env.privateNetwork.getName());
         assertEquals(network.getType(), env.privateNetwork.getType());
+    }
+
+    public void testGetAvailableTemplates()
+    {
+        List<VirtualMachineTemplate> templates = env.virtualDatacenter.listAvailableTemplates();
+
+        assertNotNull(templates);
+        assertFalse(templates.isEmpty());
+
+        VirtualMachineTemplate template = templates.get(0);
+        Integer idTemp = new Integer(template.getId());
+        VirtualMachineTemplate templateFound =
+            env.virtualDatacenter
+                .findAvailableTemplate(VirtualMachineTemplatePredicates.id(idTemp));
+
+        assertNotNull(template);
+        assertNotNull(templateFound);
+        assertEquals(templateFound.getId(), template.getId());
+
+        templateFound = env.virtualDatacenter.getAvailableTemplate(idTemp);
+        assertNotNull(templateFound);
+        assertEquals(templateFound.getId(), template.getId());
     }
 
 }

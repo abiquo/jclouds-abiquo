@@ -30,6 +30,7 @@ import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.options.search.reference.OrderBy;
@@ -42,10 +43,12 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -291,6 +294,54 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
             "PUT http://localhost/api/cloud/virtualdatacenters/5/publicips/topurchase/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + IpPoolManagementDto20.BASE_MEDIA_TYPE
             + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Available templates ***********************/
+
+    public void testListAvailableTemplates() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("listAvailableTemplates", VirtualDatacenterDto.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/action/templates HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachineTemplatesDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListAvailableTemplatesWithOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            CloudAsyncClient.class.getMethod("listAvailableTemplates", VirtualDatacenterDto.class,
+                VirtualMachineTemplateOptions.class);
+        GeneratedHttpRequest<CloudAsyncClient> request =
+            processor.createRequest(method, CloudResources.virtualDatacenterPut(),
+                VirtualMachineTemplateOptions.builder().hypervisorType(HypervisorType.XENSERVER)
+                    .categoryName("Firewalls").idTemplate(1).build());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/cloud/virtualdatacenters/1/action/templates"
+                + "?hypervisorTypeName=XENSERVER&categoryName=Firewalls&idTemplate=1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachineTemplatesDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
