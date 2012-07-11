@@ -37,6 +37,7 @@ import com.abiquo.server.core.infrastructure.network.v20.IpsPoolManagementDto20;
 @Test(groups = "live")
 public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
 {
+    @Test(enabled = false)
     public void testListIps()
     {
         IpsPoolManagementDto20 ipsDto =
