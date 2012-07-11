@@ -327,6 +327,19 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
     public List<Ip< ? , ? >> listAttachedNics()
     {
+        // First refresh the dto and its links
+        RESTLink link =
+            checkNotNull(target.getEditLink(), ValidationErrors.MISSING_REQUIRED_LINK + " edit");
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<VirtualMachineDto> parser =
+            new ParseXMLWithJAXB<VirtualMachineDto>(utils.getXml(),
+                TypeLiteral.get(VirtualMachineDto.class));
+
+        target = parser.apply(response);
+
         ListAttachedNics strategy =
             context.getUtils().getInjector().getInstance(ListAttachedNics.class);
         return Lists.newLinkedList(strategy.execute(this));

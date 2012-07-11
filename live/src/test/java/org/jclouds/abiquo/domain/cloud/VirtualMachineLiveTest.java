@@ -19,13 +19,11 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
-import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
-import static org.testng.Assert.assertTrue;
 import static org.testng.Assert.fail;
 
 import java.util.List;
@@ -33,7 +31,6 @@ import java.util.List;
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
@@ -49,10 +46,6 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 @Test(groups = "live")
 public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
 {
-    private Volume volume;
-
-    private HardDisk hardDisk;
-
     public void testGetTasks()
     {
         List<AsyncTask> tasks = env.virtualMachine.listTasks();
@@ -77,41 +70,6 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(vapp.getId(), env.virtualAppliance.getId());
     }
 
-    public void testAttachVolumes()
-    {
-        volume = createVolume();
-
-        // Since the virtual machine is not deployed, this should not generate a task
-        AsyncTask task = env.virtualMachine.attachVolumes(volume);
-        assertNull(task);
-
-        List<Volume> attached = env.virtualMachine.listAttachedVolumes();
-        assertEquals(attached.size(), 1);
-        assertEquals(attached.get(0).getId(), volume.getId());
-    }
-
-    @Test(dependsOnMethods = "testAttachVolumes")
-    public void detachVolumes()
-    {
-        env.virtualMachine.detachVolumes(volume);
-        List<Volume> attached = env.virtualMachine.listAttachedVolumes();
-        assertTrue(attached.isEmpty());
-    }
-
-    @Test(dependsOnMethods = {"testAttachVolumes", "detachVolumes"})
-    public void detachAllVolumes()
-    {
-        // Since the virtual machine is not deployed, this should not generate a task
-        AsyncTask task = env.virtualMachine.attachVolumes(volume);
-        assertNull(task);
-
-        env.virtualMachine.detachAllVolumes();
-        List<Volume> attached = env.virtualMachine.listAttachedVolumes();
-        assertTrue(attached.isEmpty());
-
-        deleteVolume(volume);
-    }
-
     public void testRebootVirtualMachineFailsWhenNotAllocated()
     {
         // Since the virtual machine is not deployed, this should not generate a task
@@ -125,81 +83,6 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
         {
             assertHasError(ex, Status.CONFLICT, "VM-11");
         }
-    }
-
-    public void testAttachHardDisks()
-    {
-        hardDisk = createHardDisk();
-
-        // Since the virtual machine is not deployed, this should not generate a task
-        AsyncTask task = env.virtualMachine.attachHardDisks(hardDisk);
-        assertNull(task);
-
-        List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
-        assertEquals(attached.size(), 1);
-        assertEquals(attached.get(0).getId(), hardDisk.getId());
-    }
-
-    @Test(dependsOnMethods = "testAttachHardDisks")
-    public void detachHardDisks()
-    {
-        env.virtualMachine.detachHardDisks(hardDisk);
-        List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
-        assertTrue(attached.isEmpty());
-    }
-
-    @Test(dependsOnMethods = {"testAttachHardDisks", "detachHardDisks"})
-    public void detachAllHardDisks()
-    {
-        // Since the virtual machine is not deployed, this should not generate a task
-        AsyncTask task = env.virtualMachine.attachHardDisks(hardDisk);
-        assertNull(task);
-
-        env.virtualMachine.detachAllHardDisks();
-        List<HardDisk> attached = env.virtualMachine.listAttachedHardDisks();
-        assertTrue(attached.isEmpty());
-
-        deleteHardDisk(hardDisk);
-    }
-
-    private Volume createVolume()
-    {
-        Tier tier = env.virtualDatacenter.listStorageTiers().get(0);
-        Volume volume =
-            Volume.builder(env.context.getApiContext(), env.virtualDatacenter, tier)
-                .name(PREFIX + "Hawaian volume").sizeInMb(128).build();
-        volume.save();
-
-        assertNotNull(volume.getId());
-        assertNotNull(env.virtualDatacenter.getVolume(volume.getId()));
-
-        return volume;
-    }
-
-    private void deleteVolume(final Volume volume)
-    {
-        Integer id = volume.getId();
-        volume.delete();
-        assertNull(env.virtualDatacenter.getVolume(id));
-    }
-
-    private HardDisk createHardDisk()
-    {
-        HardDisk hardDisk =
-            HardDisk.builder(env.context.getApiContext(), env.virtualDatacenter).sizeInMb(64L).build();
-        hardDisk.save();
-
-        assertNotNull(hardDisk.getId());
-        assertNotNull(hardDisk.getSequence());
-
-        return hardDisk;
-    }
-
-    private void deleteHardDisk(final HardDisk hardDisk)
-    {
-        Integer id = hardDisk.getId();
-        hardDisk.delete();
-        assertNull(env.virtualDatacenter.getHardDisk(id));
     }
 
     public void testUpdateForcingLimits()
@@ -221,6 +104,5 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
             env.cloudClient.getVirtualMachine(env.virtualAppliance.unwrap(), vm.getId());
 
         assertNotNull(updated.getDvd());
-
     }
 }

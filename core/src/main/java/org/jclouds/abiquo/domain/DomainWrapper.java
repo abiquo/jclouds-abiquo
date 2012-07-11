@@ -71,8 +71,8 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      */
     public URI getURI()
     {
-        return URI.create(target.searchLink("self") == null ? target.searchLink("edit").getHref()
-            : target.searchLink("self").getHref());
+        RESTLink link = getSelfLink(target);
+        return link == null ? null : URI.create(link.getHref());
     }
 
     /**
@@ -235,6 +235,18 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
 
         AsyncTask[] taskArr = new AsyncTask[tasks.size()];
         return tasks.toArray(taskArr);
+    }
+
+    /**
+     * Get the link that points to the current resource.
+     * 
+     * @param dto The target dto.
+     * @return The link to the current resource.
+     */
+    public static RESTLink getSelfLink(final SingleResourceTransportDto dto)
+    {
+        RESTLink link = dto.searchLink("edit");
+        return link == null ? dto.searchLink("self") : link;
     }
 
 }

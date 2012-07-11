@@ -139,7 +139,7 @@ public class ListAttachedNicsImpl implements ListAttachedNics
             @Override
             public boolean apply(final RESTLink input)
             {
-                return input.getRel().startsWith("nic");
+                return input.getRel().matches("^nic[0-9]+$");
             }
         });
     }
