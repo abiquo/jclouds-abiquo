@@ -35,7 +35,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineDto;
@@ -166,7 +166,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
     {
         Tier tier = env.virtualDatacenter.listStorageTiers().get(0);
         Volume volume =
-            Volume.builder(context.getApiContext(), env.virtualDatacenter, tier)
+            Volume.builder(env.context.getApiContext(), env.virtualDatacenter, tier)
                 .name(PREFIX + "Hawaian volume").sizeInMb(128).build();
         volume.save();
 
@@ -186,7 +186,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
     private HardDisk createHardDisk()
     {
         HardDisk hardDisk =
-            HardDisk.builder(context.getApiContext(), env.virtualDatacenter).sizeInMb(64L).build();
+            HardDisk.builder(env.context.getApiContext(), env.virtualDatacenter).sizeInMb(64L).build();
         hardDisk.save();
 
         assertNotNull(hardDisk.getId());

@@ -29,9 +29,10 @@ import java.util.List;
 
 import javax.ws.rs.core.Response.Status;
 
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -53,12 +54,8 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void setupNetwork()
     {
         privateNetwork =
-            PrivateNetwork.Builder.fromPrivateNetwork(env.privateNetwork)
-                .virtualDatacenter(env.virtualDatacenter).build();
-        privateNetwork.setName(PREFIX + "-privatenetwork-test");
-        privateNetwork.save();
-
-        assertNotNull(privateNetwork.getId());
+            createNetwork(env.virtualDatacenter, env.privateNetwork, PREFIX
+                + "-privatenetwork-test");
     }
 
     @AfterClass
@@ -70,7 +67,7 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListIps()
     {
         PrivateIpsDto ipsDto =
-            context
+            env.context
                 .getApiContext()
                 .getApi()
                 .getCloudClient()
@@ -92,7 +89,7 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListUnusedIps()
     {
         PrivateIpsDto ipsDto =
-            context
+            env.context
                 .getApiContext()
                 .getApi()
                 .getCloudClient()
@@ -125,12 +122,15 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
 
     public void testUpdateReadOnlyFields()
     {
+        PrivateNetwork toUpdate =
+            createNetwork(env.virtualDatacenter, privateNetwork, PREFIX + "-privtoupdate-test");
+
         try
         {
-            privateNetwork.setTag(20);
-            privateNetwork.setAddress("10.1.1.0");
-            privateNetwork.setMask(16);
-            privateNetwork.update();
+            toUpdate.setTag(20);
+            toUpdate.setAddress("10.1.1.0");
+            toUpdate.setMask(16);
+            toUpdate.update();
 
             fail("Tag field should not be editable");
         }
@@ -138,20 +138,31 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
         {
             assertHasError(ex, Status.CONFLICT, "VLAN-10");
         }
+        finally
+        {
+            toUpdate.delete();
+        }
     }
 
     public void testUpdateWithInvalidValues()
     {
+        PrivateNetwork toUpdate =
+            createNetwork(env.virtualDatacenter, privateNetwork, PREFIX + "-privtoupdate-test");
+
         try
         {
-            privateNetwork.setMask(60);
-            privateNetwork.update();
+            toUpdate.setMask(60);
+            toUpdate.update();
 
             fail("Invalid mask value");
         }
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.BAD_REQUEST, "CONSTR-MAX");
+        }
+        finally
+        {
+            toUpdate.delete();
         }
     }
 
@@ -161,5 +172,16 @@ public class PrivateNetworkLiveTest extends BaseAbiquoClientLiveTest
         PrivateNetwork network = ip.getNetwork();
 
         assertEquals(network.getId(), privateNetwork.getId());
+    }
+
+    private PrivateNetwork createNetwork(final VirtualDatacenter vdc, final PrivateNetwork from,
+        final String name)
+    {
+        PrivateNetwork network =
+            PrivateNetwork.Builder.fromPrivateNetwork(from).virtualDatacenter(vdc).build();
+        network.setName(name);
+        network.save();
+        assertNotNull(network.getId());
+        return network;
     }
 }

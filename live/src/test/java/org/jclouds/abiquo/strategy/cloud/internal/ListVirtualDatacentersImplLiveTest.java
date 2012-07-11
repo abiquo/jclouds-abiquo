@@ -46,7 +46,7 @@ public class ListVirtualDatacentersImplLiveTest extends BaseAbiquoStrategyLiveTe
     protected void setupStrategy()
     {
         this.strategy =
-            context.getUtils().getInjector().getInstance(ListVirtualDatacentersImpl.class);
+            env.context.getUtils().getInjector().getInstance(ListVirtualDatacentersImpl.class);
     }
 
     public void testExecute()

@@ -152,8 +152,8 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         virtualDatacenter =
             VirtualDatacenter.builder(context.getApiContext(), datacenter, defaultEnterprise)
                 .name(PREFIX + "Virtual Aloha").cpuCountLimits(18, 20)
-                .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
-                .storageLimits(289910292, 322122547).vlansLimits(1, 2)
+                .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 3).ramLimits(19456, 20480)
+                .storageLimits(289910292, 322122547).vlansLimits(3, 4)
                 .hypervisorType(machine.getType()).network(privateNetwork).build();
 
         virtualDatacenter.save();

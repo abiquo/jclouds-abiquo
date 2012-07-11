@@ -19,23 +19,16 @@
 
 package org.jclouds.abiquo.domain;
 
-import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.fail;
 
+import java.util.Properties;
+
 import javax.ws.rs.core.Response.Status;
 
-import org.jclouds.ContextBuilder;
-import org.jclouds.abiquo.AbiquoApiMetadata;
-import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.jclouds.abiquo.internal.BaseAbiquoLiveTest;
 import org.testng.annotations.Test;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.inject.Module;
 
 /**
  * Live integration tests for the Abiquo versioning support.
@@ -43,42 +36,21 @@ import com.google.inject.Module;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class AbiquoVersionLiveTest
+public class AbiquoVersionLiveTest extends BaseAbiquoLiveTest
 {
-    private AbiquoContext context;
-
-    @BeforeMethod
-    public void setup()
+    @Override
+    protected Properties setupProperties()
     {
-        String identity =
-            checkNotNull(System.getProperty("test.abiquo.identity"), "test.abiquo.identity");
-        String credential =
-            checkNotNull(System.getProperty("test.abiquo.credential"), "test.abiquo.credential");
-        String endpoint =
-            checkNotNull(System.getProperty("test.abiquo.endpoint"), "test.abiquo.endpoint");
-
-        context = ContextBuilder.newBuilder(new AbiquoApiMetadata()) //
-            .endpoint(endpoint) //
-            .credentials(identity, credential) //
-            .apiVersion("0.0") //
-            .modules(ImmutableSet.<Module> of(new SLF4JLoggingModule())) //
-            .build(AbiquoContext.class);
-    }
-
-    @AfterMethod
-    public void tearDown()
-    {
-        if (context != null)
-        {
-            context.close();
-        }
+        Properties overrides = super.setupProperties();
+        overrides.setProperty("abiquo.api-version", "0.0");
+        return overrides;
     }
 
     public void testUnsupportedVersion()
     {
         try
         {
-            context.getAdministrationService().getCurrentUser();
+            view.getAdministrationService().getCurrentUser();
             fail("Unsupported versions in mime types should not be allowed");
         }
         catch (AbiquoException ex)

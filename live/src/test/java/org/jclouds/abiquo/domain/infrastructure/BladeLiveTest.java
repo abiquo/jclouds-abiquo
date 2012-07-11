@@ -23,7 +23,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 

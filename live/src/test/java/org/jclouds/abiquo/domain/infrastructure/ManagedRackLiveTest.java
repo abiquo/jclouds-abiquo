@@ -26,7 +26,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.LogicServerPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.ManagedRackPredicates;
 import org.testng.annotations.Test;

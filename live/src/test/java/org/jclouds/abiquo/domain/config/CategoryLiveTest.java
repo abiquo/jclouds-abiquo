@@ -19,10 +19,11 @@
 
 package org.jclouds.abiquo.domain.config;
 
+import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.config.CategoryPredicates;
 import org.testng.annotations.Test;
 
@@ -34,37 +35,39 @@ import org.testng.annotations.Test;
 @Test(groups = "live")
 public class CategoryLiveTest extends BaseAbiquoClientLiveTest
 {
-
     public void testCreateAndGet()
     {
-        Category category = Category.builder(context.getApiContext()).name("Fake category").build();
+        Category category =
+            Category.builder(env.context.getApiContext()).name(PREFIX + "-test-category").build();
         category.save();
 
         Category apiCategory =
-            context.getAdministrationService().findCategory(
-                CategoryPredicates.name("Fake category"));
+            env.context.getAdministrationService().findCategory(
+                CategoryPredicates.name(PREFIX + "-test-category"));
         assertNotNull(apiCategory);
         assertEquals(category.getName(), apiCategory.getName());
 
         apiCategory.delete();
     }
 
+    @Test(dependsOnMethods = "testCreateAndGet")
     public void testUpdate()
     {
-        Iterable<Category> categories = context.getAdministrationService().listCategories();
+        Iterable<Category> categories = env.context.getAdministrationService().listCategories();
         assertNotNull(categories);
 
         Category category = categories.iterator().next();
         String name = category.getName();
 
-        category.setName("temp name");
+        category.setName(PREFIX + "-test-category-updated");
         category.update();
 
         Category apiCategory =
-            context.getAdministrationService().findCategory(CategoryPredicates.name("temp name"));
+            env.context.getAdministrationService().findCategory(
+                CategoryPredicates.name(PREFIX + "-test-category-updated"));
 
         assertNotNull(apiCategory);
-        assertEquals("temp name", apiCategory.getName());
+        assertEquals(PREFIX + "-test-category-updated", apiCategory.getName());
 
         category.setName(name);
         category.update();

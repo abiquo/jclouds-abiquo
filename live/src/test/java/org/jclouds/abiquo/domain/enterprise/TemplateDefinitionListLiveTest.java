@@ -25,7 +25,7 @@ import static org.testng.Assert.assertNull;
 
 import java.util.List;
 
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.enterprise.TemplateDefinitionListPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -39,7 +39,7 @@ import org.testng.annotations.Test;
 @Test(groups = "live")
 public class TemplateDefinitionListLiveTest extends BaseAbiquoClientLiveTest
 {
-    TemplateDefinitionList list;
+    private TemplateDefinitionList list;
 
     public void testUpdate()
     {
@@ -63,7 +63,7 @@ public class TemplateDefinitionListLiveTest extends BaseAbiquoClientLiveTest
     public void setup()
     {
         list =
-            TemplateDefinitionList.builder(context.getApiContext(), env.enterprise).name("myList")
+            TemplateDefinitionList.builder(env.context.getApiContext(), env.enterprise).name("myList")
                 .url("http://virtualapp-repository.com/vapp1.ovf").build();
 
         list.save();

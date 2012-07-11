@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -76,11 +76,11 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest
 
         assertNull(deleted);
 
-        URI endpoint = URI.create(context.getApiContext().getProviderMetadata().getEndpoint());
+        URI endpoint = URI.create(env.context.getApiContext().getProviderMetadata().getEndpoint());
 
         // Restore rs
         RemoteService bpm =
-            RemoteService.builder(context.getApiContext(), env.datacenter)
+            RemoteService.builder(env.context.getApiContext(), env.datacenter)
                 .type(RemoteServiceType.BPM_SERVICE).ip(endpoint.getHost()).build();
         bpm.save();
     }

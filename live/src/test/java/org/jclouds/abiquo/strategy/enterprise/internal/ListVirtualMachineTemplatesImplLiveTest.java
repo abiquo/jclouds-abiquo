@@ -37,8 +37,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListVirtualMachineTemplatesImplLiveTest extends
-    BaseAbiquoStrategyLiveTest
+public class ListVirtualMachineTemplatesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListVirtualMachineTemplatesImpl strategy;
 
@@ -47,7 +46,7 @@ public class ListVirtualMachineTemplatesImplLiveTest extends
     protected void setupStrategy()
     {
         this.strategy =
-            context.getUtils().getInjector().getInstance(ListVirtualMachineTemplatesImpl.class);
+            env.context.getUtils().getInjector().getInstance(ListVirtualMachineTemplatesImpl.class);
     }
 
     public void testExecute()

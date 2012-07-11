@@ -79,7 +79,7 @@ import com.google.common.io.Resources;
 public class InfrastructureTestEnvironment implements TestEnvironment
 {
     /** The rest context. */
-    protected AbiquoContext context;
+    public AbiquoContext context;
 
     // Environment data made public so tests can use them easily
 

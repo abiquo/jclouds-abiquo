@@ -32,7 +32,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.jclouds.abiquo.predicates.network.NetworkPredicates;
 import org.testng.annotations.AfterClass;
@@ -54,12 +54,7 @@ public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
     @BeforeClass
     public void setupNetwork()
     {
-        unmanagedNetwork =
-            UnmanagedNetwork.Builder.fromUnmanagedNetwork(env.unmanagedNetwork).build();
-        unmanagedNetwork.setName(PREFIX + "-unmanagednetwork-test");
-        unmanagedNetwork.save();
-
-        assertNotNull(unmanagedNetwork.getId());
+        unmanagedNetwork = createNetwork(env.unmanagedNetwork, PREFIX + "-unmanagednetwork-test");
     }
 
     @AfterClass
@@ -71,7 +66,7 @@ public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListIps()
     {
         UnmanagedIpsDto ipsDto =
-            context.getApiContext().getApi().getInfrastructureClient()
+            env.context.getApiContext().getApi().getInfrastructureClient()
                 .listUnmanagedIps(unmanagedNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
@@ -90,7 +85,7 @@ public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListUnusedIps()
     {
         UnmanagedIpsDto ipsDto =
-            context.getApiContext().getApi().getInfrastructureClient()
+            env.context.getApiContext().getApi().getInfrastructureClient()
                 .listUnmanagedIps(unmanagedNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
@@ -122,12 +117,14 @@ public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
 
     public void testUpdateReadOnlyFields()
     {
+        UnmanagedNetwork toUpdate = createNetwork(unmanagedNetwork, PREFIX + "-umtoupdate-test");
+
         try
         {
-            unmanagedNetwork.setTag(20);
-            unmanagedNetwork.setAddress("10.2.0.0");
-            unmanagedNetwork.setMask(16);
-            unmanagedNetwork.update();
+            toUpdate.setTag(20);
+            toUpdate.setAddress("10.2.0.0");
+            toUpdate.setMask(16);
+            toUpdate.update();
 
             fail("Tag field should not be editable");
         }
@@ -135,20 +132,30 @@ public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
         {
             assertHasError(ex, Status.CONFLICT, "VLAN-19");
         }
+        finally
+        {
+            toUpdate.delete();
+        }
     }
 
     public void testUpdateWithInvalidValues()
     {
+        UnmanagedNetwork toUpdate = createNetwork(unmanagedNetwork, PREFIX + "-umtoupdate-test");
+
         try
         {
-            unmanagedNetwork.setMask(60);
-            unmanagedNetwork.update();
+            toUpdate.setMask(60);
+            toUpdate.update();
 
             fail("Invalid mask value");
         }
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.BAD_REQUEST, "CONSTR-MAX");
+        }
+        finally
+        {
+            toUpdate.delete();
         }
     }
 
@@ -167,5 +174,14 @@ public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
         UnmanagedIp ip = unmanagedNetwork.findIp(IpPredicates.<UnmanagedIp> notUsed());
         // Unmanaged networks do not have IPs until attached to VMs
         assertNull(ip);
+    }
+
+    private UnmanagedNetwork createNetwork(final UnmanagedNetwork from, final String name)
+    {
+        UnmanagedNetwork network = UnmanagedNetwork.Builder.fromUnmanagedNetwork(from).build();
+        network.setName(name);
+        network.save();
+        assertNotNull(network.getId());
+        return network;
     }
 }

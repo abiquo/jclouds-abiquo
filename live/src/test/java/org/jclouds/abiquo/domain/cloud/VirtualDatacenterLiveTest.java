@@ -34,7 +34,7 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PublicIp;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.Test;
 
@@ -65,7 +65,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
     public void testCreateRepeated()
     {
         PrivateNetwork newnet =
-            PrivateNetwork.builder(context.getApiContext()).name("Newnet").gateway("10.0.0.1")
+            PrivateNetwork.builder(env.context.getApiContext()).name("Newnet").gateway("10.0.0.1")
                 .address("10.0.0.0").mask(24).build();
 
         VirtualDatacenter repeated =
@@ -134,7 +134,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
                 .gateway("192.168.1.1").address("192.168.1.0").mask(24).build();
 
         VirtualDatacenter virtualDatacenter =
-            VirtualDatacenter.builder(context.getApiContext(), datacenter, enterprise)
+            VirtualDatacenter.builder(env.context.getApiContext(), datacenter, enterprise)
                 .name(PREFIX + "Plain Virtual Aloha from VDC").cpuCountLimits(18, 20)
                 .hdLimitsInMb(279172872, 279172872).publicIpsLimits(2, 2).ramLimits(19456, 20480)
                 .storageLimits(289910292, 322122547).vlansLimits(1, 2).hypervisorType(hypervisor)

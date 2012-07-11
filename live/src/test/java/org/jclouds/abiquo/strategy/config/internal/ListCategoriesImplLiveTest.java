@@ -47,7 +47,7 @@ public class ListCategoriesImplLiveTest extends BaseAbiquoStrategyLiveTest
     @BeforeClass(groups = "live")
     protected void setupStrategy()
     {
-        this.strategy = context.getUtils().getInjector().getInstance(ListCategoriesImpl.class);
+        this.strategy = env.context.getUtils().getInjector().getInstance(ListCategoriesImpl.class);
     }
 
     public void testExecute()

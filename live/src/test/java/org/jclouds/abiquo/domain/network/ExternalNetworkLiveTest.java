@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.jclouds.abiquo.predicates.network.NetworkPredicates;
 import org.testng.annotations.AfterClass;
@@ -53,11 +53,7 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
     @BeforeClass
     public void setupNetwork()
     {
-        externalNetwork = ExternalNetwork.Builder.fromExternalNetwork(env.externalNetwork).build();
-        externalNetwork.setName(PREFIX + "-externalnetwork-test");
-        externalNetwork.save();
-
-        assertNotNull(externalNetwork.getId());
+        externalNetwork = createNetwork(env.externalNetwork, PREFIX + "-externalnetwork-test");
     }
 
     @AfterClass
@@ -69,7 +65,7 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListIps()
     {
         ExternalIpsDto ipsDto =
-            context.getApiContext().getApi().getInfrastructureClient()
+            env.context.getApiContext().getApi().getInfrastructureClient()
                 .listExternalIps(externalNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
@@ -87,7 +83,7 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListUnusedIps()
     {
         ExternalIpsDto ipsDto =
-            context.getApiContext().getApi().getInfrastructureClient()
+            env.context.getApiContext().getApi().getInfrastructureClient()
                 .listExternalIps(externalNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
@@ -119,12 +115,14 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
 
     public void testUpdateReadOnlyFields()
     {
+        ExternalNetwork toUpdate = createNetwork(externalNetwork, PREFIX + "-exttoupdate-test");
+
         try
         {
-            externalNetwork.setTag(20);
-            externalNetwork.setAddress("10.1.0.0");
-            externalNetwork.setMask(16);
-            externalNetwork.update();
+            toUpdate.setTag(20);
+            toUpdate.setAddress("10.1.0.0");
+            toUpdate.setMask(16);
+            toUpdate.update();
 
             fail("Tag field should not be editable");
         }
@@ -132,20 +130,30 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
         {
             assertHasError(ex, Status.CONFLICT, "VLAN-19");
         }
+        finally
+        {
+            toUpdate.delete();
+        }
     }
 
     public void testUpdateWithInvalidValues()
     {
+        ExternalNetwork toUpdate = createNetwork(externalNetwork, PREFIX + "-exttoupdate-test");
+
         try
         {
-            externalNetwork.setMask(60);
-            externalNetwork.update();
+            toUpdate.setMask(60);
+            toUpdate.update();
 
             fail("Invalid mask value");
         }
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.BAD_REQUEST, "CONSTR-MAX");
+        }
+        finally
+        {
+            toUpdate.delete();
         }
     }
 
@@ -165,5 +173,14 @@ public class ExternalNetworkLiveTest extends BaseAbiquoClientLiveTest
         ExternalNetwork network = ip.getNetwork();
 
         assertEquals(network.getId(), externalNetwork.getId());
+    }
+
+    private ExternalNetwork createNetwork(final ExternalNetwork from, final String name)
+    {
+        ExternalNetwork network = ExternalNetwork.Builder.fromExternalNetwork(from).build();
+        network.setName(name);
+        network.save();
+        assertNotNull(network.getId());
+        return network;
     }
 }

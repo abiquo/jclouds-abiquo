@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.strategy;
 
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.testng.annotations.BeforeClass;
 
 /**

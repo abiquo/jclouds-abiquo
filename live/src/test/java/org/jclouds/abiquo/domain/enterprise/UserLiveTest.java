@@ -28,7 +28,7 @@ import static org.testng.Assert.fail;
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.testng.annotations.Test;
 
@@ -102,8 +102,8 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest
 
     public void testGetCurrentUser()
     {
-        User user = context.getAdministrationService().getCurrentUser();
+        User user = env.context.getAdministrationService().getCurrentUser();
         assertNotNull(user);
-        assertEquals(user.getNick(), context.getApiContext().getIdentity());
+        assertEquals(user.getNick(), env.context.getApiContext().getIdentity());
     }
 }

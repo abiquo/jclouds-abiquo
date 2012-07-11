@@ -31,7 +31,7 @@ import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
 
@@ -245,7 +245,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
 
     // Helpers
 
-    private static void assertEvents(final EventOptions options)
+    private void assertEvents(final EventOptions options)
     {
         Iterable<Event> events = env.eventService.listEvents(options);
         assertTrue(Iterables.size(events) >= 1);
@@ -255,7 +255,7 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
     {
         Tier tier = env.virtualDatacenter.findStorageTier(TierPredicates.name(env.tier.getName()));
         Volume volume =
-            Volume.builder(context.getApiContext(), env.virtualDatacenter, tier)
+            Volume.builder(env.context.getApiContext(), env.virtualDatacenter, tier)
                 .name(PREFIX + "Event vol").sizeInMb(32).build();
 
         volume.save();
@@ -267,8 +267,8 @@ public class EventLiveTest extends BaseAbiquoClientLiveTest
     private VirtualMachine createVirtualMachine()
     {
         VirtualMachine virtualMachine =
-            VirtualMachine.builder(context.getApiContext(), env.virtualAppliance, env.template)
-                .cpu(2).ram(128).build();
+            VirtualMachine.builder(env.context.getApiContext(), env.virtualAppliance, env.template).cpu(2)
+                .ram(128).build();
 
         virtualMachine.save();
         assertNotNull(virtualMachine.getId());

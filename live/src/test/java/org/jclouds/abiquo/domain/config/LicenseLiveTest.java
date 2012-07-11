@@ -26,7 +26,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
 /**

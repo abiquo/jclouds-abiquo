@@ -47,7 +47,8 @@ public class ListVirtualMachinesImplLiveTest extends BaseAbiquoStrategyLiveTest
     @BeforeClass(groups = "live")
     protected void setupStrategy()
     {
-        this.strategy = context.getUtils().getInjector().getInstance(ListVirtualMachinesImpl.class);
+        this.strategy =
+            env.context.getUtils().getInjector().getInstance(ListVirtualMachinesImpl.class);
     }
 
     public void testExecute()

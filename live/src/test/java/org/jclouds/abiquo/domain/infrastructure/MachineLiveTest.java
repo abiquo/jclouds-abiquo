@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.Test;
@@ -71,11 +71,11 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
             assertHasError(ex, Status.NOT_FOUND, "RS-2");
         }
 
-        URI endpoint = URI.create(context.getApiContext().getProviderMetadata().getEndpoint());
+        URI endpoint = URI.create(env.context.getApiContext().getProviderMetadata().getEndpoint());
 
         // Restore rs
         nc =
-            RemoteService.builder(context.getApiContext(), env.datacenter)
+            RemoteService.builder(env.context.getApiContext(), env.datacenter)
                 .type(RemoteServiceType.NODE_COLLECTOR).ip(endpoint.getHost()).build();
         nc.save();
     }

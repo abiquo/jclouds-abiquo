@@ -36,8 +36,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class ListVirtualAppliancesImplLiveTest extends
-    BaseAbiquoStrategyLiveTest
+public class ListVirtualAppliancesImplLiveTest extends BaseAbiquoStrategyLiveTest
 {
     private ListVirtualAppliancesImpl strategy;
 
@@ -46,7 +45,7 @@ public class ListVirtualAppliancesImplLiveTest extends
     protected void setupStrategy()
     {
         this.strategy =
-            context.getUtils().getInjector().getInstance(ListVirtualAppliancesImpl.class);
+            env.context.getUtils().getInjector().getInstance(ListVirtualAppliancesImpl.class);
     }
 
     public void testExecute()

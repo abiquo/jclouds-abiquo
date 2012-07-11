@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -52,11 +52,7 @@ public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
     @BeforeClass
     public void setupNetwork()
     {
-        publicNetwork = PublicNetwork.Builder.fromPublicNetwork(env.publicNetwork).build();
-        publicNetwork.setName(PREFIX + "-publicnetwork-test");
-        publicNetwork.save();
-
-        assertNotNull(publicNetwork.getId());
+        publicNetwork = createNetwork(env.publicNetwork, PREFIX + "-publicnetwork-test");
     }
 
     @AfterClass
@@ -68,7 +64,7 @@ public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListIps()
     {
         PublicIpsDto ipsDto =
-            context.getApiContext().getApi().getInfrastructureClient()
+            env.context.getApiContext().getApi().getInfrastructureClient()
                 .listPublicIps(publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
@@ -86,7 +82,7 @@ public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListUnusedIps()
     {
         PublicIpsDto ipsDto =
-            context.getApiContext().getApi().getInfrastructureClient()
+            env.context.getApiContext().getApi().getInfrastructureClient()
                 .listPublicIps(publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
@@ -116,12 +112,14 @@ public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
 
     public void testUpdateReadOnlyFields()
     {
+        PublicNetwork toUpdate = createNetwork(publicNetwork, PREFIX + "-pubtoupdate-test");
+
         try
         {
-            publicNetwork.setTag(20);
-            publicNetwork.setAddress("80.81.81.0");
-            publicNetwork.setMask(16);
-            publicNetwork.update();
+            toUpdate.setTag(20);
+            toUpdate.setAddress("80.81.81.0");
+            toUpdate.setMask(16);
+            toUpdate.update();
 
             fail("Tag field should not be editable");
         }
@@ -129,20 +127,30 @@ public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
         {
             assertHasError(ex, Status.CONFLICT, "VLAN-19");
         }
+        finally
+        {
+            toUpdate.delete();
+        }
     }
 
     public void testUpdateWithInvalidValues()
     {
+        PublicNetwork toUpdate = createNetwork(publicNetwork, PREFIX + "-pubtoupdate-test");
+
         try
         {
-            publicNetwork.setMask(60);
-            publicNetwork.update();
+            toUpdate.setMask(60);
+            toUpdate.update();
 
             fail("Invalid mask value");
         }
         catch (AbiquoException ex)
         {
             assertHasError(ex, Status.BAD_REQUEST, "CONSTR-MAX");
+        }
+        finally
+        {
+            toUpdate.delete();
         }
     }
 
@@ -157,5 +165,14 @@ public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
         PublicNetwork network = ip.getNetwork();
 
         assertEquals(network.getId(), publicNetwork.getId());
+    }
+
+    private PublicNetwork createNetwork(final PublicNetwork from, final String name)
+    {
+        PublicNetwork network = PublicNetwork.Builder.fromPublicNetwork(from).build();
+        network.setName(name);
+        network.save();
+        assertNotNull(network.getId());
+        return network;
     }
 }

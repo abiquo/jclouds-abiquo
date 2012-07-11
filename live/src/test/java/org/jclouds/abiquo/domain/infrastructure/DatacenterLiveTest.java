@@ -32,7 +32,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
-import org.jclouds.abiquo.features.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
