@@ -29,8 +29,8 @@
         <testng.version>6.0.1</testng.version>
         <test.abiquo.identity>admin</test.abiquo.identity>
         <test.abiquo.credential>xabiquo</test.abiquo.credential>
-        <test.abiquo.api-version>${abiquo.version}</test.abiquo.api-version>
-        <test.abiquo.build-version>${abiquo.build}</test.abiquo.build-version>
+        <test.abiquo.api-version></test.abiquo.api-version>
+        <test.abiquo.build-version></test.abiquo.build-version>
     </properties>
     
     <scm>

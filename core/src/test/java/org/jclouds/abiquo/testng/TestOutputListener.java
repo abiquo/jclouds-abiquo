@@ -33,20 +33,34 @@ public class TestOutputListener extends TestListenerAdapter
     @Override
     public void onTestFailure(final ITestResult tr)
     {
-        System.out.println(String.format("FAIL %s [%s] Cause: %s", testMethod(tr), execTime(tr), tr
-            .getThrowable().getMessage()));
+        fail(testMethod(tr), execTime(tr), tr.getThrowable().getMessage());
     }
 
     @Override
     public void onTestSkipped(final ITestResult tr)
     {
-        System.out.println(String.format("SKIP %s [%s]", testMethod(tr), execTime(tr)));
+        skip(testMethod(tr), execTime(tr));
     }
 
     @Override
     public void onTestSuccess(final ITestResult tr)
     {
-        System.out.println(String.format("OK   %s [%s]", testMethod(tr), execTime(tr)));
+        success(testMethod(tr), execTime(tr));
+    }
+
+    void success(final String test, final long execTime)
+    {
+        System.out.println(String.format("OK   %s [%s ms]", test, execTime));
+    }
+
+    void fail(final String test, final long execTime, final String cause)
+    {
+        System.out.println(String.format("FAIL %s [%s ms] Cause: %s", test, execTime, cause));
+    }
+
+    void skip(final String test, final long execTime)
+    {
+        System.out.println(String.format("SKIP %s [%s ms]", test, execTime));
     }
 
     private static String testMethod(final ITestResult tr)
@@ -55,8 +69,8 @@ public class TestOutputListener extends TestListenerAdapter
             + tr.getMethod().getMethodName();
     }
 
-    private static String execTime(final ITestResult tr)
+    private static long execTime(final ITestResult tr)
     {
-        return tr.getEndMillis() - tr.getStartMillis() + " ms";
+        return tr.getEndMillis() - tr.getStartMillis();
     }
 }

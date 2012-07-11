@@ -516,8 +516,9 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         DatacenterLimitsDto limitForDatacenter = getLimits(datacenter);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        // The "rel" for the unmanaged networks is the same than teh one used for external networks
         HttpResponse response =
-            utils.getAbiquoHttpClient().get(limitForDatacenter.searchLink("unmanagednetworks"));
+            utils.getAbiquoHttpClient().get(limitForDatacenter.searchLink("externalnetworks"));
 
         ParseXMLWithJAXB<VLANNetworksDto> parser =
             new ParseXMLWithJAXB<VLANNetworksDto>(utils.getXml(),

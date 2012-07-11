@@ -21,6 +21,7 @@ package org.jclouds.abiquo.environment;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
+import static org.jclouds.abiquo.testng.TestRunner.runAndLog;
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
@@ -87,22 +88,27 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     {
         // Create base infrastructure
         super.setup();
+
         createUserContext();
         createEnterpriseAdminContext();
-        findDefaultEnterprise();
-        createVirtualDatacenter();
-        createVirtualAppliance();
-        refreshTemplateRepository();
-        createVirtualMachine();
+
+        runAndLog(this, "findDefaultEnterprise");
+        runAndLog(this, "createVirtualDatacenter");
+        runAndLog(this, "createVirtualAppliance");
+        runAndLog(this, "refreshTemplateRepository");
+        runAndLog(this, "createVirtualMachine");
     }
 
     @Override
     public void tearDown() throws Exception
     {
+        closeEnterpriseAdminContext();
         closeUserContext();
-        deleteVirtualMachine();
-        deleteVirtualAppliance();
-        deleteVirtualDatacenter();
+
+        runAndLog(this, "deleteVirtualMachine");
+        runAndLog(this, "deleteVirtualAppliance");
+        runAndLog(this, "deleteVirtualDatacenter");
+
         // Delete base infrastructure
         super.tearDown();
     }
@@ -204,6 +210,11 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     private void closeUserContext()
     {
         plainUserContext.close();
+    }
+
+    private void closeEnterpriseAdminContext()
+    {
+        enterpriseAdminContext.close();
     }
 
     protected void deleteVirtualDatacenter()

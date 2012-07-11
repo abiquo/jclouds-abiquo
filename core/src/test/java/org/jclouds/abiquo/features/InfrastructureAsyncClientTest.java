@@ -1166,6 +1166,28 @@ public class InfrastructureAsyncClientTest extends
         checkFilters(request);
     }
 
+    public void testGetVirtualMachineByMachine() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+
+        Method method =
+            InfrastructureAsyncClient.class.getMethod("getVirtualMachine", MachineDto.class,
+                Integer.class);
+        GeneratedHttpRequest<InfrastructureAsyncClient> request =
+            processor.createRequest(method, InfrastructureResources.machinePut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/virtualmachines/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
     public void testPowerOff() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncClient.class.getMethod("powerOff", MachineDto.class);
@@ -1883,7 +1905,7 @@ public class InfrastructureAsyncClientTest extends
             processor.createRequest(method, NetworkResources.externalNetworkPut());
 
         assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/network/1/ips HTTP/1.1");
+            "GET http://localhost/api/admin/enterprises/1/limits/1/externalnetworks/1/ips HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + ExternalIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -1904,8 +1926,9 @@ public class InfrastructureAsyncClientTest extends
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, NetworkResources.externalNetworkPut(), options);
 
-        assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/network/1/ips?startwith=10 HTTP/1.1");
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/limits/1/externalnetworks/1/ips?startwith=10 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + ExternalIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -1925,7 +1948,7 @@ public class InfrastructureAsyncClientTest extends
             processor.createRequest(method, NetworkResources.externalNetworkPut(), 1);
 
         assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/network/1/ips/1 HTTP/1.1");
+            "GET http://localhost/api/admin/enterprises/1/limits/1/externalnetworks/1/ips/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + ExternalIpDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -1944,7 +1967,7 @@ public class InfrastructureAsyncClientTest extends
             processor.createRequest(method, NetworkResources.unmanagedNetworkPut());
 
         assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/network/1/ips HTTP/1.1");
+            "GET http://localhost/api/admin/enterprises/1/limits/1/externalnetworks/1/ips HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + UnmanagedIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -1965,8 +1988,9 @@ public class InfrastructureAsyncClientTest extends
         GeneratedHttpRequest<InfrastructureAsyncClient> request =
             processor.createRequest(method, NetworkResources.unmanagedNetworkPut(), options);
 
-        assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/network/1/ips?startwith=10 HTTP/1.1");
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/enterprises/1/limits/1/externalnetworks/1/ips?startwith=10 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + UnmanagedIpsDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
@@ -1986,35 +2010,13 @@ public class InfrastructureAsyncClientTest extends
             processor.createRequest(method, NetworkResources.externalNetworkPut(), 1);
 
         assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/network/1/ips/1 HTTP/1.1");
+            "GET http://localhost/api/admin/enterprises/1/limits/1/externalnetworks/1/ips/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + UnmanagedIpDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testGetVirtualMachine() throws SecurityException, NoSuchMethodException,
-        IOException
-    {
-
-        Method method =
-            InfrastructureAsyncClient.class.getMethod("getVirtualMachine", MachineDto.class,
-                Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            processor.createRequest(method, InfrastructureResources.machinePut(), 1);
-
-        assertRequestLineEquals(request,
-            "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/virtualmachines/1 HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + VirtualMachineDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
 
         checkFilters(request);
     }

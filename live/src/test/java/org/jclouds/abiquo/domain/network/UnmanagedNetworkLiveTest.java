@@ -23,6 +23,7 @@ import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.fail;
 
 import java.util.List;
@@ -45,7 +46,7 @@ import com.abiquo.server.core.infrastructure.network.UnmanagedIpsDto;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "live", enabled = false)
+@Test(groups = "live")
 public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
 {
     private UnmanagedNetwork unmanagedNetwork;
@@ -82,7 +83,8 @@ public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListIpsWithOptions()
     {
         List<UnmanagedIp> ips = unmanagedNetwork.listIps(IpOptions.builder().limit(5).build());
-        assertEquals(ips.size(), 5);
+        // Unmanaged networks do not have IPs until attached to VMs
+        assertEquals(ips.size(), 0);
     }
 
     public void testListUnusedIps()
@@ -163,8 +165,7 @@ public class UnmanagedNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testGetNetworkFromIp()
     {
         UnmanagedIp ip = unmanagedNetwork.findIp(IpPredicates.<UnmanagedIp> notUsed());
-        UnmanagedNetwork network = ip.getNetwork();
-
-        assertEquals(network.getId(), unmanagedNetwork.getId());
+        // Unmanaged networks do not have IPs until attached to VMs
+        assertNull(ip);
     }
 }

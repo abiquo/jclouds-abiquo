@@ -141,7 +141,8 @@ public class NetworkResources
         vlan.setType(NetworkType.EXTERNAL);
         vlan.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/network/1"));
         vlan.addLink(new RESTLink("enterprise", "http://localhost/api/admin/enterprises/1"));
-        vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/datacenters/1/network/1/ips"));
+        vlan.addLink(new RESTLink("ips",
+            "http://localhost/api/admin/enterprises/1/limits/1/externalnetworks/1/ips"));
 
         return vlan;
     }
@@ -158,7 +159,8 @@ public class NetworkResources
         vlan.setType(NetworkType.UNMANAGED);
         vlan.addLink(new RESTLink("edit", "http://localhost/api/admin/datacenters/1/network/1"));
         vlan.addLink(new RESTLink("enterprise", "http://localhost/api/admin/enterprises/1"));
-        vlan.addLink(new RESTLink("ips", "http://localhost/api/admin/datacenters/1/network/1/ips"));
+        vlan.addLink(new RESTLink("ips",
+            "http://localhost/api/admin/enterprises/1/limits/1/externalnetworks/1/ips"));
 
         return vlan;
     }
@@ -216,7 +218,7 @@ public class NetworkResources
         buffer.append("<network>");
         buffer.append(link("/admin/datacenters/1/network/1", "edit"));
         buffer.append(link("/admin/enterprises/1", "enterprise"));
-        buffer.append(link("/admin/datacenters/1/network/1/ips", "ips"));
+        buffer.append(link("/admin/enterprises/1/limits/1/externalnetworks/1/ips", "ips"));
         buffer.append("<address>192.168.1.0</address>");
         buffer.append("<defaultNetwork>true</defaultNetwork>");
         buffer.append("<gateway>192.168.1.1</gateway>");
@@ -234,7 +236,7 @@ public class NetworkResources
         buffer.append("<network>");
         buffer.append(link("/admin/datacenters/1/network/1", "edit"));
         buffer.append(link("/admin/enterprises/1", "enterprise"));
-        buffer.append(link("/admin/datacenters/1/network/1/ips", "ips"));
+        buffer.append(link("/admin/enterprises/1/limits/1/externalnetworks/1/ips", "ips"));
         buffer.append("<address>192.168.1.0</address>");
         buffer.append("<defaultNetwork>true</defaultNetwork>");
         buffer.append("<gateway>192.168.1.1</gateway>");
