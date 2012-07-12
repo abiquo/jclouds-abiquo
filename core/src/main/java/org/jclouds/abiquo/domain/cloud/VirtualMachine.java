@@ -19,7 +19,6 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
-import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 
@@ -491,37 +490,38 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
     public AsyncTask setNics(final Ip< ? , ? >... ips)
     {
-        checkArgument(ips != null && ips.length > 0, "at least one ip must be provided");
         // By default the network of the first ip will be used as a gateway
-        return setNics(ips[0].getNetwork(), ips);
+        return setNics(ips != null && ips.length > 0 ? ips[0].getNetwork() : null, ips);
     }
 
     public AsyncTask setNics(final Network< ? > gatewayNetwork, final Ip< ? , ? >... ips)
     {
-        checkNotNull(ips, "at least one ip must be provided");
-
         RESTLink configLink =
             checkNotNull(target.searchLink(ParentLinkName.NETWORK_CONFIGURATIONS),
                 ValidationErrors.MISSING_REQUIRED_LINK + ParentLinkName.NETWORK_CONFIGURATIONS);
-        RESTLink newNetworkConfiguration =
-            new RESTLink("network_configuration", configLink.getHref() + "/"
-                + gatewayNetwork.getId());
 
         // Remove the gateway configuration and the current nics
         Iterables.removeIf(target.getLinks(),
             Predicates.or(LinkPredicates.isNic(), LinkPredicates.rel("network_configuration")));
 
         // Add the given nics in the appropriate order
-        for (int i = 0; i < ips.length; i++)
+        if (ips != null)
         {
-            RESTLink source = LinkUtils.getSelfLink(ips[i].unwrap());
-            RESTLink link = new RESTLink("nic" + i, source.getHref());
-            link.setType(ips[i].unwrap().getBaseMediaType());
-            target.addLink(link);
+            for (int i = 0; i < ips.length; i++)
+            {
+                RESTLink source = LinkUtils.getSelfLink(ips[i].unwrap());
+                RESTLink link = new RESTLink("nic" + i, source.getHref());
+                link.setType(ips[i].unwrap().getBaseMediaType());
+                target.addLink(link);
+            }
         }
 
         // Set the new network configuration
-        target.addLink(newNetworkConfiguration);
+        if (gatewayNetwork != null)
+        {
+            target.addLink(new RESTLink("network_configuration", configLink.getHref() + "/"
+                + gatewayNetwork.getId()));
+        }
 
         return update();
     }

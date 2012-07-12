@@ -42,8 +42,6 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
-import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpDto;
@@ -255,28 +253,6 @@ public interface CloudClient
      * @return The requested ip.
      */
     PrivateIpDto getPrivateNetworkIp(VLANNetworkDto network, Integer ipId);
-
-    /*********************** Attached Nic ***********************/
-
-    /**
-     * Replace the attached nics in the given virtual machine by new ones created based on the given
-     * ips.
-     * <p>
-     * If the virtual machine is deployed, the operation will be executed asynchronously.
-     * 
-     * @param virtualMachine The virtual machine where the nics will be attached.
-     * @param ips The nics to attach.
-     * @return The task reference or <code>null</code> if the operation completed synchronously.
-     */
-    AcceptedRequestDto<String> replaceNics(VirtualMachineDto virtualMachine, AbstractIpDto... ips);
-
-    /**
-     * List nics attached to a virtual machine.
-     * 
-     * @param virtualMachine The virtual machine.
-     * @return The list of nics.
-     */
-    NicsDto listAttachedNics(VirtualMachineDto virtualMachine);
 
     /*********************** Virtual Appliance ***********************/
 

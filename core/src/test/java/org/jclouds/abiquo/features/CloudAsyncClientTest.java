@@ -57,8 +57,6 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
-import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpDto;
@@ -575,59 +573,6 @@ public class CloudAsyncClientTest extends BaseAbiquoAsyncClientTest<CloudAsyncCl
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    /*********************** Attached Nic ***********************/
-
-    public void testListAttachedNics() throws SecurityException, NoSuchMethodException, IOException
-    {
-        Method method =
-            CloudAsyncClient.class.getMethod("listAttachedNics", VirtualMachineDto.class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut());
-
-        assertRequestLineEquals(
-            request,
-            "GET http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + NicsDto.BASE_MEDIA_TYPE + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testReplaceNics() throws SecurityException, NoSuchMethodException, IOException
-    {
-        PrivateIpDto first = NetworkResources.privateIpPut();
-        PrivateIpDto second = NetworkResources.privateIpPut();
-        second.searchLink("self").setHref(second.searchLink("self").getHref() + "second");
-
-        Method method =
-            CloudAsyncClient.class.getMethod("replaceNics", VirtualMachineDto.class,
-                AbstractIpDto[].class);
-        GeneratedHttpRequest<CloudAsyncClient> request =
-            processor.createRequest(method, CloudResources.virtualMachinePut(),
-                new AbstractIpDto[] {first, second});
-
-        RESTLink selfLink = first.searchLink("self");
-        assertRequestLineEquals(
-            request,
-            "PUT http://localhost/api/cloud/virtualdatacenters/1/virtualappliances/1/virtualmachines/1/network/nics HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
-            + "\n");
-        assertPayloadEquals(request, withHeader("<links><link href=\"" + selfLink.getHref()
-            + "\" rel=\"" + selfLink.getTitle() + "\"/><link href=\"" + selfLink.getHref()
-            + "second\" rel=\"" + selfLink.getTitle() + "\"/></links>"), LinksDto.class,
-            LinksDto.BASE_MEDIA_TYPE, false);
-
-        assertResponseParserClassEquals(method, request, ReturnTaskReferenceOrNull.class);
         assertSaxResponseParserClassEquals(method, null);
         assertExceptionParserClassEquals(method, null);
 

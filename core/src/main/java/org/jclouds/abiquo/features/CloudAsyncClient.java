@@ -34,7 +34,6 @@ import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.binders.cloud.BindHardDiskRefsToPayload;
-import org.jclouds.abiquo.binders.cloud.BindIpRefsToPayload;
 import org.jclouds.abiquo.binders.cloud.BindMoveVolumeToPath;
 import org.jclouds.abiquo.binders.cloud.BindNetworkConfigurationRefToPayload;
 import org.jclouds.abiquo.binders.cloud.BindNetworkRefToPayload;
@@ -79,8 +78,6 @@ import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachinesDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
-import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
-import com.abiquo.server.core.infrastructure.network.NicsDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
 import com.abiquo.server.core.infrastructure.network.PrivateIpsDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpDto;
@@ -324,28 +321,6 @@ public interface CloudAsyncClient
     ListenableFuture<PrivateIpDto> getPrivateNetworkIp(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
         @BinderParam(AppendToPath.class) Integer ipId);
-
-    /*********************** Attached Nic ***********************/
-
-    /**
-     * @see CloudClient#replaceVolumes(VirtualMachineDto, VolumeManagementDto...)
-     */
-    @PUT
-    @ResponseParser(ReturnTaskReferenceOrNull.class)
-    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
-    @Produces(LinksDto.BASE_MEDIA_TYPE)
-    ListenableFuture<AcceptedRequestDto<String>> replaceNics(
-        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(BindIpRefsToPayload.class) AbstractIpDto... ips);
-
-    /**
-     * @see CloudClient#listAttachedNics(VirtualMachineDto)
-     */
-    @GET
-    @Consumes(NicsDto.BASE_MEDIA_TYPE)
-    @JAXBResponseParser
-    ListenableFuture<NicsDto> listAttachedNics(
-        @EndpointLink("nics") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /*********************** Virtual Appliance ***********************/
 
