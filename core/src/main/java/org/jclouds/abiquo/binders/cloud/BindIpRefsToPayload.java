@@ -25,7 +25,7 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.domain.DomainWrapper;
+import org.jclouds.abiquo.domain.util.LinkUtils;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.xml.XMLParser;
@@ -60,7 +60,7 @@ public class BindIpRefsToPayload extends BindToXMLPayload
         for (AbstractIpDto ip : ips)
         {
             RESTLink selfLink =
-                checkNotNull(DomainWrapper.getSelfLink(ip),
+                checkNotNull(LinkUtils.getSelfLink(ip),
                     "AbstractIpDto must have an edit or self link");
             if (refs.searchLinkByHref(selfLink.getHref()) == null)
             {

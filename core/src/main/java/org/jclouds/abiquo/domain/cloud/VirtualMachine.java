@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
 
@@ -33,6 +34,8 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.task.AsyncTask;
+import org.jclouds.abiquo.domain.util.LinkUtils;
+import org.jclouds.abiquo.predicates.LinkPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
@@ -51,7 +54,6 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
-import com.abiquo.server.core.infrastructure.network.AbstractIpDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DvdManagementDto;
@@ -59,6 +61,7 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
 import com.abiquo.server.core.infrastructure.storage.VolumesManagementDto;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
@@ -488,9 +491,39 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
     public AsyncTask setNics(final Ip< ? , ? >... ips)
     {
-        AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().replaceNics(target, toIpDto(ips));
-        return taskRef == null ? null : getTask(taskRef);
+        checkArgument(ips != null && ips.length > 0, "at least one ip must be provided");
+        // By default the network of the first ip will be used as a gateway
+        return setNics(ips[0].getNetwork(), ips);
+    }
+
+    public AsyncTask setNics(final Network< ? > gatewayNetwork, final Ip< ? , ? >... ips)
+    {
+        checkNotNull(ips, "at least one ip must be provided");
+
+        RESTLink configLink =
+            checkNotNull(target.searchLink(ParentLinkName.NETWORK_CONFIGURATIONS),
+                ValidationErrors.MISSING_REQUIRED_LINK + ParentLinkName.NETWORK_CONFIGURATIONS);
+        RESTLink newNetworkConfiguration =
+            new RESTLink("network_configuration", configLink.getHref() + "/"
+                + gatewayNetwork.getId());
+
+        // Remove the gateway configuration and the current nics
+        Iterables.removeIf(target.getLinks(),
+            Predicates.or(LinkPredicates.isNic(), LinkPredicates.rel("network_configuration")));
+
+        // Add the given nics in the appropriate order
+        for (int i = 0; i < ips.length; i++)
+        {
+            RESTLink source = LinkUtils.getSelfLink(ips[i].unwrap());
+            RESTLink link = new RESTLink("nic" + i, source.getHref());
+            link.setType(ips[i].unwrap().getBaseMediaType());
+            target.addLink(link);
+        }
+
+        // Set the new network configuration
+        target.addLink(newNetworkConfiguration);
+
+        return update();
     }
 
     public void setGatewayNetwork(final Network< ? > network)
@@ -838,19 +871,6 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         for (int i = 0; i < hardDisks.length; i++)
         {
             dtos[i] = hardDisks[i].unwrap();
-        }
-
-        return dtos;
-    }
-
-    private static AbstractIpDto[] toIpDto(final Ip< ? , ? >... ips)
-    {
-        checkNotNull(ips, "must provide at least one ip");
-
-        AbstractIpDto[] dtos = new AbstractIpDto[ips.length];
-        for (int i = 0; i < ips.length; i++)
-        {
-            dtos[i] = ips[i].unwrap();
         }
 
         return dtos;

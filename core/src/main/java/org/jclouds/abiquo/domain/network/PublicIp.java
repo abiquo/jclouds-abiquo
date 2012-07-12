@@ -58,7 +58,7 @@ public class PublicIp extends AbstractPublicIp<PublicIpDto, PublicNetwork>
     {
         RESTLink link =
             checkNotNull(target.searchLink(ParentLinkName.PUBLIC_NETWORK),
-                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.PUBLIC_NETWORK);
+                ValidationErrors.MISSING_REQUIRED_LINK + ParentLinkName.PUBLIC_NETWORK);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);

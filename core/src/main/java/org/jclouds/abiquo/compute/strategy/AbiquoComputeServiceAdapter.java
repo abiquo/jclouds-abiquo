@@ -135,7 +135,7 @@ public class AbiquoComputeServiceAdapter
         vm.save();
 
         // Once the virtual machine is created, override the default network settings if needed
-        helper.configureNetwork(vm, options.getIps());
+        helper.configureNetwork(vm, options.getGatewayNetwork(), options.getIps());
 
         VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
         vm.deploy();

@@ -31,6 +31,7 @@ import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.exception.WrapperException;
 import org.jclouds.abiquo.domain.task.AsyncTask;
+import org.jclouds.abiquo.domain.util.LinkUtils;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.rest.RestContext;
 
@@ -71,7 +72,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      */
     public URI getURI()
     {
-        RESTLink link = getSelfLink(target);
+        RESTLink link = LinkUtils.getSelfLink(target);
         return link == null ? null : URI.create(link.getHref());
     }
 
@@ -235,18 +236,6 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
 
         AsyncTask[] taskArr = new AsyncTask[tasks.size()];
         return tasks.toArray(taskArr);
-    }
-
-    /**
-     * Get the link that points to the current resource.
-     * 
-     * @param dto The target dto.
-     * @return The link to the current resource.
-     */
-    public static RESTLink getSelfLink(final SingleResourceTransportDto dto)
-    {
-        RESTLink link = dto.searchLink("edit");
-        return link == null ? dto.searchLink("self") : link;
     }
 
 }

@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.compute.options;
 
 import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.options.TemplateOptions;
 
@@ -44,6 +45,8 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
     private String virtualDatacenter;
 
     private Ip< ? , ? >[] ips;
+
+    private Network< ? > gatewayNetwork;
 
     @Override
     public TemplateOptions clone()
@@ -137,7 +140,7 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
     /**
      * Set the ip addresses for the virtual machine.
      * 
-     * @return The template options with the ip addresses configuration
+     * @return The template options with the ip addresses configuration.
      */
     public AbiquoTemplateOptions ips(final Ip< ? , ? >... ips)
     {
@@ -148,6 +151,22 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
     public Ip< ? , ? >[] getIps()
     {
         return ips;
+    }
+
+    /**
+     * Set the gateway network for the virtual machine.
+     * 
+     * @return The template options with the gateway network configuration.
+     */
+    public AbiquoTemplateOptions gatewayNetwork(final Network< ? > gatewayNetwork)
+    {
+        this.gatewayNetwork = gatewayNetwork;
+        return this;
+    }
+
+    public Network< ? > getGatewayNetwork()
+    {
+        return gatewayNetwork;
     }
 
     public static class Builder
@@ -195,6 +214,15 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
         {
             AbiquoTemplateOptions options = new AbiquoTemplateOptions();
             return options.ips(ips);
+        }
+
+        /**
+         * @see AbiquoTemplateOptions#gatewayNetwork(Network)
+         */
+        public static AbiquoTemplateOptions gatewayNetwork(final Network< ? > gatewayNetwork)
+        {
+            AbiquoTemplateOptions options = new AbiquoTemplateOptions();
+            return options.gatewayNetwork(gatewayNetwork);
         }
     }
 }

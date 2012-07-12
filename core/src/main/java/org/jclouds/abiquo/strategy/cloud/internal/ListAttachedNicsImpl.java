@@ -33,6 +33,7 @@ import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.UnmanagedIp;
+import org.jclouds.abiquo.domain.util.LinkUtils;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.abiquo.strategy.cloud.ListAttachedNics;
 import org.jclouds.http.HttpResponse;
@@ -72,7 +73,7 @@ public class ListAttachedNicsImpl implements ListAttachedNics
     @Override
     public Iterable<Ip< ? , ? >> execute(final VirtualMachine parent)
     {
-        Iterable<RESTLink> nicLinks = getNicLinks(parent);
+        Iterable<RESTLink> nicLinks = LinkUtils.filterNicLinks(parent.unwrap().getLinks());
         return listIps(nicLinks);
     }
 
@@ -128,18 +129,6 @@ public class ListAttachedNicsImpl implements ListAttachedNics
                 {
                     throw new IllegalArgumentException("Unsupported media type: " + input.getType());
                 }
-            }
-        });
-    }
-
-    private Iterable<RESTLink> getNicLinks(final VirtualMachine vm)
-    {
-        return filter(vm.unwrap().getLinks(), new Predicate<RESTLink>()
-        {
-            @Override
-            public boolean apply(final RESTLink input)
-            {
-                return input.getRel().matches("^nic[0-9]+$");
             }
         });
     }

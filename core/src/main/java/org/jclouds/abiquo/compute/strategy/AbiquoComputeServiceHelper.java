@@ -41,6 +41,7 @@ import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
@@ -142,15 +143,27 @@ public class AbiquoComputeServiceHelper
      * Configure networking resources for the given virtual machine.
      * 
      * @param vm The virtual machine to configure.
-     * @param networkConfig The network configuration.
+     * @param gatewayNetwork The network to be used as a gateway.
+     * @param ips The ips to attach to the virtual machine.
      */
-    public void configureNetwork(final VirtualMachine vm, @Nullable final Ip< ? , ? >... ips)
+    public void configureNetwork(final VirtualMachine vm,
+        @Nullable final Network< ? > gatewayNetwork,
+        @Nullable final Ip< ? , ? extends Network< ? >>... ips)
     {
         if (ips != null)
         {
             // TODO: External ips don't have the right link
             // (http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3650)
-            vm.setNics(ips);
+
+            if (gatewayNetwork == null)
+            {
+                // By default the network of the first ip will be used as a gateway
+                vm.setNics(ips);
+            }
+            else
+            {
+                vm.setNics(gatewayNetwork, ips);
+            }
         }
     }
 
