@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -31,6 +32,7 @@ import org.jclouds.concurrent.Timeout;
 
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -111,6 +113,24 @@ public interface CloudClient
      * @param virtualDatacenter The virtual datacenter to delete.
      */
     void deleteVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * List all available templates for the given virtual datacenter
+     * 
+     * @param virtualDatacenter The virtual datacenter
+     * @return The list of available templates
+     */
+    VirtualMachineTemplatesDto listAvailableTemplates(VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * List all available templates for the given virtual datacenter
+     * 
+     * @param virtualDatacenter The virtual datacenter
+     * @param options Filtering options.
+     * @return The list of available templates
+     */
+    VirtualMachineTemplatesDto listAvailableTemplates(VirtualDatacenterDto virtualDatacenter,
+        VirtualMachineTemplateOptions options);
 
     /**
      * List all available ips to purchase in the datacenter by the virtual datacenter.

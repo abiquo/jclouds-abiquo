@@ -43,6 +43,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualApplianceOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
+import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
@@ -67,6 +68,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.model.transport.LinksDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualApplianceStateDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -160,6 +162,25 @@ public interface CloudAsyncClient
     @DELETE
     ListenableFuture<Void> deleteVirtualDatacenter(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#listAvailableTemplates(VirtualDatacenterDto)
+     */
+    @GET
+    @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<VirtualMachineTemplatesDto> listAvailableTemplates(
+        @EndpointLink("templates") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
+
+    /**
+     * @see CloudClient#listAvailableTemplates(VirtualDatacenterDto, VirtualMachineTemplateOptions)
+     */
+    @GET
+    @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<VirtualMachineTemplatesDto> listAvailableTemplates(
+        @EndpointLink("templates") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
+        @BinderParam(AppendOptionsToPath.class) VirtualMachineTemplateOptions options);
 
     /**
      * @see CloudClient#listStorageTiers(VirtualDatacenterDto)
