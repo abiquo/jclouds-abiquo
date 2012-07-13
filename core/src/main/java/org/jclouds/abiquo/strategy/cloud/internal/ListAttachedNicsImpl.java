@@ -73,6 +73,7 @@ public class ListAttachedNicsImpl implements ListAttachedNics
     @Override
     public Iterable<Ip< ? , ? >> execute(final VirtualMachine parent)
     {
+        parent.refresh();
         Iterable<RESTLink> nicLinks = LinkUtils.filterNicLinks(parent.unwrap().getLinks());
         return listIps(nicLinks);
     }

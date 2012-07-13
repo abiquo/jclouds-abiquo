@@ -24,6 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.find;
 import static com.google.common.collect.Iterables.getFirst;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -43,6 +45,7 @@ import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
+import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.predicates.cloud.VirtualDatacenterPredicates;
 import org.jclouds.compute.reference.ComputeServiceConstants;
@@ -148,7 +151,8 @@ public class AbiquoComputeServiceHelper
      */
     public void configureNetwork(final VirtualMachine vm,
         @Nullable final Network< ? > gatewayNetwork,
-        @Nullable final Ip< ? , ? extends Network< ? >>... ips)
+        @Nullable final List<Ip< ? , ? extends Network< ? >>> ips,
+        @Nullable final List<UnmanagedNetwork> unmanagedIps)
     {
         if (ips != null)
         {
@@ -158,11 +162,11 @@ public class AbiquoComputeServiceHelper
             if (gatewayNetwork == null)
             {
                 // By default the network of the first ip will be used as a gateway
-                vm.setNics(ips);
+                vm.setNics(ips, unmanagedIps);
             }
             else
             {
-                vm.setNics(gatewayNetwork, ips);
+                vm.setNics(gatewayNetwork, ips, unmanagedIps);
             }
         }
     }

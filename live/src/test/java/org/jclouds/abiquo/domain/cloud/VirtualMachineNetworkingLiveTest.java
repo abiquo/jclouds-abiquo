@@ -34,12 +34,16 @@ import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.PublicNetwork;
+import org.jclouds.abiquo.domain.network.UnmanagedIp;
+import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
+
+import com.google.common.collect.Lists;
 
 /**
  * Live integration tests for the {@link VirtualMachine} networking operations.
@@ -57,14 +61,18 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
 
     private PublicIp publicIpCloud;
 
+    private UnmanagedIp unmanagedIp1;
+
+    private UnmanagedIp unmanagedIp2;
+
     @BeforeClass
     public void setupIps()
     {
-        externalIp = env.externalNetwork.listUnusedIps().get(0);
-        assertNotNull(externalIp);
-
         privateIp = env.privateNetwork.listUnusedIps().get(0);
         assertNotNull(privateIp);
+
+        externalIp = env.externalNetwork.listUnusedIps().get(0);
+        assertNotNull(externalIp);
 
         publicIpInfrastructure = env.virtualDatacenter.listAvailablePublicIps().get(0);
         env.virtualDatacenter.purchasePublicIp(publicIpInfrastructure);
@@ -78,19 +86,25 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
     @AfterClass
     public void restorePrivateIp()
     {
-        AsyncTask task = env.virtualMachine.setNics(privateIp);
+        AsyncTask task = env.virtualMachine.setNics(Lists.<Ip< ? , ? >> newArrayList(privateIp));
         assertNull(task);
 
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
         assertEquals(nics.size(), 1);
         assertEquals(nics.get(0).getId(), privateIp.getId());
+
+        String address = publicIpCloud.getIp();
+        env.virtualDatacenter.releaseePublicIp(publicIpCloud);
+        assertNull(env.virtualDatacenter.findPurchasedPublicIp(IpPredicates
+            .<PublicIp> address(address)));
     }
 
     // TODO: Infrastructure edit link for public ips can not be used to attach
     @Test(enabled = false)
     public void testAttachInfrastructurePublicIp()
     {
-        AsyncTask task = env.virtualMachine.setNics(publicIpInfrastructure);
+        AsyncTask task =
+            env.virtualMachine.setNics(Lists.<Ip< ? , ? >> newArrayList(publicIpInfrastructure));
         assertNull(task);
 
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
@@ -100,7 +114,8 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
 
     public void testAttachPublicIp()
     {
-        AsyncTask task = env.virtualMachine.setNics(publicIpCloud);
+        AsyncTask task =
+            env.virtualMachine.setNics(Lists.<Ip< ? , ? >> newArrayList(publicIpCloud));
         assertNull(task);
 
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
@@ -114,8 +129,7 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
         nics.add(privateIp);
 
-        Ip< ? , ? >[] ips = new Ip< ? , ? >[nics.size()];
-        AsyncTask task = env.virtualMachine.setNics(nics.toArray(ips));
+        AsyncTask task = env.virtualMachine.setNics(nics);
         assertNull(task);
 
         nics = env.virtualMachine.listAttachedNics();
@@ -130,8 +144,7 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
         nics.add(externalIp);
 
-        Ip< ? , ? >[] ips = new Ip< ? , ? >[nics.size()];
-        AsyncTask task = env.virtualMachine.setNics(nics.toArray(ips));
+        AsyncTask task = env.virtualMachine.setNics(nics);
         assertNull(task);
 
         nics = env.virtualMachine.listAttachedNics();
@@ -142,26 +155,54 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
     }
 
     @Test(dependsOnMethods = "testAttachExternalIp")
+    public void testAddUnmanagedNics()
+    {
+        List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
+
+        AsyncTask task =
+            env.virtualMachine.setNics(nics,
+                Lists.<UnmanagedNetwork> newArrayList(env.unmanagedNetwork, env.unmanagedNetwork));
+        assertNull(task);
+
+        nics = env.virtualMachine.listAttachedNics();
+        assertEquals(nics.size(), 5);
+        assertEquals(nics.get(0).getId(), publicIpCloud.getId());
+        assertEquals(nics.get(1).getId(), privateIp.getId());
+        assertEquals(nics.get(2).getId(), externalIp.getId());
+        // Unmanaged ips are created during the attach.
+        assertEquals(nics.get(3).getNetworkName(), env.unmanagedNetwork.getName());
+        assertEquals(nics.get(4).getNetworkName(), env.unmanagedNetwork.getName());
+
+        unmanagedIp1 = (UnmanagedIp) nics.get(3);
+        unmanagedIp2 = (UnmanagedIp) nics.get(4);
+    }
+
+    @Test(dependsOnMethods = "testAddUnmanagedNics")
     public void testReorderNics()
     {
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
 
-        AsyncTask task = env.virtualMachine.setNics(nics.get(2), nics.get(1), nics.get(0));
+        AsyncTask task =
+            env.virtualMachine.setNics(Lists.<Ip< ? , ? >> newArrayList(nics.get(2), nics.get(1),
+                nics.get(0), nics.get(4), nics.get(3)));
         assertNull(task);
 
         nics = env.virtualMachine.listAttachedNics();
-        assertEquals(nics.size(), 3);
+        assertEquals(nics.size(), 5);
         assertEquals(nics.get(0).getId(), externalIp.getId());
         assertEquals(nics.get(1).getId(), privateIp.getId());
         assertEquals(nics.get(2).getId(), publicIpCloud.getId());
+        assertEquals(nics.get(3).getId(), unmanagedIp2.getId());
+        assertEquals(nics.get(4).getId(), unmanagedIp1.getId());
     }
 
     @Test(dependsOnMethods = "testReorderNics")
-    public void testDetachSingleNic()
+    public void testDetachNics()
     {
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
 
-        AsyncTask task = env.virtualMachine.setNics(nics.get(1), nics.get(2));
+        AsyncTask task =
+            env.virtualMachine.setNics(Lists.<Ip< ? , ? >> newArrayList(nics.get(1), nics.get(2)));
         assertNull(task);
 
         nics = env.virtualMachine.listAttachedNics();
@@ -170,7 +211,7 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(nics.get(1).getId(), publicIpCloud.getId());
     }
 
-    @Test(dependsOnMethods = "testDetachSingleNic")
+    @Test(dependsOnMethods = "testDetachNics")
     public void testSetDefaultGateway()
     {
         PublicNetwork network = publicIpCloud.getNetwork();
@@ -184,7 +225,7 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
     {
         try
         {
-            env.virtualMachine.setNics();
+            env.virtualMachine.setNics(null);
         }
         catch (AbiquoException ex)
         {

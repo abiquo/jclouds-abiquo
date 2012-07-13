@@ -21,6 +21,7 @@ package org.jclouds.abiquo.compute.options;
 
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.options.TemplateOptions;
 
@@ -45,6 +46,8 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
     private String virtualDatacenter;
 
     private Ip< ? , ? >[] ips;
+
+    private UnmanagedNetwork[] unmanagedIps;
 
     private Network< ? > gatewayNetwork;
 
@@ -154,6 +157,23 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
     }
 
     /**
+     * Set the ip addresses that must be selected from unmanaged networks.
+     * 
+     * @return The template options with the ip addresses that must be selected from unmanaged
+     *         networks.
+     */
+    public AbiquoTemplateOptions unmanagedIps(final UnmanagedNetwork... unmanagedIps)
+    {
+        this.unmanagedIps = unmanagedIps;
+        return this;
+    }
+
+    public UnmanagedNetwork[] getUnmanagedIps()
+    {
+        return unmanagedIps;
+    }
+
+    /**
      * Set the gateway network for the virtual machine.
      * 
      * @return The template options with the gateway network configuration.
@@ -214,6 +234,15 @@ public class AbiquoTemplateOptions extends TemplateOptions implements Cloneable
         {
             AbiquoTemplateOptions options = new AbiquoTemplateOptions();
             return options.ips(ips);
+        }
+
+        /**
+         * @see AbiquoTemplateOptions#unmanagedIps(UnmanagedNetwork...)
+         */
+        public AbiquoTemplateOptions unmanagedIps(final UnmanagedNetwork... unmanagedIps)
+        {
+            AbiquoTemplateOptions options = new AbiquoTemplateOptions();
+            return options.unmanagedIps(unmanagedIps);
         }
 
         /**

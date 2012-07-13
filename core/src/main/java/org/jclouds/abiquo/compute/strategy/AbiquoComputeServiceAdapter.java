@@ -21,6 +21,8 @@ package org.jclouds.abiquo.compute.strategy;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
+import java.util.Arrays;
+
 import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -135,7 +137,8 @@ public class AbiquoComputeServiceAdapter
         vm.save();
 
         // Once the virtual machine is created, override the default network settings if needed
-        helper.configureNetwork(vm, options.getGatewayNetwork(), options.getIps());
+        helper.configureNetwork(vm, options.getGatewayNetwork(), Arrays.asList(options.getIps()),
+            Arrays.asList(options.getUnmanagedIps()));
 
         VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
         vm.deploy();

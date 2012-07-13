@@ -32,6 +32,7 @@ import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.util.LinkUtils;
 import org.jclouds.abiquo.predicates.LinkPredicates;
@@ -53,6 +54,7 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
+import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DisksManagementDto;
 import com.abiquo.server.core.infrastructure.storage.DvdManagementDto;
@@ -219,6 +221,21 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return state;
     }
 
+    public void refresh()
+    {
+        RESTLink link =
+            checkNotNull(target.getEditLink(), ValidationErrors.MISSING_REQUIRED_LINK + " edit");
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<VirtualMachineDto> parser =
+            new ParseXMLWithJAXB<VirtualMachineDto>(utils.getXml(),
+                TypeLiteral.get(VirtualMachineDto.class));
+
+        target = parser.apply(response);
+    }
+
     // Parent access
 
     /**
@@ -295,6 +312,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
     public List<HardDisk> listAttachedHardDisks()
     {
+        refresh();
         DisksManagementDto hardDisks =
             context.getApi().getCloudClient().listAttachedHardDisks(target);
         return wrap(context, HardDisk.class, hardDisks.getCollection());
@@ -312,6 +330,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
     public List<Volume> listAttachedVolumes()
     {
+        refresh();
         VolumesManagementDto volumes =
             context.getApi().getCloudClient().listAttachedVolumes(target);
         return wrap(context, Volume.class, volumes.getCollection());
@@ -329,6 +348,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
     public List<Ip< ? , ? >> listAttachedNics()
     {
+        // The strategy will refresh teh vm. There is no need to do it here
         ListAttachedNics strategy =
             context.getUtils().getInjector().getInstance(ListAttachedNics.class);
         return Lists.newLinkedList(strategy.execute(this));
@@ -406,7 +426,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         expected.addAll(Arrays.asList(hardDisks));
 
         HardDisk[] disks = new HardDisk[expected.size()];
-        return replaceHardDisks(expected.toArray(disks));
+        return setHardDisks(expected.toArray(disks));
     }
 
     public AsyncTask detachAllHardDisks()
@@ -422,10 +442,10 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         Iterables.removeIf(expected, hardDiskIdIn(hardDisks));
 
         HardDisk[] disks = new HardDisk[expected.size()];
-        return replaceHardDisks(expected.toArray(disks));
+        return setHardDisks(expected.toArray(disks));
     }
 
-    public AsyncTask replaceHardDisks(final HardDisk... hardDisks)
+    public AsyncTask setHardDisks(final HardDisk... hardDisks)
     {
         AcceptedRequestDto<String> taskRef =
             context.getApi().getCloudClient().replaceHardDisks(target, toHardDiskDto(hardDisks));
@@ -475,13 +495,36 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return setVolumes(true, volumes);
     }
 
-    public AsyncTask setNics(final Ip< ? , ? >... ips)
+    public AsyncTask setNics(final List<Ip< ? , ? >> ips)
     {
         // By default the network of the first ip will be used as a gateway
-        return setNics(ips != null && ips.length > 0 ? ips[0].getNetwork() : null, ips);
+        return setNics(ips != null && !ips.isEmpty() ? ips.get(0).getNetwork() : null, ips, null);
     }
 
-    public AsyncTask setNics(final Network< ? > gatewayNetwork, final Ip< ? , ? >... ips)
+    public AsyncTask setNics(final List<Ip< ? , ? >> ips,
+        final List<UnmanagedNetwork> unmanagetNetworks)
+    {
+        // By default the network of the first ip will be used as a gateway
+        Network< ? > gateway = null;
+        if (ips != null && !ips.isEmpty())
+        {
+            gateway = ips.get(0).getNetwork();
+        }
+        else if (unmanagetNetworks != null && !unmanagetNetworks.isEmpty())
+        {
+            gateway = unmanagetNetworks.get(0);
+        }
+
+        return setNics(gateway, ips, unmanagetNetworks);
+    }
+
+    public AsyncTask setNics(final Network< ? > gatewayNetwork, final List<Ip< ? , ? >> ips)
+    {
+        return setNics(gatewayNetwork, ips, null);
+    }
+
+    public AsyncTask setNics(final Network< ? > gatewayNetwork, final List<Ip< ? , ? >> ips,
+        final List<UnmanagedNetwork> unmanagetNetworks)
     {
         RESTLink configLink =
             checkNotNull(target.searchLink(ParentLinkName.NETWORK_CONFIGURATIONS),
@@ -494,14 +537,31 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
                 LinkPredicates.rel(ParentLinkName.NETWORK_GATEWAY)));
 
         // Add the given nics in the appropriate order
+        int i = 0;
         if (ips != null)
         {
-            for (int i = 0; i < ips.length; i++)
+            for (i = 0; i < ips.size(); i++)
             {
-                RESTLink source = LinkUtils.getSelfLink(ips[i].unwrap());
+                RESTLink source = LinkUtils.getSelfLink(ips.get(i).unwrap());
                 RESTLink link = new RESTLink("nic" + i, source.getHref());
-                link.setType(ips[i].unwrap().getBaseMediaType());
+                link.setType(ips.get(i).unwrap().getBaseMediaType());
                 target.addLink(link);
+            }
+        }
+
+        // Add unmanaged network references, if given
+        if (unmanagetNetworks != null)
+        {
+            for (UnmanagedNetwork unmanaged : unmanagetNetworks)
+            {
+                RESTLink source =
+                    checkNotNull(unmanaged.unwrap().searchLink("ips"),
+                        ValidationErrors.MISSING_REQUIRED_LINK + "ips");
+
+                RESTLink link = new RESTLink("nic" + i, source.getHref());
+                link.setType(UnmanagedIpDto.BASE_MEDIA_TYPE);
+                target.addLink(link);
+                i++;
             }
         }
 
@@ -520,19 +580,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
     public void setGatewayNetwork(final Network< ? > network)
     {
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
-
-        // First refresh the target and its links
-        RESTLink link =
-            checkNotNull(target.getEditLink(), ValidationErrors.MISSING_REQUIRED_LINK + " edit");
-
-        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-        HttpResponse response = utils.getAbiquoHttpClient().get(link);
-
-        ParseXMLWithJAXB<VirtualMachineDto> parser =
-            new ParseXMLWithJAXB<VirtualMachineDto>(utils.getXml(),
-                TypeLiteral.get(VirtualMachineDto.class));
-
-        target = parser.apply(response);
+        refresh(); // First refresh the target and its links
     }
 
     /**
