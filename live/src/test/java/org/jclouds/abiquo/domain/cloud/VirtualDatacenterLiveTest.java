@@ -51,6 +51,7 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 @Test(groups = "live")
 public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
 {
+    private VirtualMachineTemplate template;
 
     public void testUpdate()
     {
@@ -178,21 +179,29 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
     public void testGetAvailableTemplates()
     {
         List<VirtualMachineTemplate> templates = env.virtualDatacenter.listAvailableTemplates();
-
         assertNotNull(templates);
         assertFalse(templates.isEmpty());
 
-        VirtualMachineTemplate template = templates.get(0);
-        Integer idTemp = new Integer(template.getId());
+        template = templates.get(0);
+    }
+
+    @Test(dependsOnMethods = "testGetAvailableTemplates")
+    public void testFindAvailableTemplate()
+    {
         VirtualMachineTemplate templateFound =
-            env.virtualDatacenter
-                .findAvailableTemplate(VirtualMachineTemplatePredicates.id(idTemp));
+            env.virtualDatacenter.findAvailableTemplate(VirtualMachineTemplatePredicates
+                .id(template.getId()));
 
         assertNotNull(template);
         assertNotNull(templateFound);
         assertEquals(templateFound.getId(), template.getId());
+    }
 
-        templateFound = env.virtualDatacenter.getAvailableTemplate(idTemp);
+    @Test(dependsOnMethods = "testGetAvailableTemplates")
+    public void testGetAvailableTemplate()
+    {
+        VirtualMachineTemplate templateFound =
+            env.virtualDatacenter.getAvailableTemplate(template.getId());
         assertNotNull(templateFound);
         assertEquals(templateFound.getId(), template.getId());
     }

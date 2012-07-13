@@ -38,7 +38,6 @@ import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.RestContext;
@@ -152,12 +151,6 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
             wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
                 .getDatacenter(datacenterId));
         return datacenter;
-    }
-
-    private Datacenter getAllowedDatacenterByEnterprise(final Enterprise ent)
-    {
-        Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        return ent.findAllowedDatacenter(DatacenterPredicates.id(datacenterId));
     }
 
     /**

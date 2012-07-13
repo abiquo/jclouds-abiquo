@@ -33,8 +33,6 @@ import org.testng.annotations.Test;
 @Test(groups = "live")
 public class SystemPropertiesLiveTest extends BaseAbiquoClientLiveTest
 {
-
-    @Test(enabled = false)
     public void testUpdate()
     {
         SystemProperty prop =

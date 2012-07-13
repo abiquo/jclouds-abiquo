@@ -115,19 +115,19 @@ public interface CloudClient
     void deleteVirtualDatacenter(VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * List all available templates for the given virtual datacenter
+     * List all available templates for the given virtual datacenter.
      * 
-     * @param virtualDatacenter The virtual datacenter
-     * @return The list of available templates
+     * @param virtualDatacenter The virtual datacenter.
+     * @return The list of available templates.
      */
     VirtualMachineTemplatesDto listAvailableTemplates(VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * List all available templates for the given virtual datacenter
+     * List all available templates for the given virtual datacenter.
      * 
-     * @param virtualDatacenter The virtual datacenter
+     * @param virtualDatacenter The virtual datacenter.
      * @param options Filtering options.
-     * @return The list of available templates
+     * @return The list of available templates.
      */
     VirtualMachineTemplatesDto listAvailableTemplates(VirtualDatacenterDto virtualDatacenter,
         VirtualMachineTemplateOptions options);
