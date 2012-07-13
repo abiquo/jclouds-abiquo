@@ -30,16 +30,16 @@ import org.jclouds.abiquo.AbiquoAsyncClient;
 import org.jclouds.abiquo.AbiquoClient;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
-import org.jclouds.abiquo.domain.infrastructure.Machine;
+import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.RoleDto;
 import com.abiquo.server.core.enterprise.UserDto;
-import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.google.common.base.Joiner;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
@@ -206,18 +206,19 @@ public class User extends DomainWrapper<UserDto>
      *      > http://community.abiquo.com/display/ABI20/User+resource#Userresource-
      *      Retrievethelistofvirtualmachinesbyuser</a>
      */
-    public List<Machine> listMachines()
+    public List<VirtualMachine> listMachines()
     {
-        MachinesDto machines = context.getApi().getEnterpriseClient().listVirtualMachines(target);
-        return wrap(context, Machine.class, machines.getCollection());
+        VirtualMachinesWithNodeExtendedDto machines =
+            context.getApi().getEnterpriseClient().listVirtualMachines(target);
+        return wrap(context, VirtualMachine.class, machines.getCollection());
     }
 
-    public List<Machine> listMachines(final Predicate<Machine> filter)
+    public List<VirtualMachine> listMachines(final Predicate<VirtualMachine> filter)
     {
         return Lists.newLinkedList(filter(listMachines(), filter));
     }
 
-    public Machine findMachine(final Predicate<Machine> filter)
+    public VirtualMachine findMachine(final Predicate<VirtualMachine> filter)
     {
         return Iterables.getFirst(filter(listMachines(), filter), null);
     }

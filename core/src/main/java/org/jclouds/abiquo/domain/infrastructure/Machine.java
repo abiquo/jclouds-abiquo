@@ -40,8 +40,7 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.rest.RESTLink;
-import com.abiquo.server.core.cloud.VirtualMachineDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
@@ -153,7 +152,7 @@ public class Machine extends AbstractPhysicalMachine
     public List<VirtualMachine> listVirtualMachines()
     {
         MachineOptions options = MachineOptions.builder().sync(false).build();
-        VirtualMachinesDto vms =
+        VirtualMachinesWithNodeExtendedDto vms =
             context.getApi().getInfrastructureClient()
                 .listVirtualMachinesByMachine(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());
@@ -194,7 +193,7 @@ public class Machine extends AbstractPhysicalMachine
     public List<VirtualMachine> listRemoteVirtualMachines()
     {
         MachineOptions options = MachineOptions.builder().sync(true).build();
-        VirtualMachinesDto vms =
+        VirtualMachinesWithNodeExtendedDto vms =
             context.getApi().getInfrastructureClient()
                 .listVirtualMachinesByMachine(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());

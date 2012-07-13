@@ -53,7 +53,7 @@ import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -296,9 +296,9 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listVirtualMachines(UserDto)
      */
     @GET
-    @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
+    @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<VirtualMachinesDto> listVirtualMachines(
+    ListenableFuture<VirtualMachinesWithNodeExtendedDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) final UserDto user);
 
     /*********************** Datacenter Repository ***********************/
@@ -349,9 +349,9 @@ public interface EnterpriseAsyncClient
      * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
      */
     @GET
-    @Consumes(VirtualMachinesDto.BASE_MEDIA_TYPE)
+    @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<VirtualMachinesDto> listVirtualMachines(
+    ListenableFuture<VirtualMachinesWithNodeExtendedDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /*********************** Machine ***********************/

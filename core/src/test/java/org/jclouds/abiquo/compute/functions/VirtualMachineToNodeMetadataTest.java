@@ -43,9 +43,9 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.rest.RESTLink;
-import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.infrastructure.network.PrivateIpDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -58,7 +58,7 @@ public class VirtualMachineToNodeMetadataTest
 {
     private VirtualMachineToNodeMetadata function;
 
-    private VirtualMachineDto vm;
+    private VirtualMachineWithNodeExtendedDto vm;
 
     private PrivateIpDto nic;
 
@@ -71,8 +71,9 @@ public class VirtualMachineToNodeMetadataTest
                 stateToNodeState(),
                 datacenterToLocation());
 
-        vm = new VirtualMachineDto();
-        vm.setName("VM");
+        vm = new VirtualMachineWithNodeExtendedDto();
+        vm.setNodeName("VM");
+        vm.setName("Internal name");
         vm.setId(5);
         vm.setVdrpPort(22);
         vm.setState(VirtualMachineState.ON);
@@ -94,7 +95,7 @@ public class VirtualMachineToNodeMetadataTest
 
         assertEquals(node.getId(), vm.getId().toString());
         assertEquals(node.getUri(), URI.create("http://foo/bar"));
-        assertEquals(node.getName(), vm.getName());
+        assertEquals(node.getName(), vm.getNodeName());
         assertEquals(node.getHostname(), vm.getName());
         assertEquals(node.getGroup(), "VAPP");
         assertEquals(node.getImageId(), "1");
@@ -150,8 +151,8 @@ public class VirtualMachineToNodeMetadataTest
         Ip< ? , ? > mockNic = wrap(EasyMock.createMock(RestContext.class), PrivateIp.class, nic);
 
         expect(mockVm.getId()).andReturn(vm.getId());
-        expect(mockVm.getName()).andReturn(vm.getName());
-        expect(mockVm.getName()).andReturn(vm.getName());
+        expect(mockVm.getNameLabel()).andReturn(vm.getNodeName());
+        expect(mockVm.getInternalName()).andReturn(vm.getName());
         expect(mockVm.unwrap()).andReturn(vm);
         expect(mockVm.getTemplate()).andReturn(null);
         expect(mockVm.getState()).andReturn(vm.getState());

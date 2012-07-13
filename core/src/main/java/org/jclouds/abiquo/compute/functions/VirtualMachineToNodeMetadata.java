@@ -72,8 +72,8 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
         NodeMetadataBuilder builder = new NodeMetadataBuilder();
         builder.ids(vm.getId().toString());
         builder.uri(URI.create(vm.unwrap().getEditLink().getHref()));
-        builder.name(vm.getName());
-        builder.hostname(vm.getName()); // TODO: Abiquo does not set the hostname
+        builder.name(vm.getNameLabel());
+        builder.hostname(vm.getInternalName()); // TODO: Abiquo does not set the hostname
         builder.group(vm.getVirtualAppliance().getName());
 
         // TODO: builder.location() Only cloud admins have access to the datacenter link of the VDC

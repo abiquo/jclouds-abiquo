@@ -53,7 +53,7 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -599,7 +599,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public List<VirtualMachine> listVirtualMachines()
     {
-        VirtualMachinesDto machines =
+        VirtualMachinesWithNodeExtendedDto machines =
             context.getApi().getEnterpriseClient().listVirtualMachines(target);
         return wrap(context, VirtualMachine.class, machines.getCollection());
     }

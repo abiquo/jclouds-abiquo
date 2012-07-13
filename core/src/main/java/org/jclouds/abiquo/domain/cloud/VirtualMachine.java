@@ -53,6 +53,7 @@ import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
 import com.abiquo.server.core.infrastructure.storage.DiskManagementDto;
@@ -75,7 +76,7 @@ import com.google.inject.TypeLiteral;
  * @see API: <a href="http://community.abiquo.com/display/ABI20/VirtualMachineResource">
  *      http://community.abiquo.com/display/ABI20/VirtualMachineResource</a>
  */
-public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
+public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNodeExtendedDto>
 {
     /** The virtual appliance where the virtual machine belongs. */
     private VirtualAppliance virtualAppliance;
@@ -87,7 +88,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
      * Constructor to be used only by the builder.
      */
     protected VirtualMachine(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
-        final VirtualMachineDto target)
+        final VirtualMachineWithNodeExtendedDto target)
     {
         super(context, target);
     }
@@ -631,7 +632,9 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
         private final VirtualMachineTemplate template;
 
-        private String name;
+        private String nameLabel;
+
+        private String internalName;
 
         private String description;
 
@@ -665,9 +668,9 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
             this.context = context;
         }
 
-        public Builder name(final String name)
+        public Builder nameLabel(final String nameLabel)
         {
-            this.name = name;
+            this.nameLabel = nameLabel;
             return this;
         }
 
@@ -734,6 +737,12 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
             return this;
         }
 
+        private Builder internalName(final String internalName)
+        {
+            this.internalName = internalName;
+            return this;
+        }
+
         public Builder virtualAppliance(final VirtualAppliance virtualAppliance)
         {
             checkNotNull(virtualAppliance, ValidationErrors.NULL_RESOURCE + VirtualAppliance.class);
@@ -743,8 +752,8 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
         public VirtualMachine build()
         {
-            VirtualMachineDto dto = new VirtualMachineDto();
-            dto.setName(name);
+            VirtualMachineWithNodeExtendedDto dto = new VirtualMachineWithNodeExtendedDto();
+            dto.setNodeName(nameLabel);
             dto.setDescription(description);
             dto.setHdInBytes(template.getHdRequired());
             dto.setVdrpIP(vncAddress);
@@ -774,6 +783,11 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
                 dto.setIdType(idType);
             }
 
+            if (internalName != null)
+            {
+                dto.setName(internalName);
+            }
+
             dto.setPassword(password);
             dto.setKeymap(keymap);
             dto.setUuid(uuid);
@@ -797,10 +811,11 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         public static Builder fromVirtualMachine(final VirtualMachine in)
         {
             return VirtualMachine.builder(in.context, in.virtualAppliance, in.template)
-                .name(in.getName()).description(in.getDescription()).ram(in.getRam())
-                .cpu(in.getCpu()).vncAddress(in.getVncAddress()).vncPort(in.getVncPort())
-                .idState(in.getIdState()).idType(in.getIdType()).password(in.getPassword())
-                .keymap(in.getKeymap()).dvd(in.hasDvd());
+                .internalName(in.getInternalName()).nameLabel(in.getNameLabel())
+                .description(in.getDescription()).ram(in.getRam()).cpu(in.getCpu())
+                .vncAddress(in.getVncAddress()).vncPort(in.getVncPort()).idState(in.getIdState())
+                .idType(in.getIdType()).password(in.getPassword()).keymap(in.getKeymap())
+                .dvd(in.hasDvd());
         }
     }
 
@@ -837,7 +852,17 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         return target.getIdType();
     }
 
-    public String getName()
+    public String getNameLabel()
+    {
+        return target.getNodeName();
+    }
+
+    public String getOwnerName()
+    {
+        return target.getUserName() + " " + target.getUserSurname();
+    }
+
+    public String getInternalName()
     {
         return target.getName();
     }
@@ -882,9 +907,9 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         target.setDescription(description);
     }
 
-    public void setName(final String name)
+    public void setNameLabel(final String nameLabel)
     {
-        target.setName(name);
+        target.setNodeName(nameLabel);
     }
 
     public void setPassword(final String password)
@@ -985,8 +1010,9 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
     {
         return "VirtualMachine [id=" + getId() + ", state=" + target.getState().name() + ", cpu="
             + getCpu() + ", description=" + getDescription() + ", hdInBytes=" + getHdInBytes()
-            + ", idType=" + getIdType() + ", name=" + getName() + ", password=" + getPassword()
-            + ", ram=" + getRam() + ", uuid=" + getUuid() + ", vncAddress=" + getVncAddress()
-            + ", vncPort=" + getVncPort() + ", keymap=" + getKeymap() + ", dvd=" + hasDvd() + "]";
+            + ", idType=" + getIdType() + ", nameLabel=" + getNameLabel() + ", internalName="
+            + getInternalName() + ", password=" + getPassword() + ", ram=" + getRam() + ", uuid="
+            + getUuid() + ", vncAddress=" + getVncAddress() + ", vncPort=" + getVncPort()
+            + ", keymap=" + getKeymap() + ", dvd=" + hasDvd() + "]";
     }
 }

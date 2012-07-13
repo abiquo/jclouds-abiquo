@@ -31,7 +31,7 @@ import com.abiquo.server.core.appslibrary.TemplateDefinitionListDto;
 import com.abiquo.server.core.appslibrary.TemplateDefinitionListsDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
-import com.abiquo.server.core.cloud.VirtualMachinesDto;
+import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacenterLimitsDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.enterprise.EnterpriseDto;
@@ -244,7 +244,7 @@ public interface EnterpriseClient
      * @param user The user.
      * @return The list of virtual machines of the user.
      */
-    MachinesDto listVirtualMachines(final UserDto user);
+    VirtualMachinesWithNodeExtendedDto listVirtualMachines(final UserDto user);
 
     /*********************** Datacenter Repository ***********************/
 
@@ -294,7 +294,7 @@ public interface EnterpriseClient
      * @param enterprise The enterprise.
      * @return The list of virtual machines by the enterprise.
      */
-    VirtualMachinesDto listVirtualMachines(EnterpriseDto enterprise);
+    VirtualMachinesWithNodeExtendedDto listVirtualMachines(EnterpriseDto enterprise);
 
     /**
      * List reserved machines for the enterprise

@@ -27,8 +27,8 @@ import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
 
-import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.google.common.base.Function;
 
 /**
@@ -93,7 +93,7 @@ public class VirtualMachineStateMonitorTest
         @SuppressWarnings("unchecked")
         public MockVirtualMachine()
         {
-            super(EasyMock.createMock(RestContext.class), new VirtualMachineDto());
+            super(EasyMock.createMock(RestContext.class), new VirtualMachineWithNodeExtendedDto());
         }
 
         @Override
