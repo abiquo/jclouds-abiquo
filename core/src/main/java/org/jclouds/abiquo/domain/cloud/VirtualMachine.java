@@ -572,7 +572,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
                 + gatewayNetwork.getId()));
         }
 
-        return update();
+        return update(true);
     }
 
     // TODO: Get current gateway network
