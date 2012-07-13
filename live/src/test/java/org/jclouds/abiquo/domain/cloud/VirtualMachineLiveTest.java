@@ -87,11 +87,28 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
 
     public void testUpdateForcingLimits()
     {
-        VirtualMachine vm = env.virtualAppliance.getVirtualMachine(env.virtualMachine.getId());
-        vm.setCpu(100);
-        AsyncTask task = vm.update(true);
-        assertNull(task);
-        assertEquals(vm.getCpu(), 100);
+        int originalHard = env.virtualDatacenter.getCpuCountHardLimit();
+        int originalSoft = env.virtualDatacenter.getCpuCountSoftLimit();
+
+        env.virtualDatacenter.setCpuCountHardLimit(10);
+        env.virtualDatacenter.setCpuCountSoftLimit(5);
+        env.virtualDatacenter.update();
+
+        try
+        {
+            VirtualMachine vm = env.virtualAppliance.getVirtualMachine(env.virtualMachine.getId());
+            vm.setCpu(7);
+            AsyncTask task = vm.update(true);
+
+            assertNull(task);
+            assertEquals(vm.getCpu(), 7);
+        }
+        finally
+        {
+            env.virtualDatacenter.setCpuCountHardLimit(originalHard);
+            env.virtualDatacenter.setCpuCountSoftLimit(originalSoft);
+            env.virtualDatacenter.update();
+        }
     }
 
     public void testAttachDvd()
