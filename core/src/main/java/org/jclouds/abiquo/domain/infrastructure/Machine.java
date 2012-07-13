@@ -40,6 +40,7 @@ import org.jclouds.rest.RestContext;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
@@ -485,7 +486,7 @@ public class Machine extends AbstractPhysicalMachine
 
     public VirtualMachine getVirtualMachine(final Integer virtualMachineId)
     {
-        VirtualMachineDto vm =
+        VirtualMachineWithNodeExtendedDto vm =
             context.getApi().getInfrastructureClient().getVirtualMachine(target, virtualMachineId);
         return wrap(context, VirtualMachine.class, vm);
     }

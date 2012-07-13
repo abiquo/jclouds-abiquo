@@ -49,7 +49,6 @@ import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
-import com.abiquo.server.core.cloud.VirtualMachineDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
@@ -69,7 +68,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.TypeLiteral;
 
 /**
- * Adds high level functionality to {@link VirtualMachineDto}.
+ * Adds high level functionality to {@link VirtualMachineWithNodeExtendedDto}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
@@ -230,9 +229,9 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
 
-        ParseXMLWithJAXB<VirtualMachineDto> parser =
-            new ParseXMLWithJAXB<VirtualMachineDto>(utils.getXml(),
-                TypeLiteral.get(VirtualMachineDto.class));
+        ParseXMLWithJAXB<VirtualMachineWithNodeExtendedDto> parser =
+            new ParseXMLWithJAXB<VirtualMachineWithNodeExtendedDto>(utils.getXml(),
+                TypeLiteral.get(VirtualMachineWithNodeExtendedDto.class));
 
         target = parser.apply(response);
     }

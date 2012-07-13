@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
+import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertFalse;
@@ -46,6 +47,22 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 @Test(groups = "live")
 public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
 {
+    public void testHasDataFromNode()
+    {
+        assertNotNull(env.virtualMachine.getNameLabel());
+        assertNotNull(env.virtualMachine.getInternalName());
+        assertNotNull(env.virtualMachine.getOwnerName());
+    }
+
+    public void testUpdateInfoFromNode()
+    {
+        env.virtualMachine.setNameLabel(PREFIX + "-label-updated");
+        env.virtualMachine.update();
+        env.virtualMachine.refresh();
+
+        assertEquals(env.virtualMachine.getNameLabel(), PREFIX + "-label-updated");
+    }
+
     public void testGetTasks()
     {
         List<AsyncTask> tasks = env.virtualMachine.listTasks();

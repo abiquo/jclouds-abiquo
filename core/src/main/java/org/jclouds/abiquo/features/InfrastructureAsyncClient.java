@@ -65,6 +65,7 @@ import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.RemoteServiceType;
 import com.abiquo.server.core.cloud.HypervisorTypesDto;
+import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
@@ -702,9 +703,9 @@ public interface InfrastructureAsyncClient
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
-    @Consumes(VirtualMachineDto.BASE_MEDIA_TYPE)
+    @Consumes(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<VirtualMachineDto> getVirtualMachine(
+    ListenableFuture<VirtualMachineWithNodeExtendedDto> getVirtualMachine(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) MachineDto machine,
         @BinderParam(AppendToPath.class) Integer virtualMachineId);
 
