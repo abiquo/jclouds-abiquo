@@ -329,19 +329,6 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
 
     public List<Ip< ? , ? >> listAttachedNics()
     {
-        // First refresh the dto and its links
-        RESTLink link =
-            checkNotNull(target.getEditLink(), ValidationErrors.MISSING_REQUIRED_LINK + " edit");
-
-        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-        HttpResponse response = utils.getAbiquoHttpClient().get(link);
-
-        ParseXMLWithJAXB<VirtualMachineDto> parser =
-            new ParseXMLWithJAXB<VirtualMachineDto>(utils.getXml(),
-                TypeLiteral.get(VirtualMachineDto.class));
-
-        target = parser.apply(response);
-
         ListAttachedNics strategy =
             context.getUtils().getInjector().getInstance(ListAttachedNics.class);
         return Lists.newLinkedList(strategy.execute(this));
@@ -501,8 +488,10 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
                 ValidationErrors.MISSING_REQUIRED_LINK + ParentLinkName.NETWORK_CONFIGURATIONS);
 
         // Remove the gateway configuration and the current nics
-        Iterables.removeIf(target.getLinks(),
-            Predicates.or(LinkPredicates.isNic(), LinkPredicates.rel("network_configuration")));
+        Iterables.removeIf(
+            target.getLinks(),
+            Predicates.or(LinkPredicates.isNic(),
+                LinkPredicates.rel(ParentLinkName.NETWORK_GATEWAY)));
 
         // Add the given nics in the appropriate order
         if (ips != null)
@@ -519,16 +508,31 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineDto>
         // Set the new network configuration
         if (gatewayNetwork != null)
         {
-            target.addLink(new RESTLink("network_configuration", configLink.getHref() + "/"
+            target.addLink(new RESTLink(ParentLinkName.NETWORK_GATEWAY, configLink.getHref() + "/"
                 + gatewayNetwork.getId()));
         }
 
         return update();
     }
 
+    // TODO: Get current gateway network
+
     public void setGatewayNetwork(final Network< ? > network)
     {
         context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
+
+        // First refresh the target and its links
+        RESTLink link =
+            checkNotNull(target.getEditLink(), ValidationErrors.MISSING_REQUIRED_LINK + " edit");
+
+        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
+        HttpResponse response = utils.getAbiquoHttpClient().get(link);
+
+        ParseXMLWithJAXB<VirtualMachineDto> parser =
+            new ParseXMLWithJAXB<VirtualMachineDto>(utils.getXml(),
+                TypeLiteral.get(VirtualMachineDto.class));
+
+        target = parser.apply(response);
     }
 
     /**

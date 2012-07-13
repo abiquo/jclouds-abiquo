@@ -61,4 +61,6 @@ public class ParentLinkName
     public final static String UNMANAGED_NETWORK = "unmanagednetwork";
 
     public final static String NETWORK_CONFIGURATIONS = "configurations";
+
+    public final static String NETWORK_GATEWAY = "network_configuration";
 }

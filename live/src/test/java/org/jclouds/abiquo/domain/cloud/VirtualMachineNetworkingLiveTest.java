@@ -33,6 +33,7 @@ import org.jclouds.abiquo.domain.network.ExternalIp;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PublicIp;
+import org.jclouds.abiquo.domain.network.PublicNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
@@ -123,7 +124,7 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(nics.get(1).getId(), privateIp.getId());
     }
 
-    @Test(dependsOnMethods = {"testAttachPublicIp", "testAttachPrivateIp"})
+    @Test(dependsOnMethods = "testAttachPrivateIp")
     public void testAttachExternalIp()
     {
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
@@ -140,7 +141,7 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(nics.get(2).getId(), externalIp.getId());
     }
 
-    @Test(dependsOnMethods = {"testAttachPublicIp", "testAttachPrivateIp", "testAttachExternalIp"})
+    @Test(dependsOnMethods = "testAttachExternalIp")
     public void testReorderNics()
     {
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
@@ -155,8 +156,7 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(nics.get(2).getId(), publicIpCloud.getId());
     }
 
-    @Test(dependsOnMethods = {"testAttachPublicIp", "testAttachPrivateIp", "testAttachExternalIp",
-    "testReorderNics"})
+    @Test(dependsOnMethods = "testReorderNics")
     public void testDetachSingleNic()
     {
         List<Ip< ? , ? >> nics = env.virtualMachine.listAttachedNics();
@@ -168,6 +168,16 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
         assertEquals(nics.size(), 2);
         assertEquals(nics.get(0).getId(), privateIp.getId());
         assertEquals(nics.get(1).getId(), publicIpCloud.getId());
+    }
+
+    @Test(dependsOnMethods = "testDetachSingleNic")
+    public void testSetDefaultGateway()
+    {
+        PublicNetwork network = publicIpCloud.getNetwork();
+        env.virtualMachine.setGatewayNetwork(network);
+
+        Integer configId = env.virtualMachine.unwrap().getIdFromLink("network_configuration");
+        assertEquals(configId, network.getId());
     }
 
     public void testDetachAllNics()
