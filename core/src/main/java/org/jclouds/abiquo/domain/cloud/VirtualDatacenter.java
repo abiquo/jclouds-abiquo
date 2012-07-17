@@ -44,6 +44,7 @@ import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.NetworkType;
+import com.abiquo.model.enumerator.StatefulInclusion;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualAppliancesDto;
@@ -456,6 +457,21 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
                 .getCloudClient()
                 .listAvailableTemplates(target,
                     VirtualMachineTemplateOptions.builder().idTemplate(id).build());
+
+        return templates.getCollection().isEmpty() ? null : //
+            wrap(context, VirtualMachineTemplate.class, templates.getCollection().get(0));
+    }
+
+    public VirtualMachineTemplate getAvailablePersistentTemplate(final Integer id)
+    {
+        VirtualMachineTemplatesDto templates =
+            context
+                .getApi()
+                .getCloudClient()
+                .listAvailableTemplates(
+                    target,
+                    VirtualMachineTemplateOptions.builder().idTemplate(id)
+                        .persistent(StatefulInclusion.ALL).build());
 
         return templates.getCollection().isEmpty() ? null : //
             wrap(context, VirtualMachineTemplate.class, templates.getCollection().get(0));
