@@ -65,8 +65,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod("listVirtualMachineTemplates",
                 Integer.class, Integer.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
-            processor.createRequest(method, 1, 1);
+        GeneratedHttpRequest request = processor.createRequest(method, 1, 1);
 
         assertRequestLineEquals(
             request,
@@ -88,7 +87,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod("listVirtualMachineTemplates",
                 Integer.class, Integer.class, VirtualMachineTemplateOptions.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, 1, 1, VirtualMachineTemplateOptions.builder()
                 .hypervisorType(HypervisorType.XENSERVER).categoryName("Firewalls").build());
 
@@ -112,8 +111,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod("getVirtualMachineTemplate",
                 Integer.class, Integer.class, Integer.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
-            processor.createRequest(method, 1, 1, 1);
+        GeneratedHttpRequest request = processor.createRequest(method, 1, 1, 1);
 
         assertRequestLineEquals(
             request,
@@ -135,7 +133,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod("updateVirtualMachineTemplate",
                 VirtualMachineTemplateDto.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
 
         assertRequestLineEquals(
@@ -159,7 +157,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod("deleteVirtualMachineTemplate",
                 VirtualMachineTemplateDto.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
 
         assertRequestLineEquals(
@@ -182,7 +180,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
             VirtualMachineTemplateAsyncApi.class.getMethod(
                 "createPersistentVirtualMachineTemplate", DatacenterRepositoryDto.class,
                 VirtualMachineTemplatePersistentDto.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, TemplateResources.datacenterRepositoryPut(),
                 TemplateResources.persistentData());
 
@@ -210,7 +208,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
             VirtualMachineTemplateAsyncApi.class.getMethod("requestConversion",
                 VirtualMachineTemplateDto.class, DiskFormatType.class, ConversionDto.class);
 
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
                 DiskFormatType.VMDK_STREAM_OPTIMIZED, TemplateResources.conversionPut());
 
@@ -235,7 +233,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod("listConversions",
                 VirtualMachineTemplateDto.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
 
         assertRequestLineEquals(
@@ -257,7 +255,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod("listConversions",
                 VirtualMachineTemplateDto.class, ConversionOptions.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
                 ConversionOptions.builder().hypervisorType(HypervisorType.XENSERVER)
                     .conversionState(ConversionState.FINISHED).build());
@@ -281,7 +279,7 @@ public class VirtualMachineTemplateAsyncApiTest extends
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod("getConversion",
                 VirtualMachineTemplateDto.class, DiskFormatType.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
                 DiskFormatType.RAW);
 

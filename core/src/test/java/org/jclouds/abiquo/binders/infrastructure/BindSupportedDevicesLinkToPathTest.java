@@ -67,11 +67,10 @@ public class BindSupportedDevicesLinkToPathTest
             InfrastructureAsyncApi.class.getMethod("listSupportedStorageDevices",
                 DatacenterDto.class);
 
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
-            GeneratedHttpRequest.<InfrastructureAsyncApi> requestBuilder()
-                .declaring(InfrastructureAsyncApi.class).javaMethod(withEndpointLink)
-                .args(ImmutableList.<Object> of(datacenter)).method(HttpMethod.GET)
-                .endpoint(URI.create("http://foo/bar")).build();
+        GeneratedHttpRequest request =
+            GeneratedHttpRequest.builder().declaring(InfrastructureAsyncApi.class)
+                .javaMethod(withEndpointLink).args(ImmutableList.<Object> of(datacenter))
+                .method(HttpMethod.GET).endpoint(URI.create("http://foo/bar")).build();
 
         assertEquals(binder.getNewEndpoint(request, datacenter), "http://foo/bar/action/supported");
     }
@@ -87,11 +86,10 @@ public class BindSupportedDevicesLinkToPathTest
             InfrastructureAsyncApi.class.getMethod("listSupportedStorageDevices",
                 DatacenterDto.class);
 
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
-            GeneratedHttpRequest.<InfrastructureAsyncApi> requestBuilder()
-                .declaring(InfrastructureAsyncApi.class).javaMethod(withEndpointLink)
-                .args(ImmutableList.<Object> of(datacenter)).method(HttpMethod.GET)
-                .endpoint(URI.create("http://foo/bar")).build();
+        GeneratedHttpRequest request =
+            GeneratedHttpRequest.builder().declaring(InfrastructureAsyncApi.class)
+                .javaMethod(withEndpointLink).args(ImmutableList.<Object> of(datacenter))
+                .method(HttpMethod.GET).endpoint(URI.create("http://foo/bar")).build();
 
         assertEquals(binder.getNewEndpoint(request, datacenter), "http://foo/bar/action/supported");
     }

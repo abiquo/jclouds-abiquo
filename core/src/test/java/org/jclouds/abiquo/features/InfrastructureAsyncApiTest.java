@@ -94,15 +94,14 @@ import com.google.inject.TypeLiteral;
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class InfrastructureAsyncApiTest extends
-    BaseAbiquoAsyncApiTest<InfrastructureAsyncApi>
+public class InfrastructureAsyncApiTest extends BaseAbiquoAsyncApiTest<InfrastructureAsyncApi>
 {
     /*********************** Datacenter ***********************/
 
     public void testListDatacenters() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("listDatacenters");
-        GeneratedHttpRequest<InfrastructureAsyncApi> request = processor.createRequest(method);
+        GeneratedHttpRequest request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/datacenters HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + DatacentersDto.BASE_MEDIA_TYPE + "\n");
@@ -119,7 +118,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("createDatacenter", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/admin/datacenters HTTP/1.1");
@@ -137,8 +136,7 @@ public class InfrastructureAsyncApiTest extends
     public void testGetDatacenter() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("getDatacenter", Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
-            processor.createRequest(method, 1);
+        GeneratedHttpRequest request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/datacenters/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + DatacenterDto.BASE_MEDIA_TYPE + "\n");
@@ -155,7 +153,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("updateDatacenter", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/datacenters/1 HTTP/1.1");
@@ -174,7 +172,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("deleteDatacenter", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/datacenters/1 HTTP/1.1");
@@ -191,9 +189,8 @@ public class InfrastructureAsyncApiTest extends
     public void testListLimitsDatacenter() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method =
-            InfrastructureAsyncApi.class.getMethod("listLimits", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        Method method = InfrastructureAsyncApi.class.getMethod("listLimits", DatacenterDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -217,7 +214,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getHypervisorTypeFromMachine",
                 DatacenterDto.class, DatacenterOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(),
                 DatacenterOptions.builder().ip("10.60.1.120").build());
 
@@ -238,7 +235,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("getHypervisorTypes", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -259,7 +256,7 @@ public class InfrastructureAsyncApiTest extends
     public void testListRacks() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("listRacks", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -277,9 +274,9 @@ public class InfrastructureAsyncApiTest extends
     public void testCreateRack() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncApi.class.getMethod("createRack", DatacenterDto.class,
-                RackDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class
+                .getMethod("createRack", DatacenterDto.class, RackDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(),
                 InfrastructureResources.rackPost());
 
@@ -299,9 +296,8 @@ public class InfrastructureAsyncApiTest extends
     public void testGetRack() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncApi.class
-                .getMethod("getRack", DatacenterDto.class, Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("getRack", DatacenterDto.class, Integer.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), 1);
 
         assertRequestLineEquals(request,
@@ -319,7 +315,7 @@ public class InfrastructureAsyncApiTest extends
     public void testUpdateRack() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("updateRack", RackDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.rackPut());
 
         assertRequestLineEquals(request,
@@ -338,7 +334,7 @@ public class InfrastructureAsyncApiTest extends
     public void testDeleteRack() throws SecurityException, NoSuchMethodException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("deleteRack", RackDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.rackPut());
 
         assertRequestLineEquals(request,
@@ -359,7 +355,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listManagedRacks", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -380,7 +376,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("createManagedRack", DatacenterDto.class,
                 UcsRackDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(),
                 InfrastructureResources.managedRackPost());
 
@@ -402,7 +398,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getManagedRack", DatacenterDto.class,
                 Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), 1);
 
         assertRequestLineEquals(request,
@@ -423,7 +419,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("updateManagedRack", UcsRackDto.class);
 
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut());
 
         assertRequestLineEquals(request,
@@ -444,7 +440,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listServiceProfiles", UcsRackDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut());
 
         assertRequestLineEquals(request,
@@ -467,7 +463,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listServiceProfiles", UcsRackDto.class,
                 FilterOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(), options);
 
         assertRequestLineEquals(request,
@@ -487,7 +483,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listOrganizations", UcsRackDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut());
 
         assertRequestLineEquals(request,
@@ -510,7 +506,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listOrganizations", UcsRackDto.class,
                 FilterOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(), options);
 
         assertRequestLineEquals(request,
@@ -529,9 +525,8 @@ public class InfrastructureAsyncApiTest extends
         IOException
     {
         Method method =
-            InfrastructureAsyncApi.class.getMethod("listServiceProfileTemplates",
-                UcsRackDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("listServiceProfileTemplates", UcsRackDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut());
 
         assertRequestLineEquals(request,
@@ -552,9 +547,9 @@ public class InfrastructureAsyncApiTest extends
         FilterOptions options = FilterOptions.builder().ascendant(true).build();
 
         Method method =
-            InfrastructureAsyncApi.class.getMethod("listServiceProfileTemplates",
-                UcsRackDto.class, FilterOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("listServiceProfileTemplates", UcsRackDto.class,
+                FilterOptions.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(), options);
 
         assertRequestLineEquals(request,
@@ -575,7 +570,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("associateLogicServer", UcsRackDto.class,
                 LogicServerDto.class, OrganizationDto.class, String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(),
                 InfrastructureResources.logicServerPut(),
                 InfrastructureResources.organizationPut(), "blade");
@@ -599,7 +594,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("associateTemplate", UcsRackDto.class,
                 LogicServerDto.class, OrganizationDto.class, String.class, String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(),
                 InfrastructureResources.logicServerPut(),
                 InfrastructureResources.organizationPut(), "newname", "blade");
@@ -624,7 +619,7 @@ public class InfrastructureAsyncApiTest extends
             InfrastructureAsyncApi.class.getMethod("cloneAndAssociateLogicServer",
                 UcsRackDto.class, LogicServerDto.class, OrganizationDto.class, String.class,
                 String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(),
                 InfrastructureResources.logicServerPut(),
                 InfrastructureResources.organizationPut(), "newname", "blade");
@@ -648,7 +643,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("dissociateLogicServer", UcsRackDto.class,
                 LogicServerDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor
                 .createRequest(method, InfrastructureResources.managedRackPut(),
                     InfrastructureResources.logicServerPut(),
@@ -672,7 +667,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("cloneLogicServer", UcsRackDto.class,
                 LogicServerDto.class, OrganizationDto.class, String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(),
                 InfrastructureResources.logicServerPut(),
                 InfrastructureResources.organizationPut(), "name");
@@ -696,7 +691,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("deleteLogicServer", UcsRackDto.class,
                 LogicServerDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(),
                 InfrastructureResources.logicServerPut());
 
@@ -716,7 +711,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listFsms", UcsRackDto.class, String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.managedRackPut(), "dn");
 
         assertRequestLineEquals(request,
@@ -738,7 +733,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listRemoteServices", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -759,7 +754,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("createRemoteService", DatacenterDto.class,
                 RemoteServiceDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(),
                 InfrastructureResources.remoteServicePost());
 
@@ -782,7 +777,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getRemoteService", DatacenterDto.class,
                 RemoteServiceType.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(),
                 RemoteServiceType.STORAGE_SYSTEM_MONITOR);
 
@@ -802,9 +797,8 @@ public class InfrastructureAsyncApiTest extends
         IOException
     {
         Method method =
-            InfrastructureAsyncApi.class
-                .getMethod("updateRemoteService", RemoteServiceDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("updateRemoteService", RemoteServiceDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.remoteServicePut());
 
         assertRequestLineEquals(request,
@@ -823,9 +817,8 @@ public class InfrastructureAsyncApiTest extends
     public void testDeleteRemoteService() throws SecurityException, NoSuchMethodException
     {
         Method method =
-            InfrastructureAsyncApi.class
-                .getMethod("deleteRemoteService", RemoteServiceDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("deleteRemoteService", RemoteServiceDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.remoteServicePut());
 
         assertRequestLineEquals(request,
@@ -845,7 +838,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("isAvailable", RemoteServiceDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.remoteServicePut());
 
         String checkUri = InfrastructureResources.remoteServicePut().searchLink("check").getHref();
@@ -868,7 +861,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("discoverSingleMachine", DatacenterDto.class,
                 String.class, HypervisorType.class, String.class, String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
                 HypervisorType.XENSERVER, "user", "pass");
 
@@ -894,7 +887,7 @@ public class InfrastructureAsyncApiTest extends
             InfrastructureAsyncApi.class.getMethod("discoverSingleMachine", DatacenterDto.class,
                 String.class, HypervisorType.class, String.class, String.class,
                 MachineOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
                 HypervisorType.KVM, "user", "pass", MachineOptions.builder().port(8889).build());
 
@@ -920,7 +913,7 @@ public class InfrastructureAsyncApiTest extends
             InfrastructureAsyncApi.class.getMethod("discoverSingleMachine", DatacenterDto.class,
                 String.class, HypervisorType.class, String.class, String.class,
                 MachineOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
                 HypervisorType.KVM, "user", "pass", MachineOptions.builder().build());
 
@@ -943,10 +936,9 @@ public class InfrastructureAsyncApiTest extends
         NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncApi.class.getMethod("discoverMultipleMachines",
-                DatacenterDto.class, String.class, String.class, HypervisorType.class,
-                String.class, String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("discoverMultipleMachines", DatacenterDto.class,
+                String.class, String.class, HypervisorType.class, String.class, String.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
                 "10.60.1.250", HypervisorType.XENSERVER, "user", "pass");
 
@@ -970,10 +962,10 @@ public class InfrastructureAsyncApiTest extends
         NoSuchMethodException
     {
         Method method =
-            InfrastructureAsyncApi.class.getMethod("discoverMultipleMachines",
-                DatacenterDto.class, String.class, String.class, HypervisorType.class,
-                String.class, String.class, MachineOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("discoverMultipleMachines", DatacenterDto.class,
+                String.class, String.class, HypervisorType.class, String.class, String.class,
+                MachineOptions.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "80.80.80.80",
                 "80.80.80.86", HypervisorType.KVM, "user", "pass",
                 MachineOptions.builder().port(8889).build());
@@ -1000,7 +992,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("checkMachineState", DatacenterDto.class,
                 String.class, HypervisorType.class, String.class, String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
                 HypervisorType.XENSERVER, "user", "pass");
 
@@ -1026,7 +1018,7 @@ public class InfrastructureAsyncApiTest extends
             InfrastructureAsyncApi.class.getMethod("checkMachineState", DatacenterDto.class,
                 String.class, HypervisorType.class, String.class, String.class,
                 MachineOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
                 HypervisorType.XENSERVER, "user", "pass", MachineOptions.builder().port(8889)
                     .build());
@@ -1049,7 +1041,7 @@ public class InfrastructureAsyncApiTest extends
     public void testListMachines() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("listMachines", RackDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.rackPut());
 
         assertRequestLineEquals(request,
@@ -1068,7 +1060,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("getMachine", RackDto.class, Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.rackPut(), 1);
 
         assertRequestLineEquals(request,
@@ -1089,7 +1081,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("checkMachineState", MachineDto.class,
                 boolean.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut(), true);
 
         assertRequestLineEquals(
@@ -1108,9 +1100,9 @@ public class InfrastructureAsyncApiTest extends
     public void testCreateMachine() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncApi.class.getMethod("createMachine", RackDto.class,
-                MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class
+                .getMethod("createMachine", RackDto.class, MachineDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.rackPut(),
                 InfrastructureResources.machinePost());
 
@@ -1129,9 +1121,8 @@ public class InfrastructureAsyncApiTest extends
 
     public void testUpdateMachine() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            InfrastructureAsyncApi.class.getMethod("updateMachine", MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        Method method = InfrastructureAsyncApi.class.getMethod("updateMachine", MachineDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
@@ -1149,9 +1140,8 @@ public class InfrastructureAsyncApiTest extends
 
     public void testDeleteMachine() throws SecurityException, NoSuchMethodException
     {
-        Method method =
-            InfrastructureAsyncApi.class.getMethod("deleteMachine", MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        Method method = InfrastructureAsyncApi.class.getMethod("deleteMachine", MachineDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
@@ -1173,7 +1163,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getVirtualMachine", MachineDto.class,
                 Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut(), 1);
 
         assertRequestLineEquals(request,
@@ -1192,7 +1182,7 @@ public class InfrastructureAsyncApiTest extends
     public void testPowerOff() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("powerOff", MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
@@ -1210,7 +1200,7 @@ public class InfrastructureAsyncApiTest extends
     public void testPowerOn() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("powerOn", MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
@@ -1227,9 +1217,8 @@ public class InfrastructureAsyncApiTest extends
 
     public void testGetLogicServer() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            InfrastructureAsyncApi.class.getMethod("getLogicServer", MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        Method method = InfrastructureAsyncApi.class.getMethod("getLogicServer", MachineDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
@@ -1247,7 +1236,7 @@ public class InfrastructureAsyncApiTest extends
     public void testLedOn() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("ledOn", MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
@@ -1265,7 +1254,7 @@ public class InfrastructureAsyncApiTest extends
     public void testLedOff() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("ledOff", MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
@@ -1282,9 +1271,8 @@ public class InfrastructureAsyncApiTest extends
 
     public void testGetLocatorLed() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            InfrastructureAsyncApi.class.getMethod("getLocatorLed", MachineDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        Method method = InfrastructureAsyncApi.class.getMethod("getLocatorLed", MachineDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut());
 
         assertRequestLineEquals(request,
@@ -1308,7 +1296,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listVirtualMachinesByMachine",
                 MachineDto.class, MachineOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.machinePut(), options);
 
         assertRequestLineEquals(
@@ -1332,7 +1320,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listStorageDevices", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -1353,7 +1341,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listSupportedStorageDevices",
                 DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -1375,7 +1363,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("createStorageDevice", DatacenterDto.class,
                 StorageDeviceDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(),
                 InfrastructureResources.storageDevicePost());
 
@@ -1396,9 +1384,8 @@ public class InfrastructureAsyncApiTest extends
     public void testDeleteStorageDevice() throws SecurityException, NoSuchMethodException
     {
         Method method =
-            InfrastructureAsyncApi.class
-                .getMethod("deleteStorageDevice", StorageDeviceDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("deleteStorageDevice", StorageDeviceDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storageDevicePut());
 
         assertRequestLineEquals(request,
@@ -1417,9 +1404,8 @@ public class InfrastructureAsyncApiTest extends
         IOException
     {
         Method method =
-            InfrastructureAsyncApi.class
-                .getMethod("updateStorageDevice", StorageDeviceDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("updateStorageDevice", StorageDeviceDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storageDevicePut());
 
         assertRequestLineEquals(request,
@@ -1440,7 +1426,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getStorageDevice", DatacenterDto.class,
                 Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), 1);
 
         assertRequestLineEquals(request,
@@ -1460,7 +1446,7 @@ public class InfrastructureAsyncApiTest extends
     public void testListTiers() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("listTiers", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -1478,7 +1464,7 @@ public class InfrastructureAsyncApiTest extends
     public void testUpdateTier() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("updateTier", TierDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.tierPut());
 
         assertRequestLineEquals(request,
@@ -1497,9 +1483,8 @@ public class InfrastructureAsyncApiTest extends
     public void testGetTier() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncApi.class
-                .getMethod("getTier", DatacenterDto.class, Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class.getMethod("getTier", DatacenterDto.class, Integer.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), 1);
 
         assertRequestLineEquals(request,
@@ -1522,7 +1507,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listStoragePools", StorageDeviceDto.class,
                 StoragePoolOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storageDevicePut(),
                 StoragePoolOptions.builder().sync(true).build());
 
@@ -1541,9 +1526,8 @@ public class InfrastructureAsyncApiTest extends
     public void testListStoragePoolsFromTier() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method =
-            InfrastructureAsyncApi.class.getMethod("listStoragePools", TierDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        Method method = InfrastructureAsyncApi.class.getMethod("listStoragePools", TierDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.tierPut(), StoragePoolOptions
                 .builder().sync(true).build());
 
@@ -1565,7 +1549,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listStoragePools", StorageDeviceDto.class,
                 StoragePoolOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storageDevicePut(),
                 StoragePoolOptions.builder().build());
 
@@ -1587,7 +1571,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("createStoragePool", StorageDeviceDto.class,
                 StoragePoolDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storageDevicePut(),
                 InfrastructureResources.storagePoolPost());
 
@@ -1609,7 +1593,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("updateStoragePool", StoragePoolDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storagePoolPut());
 
         assertRequestLineEquals(request,
@@ -1629,7 +1613,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("deleteStoragePool", StoragePoolDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storagePoolPut());
 
         assertRequestLineEquals(request,
@@ -1649,7 +1633,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getStoragePool", StorageDeviceDto.class,
                 String.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storageDevicePut(),
                 InfrastructureResources.storagePoolPut().getIdStorage());
 
@@ -1671,7 +1655,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("refreshStoragePool", StoragePoolDto.class,
                 StoragePoolOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.storagePoolPut(),
                 StoragePoolOptions.builder().sync(true).build());
 
@@ -1692,9 +1676,8 @@ public class InfrastructureAsyncApiTest extends
 
     public void testListNetworks() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            InfrastructureAsyncApi.class.getMethod("listNetworks", DatacenterDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        Method method = InfrastructureAsyncApi.class.getMethod("listNetworks", DatacenterDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut());
 
         assertRequestLineEquals(request,
@@ -1717,7 +1700,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listNetworks", DatacenterDto.class,
                 NetworkOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), options);
 
         assertRequestLineEquals(request,
@@ -1735,9 +1718,9 @@ public class InfrastructureAsyncApiTest extends
     public void testGetNetworks() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            InfrastructureAsyncApi.class.getMethod("getNetwork", DatacenterDto.class,
-                Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            InfrastructureAsyncApi.class
+                .getMethod("getNetwork", DatacenterDto.class, Integer.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), 1);
 
         assertRequestLineEquals(request,
@@ -1757,7 +1740,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("createNetwork", DatacenterDto.class,
                 VLANNetworkDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(),
                 NetworkResources.vlanPost());
 
@@ -1778,7 +1761,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("updateNetwork", VLANNetworkDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.publicNetworkPut());
 
         assertRequestLineEquals(request,
@@ -1798,7 +1781,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("deleteNetwork", VLANNetworkDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.publicNetworkPut());
 
         assertRequestLineEquals(request,
@@ -1819,7 +1802,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("checkTagAvailability", DatacenterDto.class,
                 Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), 2);
 
         assertRequestLineEquals(request,
@@ -1841,7 +1824,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listPublicIps", VLANNetworkDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.publicNetworkPut());
 
         assertRequestLineEquals(request,
@@ -1863,7 +1846,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listPublicIps", VLANNetworkDto.class,
                 IpOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.publicNetworkPut(), options);
 
         assertRequestLineEquals(request,
@@ -1883,7 +1866,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getPublicIp", VLANNetworkDto.class,
                 Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.publicNetworkPut(), 1);
 
         assertRequestLineEquals(request,
@@ -1902,7 +1885,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listExternalIps", VLANNetworkDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.externalNetworkPut());
 
         assertRequestLineEquals(request,
@@ -1924,7 +1907,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listExternalIps", VLANNetworkDto.class,
                 IpOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.externalNetworkPut(), options);
 
         assertRequestLineEquals(
@@ -1945,7 +1928,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getExternalIp", VLANNetworkDto.class,
                 Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.externalNetworkPut(), 1);
 
         assertRequestLineEquals(request,
@@ -1964,7 +1947,7 @@ public class InfrastructureAsyncApiTest extends
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("listUnmanagedIps", VLANNetworkDto.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.unmanagedNetworkPut());
 
         assertRequestLineEquals(request,
@@ -1986,7 +1969,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("listUnmanagedIps", VLANNetworkDto.class,
                 IpOptions.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.unmanagedNetworkPut(), options);
 
         assertRequestLineEquals(
@@ -2007,7 +1990,7 @@ public class InfrastructureAsyncApiTest extends
         Method method =
             InfrastructureAsyncApi.class.getMethod("getUnmanagedIp", VLANNetworkDto.class,
                 Integer.class);
-        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, NetworkResources.externalNetworkPut(), 1);
 
         assertRequestLineEquals(request,

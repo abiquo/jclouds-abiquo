@@ -42,7 +42,7 @@ public class EventAsyncApiTest extends BaseAbiquoAsyncApiTest<EventAsyncApi>
     public void testListEvents() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = EventAsyncApi.class.getMethod("listEvents");
-        GeneratedHttpRequest<EventAsyncApi> request = processor.createRequest(method);
+        GeneratedHttpRequest request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/events HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + EventsDto.BASE_MEDIA_TYPE + "\n");

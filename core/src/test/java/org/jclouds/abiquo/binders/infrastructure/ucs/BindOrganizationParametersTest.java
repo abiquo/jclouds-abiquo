@@ -27,7 +27,6 @@ import org.jclouds.http.HttpRequest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.OrganizationDto;
-import com.sun.jersey.api.uri.UriBuilderImpl;
 
 /**
  * Unit tests for the {@link BindOrganizationParameters} binder.
@@ -40,7 +39,7 @@ public class BindOrganizationParametersTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindOrganizationParameters binder = new BindOrganizationParameters(new UriBuilderImpl());
+        BindOrganizationParameters binder = new BindOrganizationParameters();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -49,7 +48,7 @@ public class BindOrganizationParametersTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindOrganizationParameters binder = new BindOrganizationParameters(new UriBuilderImpl());
+        BindOrganizationParameters binder = new BindOrganizationParameters();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -58,7 +57,7 @@ public class BindOrganizationParametersTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testBindLogicServerWithEmptyName()
     {
-        BindOrganizationParameters binder = new BindOrganizationParameters(new UriBuilderImpl());
+        BindOrganizationParameters binder = new BindOrganizationParameters();
         OrganizationDto dto = new OrganizationDto();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
@@ -67,7 +66,7 @@ public class BindOrganizationParametersTest
 
     public void testBindLogicServer()
     {
-        BindOrganizationParameters binder = new BindOrganizationParameters(new UriBuilderImpl());
+        BindOrganizationParameters binder = new BindOrganizationParameters();
         OrganizationDto dto = new OrganizationDto();
         dto.setDn("org");
         HttpRequest request =

@@ -51,7 +51,7 @@ public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi>
         IOException
     {
         Method method = TaskAsyncApi.class.getMethod("getTask", RESTLink.class);
-        GeneratedHttpRequest<TaskAsyncApi> request =
+        GeneratedHttpRequest request =
             processor
                 .createRequest(
                     method,
@@ -74,9 +74,8 @@ public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi>
     public void testListTasksVirtualMachine() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method =
-            TaskAsyncApi.class.getMethod("listTasks", SingleResourceTransportDto.class);
-        GeneratedHttpRequest<TaskAsyncApi> request =
+        Method method = TaskAsyncApi.class.getMethod("listTasks", SingleResourceTransportDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, CloudResources.virtualMachinePut());
 
         assertRequestLineEquals(
@@ -96,7 +95,7 @@ public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi>
         NoSuchMethodException, IOException
     {
         Method method = TaskAsyncApi.class.getMethod("getTask", RESTLink.class);
-        GeneratedHttpRequest<TaskAsyncApi> request =
+        GeneratedHttpRequest request =
             processor
                 .createRequest(
                     method,
@@ -119,9 +118,8 @@ public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi>
     public void testListTasksVirtualMachineTemplate() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        Method method =
-            TaskAsyncApi.class.getMethod("listTasks", SingleResourceTransportDto.class);
-        GeneratedHttpRequest<TaskAsyncApi> request =
+        Method method = TaskAsyncApi.class.getMethod("listTasks", SingleResourceTransportDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
 
         assertRequestLineEquals(

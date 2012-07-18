@@ -22,12 +22,10 @@ package org.jclouds.abiquo.binders;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.UriBuilder;
+import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.options.QueryOptions;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
 
 /**
@@ -36,18 +34,11 @@ import org.jclouds.rest.Binder;
  * @author Francesc Montserrat
  * @author Ignasi Barrera
  */
-// This class cannot be singleton. uriBuilder is not thread-save!
+@Singleton
 public class AppendOptionsToPath implements Binder
 {
-    /** The configured URI builder. */
-    private UriBuilder uriBuilder;
 
-    @Inject
-    public AppendOptionsToPath(final UriBuilder uriBuilder)
-    {
-        this.uriBuilder = uriBuilder;
-    }
-
+    @SuppressWarnings("unchecked")
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
@@ -55,6 +46,6 @@ public class AppendOptionsToPath implements Binder
             "this binder is only valid for QueryOptions objects");
         QueryOptions options = (QueryOptions) input;
 
-        return ModifyRequest.addQueryParams(request, options.getOptions(), uriBuilder);
+        return (R) request.toBuilder().addQueryParams(options.getOptions()).build();
     }
 }

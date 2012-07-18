@@ -66,16 +66,19 @@ public class BindMoveVolumeToPathTest
             "http://localhost/api/cloud/virtualdatacenters/1/volumes/1/action/move");
     }
 
-    private static GeneratedHttpRequest< ? > generatedHttpRequest() throws SecurityException,
+    private static GeneratedHttpRequest generatedHttpRequest() throws SecurityException,
         NoSuchMethodException
     {
         Method withEndpointLink =
             CloudAsyncApi.class.getMethod("moveVolume", VolumeManagementDto.class,
                 VirtualDatacenterDto.class);
-        return GeneratedHttpRequest.<CloudAsyncApi> requestBuilder().declaring(
-            CloudAsyncApi.class).javaMethod(withEndpointLink).args(
-            ImmutableList.<Object> of(CloudResources.volumePut(), CloudResources
-                .virtualDatacenterPut())).method(HttpMethod.POST).endpoint(
-            URI.create("http://localhost")).build();
+        return GeneratedHttpRequest
+            .builder()
+            .declaring(CloudAsyncApi.class)
+            .javaMethod(withEndpointLink)
+            .args(
+                ImmutableList.<Object> of(CloudResources.volumePut(),
+                    CloudResources.virtualDatacenterPut())).method(HttpMethod.POST)
+            .endpoint(URI.create("http://localhost")).build();
     }
 }

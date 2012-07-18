@@ -22,6 +22,7 @@ package org.jclouds.abiquo.config;
 import static org.jclouds.Constants.PROPERTY_SESSION_INTERVAL;
 
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Named;
@@ -132,9 +133,8 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoApi, AbiquoAs
         final AtomicReference<AuthorizationException> authException,
         @Named(PROPERTY_SESSION_INTERVAL) final long seconds, final GetCurrentUser getCurrentUser)
     {
-        return new MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier<User>(authException,
-            seconds,
-            getCurrentUser);
+        return MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier.create(authException,
+            getCurrentUser, seconds, TimeUnit.SECONDS);
     }
 
     @Provides
@@ -145,9 +145,8 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoApi, AbiquoAs
         @Named(PROPERTY_SESSION_INTERVAL) final long seconds,
         final GetCurrentEnterprise getCurrentEnterprise)
     {
-        return new MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier<Enterprise>(authException,
-            seconds,
-            getCurrentEnterprise);
+        return MemoizedRetryOnTimeOutButNotOnAuthorizationExceptionSupplier.create(authException,
+            getCurrentEnterprise, seconds, TimeUnit.SECONDS);
     }
 
 }

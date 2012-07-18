@@ -27,7 +27,6 @@ import org.jclouds.http.HttpRequest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.LogicServerDto;
-import com.sun.jersey.api.uri.UriBuilderImpl;
 
 /**
  * Unit tests for the {@link BindLogicServerParameters} binder.
@@ -40,7 +39,7 @@ public class BindLogicServerParametersTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        BindLogicServerParameters binder = new BindLogicServerParameters(new UriBuilderImpl());
+        BindLogicServerParameters binder = new BindLogicServerParameters();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -49,7 +48,7 @@ public class BindLogicServerParametersTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        BindLogicServerParameters binder = new BindLogicServerParameters(new UriBuilderImpl());
+        BindLogicServerParameters binder = new BindLogicServerParameters();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -58,7 +57,7 @@ public class BindLogicServerParametersTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testBindLogicServerWithEmptyName()
     {
-        BindLogicServerParameters binder = new BindLogicServerParameters(new UriBuilderImpl());
+        BindLogicServerParameters binder = new BindLogicServerParameters();
         LogicServerDto dto = new LogicServerDto();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
@@ -67,7 +66,7 @@ public class BindLogicServerParametersTest
 
     public void testBindLogicServer()
     {
-        BindLogicServerParameters binder = new BindLogicServerParameters(new UriBuilderImpl());
+        BindLogicServerParameters binder = new BindLogicServerParameters();
         LogicServerDto dto = new LogicServerDto();
         dto.setName("name");
         HttpRequest request =

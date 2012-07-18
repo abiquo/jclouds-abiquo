@@ -22,11 +22,9 @@ package org.jclouds.abiquo.binders.infrastructure.ucs;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import javax.inject.Inject;
-import javax.ws.rs.core.UriBuilder;
+import javax.inject.Singleton;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
 
 import com.abiquo.server.core.infrastructure.LogicServerDto;
@@ -38,18 +36,10 @@ import com.abiquo.server.core.infrastructure.LogicServerDto;
  * @author Francesc Montserrat
  * @author Ignasi Barrera
  */
-// This class cannot be singleton. uriBuilder is not thread-save!
+@Singleton
 public class BindLogicServerParameters implements Binder
 {
-    /** The configured URI builder. */
-    private UriBuilder uriBuilder;
-
-    @Inject
-    public BindLogicServerParameters(final UriBuilder uriBuilder)
-    {
-        this.uriBuilder = uriBuilder;
-    }
-
+    @SuppressWarnings("unchecked")
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
@@ -58,6 +48,6 @@ public class BindLogicServerParameters implements Binder
 
         LogicServerDto server = (LogicServerDto) input;
 
-        return ModifyRequest.addQueryParam(request, "lsName", server.getName(), uriBuilder);
+        return (R) request.toBuilder().addQueryParam("lsName", server.getName()).build();
     }
 }

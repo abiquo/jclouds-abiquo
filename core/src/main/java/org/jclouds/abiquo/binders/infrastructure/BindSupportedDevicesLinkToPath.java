@@ -34,7 +34,7 @@ public class BindSupportedDevicesLinkToPath extends BindToPath
 {
 
     @Override
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
+    protected String getNewEndpoint(final GeneratedHttpRequest gRequest, final Object input)
     {
         return super.getNewEndpoint(gRequest, input) + "/action/supported";
     }

@@ -26,7 +26,6 @@ import java.net.URI;
 import javax.inject.Singleton;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
 
 /**
@@ -37,13 +36,14 @@ import org.jclouds.rest.Binder;
 @Singleton
 public class AppendToPath implements Binder
 {
+    @SuppressWarnings("unchecked")
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
         // Append the parameter to the request URI
         String valueToAppend = getValue(request, checkNotNull(input, "input"));
         URI path = URI.create(request.getEndpoint().toString() + "/" + valueToAppend);
-        return ModifyRequest.endpoint(request, path);
+        return (R) request.toBuilder().endpoint(path).build();
     }
 
     /**
