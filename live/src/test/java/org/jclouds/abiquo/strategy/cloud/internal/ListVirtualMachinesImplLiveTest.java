@@ -61,7 +61,7 @@ public class ListVirtualMachinesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithoutResults()
     {
         Iterable<VirtualMachine> vms =
-            strategy.execute(VirtualMachinePredicates.nameLabel("UNEXISTING"));
+            strategy.execute(VirtualMachinePredicates.internalName("UNEXISTING"));
         assertNotNull(vms);
         assertEquals(size(vms), 0);
     }
@@ -69,7 +69,8 @@ public class ListVirtualMachinesImplLiveTest extends BaseAbiquoStrategyLiveTest
     public void testExecutePredicateWithResults()
     {
         Iterable<VirtualMachine> vms =
-            strategy.execute(VirtualMachinePredicates.nameLabel(env.virtualMachine.getNameLabel()));
+            strategy.execute(VirtualMachinePredicates.internalName(env.virtualMachine
+                .getNameLabel()));
         assertNotNull(vms);
         assertEquals(size(vms), 1);
     }

@@ -35,16 +35,30 @@ import com.google.common.base.Predicate;
  */
 public class VirtualMachinePredicates
 {
-    public static Predicate<VirtualMachine> nameLabel(final String... namLabels)
+    public static Predicate<VirtualMachine> internalName(final String... internalName)
     {
-        checkNotNull(namLabels, "names must be defined");
+        checkNotNull(internalName, "names must be defined");
 
         return new Predicate<VirtualMachine>()
         {
             @Override
             public boolean apply(final VirtualMachine virtualMachine)
             {
-                return Arrays.asList(namLabels).contains(virtualMachine.getNameLabel());
+                return Arrays.asList(internalName).contains(virtualMachine.getInternalName());
+            }
+        };
+    }
+
+    public static Predicate<VirtualMachine> nameLabel(final String... nameLabels)
+    {
+        checkNotNull(nameLabels, "names must be defined");
+
+        return new Predicate<VirtualMachine>()
+        {
+            @Override
+            public boolean apply(final VirtualMachine virtualMachine)
+            {
+                return Arrays.asList(nameLabels).contains(virtualMachine.getNameLabel());
             }
         };
     }
