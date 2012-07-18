@@ -32,8 +32,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Machine;
@@ -58,7 +58,7 @@ import com.google.inject.Inject;
 @Singleton
 public class ListMachinesImpl implements ListMachines
 {
-    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     protected ListDatacenters listDatacenters;
 
@@ -72,7 +72,7 @@ public class ListMachinesImpl implements ListMachines
     protected Long maxTime;
 
     @Inject
-    ListMachinesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    ListMachinesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
         final ListDatacenters listDatacenters)
     {
@@ -107,7 +107,7 @@ public class ListMachinesImpl implements ListMachines
                 @Override
                 public Future<RacksDto> apply(final Datacenter input)
                 {
-                    return context.getAsyncApi().getInfrastructureClient()
+                    return context.getAsyncApi().getInfrastructureApi()
                         .listRacks(input.unwrap());
                 }
             }, userExecutor, maxTime, logger, "getting racks");
@@ -123,7 +123,7 @@ public class ListMachinesImpl implements ListMachines
                 @Override
                 public Future<MachinesDto> apply(final RackDto input)
                 {
-                    return context.getAsyncApi().getInfrastructureClient().listMachines(input);
+                    return context.getAsyncApi().getInfrastructureApi().listMachines(input);
                 }
             }, userExecutor, maxTime, logger, "getting machines");
 

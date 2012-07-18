@@ -22,7 +22,7 @@ package org.jclouds.abiquo.domain.infrastructure;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
 
@@ -35,7 +35,7 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class TierLiveTest extends BaseAbiquoClientLiveTest
+public class TierLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testUpdate()

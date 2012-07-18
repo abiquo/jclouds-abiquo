@@ -22,8 +22,8 @@ package org.jclouds.abiquo.compute.functions;
 import static org.testng.Assert.assertEquals;
 
 import org.easymock.EasyMock;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.domain.Location;
 import org.jclouds.domain.LocationScope;
@@ -41,7 +41,7 @@ public class DatacenterToLocationTest
     @SuppressWarnings("unchecked")
     public void testDatacenterToLocation()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         DatacenterToLocation function = new DatacenterToLocation();
 

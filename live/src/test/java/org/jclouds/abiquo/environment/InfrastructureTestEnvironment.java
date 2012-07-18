@@ -52,10 +52,10 @@ import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.ExternalNetwork;
 import org.jclouds.abiquo.domain.network.PublicNetwork;
 import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
-import org.jclouds.abiquo.features.AdminClient;
-import org.jclouds.abiquo.features.ConfigClient;
-import org.jclouds.abiquo.features.EnterpriseClient;
-import org.jclouds.abiquo.features.InfrastructureClient;
+import org.jclouds.abiquo.features.AdminApi;
+import org.jclouds.abiquo.features.ConfigApi;
+import org.jclouds.abiquo.features.EnterpriseApi;
+import org.jclouds.abiquo.features.InfrastructureApi;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
@@ -85,13 +85,13 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
     public AdministrationService administrationService;
 
-    public InfrastructureClient infrastructureClient;
+    public InfrastructureApi infrastructureApi;
 
-    public EnterpriseClient enterpriseClient;
+    public EnterpriseApi enterpriseApi;
 
-    public AdminClient adminClient;
+    public AdminApi adminApi;
 
-    public ConfigClient configClient;
+    public ConfigApi configApi;
 
     // Resources
 
@@ -135,10 +135,10 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         this.context = context;
         this.administrationService = context.getAdministrationService();
         this.context = context;
-        this.enterpriseClient = context.getApiContext().getApi().getEnterpriseClient();
-        this.infrastructureClient = context.getApiContext().getApi().getInfrastructureClient();
-        this.adminClient = context.getApiContext().getApi().getAdminClient();
-        this.configClient = context.getApiContext().getApi().getConfigClient();
+        this.enterpriseApi = context.getApiContext().getApi().getEnterpriseApi();
+        this.infrastructureApi = context.getApiContext().getApi().getInfrastructureApi();
+        this.adminApi = context.getApiContext().getApi().getAdminApi();
+        this.configApi = context.getApiContext().getApi().getConfigApi();
     }
 
     @Override
@@ -427,7 +427,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer roleId = role.getId();
             role.delete();
-            assertNull(adminClient.getRole(roleId));
+            assertNull(adminApi.getRole(roleId));
         }
     }
 
@@ -437,7 +437,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             String idStoragePool = storagePool.getUUID();
             storagePool.delete();
-            assertNull(infrastructureClient.getStoragePool(storageDevice.unwrap(), idStoragePool));
+            assertNull(infrastructureApi.getStoragePool(storageDevice.unwrap(), idStoragePool));
         }
 
     }
@@ -448,7 +448,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer idStorageDevice = storageDevice.getId();
             storageDevice.delete();
-            assertNull(infrastructureClient.getStorageDevice(datacenter.unwrap(), idStorageDevice));
+            assertNull(infrastructureApi.getStorageDevice(datacenter.unwrap(), idStorageDevice));
         }
     }
 
@@ -458,7 +458,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer idMachine = machine.getId();
             machine.delete();
-            assertNull(infrastructureClient.getMachine(rack.unwrap(), idMachine));
+            assertNull(infrastructureApi.getMachine(rack.unwrap(), idMachine));
         }
     }
 
@@ -468,7 +468,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer idRack = rack.getId();
             rack.delete();
-            assertNull(infrastructureClient.getRack(datacenter.unwrap(), idRack));
+            assertNull(infrastructureApi.getRack(datacenter.unwrap(), idRack));
         }
     }
 
@@ -478,7 +478,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer idRack = ucsRack.getId();
             ucsRack.delete();
-            assertNull(infrastructureClient.getManagedRack(datacenter.unwrap(), idRack));
+            assertNull(infrastructureApi.getManagedRack(datacenter.unwrap(), idRack));
         }
     }
 
@@ -491,7 +491,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
 
             Integer idDatacenter = datacenter.getId();
             datacenter.delete(); // Abiquo API will delete remote services too
-            assertNull(infrastructureClient.getDatacenter(idDatacenter));
+            assertNull(infrastructureApi.getDatacenter(idDatacenter));
         }
     }
 
@@ -501,7 +501,7 @@ public class InfrastructureTestEnvironment implements TestEnvironment
         {
             Integer idEnterprise = enterprise.getId();
             enterprise.delete();
-            assertNull(enterpriseClient.getEnterprise(idEnterprise));
+            assertNull(enterpriseApi.getEnterprise(idEnterprise));
         }
     }
 

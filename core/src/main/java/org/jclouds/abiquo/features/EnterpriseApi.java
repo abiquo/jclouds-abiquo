@@ -49,12 +49,12 @@ import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see EnterpriseAsyncClient
+ * @see EnterpriseAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface EnterpriseClient
+public interface EnterpriseApi
 {
 
     /*********************** Enterprise ********************** */

@@ -24,7 +24,7 @@ import static org.testng.Assert.assertNotNull;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import org.jclouds.abiquo.features.BaseAbiquoAsyncClientTest;
+import org.jclouds.abiquo.features.BaseAbiquoAsyncApiTest;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.BeforeClass;
@@ -38,49 +38,49 @@ import com.google.inject.TypeLiteral;
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class AbiquoDelegateClientTest extends BaseAbiquoAsyncClientTest<AbiquoAsyncClient>
+public class AbiquoDelegateApiTest extends BaseAbiquoAsyncApiTest<AbiquoAsyncApi>
 {
-    private AbiquoAsyncClient asyncClient;
+    private AbiquoAsyncApi asyncApi;
 
-    private AbiquoClient syncClient;
+    private AbiquoApi syncApi;
 
     @BeforeClass
     @Override
     protected void setupFactory() throws IOException
     {
         super.setupFactory();
-        asyncClient = injector.getInstance(AbiquoAsyncClient.class);
-        syncClient = injector.getInstance(AbiquoClient.class);
+        asyncApi = injector.getInstance(AbiquoAsyncApi.class);
+        syncApi = injector.getInstance(AbiquoApi.class);
     }
 
     public void testSync() throws SecurityException, NoSuchMethodException, InterruptedException,
         ExecutionException
     {
-        assertNotNull(syncClient.getAdminClient());
-        assertNotNull(syncClient.getConfigClient());
-        assertNotNull(syncClient.getInfrastructureClient());
-        assertNotNull(syncClient.getEnterpriseClient());
-        assertNotNull(syncClient.getCloudClient());
-        assertNotNull(syncClient.getVirtualMachineTemplateClient());
-        assertNotNull(syncClient.getTaskClient());
+        assertNotNull(syncApi.getAdminApi());
+        assertNotNull(syncApi.getConfigApi());
+        assertNotNull(syncApi.getInfrastructureApi());
+        assertNotNull(syncApi.getEnterpriseApi());
+        assertNotNull(syncApi.getCloudApi());
+        assertNotNull(syncApi.getVirtualMachineTemplateApi());
+        assertNotNull(syncApi.getTaskApi());
     }
 
     public void testAsync() throws SecurityException, NoSuchMethodException, InterruptedException,
         ExecutionException
     {
-        assertNotNull(asyncClient.getAdminClient());
-        assertNotNull(asyncClient.getConfigClient());
-        assertNotNull(asyncClient.getInfrastructureClient());
-        assertNotNull(asyncClient.getEnterpriseClient());
-        assertNotNull(asyncClient.getCloudClient());
-        assertNotNull(asyncClient.getVirtualMachineTemplateClient());
-        assertNotNull(asyncClient.getTaskClient());
+        assertNotNull(asyncApi.getAdminApi());
+        assertNotNull(asyncApi.getConfigApi());
+        assertNotNull(asyncApi.getInfrastructureApi());
+        assertNotNull(asyncApi.getEnterpriseApi());
+        assertNotNull(asyncApi.getCloudApi());
+        assertNotNull(asyncApi.getVirtualMachineTemplateApi());
+        assertNotNull(asyncApi.getTaskApi());
     }
 
     @Override
-    protected TypeLiteral<RestAnnotationProcessor<AbiquoAsyncClient>> createTypeLiteral()
+    protected TypeLiteral<RestAnnotationProcessor<AbiquoAsyncApi>> createTypeLiteral()
     {
-        return new TypeLiteral<RestAnnotationProcessor<AbiquoAsyncClient>>()
+        return new TypeLiteral<RestAnnotationProcessor<AbiquoAsyncApi>>()
         {
         };
     }

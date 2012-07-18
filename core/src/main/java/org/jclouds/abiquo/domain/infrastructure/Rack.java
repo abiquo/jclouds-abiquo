@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -67,7 +67,7 @@ public class Rack extends DomainWrapper<RackDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Rack(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final RackDto target)
+    protected Rack(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final RackDto target)
     {
         super(context, target);
     }
@@ -84,7 +84,7 @@ public class Rack extends DomainWrapper<RackDto>
      */
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteRack(target);
+        context.getApi().getInfrastructureApi().deleteRack(target);
         target = null;
     }
 
@@ -97,7 +97,7 @@ public class Rack extends DomainWrapper<RackDto>
      */
     public void save()
     {
-        target = context.getApi().getInfrastructureClient().createRack(datacenter.unwrap(), target);
+        target = context.getApi().getInfrastructureApi().createRack(datacenter.unwrap(), target);
     }
 
     /**
@@ -111,7 +111,7 @@ public class Rack extends DomainWrapper<RackDto>
      */
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateRack(target);
+        target = context.getApi().getInfrastructureApi().updateRack(target);
     }
 
     // Parent access
@@ -126,7 +126,7 @@ public class Rack extends DomainWrapper<RackDto>
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        return wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
+        return wrap(context, Datacenter.class, context.getApi().getInfrastructureApi()
             .getDatacenter(datacenterId));
     }
 
@@ -142,7 +142,7 @@ public class Rack extends DomainWrapper<RackDto>
      */
     public List<Machine> listMachines()
     {
-        MachinesDto machines = context.getApi().getInfrastructureClient().listMachines(target);
+        MachinesDto machines = context.getApi().getInfrastructureApi().listMachines(target);
         return wrap(context, Machine.class, machines.getCollection());
     }
 
@@ -188,13 +188,13 @@ public class Rack extends DomainWrapper<RackDto>
      */
     public Machine getMachine(final Integer id)
     {
-        MachineDto machine = context.getApi().getInfrastructureClient().getMachine(target, id);
+        MachineDto machine = context.getApi().getInfrastructureApi().getMachine(target, id);
         return wrap(context, Machine.class, machine);
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
@@ -202,7 +202,7 @@ public class Rack extends DomainWrapper<RackDto>
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private Integer id;
 
@@ -224,7 +224,7 @@ public class Rack extends DomainWrapper<RackDto>
 
         private Datacenter datacenter;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter)
         {
             super();

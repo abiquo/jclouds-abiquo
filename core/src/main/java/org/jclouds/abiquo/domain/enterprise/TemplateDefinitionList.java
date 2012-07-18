@@ -23,8 +23,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.rest.RestContext;
@@ -50,7 +50,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
     /**
      * Constructor to be used only by the builder.
      */
-    protected TemplateDefinitionList(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected TemplateDefinitionList(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final TemplateDefinitionListDto target)
     {
         super(context, target);
@@ -69,7 +69,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
      */
     public void delete()
     {
-        context.getApi().getEnterpriseClient().deleteTemplateDefinitionList(target);
+        context.getApi().getEnterpriseApi().deleteTemplateDefinitionList(target);
         target = null;
     }
 
@@ -85,7 +85,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
     public void save()
     {
         target =
-            context.getApi().getEnterpriseClient()
+            context.getApi().getEnterpriseApi()
                 .createTemplateDefinitionList(enterprise.unwrap(), target);
     }
 
@@ -99,7 +99,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
      */
     public void update()
     {
-        target = context.getApi().getEnterpriseClient().updateTemplateDefinitionList(target);
+        target = context.getApi().getEnterpriseApi().updateTemplateDefinitionList(target);
     }
 
     // Children access
@@ -119,7 +119,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
     public List<TemplateState> listStatus(final Datacenter datacenter)
     {
         TemplatesStateDto states =
-            context.getApi().getEnterpriseClient()
+            context.getApi().getEnterpriseApi()
                 .listTemplateListStatus(target, datacenter.unwrap());
         return wrap(context, TemplateState.class, states.getCollection());
     }
@@ -145,7 +145,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Enterprise enterprise)
     {
         return new Builder(context, enterprise);
@@ -153,7 +153,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private Enterprise enterprise;
 
@@ -161,7 +161,7 @@ public class TemplateDefinitionList extends DomainWrapper<TemplateDefinitionList
 
         private String url;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Enterprise enterprise)
         {
             super();

@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.RemoteService.Builder;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -46,7 +46,7 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest
+public class RemoteServiceLiveTest extends BaseAbiquoApiLiveTest
 {
     public void testUpdate()
     {
@@ -58,7 +58,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated remote service
         RemoteServiceDto updated =
-            env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
+            env.infrastructureApi.getRemoteService(env.datacenter.unwrap(),
                 RemoteServiceType.VIRTUAL_FACTORY);
 
         assertEquals(updated.getUri(), rs.getUri());
@@ -71,7 +71,7 @@ public class RemoteServiceLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the deleted remote service
         RemoteServiceDto deleted =
-            env.infrastructureClient.getRemoteService(env.datacenter.unwrap(),
+            env.infrastructureApi.getRemoteService(env.datacenter.unwrap(),
                 RemoteServiceType.BPM_SERVICE);
 
         assertNull(deleted);

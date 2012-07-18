@@ -28,7 +28,7 @@ import org.testng.annotations.BeforeSuite;
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoClientLiveTest extends BaseAbiquoLiveTest
+public abstract class BaseAbiquoApiLiveTest extends BaseAbiquoLiveTest
 {
     /** The test environment. */
     protected static CloudTestEnvironment env;

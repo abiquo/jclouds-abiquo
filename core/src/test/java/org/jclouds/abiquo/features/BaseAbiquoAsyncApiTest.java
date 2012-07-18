@@ -40,11 +40,11 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
 import com.google.inject.Module;
 
 /**
- * Tests annotation parsing of {@code AbiquoAsyncClient}.
+ * Tests annotation parsing of {@code AbiquoAsyncApi}.
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoAsyncClientTest<T> extends BaseAsyncClientTest<T>
+public abstract class BaseAbiquoAsyncApiTest<T> extends BaseAsyncClientTest<T>
 {
     private XMLParser xml;
 

@@ -23,8 +23,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
@@ -85,7 +85,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Enterprise(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected Enterprise(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final EnterpriseDto target)
     {
         super(context, target);
@@ -103,7 +103,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public void delete()
     {
-        context.getApi().getEnterpriseClient().deleteEnterprise(target);
+        context.getApi().getEnterpriseApi().deleteEnterprise(target);
         target = null;
     }
 
@@ -117,7 +117,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public void save()
     {
-        target = context.getApi().getEnterpriseClient().createEnterprise(target);
+        target = context.getApi().getEnterpriseApi().createEnterprise(target);
     }
 
     /**
@@ -130,7 +130,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public void update()
     {
-        target = context.getApi().getEnterpriseClient().updateEnterprise(target);
+        target = context.getApi().getEnterpriseApi().updateEnterprise(target);
     }
 
     // Children access
@@ -147,7 +147,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<VirtualDatacenter> listVirtualDatacenters()
     {
         VirtualDatacentersDto dto =
-            context.getApi().getEnterpriseClient().listVirtualDatacenters(target);
+            context.getApi().getEnterpriseApi().listVirtualDatacenters(target);
         return wrap(context, VirtualDatacenter.class, dto.getCollection());
     }
 
@@ -194,7 +194,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<TemplateDefinitionList> listTemplateDefinitionLists()
     {
         TemplateDefinitionListsDto dto =
-            context.getApi().getEnterpriseClient().listTemplateDefinitionLists(target);
+            context.getApi().getEnterpriseApi().listTemplateDefinitionLists(target);
         return wrap(context, TemplateDefinitionList.class, dto.getCollection());
     }
 
@@ -244,7 +244,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public TemplateDefinitionList getTemplateDefinitionList(final Integer id)
     {
         TemplateDefinitionListDto templateList =
-            context.getApi().getEnterpriseClient().getTemplateDefinitionList(target, id);
+            context.getApi().getEnterpriseApi().getTemplateDefinitionList(target, id);
         return wrap(context, TemplateDefinitionList.class, templateList);
     }
 
@@ -259,7 +259,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public List<Limits> listLimits()
     {
-        DatacentersLimitsDto dto = context.getApi().getEnterpriseClient().listLimits(this.unwrap());
+        DatacentersLimitsDto dto = context.getApi().getEnterpriseApi().listLimits(this.unwrap());
         return wrap(context, Limits.class, dto.getCollection());
     }
 
@@ -306,7 +306,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public EnterpriseProperties getEnterpriseProperties()
     {
         EnterprisePropertiesDto dto =
-            context.getApi().getEnterpriseClient().getEnterpriseProperties(this.unwrap());
+            context.getApi().getEnterpriseApi().getEnterpriseProperties(this.unwrap());
         return wrap(context, EnterpriseProperties.class, dto);
     }
 
@@ -322,7 +322,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public List<User> listUsers()
     {
-        UsersDto dto = context.getApi().getEnterpriseClient().listUsers(this.unwrap());
+        UsersDto dto = context.getApi().getEnterpriseApi().listUsers(this.unwrap());
         return wrap(context, User.class, dto.getCollection());
     }
 
@@ -369,7 +369,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public User getUser(final Integer id)
     {
-        UserDto user = context.getApi().getEnterpriseClient().getUser(target, id);
+        UserDto user = context.getApi().getEnterpriseApi().getUser(target, id);
         return wrap(context, User.class, user);
     }
 
@@ -380,7 +380,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public List<Role> listRoles()
     {
-        RolesDto dto = context.getApi().getAdminClient().listRoles(target);
+        RolesDto dto = context.getApi().getAdminApi().listRoles(target);
         return wrap(context, Role.class, dto.getCollection());
     }
 
@@ -410,7 +410,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Datacenter datacenter)
     {
         VirtualMachineTemplatesDto dto =
-            context.getApi().getVirtualMachineTemplateClient()
+            context.getApi().getVirtualMachineTemplateApi()
                 .listVirtualMachineTemplates(target.getId(), datacenter.getId());
         return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
     }
@@ -431,7 +431,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         final Integer id)
     {
         VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient()
+            context.getApi().getVirtualMachineTemplateApi()
                 .getVirtualMachineTemplate(target.getId(), datacenter.getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
     }
@@ -460,7 +460,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<Datacenter> listAllowedDatacenters()
     {
         DatacentersDto datacenters =
-            context.getApi().getEnterpriseClient().listAllowedDatacenters(target.getId());
+            context.getApi().getEnterpriseApi().listAllowedDatacenters(target.getId());
         return wrap(context, Datacenter.class, datacenters.getCollection());
     }
 
@@ -553,7 +553,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<VirtualAppliance> listVirtualAppliances()
     {
         VirtualAppliancesDto virtualAppliances =
-            context.getApi().getEnterpriseClient().listVirtualAppliances(target);
+            context.getApi().getEnterpriseApi().listVirtualAppliances(target);
         return wrap(context, VirtualAppliance.class, virtualAppliances.getCollection());
     }
 
@@ -600,7 +600,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     public List<VirtualMachine> listVirtualMachines()
     {
         VirtualMachinesWithNodeExtendedDto machines =
-            context.getApi().getEnterpriseClient().listVirtualMachines(target);
+            context.getApi().getEnterpriseApi().listVirtualMachines(target);
         return wrap(context, VirtualMachine.class, machines.getCollection());
     }
 
@@ -637,7 +637,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
     public List<Machine> listReservedMachines()
     {
-        MachinesDto machines = context.getApi().getEnterpriseClient().listReservedMachines(target);
+        MachinesDto machines = context.getApi().getEnterpriseApi().listReservedMachines(target);
         return wrap(context, Machine.class, machines.getCollection());
     }
 
@@ -661,7 +661,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
      */
     public void refreshTemplateRepository(final Datacenter datacenter)
     {
-        context.getApi().getEnterpriseClient()
+        context.getApi().getEnterpriseApi()
             .refreshTemplateRepository(target.getId(), datacenter.getId());
     }
 
@@ -687,7 +687,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
             // Save new limits
             dto =
-                context.getApi().getEnterpriseClient()
+                context.getApi().getEnterpriseApi()
                     .createLimits(target, datacenter.unwrap(), limits.unwrap());
         }
         catch (AbiquoException ex)
@@ -696,7 +696,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
             if (ex.hasError("LIMIT-7"))
             {
                 DatacentersLimitsDto limits =
-                    context.getApi().getEnterpriseClient().getLimits(target, datacenter.unwrap());
+                    context.getApi().getEnterpriseApi().getLimits(target, datacenter.unwrap());
                 // Should be only one limit
                 dto = limits.getCollection().get(0);
             }
@@ -723,13 +723,13 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
     {
         // Get limits
         DatacentersLimitsDto dto =
-            context.getApi().getEnterpriseClient().getLimits(target, datacenter.unwrap());
+            context.getApi().getEnterpriseApi().getLimits(target, datacenter.unwrap());
 
         // Delete limits (if any)
         if (dto != null && !dto.isEmpty())
         {
             // Should be only one limit
-            context.getApi().getEnterpriseClient().deleteLimits(dto.getCollection().get(0));
+            context.getApi().getEnterpriseApi().deleteLimits(dto.getCollection().get(0));
         }
     }
 
@@ -753,14 +753,14 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         return new Builder(context);
     }
 
     public static class Builder extends LimitsBuilder<Builder>
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String name;
 
@@ -776,11 +776,11 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
         private String chefValidator;
 
-        private String chefClientCertificate;
+        private String chefApiCertificate;
 
         private String chefValidatorCertificate;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
         {
             super();
             this.context = context;
@@ -804,9 +804,9 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
             return this;
         }
 
-        public Builder chefClientCertificate(final String chefClientCertificate)
+        public Builder chefApiCertificate(final String chefApiCertificate)
         {
-            this.chefClientCertificate = chefClientCertificate;
+            this.chefApiCertificate = chefApiCertificate;
             return this;
         }
 
@@ -848,7 +848,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
             dto.setRepositoryLimits(repositorySoft, repositoryHard);
             dto.setIsReservationRestricted(isReservationRestricted);
             dto.setChefClient(chefClient);
-            dto.setChefClientCertificate(chefClientCertificate);
+            dto.setChefClientCertificate(chefApiCertificate);
             dto.setChefURL(chefURL);
             dto.setChefValidator(chefValidator);
             dto.setChefValidatorCertificate(chefValidatorCertificate);
@@ -867,9 +867,8 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
                 .publicIpsLimits(in.getPublicIpsSoft(), in.getPublicIpsHard())
                 .repositoryLimits(in.getRepositorySoft(), in.getRepositoryHard())
                 .isReservationRestricted(in.getIsReservationRestricted())
-                .chefClient(in.getChefClient())
-                .chefClientCertificate(in.getChefClientCertificate()).chefURL(in.getChefURL())
-                .chefValidator(in.getChefValidator())
+                .chefClient(in.getChefClient()).chefApiCertificate(in.getChefApiCertificate())
+                .chefURL(in.getChefURL()).chefValidator(in.getChefValidator())
                 .chefValidatorCertificate(in.getChefValidatorCertificate());
         }
     }
@@ -931,7 +930,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
         return target.getChefClient();
     }
 
-    public String getChefClientCertificate()
+    public String getChefApiCertificate()
     {
         return target.getChefClientCertificate();
     }
@@ -985,7 +984,7 @@ public class Enterprise extends DomainWithLimitsWrapper<EnterpriseDto>
 
     private DatacenterLimitsDto getLimits(final Datacenter datacenter)
     {
-        DatacentersLimitsDto limits = context.getApi().getEnterpriseClient().listLimits(target);
+        DatacentersLimitsDto limits = context.getApi().getEnterpriseApi().listLimits(target);
 
         return Iterables.find(limits.getCollection(), new Predicate<DatacenterLimitsDto>()
         {

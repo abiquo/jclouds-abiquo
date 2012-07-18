@@ -23,7 +23,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.StorageDevicePredicates;
 import org.testng.annotations.Test;
 
@@ -37,7 +37,7 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest
+public class StorageDeviceLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testUpdate()
@@ -47,7 +47,7 @@ public class StorageDeviceLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated storage device
         StorageDeviceDto updated =
-            env.infrastructureClient.getStorageDevice(env.datacenter.unwrap(), env.storageDevice
+            env.infrastructureApi.getStorageDevice(env.datacenter.unwrap(), env.storageDevice
                 .getId());
 
         assertEquals(updated.getName(), "Updated storage device");

@@ -108,18 +108,18 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see InfrastructureClient
+ * @see InfrastructureApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/admin")
-public interface InfrastructureAsyncClient
+public interface InfrastructureAsyncApi
 {
     /*********************** Datacenter ***********************/
 
     /**
-     * @see InfrastructureClient#listDatacenters()
+     * @see InfrastructureApi#listDatacenters()
      */
     @GET
     @Path("/datacenters")
@@ -128,7 +128,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<DatacentersDto> listDatacenters();
 
     /**
-     * @see InfrastructureClient#createDatacenter(DatacenterDto)
+     * @see InfrastructureApi#createDatacenter(DatacenterDto)
      */
     @POST
     @Path("/datacenters")
@@ -139,7 +139,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#getDatacenter(Integer)
+     * @see InfrastructureApi#getDatacenter(Integer)
      */
     @GET
     @Path("/datacenters/{datacenter}")
@@ -149,7 +149,7 @@ public interface InfrastructureAsyncClient
     ListenableFuture<DatacenterDto> getDatacenter(@PathParam("datacenter") Integer datacenterId);
 
     /**
-     * @see InfrastructureClient#updateDatacenter(DatacenterDto)
+     * @see InfrastructureApi#updateDatacenter(DatacenterDto)
      */
     @PUT
     @Produces(DatacenterDto.BASE_MEDIA_TYPE)
@@ -159,14 +159,14 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#deleteDatacenter(DatacenterDto)
+     * @see InfrastructureApi#deleteDatacenter(DatacenterDto)
      */
     @DELETE
     ListenableFuture<Void> deleteDatacenter(
         @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#discoverSingleMachine(DatacenterDto, String, HypervisorType,
+     * @see InfrastructureApi#discoverSingleMachine(DatacenterDto, String, HypervisorType,
      *      String, String)
      */
     @GET
@@ -179,7 +179,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("user") String user, @QueryParam("password") String password);
 
     /**
-     * @see InfrastructureClient#discoverSingleMachine(DatacenterDto, String, HypervisorType,
+     * @see InfrastructureApi#discoverSingleMachine(DatacenterDto, String, HypervisorType,
      *      String, String, MachineOptions)
      */
     @GET
@@ -193,7 +193,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
     /**
-     * @see InfrastructureClient#discoverMultipleMachines(DatacenterDto, String, String,
+     * @see InfrastructureApi#discoverMultipleMachines(DatacenterDto, String, String,
      *      HypervisorType, String, String)
      */
     @GET
@@ -207,7 +207,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("password") String password);
 
     /**
-     * @see InfrastructureClient#discoverMultipleMachines(DatacenterDto, String, String,
+     * @see InfrastructureApi#discoverMultipleMachines(DatacenterDto, String, String,
      *      HypervisorType, String, String, MachineOptions)
      */
     @GET
@@ -222,7 +222,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
     /**
-     * @see InfrastructureClient#listLimits(DatacenterDto)
+     * @see InfrastructureApi#listLimits(DatacenterDto)
      */
     @GET
     @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
@@ -231,7 +231,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("getLimits") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#checkMachineState(DatacenterDto, String, String, HypervisorType,
+     * @see InfrastructureApi#checkMachineState(DatacenterDto, String, String, HypervisorType,
      *      String, String)
      */
     @GET
@@ -244,7 +244,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("user") String user, @QueryParam("password") String password);
 
     /**
-     * @see InfrastructureClient#checkMachineState(DatacenterDto, String, String, HypervisorType,
+     * @see InfrastructureApi#checkMachineState(DatacenterDto, String, String, HypervisorType,
      *      String, String, MachineOptions)
      */
     @GET
@@ -259,7 +259,7 @@ public interface InfrastructureAsyncClient
 
     /*********************** Hypervisor ***********************/
     /**
-     * @see InfrastructureClient#getHypervisorTypeFromMachine(DatacenterDto, DatacenterOptions)
+     * @see InfrastructureApi#getHypervisorTypeFromMachine(DatacenterDto, DatacenterOptions)
      */
     @GET
     @Consumes(MediaType.TEXT_PLAIN)
@@ -269,7 +269,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) DatacenterOptions options);
 
     /**
-     * @see InfrastructureClient#getHypervisorTypes(DatacenterDto)
+     * @see InfrastructureApi#getHypervisorTypes(DatacenterDto)
      */
     @GET
     @Consumes(HypervisorTypesDto.BASE_MEDIA_TYPE)
@@ -280,7 +280,7 @@ public interface InfrastructureAsyncClient
     /*********************** Unmanaged Rack ***********************/
 
     /**
-     * @see InfrastructureClient#listRacks(DatacenterDto)
+     * @see InfrastructureApi#listRacks(DatacenterDto)
      */
     @GET
     @Consumes(RacksDto.BASE_MEDIA_TYPE)
@@ -289,7 +289,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#createRack(DatacenterDto, RackDto)
+     * @see InfrastructureApi#createRack(DatacenterDto, RackDto)
      */
     @POST
     @Produces(RackDto.BASE_MEDIA_TYPE)
@@ -300,7 +300,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) RackDto rack);
 
     /**
-     * @see InfrastructureClient#getRack(DatacenterDto, Integer)
+     * @see InfrastructureApi#getRack(DatacenterDto, Integer)
      */
     @GET
     @Consumes(RackDto.BASE_MEDIA_TYPE)
@@ -311,7 +311,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) Integer rackId);
 
     /**
-     * @see InfrastructureClient#updateRack(RackDto)
+     * @see InfrastructureApi#updateRack(RackDto)
      */
     @PUT
     @Consumes(RackDto.BASE_MEDIA_TYPE)
@@ -321,7 +321,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RackDto rack);
 
     /**
-     * @see InfrastructureClient#deleteRack(RackDto)
+     * @see InfrastructureApi#deleteRack(RackDto)
      */
     @DELETE
     ListenableFuture<Void> deleteRack(
@@ -330,7 +330,7 @@ public interface InfrastructureAsyncClient
     /*********************** Managed Rack ***********************/
 
     /**
-     * @see InfrastructureClient#listManagedRacks(DatacenterDto)
+     * @see InfrastructureApi#listManagedRacks(DatacenterDto)
      */
     @EnterpriseEdition
     @GET
@@ -340,7 +340,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("racks") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#createManagedRack(DatacenterDto, UcsRackDto)
+     * @see InfrastructureApi#createManagedRack(DatacenterDto, UcsRackDto)
      */
     @EnterpriseEdition
     @POST
@@ -352,7 +352,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) UcsRackDto rack);
 
     /**
-     * @see InfrastructureClient#getManagedRack(DatacenterDto, Integer)
+     * @see InfrastructureApi#getManagedRack(DatacenterDto, Integer)
      */
     @EnterpriseEdition
     @GET
@@ -364,7 +364,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) Integer rackId);
 
     /**
-     * @see InfrastructureClient#updateManagedRack(UcsRackDto)
+     * @see InfrastructureApi#updateManagedRack(UcsRackDto)
      */
     @EnterpriseEdition
     @PUT
@@ -375,7 +375,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UcsRackDto rack);
 
     /**
-     * @see InfrastructureClient#listServiceProfiles(UcsRackDto)
+     * @see InfrastructureApi#listServiceProfiles(UcsRackDto)
      */
     @EnterpriseEdition
     @GET
@@ -385,7 +385,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack);
 
     /**
-     * @see InfrastructureClient#listServiceProfiles(UcsRackDto, QueryOptions)
+     * @see InfrastructureApi#listServiceProfiles(UcsRackDto, QueryOptions)
      */
     @EnterpriseEdition
     @GET
@@ -396,7 +396,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) FilterOptions options);
 
     /**
-     * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto)
+     * @see InfrastructureApi#listServiceProfileTemplates(UcsRackDto)
      */
     @EnterpriseEdition
     @GET
@@ -406,7 +406,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack);
 
     /**
-     * @see InfrastructureClient#listServiceProfileTemplates(UcsRackDto, LogicServerOptions)
+     * @see InfrastructureApi#listServiceProfileTemplates(UcsRackDto, LogicServerOptions)
      */
     @EnterpriseEdition
     @GET
@@ -417,7 +417,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) FilterOptions options);
 
     /**
-     * @see InfrastructureClient#listOrganizations(UcsRackDto)
+     * @see InfrastructureApi#listOrganizations(UcsRackDto)
      */
     @EnterpriseEdition
     @GET
@@ -427,7 +427,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack);
 
     /**
-     * @see InfrastructureClient#listOrganizations(UcsRackDto, OrganizationOptions)
+     * @see InfrastructureApi#listOrganizations(UcsRackDto, OrganizationOptions)
      */
     @EnterpriseEdition
     @GET
@@ -438,7 +438,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) FilterOptions options);
 
     /**
-     * @see InfrastructureClient#cloneLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
+     * @see InfrastructureApi#cloneLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
      *      String)
      */
     @EnterpriseEdition
@@ -450,7 +450,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("newName") String newName);
 
     /**
-     * @see InfrastructureClient#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
+     * @see InfrastructureApi#associateLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
      *      String)
      */
     @EnterpriseEdition
@@ -462,7 +462,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("bladeDn") String bladeName);
 
     /**
-     * @see InfrastructureClient#associateTemplate(UcsRackDto, LogicServerDto, OrganizationDto,
+     * @see InfrastructureApi#associateTemplate(UcsRackDto, LogicServerDto, OrganizationDto,
      *      String, String)
      */
     @EnterpriseEdition
@@ -474,7 +474,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
 
     /**
-     * @see InfrastructureClient#cloneAndAssociateLogicServer(UcsRackDto, LogicServerDto,
+     * @see InfrastructureApi#cloneAndAssociateLogicServer(UcsRackDto, LogicServerDto,
      *      OrganizationDto, String, String)
      */
     @EnterpriseEdition
@@ -486,7 +486,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("newName") String newName, @QueryParam("bladeDn") String bladeName);
 
     /**
-     * @see InfrastructureClient#dissociateLogicServer(UcsRackDto, LogicServerDto)
+     * @see InfrastructureApi#dissociateLogicServer(UcsRackDto, LogicServerDto)
      */
     @EnterpriseEdition
     @POST
@@ -495,7 +495,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
 
     /**
-     * @see InfrastructureClient#deleteLogicServer(UcsRackDto, LogicServerDto)
+     * @see InfrastructureApi#deleteLogicServer(UcsRackDto, LogicServerDto)
      */
     @EnterpriseEdition
     @POST
@@ -504,7 +504,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindLogicServerParameters.class) LogicServerDto logicServer);
 
     /**
-     * @see InfrastructureClient#listFsms(UcsRackDto, String)
+     * @see InfrastructureApi#listFsms(UcsRackDto, String)
      */
     @EnterpriseEdition
     @GET
@@ -517,7 +517,7 @@ public interface InfrastructureAsyncClient
     /*********************** Remote Service ***********************/
 
     /**
-     * @see InfrastructureClient#listRemoteServices(DatacenterDto)
+     * @see InfrastructureApi#listRemoteServices(DatacenterDto)
      */
     @GET
     @Consumes(RemoteServicesDto.BASE_MEDIA_TYPE)
@@ -526,7 +526,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("remoteservices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#createRemoteService(DatacenterDto, RemoteServiceDto)
+     * @see InfrastructureApi#createRemoteService(DatacenterDto, RemoteServiceDto)
      */
     @POST
     @Produces(RemoteServiceDto.BASE_MEDIA_TYPE)
@@ -537,7 +537,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) RemoteServiceDto remoteService);
 
     /**
-     * @see InfrastructureClient#getRemoteService(DatacenterDto, RemoteServiceType)
+     * @see InfrastructureApi#getRemoteService(DatacenterDto, RemoteServiceType)
      */
     @GET
     @Consumes(RemoteServiceDto.BASE_MEDIA_TYPE)
@@ -548,7 +548,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendRemoteServiceTypeToPath.class) final RemoteServiceType remoteServiceType);
 
     /**
-     * @see InfrastructureClient#updateRemoteService(RemoteServiceDto)
+     * @see InfrastructureApi#updateRemoteService(RemoteServiceDto)
      */
     @PUT
     @Consumes(RemoteServiceDto.BASE_MEDIA_TYPE)
@@ -558,14 +558,14 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RemoteServiceDto remoteService);
 
     /**
-     * @see InfrastructureClient#deleteRemoteService(RemoteServiceDto)
+     * @see InfrastructureApi#deleteRemoteService(RemoteServiceDto)
      */
     @DELETE
     ListenableFuture<Void> deleteRemoteService(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RemoteServiceDto remoteService);
 
     /**
-     * @see InfrastructureClient#isAvailable(RemoteServiceDto)
+     * @see InfrastructureApi#isAvailable(RemoteServiceDto)
      */
     @GET
     @ExceptionParser(ReturnFalseIfNotAvailable.class)
@@ -575,7 +575,7 @@ public interface InfrastructureAsyncClient
     /*********************** Machine ***********************/
 
     /**
-     * @see InfrastructureClient#listMachines(RackDto)
+     * @see InfrastructureApi#listMachines(RackDto)
      */
     @GET
     @Consumes(MachinesDto.BASE_MEDIA_TYPE)
@@ -584,7 +584,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("machines") @BinderParam(BindToPath.class) RackDto rack);
 
     /**
-     * @see InfrastructureClient#createMachine(RackDto, MachineDto)
+     * @see InfrastructureApi#createMachine(RackDto, MachineDto)
      */
     @POST
     @Produces(MachineDto.BASE_MEDIA_TYPE)
@@ -595,7 +595,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) MachineDto machine);
 
     /**
-     * @see InfrastructureClient#getMachine(RackDto, Integer)
+     * @see InfrastructureApi#getMachine(RackDto, Integer)
      */
     @GET
     @Consumes(MachineDto.BASE_MEDIA_TYPE)
@@ -606,7 +606,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) Integer machineId);
 
     /**
-     * @see InfrastructureClient#checkMachineState(MachineDto)
+     * @see InfrastructureApi#checkMachineState(MachineDto)
      */
     @GET
     @Consumes(MachineStateDto.BASE_MEDIA_TYPE)
@@ -616,7 +616,7 @@ public interface InfrastructureAsyncClient
         @QueryParam("sync") boolean sync);
 
     /**
-     * @see InfrastructureClient#updateMachine(MachineDto)
+     * @see InfrastructureApi#updateMachine(MachineDto)
      */
     @PUT
     @Produces(MachineDto.BASE_MEDIA_TYPE)
@@ -626,7 +626,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) MachineDto machine);
 
     /**
-     * @see InfrastructureClient#deleteMachine(MachineDto)
+     * @see InfrastructureApi#deleteMachine(MachineDto)
      */
     @DELETE
     ListenableFuture<Void> deleteMachine(
@@ -635,7 +635,7 @@ public interface InfrastructureAsyncClient
     /*********************** Blade ***********************/
 
     /**
-     * @see InfrastructureClient#powerOff(MachineDto)
+     * @see InfrastructureApi#powerOff(MachineDto)
      */
     @EnterpriseEdition
     @PUT
@@ -643,7 +643,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("poweroff") @BinderParam(BindToPath.class) MachineDto machine);
 
     /**
-     * @see InfrastructureClient#powerOn(MachineDto)
+     * @see InfrastructureApi#powerOn(MachineDto)
      */
     @EnterpriseEdition
     @PUT
@@ -651,7 +651,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("poweron") @BinderParam(BindToPath.class) MachineDto machine);
 
     /**
-     * @see InfrastructureClient#getLogicServer(MachineDto)
+     * @see InfrastructureApi#getLogicServer(MachineDto)
      */
     @EnterpriseEdition
     @GET
@@ -661,7 +661,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("logicserver") @BinderParam(BindToPath.class) MachineDto machine);
 
     /**
-     * @see InfrastructureClient#ledOn(MachineDto)
+     * @see InfrastructureApi#ledOn(MachineDto)
      */
     @EnterpriseEdition
     @POST
@@ -669,7 +669,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("ledon") @BinderParam(BindToPath.class) MachineDto machine);
 
     /**
-     * @see InfrastructureClient#ledOff(MachineDto)
+     * @see InfrastructureApi#ledOff(MachineDto)
      */
     @EnterpriseEdition
     @POST
@@ -677,7 +677,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("ledoff") @BinderParam(BindToPath.class) MachineDto machine);
 
     /**
-     * @see InfrastructureClient#getLedLocator(MachineDto)
+     * @see InfrastructureApi#getLedLocator(MachineDto)
      */
     @EnterpriseEdition
     @GET
@@ -689,7 +689,7 @@ public interface InfrastructureAsyncClient
     /*********************** Storage Device ***********************/
 
     /**
-     * @see InfrastructureClient#listVirtualMachinesByMachine(MachineDto)
+     * @see InfrastructureApi#listVirtualMachinesByMachine(MachineDto)
      */
     @GET
     @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
@@ -699,7 +699,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) MachineOptions options);
 
     /**
-     * @see InfrastructureClient#getVirtualMachine(MachineDto, Integer)
+     * @see InfrastructureApi#getVirtualMachine(MachineDto, Integer)
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
@@ -712,7 +712,7 @@ public interface InfrastructureAsyncClient
     /*********************** Storage Device ***********************/
 
     /**
-     * @see InfrastructureClient#listStorageDevices(DatacenterDto)
+     * @see InfrastructureApi#listStorageDevices(DatacenterDto)
      */
     @EnterpriseEdition
     @GET
@@ -722,7 +722,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("devices") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#listSupportedStorageDevices(DatacenterDto)
+     * @see InfrastructureApi#listSupportedStorageDevices(DatacenterDto)
      */
     @EnterpriseEdition
     @GET
@@ -732,7 +732,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("devices") @BinderParam(BindSupportedDevicesLinkToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#getStorageDevice(DatacenterDto, Integer)
+     * @see InfrastructureApi#getStorageDevice(DatacenterDto, Integer)
      */
     @EnterpriseEdition
     @GET
@@ -744,7 +744,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) Integer storageDeviceId);
 
     /**
-     * @see InfrastructureClient#createStorageDevice(DatacenterDto, StorageDeviceDto)
+     * @see InfrastructureApi#createStorageDevice(DatacenterDto, StorageDeviceDto)
      */
     @EnterpriseEdition
     @POST
@@ -756,7 +756,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) StorageDeviceDto storageDevice);
 
     /**
-     * @see InfrastructureClient#deleteStorageDevice(StorageDeviceDto)
+     * @see InfrastructureApi#deleteStorageDevice(StorageDeviceDto)
      */
     @EnterpriseEdition
     @DELETE
@@ -764,7 +764,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice);
 
     /**
-     * @see InfrastructureClient#updateStorageDevice(StorageDeviceDto)
+     * @see InfrastructureApi#updateStorageDevice(StorageDeviceDto)
      */
     @EnterpriseEdition
     @PUT
@@ -777,7 +777,7 @@ public interface InfrastructureAsyncClient
     /*********************** Tier ***********************/
 
     /**
-     * @see InfrastructureClient#listTiers(DatacenterDto)
+     * @see InfrastructureApi#listTiers(DatacenterDto)
      */
     @EnterpriseEdition
     @GET
@@ -787,7 +787,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("tiers") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#updateTier(TierDto)
+     * @see InfrastructureApi#updateTier(TierDto)
      */
     @EnterpriseEdition
     @PUT
@@ -798,7 +798,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TierDto tier);
 
     /**
-     * @see InfrastructureClient#getTier(DatacenterDto, Integer)
+     * @see InfrastructureApi#getTier(DatacenterDto, Integer)
      */
     @EnterpriseEdition
     @GET
@@ -812,7 +812,7 @@ public interface InfrastructureAsyncClient
     /*********************** Storage Pool ***********************/
 
     /**
-     * @see InfrastructureClient#listStoragePools(StorageDeviceDto, StoragePoolOptions)
+     * @see InfrastructureApi#listStoragePools(StorageDeviceDto, StoragePoolOptions)
      */
     @EnterpriseEdition
     @GET
@@ -823,7 +823,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
 
     /**
-     * @see InfrastructureClient#listStoragePools(TierDto)
+     * @see InfrastructureApi#listStoragePools(TierDto)
      */
     @EnterpriseEdition
     @GET
@@ -833,7 +833,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("pools") @BinderParam(BindToPath.class) TierDto tier);
 
     /**
-     * @see InfrastructureClient#createStoragePool(StorageDeviceDto, StoragePoolDto)
+     * @see InfrastructureApi#createStoragePool(StorageDeviceDto, StoragePoolDto)
      */
     @EnterpriseEdition
     @POST
@@ -845,7 +845,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) StoragePoolDto storagePool);
 
     /**
-     * @see InfrastructureClient#updateStoragePool(StoragePoolDto)
+     * @see InfrastructureApi#updateStoragePool(StoragePoolDto)
      */
     @EnterpriseEdition
     @PUT
@@ -858,7 +858,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) StoragePoolDto StoragePoolDto);
 
     /**
-     * @see InfrastructureClient#deleteStoragePool(StoragePoolDto)
+     * @see InfrastructureApi#deleteStoragePool(StoragePoolDto)
      */
     @EnterpriseEdition
     @DELETE
@@ -866,7 +866,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool);
 
     /**
-     * @see InfrastructureClient#getStoragePool(StorageDeviceDto, String)
+     * @see InfrastructureApi#getStoragePool(StorageDeviceDto, String)
      */
     @EnterpriseEdition
     @GET
@@ -878,7 +878,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) final String storagePoolId);
 
     /**
-     * @see InfrastructureClient#refreshStoragePool(StoragePoolDto, StoragePoolOptions)
+     * @see InfrastructureApi#refreshStoragePool(StoragePoolDto, StoragePoolOptions)
      */
     @EnterpriseEdition
     @GET
@@ -891,7 +891,7 @@ public interface InfrastructureAsyncClient
     /*********************** Network ***********************/
 
     /**
-     * @see InfrastructureClient#listNetworks(DatacenterDto)
+     * @see InfrastructureApi#listNetworks(DatacenterDto)
      */
     @EnterpriseEdition
     @GET
@@ -901,7 +901,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureClient#listNetwork(DatacenterDto, NetworkOptions)
+     * @see InfrastructureApi#listNetwork(DatacenterDto, NetworkOptions)
      */
     @EnterpriseEdition
     @GET
@@ -912,7 +912,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) NetworkOptions options);
 
     /**
-     * @see InfrastructureClient#getNetwork(DatacenterDto, Integer)
+     * @see InfrastructureApi#getNetwork(DatacenterDto, Integer)
      */
     @EnterpriseEdition
     @GET
@@ -924,7 +924,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) Integer networkId);
 
     /**
-     * @see InfrastructureClient#createNetwork(DatacenterDto, VLANNetworkDto)
+     * @see InfrastructureApi#createNetwork(DatacenterDto, VLANNetworkDto)
      */
     @EnterpriseEdition
     @POST
@@ -936,7 +936,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(BindToXMLPayload.class) VLANNetworkDto network);
 
     /**
-     * @see InfrastructureClient#updateNetwork(VLANNetworkDto)
+     * @see InfrastructureApi#updateNetwork(VLANNetworkDto)
      */
     @EnterpriseEdition
     @PUT
@@ -947,7 +947,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VLANNetworkDto network);
 
     /**
-     * @see InfrastructureClient#deleteNetwork(VLANNetworkDto)
+     * @see InfrastructureApi#deleteNetwork(VLANNetworkDto)
      */
     @EnterpriseEdition
     @DELETE
@@ -955,7 +955,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
     /**
-     * @see InfrastructureClient#checkTagAvailability(DatacenterDto, Integer)
+     * @see InfrastructureApi#checkTagAvailability(DatacenterDto, Integer)
      */
     @EnterpriseEdition
     @GET
@@ -969,7 +969,7 @@ public interface InfrastructureAsyncClient
     /*********************** Public Network IPs ***********************/
 
     /**
-     * @see InfrastructureClient#listPublicIps(VLANNetworkDto)
+     * @see InfrastructureApi#listPublicIps(VLANNetworkDto)
      */
     @GET
     @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
@@ -978,7 +978,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
     /**
-     * @see InfrastructureClient#listPublicIps(VLANNetworkDto, IpOptions)
+     * @see InfrastructureApi#listPublicIps(VLANNetworkDto, IpOptions)
      */
     @GET
     @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
@@ -988,7 +988,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
-     * @see InfrastructureClient#getPublicIp(VLANNetworkDto, Integer)
+     * @see InfrastructureApi#getPublicIp(VLANNetworkDto, Integer)
      */
     @GET
     @Consumes(PublicIpDto.BASE_MEDIA_TYPE)
@@ -998,7 +998,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) Integer ipId);
 
     /**
-     * @see InfrastructureClient#listExternalIps(VLANNetworkDto)
+     * @see InfrastructureApi#listExternalIps(VLANNetworkDto)
      */
     @GET
     @Consumes(ExternalIpsDto.BASE_MEDIA_TYPE)
@@ -1007,7 +1007,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
     /**
-     * @see InfrastructureClient#listExternalIps(VLANNetworkDto, IpOptions)
+     * @see InfrastructureApi#listExternalIps(VLANNetworkDto, IpOptions)
      */
     @GET
     @Consumes(ExternalIpsDto.BASE_MEDIA_TYPE)
@@ -1017,7 +1017,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
-     * @see InfrastructureClient#getExternalIp(VLANNetworkDto, Integer)
+     * @see InfrastructureApi#getExternalIp(VLANNetworkDto, Integer)
      */
     @GET
     @Consumes(ExternalIpDto.BASE_MEDIA_TYPE)
@@ -1027,7 +1027,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendToPath.class) Integer ipId);
 
     /**
-     * @see InfrastructureClient#listUnmanagedIps(VLANNetworkDto)
+     * @see InfrastructureApi#listUnmanagedIps(VLANNetworkDto)
      */
     @GET
     @Consumes(UnmanagedIpsDto.BASE_MEDIA_TYPE)
@@ -1036,7 +1036,7 @@ public interface InfrastructureAsyncClient
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
     /**
-     * @see InfrastructureClient#listUnmanagedIps(VLANNetworkDto, IpOptions)
+     * @see InfrastructureApi#listUnmanagedIps(VLANNetworkDto, IpOptions)
      */
     @GET
     @Consumes(UnmanagedIpsDto.BASE_MEDIA_TYPE)
@@ -1046,7 +1046,7 @@ public interface InfrastructureAsyncClient
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
-     * @see InfrastructureClient#getUnmanagedIp(VLANNetworkDto, Integer)
+     * @see InfrastructureApi#getUnmanagedIp(VLANNetworkDto, Integer)
      */
     @GET
     @Consumes(UnmanagedIpDto.BASE_MEDIA_TYPE)

@@ -25,8 +25,8 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.Date;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
@@ -71,7 +71,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualMachineTemplate(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected VirtualMachineTemplate(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VirtualMachineTemplateDto target)
     {
         super(context, target);
@@ -81,14 +81,14 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
 
     public void delete()
     {
-        context.getApi().getVirtualMachineTemplateClient().deleteVirtualMachineTemplate(target);
+        context.getApi().getVirtualMachineTemplateApi().deleteVirtualMachineTemplate(target);
         target = null;
     }
 
     public void update()
     {
         target =
-            context.getApi().getVirtualMachineTemplateClient().updateVirtualMachineTemplate(target);
+            context.getApi().getVirtualMachineTemplateApi().updateVirtualMachineTemplate(target);
     }
 
     /**
@@ -154,7 +154,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
         DatacenterRepositoryDto dcRepository = parser.apply(rp);
 
         AcceptedRequestDto<String> response =
-            context.getApi().getVirtualMachineTemplateClient()
+            context.getApi().getVirtualMachineTemplateApi()
                 .createPersistentVirtualMachineTemplate(dcRepository, persistentData);
 
         return getTask(response);
@@ -171,7 +171,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public Category getCategory()
     {
         Integer categoryId = target.getIdFromLink(ParentLinkName.CATEGORY);
-        CategoryDto category = context.getApi().getConfigClient().getCategory(categoryId);
+        CategoryDto category = context.getApi().getConfigApi().getCategory(categoryId);
         return wrap(context, Category.class, category);
     }
 
@@ -215,7 +215,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return wrap(context, Enterprise.class, context.getApi().getEnterpriseClient()
+        return wrap(context, Enterprise.class, context.getApi().getEnterpriseApi()
             .getEnterprise(enterpriseId));
     }
 
@@ -228,7 +228,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public Datacenter getDatacenter()
     {
         Integer repositoryId = target.getIdFromLink(ParentLinkName.DATACENTER_REPOSITORY);
-        return wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
+        return wrap(context, Datacenter.class, context.getApi().getInfrastructureApi()
             .getDatacenter(repositoryId));
     }
 
@@ -244,7 +244,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public List<Conversion> listConversions()
     {
         ConversionsDto convs =
-            context.getApi().getVirtualMachineTemplateClient().listConversions(target);
+            context.getApi().getVirtualMachineTemplateApi().listConversions(target);
         return wrap(context, Conversion.class, convs.getCollection());
     }
 
@@ -288,7 +288,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
         ConversionsDto convs =
             context
                 .getApi()
-                .getVirtualMachineTemplateClient()
+                .getVirtualMachineTemplateApi()
                 .listConversions(
                     target,
                     ConversionOptions.builder().hypervisorType(hypervisor).conversionState(state)
@@ -312,7 +312,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
         request.setTargetFormat(diskFormat);
 
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getVirtualMachineTemplateClient()
+            context.getApi().getVirtualMachineTemplateApi()
                 .requestConversion(target, diskFormat, request);
 
         return taskRef == null ? null : getTask(taskRef);

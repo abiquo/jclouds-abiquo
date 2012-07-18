@@ -32,8 +32,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -57,7 +57,7 @@ import com.google.inject.Inject;
 @Singleton
 public class ListVirtualMachinesImpl implements ListVirtualMachines
 {
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     protected final ExecutorService userExecutor;
 
@@ -71,7 +71,7 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
     protected Long maxTime;
 
     @Inject
-    ListVirtualMachinesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    ListVirtualMachinesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor,
         final ListVirtualAppliances listVirtualAppliances)
     {
@@ -116,7 +116,7 @@ public class ListVirtualMachinesImpl implements ListVirtualMachines
                     public Future<VirtualMachinesWithNodeExtendedDto> apply(
                         final VirtualAppliance input)
                     {
-                        return context.getAsyncApi().getCloudClient()
+                        return context.getAsyncApi().getCloudApi()
                             .listVirtualMachines(input.unwrap(), options);
                     }
                 }, userExecutor, maxTime, logger, "getting virtual machines");

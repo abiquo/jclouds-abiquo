@@ -23,7 +23,7 @@ import static org.jclouds.abiquo.reference.AbiquoTestConstants.PREFIX;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.config.CategoryPredicates;
 import org.testng.annotations.Test;
 
@@ -33,7 +33,7 @@ import org.testng.annotations.Test;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class CategoryLiveTest extends BaseAbiquoClientLiveTest
+public class CategoryLiveTest extends BaseAbiquoApiLiveTest
 {
     public void testCreateAndGet()
     {

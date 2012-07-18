@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -73,7 +73,7 @@ public class User extends DomainWrapper<UserDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected User(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final UserDto target)
+    protected User(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final UserDto target)
     {
         super(context, target);
     }
@@ -89,7 +89,7 @@ public class User extends DomainWrapper<UserDto>
      */
     public void delete()
     {
-        context.getApi().getEnterpriseClient().deleteUser(target);
+        context.getApi().getEnterpriseApi().deleteUser(target);
         target = null;
     }
 
@@ -103,7 +103,7 @@ public class User extends DomainWrapper<UserDto>
     {
         // set role link
         target.addLink(new RESTLink("role", role.unwrap().getEditLink().getHref()));
-        target = context.getApi().getEnterpriseClient().createUser(enterprise.unwrap(), target);
+        target = context.getApi().getEnterpriseApi().createUser(enterprise.unwrap(), target);
     }
 
     /**
@@ -121,7 +121,7 @@ public class User extends DomainWrapper<UserDto>
             target.searchLink("role").setHref(role.unwrap().getEditLink().getHref());
         }
 
-        target = context.getApi().getEnterpriseClient().updateUser(target);
+        target = context.getApi().getEnterpriseApi().updateUser(target);
     }
 
     public List<VirtualDatacenter> listPermitedVirtualDatacenters()
@@ -188,7 +188,7 @@ public class User extends DomainWrapper<UserDto>
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return wrap(context, Enterprise.class, context.getApi().getEnterpriseClient()
+        return wrap(context, Enterprise.class, context.getApi().getEnterpriseApi()
             .getEnterprise(enterpriseId));
     }
 
@@ -196,7 +196,7 @@ public class User extends DomainWrapper<UserDto>
 
     public Role getRole()
     {
-        RoleDto role = context.getApi().getAdminClient().getRole(target);
+        RoleDto role = context.getApi().getAdminApi().getRole(target);
         return wrap(context, Role.class, role);
     }
 
@@ -209,7 +209,7 @@ public class User extends DomainWrapper<UserDto>
     public List<VirtualMachine> listMachines()
     {
         VirtualMachinesWithNodeExtendedDto machines =
-            context.getApi().getEnterpriseClient().listVirtualMachines(target);
+            context.getApi().getEnterpriseApi().listVirtualMachines(target);
         return wrap(context, VirtualMachine.class, machines.getCollection());
     }
 
@@ -225,7 +225,7 @@ public class User extends DomainWrapper<UserDto>
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Enterprise enterprise, final Role role)
     {
         return new Builder(context, enterprise, role);
@@ -233,7 +233,7 @@ public class User extends DomainWrapper<UserDto>
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private Enterprise enterprise;
 
@@ -257,7 +257,7 @@ public class User extends DomainWrapper<UserDto>
 
         private String authType = DEFAULT_AUTH_TYPE;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Enterprise enterprise, final Role role)
         {
             super();

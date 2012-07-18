@@ -25,7 +25,7 @@ import static org.testng.Assert.assertNull;
 
 import java.util.List;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.enterprise.TemplateDefinitionListPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -37,7 +37,7 @@ import org.testng.annotations.Test;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class TemplateDefinitionListLiveTest extends BaseAbiquoClientLiveTest
+public class TemplateDefinitionListLiveTest extends BaseAbiquoApiLiveTest
 {
     private TemplateDefinitionList list;
 

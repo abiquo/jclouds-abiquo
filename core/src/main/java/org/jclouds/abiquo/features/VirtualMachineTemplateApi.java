@@ -39,12 +39,12 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see VirtualMachineTemplateAsyncClient
+ * @see VirtualMachineTemplateAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Timeout(duration = 60, timeUnit = TimeUnit.SECONDS)
-public interface VirtualMachineTemplateClient
+public interface VirtualMachineTemplateApi
 {
     /*********************** Virtual Machine Template ***********************/
 

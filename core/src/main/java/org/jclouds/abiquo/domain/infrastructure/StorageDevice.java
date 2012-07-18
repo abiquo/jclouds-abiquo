@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -60,7 +60,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected StorageDevice(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected StorageDevice(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final StorageDeviceDto target)
     {
         super(context, target);
@@ -76,7 +76,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
      */
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteStorageDevice(target);
+        context.getApi().getInfrastructureApi().deleteStorageDevice(target);
         target = null;
     }
 
@@ -91,7 +91,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .createStorageDevice(datacenter.unwrap(), target);
     }
 
@@ -105,7 +105,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
      */
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateStorageDevice(target);
+        target = context.getApi().getInfrastructureApi().updateStorageDevice(target);
     }
 
     // Parent access
@@ -121,7 +121,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+        DatacenterDto dto = context.getApi().getInfrastructureApi().getDatacenter(datacenterId);
         datacenter = wrap(context, Datacenter.class, dto);
         return datacenter;
     }
@@ -140,7 +140,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public List<StoragePool> listRemoteStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .listStoragePools(target, StoragePoolOptions.builder().sync(true).build());
 
         List<StoragePool> storagePoolList =
@@ -199,7 +199,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public List<StoragePool> listStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .listStoragePools(target, StoragePoolOptions.builder().sync(false).build());
         return wrap(context, StoragePool.class, storagePools.getCollection());
     }
@@ -250,7 +250,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
     public StoragePool getStoragePool(final String id)
     {
         StoragePoolDto storagePool =
-            context.getApi().getInfrastructureClient().getStoragePool(target, id);
+            context.getApi().getInfrastructureApi().getStoragePool(target, id);
         return wrap(context, StoragePool.class, storagePool);
     }
 
@@ -278,7 +278,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
             datacenter = this.getDatacenter().unwrap();
         }
 
-        TiersDto dto = context.getApi().getInfrastructureClient().listTiers(datacenter);
+        TiersDto dto = context.getApi().getInfrastructureApi().listTiers(datacenter);
         return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
     }
 
@@ -313,7 +313,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
         return Iterables.getFirst(filter(listTiersFromDatacenter(), filter), null);
     }
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
@@ -321,7 +321,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private Datacenter datacenter;
 
@@ -341,7 +341,7 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
 
         private String username;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter)
         {
             super();

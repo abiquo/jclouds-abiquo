@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.event;
 
 import java.util.Date;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
@@ -37,7 +37,7 @@ public class Event extends DomainWrapper<EventDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Event(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected Event(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final EventDto target)
     {
         super(context, target);

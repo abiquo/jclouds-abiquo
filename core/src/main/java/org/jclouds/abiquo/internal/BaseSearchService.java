@@ -27,8 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
@@ -66,10 +66,10 @@ import com.google.common.annotations.VisibleForTesting;
 public class BaseSearchService implements SearchService
 {
     @VisibleForTesting
-    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    protected BaseSearchService(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    protected BaseSearchService(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = checkNotNull(context, "context");
     }
@@ -80,7 +80,7 @@ public class BaseSearchService implements SearchService
     public Iterable<Enterprise> searchEnterprises(final EnterpriseOptions options)
     {
         List<EnterpriseDto> enterprises =
-            context.getApi().getEnterpriseClient().listEnterprises(options).getCollection();
+            context.getApi().getEnterpriseApi().listEnterprises(options).getCollection();
 
         return wrap(context, Enterprise.class, enterprises);
     }
@@ -90,7 +90,7 @@ public class BaseSearchService implements SearchService
         final EnterpriseOptions options)
     {
         List<EnterpriseDto> enterprises =
-            context.getApi().getEnterpriseClient().listEnterprises(datacenter.unwrap(), options)
+            context.getApi().getEnterpriseApi().listEnterprises(datacenter.unwrap(), options)
                 .getCollection();
 
         return wrap(context, Enterprise.class, enterprises);
@@ -103,7 +103,7 @@ public class BaseSearchService implements SearchService
         final VolumeOptions options)
     {
         List<VolumeManagementDto> volumes =
-            context.getApi().getCloudClient().listVolumes(virtualDatacenter.unwrap(), options)
+            context.getApi().getCloudApi().listVolumes(virtualDatacenter.unwrap(), options)
                 .getCollection();
 
         return wrap(context, Volume.class, volumes);
@@ -116,7 +116,7 @@ public class BaseSearchService implements SearchService
         final StoragePoolOptions options)
     {
         List<StoragePoolDto> pools =
-            context.getApi().getInfrastructureClient().listStoragePools(device.unwrap(), options)
+            context.getApi().getInfrastructureApi().listStoragePools(device.unwrap(), options)
                 .getCollection();
 
         return wrap(context, StoragePool.class, pools);
@@ -129,7 +129,7 @@ public class BaseSearchService implements SearchService
         final IpOptions options)
     {
         List<PrivateIpDto> ips =
-            context.getApi().getCloudClient().listPrivateNetworkIps(network.unwrap(), options)
+            context.getApi().getCloudApi().listPrivateNetworkIps(network.unwrap(), options)
                 .getCollection();
 
         return wrap(context, PrivateIp.class, ips);
@@ -140,7 +140,7 @@ public class BaseSearchService implements SearchService
         final IpOptions options)
     {
         List<PublicIpDto> ips =
-            context.getApi().getCloudClient()
+            context.getApi().getCloudApi()
                 .listAvailablePublicIps(virtualDatacenter.unwrap(), options).getCollection();
 
         return wrap(context, PublicIp.class, ips);
@@ -151,7 +151,7 @@ public class BaseSearchService implements SearchService
         final IpOptions options)
     {
         List<PublicIpDto> ips =
-            context.getApi().getCloudClient()
+            context.getApi().getCloudApi()
                 .listPurchasedPublicIps(virtualDatacenter.unwrap(), options).getCollection();
 
         return wrap(context, PublicIp.class, ips);
@@ -162,7 +162,7 @@ public class BaseSearchService implements SearchService
         final FilterOptions options)
     {
         List<LogicServerDto> profiles =
-            context.getApi().getInfrastructureClient().listServiceProfiles(rack.unwrap(), options)
+            context.getApi().getInfrastructureApi().listServiceProfiles(rack.unwrap(), options)
                 .getCollection();
 
         return wrap(context, LogicServer.class, profiles);
@@ -173,7 +173,7 @@ public class BaseSearchService implements SearchService
         final FilterOptions options)
     {
         List<LogicServerDto> profiles =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .listServiceProfileTemplates(rack.unwrap(), options).getCollection();
 
         return wrap(context, LogicServer.class, profiles);

@@ -22,7 +22,7 @@ package org.jclouds.abiquo.domain.cloud;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 /**
@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class HardDiskLiveTest extends BaseAbiquoClientLiveTest
+public class HardDiskLiveTest extends BaseAbiquoApiLiveTest
 {
     private HardDisk hardDisk;
 

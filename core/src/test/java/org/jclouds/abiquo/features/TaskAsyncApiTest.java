@@ -37,21 +37,21 @@ import com.abiquo.server.core.task.TasksDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Tests annotation parsing of {@code TaskAsyncClient}
+ * Tests annotation parsing of {@code TaskAsyncApi}
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Test(groups = "unit")
-public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClient>
+public class TaskAsyncApiTest extends BaseAbiquoAsyncApiTest<TaskAsyncApi>
 {
     /*********************** Task ***********************/
 
     public void testGetTaskVirtualMachine() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = TaskAsyncClient.class.getMethod("getTask", RESTLink.class);
-        GeneratedHttpRequest<TaskAsyncClient> request =
+        Method method = TaskAsyncApi.class.getMethod("getTask", RESTLink.class);
+        GeneratedHttpRequest<TaskAsyncApi> request =
             processor
                 .createRequest(
                     method,
@@ -75,8 +75,8 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
         IOException
     {
         Method method =
-            TaskAsyncClient.class.getMethod("listTasks", SingleResourceTransportDto.class);
-        GeneratedHttpRequest<TaskAsyncClient> request =
+            TaskAsyncApi.class.getMethod("listTasks", SingleResourceTransportDto.class);
+        GeneratedHttpRequest<TaskAsyncApi> request =
             processor.createRequest(method, CloudResources.virtualMachinePut());
 
         assertRequestLineEquals(
@@ -95,8 +95,8 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
     public void testGetTaskVirtualMachineTemplate() throws SecurityException,
         NoSuchMethodException, IOException
     {
-        Method method = TaskAsyncClient.class.getMethod("getTask", RESTLink.class);
-        GeneratedHttpRequest<TaskAsyncClient> request =
+        Method method = TaskAsyncApi.class.getMethod("getTask", RESTLink.class);
+        GeneratedHttpRequest<TaskAsyncApi> request =
             processor
                 .createRequest(
                     method,
@@ -120,8 +120,8 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
         NoSuchMethodException, IOException
     {
         Method method =
-            TaskAsyncClient.class.getMethod("listTasks", SingleResourceTransportDto.class);
-        GeneratedHttpRequest<TaskAsyncClient> request =
+            TaskAsyncApi.class.getMethod("listTasks", SingleResourceTransportDto.class);
+        GeneratedHttpRequest<TaskAsyncApi> request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
 
         assertRequestLineEquals(
@@ -138,9 +138,9 @@ public class TaskAsyncClientTest extends BaseAbiquoAsyncClientTest<TaskAsyncClie
     }
 
     @Override
-    protected TypeLiteral<RestAnnotationProcessor<TaskAsyncClient>> createTypeLiteral()
+    protected TypeLiteral<RestAnnotationProcessor<TaskAsyncApi>> createTypeLiteral()
     {
-        return new TypeLiteral<RestAnnotationProcessor<TaskAsyncClient>>()
+        return new TypeLiteral<RestAnnotationProcessor<TaskAsyncApi>>()
         {
         };
     }

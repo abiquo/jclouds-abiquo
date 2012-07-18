@@ -24,8 +24,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.event.Event;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.features.services.EventService;
@@ -44,13 +44,13 @@ import com.google.common.annotations.VisibleForTesting;
 public class BaseEventService implements EventService
 {
     @VisibleForTesting
-    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @VisibleForTesting
     protected final ListEvents listEvents;
 
     @Inject
-    protected BaseEventService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected BaseEventService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final ListEvents listEvents)
     {
         this.context = checkNotNull(context, "context");

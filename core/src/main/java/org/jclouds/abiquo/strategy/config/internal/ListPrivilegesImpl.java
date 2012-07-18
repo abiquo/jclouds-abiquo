@@ -24,8 +24,8 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.strategy.config.ListPrivileges;
 import org.jclouds.rest.RestContext;
@@ -44,12 +44,12 @@ import com.google.inject.Inject;
 public class ListPrivilegesImpl implements ListPrivileges
 {
     // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
+    // single api methods
 
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    ListPrivilegesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    ListPrivilegesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = context;
     }
@@ -57,7 +57,7 @@ public class ListPrivilegesImpl implements ListPrivileges
     @Override
     public Iterable<Privilege> execute()
     {
-        PrivilegesDto result = context.getApi().getConfigClient().listPrivileges();
+        PrivilegesDto result = context.getApi().getConfigApi().listPrivileges();
         return wrap(context, Privilege.class, result.getCollection());
     }
 

@@ -20,8 +20,8 @@
 package org.jclouds.abiquo.domain.config;
 
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.rest.RestContext;
@@ -40,7 +40,7 @@ public class License extends DomainWrapper<LicenseDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected License(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final LicenseDto target)
+    protected License(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final LicenseDto target)
     {
         super(context, target);
     }
@@ -49,29 +49,29 @@ public class License extends DomainWrapper<LicenseDto>
 
     public void remove()
     {
-        context.getApi().getConfigClient().removeLicense(target);
+        context.getApi().getConfigApi().removeLicense(target);
         target = null;
     }
 
     public void add()
     {
-        target = context.getApi().getConfigClient().addLicense(target);
+        target = context.getApi().getConfigApi().addLicense(target);
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final String code)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final String code)
     {
         return new Builder(context, code);
     }
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String code;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final String code)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final String code)
         {
             super();
             this.context = context;

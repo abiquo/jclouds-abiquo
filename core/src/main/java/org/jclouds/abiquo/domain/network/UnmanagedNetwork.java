@@ -23,8 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -65,7 +65,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
     /**
      * Constructor to be used only by the builder.
      */
-    protected UnmanagedNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected UnmanagedNetwork(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VLANNetworkDto target)
     {
         super(context, target);
@@ -81,7 +81,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
     @Override
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteNetwork(target);
+        context.getApi().getInfrastructureApi().deleteNetwork(target);
         target = null;
     }
 
@@ -97,7 +97,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
     {
         this.addEnterpriseLink();
         target =
-            context.getApi().getInfrastructureClient().createNetwork(datacenter.unwrap(), target);
+            context.getApi().getInfrastructureApi().createNetwork(datacenter.unwrap(), target);
     }
 
     /**
@@ -110,7 +110,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
     @Override
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateNetwork(target);
+        target = context.getApi().getInfrastructureApi().updateNetwork(target);
     }
 
     /**
@@ -123,14 +123,14 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
     public List<UnmanagedIp> listIps(final IpOptions options)
     {
         UnmanagedIpsDto ips =
-            context.getApi().getInfrastructureClient().listUnmanagedIps(target, options);
+            context.getApi().getInfrastructureApi().listUnmanagedIps(target, options);
         return wrap(context, UnmanagedIp.class, ips.getCollection());
     }
 
     @Override
     public UnmanagedIp getIp(final Integer id)
     {
-        UnmanagedIpDto ip = context.getApi().getInfrastructureClient().getUnmanagedIp(target, id);
+        UnmanagedIpDto ip = context.getApi().getInfrastructureApi().getUnmanagedIp(target, id);
         return wrap(context, UnmanagedIp.class, ip);
     }
 
@@ -185,7 +185,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Datacenter datacenter, final Enterprise enterprise)
     {
         return new Builder(context, datacenter, enterprise);
@@ -197,7 +197,7 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
 
         private Enterprise enterprise;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter, final Enterprise enterprise)
         {
             super(context);

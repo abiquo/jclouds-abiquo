@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.Collections;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.rest.RestContext;
 
@@ -47,7 +47,7 @@ public abstract class DomainWithTasksWrapper<T extends SingleResourceTransportDt
     DomainWrapper<T>
 {
 
-    protected DomainWithTasksWrapper(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected DomainWithTasksWrapper(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final T target)
     {
         super(context, target);
@@ -55,7 +55,7 @@ public abstract class DomainWithTasksWrapper<T extends SingleResourceTransportDt
 
     public List<AsyncTask> listTasks()
     {
-        TasksDto result = context.getApi().getTaskClient().listTasks(target);
+        TasksDto result = context.getApi().getTaskApi().listTasks(target);
         List<AsyncTask> tasks = wrap(context, AsyncTask.class, result.getCollection());
 
         // Return the most recent task first

@@ -28,8 +28,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -58,7 +58,7 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Predicate;
 
 /**
- * Defines the connection between the {@link AbiquoClient} implementation and the jclouds
+ * Defines the connection between the {@link AbiquoApi} implementation and the jclouds
  * {@link ComputeService}.
  * 
  * @author Ignasi Barrera
@@ -72,7 +72,7 @@ public class AbiquoComputeServiceAdapter
     @Named(ComputeServiceConstants.COMPUTE_LOGGER)
     protected Logger logger = Logger.NULL;
 
-    private final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    private final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     private final AdministrationService adminService;
 
@@ -83,7 +83,7 @@ public class AbiquoComputeServiceAdapter
     private AbiquoComputeServiceHelper helper;
 
     @Inject
-    public AbiquoComputeServiceAdapter(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public AbiquoComputeServiceAdapter(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final AdministrationService adminService, final CloudService cloudService,
         final MonitoringService monitoringService, final AbiquoComputeServiceHelper helper)
     {

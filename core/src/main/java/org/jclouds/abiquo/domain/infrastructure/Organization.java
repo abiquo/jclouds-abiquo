@@ -20,8 +20,8 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.rest.RestContext;
@@ -42,7 +42,7 @@ public class Organization extends DomainWrapper<OrganizationDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Organization(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final OrganizationDto target)
+    protected Organization(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final OrganizationDto target)
     {
         super(context, target);
     }

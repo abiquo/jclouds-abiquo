@@ -48,14 +48,14 @@ import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Tests annotation parsing of {@code VirtualMachineTemplateAsyncClient}
+ * Tests annotation parsing of {@code VirtualMachineTemplateAsyncApi}
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Test(groups = "unit")
-public class VirtualMachineTemplateAsyncClientTest extends
-    BaseAbiquoAsyncClientTest<VirtualMachineTemplateAsyncClient>
+public class VirtualMachineTemplateAsyncApiTest extends
+    BaseAbiquoAsyncApiTest<VirtualMachineTemplateAsyncApi>
 {
     /*********************** Virtual Machine Template ***********************/
 
@@ -63,9 +63,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
         IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("listVirtualMachineTemplates",
+            VirtualMachineTemplateAsyncApi.class.getMethod("listVirtualMachineTemplates",
                 Integer.class, Integer.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, 1, 1);
 
         assertRequestLineEquals(
@@ -86,9 +86,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
         NoSuchMethodException, IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("listVirtualMachineTemplates",
+            VirtualMachineTemplateAsyncApi.class.getMethod("listVirtualMachineTemplates",
                 Integer.class, Integer.class, VirtualMachineTemplateOptions.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, 1, 1, VirtualMachineTemplateOptions.builder()
                 .hypervisorType(HypervisorType.XENSERVER).categoryName("Firewalls").build());
 
@@ -110,9 +110,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
         IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("getVirtualMachineTemplate",
+            VirtualMachineTemplateAsyncApi.class.getMethod("getVirtualMachineTemplate",
                 Integer.class, Integer.class, Integer.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, 1, 1, 1);
 
         assertRequestLineEquals(
@@ -133,9 +133,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
         IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("updateVirtualMachineTemplate",
+            VirtualMachineTemplateAsyncApi.class.getMethod("updateVirtualMachineTemplate",
                 VirtualMachineTemplateDto.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
 
         assertRequestLineEquals(
@@ -157,9 +157,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
     public void testDeleteVirtualMachineTemplate() throws SecurityException, NoSuchMethodException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("deleteVirtualMachineTemplate",
+            VirtualMachineTemplateAsyncApi.class.getMethod("deleteVirtualMachineTemplate",
                 VirtualMachineTemplateDto.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
 
         assertRequestLineEquals(
@@ -179,10 +179,10 @@ public class VirtualMachineTemplateAsyncClientTest extends
         NoSuchMethodException, IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod(
+            VirtualMachineTemplateAsyncApi.class.getMethod(
                 "createPersistentVirtualMachineTemplate", DatacenterRepositoryDto.class,
                 VirtualMachineTemplatePersistentDto.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, TemplateResources.datacenterRepositoryPut(),
                 TemplateResources.persistentData());
 
@@ -207,10 +207,10 @@ public class VirtualMachineTemplateAsyncClientTest extends
         IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("requestConversion",
+            VirtualMachineTemplateAsyncApi.class.getMethod("requestConversion",
                 VirtualMachineTemplateDto.class, DiskFormatType.class, ConversionDto.class);
 
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
                 DiskFormatType.VMDK_STREAM_OPTIMIZED, TemplateResources.conversionPut());
 
@@ -233,9 +233,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
     public void testListConversions() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("listConversions",
+            VirtualMachineTemplateAsyncApi.class.getMethod("listConversions",
                 VirtualMachineTemplateDto.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut());
 
         assertRequestLineEquals(
@@ -255,9 +255,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
         IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("listConversions",
+            VirtualMachineTemplateAsyncApi.class.getMethod("listConversions",
                 VirtualMachineTemplateDto.class, ConversionOptions.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
                 ConversionOptions.builder().hypervisorType(HypervisorType.XENSERVER)
                     .conversionState(ConversionState.FINISHED).build());
@@ -279,9 +279,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
     public void testGetConversion() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method =
-            VirtualMachineTemplateAsyncClient.class.getMethod("getConversion",
+            VirtualMachineTemplateAsyncApi.class.getMethod("getConversion",
                 VirtualMachineTemplateDto.class, DiskFormatType.class);
-        GeneratedHttpRequest<VirtualMachineTemplateAsyncClient> request =
+        GeneratedHttpRequest<VirtualMachineTemplateAsyncApi> request =
             processor.createRequest(method, TemplateResources.virtualMachineTemplatePut(),
                 DiskFormatType.RAW);
 
@@ -299,9 +299,9 @@ public class VirtualMachineTemplateAsyncClientTest extends
     }
 
     @Override
-    protected TypeLiteral<RestAnnotationProcessor<VirtualMachineTemplateAsyncClient>> createTypeLiteral()
+    protected TypeLiteral<RestAnnotationProcessor<VirtualMachineTemplateAsyncApi>> createTypeLiteral()
     {
-        return new TypeLiteral<RestAnnotationProcessor<VirtualMachineTemplateAsyncClient>>()
+        return new TypeLiteral<RestAnnotationProcessor<VirtualMachineTemplateAsyncApi>>()
         {
         };
     }

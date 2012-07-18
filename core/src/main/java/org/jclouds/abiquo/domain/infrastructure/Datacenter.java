@@ -23,8 +23,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -94,7 +94,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Datacenter(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected Datacenter(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final DatacenterDto target)
     {
         super(context, target);
@@ -112,7 +112,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      */
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteDatacenter(target);
+        context.getApi().getInfrastructureApi().deleteDatacenter(target);
         target = null;
     }
 
@@ -133,7 +133,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public void save()
     {
         // Datacenter must be persisted first, so links get populated in the target object
-        target = context.getApi().getInfrastructureClient().createDatacenter(target);
+        target = context.getApi().getInfrastructureApi().createDatacenter(target);
 
         // If remote services data is set, create remote services.
         if (ip != null && edition != null)
@@ -152,7 +152,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      */
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateDatacenter(target);
+        target = context.getApi().getInfrastructureApi().updateDatacenter(target);
     }
 
     /**
@@ -169,7 +169,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public VlanTagAvailabilityType checkTagAvailability(final int tag)
     {
         VlanTagAvailabilityDto availability =
-            context.getApi().getInfrastructureClient().checkTagAvailability(target, tag);
+            context.getApi().getInfrastructureApi().checkTagAvailability(target, tag);
 
         return availability.getAvailable();
     }
@@ -187,7 +187,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      */
     public List<Rack> listRacks()
     {
-        RacksDto racks = context.getApi().getInfrastructureClient().listRacks(target);
+        RacksDto racks = context.getApi().getInfrastructureApi().listRacks(target);
         return wrap(context, Rack.class, racks.getCollection());
     }
 
@@ -233,7 +233,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      */
     public Rack getRack(final Integer id)
     {
-        RackDto rack = context.getApi().getInfrastructureClient().getRack(target, id);
+        RackDto rack = context.getApi().getInfrastructureApi().getRack(target, id);
         return wrap(context, Rack.class, rack);
     }
 
@@ -249,7 +249,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @EnterpriseEdition
     public List<ManagedRack> listManagedRacks()
     {
-        UcsRacksDto racks = context.getApi().getInfrastructureClient().listManagedRacks(target);
+        UcsRacksDto racks = context.getApi().getInfrastructureApi().listManagedRacks(target);
         return wrap(context, ManagedRack.class, racks.getCollection());
     }
 
@@ -298,7 +298,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @EnterpriseEdition
     public ManagedRack getManagedRack(final Integer id)
     {
-        UcsRackDto rack = context.getApi().getInfrastructureClient().getManagedRack(target, id);
+        UcsRackDto rack = context.getApi().getInfrastructureApi().getManagedRack(target, id);
         return wrap(context, ManagedRack.class, rack);
     }
 
@@ -315,7 +315,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<StorageDeviceMetadata> listSupportedStorageDevices()
     {
         StorageDevicesMetadataDto devices =
-            context.getApi().getInfrastructureClient().listSupportedStorageDevices(target);
+            context.getApi().getInfrastructureApi().listSupportedStorageDevices(target);
         return wrap(context, StorageDeviceMetadata.class, devices.getCollection());
     }
 
@@ -363,7 +363,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<StorageDevice> listStorageDevices()
     {
         StorageDevicesDto devices =
-            context.getApi().getInfrastructureClient().listStorageDevices(target);
+            context.getApi().getInfrastructureApi().listStorageDevices(target);
         return wrap(context, StorageDevice.class, devices.getCollection());
     }
 
@@ -414,7 +414,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public StorageDevice getStorageDevice(final Integer id)
     {
         StorageDeviceDto device =
-            context.getApi().getInfrastructureClient().getStorageDevice(target, id);
+            context.getApi().getInfrastructureApi().getStorageDevice(target, id);
         return wrap(context, StorageDevice.class, device);
     }
 
@@ -430,7 +430,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<RemoteService> listRemoteServices()
     {
         RemoteServicesDto remoteServices =
-            context.getApi().getInfrastructureClient().listRemoteServices(target);
+            context.getApi().getInfrastructureApi().listRemoteServices(target);
         return wrap(context, RemoteService.class, remoteServices.getCollection());
     }
 
@@ -498,7 +498,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<Limits> listLimits()
     {
         DatacentersLimitsDto dto =
-            context.getApi().getInfrastructureClient().listLimits(this.unwrap());
+            context.getApi().getInfrastructureApi().listLimits(this.unwrap());
         return DomainWrapper.wrap(context, Limits.class, dto.getCollection());
     }
 
@@ -548,7 +548,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     @EnterpriseEdition
     public List<Tier> listTiers()
     {
-        TiersDto dto = context.getApi().getInfrastructureClient().listTiers(this.unwrap());
+        TiersDto dto = context.getApi().getInfrastructureApi().listTiers(this.unwrap());
         return DomainWrapper.wrap(context, Tier.class, dto.getCollection());
     }
 
@@ -596,7 +596,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      */
     public List<Network< ? >> listNetworks()
     {
-        VLANNetworksDto networks = context.getApi().getInfrastructureClient().listNetworks(target);
+        VLANNetworksDto networks = context.getApi().getInfrastructureApi().listNetworks(target);
         return Network.wrapNetworks(context, networks.getCollection());
     }
 
@@ -643,7 +643,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     {
         NetworkOptions options = NetworkOptions.builder().type(type).build();
         VLANNetworksDto networks =
-            context.getApi().getInfrastructureClient().listNetworks(target, options);
+            context.getApi().getInfrastructureApi().listNetworks(target, options);
         return Network.wrapNetworks(context, networks.getCollection());
     }
 
@@ -697,7 +697,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      */
     public Network< ? > getNetwork(final Integer id)
     {
-        VLANNetworkDto network = context.getApi().getInfrastructureClient().getNetwork(target, id);
+        VLANNetworkDto network = context.getApi().getInfrastructureApi().getNetwork(target, id);
         return Network.wrapNetwork(context, network);
     }
 
@@ -719,7 +719,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         DatacenterOptions options = DatacenterOptions.builder().ip(ip).build();
 
         String type =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .getHypervisorTypeFromMachine(target, options);
 
         return HypervisorType.valueOf(type);
@@ -738,7 +738,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<HypervisorType> listAvailableHypervisors()
     {
         HypervisorTypesDto types =
-            context.getApi().getInfrastructureClient().getHypervisorTypes(target);
+            context.getApi().getInfrastructureApi().getHypervisorTypes(target);
 
         return getHypervisorTypes(types);
     }
@@ -828,7 +828,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         MachineDto dto =
             context
                 .getApi()
-                .getInfrastructureClient()
+                .getInfrastructureApi()
                 .discoverSingleMachine(target, ip, hypervisorType, user, password,
                     MachineOptions.builder().port(port).build());
 
@@ -884,7 +884,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         MachinesDto dto =
             context
                 .getApi()
-                .getInfrastructureClient()
+                .getInfrastructureApi()
                 .discoverMultipleMachines(target, ipFrom, ipTo, hypervisorType, user, password,
                     MachineOptions.builder().port(port).build());
 
@@ -943,7 +943,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         MachineStateDto dto =
             context
                 .getApi()
-                .getInfrastructureClient()
+                .getInfrastructureApi()
                 .checkMachineState(target, ip, hypervisorType, user, password,
                     MachineOptions.builder().port(port).build());
 
@@ -963,7 +963,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<VirtualMachineTemplate> listTemplatesInRepository(final Enterprise enterprise)
     {
         VirtualMachineTemplatesDto dto =
-            context.getApi().getVirtualMachineTemplateClient()
+            context.getApi().getVirtualMachineTemplateApi()
                 .listVirtualMachineTemplates(enterprise.getId(), target.getId());
         return wrap(context, VirtualMachineTemplate.class, dto.getCollection());
     }
@@ -1020,21 +1020,21 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         final Integer id)
     {
         VirtualMachineTemplateDto template =
-            context.getApi().getVirtualMachineTemplateClient()
+            context.getApi().getVirtualMachineTemplateApi()
                 .getVirtualMachineTemplate(enterprise.getId(), target.getId(), id);
         return wrap(context, VirtualMachineTemplate.class, template);
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         return new Builder(context);
     }
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String name;
 
@@ -1044,7 +1044,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
 
         private AbiquoEdition edition;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
         {
             super();
             this.context = context;

@@ -29,7 +29,7 @@ import java.util.List;
 
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 /**
@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualMachineStorageLiveTest extends BaseAbiquoClientLiveTest
+public class VirtualMachineStorageLiveTest extends BaseAbiquoApiLiveTest
 {
     private Volume volume;
 

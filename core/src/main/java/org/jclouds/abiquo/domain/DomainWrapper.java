@@ -27,8 +27,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.exception.WrapperException;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.util.LinkUtils;
@@ -52,12 +52,12 @@ import com.google.common.collect.Lists;
 public abstract class DomainWrapper<T extends SingleResourceTransportDto>
 {
     /** The rest context. */
-    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     /** The wrapped object. */
     protected T target;
 
-    protected DomainWrapper(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected DomainWrapper(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final T target)
     {
         super();
@@ -99,7 +99,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      * Wraps an object in the given wrapper class.
      */
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> W wrap(
-        final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Class<W> wrapperClass,
+        final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Class<W> wrapperClass,
         final T target)
     {
         if (target == null)
@@ -127,7 +127,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      * Wrap a collection of objects to the given wrapper class.
      */
     public static <T extends SingleResourceTransportDto, W extends DomainWrapper<T>> List<W> wrap(
-        final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Class<W> wrapperClass,
+        final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Class<W> wrapperClass,
         final Iterable<T> targets)
     {
         if (targets == null)
@@ -210,7 +210,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
 
         // This will return null on untrackable tasks
-        TaskDto task = context.getApi().getTaskClient().getTask(taskLink);
+        TaskDto task = context.getApi().getTaskApi().getTask(taskLink);
         return wrap(context, AsyncTask.class, task);
     }
 
@@ -227,7 +227,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         for (RESTLink link : acceptedRequest.getLinks())
         {
             // This will return null on untrackable tasks
-            TaskDto task = context.getApi().getTaskClient().getTask(link);
+            TaskDto task = context.getApi().getTaskApi().getTask(link);
             if (task != null)
             {
                 tasks.add(wrap(context, AsyncTask.class, task));

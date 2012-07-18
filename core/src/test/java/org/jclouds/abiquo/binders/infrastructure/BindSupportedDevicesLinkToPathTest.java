@@ -26,7 +26,7 @@ import java.net.URI;
 
 import javax.ws.rs.HttpMethod;
 
-import org.jclouds.abiquo.features.InfrastructureAsyncClient;
+import org.jclouds.abiquo.features.InfrastructureAsyncApi;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.testng.annotations.Test;
 
@@ -64,12 +64,12 @@ public class BindSupportedDevicesLinkToPathTest
         BindSupportedDevicesLinkToPath binder = new BindSupportedDevicesLinkToPath();
 
         Method withEndpointLink =
-            InfrastructureAsyncClient.class.getMethod("listSupportedStorageDevices",
+            InfrastructureAsyncApi.class.getMethod("listSupportedStorageDevices",
                 DatacenterDto.class);
 
-        GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            GeneratedHttpRequest.<InfrastructureAsyncClient> requestBuilder()
-                .declaring(InfrastructureAsyncClient.class).javaMethod(withEndpointLink)
+        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            GeneratedHttpRequest.<InfrastructureAsyncApi> requestBuilder()
+                .declaring(InfrastructureAsyncApi.class).javaMethod(withEndpointLink)
                 .args(ImmutableList.<Object> of(datacenter)).method(HttpMethod.GET)
                 .endpoint(URI.create("http://foo/bar")).build();
 
@@ -84,12 +84,12 @@ public class BindSupportedDevicesLinkToPathTest
         BindSupportedDevicesLinkToPath binder = new BindSupportedDevicesLinkToPath();
 
         Method withEndpointLink =
-            InfrastructureAsyncClient.class.getMethod("listSupportedStorageDevices",
+            InfrastructureAsyncApi.class.getMethod("listSupportedStorageDevices",
                 DatacenterDto.class);
 
-        GeneratedHttpRequest<InfrastructureAsyncClient> request =
-            GeneratedHttpRequest.<InfrastructureAsyncClient> requestBuilder()
-                .declaring(InfrastructureAsyncClient.class).javaMethod(withEndpointLink)
+        GeneratedHttpRequest<InfrastructureAsyncApi> request =
+            GeneratedHttpRequest.<InfrastructureAsyncApi> requestBuilder()
+                .declaring(InfrastructureAsyncApi.class).javaMethod(withEndpointLink)
                 .args(ImmutableList.<Object> of(datacenter)).method(HttpMethod.GET)
                 .endpoint(URI.create("http://foo/bar")).build();
 

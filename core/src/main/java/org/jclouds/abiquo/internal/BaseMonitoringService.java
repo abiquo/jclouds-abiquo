@@ -31,8 +31,8 @@ import javax.annotation.Resource;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.events.handlers.AbstractEventHandler;
 import org.jclouds.abiquo.events.handlers.BlockingEventHandler;
 import org.jclouds.abiquo.events.monitor.CompletedEvent;
@@ -62,7 +62,7 @@ import com.google.inject.Inject;
 public class BaseMonitoringService implements MonitoringService
 {
     @VisibleForTesting
-    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     /** The scheduler used to perform monitoring tasks. */
     @VisibleForTesting
@@ -84,7 +84,7 @@ public class BaseMonitoringService implements MonitoringService
     private Logger logger = Logger.NULL;
 
     @Inject
-    public BaseMonitoringService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public BaseMonitoringService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         @Named(PROPERTY_SCHEDULER_THREADS) final ScheduledExecutorService scheduler,
         @Named(ASYNC_TASK_MONITOR_DELAY) final Long pollingDelay, final EventBus eventBus)
     {

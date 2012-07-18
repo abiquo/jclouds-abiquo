@@ -32,8 +32,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -56,7 +56,7 @@ import com.google.inject.Inject;
 @Singleton
 public class ListVirtualMachineTemplatesImpl implements ListVirtualMachineTemplates
 {
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     protected final ExecutorService userExecutor;
 
@@ -68,7 +68,7 @@ public class ListVirtualMachineTemplatesImpl implements ListVirtualMachineTempla
     protected Long maxTime;
 
     @Inject
-    ListVirtualMachineTemplatesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    ListVirtualMachineTemplatesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
         super();
@@ -103,7 +103,7 @@ public class ListVirtualMachineTemplatesImpl implements ListVirtualMachineTempla
                     @Override
                     public Future<VirtualMachineTemplatesDto> apply(final Datacenter input)
                     {
-                        return context.getAsyncApi().getVirtualMachineTemplateClient()
+                        return context.getAsyncApi().getVirtualMachineTemplateApi()
                             .listVirtualMachineTemplates(parent.getId(), input.getId());
                     }
                 }, userExecutor, maxTime, logger, "getting virtual machine templates");

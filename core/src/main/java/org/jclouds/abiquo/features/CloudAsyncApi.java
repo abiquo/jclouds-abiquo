@@ -103,18 +103,18 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see CloudClient
+ * @see CloudApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/cloud")
-public interface CloudAsyncClient
+public interface CloudAsyncApi
 {
     /*********************** Virtual Datacenter ***********************/
 
     /**
-     * @see CloudClient#listVirtualDatacenters(VirtualDatacenterOptions)
+     * @see CloudApi#listVirtualDatacenters(VirtualDatacenterOptions)
      */
     @GET
     @Path("/virtualdatacenters")
@@ -124,7 +124,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualDatacenterOptions options);
 
     /**
-     * @see CloudClient#getVirtualDatacenter(Integer)
+     * @see CloudApi#getVirtualDatacenter(Integer)
      */
     @GET
     @Path("/virtualdatacenters/{virtualdatacenter}")
@@ -135,7 +135,7 @@ public interface CloudAsyncClient
         @PathParam("virtualdatacenter") Integer virtualDatacenterId);
 
     /**
-     * @see CloudClient#createVirtualDatacenter(VirtualDatacenterDto, Datacenter, Enterprise)
+     * @see CloudApi#createVirtualDatacenter(VirtualDatacenterDto, Datacenter, Enterprise)
      */
     @POST
     @Path("/virtualdatacenters")
@@ -148,7 +148,7 @@ public interface CloudAsyncClient
         @QueryParam("enterprise") @ParamParser(ParseEnterpriseId.class) final EnterpriseDto enterprise);
 
     /**
-     * @see CloudClient#updateVirtualDatacenter(VirtualDatacenterDto)
+     * @see CloudApi#updateVirtualDatacenter(VirtualDatacenterDto)
      */
     @PUT
     @Consumes(VirtualDatacenterDto.BASE_MEDIA_TYPE)
@@ -158,14 +158,14 @@ public interface CloudAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#deleteVirtualDatacenter(VirtualDatacenterDto)
+     * @see CloudApi#deleteVirtualDatacenter(VirtualDatacenterDto)
      */
     @DELETE
     ListenableFuture<Void> deleteVirtualDatacenter(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#listAvailableTemplates(VirtualDatacenterDto)
+     * @see CloudApi#listAvailableTemplates(VirtualDatacenterDto)
      */
     @GET
     @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
@@ -174,7 +174,7 @@ public interface CloudAsyncClient
         @EndpointLink("templates") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#listAvailableTemplates(VirtualDatacenterDto, VirtualMachineTemplateOptions)
+     * @see CloudApi#listAvailableTemplates(VirtualDatacenterDto, VirtualMachineTemplateOptions)
      */
     @GET
     @Consumes(VirtualMachineTemplatesDto.BASE_MEDIA_TYPE)
@@ -184,7 +184,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualMachineTemplateOptions options);
 
     /**
-     * @see CloudClient#listStorageTiers(VirtualDatacenterDto)
+     * @see CloudApi#listStorageTiers(VirtualDatacenterDto)
      */
     @EnterpriseEdition
     @GET
@@ -194,7 +194,7 @@ public interface CloudAsyncClient
         @EndpointLink("tiers") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#getStorageTier(VirtualDatacenterDto, Integer)
+     * @see CloudApi#getStorageTier(VirtualDatacenterDto, Integer)
      */
     @EnterpriseEdition
     @GET
@@ -208,7 +208,7 @@ public interface CloudAsyncClient
     /*********************** Public IP ***********************/
 
     /**
-     * @see CloudClient#listAvailablePublicIps(VirtualDatacenterDto, IpOptions)
+     * @see CloudApi#listAvailablePublicIps(VirtualDatacenterDto, IpOptions)
      */
     @GET
     @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
@@ -218,7 +218,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
-     * @see CloudClient#listPurchasedPublicIps(VirtualDatacenterDto, IpOptions)
+     * @see CloudApi#listPurchasedPublicIps(VirtualDatacenterDto, IpOptions)
      */
     @GET
     @Consumes(PublicIpsDto.BASE_MEDIA_TYPE)
@@ -228,7 +228,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
-     * @see CloudClient#purchasePublicIp(PublicIpDto)
+     * @see CloudApi#purchasePublicIp(PublicIpDto)
      */
     @PUT
     @Consumes(PublicIpDto.BASE_MEDIA_TYPE)
@@ -237,7 +237,7 @@ public interface CloudAsyncClient
         @EndpointLink("purchase") @BinderParam(BindToPath.class) PublicIpDto publicIp);
 
     /**
-     * @see CloudClient#releasePublicIp(PublicIpDto)
+     * @see CloudApi#releasePublicIp(PublicIpDto)
      */
     @PUT
     @Consumes(PublicIpDto.BASE_MEDIA_TYPE)
@@ -248,7 +248,7 @@ public interface CloudAsyncClient
     /*********************** Private Network ***********************/
 
     /**
-     * @see CloudClient#listPrivateNetworks(VirtualDatacenter)
+     * @see CloudApi#listPrivateNetworks(VirtualDatacenter)
      */
     @GET
     @Consumes(VLANNetworksDto.BASE_MEDIA_TYPE)
@@ -257,7 +257,7 @@ public interface CloudAsyncClient
         @EndpointLink("privatenetworks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#getPrivateNetwork(VirtualDatacenterDto, Integer)
+     * @see CloudApi#getPrivateNetwork(VirtualDatacenterDto, Integer)
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
@@ -268,7 +268,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendToPath.class) Integer privateNetworkId);
 
     /**
-     * @see CloudClient#createPrivateNetwork(VirtualDatacenterDto, VLANNetworkDto)
+     * @see CloudApi#createPrivateNetwork(VirtualDatacenterDto, VLANNetworkDto)
      */
     @POST
     @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
@@ -279,7 +279,7 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VLANNetworkDto privateNetwork);
 
     /**
-     * @see CloudClient#updatePrivateNetwork(VLANNetworkDto)
+     * @see CloudApi#updatePrivateNetwork(VLANNetworkDto)
      */
     @PUT
     @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
@@ -289,14 +289,14 @@ public interface CloudAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VLANNetworkDto privateNetwork);
 
     /**
-     * @see CloudClient#deletePrivateNetwork(VLANNetworkDto)
+     * @see CloudApi#deletePrivateNetwork(VLANNetworkDto)
      */
     @DELETE
     ListenableFuture<Void> deletePrivateNetwork(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VLANNetworkDto privateNetwork);
 
     /**
-     * @see CloudClient#getDefaultNetwork(VirtualDatacenterDto)
+     * @see CloudApi#getDefaultNetwork(VirtualDatacenterDto)
      */
     @GET
     @Consumes(VLANNetworkDto.BASE_MEDIA_TYPE)
@@ -305,7 +305,7 @@ public interface CloudAsyncClient
         @EndpointLink("defaultnetwork") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#setDefaultNetwork(VirtualDatacenterDto, VLANNetworkDto)
+     * @see CloudApi#setDefaultNetwork(VirtualDatacenterDto, VLANNetworkDto)
      */
     @PUT
     @Produces(LinksDto.BASE_MEDIA_TYPE)
@@ -316,7 +316,7 @@ public interface CloudAsyncClient
     /*********************** Private Network IPs ***********************/
 
     /**
-     * @see CloudClient#listPrivateNetworkIps(VLANNetworkDto)
+     * @see CloudApi#listPrivateNetworkIps(VLANNetworkDto)
      */
     @GET
     @Consumes(PrivateIpsDto.BASE_MEDIA_TYPE)
@@ -325,7 +325,7 @@ public interface CloudAsyncClient
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network);
 
     /**
-     * @see CloudClient#listPrivateNetworkIps(VLANNetworkDto, IpOptions)
+     * @see CloudApi#listPrivateNetworkIps(VLANNetworkDto, IpOptions)
      */
     @GET
     @Consumes(PrivateIpsDto.BASE_MEDIA_TYPE)
@@ -335,7 +335,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) IpOptions options);
 
     /**
-     * @see CloudClient#getPrivateNetworkIp(VLANNetworkDto, Integer)
+     * @see CloudApi#getPrivateNetworkIp(VLANNetworkDto, Integer)
      */
     @GET
     @Consumes(PrivateIpDto.BASE_MEDIA_TYPE)
@@ -347,7 +347,7 @@ public interface CloudAsyncClient
     /*********************** Virtual Appliance ***********************/
 
     /**
-     * @see CloudClient#listVirtualAppliances(VirtualDatacenterDto)
+     * @see CloudApi#listVirtualAppliances(VirtualDatacenterDto)
      */
     @GET
     @Consumes(VirtualAppliancesDto.BASE_MEDIA_TYPE)
@@ -356,7 +356,7 @@ public interface CloudAsyncClient
         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#getVirtualAppliance(VirtualDatacenterDto, Integer)
+     * @see CloudApi#getVirtualAppliance(VirtualDatacenterDto, Integer)
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
@@ -367,7 +367,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendToPath.class) Integer virtualApplianceId);
 
     /**
-     * @see CloudClient#getVirtualApplianceState(VirtualApplianceDto)
+     * @see CloudApi#getVirtualApplianceState(VirtualApplianceDto)
      */
     @GET
     @Consumes(VirtualApplianceStateDto.BASE_MEDIA_TYPE)
@@ -376,7 +376,7 @@ public interface CloudAsyncClient
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
-     * @see CloudClient#createVirtualAppliance(VirtualDatacenterDto, VirtualApplianceDto)
+     * @see CloudApi#createVirtualAppliance(VirtualDatacenterDto, VirtualApplianceDto)
      */
     @POST
     @Consumes(VirtualApplianceDto.BASE_MEDIA_TYPE)
@@ -387,7 +387,7 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VirtualApplianceDto virtualAppliance);
 
     /**
-     * @see CloudClient#updateVirtualAppliance(VirtualApplianceDto)
+     * @see CloudApi#updateVirtualAppliance(VirtualApplianceDto)
      */
     @PUT
     @Consumes(VirtualApplianceDto.BASE_MEDIA_TYPE)
@@ -397,14 +397,14 @@ public interface CloudAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
-     * @see CloudClient#deleteVirtualAppliance(VirtualApplianceDto)
+     * @see CloudApi#deleteVirtualAppliance(VirtualApplianceDto)
      */
     @DELETE
     ListenableFuture<Void> deleteVirtualAppliance(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
-     * @see CloudClient#deleteVirtualAppliance(VirtualApplianceDto, VirtualApplianceOptions)
+     * @see CloudApi#deleteVirtualAppliance(VirtualApplianceDto, VirtualApplianceOptions)
      */
     @DELETE
     ListenableFuture<Void> deleteVirtualAppliance(
@@ -412,7 +412,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualApplianceOptions options);
 
     /**
-     * @see CloudClient#deployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
+     * @see CloudApi#deployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
      */
     @POST
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
@@ -423,7 +423,7 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
     /**
-     * @see CloudClient#undeployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
+     * @see CloudApi#undeployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
      */
     @POST
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
@@ -436,7 +436,7 @@ public interface CloudAsyncClient
     /*********************** Virtual Machine ***********************/
 
     /**
-     * @see CloudClient#listVirtualMachines(VirtualApplianceDto)
+     * @see CloudApi#listVirtualMachines(VirtualApplianceDto)
      */
     @GET
     @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
@@ -445,7 +445,7 @@ public interface CloudAsyncClient
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /**
-     * @see CloudClient#listVirtualMachines(VirtualApplianceDto, VirtualMachineOptions)
+     * @see CloudApi#listVirtualMachines(VirtualApplianceDto, VirtualMachineOptions)
      */
     @GET
     @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
@@ -455,7 +455,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options);
 
     /**
-     * @see CloudClient#getVirtualMachine(VirtualApplianceDto, Integer)
+     * @see CloudApi#getVirtualMachine(VirtualApplianceDto, Integer)
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
@@ -466,7 +466,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendToPath.class) Integer virtualMachineId);
 
     /**
-     * @see CloudClient#createVirtualMachine(VirtualApplianceDto, VirtualMachineWithNodeExtendedDto)
+     * @see CloudApi#createVirtualMachine(VirtualApplianceDto, VirtualMachineWithNodeExtendedDto)
      */
     @POST
     @Consumes(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
@@ -477,14 +477,14 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VirtualMachineWithNodeExtendedDto virtualMachine);
 
     /**
-     * @see CloudClient#deleteVirtualMachine(VirtualMachineDto)
+     * @see CloudApi#deleteVirtualMachine(VirtualMachineDto)
      */
     @DELETE
     ListenableFuture<Void> deleteVirtualMachine(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#updateVirtualMachine(VirtualMachineWithNodeExtendedDto)
+     * @see CloudApi#updateVirtualMachine(VirtualMachineWithNodeExtendedDto)
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
@@ -494,7 +494,7 @@ public interface CloudAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineWithNodeExtendedDto virtualMachine);
 
     /**
-     * @see CloudClient#updateVirtualMachine(VirtualMachineDto, VirtualMachineOptions)
+     * @see CloudApi#updateVirtualMachine(VirtualMachineDto, VirtualMachineOptions)
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
@@ -505,7 +505,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options);
 
     /**
-     * @see CloudClient#changeVirtualMachineState(VirtualMachineDto, VirtualMachineStateDto)
+     * @see CloudApi#changeVirtualMachineState(VirtualMachineDto, VirtualMachineStateDto)
      */
     @PUT
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
@@ -516,7 +516,7 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VirtualMachineStateDto state);
 
     /**
-     * @see CloudClient#getVirtualMachineState(VirtualMachineDto)
+     * @see CloudApi#getVirtualMachineState(VirtualMachineDto)
      */
     @GET
     @Consumes(VirtualMachineStateDto.BASE_MEDIA_TYPE)
@@ -525,7 +525,7 @@ public interface CloudAsyncClient
         @EndpointLink("state") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#listNetworkConfigurations(VirtualMachineDto)
+     * @see CloudApi#listNetworkConfigurations(VirtualMachineDto)
      */
     @GET
     @Consumes(VMNetworkConfigurationsDto.BASE_MEDIA_TYPE)
@@ -534,7 +534,7 @@ public interface CloudAsyncClient
         @EndpointLink("configurations") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#setGatewayNetwork(VirtualMachineDto, VMNetworkConfigurationDto)
+     * @see CloudApi#setGatewayNetwork(VirtualMachineDto, VMNetworkConfigurationDto)
      */
     @PUT
     @Produces(LinksDto.BASE_MEDIA_TYPE)
@@ -543,7 +543,7 @@ public interface CloudAsyncClient
         @BinderParam(BindNetworkConfigurationRefToPayload.class) VLANNetworkDto network);
 
     /**
-     * @see CloudClient#rebootVirtualMachine(VirtualMachineDto)
+     * @see CloudApi#rebootVirtualMachine(VirtualMachineDto)
      */
     @POST
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
@@ -554,7 +554,7 @@ public interface CloudAsyncClient
     /*********************** Virtual Machine Template ***********************/
 
     /**
-     * @see CloudClient#getVirtualMachineTemplate(VirtualMachineTemplateDto)
+     * @see CloudApi#getVirtualMachineTemplate(VirtualMachineTemplateDto)
      */
     @GET
     @Consumes(VirtualMachineTemplateDto.BASE_MEDIA_TYPE)
@@ -563,7 +563,7 @@ public interface CloudAsyncClient
         @EndpointLink("virtualmachinetemplate") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#listAttachedVolumes(VirtualMachineDto)
+     * @see CloudApi#listAttachedVolumes(VirtualMachineDto)
      */
     @GET
     @Consumes(VolumesManagementDto.BASE_MEDIA_TYPE)
@@ -572,7 +572,7 @@ public interface CloudAsyncClient
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#detachAllVolumes(VirtualMachineDto)
+     * @see CloudApi#detachAllVolumes(VirtualMachineDto)
      */
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
@@ -581,7 +581,7 @@ public interface CloudAsyncClient
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#replaceVolumes(VirtualMachineDto, VirtualMachineOptions,
+     * @see CloudApi#replaceVolumes(VirtualMachineDto, VirtualMachineOptions,
      *      VolumeManagementDto...)
      */
     @PUT
@@ -594,7 +594,7 @@ public interface CloudAsyncClient
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
     /**
-     * @see CloudClient#listAttachedHardDisks(VirtualMachineDto)
+     * @see CloudApi#listAttachedHardDisks(VirtualMachineDto)
      */
     @GET
     @Consumes(DisksManagementDto.BASE_MEDIA_TYPE)
@@ -603,7 +603,7 @@ public interface CloudAsyncClient
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#detachAllHardDisks(VirtualMachineDto)
+     * @see CloudApi#detachAllHardDisks(VirtualMachineDto)
      */
     @DELETE
     @ResponseParser(ReturnTaskReferenceOrNull.class)
@@ -612,7 +612,7 @@ public interface CloudAsyncClient
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine);
 
     /**
-     * @see CloudClient#replaceHardDisks(VirtualMachineDto, DiskManagementDto...)
+     * @see CloudApi#replaceHardDisks(VirtualMachineDto, DiskManagementDto...)
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
@@ -623,7 +623,7 @@ public interface CloudAsyncClient
         @BinderParam(BindHardDiskRefsToPayload.class) DiskManagementDto... hardDisks);
 
     /**
-     * @see CloudClient#deployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)
+     * @see CloudApi#deployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)
      */
     @POST
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
@@ -634,7 +634,7 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
 
     /**
-     * @see CloudClient#undeployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)
+     * @see CloudApi#undeployVirtualMachine(VirtualMachineDto, VirtualMachineTaskDto)
      */
     @POST
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
@@ -647,7 +647,7 @@ public interface CloudAsyncClient
     /*********************** Hard disks ***********************/
 
     /**
-     * @see CloudClient#listHardDisks(VirtualDatacenterDto)
+     * @see CloudApi#listHardDisks(VirtualDatacenterDto)
      */
     @GET
     @Consumes(DisksManagementDto.BASE_MEDIA_TYPE)
@@ -656,7 +656,7 @@ public interface CloudAsyncClient
         @EndpointLink("disks") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#getHardDisk(VirtualDatacenterDto, Integer)
+     * @see CloudApi#getHardDisk(VirtualDatacenterDto, Integer)
      */
     @GET
     @ExceptionParser(ReturnNullOnNotFoundOr404.class)
@@ -667,7 +667,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendToPath.class) Integer diskId);
 
     /**
-     * @see CloudClient#createHardDisk(VirtualDatacenterDto, DiskManagementDto)
+     * @see CloudApi#createHardDisk(VirtualDatacenterDto, DiskManagementDto)
      */
     @POST
     @Consumes(DiskManagementDto.BASE_MEDIA_TYPE)
@@ -678,7 +678,7 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) DiskManagementDto hardDisk);
 
     /**
-     * @see CloudClient#deleteHardDisk(DiskManagementDto)
+     * @see CloudApi#deleteHardDisk(DiskManagementDto)
      */
     @DELETE
     ListenableFuture<Void> deleteHardDisk(
@@ -687,7 +687,7 @@ public interface CloudAsyncClient
     /*********************** Volumes ***********************/
 
     /**
-     * @see CloudClient#listVolumes(VirtualDatacenterDto)
+     * @see CloudApi#listVolumes(VirtualDatacenterDto)
      */
     @EnterpriseEdition
     @GET
@@ -697,7 +697,7 @@ public interface CloudAsyncClient
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter);
 
     /**
-     * @see CloudClient#listVolumes(VirtualDatacenterDto, VolumeOptions)
+     * @see CloudApi#listVolumes(VirtualDatacenterDto, VolumeOptions)
      */
     @EnterpriseEdition
     @GET
@@ -708,7 +708,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendOptionsToPath.class) VolumeOptions options);
 
     /**
-     * @see CloudClient#getVolume(VirtualDatacenterDto, Integer)
+     * @see CloudApi#getVolume(VirtualDatacenterDto, Integer)
      */
     @EnterpriseEdition
     @GET
@@ -720,7 +720,7 @@ public interface CloudAsyncClient
         @BinderParam(AppendToPath.class) Integer volumeId);
 
     /**
-     * @see CloudClient#createVolume(VirtualDatacenterDto, VolumeManagementDto)
+     * @see CloudApi#createVolume(VirtualDatacenterDto, VolumeManagementDto)
      */
     @EnterpriseEdition
     @POST
@@ -732,7 +732,7 @@ public interface CloudAsyncClient
         @BinderParam(BindToXMLPayload.class) VolumeManagementDto volume);
 
     /**
-     * @see CloudClient#updateVolume(VolumeManagementDto)
+     * @see CloudApi#updateVolume(VolumeManagementDto)
      */
     @EnterpriseEdition
     @PUT
@@ -743,7 +743,7 @@ public interface CloudAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VolumeManagementDto volume);
 
     /**
-     * @see CloudClient#updateVolume(VolumeManagementDto)
+     * @see CloudApi#updateVolume(VolumeManagementDto)
      */
     @EnterpriseEdition
     @DELETE
@@ -751,7 +751,7 @@ public interface CloudAsyncClient
         @EndpointLink("edit") @BinderParam(BindToPath.class) VolumeManagementDto volume);
 
     /**
-     * @see CloudClient#moveVolume(VolumeManagementDto, VirtualDatacenterDto)
+     * @see CloudApi#moveVolume(VolumeManagementDto, VirtualDatacenterDto)
      */
     @EnterpriseEdition
     @POST

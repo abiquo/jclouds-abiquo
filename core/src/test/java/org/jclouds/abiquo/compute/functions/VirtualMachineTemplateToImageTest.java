@@ -26,8 +26,8 @@ import static org.testng.Assert.assertNull;
 import java.net.URI;
 
 import org.easymock.EasyMock;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.OperatingSystem;
@@ -48,7 +48,7 @@ public class VirtualMachineTemplateToImageTest
     @SuppressWarnings("unchecked")
     public void testVirtualMachineTemplateToImage()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToImage function = new VirtualMachineTemplateToImage();
 
@@ -72,7 +72,7 @@ public class VirtualMachineTemplateToImageTest
     @SuppressWarnings("unchecked")
     public void testConvertWithoutDownloadLink()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToImage function = new VirtualMachineTemplateToImage();
 
@@ -91,7 +91,7 @@ public class VirtualMachineTemplateToImageTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testConvertWithoutId()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToImage function = new VirtualMachineTemplateToImage();
 

@@ -32,7 +32,7 @@ import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.config.PrivilegePredicates;
 import org.jclouds.abiquo.predicates.enterprise.RolePredicates;
 import org.testng.annotations.Test;
@@ -46,7 +46,7 @@ import com.abiquo.server.core.enterprise.RoleDto;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class RoleLiveTest extends BaseAbiquoClientLiveTest
+public class RoleLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testUpdate()
@@ -59,7 +59,7 @@ public class RoleLiveTest extends BaseAbiquoClientLiveTest
         role.update();
 
         // Recover the updated role
-        RoleDto updated = env.adminClient.getRole(role.getId());
+        RoleDto updated = env.adminApi.getRole(role.getId());
 
         assertEquals(updated.getName(), "UPDATED_ROLE");
 
@@ -95,7 +95,7 @@ public class RoleLiveTest extends BaseAbiquoClientLiveTest
 
     public void testAddPrivilege()
     {
-        PrivilegeDto dto = env.configClient.getPrivilege(8);
+        PrivilegeDto dto = env.configApi.getPrivilege(8);
         Privilege privilege = DomainWrapper.wrap(env.context.getApiContext(), Privilege.class, dto);
         List<Privilege> privileges = env.role.listPrivileges();
         privileges.add(privilege);

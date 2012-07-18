@@ -24,8 +24,8 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Inject;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.rest.RestContext;
 
@@ -39,10 +39,10 @@ import com.google.common.base.Supplier;
  */
 public class GetCurrentUser implements Supplier<User>
 {
-    private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    public GetCurrentUser(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    public GetCurrentUser(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = checkNotNull(context, "context");
     }
@@ -50,7 +50,7 @@ public class GetCurrentUser implements Supplier<User>
     @Override
     public User get()
     {
-        UserDto user = context.getApi().getAdminClient().getCurrentUser();
+        UserDto user = context.getApi().getAdminApi().getCurrentUser();
         return wrap(context, User.class, user);
     }
 

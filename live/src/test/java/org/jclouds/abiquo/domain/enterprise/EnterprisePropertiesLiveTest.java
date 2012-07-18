@@ -22,7 +22,7 @@ package org.jclouds.abiquo.domain.enterprise;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
@@ -33,7 +33,7 @@ import com.abiquo.server.core.enterprise.EnterprisePropertiesDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class EnterprisePropertiesLiveTest extends BaseAbiquoClientLiveTest
+public class EnterprisePropertiesLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testUpdate()
@@ -47,7 +47,7 @@ public class EnterprisePropertiesLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated properties
         EnterprisePropertiesDto updated =
-            env.enterpriseClient.getEnterpriseProperties(env.enterprise.unwrap());
+            env.enterpriseApi.getEnterpriseProperties(env.enterprise.unwrap());
 
         assertEquals(updated.getProperties().size(), size + 1);
         assertTrue(updated.getProperties().containsKey("Prop"));

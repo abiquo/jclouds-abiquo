@@ -24,7 +24,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -36,7 +36,7 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class RackLiveTest extends BaseAbiquoClientLiveTest
+public class RackLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testUpdate()
@@ -46,7 +46,7 @@ public class RackLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated rack
         RackDto updated =
-            env.infrastructureClient.getRack(env.datacenter.unwrap(), env.rack.getId());
+            env.infrastructureApi.getRack(env.datacenter.unwrap(), env.rack.getId());
 
         assertEquals(updated.getName(), "Updated rack");
     }

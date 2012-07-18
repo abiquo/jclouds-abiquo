@@ -29,7 +29,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 /**
@@ -38,7 +38,7 @@ import org.testng.annotations.Test;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualMachineTemplateLiveTest extends BaseAbiquoClientLiveTest
+public class VirtualMachineTemplateLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testGetParent()

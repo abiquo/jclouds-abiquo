@@ -36,7 +36,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.enterprise.Enterprise.Builder;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -50,7 +50,7 @@ import com.abiquo.server.core.enterprise.EnterpriseDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
+public class EnterpriseLiveTest extends BaseAbiquoApiLiveTest
 {
     private Enterprise enterprise;
 
@@ -74,7 +74,7 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
         enterprise.update();
 
         // Recover the updated enterprise
-        EnterpriseDto updated = env.enterpriseClient.getEnterprise(enterprise.getId());
+        EnterpriseDto updated = env.enterpriseApi.getEnterprise(enterprise.getId());
 
         assertEquals(updated.getName(), "Updated Enterprise");
     }
@@ -102,7 +102,7 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
         assertNotNull(limits);
 
         DatacentersLimitsDto limitsDto =
-            env.enterpriseClient.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
+            env.enterpriseApi.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
         assertNotNull(limitsDto);
         assertEquals(limitsDto.getCollection().size(), 1);
     }
@@ -160,7 +160,7 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
         limits.update();
 
         DatacentersLimitsDto limitsDto =
-            env.enterpriseClient.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
+            env.enterpriseApi.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
         assertNotNull(limitsDto);
         assertEquals(limitsDto.getCollection().size(), 1);
         assertEquals(limitsDto.getCollection().get(0).getCpuCountHardLimit(), 5);
@@ -209,7 +209,7 @@ public class EnterpriseLiveTest extends BaseAbiquoClientLiveTest
         // Cleanup with the prohibe method
         enterprise.prohibitDatacenter(env.datacenter);
         DatacentersLimitsDto limitsDto =
-            env.enterpriseClient.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
+            env.enterpriseApi.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
         assertNotNull(limitsDto);
         assertEquals(limitsDto.getCollection().size(), 0);
     }

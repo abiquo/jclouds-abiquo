@@ -20,8 +20,8 @@
 package org.jclouds.abiquo.domain.config;
 
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
@@ -47,7 +47,7 @@ public class Category extends DomainWrapper<CategoryDto>
     /**
      * Constructor to be used only by the builder. This resource cannot be created.
      */
-    private Category(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final CategoryDto target)
+    private Category(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final CategoryDto target)
     {
         super(context, target);
     }
@@ -61,7 +61,7 @@ public class Category extends DomainWrapper<CategoryDto>
      */
     public void delete()
     {
-        context.getApi().getConfigClient().deleteCategory(target);
+        context.getApi().getConfigApi().deleteCategory(target);
         target = null;
     }
 
@@ -72,7 +72,7 @@ public class Category extends DomainWrapper<CategoryDto>
      */
     public void save()
     {
-        target = context.getApi().getConfigClient().createCategory(target);
+        target = context.getApi().getConfigApi().createCategory(target);
     }
 
     /**
@@ -82,19 +82,19 @@ public class Category extends DomainWrapper<CategoryDto>
      */
     public void update()
     {
-        target = context.getApi().getConfigClient().updateCategory(target);
+        target = context.getApi().getConfigApi().updateCategory(target);
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         return new Builder(context);
     }
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String name;
 
@@ -102,7 +102,7 @@ public class Category extends DomainWrapper<CategoryDto>
 
         private Boolean defaultCategory = DEFAULT_DEFAULT_CATEGORY;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
         {
             super();
             this.context = context;

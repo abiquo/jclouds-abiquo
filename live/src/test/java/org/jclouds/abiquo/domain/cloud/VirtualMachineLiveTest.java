@@ -33,7 +33,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualMachineDto;
@@ -45,7 +45,7 @@ import com.abiquo.server.core.cloud.VirtualMachineState;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
+public class VirtualMachineLiveTest extends BaseAbiquoApiLiveTest
 {
     public void testHasDataFromNode()
     {
@@ -135,7 +135,7 @@ public class VirtualMachineLiveTest extends BaseAbiquoClientLiveTest
         vm.save();
 
         VirtualMachineDto updated =
-            env.cloudClient.getVirtualMachine(env.virtualAppliance.unwrap(), vm.getId());
+            env.cloudApi.getVirtualMachine(env.virtualAppliance.unwrap(), vm.getId());
 
         assertNotNull(updated.getDvd());
     }

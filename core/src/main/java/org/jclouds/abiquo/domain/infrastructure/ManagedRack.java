@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -71,7 +71,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected ManagedRack(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected ManagedRack(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final UcsRackDto target)
     {
         super(context, target);
@@ -89,7 +89,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      */
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteRack(target);
+        context.getApi().getInfrastructureApi().deleteRack(target);
         target = null;
     }
 
@@ -106,7 +106,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .createManagedRack(datacenter.unwrap(), target);
     }
 
@@ -121,7 +121,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      */
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateManagedRack(target);
+        target = context.getApi().getInfrastructureApi().updateManagedRack(target);
     }
 
     // Parent access
@@ -136,7 +136,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        return wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
+        return wrap(context, Datacenter.class, context.getApi().getInfrastructureApi()
             .getDatacenter(datacenterId));
     }
 
@@ -152,7 +152,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      */
     public List<Blade> listMachines()
     {
-        MachinesDto machines = context.getApi().getInfrastructureClient().listMachines(target);
+        MachinesDto machines = context.getApi().getInfrastructureApi().listMachines(target);
         return wrap(context, Blade.class, machines.getCollection());
     }
 
@@ -195,7 +195,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public List<LogicServer> listServiceProfiles()
     {
         LogicServersDto profiles =
-            context.getApi().getInfrastructureClient().listServiceProfiles(target);
+            context.getApi().getInfrastructureApi().listServiceProfiles(target);
         return wrap(context, LogicServer.class, profiles.getCollection());
     }
 
@@ -239,7 +239,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public List<LogicServer> listServiceProfileTemplates()
     {
         LogicServersDto templates =
-            context.getApi().getInfrastructureClient().listServiceProfileTemplates(target);
+            context.getApi().getInfrastructureApi().listServiceProfileTemplates(target);
         return wrap(context, LogicServer.class, templates.getCollection());
     }
 
@@ -283,7 +283,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public List<Organization> listOrganizations()
     {
         OrganizationsDto organizations =
-            context.getApi().getInfrastructureClient().listOrganizations(target);
+            context.getApi().getInfrastructureApi().listOrganizations(target);
         return wrap(context, Organization.class, organizations.getCollection());
     }
 
@@ -328,7 +328,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      */
     public List<Fsm> listFsm(final String entityName)
     {
-        FsmsDto fsms = context.getApi().getInfrastructureClient().listFsms(target, entityName);
+        FsmsDto fsms = context.getApi().getInfrastructureApi().listFsms(target, entityName);
         return wrap(context, Fsm.class, fsms.getCollection());
     }
 
@@ -345,7 +345,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public void cloneLogicServer(final LogicServer logicServer, final Organization organization,
         final String newName)
     {
-        context.getApi().getInfrastructureClient()
+        context.getApi().getInfrastructureApi()
             .cloneLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(), newName);
     }
 
@@ -363,7 +363,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     {
         context
             .getApi()
-            .getInfrastructureClient()
+            .getInfrastructureApi()
             .associateLogicServer(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
                 bladeName);
     }
@@ -383,7 +383,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     {
         context
             .getApi()
-            .getInfrastructureClient()
+            .getInfrastructureApi()
             .cloneAndAssociateLogicServer(this.unwrap(), logicServer.unwrap(),
                 organization.unwrap(), bladeName, logicServerName);
     }
@@ -405,7 +405,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     {
         context
             .getApi()
-            .getInfrastructureClient()
+            .getInfrastructureApi()
             .associateTemplate(this.unwrap(), logicServer.unwrap(), organization.unwrap(),
                 bladeName, logicServerName);
     }
@@ -420,7 +420,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      */
     public void disassociateLogicServer(final LogicServer logicServer)
     {
-        context.getApi().getInfrastructureClient()
+        context.getApi().getInfrastructureApi()
             .dissociateLogicServer(this.unwrap(), logicServer.unwrap());
     }
 
@@ -434,13 +434,13 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
      */
     public void deleteLogicServer(final LogicServer logicServer)
     {
-        context.getApi().getInfrastructureClient()
+        context.getApi().getInfrastructureApi()
             .deleteLogicServer(this.unwrap(), logicServer.unwrap());
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
@@ -448,7 +448,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private Integer id;
 
@@ -482,7 +482,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
         private Datacenter datacenter;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter)
         {
             super();

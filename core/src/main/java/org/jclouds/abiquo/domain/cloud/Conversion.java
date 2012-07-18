@@ -23,8 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Date;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -54,7 +54,7 @@ public class Conversion extends DomainWithTasksWrapper<ConversionDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Conversion(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected Conversion(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final ConversionDto target)
     {
         super(context, target);

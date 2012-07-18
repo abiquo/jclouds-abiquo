@@ -24,8 +24,8 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.enterprise.Role;
 import org.jclouds.abiquo.strategy.admin.ListRoles;
 import org.jclouds.rest.RestContext;
@@ -44,12 +44,12 @@ import com.google.inject.Inject;
 public class ListRolesImpl implements ListRoles
 {
     // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
+    // single api methods
 
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    ListRolesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    ListRolesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = context;
     }
@@ -57,7 +57,7 @@ public class ListRolesImpl implements ListRoles
     @Override
     public Iterable<Role> execute()
     {
-        RolesDto result = context.getApi().getAdminClient().listRoles();
+        RolesDto result = context.getApi().getAdminApi().listRoles();
         return wrap(context, Role.class, result.getCollection());
     }
 

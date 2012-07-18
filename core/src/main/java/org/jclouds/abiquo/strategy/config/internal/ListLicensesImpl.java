@@ -24,8 +24,8 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
 import org.jclouds.abiquo.strategy.config.ListLicenses;
@@ -45,12 +45,12 @@ import com.google.inject.Inject;
 public class ListLicensesImpl implements ListLicenses
 {
     // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
+    // single api methods
 
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    ListLicensesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    ListLicensesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = context;
     }
@@ -58,14 +58,14 @@ public class ListLicensesImpl implements ListLicenses
     @Override
     public Iterable<License> execute()
     {
-        LicensesDto result = context.getApi().getConfigClient().listLicenses();
+        LicensesDto result = context.getApi().getConfigApi().listLicenses();
         return wrap(context, License.class, result.getCollection());
     }
 
     @Override
     public Iterable<License> execute(final LicenseOptions options)
     {
-        LicensesDto result = context.getApi().getConfigClient().listLicenses(options);
+        LicensesDto result = context.getApi().getConfigApi().listLicenses(options);
         return wrap(context, License.class, result.getCollection());
     }
 

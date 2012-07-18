@@ -35,7 +35,7 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PublicIp;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.cloud.VirtualMachineTemplatePredicates;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.Test;
@@ -49,7 +49,7 @@ import com.abiquo.server.core.cloud.VirtualDatacenterDto;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
+public class VirtualDatacenterLiveTest extends BaseAbiquoApiLiveTest
 {
     private VirtualMachineTemplate template;
 
@@ -60,7 +60,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated virtual datacenter
         VirtualDatacenterDto updated =
-            env.cloudClient.getVirtualDatacenter(env.virtualDatacenter.getId());
+            env.cloudApi.getVirtualDatacenter(env.virtualDatacenter.getId());
 
         assertEquals(updated.getName(), "Aloha updated");
     }
@@ -77,7 +77,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoClientLiveTest
         repeated.save();
 
         List<VirtualDatacenterDto> virtualDatacenters =
-            env.cloudClient.listVirtualDatacenters(VirtualDatacenterOptions.builder().build())
+            env.cloudApi.listVirtualDatacenters(VirtualDatacenterOptions.builder().build())
                 .getCollection();
 
         assertEquals(virtualDatacenters.size(), 2);

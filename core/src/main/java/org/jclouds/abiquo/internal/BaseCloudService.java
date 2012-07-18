@@ -27,8 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -56,7 +56,7 @@ import com.google.common.collect.Iterables;
 public class BaseCloudService implements CloudService
 {
     @VisibleForTesting
-    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @VisibleForTesting
     protected final ListVirtualDatacenters listVirtualDatacenters;
@@ -68,7 +68,7 @@ public class BaseCloudService implements CloudService
     protected ListVirtualMachines listVirtualMachines;
 
     @Inject
-    protected BaseCloudService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected BaseCloudService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final ListVirtualDatacenters listVirtualDatacenters,
         final ListVirtualAppliances listVirtualAppliances,
         final ListVirtualMachines listVirtualMachines)
@@ -112,7 +112,7 @@ public class BaseCloudService implements CloudService
     public VirtualDatacenter getVirtualDatacenter(final Integer virtualDatacenterId)
     {
         VirtualDatacenterDto virtualDatacenter =
-            context.getApi().getCloudClient().getVirtualDatacenter(virtualDatacenterId);
+            context.getApi().getCloudApi().getVirtualDatacenter(virtualDatacenterId);
         return wrap(context, VirtualDatacenter.class, virtualDatacenter);
     }
 

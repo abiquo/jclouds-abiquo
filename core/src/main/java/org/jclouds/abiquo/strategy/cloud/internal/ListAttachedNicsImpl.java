@@ -26,8 +26,8 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.network.ExternalIp;
 import org.jclouds.abiquo.domain.network.Ip;
@@ -59,12 +59,12 @@ import com.google.inject.TypeLiteral;
 @Singleton
 public class ListAttachedNicsImpl implements ListAttachedNics
 {
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     protected final ExtendedUtils extendedUtils;
 
     @Inject
-    public ListAttachedNicsImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public ListAttachedNicsImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final ExtendedUtils extendedUtils)
     {
         this.context = checkNotNull(context, "context");

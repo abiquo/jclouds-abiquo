@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
@@ -60,7 +60,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Volume(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VolumeManagementDto target)
+    protected Volume(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VolumeManagementDto target)
     {
         super(context, target);
     }
@@ -69,18 +69,18 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
 
     public void delete()
     {
-        context.getApi().getCloudClient().deleteVolume(target);
+        context.getApi().getCloudApi().deleteVolume(target);
         target = null;
     }
 
     public void save()
     {
-        target = context.getApi().getCloudClient().createVolume(virtualDatacenter.unwrap(), target);
+        target = context.getApi().getCloudApi().createVolume(virtualDatacenter.unwrap(), target);
     }
 
     public AsyncTask update()
     {
-        AcceptedRequestDto<String> taskRef = context.getApi().getCloudClient().updateVolume(target);
+        AcceptedRequestDto<String> taskRef = context.getApi().getCloudApi().updateVolume(target);
         return taskRef == null ? null : getTask(taskRef);
     }
 
@@ -96,7 +96,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     {
         Integer virtualDatacenterId = target.getIdFromLink(ParentLinkName.VIRTUAL_DATACENTER);
         VirtualDatacenterDto dto =
-            context.getApi().getCloudClient().getVirtualDatacenter(virtualDatacenterId);
+            context.getApi().getCloudApi().getVirtualDatacenter(virtualDatacenterId);
         virtualDatacenter = wrap(context, VirtualDatacenter.class, dto);
         return virtualDatacenter;
     }
@@ -108,7 +108,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     {
         Integer tierId = target.getIdFromLink(ParentLinkName.TIER);
         TierDto dto =
-            context.getApi().getCloudClient().getStorageTier(virtualDatacenter.unwrap(), tierId);
+            context.getApi().getCloudApi().getStorageTier(virtualDatacenter.unwrap(), tierId);
         tier = wrap(context, Tier.class, dto);
         return tier;
     }
@@ -123,12 +123,12 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     public void moveTo(final VirtualDatacenter newVirtualDatacenter)
     {
         target =
-            context.getApi().getCloudClient().moveVolume(unwrap(), newVirtualDatacenter.unwrap());
+            context.getApi().getCloudApi().moveVolume(unwrap(), newVirtualDatacenter.unwrap());
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VirtualDatacenter virtualDatacenter, final Tier tier)
     {
         return new Builder(context, virtualDatacenter, tier);
@@ -136,7 +136,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String name;
 
@@ -148,7 +148,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
 
         private Tier tier;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualDatacenter virtualDatacenter,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualDatacenter virtualDatacenter,
             final Tier tier)
         {
             super();

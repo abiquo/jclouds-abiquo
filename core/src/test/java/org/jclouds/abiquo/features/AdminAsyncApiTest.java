@@ -40,20 +40,20 @@ import com.abiquo.server.core.enterprise.UserDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Tests annotation parsing of {@code AdminAsyncClient}
+ * Tests annotation parsing of {@code AdminAsyncApi}
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Test(groups = "unit")
-public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncClient>
+public class AdminAsyncApiTest extends BaseAbiquoAsyncApiTest<AdminAsyncApi>
 {
     /*********************** Role ***********************/
 
     public void testListRoles() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AdminAsyncClient.class.getMethod("listRoles");
-        GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method);
+        Method method = AdminAsyncApi.class.getMethod("listRoles");
+        GeneratedHttpRequest<AdminAsyncApi> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/roles HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RolesDto.BASE_MEDIA_TYPE + "\n");
@@ -68,8 +68,8 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
     public void testGetRoleFromUser() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AdminAsyncClient.class.getMethod("getRole", UserDto.class);
-        GeneratedHttpRequest<AdminAsyncClient> request =
+        Method method = AdminAsyncApi.class.getMethod("getRole", UserDto.class);
+        GeneratedHttpRequest<AdminAsyncApi> request =
             processor.createRequest(method, EnterpriseResources.userPut());
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/roles/1 HTTP/1.1");
@@ -85,8 +85,8 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
     public void testCreateRole() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AdminAsyncClient.class.getMethod("createRole", RoleDto.class);
-        GeneratedHttpRequest<AdminAsyncClient> request =
+        Method method = AdminAsyncApi.class.getMethod("createRole", RoleDto.class);
+        GeneratedHttpRequest<AdminAsyncApi> request =
             processor.createRequest(method, AdminResources.rolePost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/admin/roles HTTP/1.1");
@@ -103,8 +103,8 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
     public void testDeleteRole() throws SecurityException, NoSuchMethodException
     {
-        Method method = AdminAsyncClient.class.getMethod("deleteRole", RoleDto.class);
-        GeneratedHttpRequest<AdminAsyncClient> request =
+        Method method = AdminAsyncApi.class.getMethod("deleteRole", RoleDto.class);
+        GeneratedHttpRequest<AdminAsyncApi> request =
             processor.createRequest(method, AdminResources.rolePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/roles/1 HTTP/1.1");
@@ -120,8 +120,8 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
     public void testUpdateRole() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AdminAsyncClient.class.getMethod("updateRole", RoleDto.class);
-        GeneratedHttpRequest<AdminAsyncClient> request =
+        Method method = AdminAsyncApi.class.getMethod("updateRole", RoleDto.class);
+        GeneratedHttpRequest<AdminAsyncApi> request =
             processor.createRequest(method, AdminResources.rolePut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/roles/1 HTTP/1.1");
@@ -138,8 +138,8 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
     public void testGetRoleById() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AdminAsyncClient.class.getMethod("getRole", Integer.class);
-        GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method, 1);
+        Method method = AdminAsyncApi.class.getMethod("getRole", Integer.class);
+        GeneratedHttpRequest<AdminAsyncApi> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/roles/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + RoleDto.BASE_MEDIA_TYPE + "\n");
@@ -155,8 +155,8 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
     public void testListPrivilegesByRoles() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = AdminAsyncClient.class.getMethod("listPrivileges", RoleDto.class);
-        GeneratedHttpRequest<AdminAsyncClient> request =
+        Method method = AdminAsyncApi.class.getMethod("listPrivileges", RoleDto.class);
+        GeneratedHttpRequest<AdminAsyncApi> request =
             processor.createRequest(method, AdminResources.rolePut());
 
         assertRequestLineEquals(request,
@@ -175,8 +175,8 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
 
     public void testGetCurrentUser() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = AdminAsyncClient.class.getMethod("getCurrentUser");
-        GeneratedHttpRequest<AdminAsyncClient> request = processor.createRequest(method, 1);
+        Method method = AdminAsyncApi.class.getMethod("getCurrentUser");
+        GeneratedHttpRequest<AdminAsyncApi> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/login HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + UserDto.BASE_MEDIA_TYPE + "\n");
@@ -190,9 +190,9 @@ public class AdminAsyncClientTest extends BaseAbiquoAsyncClientTest<AdminAsyncCl
     }
 
     @Override
-    protected TypeLiteral<RestAnnotationProcessor<AdminAsyncClient>> createTypeLiteral()
+    protected TypeLiteral<RestAnnotationProcessor<AdminAsyncApi>> createTypeLiteral()
     {
-        return new TypeLiteral<RestAnnotationProcessor<AdminAsyncClient>>()
+        return new TypeLiteral<RestAnnotationProcessor<AdminAsyncApi>>()
         {
         };
     }

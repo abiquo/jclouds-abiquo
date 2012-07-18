@@ -72,18 +72,18 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see EnterpriseClient
+ * @see EnterpriseApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/admin")
-public interface EnterpriseAsyncClient
+public interface EnterpriseAsyncApi
 {
     /*********************** Enterprise ***********************/
 
     /**
-     * @see EnterpriseClient#listEnterprises()
+     * @see EnterpriseApi#listEnterprises()
      */
     @GET
     @Path("/enterprises")
@@ -92,7 +92,7 @@ public interface EnterpriseAsyncClient
     ListenableFuture<EnterprisesDto> listEnterprises();
 
     /**
-     * @see EnterpriseClient#listEnterprises(EnterpriseOptions)
+     * @see EnterpriseApi#listEnterprises(EnterpriseOptions)
      */
     @GET
     @Path("/enterprises")
@@ -102,7 +102,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
 
     /**
-     * @see EnterpriseClient#listEnterprises(DatacenterDto, EnterpriseOptions)
+     * @see EnterpriseApi#listEnterprises(DatacenterDto, EnterpriseOptions)
      */
     @GET
     @Consumes(EnterprisesDto.BASE_MEDIA_TYPE)
@@ -112,7 +112,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
 
     /**
-     * @see EnterpriseClient#createEnterprise(EnterpriseDto)
+     * @see EnterpriseApi#createEnterprise(EnterpriseDto)
      */
     @POST
     @Path("/enterprises")
@@ -123,7 +123,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(BindToXMLPayload.class) EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#getEnterprise(Integer)
+     * @see EnterpriseApi#getEnterprise(Integer)
      */
     @GET
     @Path("/enterprises/{enterprise}")
@@ -133,7 +133,7 @@ public interface EnterpriseAsyncClient
     ListenableFuture<EnterpriseDto> getEnterprise(@PathParam("enterprise") Integer enterpriseId);
 
     /**
-     * @see EnterpriseClient#updateEnterprise(EnterpriseDto)
+     * @see EnterpriseApi#updateEnterprise(EnterpriseDto)
      */
     @PUT
     @Produces(EnterpriseDto.BASE_MEDIA_TYPE)
@@ -143,14 +143,14 @@ public interface EnterpriseAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#deleteEnterprise(EnterpriseDto)
+     * @see EnterpriseApi#deleteEnterprise(EnterpriseDto)
      */
     @DELETE
     ListenableFuture<Void> deleteEnterprise(
         @EndpointLink("edit") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#listAllowedDatacenters(Integer)
+     * @see EnterpriseApi#listAllowedDatacenters(Integer)
      */
     @GET
     @Path("/datacenters")
@@ -160,7 +160,7 @@ public interface EnterpriseAsyncClient
         @QueryParam("idEnterprise") Integer enterpriseId);
 
     /**
-     * @see EnterpriseClient#listVirtualDatacenters(EnterpriseDto)
+     * @see EnterpriseApi#listVirtualDatacenters(EnterpriseDto)
      */
     @GET
     @Consumes(VirtualDatacentersDto.BASE_MEDIA_TYPE)
@@ -171,7 +171,7 @@ public interface EnterpriseAsyncClient
     /*********************** Enterprise Properties ***********************/
 
     /**
-     * @see EnterpriseClient#getEnterpriseProperties(EnterpriseDto)
+     * @see EnterpriseApi#getEnterpriseProperties(EnterpriseDto)
      */
     @EnterpriseEdition
     @GET
@@ -181,7 +181,7 @@ public interface EnterpriseAsyncClient
         @EndpointLink("properties") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#updateEnterpriseProperties(EnterprisePropertiesDto)
+     * @see EnterpriseApi#updateEnterpriseProperties(EnterprisePropertiesDto)
      */
     @EnterpriseEdition
     @PUT
@@ -194,7 +194,7 @@ public interface EnterpriseAsyncClient
     /*********************** Enterprise Limits ***********************/
 
     /**
-     * @see EnterpriseClient#createLimits(EnterpriseDto, DatacenterDto, DatacenterLimitsDto)
+     * @see EnterpriseApi#createLimits(EnterpriseDto, DatacenterDto, DatacenterLimitsDto)
      */
     @POST
     @Produces(DatacenterLimitsDto.BASE_MEDIA_TYPE)
@@ -206,7 +206,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(BindToXMLPayload.class) DatacenterLimitsDto limits);
 
     /**
-     * @see EnterpriseClient#getLimits(EnterpriseDto, DatacenterDto)
+     * @see EnterpriseApi#getLimits(EnterpriseDto, DatacenterDto)
      */
     @GET
     @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
@@ -217,7 +217,7 @@ public interface EnterpriseAsyncClient
         @QueryParam("datacenter") @ParamParser(ParseDatacenterId.class) final DatacenterDto datacenter);
 
     /**
-     * @see EnterpriseClient#updateLimits(DatacenterLimitsDto)
+     * @see EnterpriseApi#updateLimits(DatacenterLimitsDto)
      */
     @PUT
     @Produces(DatacenterLimitsDto.BASE_MEDIA_TYPE)
@@ -227,14 +227,14 @@ public interface EnterpriseAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) DatacenterLimitsDto limits);
 
     /**
-     * @see EnterpriseClient#deleteLimits(DatacenterLimitsDto)
+     * @see EnterpriseApi#deleteLimits(DatacenterLimitsDto)
      */
     @DELETE
     ListenableFuture<Void> deleteLimits(
         @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterLimitsDto limits);
 
     /**
-     * @see EnterpriseClient#listLimits(EnterpriseDto)
+     * @see EnterpriseApi#listLimits(EnterpriseDto)
      */
     @GET
     @Consumes(DatacentersLimitsDto.BASE_MEDIA_TYPE)
@@ -245,7 +245,7 @@ public interface EnterpriseAsyncClient
     /*********************** User ***********************/
 
     /**
-     * @see EnterpriseClient#listUsers(EnterpriseDto)
+     * @see EnterpriseApi#listUsers(EnterpriseDto)
      */
     @GET
     @Consumes(UsersDto.BASE_MEDIA_TYPE)
@@ -254,7 +254,7 @@ public interface EnterpriseAsyncClient
         @EndpointLink("users") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#getUser(EnterpriseDto, Integer)
+     * @see EnterpriseApi#getUser(EnterpriseDto, Integer)
      */
     @GET
     @Consumes(UserDto.BASE_MEDIA_TYPE)
@@ -265,7 +265,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(AppendToPath.class) Integer userId);
 
     /**
-     * @see EnterpriseClient#createUser(EnterpriseDto)
+     * @see EnterpriseApi#createUser(EnterpriseDto)
      */
     @POST
     @Produces(UserDto.BASE_MEDIA_TYPE)
@@ -276,7 +276,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(BindToXMLPayload.class) UserDto user);
 
     /**
-     * @see EnterpriseClient#updateUser(UserDto)
+     * @see EnterpriseApi#updateUser(UserDto)
      */
     @PUT
     @Produces(UserDto.BASE_MEDIA_TYPE)
@@ -286,14 +286,14 @@ public interface EnterpriseAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) UserDto user);
 
     /**
-     * @see EnterpriseClient#deleteUser(UserDto)
+     * @see EnterpriseApi#deleteUser(UserDto)
      */
     @DELETE
     ListenableFuture<Void> deleteUser(
         @EndpointLink("edit") @BinderParam(BindToPath.class) UserDto user);
 
     /**
-     * @see EnterpriseClient#listVirtualMachines(UserDto)
+     * @see EnterpriseApi#listVirtualMachines(UserDto)
      */
     @GET
     @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
@@ -304,7 +304,7 @@ public interface EnterpriseAsyncClient
     /*********************** Datacenter Repository ***********************/
 
     /**
-     * @see EnterpriseClient#getDatacenterRepository(EnterpriseDto, Integer)
+     * @see EnterpriseApi#getDatacenterRepository(EnterpriseDto, Integer)
      */
     @GET
     @Consumes(DatacenterRepositoryDto.BASE_MEDIA_TYPE)
@@ -315,7 +315,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(AppendToPath.class) Integer datacenterRepositoryId);
 
     /**
-     * @see EnterpriseClient#refreshTemplateRepository(Integer, Integer)
+     * @see EnterpriseApi#refreshTemplateRepository(Integer, Integer)
      */
     @PUT
     @Path("/enterprises/{enterprise}/datacenterrepositories/{datacenterrepository}/actions/refresh")
@@ -325,7 +325,7 @@ public interface EnterpriseAsyncClient
     /*********************** External Network ***********************/
 
     /**
-     * @see EnterpriseClient#listExternalNetworks(EnterpriseDto)
+     * @see EnterpriseApi#listExternalNetworks(EnterpriseDto)
      */
     @EnterpriseEdition
     @GET
@@ -337,7 +337,7 @@ public interface EnterpriseAsyncClient
     /*********************** Cloud ***********************/
 
     /**
-     * @see EnterpriseClient#listVirtualAppliances(EnterpriseDto)
+     * @see EnterpriseApi#listVirtualAppliances(EnterpriseDto)
      */
     @GET
     @Consumes(VirtualAppliancesDto.BASE_MEDIA_TYPE)
@@ -346,7 +346,7 @@ public interface EnterpriseAsyncClient
         @EndpointLink("virtualappliances") @BinderParam(BindToPath.class) final EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
+     * @see EnterpriseApi#listVirtualMachines(EnterpriseDto)
      */
     @GET
     @Consumes(VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE)
@@ -357,7 +357,7 @@ public interface EnterpriseAsyncClient
     /*********************** Machine ***********************/
 
     /**
-     * @see EnterpriseClient#listVirtualMachines(EnterpriseDto)
+     * @see EnterpriseApi#listVirtualMachines(EnterpriseDto)
      */
     @GET
     @Consumes(MachinesDto.BASE_MEDIA_TYPE)
@@ -368,7 +368,7 @@ public interface EnterpriseAsyncClient
     /*********************** Template definition list ***********************/
 
     /**
-     * @see EnterpriseClient#listTemplateDefinitionLists(EnterpriseDto)
+     * @see EnterpriseApi#listTemplateDefinitionLists(EnterpriseDto)
      */
     @GET
     @Consumes(TemplateDefinitionListsDto.BASE_MEDIA_TYPE)
@@ -377,7 +377,7 @@ public interface EnterpriseAsyncClient
         @EndpointLink("appslib/templateDefinitionLists") @BinderParam(BindToPath.class) EnterpriseDto enterprise);
 
     /**
-     * @see EnterpriseClient#createTemplateDefinitionList(EnterpriseDto, TemplateDefinitionListDto)
+     * @see EnterpriseApi#createTemplateDefinitionList(EnterpriseDto, TemplateDefinitionListDto)
      */
     @POST
     @Produces(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
@@ -388,7 +388,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(BindToXMLPayload.class) TemplateDefinitionListDto templateList);
 
     /**
-     * @see EnterpriseClient#updateTemplateDefinitionList(TemplateDefinitionListDto)
+     * @see EnterpriseApi#updateTemplateDefinitionList(TemplateDefinitionListDto)
      */
     @PUT
     @Produces(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
@@ -398,14 +398,14 @@ public interface EnterpriseAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) TemplateDefinitionListDto templateList);
 
     /**
-     * @see EnterpriseClient#deleteTemplateDefinitionList(EnterpriseDto)
+     * @see EnterpriseApi#deleteTemplateDefinitionList(EnterpriseDto)
      */
     @DELETE
     ListenableFuture<Void> deleteTemplateDefinitionList(
         @EndpointLink("edit") @BinderParam(BindToPath.class) TemplateDefinitionListDto templateList);
 
     /**
-     * @see EnterpriseClient#getTemplateDefinitionList(EnterpriseDto, Integer)
+     * @see EnterpriseApi#getTemplateDefinitionList(EnterpriseDto, Integer)
      */
     @GET
     @Consumes(TemplateDefinitionListDto.BASE_MEDIA_TYPE)
@@ -416,7 +416,7 @@ public interface EnterpriseAsyncClient
         @BinderParam(AppendToPath.class) Integer templateListId);
 
     /**
-     * @see EnterpriseClient#getTemplateDefinitionList(EnterpriseDto, Integer)
+     * @see EnterpriseApi#getTemplateDefinitionList(EnterpriseDto, Integer)
      */
     @GET
     @Consumes(TemplatesStateDto.BASE_MEDIA_TYPE)

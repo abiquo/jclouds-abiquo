@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.network;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.rest.RestContext;
@@ -48,7 +48,7 @@ public class PrivateNetwork extends Network<PrivateIp>
     /**
      * Constructor to be used only by the builder.
      */
-    protected PrivateNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected PrivateNetwork(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VLANNetworkDto target)
     {
         super(context, target);
@@ -66,7 +66,7 @@ public class PrivateNetwork extends Network<PrivateIp>
     @Override
     public void delete()
     {
-        context.getApi().getCloudClient().deletePrivateNetwork(target);
+        context.getApi().getCloudApi().deletePrivateNetwork(target);
         target = null;
     }
 
@@ -81,7 +81,7 @@ public class PrivateNetwork extends Network<PrivateIp>
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
+            context.getApi().getCloudApi()
                 .createPrivateNetwork(virtualDatacenter.unwrap(), target);
     }
 
@@ -95,7 +95,7 @@ public class PrivateNetwork extends Network<PrivateIp>
     @Override
     public void update()
     {
-        target = context.getApi().getCloudClient().updatePrivateNetwork(target);
+        target = context.getApi().getCloudApi().updatePrivateNetwork(target);
     }
 
     /**
@@ -109,7 +109,7 @@ public class PrivateNetwork extends Network<PrivateIp>
     public List<PrivateIp> listIps(final IpOptions options)
     {
         PrivateIpsDto ips =
-            context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
+            context.getApi().getCloudApi().listPrivateNetworkIps(target, options);
         return wrap(context, PrivateIp.class, ips.getCollection());
     }
 
@@ -119,20 +119,20 @@ public class PrivateNetwork extends Network<PrivateIp>
     {
         IpOptions options = IpOptions.builder().disablePagination().free(true).build();
         PrivateIpsDto ips =
-            context.getApi().getCloudClient().listPrivateNetworkIps(target, options);
+            context.getApi().getCloudApi().listPrivateNetworkIps(target, options);
         return wrap(context, PrivateIp.class, ips.getCollection());
     }
 
     @Override
     public PrivateIp getIp(final Integer id)
     {
-        PrivateIpDto ip = context.getApi().getCloudClient().getPrivateNetworkIp(target, id);
+        PrivateIpDto ip = context.getApi().getCloudApi().getPrivateNetworkIp(target, id);
         return wrap(context, PrivateIp.class, ip);
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         return new Builder(context);
     }
@@ -141,7 +141,7 @@ public class PrivateNetwork extends Network<PrivateIp>
     {
         private VirtualDatacenter virtualDatacenter;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
         {
             super(context);
             this.context = context;

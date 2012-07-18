@@ -20,8 +20,8 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.rest.RestContext;
@@ -42,7 +42,7 @@ public class Fsm extends DomainWrapper<FsmDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Fsm(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final FsmDto target)
+    protected Fsm(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final FsmDto target)
     {
         super(context, target);
     }

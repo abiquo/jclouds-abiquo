@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo;
 
-import org.jclouds.abiquo.features.AdminAsyncClient;
-import org.jclouds.abiquo.features.CloudAsyncClient;
-import org.jclouds.abiquo.features.ConfigAsyncClient;
-import org.jclouds.abiquo.features.EnterpriseAsyncClient;
-import org.jclouds.abiquo.features.EventAsyncClient;
-import org.jclouds.abiquo.features.InfrastructureAsyncClient;
-import org.jclouds.abiquo.features.TaskAsyncClient;
-import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncClient;
+import org.jclouds.abiquo.features.AdminAsyncApi;
+import org.jclouds.abiquo.features.CloudAsyncApi;
+import org.jclouds.abiquo.features.ConfigAsyncApi;
+import org.jclouds.abiquo.features.EnterpriseAsyncApi;
+import org.jclouds.abiquo.features.EventAsyncApi;
+import org.jclouds.abiquo.features.InfrastructureAsyncApi;
+import org.jclouds.abiquo.features.TaskAsyncApi;
+import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncApi;
 import org.jclouds.rest.annotations.Delegate;
 
 import com.abiquo.model.transport.SingleResourceTransportDto;
@@ -36,10 +36,10 @@ import com.abiquo.model.transport.SingleResourceTransportDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see InfrastructureAsyncClient
+ * @see InfrastructureAsyncApi
  * @author Ignasi Barrera
  */
-public interface AbiquoAsyncClient
+public interface AbiquoAsyncApi
 {
     /**
      * The version of the supported Abiquo API.
@@ -55,47 +55,47 @@ public interface AbiquoAsyncClient
      * Provides asynchronous access to Admin features.
      */
     @Delegate
-    AdminAsyncClient getAdminClient();
+    AdminAsyncApi getAdminApi();
 
     /**
      * Provides asynchronous access to Infrastructure features.
      */
     @Delegate
-    InfrastructureAsyncClient getInfrastructureClient();
+    InfrastructureAsyncApi getInfrastructureApi();
 
     /**
      * Provides asynchronous access to Cloud features.
      */
     @Delegate
-    CloudAsyncClient getCloudClient();
+    CloudAsyncApi getCloudApi();
 
     /**
      * Provides asynchronous access to Apps library features.
      */
     @Delegate
-    VirtualMachineTemplateAsyncClient getVirtualMachineTemplateClient();
+    VirtualMachineTemplateAsyncApi getVirtualMachineTemplateApi();
 
     /**
      * Provides asynchronous access to Enterprise features.
      */
     @Delegate
-    EnterpriseAsyncClient getEnterpriseClient();
+    EnterpriseAsyncApi getEnterpriseApi();
 
     /**
      * Provides asynchronous access to configuration features.
      */
     @Delegate
-    ConfigAsyncClient getConfigClient();
+    ConfigAsyncApi getConfigApi();
 
     /**
      * Provides asynchronous access to task asynchronous features.
      */
     @Delegate
-    TaskAsyncClient getTaskClient();
+    TaskAsyncApi getTaskApi();
 
     /**
      * Provides asynchronous access to Event features.
      */
     @Delegate
-    EventAsyncClient getEventClient();
+    EventAsyncApi getEventApi();
 }

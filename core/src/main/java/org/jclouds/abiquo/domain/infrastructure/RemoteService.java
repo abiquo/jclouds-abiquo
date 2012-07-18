@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -52,7 +52,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected RemoteService(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final RemoteServiceDto target)
+    protected RemoteService(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final RemoteServiceDto target)
     {
         super(context, target);
     }
@@ -67,7 +67,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
      */
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteRemoteService(target);
+        context.getApi().getInfrastructureApi().deleteRemoteService(target);
         target = null;
     }
 
@@ -82,7 +82,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .createRemoteService(datacenter.unwrap(), target);
     }
 
@@ -96,7 +96,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
      */
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateRemoteService(target);
+        target = context.getApi().getInfrastructureApi().updateRemoteService(target);
     }
 
     /**
@@ -110,7 +110,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public boolean isAvailable()
     {
         // If the remote service can not be checked, assume it is available
-        return !getType().canBeChecked() ? true : context.getApi().getInfrastructureClient()
+        return !getType().canBeChecked() ? true : context.getApi().getInfrastructureApi()
             .isAvailable(target);
     }
 
@@ -127,19 +127,19 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+        DatacenterDto dto = context.getApi().getInfrastructureApi().getDatacenter(datacenterId);
         datacenter = wrap(context, Datacenter.class, dto);
         return datacenter;
     }
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
     }
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private Integer id;
 
@@ -156,7 +156,7 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         // To be used only internally by the builder
         private String uri;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Datacenter datacenter)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter)
         {
             super();
             checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);

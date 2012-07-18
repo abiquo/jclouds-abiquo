@@ -31,7 +31,7 @@ import org.jclouds.abiquo.domain.cloud.Volume;
 import org.jclouds.abiquo.domain.enterprise.User;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
 
@@ -46,7 +46,7 @@ import com.google.common.collect.Iterables;
  * @author Vivien Mahé
  */
 @Test(groups = "live")
-public class EventLiveTest extends BaseAbiquoClientLiveTest
+public class EventLiveTest extends BaseAbiquoApiLiveTest
 {
     public void testListEventsFilteredByDatacenter()
     {

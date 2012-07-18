@@ -27,7 +27,7 @@ import java.net.URI;
 import javax.ws.rs.HttpMethod;
 
 import org.jclouds.abiquo.domain.CloudResources;
-import org.jclouds.abiquo.features.CloudAsyncClient;
+import org.jclouds.abiquo.features.CloudAsyncApi;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.testng.annotations.Test;
 
@@ -70,10 +70,10 @@ public class BindMoveVolumeToPathTest
         NoSuchMethodException
     {
         Method withEndpointLink =
-            CloudAsyncClient.class.getMethod("moveVolume", VolumeManagementDto.class,
+            CloudAsyncApi.class.getMethod("moveVolume", VolumeManagementDto.class,
                 VirtualDatacenterDto.class);
-        return GeneratedHttpRequest.<CloudAsyncClient> requestBuilder().declaring(
-            CloudAsyncClient.class).javaMethod(withEndpointLink).args(
+        return GeneratedHttpRequest.<CloudAsyncApi> requestBuilder().declaring(
+            CloudAsyncApi.class).javaMethod(withEndpointLink).args(
             ImmutableList.<Object> of(CloudResources.volumePut(), CloudResources
                 .virtualDatacenterPut())).method(HttpMethod.POST).endpoint(
             URI.create("http://localhost")).build();

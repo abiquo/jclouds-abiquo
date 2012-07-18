@@ -39,15 +39,15 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see EventClient
+ * @see EventApi
  * @author Ignasi Barrera
  * @author Vivien Mahé
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
-public interface EventAsyncClient
+public interface EventAsyncApi
 {
     /**
-     * @see EventClient#listEvents()
+     * @see EventApi#listEvents()
      */
     @GET
     @Path("/events")
@@ -56,7 +56,7 @@ public interface EventAsyncClient
     ListenableFuture<EventsDto> listEvents();
 
     /**
-     * @see EventClient#listEvents()
+     * @see EventApi#listEvents()
      */
     @GET
     @Path("/events")

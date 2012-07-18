@@ -27,7 +27,7 @@ import static org.testng.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
@@ -39,7 +39,7 @@ import com.abiquo.server.core.cloud.VirtualApplianceState;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest
+public class VirtualApplianceLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testUpdate()
@@ -49,7 +49,7 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated virtual appliance
         VirtualApplianceDto updated =
-            env.cloudClient.getVirtualAppliance(env.virtualDatacenter.unwrap(),
+            env.cloudApi.getVirtualAppliance(env.virtualDatacenter.unwrap(),
                 env.virtualAppliance.getId());
 
         assertEquals(updated.getName(), "Virtual AppAloha updated");
@@ -63,7 +63,7 @@ public class VirtualApplianceLiveTest extends BaseAbiquoClientLiveTest
         repeated.save();
 
         List<VirtualApplianceDto> virtualAppliances =
-            env.cloudClient.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
+            env.cloudApi.listVirtualAppliances(env.virtualDatacenter.unwrap()).getCollection();
 
         assertEquals(virtualAppliances.size(), 2);
         repeated.delete();

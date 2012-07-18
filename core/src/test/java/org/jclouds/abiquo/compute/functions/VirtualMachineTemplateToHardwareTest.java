@@ -26,8 +26,8 @@ import static org.testng.Assert.assertNull;
 import java.net.URI;
 
 import org.easymock.EasyMock;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.compute.domain.Hardware;
 import org.jclouds.compute.domain.Volume;
@@ -48,7 +48,7 @@ public class VirtualMachineTemplateToHardwareTest
     @SuppressWarnings("unchecked")
     public void testVirtualMachineTemplateToHardware()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToHardware function = new VirtualMachineTemplateToHardware();
 
@@ -84,7 +84,7 @@ public class VirtualMachineTemplateToHardwareTest
     @SuppressWarnings("unchecked")
     public void testConvertWithoutEditLink()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToHardware function = new VirtualMachineTemplateToHardware();
 
@@ -106,7 +106,7 @@ public class VirtualMachineTemplateToHardwareTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testConvertWithoutId()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToHardware function = new VirtualMachineTemplateToHardware();
 
@@ -118,7 +118,7 @@ public class VirtualMachineTemplateToHardwareTest
     @SuppressWarnings("unchecked")
     public void testConvertWithoutCpu()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToHardware function = new VirtualMachineTemplateToHardware();
 
@@ -139,7 +139,7 @@ public class VirtualMachineTemplateToHardwareTest
     @SuppressWarnings("unchecked")
     public void testConvertWithoutRam()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToHardware function = new VirtualMachineTemplateToHardware();
 
@@ -159,7 +159,7 @@ public class VirtualMachineTemplateToHardwareTest
     @SuppressWarnings("unchecked")
     public void testConvertWithoutHd()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
         VirtualMachineTemplateToHardware function = new VirtualMachineTemplateToHardware();
 

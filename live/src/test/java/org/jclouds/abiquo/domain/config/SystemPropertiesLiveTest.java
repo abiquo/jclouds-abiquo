@@ -22,7 +22,7 @@ package org.jclouds.abiquo.domain.config;
 import static org.testng.Assert.assertEquals;
 
 import org.jclouds.abiquo.domain.enterprise.User;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 /**
@@ -31,7 +31,7 @@ import org.testng.annotations.Test;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class SystemPropertiesLiveTest extends BaseAbiquoClientLiveTest
+public class SystemPropertiesLiveTest extends BaseAbiquoApiLiveTest
 {
     public void testUpdate()
     {

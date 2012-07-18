@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -65,7 +65,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualAppliance(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected VirtualAppliance(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VirtualApplianceDto target)
     {
         super(context, target);
@@ -78,7 +78,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
      */
     public void delete()
     {
-        context.getApi().getCloudClient().deleteVirtualAppliance(target);
+        context.getApi().getCloudApi().deleteVirtualAppliance(target);
         target = null;
     }
 
@@ -88,7 +88,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
+            context.getApi().getCloudApi()
                 .createVirtualAppliance(virtualDatacenter.unwrap(), target);
     }
 
@@ -97,7 +97,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
      */
     public void update()
     {
-        target = context.getApi().getCloudClient().updateVirtualAppliance(target);
+        target = context.getApi().getCloudApi().updateVirtualAppliance(target);
     }
 
     // Parent access
@@ -115,7 +115,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     {
         Integer virtualDatacenterId = target.getIdFromLink(ParentLinkName.VIRTUAL_DATACENTER);
         VirtualDatacenterDto dto =
-            context.getApi().getCloudClient().getVirtualDatacenter(virtualDatacenterId);
+            context.getApi().getCloudApi().getVirtualDatacenter(virtualDatacenterId);
         virtualDatacenter = wrap(context, VirtualDatacenter.class, dto);
         return virtualDatacenter;
     }
@@ -132,7 +132,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        EnterpriseDto dto = context.getApi().getEnterpriseClient().getEnterprise(enterpriseId);
+        EnterpriseDto dto = context.getApi().getEnterpriseApi().getEnterprise(enterpriseId);
         return wrap(context, Enterprise.class, dto);
     }
 
@@ -144,7 +144,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public VirtualApplianceState getState()
     {
         VirtualApplianceStateDto stateDto =
-            context.getApi().getCloudClient().getVirtualApplianceState(target);
+            context.getApi().getCloudApi().getVirtualApplianceState(target);
         return stateDto.getPower();
     }
 
@@ -178,7 +178,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public List<VirtualMachine> listVirtualMachines(final VirtualMachineOptions options)
     {
         VirtualMachinesWithNodeExtendedDto vms =
-            context.getApi().getCloudClient().listVirtualMachines(target, options);
+            context.getApi().getCloudApi().listVirtualMachines(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());
     }
 
@@ -213,7 +213,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
     public VirtualMachine getVirtualMachine(final Integer id)
     {
         VirtualMachineWithNodeExtendedDto vm =
-            context.getApi().getCloudClient().getVirtualMachine(target, id);
+            context.getApi().getCloudApi().getVirtualMachine(target, id);
         return wrap(context, VirtualMachine.class, vm);
     }
 
@@ -252,7 +252,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         force.setForceEnterpriseSoftLimits(forceEnterpriseSoftLimits);
 
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualAppliance(unwrap(), force);
+            context.getApi().getCloudApi().deployVirtualAppliance(unwrap(), force);
 
         return getTasks(response);
     }
@@ -290,14 +290,14 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         force.setForceUndeploy(forceUndeploy);
 
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().undeployVirtualAppliance(unwrap(), force);
+            context.getApi().getCloudApi().undeployVirtualAppliance(unwrap(), force);
 
         return getTasks(response);
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VirtualDatacenter virtualDatacenter)
     {
         return new Builder(context, virtualDatacenter);
@@ -305,13 +305,13 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String name;
 
         private VirtualDatacenter virtualDatacenter;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final VirtualDatacenter virtualDatacenter)
         {
             super();

@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.enterprise;
 
 import java.util.Map;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -43,7 +43,7 @@ public class EnterpriseProperties extends DomainWrapper<EnterprisePropertiesDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected EnterpriseProperties(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected EnterpriseProperties(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final EnterprisePropertiesDto target)
     {
         super(context, target);
@@ -58,7 +58,7 @@ public class EnterpriseProperties extends DomainWrapper<EnterprisePropertiesDto>
      */
     public void update()
     {
-        target = context.getApi().getEnterpriseClient().updateEnterpriseProperties(target);
+        target = context.getApi().getEnterpriseApi().updateEnterpriseProperties(target);
     }
 
     // Parent access
@@ -71,7 +71,7 @@ public class EnterpriseProperties extends DomainWrapper<EnterprisePropertiesDto>
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return wrap(context, Enterprise.class, context.getApi().getEnterpriseClient()
+        return wrap(context, Enterprise.class, context.getApi().getEnterpriseApi()
             .getEnterprise(enterpriseId));
     }
 

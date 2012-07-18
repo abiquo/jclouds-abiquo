@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -55,7 +55,7 @@ public class Role extends DomainWrapper<RoleDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Role(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final RoleDto target)
+    protected Role(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final RoleDto target)
     {
         super(context, target);
     }
@@ -71,7 +71,7 @@ public class Role extends DomainWrapper<RoleDto>
      */
     public void delete()
     {
-        context.getApi().getAdminClient().deleteRole(target);
+        context.getApi().getAdminApi().deleteRole(target);
         target = null;
     }
 
@@ -83,7 +83,7 @@ public class Role extends DomainWrapper<RoleDto>
      */
     public void save()
     {
-        target = context.getApi().getAdminClient().createRole(target);
+        target = context.getApi().getAdminApi().createRole(target);
     }
 
     /**
@@ -95,7 +95,7 @@ public class Role extends DomainWrapper<RoleDto>
      */
     public void update()
     {
-        target = context.getApi().getAdminClient().updateRole(target);
+        target = context.getApi().getAdminApi().updateRole(target);
     }
 
     public void setEnterprise(final Enterprise enterprise)
@@ -150,7 +150,7 @@ public class Role extends DomainWrapper<RoleDto>
      */
     public List<Privilege> listPrivileges()
     {
-        PrivilegesDto dto = context.getApi().getAdminClient().listPrivileges(target);
+        PrivilegesDto dto = context.getApi().getAdminApi().listPrivileges(target);
 
         return wrap(context, Privilege.class, dto.getCollection());
     }
@@ -167,20 +167,20 @@ public class Role extends DomainWrapper<RoleDto>
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         return new Builder(context);
     }
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String name;
 
         private boolean blocked = DEFAULT_BLOCKED;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
         {
             super();
             this.context = context;

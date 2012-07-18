@@ -25,8 +25,8 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.Context;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
@@ -64,7 +64,7 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
     public AbiquoContextImpl(@Provider final Context wrapped,
         @Provider final TypeToken< ? extends Context> wrappedType,
         final ComputeService computeService, final Utils utils,
-        final RestContext<AbiquoClient, AbiquoAsyncClient> providerSpecificContext,
+        final RestContext<AbiquoApi, AbiquoAsyncApi> providerSpecificContext,
         final AdministrationService administrationService, final CloudService cloudService,
         final SearchService searchService, final MonitoringService monitoringService,
         final EventService eventService)
@@ -78,7 +78,7 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
     }
 
     @Override
-    public RestContext<AbiquoClient, AbiquoAsyncClient> getApiContext()
+    public RestContext<AbiquoApi, AbiquoAsyncApi> getApiContext()
     {
         return unwrap();
     }

@@ -24,8 +24,8 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 
 import org.easymock.EasyMock;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
@@ -80,7 +80,7 @@ public class AbiquoTemplateOptionsTest
     @SuppressWarnings("unchecked")
     public void testIps()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
 
         PrivateIpDto dto1 = new PrivateIpDto();
@@ -102,7 +102,7 @@ public class AbiquoTemplateOptionsTest
     @SuppressWarnings("unchecked")
     public void testGatewayNetwork()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
 
         VLANNetworkDto dto = new VLANNetworkDto();
@@ -120,7 +120,7 @@ public class AbiquoTemplateOptionsTest
     @SuppressWarnings("unchecked")
     public void testUnmanagedIps()
     {
-        RestContext<AbiquoClient, AbiquoAsyncClient> context =
+        RestContext<AbiquoApi, AbiquoAsyncApi> context =
             EasyMock.createMock(RestContext.class);
 
         VLANNetworkDto dto1 = new VLANNetworkDto();

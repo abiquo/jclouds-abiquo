@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
@@ -49,7 +49,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
     /**
      * Constructor to be used only by the builder.
      */
-    protected Network(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected Network(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VLANNetworkDto target)
     {
         super(context, target);
@@ -97,7 +97,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
 
     public static class NetworkBuilder<T extends NetworkBuilder<T>>
     {
-        protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         protected String name;
 
@@ -117,7 +117,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
 
         protected Boolean defaultNetwork;
 
-        public NetworkBuilder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+        public NetworkBuilder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
         {
             super();
             this.context = context;
@@ -335,7 +335,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
     }
 
     public static Network< ? > wrapNetwork(
-        final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VLANNetworkDto dto)
+        final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VLANNetworkDto dto)
     {
         if (dto == null)
         {
@@ -367,7 +367,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
     }
 
     public static List<Network< ? >> wrapNetworks(
-        final RestContext<AbiquoClient, AbiquoAsyncClient> context, final List<VLANNetworkDto> dtos)
+        final RestContext<AbiquoApi, AbiquoAsyncApi> context, final List<VLANNetworkDto> dtos)
     {
         List<Network< ? >> networks = Lists.newLinkedList();
         for (VLANNetworkDto dto : dtos)

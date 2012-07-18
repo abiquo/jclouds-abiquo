@@ -37,7 +37,7 @@ import org.jclouds.abiquo.domain.network.PublicNetwork;
 import org.jclouds.abiquo.domain.network.UnmanagedIp;
 import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -51,7 +51,7 @@ import com.google.common.collect.Lists;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class VirtualMachineNetworkingLiveTest extends BaseAbiquoClientLiveTest
+public class VirtualMachineNetworkingLiveTest extends BaseAbiquoApiLiveTest
 {
     private PrivateIp privateIp;
 

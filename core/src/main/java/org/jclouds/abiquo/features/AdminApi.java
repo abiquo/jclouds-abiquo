@@ -34,12 +34,12 @@ import com.abiquo.server.core.enterprise.UserDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see AdminAsyncClient
+ * @see AdminAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AdminClient
+public interface AdminApi
 {
     /* ********************** User ********************** */
 

@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.strategy;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.BeforeClass;
 
 /**
@@ -27,7 +27,7 @@ import org.testng.annotations.BeforeClass;
  * 
  * @author Ignasi Barrera
  */
-public abstract class BaseAbiquoStrategyLiveTest extends BaseAbiquoClientLiveTest
+public abstract class BaseAbiquoStrategyLiveTest extends BaseAbiquoApiLiveTest
 {
     @BeforeClass(groups = "live")
     protected abstract void setupStrategy();

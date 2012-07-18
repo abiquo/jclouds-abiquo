@@ -46,7 +46,7 @@ import com.google.common.collect.Iterables;
 @Test(groups = "unit")
 public class FeatureCoverageTest
 {
-    /** A collection with all async client classes. */
+    /** A collection with all async api classes. */
     private Collection<Class< ? >> featureClasses;
 
     @BeforeMethod

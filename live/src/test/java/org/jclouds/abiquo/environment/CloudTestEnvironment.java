@@ -39,7 +39,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.features.CloudClient;
+import org.jclouds.abiquo.features.CloudApi;
 import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.predicates.enterprise.EnterprisePredicates;
 import org.jclouds.abiquo.predicates.network.NetworkPredicates;
@@ -56,7 +56,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
 {
 
     // Environment data made public so tests can use them easily
-    public CloudClient cloudClient;
+    public CloudApi cloudApi;
 
     public EventService eventService;
 
@@ -79,7 +79,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
     public CloudTestEnvironment(final AbiquoContext context)
     {
         super(context);
-        this.cloudClient = context.getApiContext().getApi().getCloudClient();
+        this.cloudApi = context.getApiContext().getApi().getCloudApi();
         this.eventService = context.getEventService();
     }
 
@@ -223,7 +223,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         {
             Integer idVirtualDatacenter = virtualDatacenter.getId();
             virtualDatacenter.delete();
-            assertNull(cloudClient.getVirtualDatacenter(idVirtualDatacenter));
+            assertNull(cloudApi.getVirtualDatacenter(idVirtualDatacenter));
         }
     }
 
@@ -233,7 +233,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         {
             Integer idVirtualAppliance = virtualAppliance.getId();
             virtualAppliance.delete();
-            assertNull(cloudClient.getVirtualAppliance(virtualDatacenter.unwrap(),
+            assertNull(cloudApi.getVirtualAppliance(virtualDatacenter.unwrap(),
                 idVirtualAppliance));
         }
     }
@@ -244,7 +244,7 @@ public class CloudTestEnvironment extends InfrastructureTestEnvironment
         {
             Integer idVirtualMachine = virtualMachine.getId();
             virtualMachine.delete();
-            assertNull(cloudClient.getVirtualMachine(virtualAppliance.unwrap(), idVirtualMachine));
+            assertNull(cloudApi.getVirtualMachine(virtualAppliance.unwrap(), idVirtualMachine));
         }
 
     }

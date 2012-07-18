@@ -23,7 +23,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertNull;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.StoragePoolPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
@@ -37,7 +37,7 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class StoragePoolLiveTest extends BaseAbiquoClientLiveTest
+public class StoragePoolLiveTest extends BaseAbiquoApiLiveTest
 {
     public void testGetDevice()
     {

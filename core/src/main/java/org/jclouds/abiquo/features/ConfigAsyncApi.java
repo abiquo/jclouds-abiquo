@@ -60,18 +60,18 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see AdminClient
+ * @see AdminApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/config")
-public interface ConfigAsyncClient
+public interface ConfigAsyncApi
 {
     /*********************** License ***********************/
 
     /**
-     * @see ConfigClient#listLicenses()
+     * @see ConfigApi#listLicenses()
      */
 
     @EnterpriseEdition
@@ -82,7 +82,7 @@ public interface ConfigAsyncClient
     ListenableFuture<LicensesDto> listLicenses();
 
     /**
-     * @see ConfigClient#listLicenses(LicenseOptions)
+     * @see ConfigApi#listLicenses(LicenseOptions)
      */
     @EnterpriseEdition
     @GET
@@ -93,7 +93,7 @@ public interface ConfigAsyncClient
         @BinderParam(AppendOptionsToPath.class) LicenseOptions options);
 
     /**
-     * @see ConfigClient#addLicense(LicenseDto)
+     * @see ConfigApi#addLicense(LicenseDto)
      */
     @EnterpriseEdition
     @POST
@@ -104,7 +104,7 @@ public interface ConfigAsyncClient
     ListenableFuture<LicenseDto> addLicense(@BinderParam(BindToXMLPayload.class) LicenseDto license);
 
     /**
-     * @see ConfigClient#removeLicense(LicenseDto)
+     * @see ConfigApi#removeLicense(LicenseDto)
      */
     @DELETE
     @EnterpriseEdition
@@ -114,7 +114,7 @@ public interface ConfigAsyncClient
     /*********************** Privilege ***********************/
 
     /**
-     * @see ConfigClient#listPrivileges()
+     * @see ConfigApi#listPrivileges()
      */
     @GET
     @Path("/privileges")
@@ -123,7 +123,7 @@ public interface ConfigAsyncClient
     ListenableFuture<PrivilegesDto> listPrivileges();
 
     /**
-     * @see ConfigClient#getPrivilege(Integer)
+     * @see ConfigApi#getPrivilege(Integer)
      */
     @GET
     @Path("/privileges/{privilege}")
@@ -135,7 +135,7 @@ public interface ConfigAsyncClient
     /*********************** System Properties ***********************/
 
     /**
-     * @see ConfigClient#listSystemProperties()
+     * @see ConfigApi#listSystemProperties()
      */
     @GET
     @Path("/properties")
@@ -144,7 +144,7 @@ public interface ConfigAsyncClient
     ListenableFuture<SystemPropertiesDto> listSystemProperties();
 
     /**
-     * @see ConfigClient#listSystemProperties(PropertyOptions)
+     * @see ConfigApi#listSystemProperties(PropertyOptions)
      */
     @GET
     @Path("/properties")
@@ -154,7 +154,7 @@ public interface ConfigAsyncClient
         @BinderParam(AppendOptionsToPath.class) PropertyOptions options);
 
     /**
-     * @see ConfigClient#updateSystemProperty(VirtualDatacenterDto)
+     * @see ConfigApi#updateSystemProperty(VirtualDatacenterDto)
      */
     @PUT
     @Produces(SystemPropertyDto.BASE_MEDIA_TYPE)
@@ -166,7 +166,7 @@ public interface ConfigAsyncClient
     /*********************** Category ***********************/
 
     /**
-     * @see ConfigClient#listCategories()
+     * @see ConfigApi#listCategories()
      */
     @GET
     @Path("/categories")
@@ -175,7 +175,7 @@ public interface ConfigAsyncClient
     ListenableFuture<CategoriesDto> listCategories();
 
     /**
-     * @see ConfigClient#getCategory(Integer)
+     * @see ConfigApi#getCategory(Integer)
      */
     @GET
     @Path("/categories/{category}")
@@ -185,7 +185,7 @@ public interface ConfigAsyncClient
     ListenableFuture<CategoryDto> getCategory(@PathParam("category") Integer categoryId);
 
     /**
-     * @see ConfigClient#createCategory(CategoryDto)
+     * @see ConfigApi#createCategory(CategoryDto)
      */
     @POST
     @Path("/categories")
@@ -196,7 +196,7 @@ public interface ConfigAsyncClient
         @BinderParam(BindToXMLPayload.class) CategoryDto category);
 
     /**
-     * @see ConfigClient#updateCategory(CategoryDto)
+     * @see ConfigApi#updateCategory(CategoryDto)
      */
     @PUT
     @Produces(CategoryDto.BASE_MEDIA_TYPE)
@@ -206,7 +206,7 @@ public interface ConfigAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) CategoryDto category);
 
     /**
-     * @see ConfigClient#deleteCategory(CategoryDto)
+     * @see ConfigApi#deleteCategory(CategoryDto)
      */
     @DELETE
     ListenableFuture<Void> deleteCategory(

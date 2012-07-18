@@ -24,8 +24,8 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.strategy.config.ListCategories;
 import org.jclouds.rest.RestContext;
@@ -44,12 +44,12 @@ import com.google.inject.Inject;
 public class ListCategoriesImpl implements ListCategories
 {
     // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
+    // single api methods
 
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    ListCategoriesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    ListCategoriesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = context;
     }
@@ -57,7 +57,7 @@ public class ListCategoriesImpl implements ListCategories
     @Override
     public Iterable<Category> execute()
     {
-        CategoriesDto result = context.getApi().getConfigClient().listCategories();
+        CategoriesDto result = context.getApi().getConfigApi().listCategories();
         return wrap(context, Category.class, result.getCollection());
     }
 

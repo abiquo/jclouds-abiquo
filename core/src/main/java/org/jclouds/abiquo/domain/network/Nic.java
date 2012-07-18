@@ -20,8 +20,8 @@
 package org.jclouds.abiquo.domain.network;
 
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
@@ -40,7 +40,7 @@ public class Nic extends DomainWrapper<NicDto>
     /**
      * Constructor to be used only by the builder (if any).
      */
-    protected Nic(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final NicDto target)
+    protected Nic(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final NicDto target)
     {
         super(context, target);
     }

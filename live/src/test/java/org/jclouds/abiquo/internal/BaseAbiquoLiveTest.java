@@ -48,12 +48,12 @@ public abstract class BaseAbiquoLiveTest extends BaseViewLiveTest<AbiquoContext>
         overrides.put(Constants.PROPERTY_MAX_RETRIES, "0");
         overrides.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
         // Wait at most one minute in Machine discovery
-        overrides.put("jclouds.timeouts.InfrastructureClient.discoverSingleMachine", "60000");
-        overrides.put("jclouds.timeouts.InfrastructureClient.discoverMultipleMachines", "60000");
-        overrides.put("jclouds.timeouts.InfrastructureClient.createMachine", "60000");
-        overrides.put("jclouds.timeouts.InfrastructureClient.updateMachine", "60000");
-        overrides.put("jclouds.timeouts.InfrastructureClient.checkMachineState", "60000");
-        overrides.put("jclouds.timeouts.CloudClient.listVirtualMachines", "60000");
+        overrides.put("jclouds.timeouts.InfrastructureApi.discoverSingleMachine", "60000");
+        overrides.put("jclouds.timeouts.InfrastructureApi.discoverMultipleMachines", "60000");
+        overrides.put("jclouds.timeouts.InfrastructureApi.createMachine", "60000");
+        overrides.put("jclouds.timeouts.InfrastructureApi.updateMachine", "60000");
+        overrides.put("jclouds.timeouts.InfrastructureApi.checkMachineState", "60000");
+        overrides.put("jclouds.timeouts.CloudApi.listVirtualMachines", "60000");
         return overrides;
     }
 

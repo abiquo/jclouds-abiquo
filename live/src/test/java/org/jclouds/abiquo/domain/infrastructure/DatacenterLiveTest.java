@@ -32,7 +32,7 @@ import javax.ws.rs.core.Response.Status;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter.Builder;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.Test;
 
 import com.abiquo.model.enumerator.HypervisorType;
@@ -44,7 +44,7 @@ import com.abiquo.server.core.infrastructure.DatacenterDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class DatacenterLiveTest extends BaseAbiquoClientLiveTest
+public class DatacenterLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testUpdate()
@@ -53,7 +53,7 @@ public class DatacenterLiveTest extends BaseAbiquoClientLiveTest
         env.datacenter.update();
 
         // Recover the updated datacenter
-        DatacenterDto updated = env.infrastructureClient.getDatacenter(env.datacenter.getId());
+        DatacenterDto updated = env.infrastructureApi.getDatacenter(env.datacenter.getId());
 
         assertEquals(updated.getLocation(), "New York");
     }

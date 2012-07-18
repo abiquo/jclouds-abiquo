@@ -23,8 +23,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -57,7 +57,7 @@ public class Tier extends DomainWrapper<TierDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Tier(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final TierDto target)
+    protected Tier(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final TierDto target)
     {
         super(context, target);
     }
@@ -73,7 +73,7 @@ public class Tier extends DomainWrapper<TierDto>
      */
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateTier(target);
+        target = context.getApi().getInfrastructureApi().updateTier(target);
     }
 
     /**
@@ -88,7 +88,7 @@ public class Tier extends DomainWrapper<TierDto>
     public List<StoragePool> listStoragePools()
     {
         StoragePoolsDto storagePools =
-            context.getApi().getInfrastructureClient().listStoragePools(target);
+            context.getApi().getInfrastructureApi().listStoragePools(target);
         return wrap(context, StoragePool.class, storagePools.getCollection());
     }
 
@@ -135,7 +135,7 @@ public class Tier extends DomainWrapper<TierDto>
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        DatacenterDto dto = context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+        DatacenterDto dto = context.getApi().getInfrastructureApi().getDatacenter(datacenterId);
         datacenter = wrap(context, Datacenter.class, dto);
         return datacenter;
     }

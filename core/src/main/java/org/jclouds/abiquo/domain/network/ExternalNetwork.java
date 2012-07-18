@@ -23,8 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -65,7 +65,7 @@ public class ExternalNetwork extends Network<ExternalIp>
     /**
      * Constructor to be used only by the builder.
      */
-    protected ExternalNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected ExternalNetwork(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VLANNetworkDto target)
     {
         super(context, target);
@@ -81,7 +81,7 @@ public class ExternalNetwork extends Network<ExternalIp>
     @Override
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteNetwork(target);
+        context.getApi().getInfrastructureApi().deleteNetwork(target);
         target = null;
     }
 
@@ -97,7 +97,7 @@ public class ExternalNetwork extends Network<ExternalIp>
     {
         this.addEnterpriseLink();
         target =
-            context.getApi().getInfrastructureClient().createNetwork(datacenter.unwrap(), target);
+            context.getApi().getInfrastructureApi().createNetwork(datacenter.unwrap(), target);
     }
 
     /**
@@ -110,7 +110,7 @@ public class ExternalNetwork extends Network<ExternalIp>
     @Override
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateNetwork(target);
+        target = context.getApi().getInfrastructureApi().updateNetwork(target);
     }
 
     /**
@@ -123,14 +123,14 @@ public class ExternalNetwork extends Network<ExternalIp>
     public List<ExternalIp> listIps(final IpOptions options)
     {
         ExternalIpsDto ips =
-            context.getApi().getInfrastructureClient().listExternalIps(target, options);
+            context.getApi().getInfrastructureApi().listExternalIps(target, options);
         return wrap(context, ExternalIp.class, ips.getCollection());
     }
 
     @Override
     public ExternalIp getIp(final Integer id)
     {
-        ExternalIpDto ip = context.getApi().getInfrastructureClient().getExternalIp(target, id);
+        ExternalIpDto ip = context.getApi().getInfrastructureApi().getExternalIp(target, id);
         return wrap(context, ExternalIp.class, ip);
     }
 
@@ -184,7 +184,7 @@ public class ExternalNetwork extends Network<ExternalIp>
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Datacenter datacenter, final Enterprise enterprise)
     {
         return new Builder(context, datacenter, enterprise);
@@ -196,7 +196,7 @@ public class ExternalNetwork extends Network<ExternalIp>
 
         private Enterprise enterprise;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter, final Enterprise enterprise)
         {
             super(context);

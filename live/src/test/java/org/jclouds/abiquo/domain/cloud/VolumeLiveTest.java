@@ -31,7 +31,7 @@ import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.cloud.VolumePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
 import org.testng.annotations.Test;
@@ -44,7 +44,7 @@ import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class VolumeLiveTest extends BaseAbiquoClientLiveTest
+public class VolumeLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void createVolume()
@@ -66,13 +66,13 @@ public class VolumeLiveTest extends BaseAbiquoClientLiveTest
         VolumeOptions invalidOptions = VolumeOptions.builder().has("cacatua").build();
 
         List<VolumeManagementDto> volumes =
-            env.cloudClient.listVolumes(env.virtualDatacenter.unwrap(), validOptions)
+            env.cloudApi.listVolumes(env.virtualDatacenter.unwrap(), validOptions)
                 .getCollection();
 
         assertEquals(volumes.size(), 1);
 
         volumes =
-            env.cloudClient.listVolumes(env.virtualDatacenter.unwrap(), invalidOptions)
+            env.cloudApi.listVolumes(env.virtualDatacenter.unwrap(), invalidOptions)
                 .getCollection();
 
         assertEquals(volumes.size(), 0);

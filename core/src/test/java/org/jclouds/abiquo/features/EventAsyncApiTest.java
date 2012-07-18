@@ -31,18 +31,18 @@ import com.abiquo.server.core.event.EventsDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Tests annotation parsing of {@code EventAsyncClient}
+ * Tests annotation parsing of {@code EventAsyncApi}
  * 
  * @author Ignasi Barrera
  * @author Vivien Mahé
  */
 @Test(groups = "unit")
-public class EventAsyncClientTest extends BaseAbiquoAsyncClientTest<EventAsyncClient>
+public class EventAsyncApiTest extends BaseAbiquoAsyncApiTest<EventAsyncApi>
 {
     public void testListEvents() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = EventAsyncClient.class.getMethod("listEvents");
-        GeneratedHttpRequest<EventAsyncClient> request = processor.createRequest(method);
+        Method method = EventAsyncApi.class.getMethod("listEvents");
+        GeneratedHttpRequest<EventAsyncApi> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/events HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + EventsDto.BASE_MEDIA_TYPE + "\n");
@@ -56,9 +56,9 @@ public class EventAsyncClientTest extends BaseAbiquoAsyncClientTest<EventAsyncCl
     }
 
     @Override
-    protected TypeLiteral<RestAnnotationProcessor<EventAsyncClient>> createTypeLiteral()
+    protected TypeLiteral<RestAnnotationProcessor<EventAsyncApi>> createTypeLiteral()
     {
-        return new TypeLiteral<RestAnnotationProcessor<EventAsyncClient>>()
+        return new TypeLiteral<RestAnnotationProcessor<EventAsyncApi>>()
         {
         };
     }

@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
@@ -54,7 +54,7 @@ public class Blade extends AbstractPhysicalMachine
     /**
      * Constructor to be used only by the builder.
      */
-    protected Blade(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final MachineDto target)
+    protected Blade(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final MachineDto target)
     {
         super(context, target);
     }
@@ -93,7 +93,7 @@ public class Blade extends AbstractPhysicalMachine
      */
     public LogicServer getLogicServer()
     {
-        LogicServerDto server = context.getApi().getInfrastructureClient().getLogicServer(target);
+        LogicServerDto server = context.getApi().getInfrastructureApi().getLogicServer(target);
 
         return wrap(context, LogicServer.class, server);
     }
@@ -113,7 +113,7 @@ public class Blade extends AbstractPhysicalMachine
      */
     public void powerOff()
     {
-        context.getApi().getInfrastructureClient().powerOff(target);
+        context.getApi().getInfrastructureApi().powerOff(target);
     }
 
     /**
@@ -127,7 +127,7 @@ public class Blade extends AbstractPhysicalMachine
      */
     public void powerOn()
     {
-        context.getApi().getInfrastructureClient().powerOn(target);
+        context.getApi().getInfrastructureApi().powerOn(target);
     }
 
     /**
@@ -141,7 +141,7 @@ public class Blade extends AbstractPhysicalMachine
      */
     public void ledOn()
     {
-        context.getApi().getInfrastructureClient().ledOn(target);
+        context.getApi().getInfrastructureApi().ledOn(target);
     }
 
     /**
@@ -155,7 +155,7 @@ public class Blade extends AbstractPhysicalMachine
      */
     public void ledOff()
     {
-        context.getApi().getInfrastructureClient().ledOff(target);
+        context.getApi().getInfrastructureApi().ledOff(target);
     }
 
     /**
@@ -169,7 +169,7 @@ public class Blade extends AbstractPhysicalMachine
      */
     public BladeLocatorLed getLocatorLed()
     {
-        BladeLocatorLedDto led = context.getApi().getInfrastructureClient().getLocatorLed(target);
+        BladeLocatorLedDto led = context.getApi().getInfrastructureApi().getLocatorLed(target);
 
         return wrap(context, BladeLocatorLed.class, led);
     }

@@ -28,7 +28,7 @@ import static org.testng.Assert.fail;
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.enterprise.UserPredicates;
 import org.testng.annotations.Test;
 
@@ -41,7 +41,7 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "live")
-public class UserLiveTest extends BaseAbiquoClientLiveTest
+public class UserLiveTest extends BaseAbiquoApiLiveTest
 {
 
     public void testUpdate()
@@ -51,7 +51,7 @@ public class UserLiveTest extends BaseAbiquoClientLiveTest
         env.user.update();
 
         // Recover the updated user
-        UserDto updated = env.enterpriseClient.getUser(env.enterprise.unwrap(), env.user.getId());
+        UserDto updated = env.enterpriseApi.getUser(env.enterprise.unwrap(), env.user.getId());
 
         assertEquals(updated.getName(), "Manolo");
 

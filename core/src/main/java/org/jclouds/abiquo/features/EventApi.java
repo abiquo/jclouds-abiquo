@@ -31,12 +31,12 @@ import com.abiquo.server.core.event.EventsDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see EventAsyncClient
+ * @see EventAsyncApi
  * @author Ignasi Barrera
  * @author Vivien Mahé
  */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface EventClient
+public interface EventApi
 {
     /**
      * List events.

@@ -45,20 +45,20 @@ import com.abiquo.server.core.enterprise.PrivilegesDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Tests annotation parsing of {@code AdminAsyncClient}.
+ * Tests annotation parsing of {@code AdminAsyncApi}.
  * 
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Test(groups = "unit")
-public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsyncClient>
+public class ConfigAsyncApiTest extends BaseAbiquoAsyncApiTest<ConfigAsyncApi>
 {
     /*********************** License ***********************/
 
     public void testListLicenses() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("listLicenses");
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
+        Method method = ConfigAsyncApi.class.getMethod("listLicenses");
+        GeneratedHttpRequest<ConfigAsyncApi> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/licenses HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + LicensesDto.BASE_MEDIA_TYPE + "\n");
@@ -74,8 +74,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
     public void testListLicenseWithOptions() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("listLicenses", LicenseOptions.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
+        Method method = ConfigAsyncApi.class.getMethod("listLicenses", LicenseOptions.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request =
             processor.createRequest(method, LicenseOptions.builder().active(true).build());
 
         assertRequestLineEquals(request,
@@ -92,8 +92,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testAddLicense() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("addLicense", LicenseDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
+        Method method = ConfigAsyncApi.class.getMethod("addLicense", LicenseDto.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request =
             processor.createRequest(method, ConfigResources.licensePost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/config/licenses HTTP/1.1");
@@ -110,8 +110,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testRemoveLicense() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("removeLicense", LicenseDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
+        Method method = ConfigAsyncApi.class.getMethod("removeLicense", LicenseDto.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request =
             processor.createRequest(method, ConfigResources.licensePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/licenses/1 HTTP/1.1");
@@ -129,8 +129,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testListPrivileges() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("listPrivileges");
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
+        Method method = ConfigAsyncApi.class.getMethod("listPrivileges");
+        GeneratedHttpRequest<ConfigAsyncApi> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/privileges HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + PrivilegesDto.BASE_MEDIA_TYPE + "\n");
@@ -145,8 +145,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testGetPrivilege() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("getPrivilege", Integer.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
+        Method method = ConfigAsyncApi.class.getMethod("getPrivilege", Integer.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/privileges/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + PrivilegeDto.BASE_MEDIA_TYPE + "\n");
@@ -164,8 +164,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
     public void testListSystemProperties() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("listSystemProperties");
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
+        Method method = ConfigAsyncApi.class.getMethod("listSystemProperties");
+        GeneratedHttpRequest<ConfigAsyncApi> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/properties HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertiesDto.BASE_MEDIA_TYPE
@@ -183,12 +183,12 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         NoSuchMethodException, IOException
     {
         Method method =
-            ConfigAsyncClient.class.getMethod("listSystemProperties", PropertyOptions.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
-            processor.createRequest(method, PropertyOptions.builder().component("client").build());
+            ConfigAsyncApi.class.getMethod("listSystemProperties", PropertyOptions.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request =
+            processor.createRequest(method, PropertyOptions.builder().component("api").build());
 
         assertRequestLineEquals(request,
-            "GET http://localhost/api/config/properties?component=client HTTP/1.1");
+            "GET http://localhost/api/config/properties?component=api HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + SystemPropertiesDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, null, null, false);
@@ -204,8 +204,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
         IOException
     {
         Method method =
-            ConfigAsyncClient.class.getMethod("updateSystemProperty", SystemPropertyDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
+            ConfigAsyncApi.class.getMethod("updateSystemProperty", SystemPropertyDto.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request =
             processor.createRequest(method, ConfigResources.propertyPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/config/properties/1 HTTP/1.1");
@@ -224,8 +224,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testListCategories() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("listCategories");
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method);
+        Method method = ConfigAsyncApi.class.getMethod("listCategories");
+        GeneratedHttpRequest<ConfigAsyncApi> request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/categories HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + CategoriesDto.BASE_MEDIA_TYPE + "\n");
@@ -240,8 +240,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testGetCategory() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("getCategory", Integer.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request = processor.createRequest(method, 1);
+        Method method = ConfigAsyncApi.class.getMethod("getCategory", Integer.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/config/categories/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + CategoryDto.BASE_MEDIA_TYPE + "\n");
@@ -256,8 +256,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testCreateCategory() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("createCategory", CategoryDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
+        Method method = ConfigAsyncApi.class.getMethod("createCategory", CategoryDto.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request =
             processor.createRequest(method, ConfigResources.categoryPost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/config/categories HTTP/1.1");
@@ -274,8 +274,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testUpdateCategory() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method = ConfigAsyncClient.class.getMethod("updateCategory", CategoryDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
+        Method method = ConfigAsyncApi.class.getMethod("updateCategory", CategoryDto.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request =
             processor.createRequest(method, ConfigResources.categoryPut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/config/categories/1 HTTP/1.1");
@@ -292,8 +292,8 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
 
     public void testDeleteCategory() throws SecurityException, NoSuchMethodException
     {
-        Method method = ConfigAsyncClient.class.getMethod("deleteCategory", CategoryDto.class);
-        GeneratedHttpRequest<ConfigAsyncClient> request =
+        Method method = ConfigAsyncApi.class.getMethod("deleteCategory", CategoryDto.class);
+        GeneratedHttpRequest<ConfigAsyncApi> request =
             processor.createRequest(method, ConfigResources.categoryPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/categories/1 HTTP/1.1");
@@ -308,9 +308,9 @@ public class ConfigAsyncClientTest extends BaseAbiquoAsyncClientTest<ConfigAsync
     }
 
     @Override
-    protected TypeLiteral<RestAnnotationProcessor<ConfigAsyncClient>> createTypeLiteral()
+    protected TypeLiteral<RestAnnotationProcessor<ConfigAsyncApi>> createTypeLiteral()
     {
-        return new TypeLiteral<RestAnnotationProcessor<ConfigAsyncClient>>()
+        return new TypeLiteral<RestAnnotationProcessor<ConfigAsyncApi>>()
         {
         };
     }

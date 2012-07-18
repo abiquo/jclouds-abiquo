@@ -25,8 +25,8 @@ import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
@@ -68,7 +68,7 @@ public class Machine extends AbstractPhysicalMachine
     /**
      * Constructor to be used only by the builder.
      */
-    protected Machine(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected Machine(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final MachineDto target)
     {
         super(context, target);
@@ -91,14 +91,14 @@ public class Machine extends AbstractPhysicalMachine
      */
     public void save()
     {
-        target = context.getApi().getInfrastructureClient().createMachine(rack.unwrap(), target);
+        target = context.getApi().getInfrastructureApi().createMachine(rack.unwrap(), target);
     }
 
     @Override
     public MachineState check()
     {
         MachineStateDto dto =
-            context.getApi().getInfrastructureClient().checkMachineState(target, true);
+            context.getApi().getInfrastructureApi().checkMachineState(target, true);
         MachineState state = dto.getState();
         target.setState(state);
         return state;
@@ -154,7 +154,7 @@ public class Machine extends AbstractPhysicalMachine
     {
         MachineOptions options = MachineOptions.builder().sync(false).build();
         VirtualMachinesWithNodeExtendedDto vms =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .listVirtualMachinesByMachine(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());
     }
@@ -195,7 +195,7 @@ public class Machine extends AbstractPhysicalMachine
     {
         MachineOptions options = MachineOptions.builder().sync(true).build();
         VirtualMachinesWithNodeExtendedDto vms =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .listVirtualMachinesByMachine(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());
     }
@@ -227,7 +227,7 @@ public class Machine extends AbstractPhysicalMachine
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Rack rack)
     {
         return new Builder(context, rack);
@@ -235,7 +235,7 @@ public class Machine extends AbstractPhysicalMachine
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String name, description;
 
@@ -275,7 +275,7 @@ public class Machine extends AbstractPhysicalMachine
 
         private Rack rack;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final Rack rack)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Rack rack)
         {
             super();
             checkNotNull(rack, ValidationErrors.NULL_RESOURCE + Rack.class);
@@ -487,7 +487,7 @@ public class Machine extends AbstractPhysicalMachine
     public VirtualMachine getVirtualMachine(final Integer virtualMachineId)
     {
         VirtualMachineWithNodeExtendedDto vm =
-            context.getApi().getInfrastructureClient().getVirtualMachine(target, virtualMachineId);
+            context.getApi().getInfrastructureApi().getVirtualMachine(target, virtualMachineId);
         return wrap(context, VirtualMachine.class, vm);
     }
 

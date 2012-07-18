@@ -33,12 +33,12 @@ import com.abiquo.server.core.task.TasksDto;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see TaskAsyncClient
+ * @see TaskAsyncApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface TaskClient
+public interface TaskApi
 {
     /*********************** Task ***********************/
 

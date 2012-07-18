@@ -44,17 +44,17 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see TaskClient
+ * @see TaskApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
-public interface TaskAsyncClient
+public interface TaskAsyncApi
 {
     /*********************** Task ***********************/
 
     /**
-     * @see TaskClient#getTask(RESTLink)
+     * @see TaskApi#getTask(RESTLink)
      */
     @GET
     @Consumes(TaskDto.BASE_MEDIA_TYPE)
@@ -63,7 +63,7 @@ public interface TaskAsyncClient
     ListenableFuture<TaskDto> getTask(@BinderParam(BindLinkToPath.class) RESTLink link);
 
     /**
-     * @see TaskClient#listTasks(SingleResourceTransportDto)
+     * @see TaskApi#listTasks(SingleResourceTransportDto)
      */
     @GET
     @Consumes(TasksDto.BASE_MEDIA_TYPE)

@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
@@ -47,7 +47,7 @@ public class ExternalIp extends AbstractPublicIp<ExternalIpDto, ExternalNetwork>
     /**
      * Constructor to be used only by the builder.
      */
-    protected ExternalIp(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected ExternalIp(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final ExternalIpDto target)
     {
         super(context, target);

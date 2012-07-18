@@ -20,8 +20,8 @@
 package org.jclouds.abiquo.domain.enterprise;
 
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.rest.RestContext;
@@ -41,7 +41,7 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Limits(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final DatacenterLimitsDto target)
+    protected Limits(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final DatacenterLimitsDto target)
     {
         super(context, target);
     }
@@ -55,25 +55,25 @@ public class Limits extends DomainWithLimitsWrapper<DatacenterLimitsDto>
      */
     public void update()
     {
-        target = context.getApi().getEnterpriseClient().updateLimits(target);
+        target = context.getApi().getEnterpriseApi().updateLimits(target);
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         return new Builder(context);
     }
 
     public static class Builder extends LimitsBuilder<Builder>
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         protected Long repositorySoft = Long.valueOf(DEFAULT_LIMITS);
 
         protected Long repositoryHard = Long.valueOf(DEFAULT_LIMITS);
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
         {
             super();
             this.context = context;

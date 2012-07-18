@@ -33,8 +33,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.strategy.infrastructure.ListDatacenters;
@@ -58,7 +58,7 @@ import com.google.inject.Inject;
 public class ListDatacentersImpl implements ListDatacenters
 {
 
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     protected final ExecutorService userExecutor;
 
@@ -70,7 +70,7 @@ public class ListDatacentersImpl implements ListDatacenters
     protected Long maxTime;
 
     @Inject
-    ListDatacentersImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    ListDatacentersImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
         this.context = context;
@@ -80,7 +80,7 @@ public class ListDatacentersImpl implements ListDatacenters
     @Override
     public Iterable<Datacenter> execute()
     {
-        DatacentersDto result = context.getApi().getInfrastructureClient().listDatacenters();
+        DatacentersDto result = context.getApi().getInfrastructureApi().listDatacenters();
         return wrap(context, Datacenter.class, result.getCollection());
     }
 
@@ -105,7 +105,7 @@ public class ListDatacentersImpl implements ListDatacenters
                 @Override
                 public Future<DatacenterDto> apply(final Integer input)
                 {
-                    return context.getAsyncApi().getInfrastructureClient().getDatacenter(input);
+                    return context.getAsyncApi().getInfrastructureApi().getDatacenter(input);
                 }
             }, userExecutor, maxTime, logger, "getting datacenters");
 

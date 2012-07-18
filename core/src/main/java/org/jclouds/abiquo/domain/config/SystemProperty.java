@@ -20,8 +20,8 @@
 package org.jclouds.abiquo.domain.config;
 
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
@@ -41,7 +41,7 @@ public class SystemProperty extends DomainWrapper<SystemPropertyDto>
     /**
      * Constructor to be used only by the builder. This resource cannot be created.
      */
-    private SystemProperty(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final SystemPropertyDto target)
+    private SystemProperty(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final SystemPropertyDto target)
     {
         super(context, target);
     }
@@ -55,7 +55,7 @@ public class SystemProperty extends DomainWrapper<SystemPropertyDto>
      */
     public void update()
     {
-        target = context.getApi().getConfigClient().updateSystemProperty(target);
+        target = context.getApi().getConfigApi().updateSystemProperty(target);
     }
 
     // Delegate methods

@@ -24,8 +24,8 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.config.SystemProperty;
 import org.jclouds.abiquo.domain.config.options.PropertyOptions;
 import org.jclouds.abiquo.strategy.config.ListProperties;
@@ -45,12 +45,12 @@ import com.google.inject.Inject;
 public class ListPropertiesImpl implements ListProperties
 {
     // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
+    // single api methods
 
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    ListPropertiesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    ListPropertiesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = context;
     }
@@ -58,7 +58,7 @@ public class ListPropertiesImpl implements ListProperties
     @Override
     public Iterable<SystemProperty> execute()
     {
-        SystemPropertiesDto result = context.getApi().getConfigClient().listSystemProperties();
+        SystemPropertiesDto result = context.getApi().getConfigApi().listSystemProperties();
         return wrap(context, SystemProperty.class, result.getCollection());
     }
 
@@ -72,7 +72,7 @@ public class ListPropertiesImpl implements ListProperties
     public Iterable<SystemProperty> execute(final PropertyOptions options)
     {
         SystemPropertiesDto result =
-            context.getApi().getConfigClient().listSystemProperties(options);
+            context.getApi().getConfigApi().listSystemProperties(options);
         return wrap(context, SystemProperty.class, result.getCollection());
     }
 }

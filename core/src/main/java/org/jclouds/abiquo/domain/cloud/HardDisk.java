@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
@@ -50,7 +50,7 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected HardDisk(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final DiskManagementDto target)
+    protected HardDisk(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final DiskManagementDto target)
     {
         super(context, target);
     }
@@ -66,7 +66,7 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     public void save()
     {
         target =
-            context.getApi().getCloudClient().createHardDisk(virtualDatacenter.unwrap(), target);
+            context.getApi().getCloudApi().createHardDisk(virtualDatacenter.unwrap(), target);
     }
 
     /**
@@ -74,7 +74,7 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
      */
     public void delete()
     {
-        context.getApi().getCloudClient().deleteHardDisk(target);
+        context.getApi().getCloudApi().deleteHardDisk(target);
         target = null;
     }
 
@@ -92,14 +92,14 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     {
         Integer virtualDatacenterId = target.getIdFromLink(ParentLinkName.VIRTUAL_DATACENTER);
         VirtualDatacenterDto dto =
-            context.getApi().getCloudClient().getVirtualDatacenter(virtualDatacenterId);
+            context.getApi().getCloudApi().getVirtualDatacenter(virtualDatacenterId);
         virtualDatacenter = wrap(context, VirtualDatacenter.class, dto);
         return virtualDatacenter;
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VirtualDatacenter virtualDatacenter)
     {
         return new Builder(context, virtualDatacenter);
@@ -107,13 +107,13 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private Long sizeInMb;
 
         private VirtualDatacenter virtualDatacenter;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final VirtualDatacenter virtualDatacenter)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualDatacenter virtualDatacenter)
         {
             super();
             checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE

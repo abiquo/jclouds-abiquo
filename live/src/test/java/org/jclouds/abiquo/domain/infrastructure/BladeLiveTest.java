@@ -23,7 +23,7 @@ import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -35,7 +35,7 @@ import com.google.common.collect.Iterables;
  * @author Ignasi Barrera
  */
 @Test(groups = "ucs")
-public class BladeLiveTest extends BaseAbiquoClientLiveTest
+public class BladeLiveTest extends BaseAbiquoApiLiveTest
 {
     Blade blade;
 

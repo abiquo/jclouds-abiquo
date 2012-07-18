@@ -22,7 +22,7 @@ package org.jclouds.abiquo.rest.internal;
 import java.io.IOException;
 import java.lang.reflect.Method;
 
-import org.jclouds.abiquo.features.BaseAbiquoAsyncClientTest;
+import org.jclouds.abiquo.features.BaseAbiquoAsyncApiTest;
 import org.jclouds.functions.IdentityFunction;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
@@ -34,12 +34,12 @@ import com.abiquo.server.core.infrastructure.DatacentersDto;
 import com.google.inject.TypeLiteral;
 
 /**
- * Tests annotation parsing of {@code AbiquoHttpAsyncClient}.
+ * Tests annotation parsing of {@code AbiquoHttpAsyncApi}.
  * 
  * @author Ignasi Barrera
  */
 @Test(groups = "unit")
-public class AbiquoHttpAsyncClientTest extends BaseAbiquoAsyncClientTest<AbiquoHttpAsyncClient>
+public class AbiquoHttpAsyncClientTest extends BaseAbiquoAsyncApiTest<AbiquoHttpAsyncClient>
 {
     public void testGet() throws SecurityException, NoSuchMethodException, IOException
     {

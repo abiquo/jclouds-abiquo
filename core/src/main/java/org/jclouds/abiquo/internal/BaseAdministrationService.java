@@ -27,8 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
@@ -73,7 +73,7 @@ import com.google.common.collect.Iterables;
 public class BaseAdministrationService implements AdministrationService
 {
     @VisibleForTesting
-    protected RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @VisibleForTesting
     protected final ListDatacenters listDatacenters;
@@ -106,7 +106,7 @@ public class BaseAdministrationService implements AdministrationService
     protected final Supplier<Enterprise> currentEnterprise;
 
     @Inject
-    protected BaseAdministrationService(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected BaseAdministrationService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final ListDatacenters listDatacenters, final ListMachines listMachines,
         final ListEnterprises listEnterprises, final ListRoles listRoles,
         final ListLicenses listLicenses, final ListPrivileges listPrivileges,
@@ -145,7 +145,7 @@ public class BaseAdministrationService implements AdministrationService
     public Datacenter getDatacenter(final Integer datacenterId)
     {
         DatacenterDto datacenter =
-            context.getApi().getInfrastructureClient().getDatacenter(datacenterId);
+            context.getApi().getInfrastructureApi().getDatacenter(datacenterId);
         return wrap(context, Datacenter.class, datacenter);
     }
 
@@ -205,7 +205,7 @@ public class BaseAdministrationService implements AdministrationService
     public Enterprise getEnterprise(final Integer enterpriseId)
     {
         EnterpriseDto enterprise =
-            context.getApi().getEnterpriseClient().getEnterprise(enterpriseId);
+            context.getApi().getEnterpriseApi().getEnterprise(enterpriseId);
         return wrap(context, Enterprise.class, enterprise);
     }
 
@@ -218,7 +218,7 @@ public class BaseAdministrationService implements AdministrationService
             + Enterprise.class);
 
         EnterprisePropertiesDto properties =
-            context.getApi().getEnterpriseClient().getEnterpriseProperties(enterprise.unwrap());
+            context.getApi().getEnterpriseApi().getEnterpriseProperties(enterprise.unwrap());
         return wrap(context, EnterpriseProperties.class, properties);
     }
 
@@ -245,7 +245,7 @@ public class BaseAdministrationService implements AdministrationService
     @Override
     public Role getRole(final Integer roleId)
     {
-        RoleDto role = context.getApi().getAdminClient().getRole(roleId);
+        RoleDto role = context.getApi().getAdminApi().getRole(roleId);
         return wrap(context, Role.class, role);
     }
 

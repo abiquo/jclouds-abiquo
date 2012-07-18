@@ -56,17 +56,17 @@ import com.google.common.util.concurrent.ListenableFuture;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see AdminClient
+ * @see AdminApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
-public interface AdminAsyncClient
+public interface AdminAsyncApi
 {
     /*********************** Login ***********************/
 
     /**
-     * @see AdminClient#getCurrentUser()
+     * @see AdminApi#getCurrentUser()
      */
     @GET
     @Path("/login")
@@ -77,7 +77,7 @@ public interface AdminAsyncClient
     /*********************** Role ***********************/
 
     /**
-     * @see AdminClient#listRoles()
+     * @see AdminApi#listRoles()
      */
     @GET
     @Path("/admin/roles")
@@ -86,7 +86,7 @@ public interface AdminAsyncClient
     ListenableFuture<RolesDto> listRoles();
 
     /**
-     * @see AdminClient#listRoles(Enterprise enterprise)
+     * @see AdminApi#listRoles(Enterprise enterprise)
      */
     @GET
     @Path("/admin/roles")
@@ -96,7 +96,7 @@ public interface AdminAsyncClient
         @QueryParam("identerprise") @ParamParser(ParseEnterpriseId.class) final EnterpriseDto enterprise);
 
     /**
-     * @see AdminClient#getRole(UserDto)
+     * @see AdminApi#getRole(UserDto)
      */
     @GET
     @Consumes(RoleDto.BASE_MEDIA_TYPE)
@@ -106,7 +106,7 @@ public interface AdminAsyncClient
         @EndpointLink("role") @BinderParam(BindToPath.class) UserDto user);
 
     /**
-     * @see AdminClient#getRole(Integer)
+     * @see AdminApi#getRole(Integer)
      */
     @GET
     @Path("/admin/roles/{role}")
@@ -116,14 +116,14 @@ public interface AdminAsyncClient
     ListenableFuture<RoleDto> getRole(@PathParam("role") Integer roleId);
 
     /**
-     * @see AdminClient#deleteRole(RoleDto)
+     * @see AdminApi#deleteRole(RoleDto)
      */
     @DELETE
     ListenableFuture<Void> deleteRole(
         @EndpointLink("edit") @BinderParam(BindToPath.class) RoleDto role);
 
     /**
-     * @see AdminClient#updateRole(RoleDto)
+     * @see AdminApi#updateRole(RoleDto)
      */
     @PUT
     @Produces(RoleDto.BASE_MEDIA_TYPE)
@@ -133,7 +133,7 @@ public interface AdminAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) RoleDto role);
 
     /**
-     * @see AdminClient#createRole(RoleDto)
+     * @see AdminApi#createRole(RoleDto)
      */
     @POST
     @Path("/admin/roles")
@@ -143,7 +143,7 @@ public interface AdminAsyncClient
     ListenableFuture<RoleDto> createRole(@BinderParam(BindToXMLPayload.class) RoleDto role);
 
     /**
-     * @see AdminClient#listPrivileges(RoleDto)
+     * @see AdminApi#listPrivileges(RoleDto)
      */
     @GET
     @Consumes(PrivilegesDto.BASE_MEDIA_TYPE)

@@ -25,8 +25,8 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -86,7 +86,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualMachine(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected VirtualMachine(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VirtualMachineWithNodeExtendedDto target)
     {
         super(context, target);
@@ -105,7 +105,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
      */
     public void delete()
     {
-        context.getApi().getCloudClient().deleteVirtualMachine(target);
+        context.getApi().getCloudApi().deleteVirtualMachine(target);
         target = null;
     }
 
@@ -126,7 +126,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudClient()
+            context.getApi().getCloudApi()
                 .createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
@@ -148,7 +148,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public AsyncTask update()
     {
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().updateVirtualMachine(target);
+            context.getApi().getCloudApi().updateVirtualMachine(target);
         return taskRef == null ? null : getTask(taskRef);
     }
 
@@ -171,7 +171,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public AsyncTask update(final boolean force)
     {
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient()
+            context.getApi().getCloudApi()
                 .updateVirtualMachine(target, VirtualMachineOptions.builder().force(force).build());
         return taskRef == null ? null : getTask(taskRef);
     }
@@ -197,7 +197,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         dto.setState(state);
 
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().changeVirtualMachineState(target, dto);
+            context.getApi().getCloudApi().changeVirtualMachineState(target, dto);
 
         return getTask(taskRef);
     }
@@ -214,7 +214,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public VirtualMachineState getState()
     {
         VirtualMachineStateDto stateDto =
-            context.getApi().getCloudClient().getVirtualMachineState(target);
+            context.getApi().getCloudApi().getVirtualMachineState(target);
         VirtualMachineState state = stateDto.getState();
         target.setState(state);
         target.setIdState(state.id());
@@ -276,7 +276,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     {
         Integer virtualDatacenterId = target.getIdFromLink(ParentLinkName.VIRTUAL_DATACENTER);
         VirtualDatacenterDto dto =
-            context.getApi().getCloudClient().getVirtualDatacenter(virtualDatacenterId);
+            context.getApi().getCloudApi().getVirtualDatacenter(virtualDatacenterId);
         return wrap(context, VirtualDatacenter.class, dto);
     }
 
@@ -292,7 +292,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        EnterpriseDto dto = context.getApi().getEnterpriseClient().getEnterprise(enterpriseId);
+        EnterpriseDto dto = context.getApi().getEnterpriseApi().getEnterprise(enterpriseId);
         return wrap(context, Enterprise.class, dto);
     }
 
@@ -304,7 +304,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public VirtualMachineTemplate getTemplate()
     {
         VirtualMachineTemplateDto dto =
-            context.getApi().getCloudClient().getVirtualMachineTemplate(target);
+            context.getApi().getCloudApi().getVirtualMachineTemplate(target);
         return wrap(context, VirtualMachineTemplate.class, dto);
     }
 
@@ -314,7 +314,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     {
         refresh();
         DisksManagementDto hardDisks =
-            context.getApi().getCloudClient().listAttachedHardDisks(target);
+            context.getApi().getCloudApi().listAttachedHardDisks(target);
         return wrap(context, HardDisk.class, hardDisks.getCollection());
     }
 
@@ -332,7 +332,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     {
         refresh();
         VolumesManagementDto volumes =
-            context.getApi().getCloudClient().listAttachedVolumes(target);
+            context.getApi().getCloudApi().listAttachedVolumes(target);
         return wrap(context, Volume.class, volumes.getCollection());
     }
 
@@ -377,7 +377,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         force.setForceEnterpriseSoftLimits(forceEnterpriseSoftLimits);
 
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().deployVirtualMachine(unwrap(), force);
+            context.getApi().getCloudApi().deployVirtualMachine(unwrap(), force);
 
         return getTask(response);
     }
@@ -393,7 +393,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         force.setForceUndeploy(forceUndeploy);
 
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().undeployVirtualMachine(unwrap(), force);
+            context.getApi().getCloudApi().undeployVirtualMachine(unwrap(), force);
 
         return getTask(response);
     }
@@ -415,7 +415,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public AsyncTask reboot()
     {
         AcceptedRequestDto<String> response =
-            context.getApi().getCloudClient().rebootVirtualMachine(unwrap());
+            context.getApi().getCloudApi().rebootVirtualMachine(unwrap());
 
         return getTask(response);
     }
@@ -432,7 +432,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public AsyncTask detachAllHardDisks()
     {
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().detachAllHardDisks(target);
+            context.getApi().getCloudApi().detachAllHardDisks(target);
         return taskRef == null ? null : getTask(taskRef);
     }
 
@@ -448,7 +448,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public AsyncTask setHardDisks(final HardDisk... hardDisks)
     {
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().replaceHardDisks(target, toHardDiskDto(hardDisks));
+            context.getApi().getCloudApi().replaceHardDisks(target, toHardDiskDto(hardDisks));
         return taskRef == null ? null : getTask(taskRef);
     }
 
@@ -464,7 +464,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public AsyncTask detachAllVolumes()
     {
         AcceptedRequestDto<String> taskRef =
-            context.getApi().getCloudClient().detachAllVolumes(target);
+            context.getApi().getCloudApi().detachAllVolumes(target);
         return taskRef == null ? null : getTask(taskRef);
     }
 
@@ -482,7 +482,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         AcceptedRequestDto<String> taskRef =
             context
                 .getApi()
-                .getCloudClient()
+                .getCloudApi()
                 .replaceVolumes(target,
                     VirtualMachineOptions.builder().force(forceSoftLimits).build(),
                     toVolumeDto(volumes));
@@ -579,7 +579,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
     public void setGatewayNetwork(final Network< ? > network)
     {
-        context.getApi().getCloudClient().setGatewayNetwork(target, network.unwrap());
+        context.getApi().getCloudApi().setGatewayNetwork(target, network.unwrap());
         refresh(); // First refresh the target and its links
     }
 
@@ -617,7 +617,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template)
     {
         return new Builder(context, virtualAppliance, template);
@@ -625,7 +625,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
     public static class Builder
     {
-        private final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private VirtualAppliance virtualAppliance;
 
@@ -657,7 +657,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
         private boolean dvd;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template)
         {
             super();

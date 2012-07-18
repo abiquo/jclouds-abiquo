@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
 import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.Test;
@@ -47,7 +47,7 @@ import com.abiquo.server.core.infrastructure.MachineDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class MachineLiveTest extends BaseAbiquoClientLiveTest
+public class MachineLiveTest extends BaseAbiquoApiLiveTest
 {
     public void testDiscoverMachineWithouRemoteService()
     {
@@ -87,7 +87,7 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated machine
         MachineDto updated =
-            env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
+            env.infrastructureApi.getMachine(env.rack.unwrap(), env.machine.getId());
         assertEquals(updated.getName(), "API Machine");
     }
 
@@ -97,7 +97,7 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the machine with same state that has been returned
         MachineDto machine =
-            env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
+            env.infrastructureApi.getMachine(env.rack.unwrap(), env.machine.getId());
         assertEquals(machine.getState(), state);
     }
 
@@ -112,7 +112,7 @@ public class MachineLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the same machine and compare states
         MachineDto machine =
-            env.infrastructureClient.getMachine(env.rack.unwrap(), env.machine.getId());
+            env.infrastructureApi.getMachine(env.rack.unwrap(), env.machine.getId());
         assertEquals(machine.getState(), state);
     }
 

@@ -33,8 +33,8 @@ import javax.inject.Named;
 import javax.inject.Singleton;
 
 import org.jclouds.Constants;
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.options.VirtualDatacenterOptions;
@@ -58,7 +58,7 @@ import com.google.inject.Inject;
 @Singleton
 public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
 {
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     protected final ExecutorService userExecutor;
 
@@ -70,7 +70,7 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
     protected Long maxTime;
 
     @Inject
-    ListVirtualDatacentersImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    ListVirtualDatacentersImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userExecutor)
     {
         this.context = checkNotNull(context, "context");
@@ -97,7 +97,7 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
         final VirtualDatacenterOptions virtualDatacenterOptions)
     {
         VirtualDatacentersDto result =
-            context.getApi().getCloudClient().listVirtualDatacenters(virtualDatacenterOptions);
+            context.getApi().getCloudApi().listVirtualDatacenters(virtualDatacenterOptions);
         return wrap(context, VirtualDatacenter.class, result.getCollection());
     }
 
@@ -123,7 +123,7 @@ public class ListVirtualDatacentersImpl implements ListVirtualDatacenters
                 @Override
                 public Future<VirtualDatacenterDto> apply(final Integer input)
                 {
-                    return context.getAsyncApi().getCloudClient().getVirtualDatacenter(input);
+                    return context.getAsyncApi().getCloudApi().getVirtualDatacenter(input);
                 }
             }, userExecutor, maxTime, logger, "getting virtual datacenters");
 

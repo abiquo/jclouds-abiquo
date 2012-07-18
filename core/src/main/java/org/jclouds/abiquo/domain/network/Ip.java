@@ -19,8 +19,8 @@
 
 package org.jclouds.abiquo.domain.network;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.rest.RestContext;
 
@@ -38,7 +38,7 @@ public abstract class Ip<T extends AbstractIpDto, N extends Network< ? >> extend
     /**
      * Constructor to be used only by the builder.
      */
-    protected Ip(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final T target)
+    protected Ip(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final T target)
     {
         super(context, target);
     }

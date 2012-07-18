@@ -43,7 +43,7 @@ public interface AbiquoContext extends ComputeServiceContext
      * 
      * @return The Abiquo API context.
      */
-    RestContext<AbiquoClient, AbiquoAsyncClient> getApiContext();
+    RestContext<AbiquoApi, AbiquoAsyncApi> getApiContext();
 
     /**
      * Returns the administration service.

@@ -31,8 +31,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.compute.exception.NotEnoughResourcesException;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -68,12 +68,12 @@ public class AbiquoComputeServiceHelper
     @Named(ComputeServiceConstants.COMPUTE_LOGGER)
     protected Logger logger = Logger.NULL;
 
-    private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     private CloudService cloudService;
 
     @Inject
-    public AbiquoComputeServiceHelper(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public AbiquoComputeServiceHelper(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final CloudService cloudService)
     {
         super();

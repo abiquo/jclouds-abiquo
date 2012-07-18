@@ -22,8 +22,8 @@ package org.jclouds.abiquo.strategy.event.internal;
 import static com.google.common.collect.Iterables.filter;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.event.Event;
 import org.jclouds.abiquo.domain.event.options.EventOptions;
 import org.jclouds.abiquo.strategy.event.ListEvents;
@@ -36,12 +36,12 @@ import com.google.inject.Inject;
 public class ListEventsImpl implements ListEvents
 {
     // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
+    // single api methods
 
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    ListEventsImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    ListEventsImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = context;
     }
@@ -49,14 +49,14 @@ public class ListEventsImpl implements ListEvents
     @Override
     public Iterable<Event> execute()
     {
-        EventsDto result = context.getApi().getEventClient().listEvents();
+        EventsDto result = context.getApi().getEventApi().listEvents();
         return wrap(context, Event.class, result.getCollection());
     }
 
     @Override
     public Iterable<Event> execute(final EventOptions options)
     {
-        EventsDto result = context.getApi().getEventClient().listEvents(options);
+        EventsDto result = context.getApi().getEventApi().listEvents(options);
         return wrap(context, Event.class, result.getCollection());
     }
 

@@ -49,8 +49,8 @@ public class AbiquoApiMetadata extends BaseRestApiMetadata
     private static final long serialVersionUID = -8355533493674898171L;
 
     /** The token describing the rest api context. */
-    public static final TypeToken<RestContext<AbiquoClient, AbiquoAsyncClient>> CONTEXT_TOKEN =
-        new TypeToken<RestContext<AbiquoClient, AbiquoAsyncClient>>()
+    public static final TypeToken<RestContext<AbiquoApi, AbiquoAsyncApi>> CONTEXT_TOKEN =
+        new TypeToken<RestContext<AbiquoApi, AbiquoAsyncApi>>()
         {
             private static final long serialVersionUID = -5070937833892503232L;
         };
@@ -86,19 +86,19 @@ public class AbiquoApiMetadata extends BaseRestApiMetadata
     public static class Builder extends BaseRestApiMetadata.Builder
     {
         private static final String DOCUMENTATION_ROOT = "http://community.abiquo.com/display/ABI"
-            + CharMatcher.DIGIT.retainFrom(AbiquoAsyncClient.API_VERSION);
+            + CharMatcher.DIGIT.retainFrom(AbiquoAsyncApi.API_VERSION);
 
         protected Builder()
         {
-            super(AbiquoClient.class, AbiquoAsyncClient.class);
+            super(AbiquoApi.class, AbiquoAsyncApi.class);
             id("abiquo")
                 .name("Abiquo API")
                 .identityName("API Username")
                 .credentialName("API Password")
                 .documentation(URI.create(DOCUMENTATION_ROOT + "/API+Reference"))
                 .defaultEndpoint("http://localhost/api")
-                .version(AbiquoAsyncClient.API_VERSION)
-                .buildVersion(AbiquoAsyncClient.BUILD_VERSION)
+                .version(AbiquoAsyncApi.API_VERSION)
+                .buildVersion(AbiquoAsyncApi.BUILD_VERSION)
                 .view(TypeToken.of(AbiquoContext.class))
                 .defaultProperties(AbiquoApiMetadata.defaultProperties())
                 .defaultModules(

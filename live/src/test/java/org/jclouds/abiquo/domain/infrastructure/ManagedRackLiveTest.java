@@ -26,7 +26,7 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.List;
 
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.LogicServerPredicates;
 import org.jclouds.abiquo.predicates.infrastructure.ManagedRackPredicates;
 import org.testng.annotations.Test;
@@ -40,7 +40,7 @@ import com.google.common.collect.Iterables;
  * @author Francesc Montserrat
  */
 @Test(groups = "ucs")
-public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
+public class ManagedRackLiveTest extends BaseAbiquoApiLiveTest
 {
     private LogicServer logicServer;
 
@@ -53,7 +53,7 @@ public class ManagedRackLiveTest extends BaseAbiquoClientLiveTest
 
         // Recover the updated rack
         UcsRackDto updated =
-            env.infrastructureClient.getManagedRack(env.datacenter.unwrap(), env.ucsRack.getId());
+            env.infrastructureApi.getManagedRack(env.datacenter.unwrap(), env.ucsRack.getId());
 
         assertEquals(updated.getShortDescription(), "Updated description");
     }

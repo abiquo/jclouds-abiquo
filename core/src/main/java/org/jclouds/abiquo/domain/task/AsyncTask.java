@@ -23,8 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.rest.RestContext;
@@ -44,7 +44,7 @@ public class AsyncTask extends DomainWrapper<TaskDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected AsyncTask(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected AsyncTask(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final TaskDto target)
     {
         super(context, target);
@@ -60,7 +60,7 @@ public class AsyncTask extends DomainWrapper<TaskDto>
         RESTLink self =
             checkNotNull(target.searchLink("self"), ValidationErrors.MISSING_REQUIRED_LINK + "self");
 
-        target = context.getApi().getTaskClient().getTask(self);
+        target = context.getApi().getTaskApi().getTask(self);
     }
 
     // Children access

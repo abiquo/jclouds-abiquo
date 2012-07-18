@@ -31,7 +31,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.internal.BaseAbiquoClientLiveTest;
+import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -45,7 +45,7 @@ import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
  * @author Ignasi Barrera
  */
 @Test(groups = "live")
-public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
+public class PublicNetworkLiveTest extends BaseAbiquoApiLiveTest
 {
     private PublicNetwork publicNetwork;
 
@@ -64,7 +64,7 @@ public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListIps()
     {
         PublicIpsDto ipsDto =
-            env.context.getApiContext().getApi().getInfrastructureClient()
+            env.context.getApiContext().getApi().getInfrastructureApi()
                 .listPublicIps(publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 
@@ -82,7 +82,7 @@ public class PublicNetworkLiveTest extends BaseAbiquoClientLiveTest
     public void testListUnusedIps()
     {
         PublicIpsDto ipsDto =
-            env.context.getApiContext().getApi().getInfrastructureClient()
+            env.context.getApiContext().getApi().getInfrastructureApi()
                 .listPublicIps(publicNetwork.unwrap(), IpOptions.builder().limit(1).build());
         int totalIps = ipsDto.getTotalSize();
 

@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
@@ -63,7 +63,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected StoragePool(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final StoragePoolDto target)
+    protected StoragePool(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StoragePoolDto target)
     {
         super(context, target);
     }
@@ -80,7 +80,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
      */
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteStoragePool(target);
+        context.getApi().getInfrastructureApi().deleteStoragePool(target);
         target = null;
     }
 
@@ -97,7 +97,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .createStoragePool(storageDevice.unwrap(), target);
     }
 
@@ -114,13 +114,13 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
      */
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateStoragePool(target);
+        target = context.getApi().getInfrastructureApi().updateStoragePool(target);
     }
 
     public void refresh()
     {
         target =
-            context.getApi().getInfrastructureClient()
+            context.getApi().getInfrastructureApi()
                 .refreshStoragePool(target, StoragePoolOptions.builder().sync(true).build());
     }
 
@@ -190,14 +190,14 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final StorageDevice storageDevice)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StorageDevice storageDevice)
     {
         return new Builder(context, storageDevice);
     }
 
     public static class Builder
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private StorageDevice storageDevice;
 
@@ -214,7 +214,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
         private Long usedSizeInMb = DEFAULT_USED_SIZE;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context, final StorageDevice storageDevice)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StorageDevice storageDevice)
         {
             super();
             checkNotNull(storageDevice, ValidationErrors.NULL_RESOURCE + StorageDevice.class);

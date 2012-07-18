@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
@@ -84,7 +84,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     /**
      * Constructor to be used only by the builder.
      */
-    protected VirtualDatacenter(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected VirtualDatacenter(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VirtualDatacenterDto target)
     {
         super(context, target);
@@ -102,7 +102,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public void delete()
     {
-        context.getApi().getCloudClient().deleteVirtualDatacenter(target);
+        context.getApi().getCloudApi().deleteVirtualDatacenter(target);
         target = null;
     }
 
@@ -117,7 +117,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public void save()
     {
         target =
-            context.getApi().getCloudClient()
+            context.getApi().getCloudApi()
                 .createVirtualDatacenter(target, datacenter.unwrap(), enterprise.unwrap());
     }
 
@@ -131,7 +131,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public void update()
     {
-        target = context.getApi().getCloudClient().updateVirtualDatacenter(target);
+        target = context.getApi().getCloudApi().updateVirtualDatacenter(target);
     }
 
     // Parent access
@@ -149,7 +149,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
         datacenter =
-            wrap(context, Datacenter.class, context.getApi().getInfrastructureClient()
+            wrap(context, Datacenter.class, context.getApi().getInfrastructureApi()
                 .getDatacenter(datacenterId));
         return datacenter;
     }
@@ -168,7 +168,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
         enterprise =
             wrap(context, Enterprise.class,
-                context.getApi().getEnterpriseClient().getEnterprise(enterpriseId));
+                context.getApi().getEnterpriseApi().getEnterprise(enterpriseId));
         return enterprise;
     }
 
@@ -186,7 +186,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public List<VirtualAppliance> listVirtualAppliances()
     {
         VirtualAppliancesDto vapps =
-            context.getApi().getCloudClient().listVirtualAppliances(target);
+            context.getApi().getCloudApi().listVirtualAppliances(target);
         return wrap(context, VirtualAppliance.class, vapps.getCollection());
     }
 
@@ -230,7 +230,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public VirtualAppliance getVirtualAppliance(final Integer id)
     {
         VirtualApplianceDto vapp =
-            context.getApi().getCloudClient().getVirtualAppliance(target, id);
+            context.getApi().getCloudApi().getVirtualAppliance(target, id);
         return wrap(context, VirtualAppliance.class, vapp);
     }
 
@@ -245,7 +245,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public List<Tier> listStorageTiers()
     {
-        TiersDto tiers = context.getApi().getCloudClient().listStorageTiers(target);
+        TiersDto tiers = context.getApi().getCloudApi().listStorageTiers(target);
         return wrap(context, Tier.class, tiers.getCollection());
     }
 
@@ -291,7 +291,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public Tier getStorageTier(final Integer id)
     {
-        TierDto tier = context.getApi().getCloudClient().getStorageTier(target, id);
+        TierDto tier = context.getApi().getCloudApi().getStorageTier(target, id);
         return wrap(context, Tier.class, tier);
     }
 
@@ -306,7 +306,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public List<Volume> listVolumes()
     {
-        VolumesManagementDto volumes = context.getApi().getCloudClient().listVolumes(target);
+        VolumesManagementDto volumes = context.getApi().getCloudApi().listVolumes(target);
         return wrap(context, Volume.class, volumes.getCollection());
     }
 
@@ -343,7 +343,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     public Volume getVolume(final Integer id)
     {
-        VolumeManagementDto volume = context.getApi().getCloudClient().getVolume(target, id);
+        VolumeManagementDto volume = context.getApi().getCloudApi().getVolume(target, id);
         return wrap(context, Volume.class, volume);
     }
 
@@ -355,7 +355,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public List<HardDisk> listHardDisks()
     {
-        DisksManagementDto hardDisks = context.getApi().getCloudClient().listHardDisks(target);
+        DisksManagementDto hardDisks = context.getApi().getCloudApi().listHardDisks(target);
         return wrap(context, HardDisk.class, hardDisks.getCollection());
     }
 
@@ -371,7 +371,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     public HardDisk getHardDisk(final Integer id)
     {
-        DiskManagementDto hardDisk = context.getApi().getCloudClient().getHardDisk(target, id);
+        DiskManagementDto hardDisk = context.getApi().getCloudApi().getHardDisk(target, id);
         return wrap(context, HardDisk.class, hardDisk);
     }
 
@@ -383,7 +383,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public Network< ? > getDefaultNetwork()
     {
-        VLANNetworkDto network = context.getApi().getCloudClient().getDefaultNetwork(target);
+        VLANNetworkDto network = context.getApi().getCloudApi().getDefaultNetwork(target);
         return wrap(context, network.getType() == NetworkType.INTERNAL ? PrivateNetwork.class
             : ExternalNetwork.class, network);
     }
@@ -397,7 +397,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public List<PrivateNetwork> listPrivateNetworks()
     {
-        VLANNetworksDto networks = context.getApi().getCloudClient().listPrivateNetworks(target);
+        VLANNetworksDto networks = context.getApi().getCloudApi().listPrivateNetworks(target);
         return wrap(context, PrivateNetwork.class, networks.getCollection());
     }
 
@@ -413,7 +413,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     public PrivateNetwork getPrivateNetwork(final Integer id)
     {
-        VLANNetworkDto network = context.getApi().getCloudClient().getPrivateNetwork(target, id);
+        VLANNetworkDto network = context.getApi().getCloudApi().getPrivateNetwork(target, id);
         return wrap(context, PrivateNetwork.class, network);
     }
 
@@ -423,7 +423,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public List<VirtualMachineTemplate> listAvailableTemplates()
     {
         VirtualMachineTemplatesDto templates =
-            context.getApi().getCloudClient().listAvailableTemplates(target);
+            context.getApi().getCloudApi().listAvailableTemplates(target);
 
         return wrap(context, VirtualMachineTemplate.class, templates.getCollection());
     }
@@ -432,7 +432,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         final VirtualMachineTemplateOptions options)
     {
         VirtualMachineTemplatesDto templates =
-            context.getApi().getCloudClient().listAvailableTemplates(target, options);
+            context.getApi().getCloudApi().listAvailableTemplates(target, options);
 
         return wrap(context, VirtualMachineTemplate.class, templates.getCollection());
     }
@@ -454,7 +454,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         VirtualMachineTemplatesDto templates =
             context
                 .getApi()
-                .getCloudClient()
+                .getCloudApi()
                 .listAvailableTemplates(target,
                     VirtualMachineTemplateOptions.builder().idTemplate(id).build());
 
@@ -467,7 +467,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         VirtualMachineTemplatesDto templates =
             context
                 .getApi()
-                .getCloudClient()
+                .getCloudApi()
                 .listAvailableTemplates(
                     target,
                     VirtualMachineTemplateOptions.builder().idTemplate(id)
@@ -488,7 +488,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         IpOptions options = IpOptions.builder().build();
 
         PublicIpsDto ips =
-            context.getApi().getCloudClient().listAvailablePublicIps(target, options);
+            context.getApi().getCloudApi().listAvailablePublicIps(target, options);
 
         return wrap(context, PublicIp.class, ips.getCollection());
     }
@@ -514,7 +514,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         IpOptions options = IpOptions.builder().build();
 
         PublicIpsDto ips =
-            context.getApi().getCloudClient().listPurchasedPublicIps(target, options);
+            context.getApi().getCloudApi().listPurchasedPublicIps(target, options);
 
         return wrap(context, PublicIp.class, ips.getCollection());
     }
@@ -532,25 +532,25 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public void purchasePublicIp(final PublicIp ip)
     {
         checkNotNull(ip.unwrap().searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
-        context.getApi().getCloudClient().purchasePublicIp(ip.unwrap());
+        context.getApi().getCloudApi().purchasePublicIp(ip.unwrap());
     }
 
     public void releaseePublicIp(final PublicIp ip)
     {
         checkNotNull(ip.unwrap().searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
-        context.getApi().getCloudClient().releasePublicIp(ip.unwrap());
+        context.getApi().getCloudApi().releasePublicIp(ip.unwrap());
     }
 
     // Actions
 
     public void setDefaultNetwork(final Network< ? > network)
     {
-        context.getApi().getCloudClient().setDefaultNetwork(target, network.unwrap());
+        context.getApi().getCloudApi().setDefaultNetwork(target, network.unwrap());
     }
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Datacenter datacenter, final Enterprise enterprise)
     {
         return new Builder(context, datacenter, enterprise);
@@ -558,7 +558,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     public static class Builder extends LimitsBuilder<Builder>
     {
-        private RestContext<AbiquoClient, AbiquoAsyncClient> context;
+        private RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
         private String name;
 
@@ -570,7 +570,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         private PrivateNetwork network;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter, final Enterprise enterprise)
         {
             super();

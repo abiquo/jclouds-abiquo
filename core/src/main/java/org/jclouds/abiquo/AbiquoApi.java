@@ -21,14 +21,14 @@ package org.jclouds.abiquo;
 
 import java.util.concurrent.TimeUnit;
 
-import org.jclouds.abiquo.features.AdminClient;
-import org.jclouds.abiquo.features.CloudClient;
-import org.jclouds.abiquo.features.ConfigClient;
-import org.jclouds.abiquo.features.EnterpriseClient;
-import org.jclouds.abiquo.features.EventClient;
-import org.jclouds.abiquo.features.InfrastructureClient;
-import org.jclouds.abiquo.features.TaskClient;
-import org.jclouds.abiquo.features.VirtualMachineTemplateClient;
+import org.jclouds.abiquo.features.AdminApi;
+import org.jclouds.abiquo.features.CloudApi;
+import org.jclouds.abiquo.features.ConfigApi;
+import org.jclouds.abiquo.features.EnterpriseApi;
+import org.jclouds.abiquo.features.EventApi;
+import org.jclouds.abiquo.features.InfrastructureApi;
+import org.jclouds.abiquo.features.TaskApi;
+import org.jclouds.abiquo.features.VirtualMachineTemplateApi;
 import org.jclouds.concurrent.Timeout;
 import org.jclouds.rest.annotations.Delegate;
 
@@ -37,57 +37,57 @@ import org.jclouds.rest.annotations.Delegate;
  * 
  * @see API: <a href="http://community.abiquo.com/display/ABI20/API+Reference">
  *      http://community.abiquo.com/display/ABI20/API+Reference</a>
- * @see AbiquoAsyncClient
+ * @see AbiquoAsyncApi
  * @author Ignasi Barrera
  */
 @Timeout(duration = 30, timeUnit = TimeUnit.SECONDS)
-public interface AbiquoClient
+public interface AbiquoApi
 {
     /**
      * Provides synchronous access to Admin features.
      */
     @Delegate
-    AdminClient getAdminClient();
+    AdminApi getAdminApi();
 
     /**
      * Provides synchronous access to Infrastructure features.
      */
     @Delegate
-    InfrastructureClient getInfrastructureClient();
+    InfrastructureApi getInfrastructureApi();
 
     /**
      * Provides synchronous access to Cloud features.
      */
     @Delegate
-    CloudClient getCloudClient();
+    CloudApi getCloudApi();
 
     /**
      * Provides synchronous access to Apps library features.
      */
     @Delegate
-    VirtualMachineTemplateClient getVirtualMachineTemplateClient();
+    VirtualMachineTemplateApi getVirtualMachineTemplateApi();
 
     /**
      * Provides synchronous access to Enterprise features.
      */
     @Delegate
-    EnterpriseClient getEnterpriseClient();
+    EnterpriseApi getEnterpriseApi();
 
     /**
      * Provides synchronous access to configuration features.
      */
     @Delegate
-    ConfigClient getConfigClient();
+    ConfigApi getConfigApi();
 
     /**
      * Provides synchronous access to task asynchronous features.
      */
     @Delegate
-    TaskClient getTaskClient();
+    TaskApi getTaskApi();
 
     /**
      * Provides synchronous access to Event features.
      */
     @Delegate
-    EventClient getEventClient();
+    EventApi getEventApi();
 }

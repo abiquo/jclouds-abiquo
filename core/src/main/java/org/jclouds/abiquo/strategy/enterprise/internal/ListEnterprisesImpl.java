@@ -24,8 +24,8 @@ import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.strategy.enterprise.ListEnterprises;
 import org.jclouds.rest.RestContext;
@@ -44,12 +44,12 @@ import com.google.inject.Inject;
 public class ListEnterprisesImpl implements ListEnterprises
 {
     // This strategy does not have still an Executor instance because the current methods call
-    // single client methods
+    // single api methods
 
-    protected final RestContext<AbiquoClient, AbiquoAsyncClient> context;
+    protected final RestContext<AbiquoApi, AbiquoAsyncApi> context;
 
     @Inject
-    ListEnterprisesImpl(final RestContext<AbiquoClient, AbiquoAsyncClient> context)
+    ListEnterprisesImpl(final RestContext<AbiquoApi, AbiquoAsyncApi> context)
     {
         this.context = context;
     }
@@ -57,7 +57,7 @@ public class ListEnterprisesImpl implements ListEnterprises
     @Override
     public Iterable<Enterprise> execute()
     {
-        EnterprisesDto result = context.getApi().getEnterpriseClient().listEnterprises();
+        EnterprisesDto result = context.getApi().getEnterpriseApi().listEnterprises();
         return wrap(context, Enterprise.class, result.getCollection());
     }
 

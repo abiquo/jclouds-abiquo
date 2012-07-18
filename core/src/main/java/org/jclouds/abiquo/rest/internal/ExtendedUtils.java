@@ -53,22 +53,22 @@ public class ExtendedUtils extends UtilsImpl implements Utils
 {
     private AbiquoHttpClient abiquoHttpClient;
 
-    private AbiquoHttpAsyncClient abiquoHttpAsyncClient;
+    private AbiquoHttpAsyncClient abiquoHttpAsyncApi;
 
     @Inject
     public ExtendedUtils(final Injector injector, final Json json, final XMLParser xml,
-        final HttpClient simpleClient, final HttpAsyncClient simpleAsyncClient,
-        final Crypto encryption, final DateService date,
+        final HttpClient simpleApi, final HttpAsyncClient simpleAsyncApi, final Crypto encryption,
+        final DateService date,
         @Named(Constants.PROPERTY_USER_THREADS) final ExecutorService userThreads,
         @Named(Constants.PROPERTY_IO_WORKER_THREADS) final ExecutorService ioThreads,
         final EventBus eventBus, final Map<String, Credentials> credentialStore,
         final LoggerFactory loggerFactory, final AbiquoHttpClient abiquoHttpClient,
-        final AbiquoHttpAsyncClient abiquoHttpAsyncClient)
+        final AbiquoHttpAsyncClient abiquoHttpAsyncApi)
     {
-        super(injector, json, xml, simpleClient, simpleAsyncClient, encryption, date, userThreads,
+        super(injector, json, xml, simpleApi, simpleAsyncApi, encryption, date, userThreads,
             ioThreads, eventBus, credentialStore, loggerFactory);
         this.abiquoHttpClient = checkNotNull(abiquoHttpClient, "abiquoHttpClient");
-        this.abiquoHttpAsyncClient = checkNotNull(abiquoHttpAsyncClient, "abiquoHttpAsyncClient");
+        this.abiquoHttpAsyncApi = checkNotNull(abiquoHttpAsyncApi, "abiquoHttpAsyncApi");
     }
 
     public AbiquoHttpClient getAbiquoHttpClient()
@@ -78,7 +78,7 @@ public class ExtendedUtils extends UtilsImpl implements Utils
 
     public AbiquoHttpAsyncClient getAbiquoHttpAsyncClient()
     {
-        return abiquoHttpAsyncClient;
+        return abiquoHttpAsyncApi;
     }
 
 }

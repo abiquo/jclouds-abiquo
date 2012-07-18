@@ -23,8 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
-import org.jclouds.abiquo.AbiquoClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -61,7 +61,7 @@ public class PublicNetwork extends Network<PublicIp>
     /**
      * Constructor to be used only by the builder.
      */
-    protected PublicNetwork(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    protected PublicNetwork(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final VLANNetworkDto target)
     {
         super(context, target);
@@ -77,7 +77,7 @@ public class PublicNetwork extends Network<PublicIp>
     @Override
     public void delete()
     {
-        context.getApi().getInfrastructureClient().deleteNetwork(target);
+        context.getApi().getInfrastructureApi().deleteNetwork(target);
         target = null;
     }
 
@@ -92,7 +92,7 @@ public class PublicNetwork extends Network<PublicIp>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureClient().createNetwork(datacenter.unwrap(), target);
+            context.getApi().getInfrastructureApi().createNetwork(datacenter.unwrap(), target);
     }
 
     /**
@@ -105,7 +105,7 @@ public class PublicNetwork extends Network<PublicIp>
     @Override
     public void update()
     {
-        target = context.getApi().getInfrastructureClient().updateNetwork(target);
+        target = context.getApi().getInfrastructureApi().updateNetwork(target);
     }
 
     /**
@@ -118,14 +118,14 @@ public class PublicNetwork extends Network<PublicIp>
     public List<PublicIp> listIps(final IpOptions options)
     {
         PublicIpsDto ips =
-            context.getApi().getInfrastructureClient().listPublicIps(target, options);
+            context.getApi().getInfrastructureApi().listPublicIps(target, options);
         return wrap(context, PublicIp.class, ips.getCollection());
     }
 
     @Override
     public PublicIp getIp(final Integer id)
     {
-        PublicIpDto ip = context.getApi().getInfrastructureClient().getPublicIp(target, id);
+        PublicIpDto ip = context.getApi().getInfrastructureApi().getPublicIp(target, id);
         return wrap(context, PublicIp.class, ip);
     }
 
@@ -150,7 +150,7 @@ public class PublicNetwork extends Network<PublicIp>
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
         final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
@@ -160,7 +160,7 @@ public class PublicNetwork extends Network<PublicIp>
     {
         private Datacenter datacenter;
 
-        public Builder(final RestContext<AbiquoClient, AbiquoAsyncClient> context,
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter)
         {
             super(context);

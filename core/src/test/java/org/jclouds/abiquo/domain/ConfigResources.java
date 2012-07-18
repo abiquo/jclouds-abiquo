@@ -79,7 +79,7 @@ public class ConfigResources
         property.setId(1);
         property.setDescription("Time interval in seconds");
         property.setValue("10");
-        property.setName("client.applibrary.ovfpackagesDownloadingProgressUpdateInterval");
+        property.setName("api.applibrary.ovfpackagesDownloadingProgressUpdateInterval");
         property.addLink(new RESTLink("edit", "http://localhost/api/config/properties/1"));
 
         return property;
@@ -161,7 +161,7 @@ public class ConfigResources
         buffer.append("<description>Time interval in seconds</description>");
         buffer.append("<id>1</id>");
         buffer
-            .append("<name>client.applibrary.ovfpackagesDownloadingProgressUpdateInterval</name>");
+            .append("<name>api.applibrary.ovfpackagesDownloadingProgressUpdateInterval</name>");
         buffer.append("<value>10</value>");
         buffer.append("</property>");
         return buffer.toString();

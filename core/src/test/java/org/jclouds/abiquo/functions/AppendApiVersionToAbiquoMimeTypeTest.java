@@ -21,7 +21,7 @@ package org.jclouds.abiquo.functions;
 
 import static org.testng.Assert.assertEquals;
 
-import org.jclouds.abiquo.AbiquoAsyncClient;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.testng.annotations.Test;
 
 import com.google.common.base.Function;
@@ -38,7 +38,7 @@ public class AppendApiVersionToAbiquoMimeTypeTest
     public void testApplyWithNullInput()
     {
         Function<String, String> function =
-            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncClient.API_VERSION);
+            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncApi.API_VERSION);
         function.apply(null);
     }
 
@@ -46,21 +46,21 @@ public class AppendApiVersionToAbiquoMimeTypeTest
     public void testApplyWithInvalidMediaType()
     {
         Function<String, String> function =
-            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncClient.API_VERSION);
+            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncApi.API_VERSION);
         function.apply("foo");
     }
 
     public void testApplyToStandardMediaType()
     {
         Function<String, String> function =
-            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncClient.API_VERSION);
+            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncApi.API_VERSION);
         assertEquals(function.apply("application/xml"), "application/xml");
     }
 
     public void testApplyToAbiquoMediaTypeWithVersion()
     {
         Function<String, String> function =
-            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncClient.API_VERSION);
+            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncApi.API_VERSION);
         assertEquals(function.apply("application/vnd.abiquo.datacenters+xml;version=1.8.5"),
             "application/vnd.abiquo.datacenters+xml;version=1.8.5");
     }
@@ -68,8 +68,8 @@ public class AppendApiVersionToAbiquoMimeTypeTest
     public void testApplyToAbiquoMediaTypeWithoutVersion()
     {
         Function<String, String> function =
-            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncClient.API_VERSION);
+            new AppendApiVersionToAbiquoMimeType(AbiquoAsyncApi.API_VERSION);
         assertEquals(function.apply("application/vnd.abiquo.datacenters+xml"),
-            "application/vnd.abiquo.datacenters+xml;version=" + AbiquoAsyncClient.API_VERSION);
+            "application/vnd.abiquo.datacenters+xml;version=" + AbiquoAsyncApi.API_VERSION);
     }
 }

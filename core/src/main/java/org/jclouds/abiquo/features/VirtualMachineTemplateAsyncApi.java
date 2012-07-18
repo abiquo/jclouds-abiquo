@@ -61,18 +61,18 @@ import com.google.common.util.concurrent.ListenableFuture;
  * href="http://community.abiquo.com/display/ABI20/API+Reference">
  * http://community.abiquo.com/display/ABI20/API+Reference</a>
  * 
- * @see VirtualMachineTemplateClient
+ * @see VirtualMachineTemplateApi
  * @author Ignasi Barrera
  * @author Francesc Montserrat
  */
 @RequestFilters({AbiquoAuthentication.class, AppendApiVersionToMediaType.class})
 @Path("/admin/enterprises")
-public interface VirtualMachineTemplateAsyncClient
+public interface VirtualMachineTemplateAsyncApi
 {
     /*********************** Virtual Machine Template ***********************/
 
     /**
-     * @see VirtualMachineTemplateClient#listVirtualMachineTemplates(Integer, Integer)
+     * @see VirtualMachineTemplateApi#listVirtualMachineTemplates(Integer, Integer)
      */
     @GET
     @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
@@ -83,7 +83,7 @@ public interface VirtualMachineTemplateAsyncClient
         @PathParam("datacenterrepository") Integer datacenterRepositoryId);
 
     /**
-     * @see VirtualMachineTemplateClient#listVirtualMachineTemplates(Integer, Integer,
+     * @see VirtualMachineTemplateApi#listVirtualMachineTemplates(Integer, Integer,
      *      VirtualMachineTemplateOptions)
      */
     @GET
@@ -96,7 +96,7 @@ public interface VirtualMachineTemplateAsyncClient
         @BinderParam(AppendOptionsToPath.class) VirtualMachineTemplateOptions options);
 
     /**
-     * @see VirtualMachineTemplateClient#getVirtualMachineTemplate(Integer, Integer, Integer)
+     * @see VirtualMachineTemplateApi#getVirtualMachineTemplate(Integer, Integer, Integer)
      */
     @GET
     @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates/{virtualmachinetemplate}")
@@ -109,7 +109,7 @@ public interface VirtualMachineTemplateAsyncClient
         @PathParam("virtualmachinetemplate") Integer virtualMachineTemplateId);
 
     /**
-     * @see VirtualMachineTemplateClient#updateVirtualMachineTemplate(VirtualMachineTemplateDto)
+     * @see VirtualMachineTemplateApi#updateVirtualMachineTemplate(VirtualMachineTemplateDto)
      */
     @PUT
     @Produces(VirtualMachineTemplateDto.BASE_MEDIA_TYPE)
@@ -119,14 +119,14 @@ public interface VirtualMachineTemplateAsyncClient
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineTemplateDto template);
 
     /**
-     * @see VirtualMachineTemplateClient#deleteVirtualMachineTemplate(VirtualMachineTemplateDto)
+     * @see VirtualMachineTemplateApi#deleteVirtualMachineTemplate(VirtualMachineTemplateDto)
      */
     @DELETE
     ListenableFuture<Void> deleteVirtualMachineTemplate(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
     /**
-     * @see VirtualMachineTemplateClient#createPersistentVirtualMachineTemplate(DatacenterRepositoryDto,
+     * @see VirtualMachineTemplateApi#createPersistentVirtualMachineTemplate(DatacenterRepositoryDto,
      *      VirtualMachineTemplatePersistentDto)
      */
     @POST
@@ -140,7 +140,7 @@ public interface VirtualMachineTemplateAsyncClient
     /*********************** Conversions ***********************/
 
     /**
-     * @see VirtualMachineTemplateClient#listConversions(VirtualMachineTemplateDto)
+     * @see VirtualMachineTemplateApi#listConversions(VirtualMachineTemplateDto)
      */
     @GET
     @Consumes(ConversionsDto.BASE_MEDIA_TYPE)
@@ -149,7 +149,7 @@ public interface VirtualMachineTemplateAsyncClient
         @EndpointLink("conversions") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
     /**
-     * @see VirtualMachineTemplateClient#listConversions(VirtualMachineTemplateDto,
+     * @see VirtualMachineTemplateApi#listConversions(VirtualMachineTemplateDto,
      *      ConversionOptions)
      */
     @GET
@@ -160,7 +160,7 @@ public interface VirtualMachineTemplateAsyncClient
         @BinderParam(AppendOptionsToPath.class) ConversionOptions options);
 
     /**
-     * @see VirtualMachineTemplateClient#getConversion(VirtualMachineTemplateDto, DiskFormatType)
+     * @see VirtualMachineTemplateApi#getConversion(VirtualMachineTemplateDto, DiskFormatType)
      */
     @GET
     @Consumes(ConversionDto.BASE_MEDIA_TYPE)
@@ -171,7 +171,7 @@ public interface VirtualMachineTemplateAsyncClient
         @BinderParam(AppendToPath.class) DiskFormatType targetFormat);
 
     /**
-     * @see VirtualMachineTemplateClient#updateConversion(ConversinoDto)
+     * @see VirtualMachineTemplateApi#updateConversion(ConversinoDto)
      */
     @PUT
     @ResponseParser(ReturnTaskReferenceOrNull.class)
