@@ -38,7 +38,7 @@ public class BindLinkToPath extends BindToPath
 {
 
     @Override
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
+    protected String getNewEndpoint(final GeneratedHttpRequest gRequest, final Object input)
     {
         checkArgument(checkNotNull(input, "input") instanceof RESTLink,
             "this binder is only valid for RESTLink objects");

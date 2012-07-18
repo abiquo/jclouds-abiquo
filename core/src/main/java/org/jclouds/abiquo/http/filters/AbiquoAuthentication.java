@@ -33,7 +33,6 @@ import org.jclouds.crypto.CryptoStreams;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
-import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.annotations.Credential;
 import org.jclouds.rest.annotations.Identity;
 
@@ -73,8 +72,10 @@ public class AbiquoAuthentication implements HttpRequestFilter
         {
             String header =
                 credentialIsToken ? tokenAuth(credential) : basicAuth(identity, credential);
-            return ModifyRequest.replaceHeader(request, credentialIsToken ? HttpHeaders.COOKIE
-                : HttpHeaders.AUTHORIZATION, header);
+            return request
+                .toBuilder()
+                .replaceHeader(credentialIsToken ? HttpHeaders.COOKIE : HttpHeaders.AUTHORIZATION,
+                    header).build();
         }
         catch (UnsupportedEncodingException ex)
         {

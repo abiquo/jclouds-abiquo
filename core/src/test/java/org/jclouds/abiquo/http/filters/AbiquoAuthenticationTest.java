@@ -30,7 +30,6 @@ import java.security.cert.CertificateException;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.http.utils.ModifyRequest;
 import org.testng.annotations.Test;
 
 /**
@@ -51,8 +50,10 @@ public class AbiquoAuthenticationTest
         AbiquoAuthentication filter = new AbiquoAuthentication("identity", "credential", "false");
         HttpRequest filtered = filter.filter(request);
         HttpRequest expected =
-            ModifyRequest.replaceHeader(request, HttpHeaders.AUTHORIZATION,
-                AbiquoAuthentication.basicAuth("identity", "credential"));
+            request
+                .toBuilder()
+                .replaceHeader(HttpHeaders.AUTHORIZATION,
+                    AbiquoAuthentication.basicAuth("identity", "credential")).build();
 
         assertFalse(filtered.getHeaders().containsKey(HttpHeaders.COOKIE));
         assertEquals(filtered, expected);
@@ -89,8 +90,8 @@ public class AbiquoAuthenticationTest
         AbiquoAuthentication filter = new AbiquoAuthentication("token-identity", "token", "true");
         HttpRequest filtered = filter.filter(request);
         HttpRequest expected =
-            ModifyRequest.replaceHeader(request, HttpHeaders.COOKIE,
-                AbiquoAuthentication.tokenAuth("token"));
+            request.toBuilder()
+                .replaceHeader(HttpHeaders.COOKIE, AbiquoAuthentication.tokenAuth("token")).build();
 
         assertFalse(filtered.getHeaders().containsKey(HttpHeaders.AUTHORIZATION));
         assertEquals(filtered, expected);

@@ -47,7 +47,7 @@ public class AbiquoHttpAsyncClientTest extends BaseAbiquoAsyncApiTest<AbiquoHttp
         link.setType(DatacentersDto.BASE_MEDIA_TYPE);
 
         Method method = AbiquoHttpAsyncClient.class.getMethod("get", RESTLink.class);
-        GeneratedHttpRequest<AbiquoHttpAsyncClient> request = processor.createRequest(method, link);
+        GeneratedHttpRequest request = processor.createRequest(method, link);
 
         assertRequestLineEquals(request, "GET http://foo/bar HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + DatacentersDto.BASE_MEDIA_TYPE + "\n");

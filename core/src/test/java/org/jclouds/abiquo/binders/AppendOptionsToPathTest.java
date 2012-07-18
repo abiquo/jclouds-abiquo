@@ -29,7 +29,6 @@ import org.testng.annotations.Test;
 
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
-import com.sun.jersey.api.uri.UriBuilderImpl;
 
 /**
  * Unit tests for the {@link AppendOptionsToPath} binder.
@@ -43,7 +42,7 @@ public class AppendOptionsToPathTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullInput()
     {
-        AppendOptionsToPath binder = new AppendOptionsToPath(new UriBuilderImpl());
+        AppendOptionsToPath binder = new AppendOptionsToPath();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, null);
@@ -52,7 +51,7 @@ public class AppendOptionsToPathTest
     @Test(expectedExceptions = IllegalArgumentException.class)
     public void testInvalidTypeInput()
     {
-        AppendOptionsToPath binder = new AppendOptionsToPath(new UriBuilderImpl());
+        AppendOptionsToPath binder = new AppendOptionsToPath();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         binder.bindToRequest(request, new Object());
@@ -60,7 +59,7 @@ public class AppendOptionsToPathTest
 
     public void testBindEmptyOptions()
     {
-        AppendOptionsToPath binder = new AppendOptionsToPath(new UriBuilderImpl());
+        AppendOptionsToPath binder = new AppendOptionsToPath();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         HttpRequest newRequest = binder.bindToRequest(request, EMPTY_OPTIONS);
@@ -69,7 +68,7 @@ public class AppendOptionsToPathTest
 
     public void testBindOptions()
     {
-        AppendOptionsToPath binder = new AppendOptionsToPath(new UriBuilderImpl());
+        AppendOptionsToPath binder = new AppendOptionsToPath();
         HttpRequest request =
             HttpRequest.builder().method("GET").endpoint(URI.create("http://localhost")).build();
         HttpRequest newRequest = binder.bindToRequest(request, DUMMY_OPTIONS);

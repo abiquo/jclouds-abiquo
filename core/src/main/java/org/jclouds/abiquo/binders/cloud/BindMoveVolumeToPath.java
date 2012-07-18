@@ -37,7 +37,7 @@ public class BindMoveVolumeToPath extends BindToPath
 {
 
     @Override
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
+    protected String getNewEndpoint(final GeneratedHttpRequest gRequest, final Object input)
     {
         checkArgument(checkNotNull(input, "input") instanceof VolumeManagementDto,
             "this binder is only valid for VolumeManagementDto objects");

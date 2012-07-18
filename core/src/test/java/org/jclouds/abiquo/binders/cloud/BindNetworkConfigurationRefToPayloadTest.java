@@ -63,7 +63,9 @@ public class BindNetworkConfigurationRefToPayloadTest
     {
         BindNetworkConfigurationRefToPayload binder =
             new BindNetworkConfigurationRefToPayload(new JAXBParser("false"));
-        binder.bindToRequest(new HttpRequest("m", URI.create("http://localhost")), new Object());
+
+        binder.bindToRequest(
+            HttpRequest.builder().method("m").endpoint("http://localhost").build(), new Object());
     }
 
     @Test(expectedExceptions = NullPointerException.class)
@@ -74,9 +76,8 @@ public class BindNetworkConfigurationRefToPayloadTest
         Method method =
             TestNetworkConfig.class.getMethod("withAll", VirtualMachineDto.class,
                 VLANNetworkDto.class);
-        GeneratedHttpRequest<TestNetworkConfig> request =
-            GeneratedHttpRequest.<TestNetworkConfig> requestBuilder()
-                .declaring(TestNetworkConfig.class).javaMethod(method)
+        GeneratedHttpRequest request =
+            GeneratedHttpRequest.builder().declaring(TestNetworkConfig.class).javaMethod(method)
                 .args(ImmutableList.<Object> of(vm, null)).method(HttpMethod.GET)
                 .endpoint(URI.create("http://localhost")).build();
 
@@ -94,9 +95,8 @@ public class BindNetworkConfigurationRefToPayloadTest
         Method method =
             TestNetworkConfig.class.getMethod("withAll", VirtualMachineDto.class,
                 VLANNetworkDto.class);
-        GeneratedHttpRequest<TestNetworkConfig> request =
-            GeneratedHttpRequest.<TestNetworkConfig> requestBuilder()
-                .declaring(TestNetworkConfig.class).javaMethod(method)
+        GeneratedHttpRequest request =
+            GeneratedHttpRequest.builder().declaring(TestNetworkConfig.class).javaMethod(method)
                 .args(ImmutableList.<Object> of(vm, network)).method(HttpMethod.GET)
                 .endpoint(URI.create("http://localhost")).build();
 
@@ -113,9 +113,8 @@ public class BindNetworkConfigurationRefToPayloadTest
 
         Method method =
             TestNetworkConfig.class.getMethod("withoutVirtualMachine", VLANNetworkDto.class);
-        GeneratedHttpRequest<TestNetworkConfig> request =
-            GeneratedHttpRequest.<TestNetworkConfig> requestBuilder()
-                .declaring(TestNetworkConfig.class).javaMethod(method)
+        GeneratedHttpRequest request =
+            GeneratedHttpRequest.builder().declaring(TestNetworkConfig.class).javaMethod(method)
                 .args(ImmutableList.<Object> of(network)).method(HttpMethod.GET)
                 .endpoint(URI.create("http://localhost")).build();
 
@@ -133,9 +132,8 @@ public class BindNetworkConfigurationRefToPayloadTest
         Method method =
             TestNetworkConfig.class.getMethod("withAll", VirtualMachineDto.class,
                 VLANNetworkDto.class);
-        GeneratedHttpRequest<TestNetworkConfig> request =
-            GeneratedHttpRequest.<TestNetworkConfig> requestBuilder()
-                .declaring(TestNetworkConfig.class).javaMethod(method)
+        GeneratedHttpRequest request =
+            GeneratedHttpRequest.builder().declaring(TestNetworkConfig.class).javaMethod(method)
                 .args(ImmutableList.<Object> of(vm, network)).method(HttpMethod.GET)
                 .endpoint(URI.create("http://localhost")).build();
 
@@ -144,7 +142,7 @@ public class BindNetworkConfigurationRefToPayloadTest
 
         String configLink = vm.searchLink("configurations").getHref() + "/" + network.getId();
 
-        GeneratedHttpRequest<TestNetworkConfig> newRequest = binder.bindToRequest(request, network);
+        GeneratedHttpRequest newRequest = binder.bindToRequest(request, network);
         assertPayloadEquals(newRequest.getPayload(), withHeader("<links><link href=\"" + configLink
             + "\" rel=\"network_configuration\"/></links>"), LinksDto.class);
     }

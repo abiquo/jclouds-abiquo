@@ -31,7 +31,6 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
 import org.jclouds.http.HttpRequest;
-import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.rest.Binder;
 import org.jclouds.rest.binders.BindException;
 import org.jclouds.rest.internal.GeneratedHttpRequest;
@@ -52,9 +51,9 @@ public class BindToPath implements Binder
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkArgument(checkNotNull(request, "request") instanceof GeneratedHttpRequest< ? >,
+        checkArgument(checkNotNull(request, "request") instanceof GeneratedHttpRequest,
             "this binder is only valid for GeneratedHttpRequests");
-        GeneratedHttpRequest< ? > gRequest = (GeneratedHttpRequest< ? >) request;
+        GeneratedHttpRequest gRequest = (GeneratedHttpRequest) request;
         checkState(gRequest.getArgs() != null, "args should be initialized at this point");
 
         // Update the request URI with the configured link URI
@@ -69,7 +68,7 @@ public class BindToPath implements Binder
      * @param input The input parameter.
      * @return The new endpoint to use.
      */
-    protected String getNewEndpoint(final GeneratedHttpRequest< ? > gRequest, final Object input)
+    protected String getNewEndpoint(final GeneratedHttpRequest gRequest, final Object input)
     {
         SingleResourceTransportDto dto = checkValidInput(input);
         return getLinkToUse(gRequest, dto).getHref();
@@ -82,7 +81,7 @@ public class BindToPath implements Binder
      * @param payload The object containing the link.
      * @return The link to be used to build the request URI.
      */
-    static RESTLink getLinkToUse(final GeneratedHttpRequest< ? > request,
+    static RESTLink getLinkToUse(final GeneratedHttpRequest request,
         final SingleResourceTransportDto payload)
     {
         int argIndex = request.getArgs().indexOf(payload);
@@ -109,6 +108,7 @@ public class BindToPath implements Binder
      * @param endpoint The endpoint to use as the request URI.
      * @return The updated request.
      */
+    @SuppressWarnings("unchecked")
     static <R extends HttpRequest> R bindToPath(final R request, final String endpoint)
     {
         // Preserve current query and matrix parameters
@@ -116,7 +116,7 @@ public class BindToPath implements Binder
 
         // Replace the URI with the edit link in the DTO
         URI path = URI.create(newEndpoint);
-        return ModifyRequest.endpoint(request, path);
+        return (R) request.toBuilder().endpoint(path).build();
     }
 
     protected static SingleResourceTransportDto checkValidInput(final Object input)

@@ -28,7 +28,6 @@ import org.jclouds.abiquo.functions.AppendApiVersionToAbiquoMimeType;
 import org.jclouds.http.HttpException;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpRequestFilter;
-import org.jclouds.http.utils.ModifyRequest;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Iterables;
@@ -64,8 +63,11 @@ public class AppendApiVersionToMediaType implements HttpRequestFilter
     HttpRequest appendVersionToNonPayloadHeaders(final HttpRequest request)
     {
         Collection<String> accept = request.getHeaders().get(HttpHeaders.ACCEPT);
-        return accept.isEmpty() ? request : ModifyRequest.replaceHeader(request,
-            HttpHeaders.ACCEPT, Iterables.transform(accept, versionAppender));
+        return accept.isEmpty() ? request : request
+            .toBuilder()
+            .replaceHeader(HttpHeaders.ACCEPT,
+                Iterables.toArray(Iterables.transform(accept, versionAppender), String.class))
+            .build();
     }
 
     @VisibleForTesting

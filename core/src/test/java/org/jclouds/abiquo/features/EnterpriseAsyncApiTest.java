@@ -70,7 +70,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     public void testListEnterprises() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = EnterpriseAsyncApi.class.getMethod("listEnterprises");
-        GeneratedHttpRequest<EnterpriseAsyncApi> request = processor.createRequest(method);
+        GeneratedHttpRequest request = processor.createRequest(method);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + EnterprisesDto.BASE_MEDIA_TYPE + "\n");
@@ -91,8 +91,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
 
         Method method =
             EnterpriseAsyncApi.class.getMethod("listEnterprises", EnterpriseOptions.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
-            processor.createRequest(method, options);
+        GeneratedHttpRequest request = processor.createRequest(method, options);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/enterprises?has=abi&by=name&asc=true HTTP/1.1");
@@ -115,7 +114,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("listEnterprises", DatacenterDto.class,
                 EnterpriseOptions.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), options);
 
         assertRequestLineEquals(
@@ -133,9 +132,8 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
 
     public void testCreateEnterprise() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            EnterpriseAsyncApi.class.getMethod("createEnterprise", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        Method method = EnterpriseAsyncApi.class.getMethod("createEnterprise", EnterpriseDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePost());
 
         assertRequestLineEquals(request, "POST http://localhost/api/admin/enterprises HTTP/1.1");
@@ -153,7 +151,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     public void testGetEnterprise() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = EnterpriseAsyncApi.class.getMethod("getEnterprise", Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request = processor.createRequest(method, 1);
+        GeneratedHttpRequest request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request, "GET http://localhost/api/admin/enterprises/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + EnterpriseDto.BASE_MEDIA_TYPE + "\n");
@@ -168,9 +166,8 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
 
     public void testUpdateEnterprise() throws SecurityException, NoSuchMethodException, IOException
     {
-        Method method =
-            EnterpriseAsyncApi.class.getMethod("updateEnterprise", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        Method method = EnterpriseAsyncApi.class.getMethod("updateEnterprise", EnterpriseDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request, "PUT http://localhost/api/admin/enterprises/1 HTTP/1.1");
@@ -187,9 +184,8 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
 
     public void testDeleteEnterprise() throws SecurityException, NoSuchMethodException
     {
-        Method method =
-            EnterpriseAsyncApi.class.getMethod("deleteEnterprise", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        Method method = EnterpriseAsyncApi.class.getMethod("deleteEnterprise", EnterpriseDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/admin/enterprises/1 HTTP/1.1");
@@ -206,9 +202,8 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     public void testListAllowedDatacenters() throws SecurityException, NoSuchMethodException,
         IOException
     {
-        Method method =
-            EnterpriseAsyncApi.class.getMethod("listAllowedDatacenters", Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request = processor.createRequest(method, 1);
+        Method method = EnterpriseAsyncApi.class.getMethod("listAllowedDatacenters", Integer.class);
+        GeneratedHttpRequest request = processor.createRequest(method, 1);
 
         assertRequestLineEquals(request,
             "GET http://localhost/api/admin/datacenters?idEnterprise=1 HTTP/1.1");
@@ -227,7 +222,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     {
         Method method =
             EnterpriseAsyncApi.class.getMethod("listVirtualDatacenters", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -250,7 +245,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     {
         Method method =
             EnterpriseAsyncApi.class.getMethod("getEnterpriseProperties", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -272,7 +267,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("updateEnterpriseProperties",
                 EnterprisePropertiesDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePropertiesPut());
 
         assertRequestLineEquals(request,
@@ -301,7 +296,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("createLimits", EnterpriseDto.class,
                 DatacenterDto.class, DatacenterLimitsDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, enterprise, datacenter, limits);
 
         String limitsUri = enterprise.searchLink("limits").getHref();
@@ -329,8 +324,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("getLimits", EnterpriseDto.class,
                 DatacenterDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
-            processor.createRequest(method, enterprise, datacenter);
+        GeneratedHttpRequest request = processor.createRequest(method, enterprise, datacenter);
 
         String limitsUri = enterprise.searchLink("limits").getHref();
         String requestURI =
@@ -354,7 +348,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
 
         Method method =
             EnterpriseAsyncApi.class.getMethod("updateLimits", DatacenterLimitsDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.datacenterLimitsPut(enterprise));
 
         assertRequestLineEquals(request,
@@ -378,7 +372,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
 
         Method method =
             EnterpriseAsyncApi.class.getMethod("deleteLimits", DatacenterLimitsDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.datacenterLimitsPut(enterprise));
 
         assertRequestLineEquals(request,
@@ -397,7 +391,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         IOException
     {
         Method method = EnterpriseAsyncApi.class.getMethod("listLimits", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -419,7 +413,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     {
         Method method =
             EnterpriseAsyncApi.class.getMethod("getUser", EnterpriseDto.class, Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut(), 1);
 
         assertRequestLineEquals(request,
@@ -437,7 +431,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     public void testListUsers() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = EnterpriseAsyncApi.class.getMethod("listUsers", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -459,8 +453,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
 
         Method method =
             EnterpriseAsyncApi.class.getMethod("createUser", EnterpriseDto.class, UserDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
-            processor.createRequest(method, enterprise, user);
+        GeneratedHttpRequest request = processor.createRequest(method, enterprise, user);
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/enterprises/1/users HTTP/1.1");
@@ -478,7 +471,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     public void testUpdateUser() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = EnterpriseAsyncApi.class.getMethod("updateUser", UserDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.userPut());
 
         assertRequestLineEquals(request,
@@ -497,7 +490,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     public void testDeleteUser() throws SecurityException, NoSuchMethodException
     {
         Method method = EnterpriseAsyncApi.class.getMethod("deleteUser", UserDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.userPut());
 
         assertRequestLineEquals(request,
@@ -516,7 +509,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         IOException
     {
         Method method = EnterpriseAsyncApi.class.getMethod("listVirtualMachines", UserDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.userPut());
 
         assertRequestLineEquals(request,
@@ -540,7 +533,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("getDatacenterRepository", EnterpriseDto.class,
                 Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut(),
                 InfrastructureResources.datacenterPut().getId());
 
@@ -563,7 +556,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("refreshTemplateRepository", Integer.class,
                 Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut().getId(),
                 InfrastructureResources.datacenterPut().getId());
 
@@ -586,7 +579,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     {
         Method method =
             EnterpriseAsyncApi.class.getMethod("listExternalNetworks", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -608,7 +601,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     {
         Method method =
             EnterpriseAsyncApi.class.getMethod("listVirtualMachines", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -629,7 +622,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     {
         Method method =
             EnterpriseAsyncApi.class.getMethod("listVirtualAppliances", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -652,7 +645,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
     {
         Method method =
             EnterpriseAsyncApi.class.getMethod("listReservedMachines", EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -673,9 +666,8 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         IOException
     {
         Method method =
-            EnterpriseAsyncApi.class.getMethod("listTemplateDefinitionLists",
-                EnterpriseDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+            EnterpriseAsyncApi.class.getMethod("listTemplateDefinitionLists", EnterpriseDto.class);
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut());
 
         assertRequestLineEquals(request,
@@ -698,10 +690,9 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         TemplateDefinitionListDto template = EnterpriseResources.templateListPost();
 
         Method method =
-            EnterpriseAsyncApi.class.getMethod("createTemplateDefinitionList",
-                EnterpriseDto.class, TemplateDefinitionListDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
-            processor.createRequest(method, enterprise, template);
+            EnterpriseAsyncApi.class.getMethod("createTemplateDefinitionList", EnterpriseDto.class,
+                TemplateDefinitionListDto.class);
+        GeneratedHttpRequest request = processor.createRequest(method, enterprise, template);
 
         assertRequestLineEquals(request,
             "POST http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists HTTP/1.1");
@@ -725,8 +716,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("updateTemplateDefinitionList",
                 TemplateDefinitionListDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
-            processor.createRequest(method, template);
+        GeneratedHttpRequest request = processor.createRequest(method, template);
 
         assertRequestLineEquals(request,
             "PUT http://localhost/api/admin/enterprises/1/appslib/templateDefinitionLists/1 HTTP/1.1");
@@ -747,7 +737,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("deleteTemplateDefinitionList",
                 TemplateDefinitionListDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.templateListPut());
 
         assertRequestLineEquals(request,
@@ -768,7 +758,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("getTemplateDefinitionList", EnterpriseDto.class,
                 Integer.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.enterprisePut(), 1);
 
         assertRequestLineEquals(request,
@@ -790,7 +780,7 @@ public class EnterpriseAsyncApiTest extends BaseAbiquoAsyncApiTest<EnterpriseAsy
         Method method =
             EnterpriseAsyncApi.class.getMethod("listTemplateListStatus",
                 TemplateDefinitionListDto.class, DatacenterDto.class);
-        GeneratedHttpRequest<EnterpriseAsyncApi> request =
+        GeneratedHttpRequest request =
             processor.createRequest(method, EnterpriseResources.templateListPut(),
                 InfrastructureResources.datacenterPut());
 

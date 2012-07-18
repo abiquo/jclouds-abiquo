@@ -25,7 +25,6 @@ import javax.inject.Singleton;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.jclouds.http.HttpRequest;
-import org.jclouds.http.utils.ModifyRequest;
 
 import com.abiquo.model.rest.RESTLink;
 import com.google.common.annotations.VisibleForTesting;
@@ -45,10 +44,11 @@ public class BindLinkToPathAndAcceptHeader extends BindLinkToPath
         return addHeader(updatedRequest, HttpHeaders.ACCEPT, ((RESTLink) input).getType());
     }
 
+    @SuppressWarnings("unchecked")
     @VisibleForTesting
     <R extends HttpRequest> R addHeader(final R request, final String header, final String value)
     {
-        return ModifyRequest.replaceHeader(request, HttpHeaders.ACCEPT,
-            checkNotNull(value, "value"));
+        return (R) request.toBuilder()
+            .replaceHeader(HttpHeaders.ACCEPT, checkNotNull(value, "value")).build();
     }
 }

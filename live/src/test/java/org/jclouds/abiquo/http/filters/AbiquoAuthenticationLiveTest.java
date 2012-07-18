@@ -41,7 +41,6 @@ import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.reference.AbiquoConstants;
 import org.jclouds.http.HttpRequest;
 import org.jclouds.http.HttpResponse;
-import org.jclouds.http.utils.ModifyRequest;
 import org.jclouds.logging.slf4j.config.SLF4JLoggingModule;
 import org.jclouds.rest.AuthorizationException;
 import org.testng.annotations.BeforeMethod;
@@ -159,7 +158,7 @@ public class AbiquoAuthenticationLiveTest
             HttpRequest request =
                 HttpRequest.builder().method("GET").endpoint(URI.create(endpoint)).build();
             String auth = AbiquoAuthentication.basicAuth(identity, credential);
-            request = ModifyRequest.replaceHeader(request, HttpHeaders.AUTHORIZATION, auth);
+            request = request.toBuilder().replaceHeader(HttpHeaders.AUTHORIZATION, auth).build();
 
             // Execute the request and read the generated token
             HttpResponse response = context.utils().http().invoke(request);

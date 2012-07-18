@@ -55,11 +55,11 @@ public class BindNetworkConfigurationRefToPayload extends BindToXMLPayload
     @Override
     public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
     {
-        checkArgument(checkNotNull(request, "request") instanceof GeneratedHttpRequest< ? >,
+        checkArgument(checkNotNull(request, "request") instanceof GeneratedHttpRequest,
             "this binder is only valid for GeneratedHttpRequests");
         checkArgument(checkNotNull(input, "input") instanceof VLANNetworkDto,
             "this binder is only valid for VLANNetworkDto");
-        GeneratedHttpRequest< ? > gRequest = (GeneratedHttpRequest< ? >) request;
+        GeneratedHttpRequest gRequest = (GeneratedHttpRequest) request;
         checkState(gRequest.getArgs() != null, "args should be initialized at this point");
 
         VLANNetworkDto network = (VLANNetworkDto) input;
