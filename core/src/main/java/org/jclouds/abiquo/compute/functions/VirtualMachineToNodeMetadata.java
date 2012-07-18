@@ -20,22 +20,29 @@
 package org.jclouds.abiquo.compute.functions;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.collect.Iterables.filter;
 import static com.google.common.collect.Iterables.transform;
 
-import java.net.URI;
+import java.util.List;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
+import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.Ip;
+import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.NodeMetadataBuilder;
+import org.jclouds.logging.Logger;
+import org.jclouds.rest.AuthorizationException;
 
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.google.common.base.Function;
+import com.google.common.base.Predicates;
 
 /**
  * Links a {@link VirtualMachine} object to a {@link NodeMetadata} one.
@@ -45,11 +52,16 @@ import com.google.common.base.Function;
 @Singleton
 public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, NodeMetadata>
 {
+    @Resource
+    protected Logger logger = Logger.NULL;
+
     private final VirtualMachineTemplateToImage virtualMachineTemplateToImage;
 
     private final VirtualMachineTemplateToHardware virtualMachineTemplateToHardware;
 
     private final VirtualMachineStateToNodeState virtualMachineStateToNodeState;
+
+    private final DatacenterToLocation datacenterToLocation;
 
     @Inject
     public VirtualMachineToNodeMetadata(
@@ -64,6 +76,7 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
             checkNotNull(virtualMachineTemplateToHardware, "virtualMachineTemplateToHardware");
         this.virtualMachineStateToNodeState =
             checkNotNull(virtualMachineStateToNodeState, "virtualMachineStateToNodeState");
+        this.datacenterToLocation = checkNotNull(datacenterToLocation, "datacenterToLocation");
     }
 
     @Override
@@ -71,13 +84,22 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
     {
         NodeMetadataBuilder builder = new NodeMetadataBuilder();
         builder.ids(vm.getId().toString());
-        builder.uri(URI.create(vm.unwrap().getEditLink().getHref()));
+        builder.uri(vm.getURI());
         builder.name(vm.getNameLabel());
         builder.hostname(vm.getInternalName()); // TODO: Abiquo does not set the hostname
         builder.group(vm.getVirtualAppliance().getName());
 
-        // TODO: builder.location() Only cloud admins have access to the datacenter link of the VDC
         // TODO: builder.credentials() (http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3647)
+
+        try
+        {
+            Datacenter datacenter = vm.getVirtualDatacenter().getDatacenter();
+            builder.location(datacenterToLocation.apply(datacenter));
+        }
+        catch (AuthorizationException ex)
+        {
+            logger.debug("User does not have permissions to see the location of the node");
+        }
 
         VirtualMachineTemplate template = vm.getTemplate();
         Image image = virtualMachineTemplateToImage.apply(template);
@@ -86,9 +108,10 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
 
         builder.hardware(virtualMachineTemplateToHardware.apply(template));
 
-        // TODO: Add a method to NIC domain object to determine its type
-        // (http://jira.abiquo.com/browse/ABIQUOJC-3)
-        builder.privateAddresses(privateIps(vm.listAttachedNics()));
+        List<Ip< ? , ? >> nics = vm.listAttachedNics();
+        builder.privateAddresses(ips(filter(nics, Predicates.instanceOf(PrivateIp.class))));
+        builder.publicAddresses(ips(filter(nics,
+            Predicates.not(Predicates.instanceOf(PrivateIp.class)))));
 
         VirtualMachineState state = vm.getState();
         builder.status(virtualMachineStateToNodeState.apply(state));
@@ -97,7 +120,7 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
         return builder.build();
     }
 
-    private static Iterable<String> privateIps(final Iterable<Ip< ? , ? >> nics)
+    private static Iterable<String> ips(final Iterable<Ip< ? , ? >> nics)
     {
         return transform(nics, new Function<Ip< ? , ? >, String>()
         {
@@ -108,4 +131,5 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
             }
         });
     }
+
 }

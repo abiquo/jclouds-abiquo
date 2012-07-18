@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.compute.functions;
 
-import java.net.URI;
-
 import javax.inject.Singleton;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
@@ -31,7 +29,6 @@ import org.jclouds.compute.domain.Volume;
 import org.jclouds.compute.domain.VolumeBuilder;
 import org.jclouds.compute.predicates.ImagePredicates;
 
-import com.abiquo.model.rest.RESTLink;
 import com.google.common.base.Function;
 
 /**
@@ -50,8 +47,7 @@ public class VirtualMachineTemplateToHardware implements Function<VirtualMachine
     {
         HardwareBuilder builder = new HardwareBuilder();
         builder.ids(template.getId().toString());
-        RESTLink editLink = template.unwrap().getEditLink();
-        builder.uri(editLink == null ? null : URI.create(editLink.getHref()));
+        builder.uri(template.getURI());
 
         builder.name(template.getName());
         builder.processor(new Processor(template.getCpuRequired(), DEFAULT_CORE_SPEED));

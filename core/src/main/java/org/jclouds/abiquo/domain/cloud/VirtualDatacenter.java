@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWithLimitsWrapper;
 import org.jclouds.abiquo.domain.builder.LimitsBuilder;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineTemplateOptions;
@@ -38,6 +38,7 @@ import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.PublicIp;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
+import org.jclouds.abiquo.predicates.infrastructure.DatacenterPredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.RestContext;
@@ -148,9 +149,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     public Datacenter getDatacenter()
     {
         Integer datacenterId = target.getIdFromLink(ParentLinkName.DATACENTER);
-        datacenter =
-            wrap(context, Datacenter.class, context.getApi().getInfrastructureApi()
-                .getDatacenter(datacenterId));
+        datacenter = getEnterprise().findAllowedDatacenter(DatacenterPredicates.id(datacenterId));
         return datacenter;
     }
 
@@ -185,8 +184,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public List<VirtualAppliance> listVirtualAppliances()
     {
-        VirtualAppliancesDto vapps =
-            context.getApi().getCloudApi().listVirtualAppliances(target);
+        VirtualAppliancesDto vapps = context.getApi().getCloudApi().listVirtualAppliances(target);
         return wrap(context, VirtualAppliance.class, vapps.getCollection());
     }
 
@@ -229,8 +227,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
      */
     public VirtualAppliance getVirtualAppliance(final Integer id)
     {
-        VirtualApplianceDto vapp =
-            context.getApi().getCloudApi().getVirtualAppliance(target, id);
+        VirtualApplianceDto vapp = context.getApi().getCloudApi().getVirtualAppliance(target, id);
         return wrap(context, VirtualAppliance.class, vapp);
     }
 
@@ -487,8 +484,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         IpOptions options = IpOptions.builder().build();
 
-        PublicIpsDto ips =
-            context.getApi().getCloudApi().listAvailablePublicIps(target, options);
+        PublicIpsDto ips = context.getApi().getCloudApi().listAvailablePublicIps(target, options);
 
         return wrap(context, PublicIp.class, ips.getCollection());
     }
@@ -513,8 +509,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
     {
         IpOptions options = IpOptions.builder().build();
 
-        PublicIpsDto ips =
-            context.getApi().getCloudApi().listPurchasedPublicIps(target, options);
+        PublicIpsDto ips = context.getApi().getCloudApi().listPurchasedPublicIps(target, options);
 
         return wrap(context, PublicIp.class, ips.getCollection());
     }
