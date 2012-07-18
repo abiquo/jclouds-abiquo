@@ -70,7 +70,7 @@ public class ListVirtualMachinesImplLiveTest extends BaseAbiquoStrategyLiveTest
     {
         Iterable<VirtualMachine> vms =
             strategy.execute(VirtualMachinePredicates.internalName(env.virtualMachine
-                .getNameLabel()));
+                .getInternalName()));
         assertNotNull(vms);
         assertEquals(size(vms), 1);
     }
