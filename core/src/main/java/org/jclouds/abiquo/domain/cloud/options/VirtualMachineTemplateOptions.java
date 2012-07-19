@@ -23,6 +23,7 @@ import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.options.QueryOptions;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.OSType;
 import com.abiquo.model.enumerator.StatefulInclusion;
 
 /**
@@ -63,6 +64,10 @@ public class VirtualMachineTemplateOptions extends QueryOptions
 
         private Integer idTemplate;
 
+        private OSType osType;
+        
+        private Boolean is64bits;
+        
         public Builder persistent(final StatefulInclusion persistent)
         {
             this.persistent = persistent;
@@ -92,7 +97,19 @@ public class VirtualMachineTemplateOptions extends QueryOptions
             this.idTemplate = idTemplate;
             return this;
         }
-
+        
+        public Builder osType(final OSType osType)
+        {
+            this.osType = osType;
+            return this;
+        }
+        
+        public Builder is64bits(final Boolean is64bits)
+        {
+            this.is64bits = is64bits;
+            return this;
+        }
+        
         public VirtualMachineTemplateOptions build()
         {
             VirtualMachineTemplateOptions options = new VirtualMachineTemplateOptions();
@@ -118,6 +135,16 @@ public class VirtualMachineTemplateOptions extends QueryOptions
             if (idTemplate != null)
             {
                 options.map.put("idTemplate", String.valueOf(idTemplate));
+            }
+            
+            if (osType != null)
+            {
+                options.map.put("ostype", osType.name());
+            }
+            
+            if(is64bits != null)
+            {
+                options.map.put("64bits", is64bits.toString());
             }
 
             return options;
