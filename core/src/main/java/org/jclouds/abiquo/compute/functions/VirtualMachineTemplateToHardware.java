@@ -55,6 +55,7 @@ public class VirtualMachineTemplateToHardware implements Function<VirtualMachine
 
         // Currently we consider each template as a hardware profile
         builder.supportsImage(ImagePredicates.idEquals(template.getId().toString()));
+        // already filtered in ''supportesImages'' builder.is64Bit(template.getOsType().is64Bit());
 
         VolumeBuilder volumeBuilder = new VolumeBuilder();
         volumeBuilder.bootDevice(true);
