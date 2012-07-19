@@ -43,8 +43,11 @@ import org.jclouds.http.functions.ParseXMLWithJAXB;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.ConversionState;
+import com.abiquo.model.enumerator.DiskControllerType;
 import com.abiquo.model.enumerator.DiskFormatType;
+import com.abiquo.model.enumerator.EthernetDriverType;
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.OSType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
@@ -381,6 +384,66 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public void setName(final String name)
     {
         target.setName(name);
+    }
+    
+    public String getLoginUser()
+    {
+        return target.getLoginUser();
+    }
+
+    public void setLoginUser(final String loginUser)
+    {
+        target.setLoginUser(loginUser);
+    }
+
+    public String getLoginPassword()
+    {
+        return target.getLoginPassword();
+    }
+
+    public void setLoginPassword(final String loginPassword)
+    {
+        target.setLoginPassword(loginPassword);
+    }
+
+    public OSType getOsType()
+    {
+        return target.getOsType();
+    }
+
+    public void setOsType(final OSType osType)
+    {
+        target.setOsType(osType);
+    }
+
+    public String getOsVersion()
+    {
+        return target.getOsVersion();
+    }
+
+    public void setOsVersion(final String osVersion)
+    {
+        target.setOsVersion(osVersion);
+    }
+
+    public DiskControllerType getDiskControllerType()
+    {
+        return target.getDiskControllerType();
+    }
+
+    public void setDiskControllerType(final DiskControllerType diskControllerType)
+    {
+        target.setDiskControllerType(diskControllerType);
+    }
+
+    public EthernetDriverType getEthernetDriverType()
+    {
+        return target.getEthernetDriverType();
+    }
+
+    public void setEthernetDriverType(final EthernetDriverType ethernetDriverType)
+    {
+        target.setEthernetDriverType(ethernetDriverType);
     }
 
     public Integer getId()

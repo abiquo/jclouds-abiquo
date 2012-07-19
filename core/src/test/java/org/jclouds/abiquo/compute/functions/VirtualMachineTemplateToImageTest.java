@@ -34,6 +34,7 @@ import org.jclouds.compute.domain.OperatingSystem;
 import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.OSType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
@@ -57,6 +58,9 @@ public class VirtualMachineTemplateToImageTest
         dto.setId(5);
         dto.setName("Template");
         dto.setDescription("Template description");
+        dto.setOsType(OSType.MACOS);
+        dto.setLoginUser("loginUser");
+        dto.setLoginPassword("loginPassword");
         dto.addLink(new RESTLink("diskfile", "http://foo/bar"));
 
         Image image = function.apply(wrap(context, VirtualMachineTemplate.class, dto));
@@ -65,8 +69,11 @@ public class VirtualMachineTemplateToImageTest
         assertEquals(image.getName(), dto.getName());
         assertEquals(image.getDescription(), dto.getDescription());
         assertEquals(image.getUri(), URI.create("http://foo/bar"));
-        assertEquals(image.getOperatingSystem(),
-            OperatingSystem.builder().description(dto.getName()).build());
+        assertEquals(image.getOperatingSystem().is64Bit(), dto.getOsType().is64Bit());
+        assertEquals(image.getOperatingSystem().getName(), dto.getOsType().name());
+        assertEquals(image.getDefaultCredentials().getUser(), dto.getLoginUser());
+        assertEquals(image.getDefaultCredentials().getPassword(), dto.getLoginPassword());
+        assertEquals(image.getDefaultCredentials().shouldAuthenticateSudo(), false);
     }
 
     @SuppressWarnings("unchecked")
