@@ -34,6 +34,7 @@ import org.jclouds.compute.domain.Volume;
 import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.OSType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 
@@ -60,6 +61,7 @@ public class VirtualMachineTemplateToHardwareTest
         dto.setHdRequired(50L * 1024 * 1024 * 1024); // 50 GB
         dto.setCpuRequired(5);
         dto.setRamRequired(2048);
+        dto.setOsType(OSType.UBUNTU_64);
         dto.addLink(new RESTLink("edit", "http://foo/bar"));
 
         Hardware hardware = function.apply(wrap(context, VirtualMachineTemplate.class, dto));

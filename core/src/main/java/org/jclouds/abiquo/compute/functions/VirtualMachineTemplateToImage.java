@@ -28,7 +28,9 @@ import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.Image.Status;
 import org.jclouds.compute.domain.ImageBuilder;
 import org.jclouds.compute.domain.OperatingSystem;
+import org.jclouds.domain.LoginCredentials;
 
+import com.abiquo.model.enumerator.OSType;
 import com.abiquo.model.rest.RESTLink;
 import com.google.common.base.Function;
 
@@ -56,10 +58,43 @@ public class VirtualMachineTemplateToImage implements Function<VirtualMachineTem
         RESTLink downloadLink = template.unwrap().searchLink("diskfile");
         builder.uri(downloadLink == null ? null : URI.create(downloadLink.getHref()));
 
-        // TODO: Operating system not implemented in Abiquo Templates
-        builder.operatingSystem(OperatingSystem.builder().description(template.getName()).build());
-        // TODO: image credentials
+        builder.operatingSystem(toOperatingSystem(template.getOsType(), template.getOsVersion()));
+        builder.defaultCredentials(toLoginCredentials(template.getLoginUser(), template
+            .getLoginPassword(), template.getOsType()));
+
         return builder.build();
     }
 
+    private OperatingSystem toOperatingSystem(OSType ostype, final String osVersion)
+    {
+        org.jclouds.cim.OSType jcloudsOstype;
+
+        try
+        {
+            jcloudsOstype = org.jclouds.cim.OSType.valueOf(ostype.name());
+        }
+        catch (Throwable e)
+        {
+            jcloudsOstype = org.jclouds.cim.OSType.UNRECOGNIZED;
+        }
+
+        return OperatingSystem.builder().family(jcloudsOstype.getFamily()).name(
+            jcloudsOstype.name()).is64Bit(jcloudsOstype.is64Bit()).description(
+            jcloudsOstype.getValue()).version(osVersion).build();
+    }
+
+    private LoginCredentials toLoginCredentials(final String loginUser, final String loginPassword,
+        final OSType ostype)
+    {
+        if (loginUser == null || loginPassword == null)
+        {
+            return null;
+        }
+        else
+        {
+            boolean useSudo = (OSType.UBUNTU == ostype || OSType.UBUNTU_64 == ostype);
+            return LoginCredentials.builder().identity(loginUser).password(loginPassword)
+                .authenticateSudo(useSudo).build();
+        }
+    }
 }
