@@ -29,14 +29,18 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateIp;
+import org.jclouds.compute.domain.Hardware;
+import org.jclouds.compute.domain.HardwareBuilder;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.NodeMetadataBuilder;
+import org.jclouds.compute.domain.Processor;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.AuthorizationException;
 
@@ -90,10 +94,12 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
         builder.group(vm.getVirtualAppliance().getName());
 
         // TODO: builder.credentials() (http://jira.abiquo.com/browse/ABICLOUDPREMIUM-3647)
+        VirtualDatacenter vdc = vm.getVirtualDatacenter();
 
+        // Location details
         try
         {
-            Datacenter datacenter = vm.getVirtualDatacenter().getDatacenter();
+            Datacenter datacenter = vdc.getDatacenter();
             builder.location(datacenterToLocation.apply(datacenter));
         }
         catch (AuthorizationException ex)
@@ -101,18 +107,34 @@ public class VirtualMachineToNodeMetadata implements Function<VirtualMachine, No
             logger.debug("User does not have permissions to see the location of the node");
         }
 
+        // Image details
         VirtualMachineTemplate template = vm.getTemplate();
         Image image = virtualMachineTemplateToImage.apply(template);
         builder.imageId(image.getId().toString());
         builder.operatingSystem(image.getOperatingSystem());
 
-        builder.hardware(virtualMachineTemplateToHardware.apply(template));
+        // Hardware details
+        Hardware defaultHardware = virtualMachineTemplateToHardware.apply(template);
+        Hardware hardware =
+            new HardwareBuilder() //
+                .ids(defaultHardware.getId()) //
+                .uri(defaultHardware.getUri()) //
+                .name(defaultHardware.getName()) //
+                .supportsImage(defaultHardware.supportsImage()) //
+                .ram(vm.getRam()) //
+                .hypervisor(vdc.getHypervisorType().name()) //
+                .processor(
+                    new Processor(vm.getCpu(), VirtualMachineTemplateToHardware.DEFAULT_CORE_SPEED)) //
+                .build();
+        builder.hardware(hardware);
 
+        // Networking configuration
         List<Ip< ? , ? >> nics = vm.listAttachedNics();
         builder.privateAddresses(ips(filter(nics, Predicates.instanceOf(PrivateIp.class))));
         builder.publicAddresses(ips(filter(nics,
             Predicates.not(Predicates.instanceOf(PrivateIp.class)))));
 
+        // Node state
         VirtualMachineState state = vm.getState();
         builder.status(virtualMachineStateToNodeState.apply(state));
         builder.backendStatus(state.name());

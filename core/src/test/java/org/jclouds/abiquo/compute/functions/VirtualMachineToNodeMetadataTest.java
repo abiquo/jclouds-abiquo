@@ -25,7 +25,6 @@ import static org.easymock.EasyMock.replay;
 import static org.easymock.EasyMock.verify;
 import static org.jclouds.abiquo.domain.DomainWrapper.wrap;
 import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNull;
 
 import java.net.URI;
 
@@ -39,6 +38,8 @@ import org.jclouds.abiquo.domain.network.ExternalIp;
 import org.jclouds.abiquo.domain.network.Ip;
 import org.jclouds.abiquo.domain.network.PrivateIp;
 import org.jclouds.abiquo.domain.network.PublicIp;
+import org.jclouds.compute.domain.Hardware;
+import org.jclouds.compute.domain.HardwareBuilder;
 import org.jclouds.compute.domain.Image;
 import org.jclouds.compute.domain.NodeMetadata;
 import org.jclouds.compute.domain.NodeMetadata.Status;
@@ -47,6 +48,7 @@ import org.jclouds.rest.RestContext;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
@@ -74,20 +76,18 @@ public class VirtualMachineToNodeMetadataTest
 
     private ExternalIpDto extNic;
 
+    private Hardware hardware;
+
     @BeforeMethod
     public void setup()
     {
-        function =
-            new VirtualMachineToNodeMetadata(templateToImage(),
-                templateToHardware(),
-                stateToNodeState(),
-                datacenterToLocation());
-
         vm = new VirtualMachineWithNodeExtendedDto();
         vm.setNodeName("VM");
         vm.setName("Internal name");
         vm.setId(5);
         vm.setVdrpPort(22);
+        vm.setRam(2048);
+        vm.setCpu(2);
         vm.setState(VirtualMachineState.ON);
         vm.addLink(new RESTLink("edit", "http://foo/bar"));
 
@@ -102,6 +102,16 @@ public class VirtualMachineToNodeMetadataTest
         extNic = new ExternalIpDto();
         extNic.setIp("10.10.10.10");
         extNic.setMac("2a:6e:40:69:84:e2");
+
+        hardware = new HardwareBuilder() //
+            .ids("1") //
+            .build();
+
+        function =
+            new VirtualMachineToNodeMetadata(templateToImage(),
+                templateToHardware(),
+                stateToNodeState(),
+                datacenterToLocation());
     }
 
     public void testVirtualMachineToNodeMetadata()
@@ -121,7 +131,11 @@ public class VirtualMachineToNodeMetadataTest
         assertEquals(node.getLocation().getId(), "1");
         assertEquals(node.getLocation().getDescription(), "Mock Location");
         assertEquals(node.getImageId(), "1");
-        assertNull(node.getHardware());
+        assertEquals(node.getHardware().getId(), "1");
+        assertEquals(node.getHardware().getHypervisor(), HypervisorType.VMX_04.name());
+        assertEquals(node.getHardware().getId(), "1");
+        assertEquals(node.getHardware().getRam(), vm.getRam());
+        assertEquals(node.getHardware().getProcessors().get(0).getCores(), (double) vm.getCpu());
         assertEquals(node.getLoginPort(), vm.getVdrpPort());
         assertEquals(node.getPrivateAddresses().size(), 1);
         assertEquals(node.getPublicAddresses().size(), 2);
@@ -148,7 +162,15 @@ public class VirtualMachineToNodeMetadataTest
 
     private VirtualMachineTemplateToHardware templateToHardware()
     {
-        return EasyMock.createMock(VirtualMachineTemplateToHardware.class);
+        VirtualMachineTemplateToHardware virtualMachineTemplateToHardware =
+            EasyMock.createMock(VirtualMachineTemplateToHardware.class);
+
+        expect(virtualMachineTemplateToHardware.apply(anyObject(VirtualMachineTemplate.class)))
+            .andReturn(hardware);
+
+        replay(virtualMachineTemplateToHardware);
+
+        return virtualMachineTemplateToHardware;
     }
 
     private DatacenterToLocation datacenterToLocation()
@@ -180,10 +202,15 @@ public class VirtualMachineToNodeMetadataTest
     private VirtualDatacenter mockVirtualDatacenter()
     {
         VirtualDatacenter vdc = EasyMock.createMock(VirtualDatacenter.class);
+        expect(vdc.getHypervisorType()).andReturn(HypervisorType.VMX_04);
         expect(vdc.getDatacenter()).andReturn(null);
         replay(vdc);
         return vdc;
+    }
 
+    private VirtualMachineTemplate mockTemplate()
+    {
+        return EasyMock.createMock(VirtualMachineTemplate.class);
     }
 
     @SuppressWarnings("unchecked")
@@ -202,13 +229,15 @@ public class VirtualMachineToNodeMetadataTest
         expect(mockVm.getURI()).andReturn(URI.create(vm.getEditLink().getHref()));
         expect(mockVm.getNameLabel()).andReturn(vm.getNodeName());
         expect(mockVm.getInternalName()).andReturn(vm.getName());
-        expect(mockVm.getTemplate()).andReturn(null);
+        expect(mockVm.getTemplate()).andReturn(mockTemplate());
         expect(mockVm.getState()).andReturn(vm.getState());
         expect(mockVm.listAttachedNics()).andReturn(
             ImmutableList.<Ip< ? , ? >> of(mockPubNic, mockPrivNic, mockExtNic));
         expect(mockVm.getVirtualAppliance()).andReturn(vapp);
         expect(vapp.getName()).andReturn("VAPP");
         expect(mockVm.getVirtualDatacenter()).andReturn(mockVirtualDatacenter());
+        expect(mockVm.getRam()).andReturn(vm.getRam());
+        expect(mockVm.getCpu()).andReturn(vm.getCpu());
 
         replay(mockVm);
         replay(vapp);
