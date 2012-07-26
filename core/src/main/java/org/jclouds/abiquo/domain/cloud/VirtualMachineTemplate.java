@@ -21,12 +21,13 @@ package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
 
 import java.util.Date;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
@@ -34,7 +35,6 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
@@ -138,9 +138,7 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
         persistentData.addLink(storageLink);
         persistentData.addLink(templateLink);
 
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.DATACENTER_REPOSITORY),
-                ValidationErrors.MISSING_REQUIRED_LINK + ParentLinkName.DATACENTER_REPOSITORY);
+        RESTLink link = requireLink(target, ParentLinkName.DATACENTER_REPOSITORY);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse rp =
@@ -215,8 +213,8 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return wrap(context, Enterprise.class, context.getApi().getEnterpriseApi()
-            .getEnterprise(enterpriseId));
+        return wrap(context, Enterprise.class,
+            context.getApi().getEnterpriseApi().getEnterprise(enterpriseId));
     }
 
     /**

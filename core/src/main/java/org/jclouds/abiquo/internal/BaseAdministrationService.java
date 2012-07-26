@@ -27,8 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.config.Category;
 import org.jclouds.abiquo.domain.config.License;
 import org.jclouds.abiquo.domain.config.Privilege;
@@ -204,8 +204,7 @@ public class BaseAdministrationService implements AdministrationService
     @Override
     public Enterprise getEnterprise(final Integer enterpriseId)
     {
-        EnterpriseDto enterprise =
-            context.getApi().getEnterpriseApi().getEnterprise(enterpriseId);
+        EnterpriseDto enterprise = context.getApi().getEnterpriseApi().getEnterprise(enterpriseId);
         return wrap(context, Enterprise.class, enterprise);
     }
 
@@ -214,8 +213,7 @@ public class BaseAdministrationService implements AdministrationService
     @Override
     public EnterpriseProperties getEnterpriseProperties(final Enterprise enterprise)
     {
-        checkNotNull(enterprise.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
-            + Enterprise.class);
+        checkNotNull(enterprise.getId(), ValidationErrors.missingField("id", Enterprise.class));
 
         EnterprisePropertiesDto properties =
             context.getApi().getEnterpriseApi().getEnterpriseProperties(enterprise.unwrap());

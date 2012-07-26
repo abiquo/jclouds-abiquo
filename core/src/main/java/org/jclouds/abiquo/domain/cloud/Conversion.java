@@ -23,8 +23,8 @@ import static com.google.common.base.Preconditions.checkNotNull;
 
 import java.util.Date;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -65,7 +65,7 @@ public class Conversion extends DomainWithTasksWrapper<ConversionDto>
     public void refresh()
     {
         RESTLink link =
-            checkNotNull(target.searchLink("edit"), ValidationErrors.MISSING_REQUIRED_LINK + "edit");
+            checkNotNull(target.searchLink("edit"), ValidationErrors.missingLink("edit"));
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = checkNotNull(utils.getAbiquoHttpClient().get(link), "conversion");
@@ -88,8 +88,7 @@ public class Conversion extends DomainWithTasksWrapper<ConversionDto>
     {
         RESTLink link =
             checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE),
-                ValidationErrors.MISSING_REQUIRED_LINK + " "
-                    + ParentLinkName.VIRTUAL_MACHINE_TEMPLATE);
+                ValidationErrors.missingLink(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE));
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);

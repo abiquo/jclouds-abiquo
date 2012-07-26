@@ -21,11 +21,14 @@ package org.jclouds.abiquo.domain.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
+import static org.jclouds.abiquo.reference.ValidationErrors.missingField;
+import static org.jclouds.abiquo.reference.ValidationErrors.nullResource;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -100,14 +103,10 @@ public class Role extends DomainWrapper<RoleDto>
 
     public void setEnterprise(final Enterprise enterprise)
     {
-        checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
-        checkNotNull(enterprise.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
-            + Enterprise.class);
+        checkNotNull(enterprise, nullResource(Enterprise.class));
+        checkNotNull(enterprise.getId(), missingField("id", Enterprise.class));
 
-        RESTLink link = enterprise.unwrap().searchLink("edit");
-
-        checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
-
+        RESTLink link = requireLink(enterprise.unwrap(), "edit");
         target.addLink(new RESTLink("enterprise", link.getHref()));
     }
 
@@ -123,9 +122,8 @@ public class Role extends DomainWrapper<RoleDto>
     @EnterpriseEdition
     private void addPrivilege(final Privilege privilege)
     {
-        checkNotNull(privilege, ValidationErrors.NULL_RESOURCE + Privilege.class);
-        checkNotNull(privilege.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
-            + Privilege.class);
+        checkNotNull(privilege, nullResource(Privilege.class));
+        checkNotNull(privilege.getId(), missingField("id", Privilege.class));
 
         RESTLink link = privilege.unwrap().searchLink("self");
 
@@ -135,7 +133,7 @@ public class Role extends DomainWrapper<RoleDto>
             link = privilege.unwrap().searchLink("privilege");
         }
 
-        checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
+        checkNotNull(link, ValidationErrors.missingLink("self/privilege"));
 
         target.addLink(new RESTLink("privilege" + privilege.getId(), link.getHref()));
     }

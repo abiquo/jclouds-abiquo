@@ -20,9 +20,10 @@
 package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
@@ -60,7 +61,8 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected Volume(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VolumeManagementDto target)
+    protected Volume(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+        final VolumeManagementDto target)
     {
         super(context, target);
     }
@@ -122,8 +124,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
      */
     public void moveTo(final VirtualDatacenter newVirtualDatacenter)
     {
-        target =
-            context.getApi().getCloudApi().moveVolume(unwrap(), newVirtualDatacenter.unwrap());
+        target = context.getApi().getCloudApi().moveVolume(unwrap(), newVirtualDatacenter.unwrap());
     }
 
     // Builder
@@ -148,13 +149,12 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
 
         private Tier tier;
 
-        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VirtualDatacenter virtualDatacenter,
-            final Tier tier)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+            final VirtualDatacenter virtualDatacenter, final Tier tier)
         {
             super();
-            checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE
-                + VirtualDatacenter.class);
-            checkNotNull(tier, ValidationErrors.NULL_RESOURCE + Tier.class);
+            checkNotNull(virtualDatacenter, ValidationErrors.nullResource(VirtualDatacenter.class));
+            checkNotNull(tier, ValidationErrors.nullResource(Tier.class));
             this.context = context;
             this.virtualDatacenter = virtualDatacenter;
             this.tier = tier;
@@ -186,8 +186,7 @@ public class Volume extends DomainWrapper<VolumeManagementDto>
             dto.setSizeInMB(sizeInMb);
             dto.setState(DEFAULT_STATE.name());
 
-            RESTLink link = tier.unwrap().searchLink("self");
-            checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
+            RESTLink link = requireLink(tier.unwrap(), "self");
             dto.addLink(new RESTLink("tier", link.getHref()));
 
             Volume volume = new Volume(context, dto);

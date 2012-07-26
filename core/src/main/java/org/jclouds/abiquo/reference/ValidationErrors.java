@@ -19,6 +19,8 @@
 
 package org.jclouds.abiquo.reference;
 
+import com.abiquo.model.enumerator.NetworkType;
+
 /**
  * Error constants.
  * 
@@ -26,12 +28,23 @@ package org.jclouds.abiquo.reference;
  */
 public class ValidationErrors
 {
-    public static final String NULL_RESOURCE = "The resource should be assigned to a ";
+    public static String missingLink(final String name)
+    {
+        return "Missing required link " + name;
+    }
 
-    public static final String MISSING_REQUIRED_FIELD = "Missing required field ";
+    public static String missingField(final String name, final Class< ? > clazz)
+    {
+        return "Missing required field " + name + " in " + clazz.getName();
+    }
 
-    public static final String MISSING_REQUIRED_LINK = "Missing required link ";
+    public static String invalidNetworkType(final NetworkType type)
+    {
+        return "Invalid network type " + type.name();
+    }
 
-    public static final String INVALID_NETWORK_TYPE = "Invalid network type ";
-
+    public static String nullResource(final Class< ? > clazz)
+    {
+        return "The resource should be assigned to a " + clazz.getName();
+    }
 }

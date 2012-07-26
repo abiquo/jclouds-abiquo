@@ -19,11 +19,10 @@
 
 package org.jclouds.abiquo.domain.network;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
-import org.jclouds.abiquo.reference.ValidationErrors;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
@@ -58,9 +57,7 @@ public class ExternalIp extends AbstractPublicIp<ExternalIpDto, ExternalNetwork>
     @Override
     public ExternalNetwork getNetwork()
     {
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.EXTERNAL_NETWORK),
-                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.EXTERNAL_NETWORK);
+        RESTLink link = requireLink(target, ParentLinkName.EXTERNAL_NETWORK);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);

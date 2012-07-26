@@ -160,7 +160,7 @@ public class VirtualDatacenterLiveTest extends BaseAbiquoApiLiveTest
                 .getIp()));
         assertNotNull(apiIp);
 
-        env.virtualDatacenter.releaseePublicIp(apiIp);
+        env.virtualDatacenter.releasePublicIp(apiIp);
         apiIp =
             env.virtualDatacenter.findPurchasedPublicIp(IpPredicates.<PublicIp> address(publicIp
                 .getIp()));

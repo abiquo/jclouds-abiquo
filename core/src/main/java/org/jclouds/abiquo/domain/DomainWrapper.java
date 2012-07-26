@@ -21,18 +21,18 @@ package org.jclouds.abiquo.domain;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.transform;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
 
 import java.lang.reflect.Constructor;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.exception.WrapperException;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.util.LinkUtils;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.rest.RESTLink;
@@ -57,8 +57,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
     /** The wrapped object. */
     protected T target;
 
-    protected DomainWrapper(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-        final T target)
+    protected DomainWrapper(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final T target)
     {
         super();
         this.context = checkNotNull(context, "context");
@@ -168,18 +167,17 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
         final T1 target, final String targetLinkRel, final T2 source, final String sourceLinkRel)
     {
         RESTLink parent = null;
-
-        checkNotNull(source.searchLink(sourceLinkRel), ValidationErrors.MISSING_REQUIRED_LINK);
+        RESTLink sourceLink = requireLink(source, sourceLinkRel);
 
         // Insert
         if ((parent = target.searchLink(targetLinkRel)) == null)
         {
-            target.addLink(new RESTLink(targetLinkRel, source.searchLink(sourceLinkRel).getHref()));
+            target.addLink(new RESTLink(targetLinkRel, sourceLink.getHref()));
         }
         // Replace
         else
         {
-            parent.setHref(source.searchLink(sourceLinkRel).getHref());
+            parent.setHref(sourceLink.getHref());
         }
     }
 
@@ -206,8 +204,7 @@ public abstract class DomainWrapper<T extends SingleResourceTransportDto>
      */
     protected AsyncTask getTask(final AcceptedRequestDto<String> acceptedRequest)
     {
-        RESTLink taskLink = acceptedRequest.getStatusLink();
-        checkNotNull(taskLink, ValidationErrors.MISSING_REQUIRED_LINK + AsyncTask.class);
+        RESTLink taskLink = requireLink(acceptedRequest, "status");
 
         // This will return null on untrackable tasks
         TaskDto task = context.getApi().getTaskApi().getTask(taskLink);

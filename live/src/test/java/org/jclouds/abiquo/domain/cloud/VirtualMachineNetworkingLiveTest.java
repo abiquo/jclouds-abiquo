@@ -94,7 +94,7 @@ public class VirtualMachineNetworkingLiveTest extends BaseAbiquoApiLiveTest
         assertEquals(nics.get(0).getId(), privateIp.getId());
 
         String address = publicIpCloud.getIp();
-        env.virtualDatacenter.releaseePublicIp(publicIpCloud);
+        env.virtualDatacenter.releasePublicIp(publicIpCloud);
         assertNull(env.virtualDatacenter.findPurchasedPublicIp(IpPredicates
             .<PublicIp> address(address)));
     }

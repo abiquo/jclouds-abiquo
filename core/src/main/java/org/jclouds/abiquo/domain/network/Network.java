@@ -21,15 +21,15 @@ package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Iterables.filter;
+import static org.jclouds.abiquo.reference.ValidationErrors.invalidNetworkType;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.predicates.network.IpPredicates;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.NetworkType;
@@ -190,7 +190,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
     public PrivateNetwork toPrivateNetwork()
     {
         checkArgument(target.getType().equals(NetworkType.INTERNAL),
-            ValidationErrors.INVALID_NETWORK_TYPE + target.getType());
+            invalidNetworkType(target.getType()));
 
         return wrap(context, PrivateNetwork.class, target);
 
@@ -199,7 +199,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
     public ExternalNetwork toExternalNetwork()
     {
         checkArgument(target.getType().equals(NetworkType.EXTERNAL),
-            ValidationErrors.INVALID_NETWORK_TYPE + target.getType());
+            invalidNetworkType(target.getType()));
 
         return wrap(context, ExternalNetwork.class, target);
 
@@ -208,7 +208,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
     public PublicNetwork toPublicNetwork()
     {
         checkArgument(target.getType().equals(NetworkType.PUBLIC),
-            ValidationErrors.INVALID_NETWORK_TYPE + target.getType());
+            invalidNetworkType(target.getType()));
 
         return wrap(context, PublicNetwork.class, target);
 
@@ -217,7 +217,7 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
     public UnmanagedNetwork toUnmanagedNetwork()
     {
         checkArgument(target.getType().equals(NetworkType.UNMANAGED),
-            ValidationErrors.INVALID_NETWORK_TYPE + target.getType());
+            invalidNetworkType(target.getType()));
 
         return wrap(context, UnmanagedNetwork.class, target);
 
@@ -334,8 +334,8 @@ public abstract class Network<T extends Ip< ? , ? >> extends DomainWrapper<VLANN
             + ", suffixDNS=" + getSufixDNS() + ", tag=" + getTag() + ", type=" + getType() + "]";
     }
 
-    public static Network< ? > wrapNetwork(
-        final RestContext<AbiquoApi, AbiquoAsyncApi> context, final VLANNetworkDto dto)
+    public static Network< ? > wrapNetwork(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+        final VLANNetworkDto dto)
     {
         if (dto == null)
         {

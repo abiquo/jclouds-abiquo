@@ -84,7 +84,7 @@ public class ListAttachedNicsImplLiveTest extends BaseAbiquoStrategyLiveTest
     {
         env.virtualMachine.setNics(Lists.<Ip< ? , ? >> newArrayList(privateIp));
         String address = publicIp.getIp();
-        env.virtualDatacenter.releaseePublicIp(publicIp);
+        env.virtualDatacenter.releasePublicIp(publicIp);
         assertNull(env.virtualDatacenter.findPurchasedPublicIp(IpPredicates
             .<PublicIp> address(address)));
     }

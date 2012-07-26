@@ -95,7 +95,7 @@ public class VirtualDatacenterPredicates
                 Integer datacenterId =
                     checkNotNull(virtualDatacenter.unwrap()
                         .getIdFromLink(ParentLinkName.DATACENTER),
-                        ValidationErrors.MISSING_REQUIRED_LINK);
+                        ValidationErrors.missingLink(ParentLinkName.DATACENTER));
 
                 return ids.contains(datacenterId);
             }

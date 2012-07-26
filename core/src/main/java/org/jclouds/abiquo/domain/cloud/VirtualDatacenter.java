@@ -21,6 +21,7 @@ package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
 
 import java.util.List;
 
@@ -526,13 +527,13 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
     public void purchasePublicIp(final PublicIp ip)
     {
-        checkNotNull(ip.unwrap().searchLink("purchase"), ValidationErrors.MISSING_REQUIRED_LINK);
+        requireLink(ip.unwrap(), "purchase");
         context.getApi().getCloudApi().purchasePublicIp(ip.unwrap());
     }
 
-    public void releaseePublicIp(final PublicIp ip)
+    public void releasePublicIp(final PublicIp ip)
     {
-        checkNotNull(ip.unwrap().searchLink("release"), ValidationErrors.MISSING_REQUIRED_LINK);
+        requireLink(ip.unwrap(), "release");
         context.getApi().getCloudApi().releasePublicIp(ip.unwrap());
     }
 
@@ -569,9 +570,9 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
             final Datacenter datacenter, final Enterprise enterprise)
         {
             super();
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.nullResource(Datacenter.class));
             this.datacenter = datacenter;
-            checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
+            checkNotNull(enterprise, ValidationErrors.nullResource(Enterprise.class));
             this.enterprise = enterprise;
             this.context = context;
         }
@@ -590,21 +591,21 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
 
         public Builder datacenter(final Datacenter datacenter)
         {
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.nullResource(Datacenter.class));
             this.datacenter = datacenter;
             return this;
         }
 
         public Builder enterprise(final Enterprise enterprise)
         {
-            checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
+            checkNotNull(enterprise, ValidationErrors.nullResource(Enterprise.class));
             this.enterprise = enterprise;
             return this;
         }
 
         public Builder network(final PrivateNetwork network)
         {
-            checkNotNull(network, ValidationErrors.NULL_RESOURCE + PrivateNetwork.class);
+            checkNotNull(network, ValidationErrors.nullResource(PrivateNetwork.class));
             this.network = network;
             return this;
         }

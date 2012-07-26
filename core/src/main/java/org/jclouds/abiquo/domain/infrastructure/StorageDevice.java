@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -345,14 +345,14 @@ public class StorageDevice extends DomainWrapper<StorageDeviceDto>
             final Datacenter datacenter)
         {
             super();
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.nullResource(Datacenter.class));
             this.datacenter = datacenter;
             this.context = context;
         }
 
         public Builder datacenter(final Datacenter datacenter)
         {
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.nullResource(Datacenter.class));
             this.datacenter = datacenter;
             return this;
         }

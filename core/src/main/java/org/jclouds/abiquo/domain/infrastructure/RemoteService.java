@@ -20,11 +20,12 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.reference.ValidationErrors.missingField;
+import static org.jclouds.abiquo.reference.ValidationErrors.nullResource;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.rest.RestContext;
 
@@ -52,7 +53,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected RemoteService(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final RemoteServiceDto target)
+    protected RemoteService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+        final RemoteServiceDto target)
     {
         super(context, target);
     }
@@ -132,7 +134,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         return datacenter;
     }
 
-    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+        final Datacenter datacenter)
     {
         return new Builder(context, datacenter);
     }
@@ -156,17 +159,18 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         // To be used only internally by the builder
         private String uri;
 
-        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Datacenter datacenter)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+            final Datacenter datacenter)
         {
             super();
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, nullResource(Datacenter.class));
             this.datacenter = datacenter;
             this.context = context;
         }
 
         public Builder datacenter(final Datacenter datacenter)
         {
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, nullResource(Datacenter.class));
             this.datacenter = datacenter;
             return this;
         }
@@ -204,8 +208,8 @@ public class RemoteService extends DomainWrapper<RemoteServiceDto>
         {
             if (uri == null)
             {
-                checkNotNull(ip, ValidationErrors.MISSING_REQUIRED_FIELD + "ip");
-                checkNotNull(type, ValidationErrors.MISSING_REQUIRED_FIELD + "type");
+                checkNotNull(ip, missingField("ip", RemoteService.class));
+                checkNotNull(type, missingField("type", RemoteService.class));
 
                 uri = generateUri(ip, port == null ? type.getDefaultPort() : port, type);
             }

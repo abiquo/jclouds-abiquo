@@ -19,7 +19,9 @@
 
 package org.jclouds.abiquo.domain.util;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static org.jclouds.abiquo.reference.ValidationErrors.missingLink;
 
 import java.util.List;
 
@@ -57,5 +59,16 @@ public class LinkUtils
     public static List<RESTLink> filterNicLinks(final List<RESTLink> links)
     {
         return Lists.newLinkedList(filter(links, LinkPredicates.isNic()));
+    }
+
+    /**
+     * Check that the requested link exists in the given object.
+     * 
+     * @param rel The link to check.
+     * @return The requested link.
+     */
+    public static RESTLink requireLink(final SingleResourceTransportDto target, final String rel)
+    {
+        return checkNotNull(target.searchLink(rel), missingLink(rel));
     }
 }

@@ -27,8 +27,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
@@ -91,9 +91,8 @@ public class BaseCloudService implements CloudService
     @Override
     public Iterable<VirtualDatacenter> listVirtualDatacenters(final Enterprise enterprise)
     {
-        checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
-        checkNotNull(enterprise.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
-            + Enterprise.class);
+        checkNotNull(enterprise, ValidationErrors.nullResource(Enterprise.class));
+        checkNotNull(enterprise.getId(), ValidationErrors.missingField("id", Enterprise.class));
 
         VirtualDatacenterOptions options =
             VirtualDatacenterOptions.builder().enterpriseId(enterprise.getId()).build();

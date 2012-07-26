@@ -21,17 +21,18 @@ package org.jclouds.abiquo.domain.enterprise;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static org.jclouds.abiquo.reference.ValidationErrors.missingField;
+import static org.jclouds.abiquo.reference.ValidationErrors.nullResource;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.strategy.cloud.ListVirtualDatacenters;
 import org.jclouds.rest.RestContext;
@@ -170,8 +171,7 @@ public class User extends DomainWrapper<UserDto>
 
         for (VirtualDatacenter vdc : vdcs)
         {
-            checkNotNull(vdc.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
-                + VirtualDatacenter.class);
+            checkNotNull(vdc.getId(), missingField("id", VirtualDatacenter.class));
             ids.add(vdc.getId());
         }
 
@@ -188,8 +188,8 @@ public class User extends DomainWrapper<UserDto>
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return wrap(context, Enterprise.class, context.getApi().getEnterpriseApi()
-            .getEnterprise(enterpriseId));
+        return wrap(context, Enterprise.class,
+            context.getApi().getEnterpriseApi().getEnterprise(enterpriseId));
     }
 
     // Children access
@@ -261,8 +261,8 @@ public class User extends DomainWrapper<UserDto>
             final Enterprise enterprise, final Role role)
         {
             super();
-            checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
-            checkNotNull(role, ValidationErrors.NULL_RESOURCE + Role.class);
+            checkNotNull(enterprise, nullResource(Enterprise.class));
+            checkNotNull(role, nullResource(Role.class));
             this.context = context;
             this.enterprise = enterprise;
             this.role = role;
@@ -270,7 +270,7 @@ public class User extends DomainWrapper<UserDto>
 
         public Builder enterprise(final Enterprise enterprise)
         {
-            checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
+            checkNotNull(enterprise, nullResource(Enterprise.class));
             this.enterprise = enterprise;
             return this;
         }

@@ -21,6 +21,9 @@ package org.jclouds.abiquo.domain.cloud;
 
 import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Iterables.filter;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
+import static org.jclouds.abiquo.reference.ValidationErrors.missingField;
+import static org.jclouds.abiquo.reference.ValidationErrors.nullResource;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,7 +39,6 @@ import org.jclouds.abiquo.domain.network.UnmanagedNetwork;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.domain.util.LinkUtils;
 import org.jclouds.abiquo.predicates.LinkPredicates;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.abiquo.strategy.cloud.ListAttachedNics;
@@ -120,9 +122,8 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
      */
     public void save()
     {
-        checkNotNull(template, ValidationErrors.NULL_RESOURCE + VirtualMachineTemplate.class);
-        checkNotNull(template.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
-            + VirtualMachineTemplate.class);
+        checkNotNull(template, nullResource(VirtualMachineTemplate.class));
+        checkNotNull(template.getId(), missingField("id", VirtualMachineTemplate.class));
 
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
@@ -223,8 +224,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
     public void refresh()
     {
-        RESTLink link =
-            checkNotNull(target.getEditLink(), ValidationErrors.MISSING_REQUIRED_LINK + " edit");
+        RESTLink link = requireLink(target, "edit");
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
@@ -269,9 +269,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
      */
     public VirtualAppliance getVirtualAppliance()
     {
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.VIRTUAL_APPLIANCE),
-                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.VIRTUAL_APPLIANCE);
+        RESTLink link = requireLink(target, ParentLinkName.VIRTUAL_APPLIANCE);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
@@ -544,9 +542,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public AsyncTask setNics(final Network< ? > gatewayNetwork, final List<Ip< ? , ? >> ips,
         final List<UnmanagedNetwork> unmanagetNetworks)
     {
-        RESTLink configLink =
-            checkNotNull(target.searchLink(ParentLinkName.NETWORK_CONFIGURATIONS),
-                ValidationErrors.MISSING_REQUIRED_LINK + ParentLinkName.NETWORK_CONFIGURATIONS);
+        RESTLink configLink = requireLink(target, ParentLinkName.NETWORK_CONFIGURATIONS);
 
         // Remove the gateway configuration and the current nics
         Iterables.removeIf(
@@ -572,9 +568,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         {
             for (UnmanagedNetwork unmanaged : unmanagetNetworks)
             {
-                RESTLink source =
-                    checkNotNull(unmanaged.unwrap().searchLink("ips"),
-                        ValidationErrors.MISSING_REQUIRED_LINK + "ips");
+                RESTLink source = requireLink(unmanaged.unwrap(), "ips");
 
                 RESTLink link = new RESTLink("nic" + i, source.getHref());
                 link.setType(UnmanagedIpDto.BASE_MEDIA_TYPE);
@@ -598,7 +592,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public void setGatewayNetwork(final Network< ? > network)
     {
         context.getApi().getCloudApi().setGatewayNetwork(target, network.unwrap());
-        refresh(); // First refresh the target and its links
+        refresh(); // Refresh the target and its links
     }
 
     /**
@@ -679,7 +673,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
             final VirtualAppliance virtualAppliance, final VirtualMachineTemplate template)
         {
             super();
-            checkNotNull(virtualAppliance, ValidationErrors.NULL_RESOURCE + VirtualAppliance.class);
+            checkNotNull(virtualAppliance, nullResource(VirtualAppliance.class));
             this.virtualAppliance = virtualAppliance;
             this.template = template;
             this.context = context;
@@ -762,7 +756,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
         public Builder virtualAppliance(final VirtualAppliance virtualAppliance)
         {
-            checkNotNull(virtualAppliance, ValidationErrors.NULL_RESOURCE + VirtualAppliance.class);
+            checkNotNull(virtualAppliance, nullResource(VirtualAppliance.class));
             this.virtualAppliance = virtualAppliance;
             return this;
         }

@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
@@ -106,8 +106,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
     public void save()
     {
         target =
-            context.getApi().getInfrastructureApi()
-                .createManagedRack(datacenter.unwrap(), target);
+            context.getApi().getInfrastructureApi().createManagedRack(datacenter.unwrap(), target);
     }
 
     /**
@@ -486,7 +485,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
             final Datacenter datacenter)
         {
             super();
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.nullResource(Datacenter.class));
             this.datacenter = datacenter;
             this.context = context;
         }
@@ -583,7 +582,7 @@ public class ManagedRack extends DomainWrapper<UcsRackDto>
 
         public Builder datacenter(final Datacenter datacenter)
         {
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
+            checkNotNull(datacenter, ValidationErrors.nullResource(Datacenter.class));
             this.datacenter = datacenter;
             return this;
         }

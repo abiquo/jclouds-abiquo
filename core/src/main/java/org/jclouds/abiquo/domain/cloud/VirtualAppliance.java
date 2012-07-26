@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -315,8 +315,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
             final VirtualDatacenter virtualDatacenter)
         {
             super();
-            checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE
-                + VirtualDatacenter.class);
+            checkNotNull(virtualDatacenter, ValidationErrors.nullResource(VirtualDatacenter.class));
             this.virtualDatacenter = virtualDatacenter;
             this.context = context;
         }
@@ -329,8 +328,7 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
 
         public Builder virtualDatacenter(final VirtualDatacenter virtualDatacenter)
         {
-            checkNotNull(virtualDatacenter, ValidationErrors.NULL_RESOURCE
-                + VirtualDatacenter.class);
+            checkNotNull(virtualDatacenter, ValidationErrors.nullResource(VirtualDatacenter.class));
             this.virtualDatacenter = virtualDatacenter;
             return this;
         }

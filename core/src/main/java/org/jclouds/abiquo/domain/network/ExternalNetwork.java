@@ -20,15 +20,17 @@
 package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
+import static org.jclouds.abiquo.reference.ValidationErrors.missingField;
+import static org.jclouds.abiquo.reference.ValidationErrors.nullResource;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
@@ -96,8 +98,7 @@ public class ExternalNetwork extends Network<ExternalIp>
     public void save()
     {
         this.addEnterpriseLink();
-        target =
-            context.getApi().getInfrastructureApi().createNetwork(datacenter.unwrap(), target);
+        target = context.getApi().getInfrastructureApi().createNetwork(datacenter.unwrap(), target);
     }
 
     /**
@@ -138,9 +139,7 @@ public class ExternalNetwork extends Network<ExternalIp>
 
     public Enterprise getEnterprise()
     {
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.ENTERPRISE),
-                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.ENTERPRISE);
+        RESTLink link = requireLink(target, ParentLinkName.ENTERPRISE);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
@@ -155,9 +154,7 @@ public class ExternalNetwork extends Network<ExternalIp>
 
     public Datacenter getDatacenter()
     {
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.DATACENTER),
-                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.DATACENTER);
+        RESTLink link = requireLink(target, ParentLinkName.DATACENTER);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
@@ -172,13 +169,10 @@ public class ExternalNetwork extends Network<ExternalIp>
 
     private void addEnterpriseLink()
     {
-        checkNotNull(enterprise, ValidationErrors.NULL_RESOURCE + Enterprise.class);
-        checkNotNull(enterprise.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in "
-            + Enterprise.class);
+        checkNotNull(enterprise, nullResource(Enterprise.class));
+        checkNotNull(enterprise.getId(), missingField("id", Enterprise.class));
 
-        RESTLink link = enterprise.unwrap().getEditLink();
-        checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
-
+        RESTLink link = requireLink(enterprise.unwrap(), "edit");
         target.addLink(new RESTLink("enterprise", link.getHref()));
     }
 
@@ -200,8 +194,8 @@ public class ExternalNetwork extends Network<ExternalIp>
             final Datacenter datacenter, final Enterprise enterprise)
         {
             super(context);
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Enterprise.class);
+            checkNotNull(datacenter, nullResource(Datacenter.class));
+            checkNotNull(datacenter, nullResource(Enterprise.class));
             this.datacenter = datacenter;
             this.enterprise = enterprise;
             this.context = context;

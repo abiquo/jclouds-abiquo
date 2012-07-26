@@ -20,11 +20,12 @@
 package org.jclouds.abiquo.domain.network;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -91,8 +92,7 @@ public class PublicNetwork extends Network<PublicIp>
     @Override
     public void save()
     {
-        target =
-            context.getApi().getInfrastructureApi().createNetwork(datacenter.unwrap(), target);
+        target = context.getApi().getInfrastructureApi().createNetwork(datacenter.unwrap(), target);
     }
 
     /**
@@ -117,8 +117,7 @@ public class PublicNetwork extends Network<PublicIp>
     @Override
     public List<PublicIp> listIps(final IpOptions options)
     {
-        PublicIpsDto ips =
-            context.getApi().getInfrastructureApi().listPublicIps(target, options);
+        PublicIpsDto ips = context.getApi().getInfrastructureApi().listPublicIps(target, options);
         return wrap(context, PublicIp.class, ips.getCollection());
     }
 
@@ -133,9 +132,7 @@ public class PublicNetwork extends Network<PublicIp>
 
     public Datacenter getDatacenter()
     {
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.DATACENTER),
-                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.DATACENTER);
+        RESTLink link = requireLink(target, ParentLinkName.DATACENTER);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
@@ -164,8 +161,8 @@ public class PublicNetwork extends Network<PublicIp>
             final Datacenter datacenter)
         {
             super(context);
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Datacenter.class);
-            checkNotNull(datacenter, ValidationErrors.NULL_RESOURCE + Enterprise.class);
+            checkNotNull(datacenter, ValidationErrors.nullResource(Datacenter.class));
+            checkNotNull(datacenter, ValidationErrors.nullResource(Enterprise.class));
             this.datacenter = datacenter;
             this.context = context;
         }

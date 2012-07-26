@@ -20,13 +20,15 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
+import static org.jclouds.abiquo.reference.ValidationErrors.missingField;
+import static org.jclouds.abiquo.reference.ValidationErrors.nullResource;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.config.Privilege;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
@@ -63,7 +65,8 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected StoragePool(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StoragePoolDto target)
+    protected StoragePool(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+        final StoragePoolDto target)
     {
         super(context, target);
     }
@@ -134,8 +137,8 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
      */
     public void setTier(final Tier tier)
     {
-        checkNotNull(tier, ValidationErrors.NULL_RESOURCE + Privilege.class);
-        checkNotNull(tier.getId(), ValidationErrors.MISSING_REQUIRED_FIELD + " id in " + Tier.class);
+        checkNotNull(tier, nullResource(Privilege.class));
+        checkNotNull(tier.getId(), missingField("id", Tier.class));
 
         this.updateLink(target, ParentLinkName.TIER, tier.unwrap(), "edit");
     }
@@ -152,9 +155,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
      */
     public StorageDevice getStorageDevice()
     {
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.STORAGE_DEVICE),
-                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.STORAGE_DEVICE);
+        RESTLink link = requireLink(target, ParentLinkName.STORAGE_DEVICE);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
@@ -175,9 +176,7 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
      */
     public Tier getTier()
     {
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.TIER),
-                ValidationErrors.MISSING_REQUIRED_LINK + " " + ParentLinkName.TIER);
+        RESTLink link = requireLink(target, ParentLinkName.TIER);
 
         ExtendedUtils utils = (ExtendedUtils) context.getUtils();
         HttpResponse response = utils.getAbiquoHttpClient().get(link);
@@ -190,7 +189,8 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
     // Builder
 
-    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StorageDevice storageDevice)
+    public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+        final StorageDevice storageDevice)
     {
         return new Builder(context, storageDevice);
     }
@@ -214,17 +214,18 @@ public class StoragePool extends DomainWrapper<StoragePoolDto>
 
         private Long usedSizeInMb = DEFAULT_USED_SIZE;
 
-        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final StorageDevice storageDevice)
+        public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+            final StorageDevice storageDevice)
         {
             super();
-            checkNotNull(storageDevice, ValidationErrors.NULL_RESOURCE + StorageDevice.class);
+            checkNotNull(storageDevice, nullResource(StorageDevice.class));
             this.storageDevice = storageDevice;
             this.context = context;
         }
 
         public Builder storageDevice(final StorageDevice storageDevice)
         {
-            checkNotNull(storageDevice, ValidationErrors.NULL_RESOURCE + StorageDevice.class);
+            checkNotNull(storageDevice, nullResource(StorageDevice.class));
             this.storageDevice = storageDevice;
             return this;
         }
