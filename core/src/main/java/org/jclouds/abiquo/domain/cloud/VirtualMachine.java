@@ -25,8 +25,8 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.Arrays;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWithTasksWrapper;
 import org.jclouds.abiquo.domain.cloud.options.VirtualMachineOptions;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
@@ -49,6 +49,7 @@ import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.cloud.VirtualApplianceDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
+import com.abiquo.server.core.cloud.VirtualMachineInstanceDto;
 import com.abiquo.server.core.cloud.VirtualMachineState;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
@@ -126,8 +127,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         this.updateLink(target, ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, template.unwrap(), "edit");
 
         target =
-            context.getApi().getCloudApi()
-                .createVirtualMachine(virtualAppliance.unwrap(), target);
+            context.getApi().getCloudApi().createVirtualMachine(virtualAppliance.unwrap(), target);
     }
 
     /**
@@ -236,6 +236,26 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         target = parser.apply(response);
     }
 
+    /**
+     * Take a snapshot of the given virtual machine.
+     * <p>
+     * This will create a new {@link VirtualMachineTemplate} in the appliance library based on the
+     * given virtual machine.
+     * 
+     * @param snapshotName The name of the snapshot.
+     * @return The task reference to the snapshot process.
+     */
+    public AsyncTask snapshot(final String snapshotName)
+    {
+        VirtualMachineInstanceDto snapshotConfig = new VirtualMachineInstanceDto();
+        snapshotConfig.setInstanceName(snapshotName);
+
+        AcceptedRequestDto<String> response =
+            context.getApi().getCloudApi().snapshotVirtualMachine(target, snapshotConfig);
+
+        return getTask(response);
+    }
+
     // Parent access
 
     /**
@@ -313,8 +333,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public List<HardDisk> listAttachedHardDisks()
     {
         refresh();
-        DisksManagementDto hardDisks =
-            context.getApi().getCloudApi().listAttachedHardDisks(target);
+        DisksManagementDto hardDisks = context.getApi().getCloudApi().listAttachedHardDisks(target);
         return wrap(context, HardDisk.class, hardDisks.getCollection());
     }
 
@@ -331,8 +350,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     public List<Volume> listAttachedVolumes()
     {
         refresh();
-        VolumesManagementDto volumes =
-            context.getApi().getCloudApi().listAttachedVolumes(target);
+        VolumesManagementDto volumes = context.getApi().getCloudApi().listAttachedVolumes(target);
         return wrap(context, Volume.class, volumes.getCollection());
     }
 

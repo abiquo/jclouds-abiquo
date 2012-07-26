@@ -39,6 +39,7 @@ import com.abiquo.server.core.cloud.VirtualAppliancesDto;
 import com.abiquo.server.core.cloud.VirtualDatacenterDto;
 import com.abiquo.server.core.cloud.VirtualDatacentersDto;
 import com.abiquo.server.core.cloud.VirtualMachineDto;
+import com.abiquo.server.core.cloud.VirtualMachineInstanceDto;
 import com.abiquo.server.core.cloud.VirtualMachineStateDto;
 import com.abiquo.server.core.cloud.VirtualMachineTaskDto;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
@@ -334,7 +335,7 @@ public interface CloudApi
      * 
      * @param virtualAppliance The virtual appliance to deploy
      * @param options the extra options for the deploy process.
-     * @return Response message to the deploy request.
+     * @return The task reference to the deploy process.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> deployVirtualAppliance(VirtualApplianceDto virtualAppliance,
@@ -345,7 +346,7 @@ public interface CloudApi
      * 
      * @param virtualAppliance The virtual appliance to undeploy
      * @param options the extra options for the undeploy process.
-     * @return Response message to the undeploy request.
+     * @return The task reference to the undeploy process.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> undeployVirtualAppliance(VirtualApplianceDto virtualAppliance,
@@ -447,7 +448,7 @@ public interface CloudApi
      * 
      * @param virtualMachine The virtual machine to deploy.
      * @param options extra deploy options.
-     * @return Response message to the deploy request.
+     * @return The task reference to the deploy process.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> deployVirtualMachine(VirtualMachineDto virtualMachine,
@@ -458,7 +459,7 @@ public interface CloudApi
      * 
      * @param virtualMachine The virtual machine to undeploy.
      * @param options extra deploy unoptions.
-     * @return Response message to the undeploy request.
+     * @return The task reference to the undeploy process.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> undeployVirtualMachine(VirtualMachineDto virtualMachine,
@@ -484,9 +485,22 @@ public interface CloudApi
      * Reboot a virtual machine.
      * 
      * @param virtualMachine The virtual machine to reboot.
-     * @return Response message to the reset request.
+     * @return The task reference to the reboot process.
      */
     AcceptedRequestDto<String> rebootVirtualMachine(VirtualMachineDto virtualMachine);
+
+    /**
+     * Take a snapshot of the given virtual machine.
+     * <p>
+     * This will create a new virtual machine template in the appliance library based on the given
+     * virtual machine.
+     * 
+     * @param virtualMachine The virtual machine to snapshot.
+     * @param snapshotConfig The configuration of the snapshot.
+     * @return The task reference to the snapshot process.
+     */
+    AcceptedRequestDto<String> snapshotVirtualMachine(VirtualMachineDto virtualMachine,
+        VirtualMachineInstanceDto snapshotConfig);
 
     /******************* Virtual Machine Template ***********************/
 
