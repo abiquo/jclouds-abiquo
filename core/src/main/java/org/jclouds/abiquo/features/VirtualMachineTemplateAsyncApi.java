@@ -132,9 +132,11 @@ public interface VirtualMachineTemplateAsyncApi
     @POST
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(VirtualMachineTemplatePersistentDto.BASE_MEDIA_TYPE)
+    @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
     @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> createPersistentVirtualMachineTemplate(
-        @EndpointLink("virtualmachinetemplates") @BinderParam(BindToPath.class) DatacenterRepositoryDto dcRepository,
+        @PathParam("enterprise") Integer enterpriseId,
+        @PathParam("datacenterrepository") Integer datacenterRepositoryId,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTemplatePersistentDto persistentOptions);
 
     /*********************** Conversions ***********************/
@@ -149,8 +151,7 @@ public interface VirtualMachineTemplateAsyncApi
         @EndpointLink("conversions") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
     /**
-     * @see VirtualMachineTemplateApi#listConversions(VirtualMachineTemplateDto,
-     *      ConversionOptions)
+     * @see VirtualMachineTemplateApi#listConversions(VirtualMachineTemplateDto, ConversionOptions)
      */
     @GET
     @Consumes(ConversionsDto.BASE_MEDIA_TYPE)

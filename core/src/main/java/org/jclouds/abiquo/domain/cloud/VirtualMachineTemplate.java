@@ -24,9 +24,11 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.options.ConversionOptions;
 import org.jclouds.abiquo.domain.config.Category;
@@ -34,7 +36,6 @@ import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.Datacenter;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
 import org.jclouds.http.HttpResponse;
@@ -49,7 +50,6 @@ import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.CategoryDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
-import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
 import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
@@ -129,33 +129,32 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
             new VirtualMachineTemplatePersistentDto();
         persistentData.setPersistentTemplateName(persistentTemplateName);
         persistentData.setPersistentVolumeName(persistentVolumeName);
-        RESTLink vdcLink = vdc.unwrap().getEditLink();
-        vdcLink.setRel(ParentLinkName.VIRTUAL_DATACENTER);
-        RESTLink templateLink = target.getEditLink();
-        templateLink.setRel(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE);
+        RESTLink vdcLink =
+            new RESTLink(ParentLinkName.VIRTUAL_DATACENTER, vdc.unwrap().getEditLink().getHref());
+        RESTLink templateLink =
+            new RESTLink(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, target.getEditLink().getHref());
 
         persistentData.addLink(vdcLink);
         persistentData.addLink(storageLink);
         persistentData.addLink(templateLink);
 
-        RESTLink link =
-            checkNotNull(target.searchLink(ParentLinkName.DATACENTER_REPOSITORY),
-                ValidationErrors.MISSING_REQUIRED_LINK + ParentLinkName.DATACENTER_REPOSITORY);
-
-        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-        HttpResponse rp =
-            checkNotNull(utils.getAbiquoHttpClient().get(link),
-                ParentLinkName.DATACENTER_REPOSITORY);
-
-        ParseXMLWithJAXB<DatacenterRepositoryDto> parser =
-            new ParseXMLWithJAXB<DatacenterRepositoryDto>(utils.getXml(),
-                TypeLiteral.get(DatacenterRepositoryDto.class));
-
-        DatacenterRepositoryDto dcRepository = parser.apply(rp);
+        // SCG:
+        // A simple user should not have permissions to obtain a datacenter repository, but at this
+        // point we have the datacenter repository and enterprise ids in the own target uri. So we
+        // can obtain the path where do the POST
+        // Assumption that to create a new object a user needs to get the parent object cannot be
+        // applied in this case
+        String editUri = getURI().getPath();
+        Pattern p = Pattern.compile("\\d+");
+        Matcher m = p.matcher(editUri);
+        m.find();
+        Integer idEnt = new Integer(m.group());
+        m.find();
+        Integer idDcRepo = new Integer(m.group());
 
         AcceptedRequestDto<String> response =
             context.getApi().getVirtualMachineTemplateApi()
-                .createPersistentVirtualMachineTemplate(dcRepository, persistentData);
+                .createPersistentVirtualMachineTemplate(idEnt, idDcRepo, persistentData);
 
         return getTask(response);
     }
@@ -215,8 +214,8 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
     public Enterprise getEnterprise()
     {
         Integer enterpriseId = target.getIdFromLink(ParentLinkName.ENTERPRISE);
-        return wrap(context, Enterprise.class, context.getApi().getEnterpriseApi()
-            .getEnterprise(enterpriseId));
+        return wrap(context, Enterprise.class,
+            context.getApi().getEnterpriseApi().getEnterprise(enterpriseId));
     }
 
     /**
