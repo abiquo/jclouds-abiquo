@@ -44,6 +44,7 @@ import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.inject.TypeLiteral;
 
@@ -198,6 +199,32 @@ public class VirtualMachineTemplateAsyncApiTest extends
 
         checkFilters(request);
     }
+    
+    public void testCreateVirtualMachineTemplate() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            VirtualMachineTemplateAsyncApi.class.getMethod(
+                "createVirtualMachineTemplate", DatacenterRepositoryDto.class,
+                VirtualMachineTemplateRequestDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, TemplateResources.datacenterRepositoryPut(),
+                TemplateResources.templateRequest());
+        assertRequestLineEquals(
+            request,
+            "POST http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + AcceptedRequestDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, withHeader(TemplateResources.templateRequestPlayload()),
+            VirtualMachineTemplateRequestDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
 
     /*********************** Conversions ***********************/
 

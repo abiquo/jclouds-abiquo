@@ -31,6 +31,7 @@ import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 
 /**
@@ -103,11 +104,23 @@ public interface VirtualMachineTemplateApi
      *            created.
      * @param options The persistent options like name, volume/tier, virtual datacenter and original
      *            template.
-     * @return Response message to the persistent request.
+     * @return Traceable task response.
      */
     @Timeout(duration = 90, timeUnit = TimeUnit.SECONDS)
     AcceptedRequestDto<String> createPersistentVirtualMachineTemplate(Integer enterpriseId,
         Integer datacenterRepositoryId, VirtualMachineTemplatePersistentDto persistentOptions);
+
+    /**
+     * Creates a virtual machine template by downloading a template definition into the datacenter
+     * repository.
+     *
+     * @param dcRepository The repository where the persistent virtual machine template will be
+     *            created.
+     * @param templateRequest link to the template definition
+     * @return Traceable task response.
+     */
+    AcceptedRequestDto<String> createVirtualMachineTemplate(DatacenterRepositoryDto dcRepository,
+        VirtualMachineTemplateRequestDto templateRequest);
 
     /**
      * List all the conversions for a virtual machine template.
