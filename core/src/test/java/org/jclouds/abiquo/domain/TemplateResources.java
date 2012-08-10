@@ -28,6 +28,7 @@ import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateRequestDto;
 
 /**
  * VM template domain utilities.
@@ -117,7 +118,7 @@ public class TemplateResources
             "http://localhost/api/admin/enterprises/1/datacenterrepositories/1/virtualmachinetemplates/1"));
         return dto;
     }
-
+    
     public static String persistentPayload()
     {
         StringBuffer buffer = new StringBuffer();
@@ -133,7 +134,27 @@ public class TemplateResources
         buffer.append("</virtualmachinetemplatepersistent>");
         return buffer.toString();
     }
+    
 
+    public static VirtualMachineTemplateRequestDto templateRequest()
+    {
+        VirtualMachineTemplateRequestDto templateRequest = new VirtualMachineTemplateRequestDto();
+        templateRequest.addLink(new RESTLink("templatedefinition",
+            "http://localhost/api/admin/enterprises/1/appslib/templateDefinitions/1"));
+        return templateRequest;
+    }
+
+    public static String templateRequestPlayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<virtualmachinetemplaterequest>");
+        buffer.append(link("/admin/enterprises/1/appslib/templateDefinitions/1",
+            "templatedefinition"));
+        buffer.append("</virtualmachinetemplaterequest>");
+        return buffer.toString();
+    }
+
+    
     public static ConversionDto conversionPut()
     {
         ConversionDto conversion = new ConversionDto();

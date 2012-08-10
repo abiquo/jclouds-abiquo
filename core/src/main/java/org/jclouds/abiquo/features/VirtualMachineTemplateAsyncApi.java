@@ -53,6 +53,7 @@ import com.abiquo.server.core.appslibrary.ConversionsDto;
 import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
+import com.abiquo.server.core.appslibrary.VirtualMachineTemplateRequestDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -125,6 +126,18 @@ public interface VirtualMachineTemplateAsyncApi
     ListenableFuture<Void> deleteVirtualMachineTemplate(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
+    /**
+     * @see VirtualMachineTemplateApi#createVirtualMachineTemplate(DatacenterRepositoryDto,
+     *      VirtualMachineTemplateRequestDto)
+     */
+    @POST
+    @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
+    @Produces(VirtualMachineTemplateRequestDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<AcceptedRequestDto<String>> createVirtualMachineTemplate(
+        @EndpointLink("virtualmachinetemplates") @BinderParam(BindToPath.class) DatacenterRepositoryDto dcRepository,
+        @BinderParam(BindToXMLPayload.class) VirtualMachineTemplateRequestDto templateRequest);
+    
     /**
      * @see VirtualMachineTemplateApi#createPersistentVirtualMachineTemplate(DatacenterRepositoryDto,
      *      VirtualMachineTemplatePersistentDto)
