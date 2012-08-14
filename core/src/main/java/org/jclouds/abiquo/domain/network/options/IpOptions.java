@@ -19,14 +19,15 @@
 
 package org.jclouds.abiquo.domain.network.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions.BaseFilterOptionsBuilder;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query ips.
  * 
  * @author Francesc Montserrat
  */
-public class IpOptions extends QueryOptions
+public class IpOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -37,17 +38,11 @@ public class IpOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         IpOptions options = new IpOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
     }
 
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
-    }
-
-    public static class Builder extends QueryOptionsBuilder<Builder>
+    public static class Builder extends BaseFilterOptionsBuilder<Builder>
     {
         private Boolean free;
 
@@ -57,20 +52,16 @@ public class IpOptions extends QueryOptions
             return this;
         }
 
-        @Override
         public IpOptions build()
         {
             IpOptions options = new IpOptions();
 
             if (free != null)
             {
-                options.map.put("free", String.valueOf(free));
+                options.queryParameters.put("free", String.valueOf(free));
             }
 
-            // Add FilterOptions options
-            options.map.putAll(super.build().getOptions());
-
-            return options;
+            return addFilterOptions(options);
         }
     }
 }

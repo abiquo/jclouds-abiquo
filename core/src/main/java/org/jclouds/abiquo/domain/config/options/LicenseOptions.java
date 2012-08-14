@@ -19,8 +19,8 @@
 
 package org.jclouds.abiquo.domain.config.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query licenses.
@@ -28,7 +28,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
  * @author Francesc Montserrat
  */
 @EnterpriseEdition
-public class LicenseOptions extends QueryOptions
+public class LicenseOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -39,14 +39,8 @@ public class LicenseOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         LicenseOptions options = new LicenseOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -76,7 +70,7 @@ public class LicenseOptions extends QueryOptions
             LicenseOptions options = new LicenseOptions();
             if (active != null)
             {
-                options.map.put("active", active.toString());
+                options.queryParameters.put("active", active.toString());
             }
             return options;
         }

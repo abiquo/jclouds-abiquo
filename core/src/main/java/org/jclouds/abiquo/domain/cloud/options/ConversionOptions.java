@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.HypervisorType;
@@ -27,7 +27,7 @@ import com.abiquo.model.enumerator.HypervisorType;
 /**
  * Available options to filter virtual machine template conversions
  */
-public class ConversionOptions extends QueryOptions
+public class ConversionOptions extends BaseHttpRequestOptions
 {
 
     public static Builder builder()
@@ -39,14 +39,8 @@ public class ConversionOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         ConversionOptions options = new ConversionOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -75,11 +69,11 @@ public class ConversionOptions extends QueryOptions
 
             if (hypervisorType != null)
             {
-                options.map.put("hypervisor", hypervisorType.name());
+                options.queryParameters.put("hypervisor", hypervisorType.name());
             }
             if (conversionState != null)
             {
-                options.map.put("state", conversionState.name());
+                options.queryParameters.put("state", conversionState.name());
             }
 
             return options;

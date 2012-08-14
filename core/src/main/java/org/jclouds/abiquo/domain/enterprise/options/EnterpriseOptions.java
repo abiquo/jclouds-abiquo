@@ -19,14 +19,15 @@
 
 package org.jclouds.abiquo.domain.enterprise.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions.BaseFilterOptionsBuilder;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query enterprises.
  * 
  * @author Francesc Montserrat
  */
-public class EnterpriseOptions extends QueryOptions
+public class EnterpriseOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -37,17 +38,11 @@ public class EnterpriseOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         EnterpriseOptions options = new EnterpriseOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
     }
 
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
-    }
-
-    public static class Builder extends QueryOptionsBuilder<Builder>
+    public static class Builder extends BaseFilterOptionsBuilder<Builder>
     {
         private String idPricingTemplate;
 
@@ -97,45 +92,41 @@ public class EnterpriseOptions extends QueryOptions
             return this;
         }
 
-        @Override
         public EnterpriseOptions build()
         {
             EnterpriseOptions options = new EnterpriseOptions();
 
             if (idPricingTemplate != null)
             {
-                options.map.put("idPricingTemplate", String.valueOf(idPricingTemplate));
+                options.queryParameters.put("idPricingTemplate", String.valueOf(idPricingTemplate));
             }
 
             if (included != null)
             {
-                options.map.put("included", String.valueOf(included));
+                options.queryParameters.put("included", String.valueOf(included));
             }
 
             if (filter != null)
             {
-                options.map.put("filter", String.valueOf(filter));
+                options.queryParameters.put("filter", String.valueOf(filter));
             }
 
             if (page != null)
             {
-                options.map.put("page", String.valueOf(page));
+                options.queryParameters.put("page", String.valueOf(page));
             }
 
             if (results != null)
             {
-                options.map.put("numResults", String.valueOf(results));
+                options.queryParameters.put("numResults", String.valueOf(results));
             }
 
             if (network != null)
             {
-                options.map.put("network", String.valueOf(network));
+                options.queryParameters.put("network", String.valueOf(network));
             }
 
-            // Add FilterOptions options
-            options.map.putAll(super.build().getOptions());
-
-            return options;
+            return addFilterOptions(options);
         }
     }
 }

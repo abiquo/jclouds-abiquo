@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.infrastructure.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query machines.
  * 
  * @author Francesc Montserrat
  */
-public class MachineOptions extends QueryOptions
+public class MachineOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -37,14 +37,8 @@ public class MachineOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         MachineOptions options = new MachineOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -76,12 +70,12 @@ public class MachineOptions extends QueryOptions
             MachineOptions options = new MachineOptions();
             if (port != null)
             {
-                options.map.put("port", port.toString());
+                options.queryParameters.put("port", port.toString());
             }
 
             if (sync != null)
             {
-                options.map.put("sync", sync.toString());
+                options.queryParameters.put("sync", sync.toString());
             }
 
             return options;

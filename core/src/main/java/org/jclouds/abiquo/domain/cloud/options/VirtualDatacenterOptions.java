@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.cloud.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query virtual datacenters.
  * 
  * @author Francesc Montserrat
  */
-public class VirtualDatacenterOptions extends QueryOptions
+public class VirtualDatacenterOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -37,14 +37,8 @@ public class VirtualDatacenterOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         VirtualDatacenterOptions options = new VirtualDatacenterOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -77,12 +71,12 @@ public class VirtualDatacenterOptions extends QueryOptions
 
             if (datacenterId != null)
             {
-                options.map.put("datacenter", datacenterId.toString());
+                options.queryParameters.put("datacenter", datacenterId.toString());
             }
 
             if (enterpriseId != null)
             {
-                options.map.put("enterprise", enterpriseId.toString());
+                options.queryParameters.put("enterprise", enterpriseId.toString());
             }
             return options;
         }
