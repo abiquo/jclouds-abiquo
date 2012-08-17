@@ -33,6 +33,7 @@ import javax.ws.rs.core.MediaType;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.binders.infrastructure.AppendMachineIdToPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.binders.infrastructure.BindSupportedDevicesLinkToPath;
 import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
@@ -66,6 +67,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
@@ -627,6 +629,25 @@ public interface InfrastructureAsyncApi
     @DELETE
     ListenableFuture<Void> deleteMachine(
         @EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureApi#reserveMachine(EnterpriseDto, MachineDto)
+     */
+    @POST
+    @Consumes(MachineDto.BASE_MEDIA_TYPE)
+    @Produces(MachineDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<MachineDto> reserveMachine(
+        @EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+        @BinderParam(BindToXMLPayload.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureApi#cancelReservation(EnterpriseDto, MachineDto)
+     */
+    @DELETE
+    ListenableFuture<Void> cancelReservation(
+        @EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+        @BinderParam(AppendMachineIdToPath.class) MachineDto machine);
 
     /*********************** Blade ***********************/
 

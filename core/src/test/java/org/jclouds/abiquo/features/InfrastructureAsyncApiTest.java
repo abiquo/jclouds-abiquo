@@ -26,6 +26,7 @@ import java.lang.reflect.Method;
 
 import javax.ws.rs.core.MediaType;
 
+import org.jclouds.abiquo.domain.EnterpriseResources;
 import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
@@ -53,6 +54,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
@@ -1156,6 +1158,74 @@ public class InfrastructureAsyncApiTest extends BaseAbiquoAsyncApiTest<Infrastru
         checkFilters(request);
     }
 
+    public void testReserveMachine() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("reserveMachine", EnterpriseDto.class,
+                MachineDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut(),
+                InfrastructureResources.machinePut());
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/admin/enterprises/1/reservedmachines HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + MachineDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, withHeader(InfrastructureResources.machinePutPayload()),
+            MachineDto.class, MachineDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCancelReservation() throws SecurityException, NoSuchMethodException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("cancelReservation", EnterpriseDto.class,
+                MachineDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, EnterpriseResources.enterprisePut(),
+                InfrastructureResources.machinePut());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/admin/enterprises/1/reservedmachines/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testListVirtualMachinesByMachine() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        MachineOptions options = MachineOptions.builder().sync(true).build();
+
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("listVirtualMachinesByMachine",
+                MachineDto.class, MachineOptions.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.machinePut(), options);
+
+        assertRequestLineEquals(
+            request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/virtualmachines?sync=true HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: "
+            + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
     public void testGetVirtualMachineByMachine() throws SecurityException, NoSuchMethodException,
         IOException
     {
@@ -1178,6 +1248,8 @@ public class InfrastructureAsyncApiTest extends BaseAbiquoAsyncApiTest<Infrastru
 
         checkFilters(request);
     }
+
+    /*********************** Blade ***********************/
 
     public void testPowerOff() throws SecurityException, NoSuchMethodException, IOException
     {
@@ -1279,31 +1351,6 @@ public class InfrastructureAsyncApiTest extends BaseAbiquoAsyncApiTest<Infrastru
             "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/led HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + BladeLocatorLedDto.BASE_MEDIA_TYPE
             + "\n");
-        assertPayloadEquals(request, null, null, false);
-
-        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
-        assertSaxResponseParserClassEquals(method, null);
-        assertExceptionParserClassEquals(method, null);
-
-        checkFilters(request);
-    }
-
-    public void testListVirtualMachinesByMachine() throws SecurityException, NoSuchMethodException,
-        IOException
-    {
-        MachineOptions options = MachineOptions.builder().sync(true).build();
-
-        Method method =
-            InfrastructureAsyncApi.class.getMethod("listVirtualMachinesByMachine",
-                MachineDto.class, MachineOptions.class);
-        GeneratedHttpRequest request =
-            processor.createRequest(method, InfrastructureResources.machinePut(), options);
-
-        assertRequestLineEquals(
-            request,
-            "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/virtualmachines?sync=true HTTP/1.1");
-        assertNonPayloadHeadersEqual(request, "Accept: "
-            + VirtualMachinesWithNodeExtendedDto.BASE_MEDIA_TYPE + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

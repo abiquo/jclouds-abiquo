@@ -25,9 +25,10 @@ import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
 import org.jclouds.abiquo.reference.ValidationErrors;
@@ -42,6 +43,7 @@ import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
@@ -68,8 +70,7 @@ public class Machine extends AbstractPhysicalMachine
     /**
      * Constructor to be used only by the builder.
      */
-    protected Machine(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-        final MachineDto target)
+    protected Machine(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final MachineDto target)
     {
         super(context, target);
     }
@@ -154,8 +155,7 @@ public class Machine extends AbstractPhysicalMachine
     {
         MachineOptions options = MachineOptions.builder().sync(false).build();
         VirtualMachinesWithNodeExtendedDto vms =
-            context.getApi().getInfrastructureApi()
-                .listVirtualMachinesByMachine(target, options);
+            context.getApi().getInfrastructureApi().listVirtualMachinesByMachine(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());
     }
 
@@ -195,8 +195,7 @@ public class Machine extends AbstractPhysicalMachine
     {
         MachineOptions options = MachineOptions.builder().sync(true).build();
         VirtualMachinesWithNodeExtendedDto vms =
-            context.getApi().getInfrastructureApi()
-                .listVirtualMachinesByMachine(target, options);
+            context.getApi().getInfrastructureApi().listVirtualMachinesByMachine(target, options);
         return wrap(context, VirtualMachine.class, vms.getCollection());
     }
 
@@ -223,6 +222,62 @@ public class Machine extends AbstractPhysicalMachine
     public VirtualMachine findRemoteVirtualMachine(final Predicate<VirtualMachine> filter)
     {
         return Iterables.getFirst(filter(listVirtualMachines(), filter), null);
+    }
+
+    /**
+     * Reserve the machine for the given enterprise.
+     * <p>
+     * When a {@link Machine} is reserved for an {@link Enterprise}, only the users of that
+     * enterprise will be able to deploy {@link VirtualMachine}s in it.
+     * 
+     * @param enterprise The enterprise reserving the machine.
+     */
+    public void reserveFor(final Enterprise enterprise)
+    {
+        target =
+            context.getApi().getInfrastructureApi().reserveMachine(enterprise.unwrap(), target);
+    }
+
+    /**
+     * Cancels the machine reservation for the given enterprise.
+     * 
+     * @param enterprise The enterprise to cancel reservation for.
+     */
+    public void cancelReservationFor(final Enterprise enterprise)
+    {
+        context.getApi().getInfrastructureApi().cancelReservation(enterprise.unwrap(), target);
+        target.getLinks().remove(target.searchLink(ParentLinkName.ENTERPRISE));
+    }
+
+    /**
+     * Check if the machine is reserved.
+     * 
+     * @return Boolean indicating if the machine is reserved for an enterprise.
+     */
+    public boolean isReserved()
+    {
+        return target.searchLink(ParentLinkName.ENTERPRISE) != null;
+    }
+
+    /**
+     * Get the enterprise that has reserved the machine or <code>null</code> if the machine is not
+     * reserved.
+     * 
+     * @return The enterprise that has reserved the machine or <code>null</code> if the machine is
+     *         not reserved.
+     */
+    public Enterprise getOwnerEnterprise()
+    {
+        if (!isReserved())
+        {
+            return null;
+        }
+
+        EnterpriseDto enterprise =
+            context.getApi().getEnterpriseApi()
+                .getEnterprise(target.getIdFromLink(ParentLinkName.ENTERPRISE));
+
+        return wrap(context, Enterprise.class, enterprise);
     }
 
     // Builder
