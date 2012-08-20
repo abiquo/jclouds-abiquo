@@ -29,7 +29,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
@@ -120,8 +119,7 @@ public interface CloudAsyncApi
     @Path("/virtualdatacenters")
     @Consumes(VirtualDatacentersDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<VirtualDatacentersDto> listVirtualDatacenters(
-        @BinderParam(AppendOptionsToPath.class) VirtualDatacenterOptions options);
+    ListenableFuture<VirtualDatacentersDto> listVirtualDatacenters(VirtualDatacenterOptions options);
 
     /**
      * @see CloudApi#getVirtualDatacenter(Integer)
@@ -181,7 +179,7 @@ public interface CloudAsyncApi
     @JAXBResponseParser
     ListenableFuture<VirtualMachineTemplatesDto> listAvailableTemplates(
         @EndpointLink("templates") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
-        @BinderParam(AppendOptionsToPath.class) VirtualMachineTemplateOptions options);
+        VirtualMachineTemplateOptions options);
 
     /**
      * @see CloudApi#listStorageTiers(VirtualDatacenterDto)
@@ -215,7 +213,7 @@ public interface CloudAsyncApi
     @JAXBResponseParser
     ListenableFuture<PublicIpsDto> listAvailablePublicIps(
         @EndpointLink("topurchase") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
-        @BinderParam(AppendOptionsToPath.class) IpOptions options);
+        IpOptions options);
 
     /**
      * @see CloudApi#listPurchasedPublicIps(VirtualDatacenterDto, IpOptions)
@@ -225,7 +223,7 @@ public interface CloudAsyncApi
     @JAXBResponseParser
     ListenableFuture<PublicIpsDto> listPurchasedPublicIps(
         @EndpointLink("purchased") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
-        @BinderParam(AppendOptionsToPath.class) IpOptions options);
+        IpOptions options);
 
     /**
      * @see CloudApi#purchasePublicIp(PublicIpDto)
@@ -332,7 +330,7 @@ public interface CloudAsyncApi
     @JAXBResponseParser
     ListenableFuture<PrivateIpsDto> listPrivateNetworkIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-        @BinderParam(AppendOptionsToPath.class) IpOptions options);
+        IpOptions options);
 
     /**
      * @see CloudApi#getPrivateNetworkIp(VLANNetworkDto, Integer)
@@ -409,7 +407,7 @@ public interface CloudAsyncApi
     @DELETE
     ListenableFuture<Void> deleteVirtualAppliance(
         @EndpointLink("edit") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
-        @BinderParam(AppendOptionsToPath.class) VirtualApplianceOptions options);
+        VirtualApplianceOptions options);
 
     /**
      * @see CloudApi#deployVirtualAppliance(VirtualApplianceDto, VirtualMachineTaskDto)
@@ -452,7 +450,7 @@ public interface CloudAsyncApi
     @JAXBResponseParser
     ListenableFuture<VirtualMachinesWithNodeExtendedDto> listVirtualMachines(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
-        @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options);
+        VirtualMachineOptions options);
 
     /**
      * @see CloudApi#getVirtualMachine(VirtualApplianceDto, Integer)
@@ -502,7 +500,7 @@ public interface CloudAsyncApi
     @Produces(VirtualMachineWithNodeExtendedDto.BASE_MEDIA_TYPE)
     ListenableFuture<AcceptedRequestDto<String>> updateVirtualMachine(
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) VirtualMachineWithNodeExtendedDto virtualMachine,
-        @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options);
+        VirtualMachineOptions options);
 
     /**
      * @see CloudApi#changeVirtualMachineState(VirtualMachineDto, VirtualMachineStateDto)
@@ -590,7 +588,7 @@ public interface CloudAsyncApi
     @Produces(LinksDto.BASE_MEDIA_TYPE)
     ListenableFuture<AcceptedRequestDto<String>> replaceVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualMachineDto virtualMachine,
-        @BinderParam(AppendOptionsToPath.class) VirtualMachineOptions options,
+        VirtualMachineOptions options,
         @BinderParam(BindVolumeRefsToPayload.class) VolumeManagementDto... volumes);
 
     /**
@@ -705,7 +703,7 @@ public interface CloudAsyncApi
     @JAXBResponseParser
     ListenableFuture<VolumesManagementDto> listVolumes(
         @EndpointLink("volumes") @BinderParam(BindToPath.class) VirtualDatacenterDto virtualDatacenter,
-        @BinderParam(AppendOptionsToPath.class) VolumeOptions options);
+        VolumeOptions options);
 
     /**
      * @see CloudApi#getVolume(VirtualDatacenterDto, Integer)

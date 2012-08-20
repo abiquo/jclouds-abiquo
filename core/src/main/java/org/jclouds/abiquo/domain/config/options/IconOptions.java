@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.config.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query icons.
  * 
  * @author Francesc Montserrat
  */
-public class IconOptions extends QueryOptions
+public class IconOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -37,14 +37,8 @@ public class IconOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         IconOptions options = new IconOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -62,7 +56,7 @@ public class IconOptions extends QueryOptions
             IconOptions options = new IconOptions();
             if (path != null)
             {
-                options.map.put("path", path);
+                options.queryParameters.put("path", path);
             }
 
             return options;

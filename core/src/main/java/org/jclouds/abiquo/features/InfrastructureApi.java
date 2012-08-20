@@ -36,6 +36,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
@@ -593,12 +594,31 @@ public interface InfrastructureApi
     void deleteMachine(MachineDto machine);
 
     /**
+     * Reserve the given machine for the given enterprise.
+     * 
+     * @param enterprise The enterprise reserving the machine.
+     * @param machine The machine to reserve.
+     * @return The reserved machine.
+     */
+    MachineDto reserveMachine(EnterpriseDto enterprise, MachineDto machine);
+
+    /**
+     * Cancels the reservation of the given machine.
+     * 
+     * @param enterprise The enterprise to cancel reservation.
+     * @param machine The machine to release.
+     */
+    Void cancelReservation(EnterpriseDto enterprise, MachineDto machine);
+
+    /**
      * List all machines racks for a rack.
      * 
      * @param rack The rack.
      * @return The list of physical machines for the rack.
      */
     MachinesDto listMachines(RackDto rack);
+
+    /*********************** Blade ***********************/
 
     /**
      * Power off a physical machine in a UCS rack.

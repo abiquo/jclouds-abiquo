@@ -20,7 +20,7 @@
 package org.jclouds.abiquo.domain.cloud.options;
 
 import org.jclouds.abiquo.domain.config.Category;
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.enumerator.StatefulInclusion;
@@ -30,7 +30,7 @@ import com.abiquo.model.enumerator.StatefulInclusion;
  * 
  * @author Ignasi Barrera
  */
-public class VirtualMachineTemplateOptions extends QueryOptions
+public class VirtualMachineTemplateOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -41,14 +41,8 @@ public class VirtualMachineTemplateOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         VirtualMachineTemplateOptions options = new VirtualMachineTemplateOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -99,25 +93,25 @@ public class VirtualMachineTemplateOptions extends QueryOptions
 
             if (persistent != null)
             {
-                options.map.put("stateful", persistent.name());
+                options.queryParameters.put("stateful", persistent.name());
             }
             if (hypervisorType != null)
             {
-                options.map.put("hypervisorTypeName", hypervisorType.name());
+                options.queryParameters.put("hypervisorTypeName", hypervisorType.name());
             }
             if (category != null)
             {
-                options.map.put("categoryName", category.getName());
+                options.queryParameters.put("categoryName", category.getName());
             }
 
             if (category == null && categoryName != null)
             {
-                options.map.put("categoryName", categoryName);
+                options.queryParameters.put("categoryName", categoryName);
             }
 
             if (idTemplate != null)
             {
-                options.map.put("idTemplate", String.valueOf(idTemplate));
+                options.queryParameters.put("idTemplate", String.valueOf(idTemplate));
             }
 
             return options;

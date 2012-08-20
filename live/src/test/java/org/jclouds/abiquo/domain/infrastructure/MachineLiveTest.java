@@ -21,7 +21,9 @@ package org.jclouds.abiquo.domain.infrastructure;
 
 import static org.jclouds.abiquo.util.Assert.assertHasError;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
 import static org.testng.Assert.assertTrue;
 
 import java.net.URI;
@@ -30,6 +32,7 @@ import java.util.List;
 import javax.ws.rs.core.Response.Status;
 
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
+import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.exception.AbiquoException;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.infrastructure.RemoteServicePredicates;
@@ -142,5 +145,27 @@ public class MachineLiveTest extends BaseAbiquoApiLiveTest
         List<VirtualMachine> machines = env.machine.listRemoteVirtualMachines();
         assertNotNull(machines);
         assertTrue(machines.size() >= 0);
+    }
+
+    public void testReserveMachine()
+    {
+        assertFalse(env.machine.isReserved());
+
+        env.machine.reserveFor(env.enterprise);
+        assertTrue(env.machine.isReserved());
+
+        Enterprise owner = env.machine.getOwnerEnterprise();
+        assertNotNull(owner);
+        assertEquals(owner.getId(), env.enterprise.getId());
+    }
+
+    @Test(dependsOnMethods = "testReserveMachine")
+    public void testCancelReservation()
+    {
+        env.machine.cancelReservationFor(env.enterprise);
+        assertFalse(env.machine.isReserved());
+
+        Enterprise owner = env.machine.getOwnerEnterprise();
+        assertNull(owner);
     }
 }

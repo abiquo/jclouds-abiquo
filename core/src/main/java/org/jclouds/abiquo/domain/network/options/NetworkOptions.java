@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.domain.network.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 import com.abiquo.model.enumerator.NetworkType;
 
@@ -28,7 +28,7 @@ import com.abiquo.model.enumerator.NetworkType;
  * 
  * @author Francesc Montserrat
  */
-public class NetworkOptions extends QueryOptions
+public class NetworkOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -39,14 +39,8 @@ public class NetworkOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         NetworkOptions options = new NetworkOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -73,12 +67,12 @@ public class NetworkOptions extends QueryOptions
 
             if (type != null)
             {
-                options.map.put("type", String.valueOf(type));
+                options.queryParameters.put("type", String.valueOf(type));
             }
 
             if (all != null)
             {
-                options.map.put("all", String.valueOf(all));
+                options.queryParameters.put("all", String.valueOf(all));
             }
 
             return options;

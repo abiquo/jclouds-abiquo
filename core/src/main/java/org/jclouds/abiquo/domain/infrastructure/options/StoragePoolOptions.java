@@ -19,8 +19,8 @@
 
 package org.jclouds.abiquo.domain.infrastructure.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query storage pools.
@@ -29,7 +29,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
  */
 
 @EnterpriseEdition
-public class StoragePoolOptions extends QueryOptions
+public class StoragePoolOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -40,17 +40,11 @@ public class StoragePoolOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         StoragePoolOptions options = new StoragePoolOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
     }
 
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
-    }
-
-    public static class Builder extends QueryOptionsBuilder<Builder>
+    public static class Builder
     {
         private Boolean sync;
 
@@ -63,13 +57,12 @@ public class StoragePoolOptions extends QueryOptions
             return this;
         }
 
-        @Override
         public StoragePoolOptions build()
         {
             StoragePoolOptions options = new StoragePoolOptions();
             if (sync != null)
             {
-                options.map.put("sync", sync.toString());
+                options.queryParameters.put("sync", sync.toString());
             }
 
             return options;

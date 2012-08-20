@@ -23,7 +23,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions.BaseFilterOptionsBuilder;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 import com.abiquo.model.enumerator.ComponentType;
 import com.abiquo.model.enumerator.EventType;
@@ -35,7 +36,7 @@ import com.google.common.collect.Maps;
  * 
  * @author Vivien Mahé
  */
-public class EventOptions extends QueryOptions
+public class EventOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -46,17 +47,11 @@ public class EventOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         EventOptions options = new EventOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
     }
 
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
-    }
-
-    public static class Builder extends QueryOptionsBuilder<Builder>
+    public static class Builder extends BaseFilterOptionsBuilder<Builder>
     {
         private Map<String, String> filters = Maps.newHashMap();
 
@@ -186,20 +181,16 @@ public class EventOptions extends QueryOptions
             return this;
         }
 
-        @Override
         public EventOptions build()
         {
             EventOptions options = new EventOptions();
 
             for (Entry<String, String> filter : filters.entrySet())
             {
-                options.map.put(filter.getKey(), filter.getValue());
+                options.queryParameters.put(filter.getKey(), filter.getValue());
             }
 
-            // Add FilterOptions options
-            options.map.putAll(super.build().getOptions());
-
-            return options;
+            return addFilterOptions(options);
         }
     }
 }

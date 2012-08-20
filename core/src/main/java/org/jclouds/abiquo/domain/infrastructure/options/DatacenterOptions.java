@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.infrastructure.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query datacenters.
  * 
  * @author Francesc Montserrat
  */
-public class DatacenterOptions extends QueryOptions
+public class DatacenterOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -37,14 +37,8 @@ public class DatacenterOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         DatacenterOptions options = new DatacenterOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -62,7 +56,7 @@ public class DatacenterOptions extends QueryOptions
             DatacenterOptions options = new DatacenterOptions();
             if (ip != null)
             {
-                options.map.put("ip", ip);
+                options.queryParameters.put("ip", ip);
             }
             return options;
         }

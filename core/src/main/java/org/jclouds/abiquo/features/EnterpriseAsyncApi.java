@@ -29,7 +29,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 
-import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
@@ -98,8 +97,7 @@ public interface EnterpriseAsyncApi
     @Path("/enterprises")
     @Consumes(EnterprisesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<EnterprisesDto> listEnterprises(
-        @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
+    ListenableFuture<EnterprisesDto> listEnterprises(EnterpriseOptions options);
 
     /**
      * @see EnterpriseApi#listEnterprises(DatacenterDto, EnterpriseOptions)
@@ -109,7 +107,7 @@ public interface EnterpriseAsyncApi
     @JAXBResponseParser
     ListenableFuture<EnterprisesDto> listEnterprises(
         @EndpointLink("enterprises") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @BinderParam(AppendOptionsToPath.class) EnterpriseOptions options);
+        EnterpriseOptions options);
 
     /**
      * @see EnterpriseApi#createEnterprise(EnterpriseDto)

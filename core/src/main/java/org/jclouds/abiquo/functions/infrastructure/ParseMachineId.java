@@ -17,35 +17,31 @@
  * under the License.
  */
 
-package org.jclouds.abiquo.binders;
+package org.jclouds.abiquo.functions.infrastructure;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
-import org.jclouds.http.HttpRequest;
-import org.jclouds.rest.Binder;
+import com.abiquo.server.core.infrastructure.MachineDto;
+import com.google.common.base.Function;
 
 /**
- * Appends the parameter value to the end of the request URI.
+ * Parses a {@link MachineDto} object to extract its id.
  * 
- * @author Francesc Montserrat
  * @author Ignasi Barrera
  */
 @Singleton
-public class AppendOptionsToPath implements Binder
+public class ParseMachineId implements Function<Object, String>
 {
-
-    @SuppressWarnings("unchecked")
     @Override
-    public <R extends HttpRequest> R bindToRequest(final R request, final Object input)
+    public String apply(final Object input)
     {
-        checkArgument(checkNotNull(input, "input") instanceof QueryOptions,
-            "this binder is only valid for QueryOptions objects");
-        QueryOptions options = (QueryOptions) input;
+        checkArgument(checkNotNull(input, "input") instanceof MachineDto,
+            "This parser is only valid for MachineDto objects");
 
-        return (R) request.toBuilder().addQueryParams(options.getOptions()).build();
+        return ((MachineDto) input).getId().toString();
     }
+
 }

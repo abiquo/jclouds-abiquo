@@ -28,7 +28,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
 import org.jclouds.abiquo.domain.config.options.LicenseOptions;
@@ -89,8 +88,7 @@ public interface ConfigAsyncApi
     @Path("/licenses")
     @Consumes(LicensesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<LicensesDto> listLicenses(
-        @BinderParam(AppendOptionsToPath.class) LicenseOptions options);
+    ListenableFuture<LicensesDto> listLicenses(LicenseOptions options);
 
     /**
      * @see ConfigApi#addLicense(LicenseDto)
@@ -150,8 +148,7 @@ public interface ConfigAsyncApi
     @Path("/properties")
     @Consumes(SystemPropertiesDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
-    ListenableFuture<SystemPropertiesDto> listSystemProperties(
-        @BinderParam(AppendOptionsToPath.class) PropertyOptions options);
+    ListenableFuture<SystemPropertiesDto> listSystemProperties(PropertyOptions options);
 
     /**
      * @see ConfigApi#updateSystemProperty(VirtualDatacenterDto)

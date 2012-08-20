@@ -21,8 +21,8 @@ package org.jclouds.abiquo.domain;
 
 
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.transport.SingleResourceWithLimitsDto;

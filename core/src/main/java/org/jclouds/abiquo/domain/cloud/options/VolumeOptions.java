@@ -19,8 +19,9 @@
 
 package org.jclouds.abiquo.domain.cloud.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.abiquo.domain.options.search.FilterOptions.BaseFilterOptionsBuilder;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query volumes.
@@ -28,7 +29,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
  * @author Ignasi Barrera
  */
 @EnterpriseEdition
-public class VolumeOptions extends QueryOptions
+public class VolumeOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -39,17 +40,11 @@ public class VolumeOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         VolumeOptions options = new VolumeOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
     }
 
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
-    }
-
-    public static class Builder extends QueryOptionsBuilder<Builder>
+    public static class Builder extends BaseFilterOptionsBuilder<Builder>
     {
         private Boolean onlyAvailable;
 
@@ -59,20 +54,16 @@ public class VolumeOptions extends QueryOptions
             return this;
         }
 
-        @Override
         public VolumeOptions build()
         {
             VolumeOptions options = new VolumeOptions();
 
             if (onlyAvailable != null)
             {
-                options.map.put("available", String.valueOf(onlyAvailable));
+                options.queryParameters.put("available", String.valueOf(onlyAvailable));
             }
 
-            // Add FilterOptions options
-            options.map.putAll(super.build().getOptions());
-
-            return options;
+            return addFilterOptions(options);
         }
     }
 }
