@@ -19,7 +19,7 @@
 
 package org.jclouds.abiquo.domain.cloud.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query virtual appliances.
@@ -27,7 +27,7 @@ import org.jclouds.abiquo.domain.options.QueryOptions;
  * @author Francesc Montserrat
  * @author Ignasi Barrera
  */
-public class VirtualApplianceOptions extends QueryOptions
+public class VirtualApplianceOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -38,14 +38,8 @@ public class VirtualApplianceOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         VirtualApplianceOptions options = new VirtualApplianceOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -65,7 +59,7 @@ public class VirtualApplianceOptions extends QueryOptions
 
             if (available != null)
             {
-                options.map.put("available", String.valueOf(available));
+                options.queryParameters.put("available", String.valueOf(available));
             }
 
             return options;

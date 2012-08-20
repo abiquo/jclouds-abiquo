@@ -54,17 +54,43 @@ public class EnterpriseLiveTest extends BaseAbiquoApiLiveTest
 {
     private Enterprise enterprise;
 
+    private Limits limits;
+
     @BeforeClass
     public void setupEnterprise()
     {
         enterprise = Enterprise.Builder.fromEnterprise(env.enterprise).build();
         enterprise.setName(PREFIX + "-enterprise-test");
         enterprise.save();
+
+        limits = enterprise.allowDatacenter(env.datacenter);
+        assertNotNull(limits);
+
+        DatacentersLimitsDto limitsDto =
+            env.enterpriseApi.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
+        assertNotNull(limitsDto);
+        assertEquals(limitsDto.getCollection().size(), 1);
     }
 
     @AfterClass
     public void tearDownEnterprise()
     {
+        enterprise.prohibitDatacenter(env.datacenter);
+
+        try
+        {
+            // If a datacenter is not allowed, the limits for it can not be retrieved
+            env.enterpriseApi.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
+        }
+        catch (AbiquoException ex)
+        {
+            assertHasError(ex, Status.CONFLICT, "ENTERPRISE-10");
+        }
+
+        List<Datacenter> allowed = enterprise.listAllowedDatacenters();
+        assertNotNull(allowed);
+        assertTrue(allowed.isEmpty());
+
         enterprise.delete();
     }
 
@@ -94,10 +120,9 @@ public class EnterpriseLiveTest extends BaseAbiquoApiLiveTest
         }
     }
 
-    public void testAllowDatacenter()
+    public void testAllowTwiceWorks()
     {
-        tearDownLimits();
-
+        // Allow the datacenter again and check that the configuration has not changed
         Limits limits = enterprise.allowDatacenter(env.datacenter);
         assertNotNull(limits);
 
@@ -107,27 +132,8 @@ public class EnterpriseLiveTest extends BaseAbiquoApiLiveTest
         assertEquals(limitsDto.getCollection().size(), 1);
     }
 
-    public void testAllowTwiceWorks()
-    {
-        tearDownLimits();
-
-        Limits limits = enterprise.allowDatacenter(env.datacenter);
-        assertNotNull(limits);
-        limits = enterprise.allowDatacenter(env.datacenter);
-        assertNotNull(limits);
-    }
-
-    public void testDeleteTwiceWorks()
-    {
-        enterprise.prohibitDatacenter(env.datacenter);
-        enterprise.prohibitDatacenter(env.datacenter);
-    }
-
     public void testListLimits()
     {
-        Limits limits = enterprise.allowDatacenter(env.datacenter);
-        assertNotNull(limits);
-
         List<Limits> allLimits = enterprise.listLimits();
         assertNotNull(allLimits);
         assertEquals(allLimits.size(), 1);
@@ -135,9 +141,6 @@ public class EnterpriseLiveTest extends BaseAbiquoApiLiveTest
 
     public void testUpdateInvalidLimits()
     {
-        Limits limits = enterprise.allowDatacenter(env.datacenter);
-        assertNotNull(limits);
-
         // CPU soft remains to 0 => conflict because hard is smaller
         limits.setCpuCountHardLimit(2);
 
@@ -153,9 +156,6 @@ public class EnterpriseLiveTest extends BaseAbiquoApiLiveTest
 
     public void testUpdateLimits()
     {
-        Limits limits = enterprise.allowDatacenter(env.datacenter);
-        assertNotNull(limits);
-
         limits.setCpuCountLimits(4, 5);
         limits.update();
 
@@ -169,9 +169,6 @@ public class EnterpriseLiveTest extends BaseAbiquoApiLiveTest
 
     public void testListAllowedDatacenters()
     {
-        Limits limits = enterprise.allowDatacenter(env.datacenter);
-        assertNotNull(limits);
-
         List<Datacenter> allowed = enterprise.listAllowedDatacenters();
 
         assertNotNull(allowed);
@@ -179,38 +176,15 @@ public class EnterpriseLiveTest extends BaseAbiquoApiLiveTest
         assertEquals(allowed.get(0).getId(), env.datacenter.getId());
     }
 
-    public void testListAllowedDatacentersWithNoAllowedDatacenters()
-    {
-        tearDownLimits();
-
-        List<Datacenter> allowed = enterprise.listAllowedDatacenters();
-
-        assertNotNull(allowed);
-        assertTrue(allowed.isEmpty());
-
-        enterprise.allowDatacenter(env.datacenter);
-    }
-
     public void testListVirtualMachines()
     {
         List<VirtualMachine> machines = env.defaultEnterprise.listVirtualMachines();
         assertTrue(machines.size() > 0);
-
     }
 
     public void testListVirtualAppliances()
     {
         List<VirtualAppliance> vapps = env.defaultEnterprise.listVirtualAppliances();
         assertTrue(vapps.size() > 0);
-    }
-
-    private void tearDownLimits()
-    {
-        // Cleanup with the prohibe method
-        enterprise.prohibitDatacenter(env.datacenter);
-        DatacentersLimitsDto limitsDto =
-            env.enterpriseApi.getLimits(enterprise.unwrap(), env.datacenter.unwrap());
-        assertNotNull(limitsDto);
-        assertEquals(limitsDto.getCollection().size(), 0);
     }
 }

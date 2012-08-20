@@ -28,7 +28,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
@@ -93,7 +92,7 @@ public interface VirtualMachineTemplateAsyncApi
     ListenableFuture<VirtualMachineTemplatesDto> listVirtualMachineTemplates(
         @PathParam("enterprise") Integer enterpriseId,
         @PathParam("datacenterrepository") Integer datacenterRepositoryId,
-        @BinderParam(AppendOptionsToPath.class) VirtualMachineTemplateOptions options);
+        VirtualMachineTemplateOptions options);
 
     /**
      * @see VirtualMachineTemplateApi#getVirtualMachineTemplate(Integer, Integer, Integer)
@@ -132,9 +131,11 @@ public interface VirtualMachineTemplateAsyncApi
     @POST
     @Consumes(AcceptedRequestDto.BASE_MEDIA_TYPE)
     @Produces(VirtualMachineTemplatePersistentDto.BASE_MEDIA_TYPE)
+    @Path("/{enterprise}/datacenterrepositories/{datacenterrepository}/virtualmachinetemplates")
     @JAXBResponseParser
     ListenableFuture<AcceptedRequestDto<String>> createPersistentVirtualMachineTemplate(
-        @EndpointLink("virtualmachinetemplates") @BinderParam(BindToPath.class) DatacenterRepositoryDto dcRepository,
+        @PathParam("enterprise") Integer enterpriseId,
+        @PathParam("datacenterrepository") Integer datacenterRepositoryId,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTemplatePersistentDto persistentOptions);
 
     /*********************** Conversions ***********************/
@@ -149,15 +150,14 @@ public interface VirtualMachineTemplateAsyncApi
         @EndpointLink("conversions") @BinderParam(BindToPath.class) VirtualMachineTemplateDto template);
 
     /**
-     * @see VirtualMachineTemplateApi#listConversions(VirtualMachineTemplateDto,
-     *      ConversionOptions)
+     * @see VirtualMachineTemplateApi#listConversions(VirtualMachineTemplateDto, ConversionOptions)
      */
     @GET
     @Consumes(ConversionsDto.BASE_MEDIA_TYPE)
     @JAXBResponseParser
     ListenableFuture<ConversionsDto> listConversions(
         @EndpointLink("conversions") @BinderParam(BindToPath.class) final VirtualMachineTemplateDto template,
-        @BinderParam(AppendOptionsToPath.class) ConversionOptions options);
+        ConversionOptions options);
 
     /**
      * @see VirtualMachineTemplateApi#getConversion(VirtualMachineTemplateDto, DiskFormatType)

@@ -41,7 +41,6 @@ import com.abiquo.model.enumerator.HypervisorType;
 import com.abiquo.model.transport.AcceptedRequestDto;
 import com.abiquo.server.core.appslibrary.ConversionDto;
 import com.abiquo.server.core.appslibrary.ConversionsDto;
-import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
 import com.abiquo.server.core.appslibrary.VirtualMachineTemplatesDto;
@@ -178,11 +177,10 @@ public class VirtualMachineTemplateAsyncApiTest extends
     {
         Method method =
             VirtualMachineTemplateAsyncApi.class.getMethod(
-                "createPersistentVirtualMachineTemplate", DatacenterRepositoryDto.class,
+                "createPersistentVirtualMachineTemplate", Integer.class, Integer.class,
                 VirtualMachineTemplatePersistentDto.class);
         GeneratedHttpRequest request =
-            processor.createRequest(method, TemplateResources.datacenterRepositoryPut(),
-                TemplateResources.persistentData());
+            processor.createRequest(method, 1, 1, TemplateResources.persistentData());
 
         assertRequestLineEquals(
             request,

@@ -19,12 +19,12 @@
 
 package org.jclouds.abiquo.domain.cloud;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Iterables.filter;
-import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
-
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.sql.rowset.Predicate;
 
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.AbiquoAsyncApi;
@@ -37,26 +37,6 @@ import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.reference.rest.ParentLinkName;
 import org.jclouds.abiquo.rest.internal.ExtendedUtils;
-import org.jclouds.http.HttpResponse;
-import org.jclouds.http.functions.ParseXMLWithJAXB;
-import org.jclouds.rest.RestContext;
-
-import com.abiquo.model.enumerator.ConversionState;
-import com.abiquo.model.enumerator.DiskFormatType;
-import com.abiquo.model.enumerator.HypervisorType;
-import com.abiquo.model.rest.RESTLink;
-import com.abiquo.model.transport.AcceptedRequestDto;
-import com.abiquo.server.core.appslibrary.CategoryDto;
-import com.abiquo.server.core.appslibrary.ConversionDto;
-import com.abiquo.server.core.appslibrary.ConversionsDto;
-import com.abiquo.server.core.appslibrary.DatacenterRepositoryDto;
-import com.abiquo.server.core.appslibrary.VirtualMachineTemplateDto;
-import com.abiquo.server.core.appslibrary.VirtualMachineTemplatePersistentDto;
-import com.abiquo.server.core.infrastructure.storage.VolumeManagementDto;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
-import com.google.inject.TypeLiteral;
 
 /**
  * Adds high level functionality to {@link VirtualMachineTemplateDto}.
@@ -129,31 +109,32 @@ public class VirtualMachineTemplate extends DomainWrapper<VirtualMachineTemplate
             new VirtualMachineTemplatePersistentDto();
         persistentData.setPersistentTemplateName(persistentTemplateName);
         persistentData.setPersistentVolumeName(persistentVolumeName);
-        RESTLink vdcLink = vdc.unwrap().getEditLink();
-        vdcLink.setRel(ParentLinkName.VIRTUAL_DATACENTER);
-        RESTLink templateLink = target.getEditLink();
-        templateLink.setRel(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE);
+        RESTLink vdcLink =
+            new RESTLink(ParentLinkName.VIRTUAL_DATACENTER, vdc.unwrap().getEditLink().getHref());
+        RESTLink templateLink =
+            new RESTLink(ParentLinkName.VIRTUAL_MACHINE_TEMPLATE, target.getEditLink().getHref());
 
         persistentData.addLink(vdcLink);
         persistentData.addLink(storageLink);
         persistentData.addLink(templateLink);
 
-        RESTLink link = requireLink(target, ParentLinkName.DATACENTER_REPOSITORY);
-
-        ExtendedUtils utils = (ExtendedUtils) context.getUtils();
-        HttpResponse rp =
-            checkNotNull(utils.getAbiquoHttpClient().get(link),
-                ParentLinkName.DATACENTER_REPOSITORY);
-
-        ParseXMLWithJAXB<DatacenterRepositoryDto> parser =
-            new ParseXMLWithJAXB<DatacenterRepositoryDto>(utils.getXml(),
-                TypeLiteral.get(DatacenterRepositoryDto.class));
-
-        DatacenterRepositoryDto dcRepository = parser.apply(rp);
+        // SCG:
+        // A simple user should not have permissions to obtain a datacenter repository, but at this
+        // point we have the datacenter repository and enterprise ids in the own target uri. So we
+        // can obtain the path where do the POST
+        // Assumption that to create a new object a user needs to get the parent object cannot be
+        // applied in this case
+        String editUri = getURI().getPath();
+        Pattern p = Pattern.compile("\\d+");
+        Matcher m = p.matcher(editUri);
+        m.find();
+        Integer idEnt = new Integer(m.group());
+        m.find();
+        Integer idDcRepo = new Integer(m.group());
 
         AcceptedRequestDto<String> response =
             context.getApi().getVirtualMachineTemplateApi()
-                .createPersistentVirtualMachineTemplate(dcRepository, persistentData);
+                .createPersistentVirtualMachineTemplate(idEnt, idDcRepo, persistentData);
 
         return getTask(response);
     }

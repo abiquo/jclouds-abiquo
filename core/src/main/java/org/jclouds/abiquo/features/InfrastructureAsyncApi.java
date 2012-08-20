@@ -30,10 +30,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.jclouds.abiquo.binders.AppendOptionsToPath;
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
 import org.jclouds.abiquo.binders.BindToXMLPayloadAndPath;
+import org.jclouds.abiquo.binders.infrastructure.AppendMachineIdToPath;
 import org.jclouds.abiquo.binders.infrastructure.AppendRemoteServiceTypeToPath;
 import org.jclouds.abiquo.binders.infrastructure.BindSupportedDevicesLinkToPath;
 import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
@@ -43,7 +43,6 @@ import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
-import org.jclouds.abiquo.domain.options.QueryOptions;
 import org.jclouds.abiquo.domain.options.search.FilterOptions;
 import org.jclouds.abiquo.functions.ReturnAbiquoExceptionOnNotFoundOr4xx;
 import org.jclouds.abiquo.functions.ReturnFalseIfNotAvailable;
@@ -68,6 +67,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.cloud.VirtualMachineWithNodeExtendedDto;
 import com.abiquo.server.core.cloud.VirtualMachinesWithNodeExtendedDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
+import com.abiquo.server.core.enterprise.EnterpriseDto;
 import com.abiquo.server.core.infrastructure.BladeLocatorLedDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.DatacentersDto;
@@ -166,8 +166,8 @@ public interface InfrastructureAsyncApi
         @EndpointLink("edit") @BinderParam(BindToPath.class) DatacenterDto datacenter);
 
     /**
-     * @see InfrastructureApi#discoverSingleMachine(DatacenterDto, String, HypervisorType,
-     *      String, String)
+     * @see InfrastructureApi#discoverSingleMachine(DatacenterDto, String, HypervisorType, String,
+     *      String)
      */
     @GET
     @Consumes(MachineDto.BASE_MEDIA_TYPE)
@@ -179,8 +179,8 @@ public interface InfrastructureAsyncApi
         @QueryParam("user") String user, @QueryParam("password") String password);
 
     /**
-     * @see InfrastructureApi#discoverSingleMachine(DatacenterDto, String, HypervisorType,
-     *      String, String, MachineOptions)
+     * @see InfrastructureApi#discoverSingleMachine(DatacenterDto, String, HypervisorType, String,
+     *      String, MachineOptions)
      */
     @GET
     @Consumes(MachineDto.BASE_MEDIA_TYPE)
@@ -190,7 +190,7 @@ public interface InfrastructureAsyncApi
         @EndpointLink("discoversingle") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
         @QueryParam("user") String user, @QueryParam("password") String password,
-        @BinderParam(AppendOptionsToPath.class) MachineOptions options);
+        MachineOptions options);
 
     /**
      * @see InfrastructureApi#discoverMultipleMachines(DatacenterDto, String, String,
@@ -218,8 +218,7 @@ public interface InfrastructureAsyncApi
         @EndpointLink("discovermultiple") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ipFrom") String ipFrom, @QueryParam("ipTo") String ipTo,
         @QueryParam("hypervisor") HypervisorType hypervisorType, @QueryParam("user") String user,
-        @QueryParam("password") String password,
-        @BinderParam(AppendOptionsToPath.class) MachineOptions options);
+        @QueryParam("password") String password, MachineOptions options);
 
     /**
      * @see InfrastructureApi#listLimits(DatacenterDto)
@@ -255,7 +254,7 @@ public interface InfrastructureAsyncApi
         @EndpointLink("checkmachinestate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
         @QueryParam("user") String user, @QueryParam("password") String password,
-        @BinderParam(AppendOptionsToPath.class) MachineOptions options);
+        MachineOptions options);
 
     /*********************** Hypervisor ***********************/
     /**
@@ -266,7 +265,7 @@ public interface InfrastructureAsyncApi
     @ResponseParser(ReturnStringIf2xx.class)
     ListenableFuture<String> getHypervisorTypeFromMachine(
         @EndpointLink("hypervisor") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @BinderParam(AppendOptionsToPath.class) DatacenterOptions options);
+        DatacenterOptions options);
 
     /**
      * @see InfrastructureApi#getHypervisorTypes(DatacenterDto)
@@ -393,7 +392,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<LogicServersDto> listServiceProfiles(
         @EndpointLink("logicservers") @BinderParam(BindToPath.class) UcsRackDto rack,
-        @BinderParam(AppendOptionsToPath.class) FilterOptions options);
+        FilterOptions options);
 
     /**
      * @see InfrastructureApi#listServiceProfileTemplates(UcsRackDto)
@@ -414,7 +413,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<LogicServersDto> listServiceProfileTemplates(
         @EndpointLink("ls-templates") @BinderParam(BindToPath.class) UcsRackDto rack,
-        @BinderParam(AppendOptionsToPath.class) FilterOptions options);
+        FilterOptions options);
 
     /**
      * @see InfrastructureApi#listOrganizations(UcsRackDto)
@@ -435,11 +434,10 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<OrganizationsDto> listOrganizations(
         @EndpointLink("organizations") @BinderParam(BindToPath.class) UcsRackDto rack,
-        @BinderParam(AppendOptionsToPath.class) FilterOptions options);
+        FilterOptions options);
 
     /**
-     * @see InfrastructureApi#cloneLogicServer(UcsRackDto, LogicServerDto, OrganizationDto,
-     *      String)
+     * @see InfrastructureApi#cloneLogicServer(UcsRackDto, LogicServerDto, OrganizationDto, String)
      */
     @EnterpriseEdition
     @POST
@@ -462,8 +460,8 @@ public interface InfrastructureAsyncApi
         @QueryParam("bladeDn") String bladeName);
 
     /**
-     * @see InfrastructureApi#associateTemplate(UcsRackDto, LogicServerDto, OrganizationDto,
-     *      String, String)
+     * @see InfrastructureApi#associateTemplate(UcsRackDto, LogicServerDto, OrganizationDto, String,
+     *      String)
      */
     @EnterpriseEdition
     @POST
@@ -632,6 +630,25 @@ public interface InfrastructureAsyncApi
     ListenableFuture<Void> deleteMachine(
         @EndpointLink("edit") @BinderParam(BindToPath.class) MachineDto machine);
 
+    /**
+     * @see InfrastructureApi#reserveMachine(EnterpriseDto, MachineDto)
+     */
+    @POST
+    @Consumes(MachineDto.BASE_MEDIA_TYPE)
+    @Produces(MachineDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<MachineDto> reserveMachine(
+        @EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+        @BinderParam(BindToXMLPayload.class) MachineDto machine);
+
+    /**
+     * @see InfrastructureApi#cancelReservation(EnterpriseDto, MachineDto)
+     */
+    @DELETE
+    ListenableFuture<Void> cancelReservation(
+        @EndpointLink("reservedmachines") @BinderParam(BindToPath.class) EnterpriseDto enterprise,
+        @BinderParam(AppendMachineIdToPath.class) MachineDto machine);
+
     /*********************** Blade ***********************/
 
     /**
@@ -696,7 +713,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<VirtualMachinesWithNodeExtendedDto> listVirtualMachinesByMachine(
         @EndpointLink("virtualmachines") @BinderParam(BindToPath.class) MachineDto machine,
-        @BinderParam(AppendOptionsToPath.class) MachineOptions options);
+        MachineOptions options);
 
     /**
      * @see InfrastructureApi#getVirtualMachine(MachineDto, Integer)
@@ -820,7 +837,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<StoragePoolsDto> listStoragePools(
         @EndpointLink("pools") @BinderParam(BindToPath.class) StorageDeviceDto storageDevice,
-        @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
+        StoragePoolOptions options);
 
     /**
      * @see InfrastructureApi#listStoragePools(TierDto)
@@ -886,7 +903,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<StoragePoolDto> refreshStoragePool(
         @EndpointLink("edit") @BinderParam(BindToPath.class) StoragePoolDto storagePool,
-        @BinderParam(AppendOptionsToPath.class) StoragePoolOptions options);
+        StoragePoolOptions options);
 
     /*********************** Network ***********************/
 
@@ -909,7 +926,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<VLANNetworksDto> listNetworks(
         @EndpointLink("network") @BinderParam(BindToPath.class) DatacenterDto datacenter,
-        @BinderParam(AppendOptionsToPath.class) NetworkOptions options);
+        NetworkOptions options);
 
     /**
      * @see InfrastructureApi#getNetwork(DatacenterDto, Integer)
@@ -985,7 +1002,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<PublicIpsDto> listPublicIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-        @BinderParam(AppendOptionsToPath.class) IpOptions options);
+        IpOptions options);
 
     /**
      * @see InfrastructureApi#getPublicIp(VLANNetworkDto, Integer)
@@ -1014,7 +1031,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<ExternalIpsDto> listExternalIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-        @BinderParam(AppendOptionsToPath.class) IpOptions options);
+        IpOptions options);
 
     /**
      * @see InfrastructureApi#getExternalIp(VLANNetworkDto, Integer)
@@ -1043,7 +1060,7 @@ public interface InfrastructureAsyncApi
     @JAXBResponseParser
     ListenableFuture<UnmanagedIpsDto> listUnmanagedIps(
         @EndpointLink("ips") @BinderParam(BindToPath.class) VLANNetworkDto network,
-        @BinderParam(AppendOptionsToPath.class) IpOptions options);
+        IpOptions options);
 
     /**
      * @see InfrastructureApi#getUnmanagedIp(VLANNetworkDto, Integer)

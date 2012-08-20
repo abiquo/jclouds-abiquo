@@ -24,8 +24,8 @@ import static com.google.common.collect.Iterables.filter;
 import java.util.Collections;
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.rest.RestContext;
 

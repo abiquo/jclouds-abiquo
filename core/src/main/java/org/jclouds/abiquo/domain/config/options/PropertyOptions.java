@@ -19,14 +19,14 @@
 
 package org.jclouds.abiquo.domain.config.options;
 
-import org.jclouds.abiquo.domain.options.QueryOptions;
+import org.jclouds.http.options.BaseHttpRequestOptions;
 
 /**
  * Available options to query system properties.
  * 
  * @author Francesc Montserrat
  */
-public class PropertyOptions extends QueryOptions
+public class PropertyOptions extends BaseHttpRequestOptions
 {
     public static Builder builder()
     {
@@ -37,14 +37,8 @@ public class PropertyOptions extends QueryOptions
     protected Object clone() throws CloneNotSupportedException
     {
         PropertyOptions options = new PropertyOptions();
-        options.map.putAll(map);
+        options.queryParameters.putAll(queryParameters);
         return options;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.map.toString();
     }
 
     public static class Builder
@@ -70,12 +64,12 @@ public class PropertyOptions extends QueryOptions
             PropertyOptions options = new PropertyOptions();
             if (component != null)
             {
-                options.map.put("component", component.toString());
+                options.queryParameters.put("component", component.toString());
             }
 
             if (name != null)
             {
-                options.map.put("name", name.toString());
+                options.queryParameters.put("name", name.toString());
             }
             return options;
         }
