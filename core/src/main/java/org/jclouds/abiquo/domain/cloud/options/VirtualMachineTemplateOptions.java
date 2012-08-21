@@ -133,12 +133,12 @@ public class VirtualMachineTemplateOptions extends BaseHttpRequestOptions
             
             if (osType != null)
             {
-                options.map.put("ostype", osType.name());
+                options.queryParameters.put("ostype", osType.name());
             }
             
             if(is64bits != null)
             {
-                options.map.put("64bits", is64bits.toString());
+                options.queryParameters.put("64bits", is64bits.toString());
             }
 
             return options;
