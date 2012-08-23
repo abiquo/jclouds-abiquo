@@ -145,8 +145,8 @@ public class AbiquoComputeServiceAdapter
         vm.deploy();
         monitor.awaitCompletionDeploy(vm);
 
-        // TODO: Node default credentials
-        return new NodeAndInitialCredentials<VirtualMachine>(vm, vm.getId().toString(), null);
+        return new NodeAndInitialCredentials<VirtualMachine>(vm, vm.getId().toString(), template
+            .getImage().getDefaultCredentials());
     }
 
     @Override

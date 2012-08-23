@@ -43,8 +43,11 @@ import com.google.inject.Module;
  * 
  * @author Ignasi Barrera
  */
-@Test(groups = "live", enabled = false, singleThreaded = true)
-public class AbiquoComputeServiceLiveTest extends BaseComputeServiceLiveTest
+@Test(groups = "live", singleThreaded = true)
+// Made abstract to avoid executing tests. Since the base class has test configuration, even if we
+// disable
+// tests here, or comment them out, the ones in the base class will be executed
+public abstract class AbiquoComputeServiceLiveTest extends BaseComputeServiceLiveTest
 {
     public AbiquoComputeServiceLiveTest()
     {
@@ -67,6 +70,14 @@ public class AbiquoComputeServiceLiveTest extends BaseComputeServiceLiveTest
         overrides.put(Constants.PROPERTY_MAX_REDIRECTS, "0");
         overrides.put("jclouds.timeouts.CloudApi.listVirtualMachines", "60000");
         return overrides;
+    }
+
+    @Override
+    protected void initializeContext()
+    {
+        super.initializeContext();
+        String templateId = buildTemplate(client.templateBuilder()).getImage().getId();
+        view.getUtils().getCredentialStore().put("image#" + templateId, loginCredentials);
     }
 
     @Override
@@ -95,6 +106,12 @@ public class AbiquoComputeServiceLiveTest extends BaseComputeServiceLiveTest
         }
     }
 
+    @Override
+    public void testOptionToNotBlock() throws Exception
+    {
+        // By default the provider blocks until the node is running
+    }
+
     // Abiquo does not support metadata
     @Override
     protected void checkUserMetadataInNodeEquals(final NodeMetadata node,
@@ -110,12 +127,6 @@ public class AbiquoComputeServiceLiveTest extends BaseComputeServiceLiveTest
     {
         assert node.getTags().equals(ImmutableSet.<String> of()) : String.format(
             "node tags did not match %s %s", tags, node);
-    }
-
-    @Override
-    public void testOptionToNotBlock() throws Exception
-    {
-        // By default the provider blocks until the node is running
     }
 
 }

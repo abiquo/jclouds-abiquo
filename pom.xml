@@ -236,12 +236,6 @@
             </modules>
         </profile>
         <profile>
-            <id>compute</id>
-            <modules>
-                <module>live</module>
-            </modules>
-        </profile>
-        <profile>
             <id>ucs</id>
             <modules>
                 <module>live</module>
