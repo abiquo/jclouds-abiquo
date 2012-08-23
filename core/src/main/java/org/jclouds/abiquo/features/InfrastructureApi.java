@@ -22,6 +22,7 @@ package org.jclouds.abiquo.features;
 import java.util.concurrent.TimeUnit;
 
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -268,7 +269,7 @@ public interface InfrastructureApi
      * @return The ipmi configuration state information
      */
     MachineIpmiStateDto checkMachineIpmiState(DatacenterDto datacenter, String ip, String user,
-        String password, MachineOptions options);
+        String password, IpmiOptions options);
 
     /*********************** Hypervisor ***********************/
 

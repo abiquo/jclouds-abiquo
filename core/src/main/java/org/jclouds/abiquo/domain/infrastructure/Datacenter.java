@@ -30,6 +30,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
@@ -918,7 +919,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public MachineState checkMachineState(final String ip, final HypervisorType hypervisorType,
         final String user, final String password)
     {
-        return checkMachineState(ip, hypervisorType, user, password, hypervisorType.defaultPort);
+        return checkMachineState(ip, hypervisorType, user, password,
+            MachineOptions.builder().port(hypervisorType.defaultPort).build());
     }
 
     /**
@@ -931,7 +933,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *            xen-3, vmx-04, hyperv-301, xenserver}.
      * @param user User to log in.
      * @param password Password to authenticate.
-     * @param port Port to connect.
+     * @param options.
      * @return The physical machine state if the machine is found or <code>null</code>.
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Checkthestatefromremotemachine"
@@ -939,14 +941,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      Checkthestatefromremotemachine</a>
      */
     public MachineState checkMachineState(final String ip, final HypervisorType hypervisorType,
-        final String user, final String password, final int port)
+        final String user, final String password, final MachineOptions options)
     {
         MachineStateDto dto =
-            context
-                .getApi()
-                .getInfrastructureApi()
-                .checkMachineState(target, ip, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureApi()
+                .checkMachineState(target, ip, hypervisorType, user, password, options);
 
         return dto.getState();
     }
@@ -989,14 +988,11 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      Checktheipmistatefromremotemachine</a>
      */
     public MachineIpmiState checkMachineIpmiState(final String ip, final String user,
-        final String password, final Integer port)
+        final String password, final IpmiOptions options)
     {
         MachineIpmiStateDto dto =
-            context
-                .getApi()
-                .getInfrastructureApi()
-                .checkMachineIpmiState(target, ip, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureApi()
+                .checkMachineIpmiState(target, ip, user, password, options);
         return dto.getState();
     }
 

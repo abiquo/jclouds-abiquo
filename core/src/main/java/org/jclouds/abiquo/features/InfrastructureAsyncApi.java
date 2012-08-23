@@ -39,6 +39,7 @@ import org.jclouds.abiquo.binders.infrastructure.BindSupportedDevicesLinkToPath;
 import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
 import org.jclouds.abiquo.binders.infrastructure.ucs.BindOrganizationParameters;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -271,7 +272,7 @@ public interface InfrastructureAsyncApi
 
     /**
      * @see InfrastructureApi#checkMachineIpmiState(DatacenterDto, String, String, String,
-     *      MachineOptions)
+     *      IpmiOptions)
      */
     @GET
     @Consumes(MachineIpmiStateDto.BASE_MEDIA_TYPE)
@@ -280,7 +281,7 @@ public interface InfrastructureAsyncApi
     ListenableFuture<MachineIpmiStateDto> checkMachineIpmiState(
         @EndpointLink("checkmachineipmistate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
         @QueryParam("ip") String ip, @QueryParam("user") String user,
-        @QueryParam("password") String password, MachineOptions options);
+        @QueryParam("password") String password, IpmiOptions options);
 
     /*********************** Hypervisor ***********************/
     /**

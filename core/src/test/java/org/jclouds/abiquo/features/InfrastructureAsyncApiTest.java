@@ -30,6 +30,7 @@ import org.jclouds.abiquo.domain.EnterpriseResources;
 import org.jclouds.abiquo.domain.InfrastructureResources;
 import org.jclouds.abiquo.domain.NetworkResources;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -1072,10 +1073,10 @@ public class InfrastructureAsyncApiTest extends BaseAbiquoAsyncApiTest<Infrastru
     {
         Method method =
             InfrastructureAsyncApi.class.getMethod("checkMachineIpmiState", DatacenterDto.class,
-                String.class, String.class, String.class, MachineOptions.class);
+                String.class, String.class, String.class, IpmiOptions.class);
         GeneratedHttpRequest request =
             processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
-                "user", "pass", MachineOptions.builder().port(8889).build());
+                "user", "pass", IpmiOptions.builder().port(8889).build());
 
         String baseUrl = "http://localhost/api/admin/datacenters/1/action/checkmachineipmistate";
         String query = "user=user&ip=10.60.1.222&password=pass&port=8889";
