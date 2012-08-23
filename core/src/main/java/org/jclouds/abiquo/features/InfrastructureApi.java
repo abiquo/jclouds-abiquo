@@ -44,6 +44,7 @@ import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineIpmiStateDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.OrganizationDto;
@@ -241,6 +242,33 @@ public interface InfrastructureApi
      */
     MachineStateDto checkMachineState(DatacenterDto datacenter, String ip,
         HypervisorType hypervisorType, String user, String password, MachineOptions options);
+
+    /**
+     * Check the ipmi configuration state of a remote machine. This machine does not need to be
+     * managed by Abiquo.
+     * 
+     * @param datacenter The datacenter.
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @return The ipmi configuration state information
+     */
+    MachineIpmiStateDto checkMachineIpmiState(DatacenterDto datacenter, String ip, String user,
+        String password);
+
+    /**
+     * Check the ipmi configuration state of a remote machine. This machine does not need to be
+     * managed by Abiquo.
+     * 
+     * @param datacenter The datacenter.
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @param options Optional query params.
+     * @return The ipmi configuration state information
+     */
+    MachineIpmiStateDto checkMachineIpmiState(DatacenterDto datacenter, String ip, String user,
+        String password, MachineOptions options);
 
     /*********************** Hypervisor ***********************/
 
@@ -577,6 +605,15 @@ public interface InfrastructureApi
      * @return A machineStateDto with a machine state value from enum MachineState
      */
     MachineStateDto checkMachineState(MachineDto machine, boolean sync);
+
+    /**
+     * Checks the ipmi configuration state for the given physical machine.
+     * 
+     * @param machine The machine to check
+     * @return A machineIpmiStateDto with a machine ipmi configuration state value from enum
+     *         MachineState
+     */
+    MachineIpmiStateDto checkMachineIpmiState(MachineDto machine);
 
     /**
      * Updates an existing physical machine.

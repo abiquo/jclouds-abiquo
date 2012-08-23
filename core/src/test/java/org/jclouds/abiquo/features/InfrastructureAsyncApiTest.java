@@ -62,6 +62,7 @@ import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineIpmiStateDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.OrganizationDto;
@@ -1040,6 +1041,58 @@ public class InfrastructureAsyncApiTest extends BaseAbiquoAsyncApiTest<Infrastru
         checkFilters(request);
     }
 
+    public void testCheckMachineIpmiStateWithoutOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("checkMachineIpmiState", DatacenterDto.class,
+                String.class, String.class, String.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
+                "user", "pass");
+
+        String baseUrl = "http://localhost/api/admin/datacenters/1/action/checkmachineipmistate";
+        String query = "user=user&ip=10.60.1.222&password=pass";
+        String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
+
+        assertRequestLineEquals(request, expectedRequest);
+        assertNonPayloadHeadersEqual(request, "Accept: " + MachineIpmiStateDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
+
+        checkFilters(request);
+    }
+
+    public void testCheckMachineIpmiStateWithALLOptions() throws SecurityException,
+        NoSuchMethodException, IOException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("checkMachineIpmiState", DatacenterDto.class,
+                String.class, String.class, String.class, MachineOptions.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), "10.60.1.222",
+                "user", "pass", MachineOptions.builder().port(8889).build());
+
+        String baseUrl = "http://localhost/api/admin/datacenters/1/action/checkmachineipmistate";
+        String query = "user=user&ip=10.60.1.222&password=pass&port=8889";
+        String expectedRequest = String.format("GET %s?%s HTTP/1.1", baseUrl, query);
+
+        assertRequestLineEquals(request, expectedRequest);
+        assertNonPayloadHeadersEqual(request, "Accept: " + MachineIpmiStateDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnAbiquoExceptionOnNotFoundOr4xx.class);
+
+        checkFilters(request);
+    }
+
     public void testListMachines() throws SecurityException, NoSuchMethodException, IOException
     {
         Method method = InfrastructureAsyncApi.class.getMethod("listMachines", RackDto.class);
@@ -1090,6 +1143,27 @@ public class InfrastructureAsyncApiTest extends BaseAbiquoAsyncApiTest<Infrastru
             request,
             "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/checkstate?sync=true HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "Accept: " + MachineStateDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCheckMachineIpmiState() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("checkMachineIpmiState", MachineDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.machinePut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/racks/1/machines/1/action/checkipmistate HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + MachineIpmiStateDto.BASE_MEDIA_TYPE
+            + "\n");
         assertPayloadEquals(request, null, null, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);

@@ -24,16 +24,18 @@ import static com.google.common.collect.Iterables.find;
 import java.util.List;
 import java.util.StringTokenizer;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.predicates.infrastructure.DatastorePredicates;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.MachineIpmiState;
 import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.server.core.infrastructure.DatastoresDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineIpmiStateDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
@@ -61,7 +63,8 @@ public abstract class AbstractPhysicalMachine extends DomainWrapper<MachineDto>
     /**
      * Constructor to be used only by the builder.
      */
-    protected AbstractPhysicalMachine(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final MachineDto target)
+    protected AbstractPhysicalMachine(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
+        final MachineDto target)
     {
         super(context, target);
         extractVirtualSwitches();
@@ -85,6 +88,13 @@ public abstract class AbstractPhysicalMachine extends DomainWrapper<MachineDto>
         MachineState state = dto.getState();
         target.setState(state);
         return state;
+    }
+
+    public MachineIpmiState checkIpmi()
+    {
+        MachineIpmiStateDto dto =
+            context.getApi().getInfrastructureApi().checkMachineIpmiState(target);
+        return dto.getState();
     }
 
     // Children access
