@@ -60,15 +60,15 @@ public class CurrencyLiveTest extends BaseAbiquoApiLiveTest
         Currency currency = currencies.iterator().next();
         String name = currency.getName();
 
-        currency.setName(PREFIX + "t-currency-updated");
+        currency.setName(PREFIX + "t-currency-upd");
         currency.update();
 
         Currency apiCurrency =
             env.context.getPricingService().findCurrency(
-                CurrencyPredicates.name(PREFIX + "t-currency-updated"));
+                CurrencyPredicates.name(PREFIX + "t-currency-upd"));
 
         assertNotNull(apiCurrency);
-        assertEquals(PREFIX + "t-currency-updated", apiCurrency.getName());
+        assertEquals(PREFIX + "t-currency-upd", apiCurrency.getName());
 
         currency.setName(name);
         currency.update();
