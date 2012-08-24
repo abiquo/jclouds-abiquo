@@ -28,26 +28,28 @@ import java.util.concurrent.atomic.AtomicReference;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.User;
-import org.jclouds.abiquo.features.AdminAsyncApi;
 import org.jclouds.abiquo.features.AdminApi;
-import org.jclouds.abiquo.features.CloudAsyncApi;
+import org.jclouds.abiquo.features.AdminAsyncApi;
 import org.jclouds.abiquo.features.CloudApi;
-import org.jclouds.abiquo.features.ConfigAsyncApi;
+import org.jclouds.abiquo.features.CloudAsyncApi;
 import org.jclouds.abiquo.features.ConfigApi;
-import org.jclouds.abiquo.features.EnterpriseAsyncApi;
+import org.jclouds.abiquo.features.ConfigAsyncApi;
 import org.jclouds.abiquo.features.EnterpriseApi;
-import org.jclouds.abiquo.features.EventAsyncApi;
+import org.jclouds.abiquo.features.EnterpriseAsyncApi;
 import org.jclouds.abiquo.features.EventApi;
-import org.jclouds.abiquo.features.InfrastructureAsyncApi;
+import org.jclouds.abiquo.features.EventAsyncApi;
 import org.jclouds.abiquo.features.InfrastructureApi;
-import org.jclouds.abiquo.features.TaskAsyncApi;
+import org.jclouds.abiquo.features.InfrastructureAsyncApi;
+import org.jclouds.abiquo.features.PricingApi;
+import org.jclouds.abiquo.features.PricingAsyncApi;
 import org.jclouds.abiquo.features.TaskApi;
-import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncApi;
+import org.jclouds.abiquo.features.TaskAsyncApi;
 import org.jclouds.abiquo.features.VirtualMachineTemplateApi;
+import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncApi;
 import org.jclouds.abiquo.handlers.AbiquoErrorHandler;
 import org.jclouds.abiquo.rest.internal.AbiquoHttpAsyncClient;
 import org.jclouds.abiquo.rest.internal.AbiquoHttpClient;
@@ -87,7 +89,7 @@ public class AbiquoRestClientModule extends RestClientModule<AbiquoApi, AbiquoAs
         .put(CloudApi.class, CloudAsyncApi.class) //
         .put(VirtualMachineTemplateApi.class, VirtualMachineTemplateAsyncApi.class) //
         .put(TaskApi.class, TaskAsyncApi.class) //
-        .put(EventApi.class, EventAsyncApi.class) //
+        .put(EventApi.class, EventAsyncApi.class).put(PricingApi.class, PricingAsyncApi.class) //
         .build();
 
     public AbiquoRestClientModule()
