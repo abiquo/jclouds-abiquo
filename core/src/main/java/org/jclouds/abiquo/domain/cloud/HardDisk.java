@@ -173,7 +173,7 @@ public class HardDisk extends DomainWrapper<DiskManagementDto>
     @Override
     public String toString()
     {
-        return "HardDisk [id=" + getId() + ", sizeInMb()=" + getSizeInMb() + ", sequence()="
+        return "HardDisk [id=" + getId() + ", sizeInMb=" + getSizeInMb() + ", sequence="
             + getSequence() + "]";
     }
 

@@ -28,8 +28,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
 import org.jclouds.abiquo.domain.cloud.VirtualAppliance;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
@@ -137,15 +137,16 @@ public class AbiquoComputeServiceAdapter
         vm.save();
 
         // Once the virtual machine is created, override the default network settings if needed
-        helper.configureNetwork(vm, options.getGatewayNetwork(), Arrays.asList(options.getIps()),
-            Arrays.asList(options.getUnmanagedIps()));
+        helper.configureNetwork(vm, options.getGatewayNetwork(), options.getIps() == null ? null
+            : Arrays.asList(options.getIps()),
+            options.getUnmanagedIps() == null ? null : Arrays.asList(options.getUnmanagedIps()));
 
         VirtualMachineMonitor monitor = monitoringService.getVirtualMachineMonitor();
         vm.deploy();
         monitor.awaitCompletionDeploy(vm);
 
-        // TODO: Node default credentials
-        return new NodeAndInitialCredentials<VirtualMachine>(vm, vm.getId().toString(), null);
+        return new NodeAndInitialCredentials<VirtualMachine>(vm, vm.getId().toString(), template
+            .getImage().getDefaultCredentials());
     }
 
     @Override

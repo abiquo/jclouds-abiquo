@@ -31,10 +31,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.compute.exception.NotEnoughResourcesException;
 import org.jclouds.abiquo.compute.options.AbiquoTemplateOptions;
+import org.jclouds.abiquo.domain.cloud.Conversion;
 import org.jclouds.abiquo.domain.cloud.VirtualDatacenter;
 import org.jclouds.abiquo.domain.cloud.VirtualMachine;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
@@ -53,6 +54,7 @@ import org.jclouds.javax.annotation.Nullable;
 import org.jclouds.logging.Logger;
 import org.jclouds.rest.RestContext;
 
+import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.HypervisorType;
 import com.google.common.base.Predicate;
 
@@ -137,7 +139,7 @@ public class AbiquoComputeServiceHelper
             @Override
             public boolean apply(final VirtualDatacenter vdc)
             {
-                return vdc.getHypervisorType().isCompatible(template.getDiskFormatType());
+                return isTemplateCompatibleWithHypervisor(template, vdc.getHypervisorType());
             }
         });
     }
@@ -195,7 +197,7 @@ public class AbiquoComputeServiceHelper
         // Find the first hypervisor in the datacenter compatible with the template
         for (HypervisorType type : HypervisorType.values())
         {
-            if (type.isCompatible(template.getDiskFormatType()))
+            if (isTemplateCompatibleWithHypervisor(template, type))
             {
                 try
                 {
@@ -228,6 +230,27 @@ public class AbiquoComputeServiceHelper
             template.getDiskFormatType().name());
 
         return null;
+    }
+
+    /**
+     * Check if the given template type is compatible with the given hypervisor type.
+     * 
+     * @param template The template to check.
+     * @param type The type of the hypervisor.
+     * @return Boolean indicating if the given template type is compatible with the given hypervisor
+     *         type.
+     */
+    private static boolean isTemplateCompatibleWithHypervisor(
+        final VirtualMachineTemplate template, final HypervisorType type)
+    {
+        boolean compatible = type.isCompatible(template.getDiskFormatType());
+        if (!compatible)
+        {
+            List<Conversion> compatibleConversions =
+                template.listConversions(type, ConversionState.FINISHED);
+            compatible = compatibleConversions != null && !compatibleConversions.isEmpty();
+        }
+        return compatible;
     }
 
 }

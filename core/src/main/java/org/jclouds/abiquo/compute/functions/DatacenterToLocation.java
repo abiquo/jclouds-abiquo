@@ -49,7 +49,10 @@ public class DatacenterToLocation implements Function<Datacenter, Location>
         builder.scope(LocationScope.ZONE);
         // TODO: Convert to ISO3166 code?
         builder.iso3166Codes(ImmutableSet.<String> of());
+
+        builder.parent(new LocationBuilder().scope(LocationScope.PROVIDER).id("abiquo")
+            .description("abiquo").build());
+
         return builder.build();
     }
-
 }

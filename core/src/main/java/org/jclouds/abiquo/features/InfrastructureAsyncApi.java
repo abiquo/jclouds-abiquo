@@ -39,6 +39,7 @@ import org.jclouds.abiquo.binders.infrastructure.BindSupportedDevicesLinkToPath;
 import org.jclouds.abiquo.binders.infrastructure.ucs.BindLogicServerParameters;
 import org.jclouds.abiquo.binders.infrastructure.ucs.BindOrganizationParameters;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.StoragePoolOptions;
 import org.jclouds.abiquo.domain.network.options.IpOptions;
@@ -75,6 +76,7 @@ import com.abiquo.server.core.infrastructure.FsmsDto;
 import com.abiquo.server.core.infrastructure.LogicServerDto;
 import com.abiquo.server.core.infrastructure.LogicServersDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineIpmiStateDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.OrganizationDto;
@@ -255,6 +257,31 @@ public interface InfrastructureAsyncApi
         @QueryParam("ip") String ip, @QueryParam("hypervisor") HypervisorType hypervisorType,
         @QueryParam("user") String user, @QueryParam("password") String password,
         MachineOptions options);
+
+    /**
+     * @see InfrastructureApi#checkMachineIpmiState(DatacenterDto, String, String, String)
+     */
+    @GET
+    @Consumes(MachineIpmiStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
+    ListenableFuture<MachineIpmiStateDto> checkMachineIpmiState(
+        @EndpointLink("checkmachineipmistate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @QueryParam("ip") String ip, @QueryParam("user") String user,
+        @QueryParam("password") String password);
+
+    /**
+     * @see InfrastructureApi#checkMachineIpmiState(DatacenterDto, String, String, String,
+     *      IpmiOptions)
+     */
+    @GET
+    @Consumes(MachineIpmiStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @ExceptionParser(ReturnAbiquoExceptionOnNotFoundOr4xx.class)
+    ListenableFuture<MachineIpmiStateDto> checkMachineIpmiState(
+        @EndpointLink("checkmachineipmistate") @BinderParam(BindToPath.class) DatacenterDto datacenter,
+        @QueryParam("ip") String ip, @QueryParam("user") String user,
+        @QueryParam("password") String password, IpmiOptions options);
 
     /*********************** Hypervisor ***********************/
     /**
@@ -612,6 +639,15 @@ public interface InfrastructureAsyncApi
     ListenableFuture<MachineStateDto> checkMachineState(
         @EndpointLink("checkstate") @BinderParam(BindToPath.class) final MachineDto machine,
         @QueryParam("sync") boolean sync);
+
+    /**
+     * @see InfrastructureApi#checkMachineIpmiState(MachineDto)
+     */
+    @GET
+    @Consumes(MachineIpmiStateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<MachineIpmiStateDto> checkMachineIpmiState(
+        @EndpointLink("checkipmistate") @BinderParam(BindToPath.class) final MachineDto machine);
 
     /**
      * @see InfrastructureApi#updateMachine(MachineDto)

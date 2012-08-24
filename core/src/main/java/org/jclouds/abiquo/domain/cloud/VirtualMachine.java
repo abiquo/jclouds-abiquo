@@ -364,7 +364,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
 
     public List<Ip< ? , ? >> listAttachedNics()
     {
-        // The strategy will refresh teh vm. There is no need to do it here
+        // The strategy will refresh the vm. There is no need to do it here
         ListAttachedNics strategy =
             context.getUtils().getInjector().getInstance(ListAttachedNics.class);
         return Lists.newLinkedList(strategy.execute(this));

@@ -28,6 +28,7 @@ import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 
 import com.abiquo.model.enumerator.ConversionState;
 import com.abiquo.model.enumerator.DiskFormatType;
+import com.abiquo.model.enumerator.HypervisorType;
 import com.google.common.base.Predicate;
 
 /**
@@ -76,6 +77,20 @@ public class ConversionPredicates
             public boolean apply(final Conversion conversion)
             {
                 return Arrays.asList(states).contains(conversion.getState());
+            }
+        };
+    }
+
+    public static Predicate<Conversion> compatible(final HypervisorType type)
+    {
+        checkNotNull(type, "type must be defined");
+
+        return new Predicate<Conversion>()
+        {
+            @Override
+            public boolean apply(final Conversion conversion)
+            {
+                return type.isCompatible(conversion.getTargetFormat());
             }
         };
     }

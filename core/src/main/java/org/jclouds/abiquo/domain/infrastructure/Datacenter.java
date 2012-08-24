@@ -23,13 +23,14 @@ import static com.google.common.collect.Iterables.filter;
 
 import java.util.List;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
 import org.jclouds.abiquo.domain.cloud.VirtualMachineTemplate;
 import org.jclouds.abiquo.domain.enterprise.Enterprise;
 import org.jclouds.abiquo.domain.enterprise.Limits;
 import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
+import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.network.Network;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
@@ -38,6 +39,7 @@ import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.HypervisorType;
+import com.abiquo.model.enumerator.MachineIpmiState;
 import com.abiquo.model.enumerator.MachineState;
 import com.abiquo.model.enumerator.NetworkType;
 import com.abiquo.model.enumerator.RemoteServiceType;
@@ -49,6 +51,7 @@ import com.abiquo.server.core.cloud.HypervisorTypesDto;
 import com.abiquo.server.core.enterprise.DatacentersLimitsDto;
 import com.abiquo.server.core.infrastructure.DatacenterDto;
 import com.abiquo.server.core.infrastructure.MachineDto;
+import com.abiquo.server.core.infrastructure.MachineIpmiStateDto;
 import com.abiquo.server.core.infrastructure.MachineStateDto;
 import com.abiquo.server.core.infrastructure.MachinesDto;
 import com.abiquo.server.core.infrastructure.RackDto;
@@ -719,8 +722,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
         DatacenterOptions options = DatacenterOptions.builder().ip(ip).build();
 
         String type =
-            context.getApi().getInfrastructureApi()
-                .getHypervisorTypeFromMachine(target, options);
+            context.getApi().getInfrastructureApi().getHypervisorTypeFromMachine(target, options);
 
         return HypervisorType.valueOf(type);
     }
@@ -917,7 +919,8 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public MachineState checkMachineState(final String ip, final HypervisorType hypervisorType,
         final String user, final String password)
     {
-        return checkMachineState(ip, hypervisorType, user, password, hypervisorType.defaultPort);
+        return checkMachineState(ip, hypervisorType, user, password,
+            MachineOptions.builder().port(hypervisorType.defaultPort).build());
     }
 
     /**
@@ -930,7 +933,7 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *            xen-3, vmx-04, hyperv-301, xenserver}.
      * @param user User to log in.
      * @param password Password to authenticate.
-     * @param port Port to connect.
+     * @param options.
      * @return The physical machine state if the machine is found or <code>null</code>.
      * @see API: <a href=
      *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Checkthestatefromremotemachine"
@@ -938,15 +941,58 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
      *      Checkthestatefromremotemachine</a>
      */
     public MachineState checkMachineState(final String ip, final HypervisorType hypervisorType,
-        final String user, final String password, final int port)
+        final String user, final String password, final MachineOptions options)
     {
         MachineStateDto dto =
-            context
-                .getApi()
-                .getInfrastructureApi()
-                .checkMachineState(target, ip, hypervisorType, user, password,
-                    MachineOptions.builder().port(port).build());
+            context.getApi().getInfrastructureApi()
+                .checkMachineState(target, ip, hypervisorType, user, password, options);
 
+        return dto.getState();
+    }
+
+    /**
+     * Check the ipmi configuration state of a remote machine. This feature is used to check the
+     * ipmi configuration state from a remote machine giving its location, user and password. This
+     * machine does not need to be managed by Abiquo.
+     * 
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @return The physical machine state if the machine is found or <code>null</code>.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Checktheipmistatefromremotemachine"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Checktheipmistatefromremotemachine</a>
+     */
+    public MachineIpmiState checkMachineIpmiState(final String ip, final String user,
+        final String password)
+    {
+        MachineIpmiStateDto dto =
+            context.getApi().getInfrastructureApi()
+                .checkMachineIpmiState(target, ip, user, password);
+        return dto.getState();
+    }
+
+    /**
+     * Check the ipmi configuration state of a remote machine. This feature is used to check the
+     * ipmi configuration state from a remote machine giving its location, user and password. This
+     * machine does not need to be managed by Abiquo.
+     * 
+     * @param ip IP address of the remote hypervisor to connect.
+     * @param user User to log in.
+     * @param password Password to authenticate.
+     * @return The physical machine state if the machine is found or <code>null</code>.
+     * @see API: <a href=
+     *      "http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-Checktheipmistatefromremotemachine"
+     *      > http://community.abiquo.com/display/ABI20/DatacenterResource#DatacenterResource-
+     *      Checktheipmistatefromremotemachine</a>
+     */
+    public MachineIpmiState checkMachineIpmiState(final String ip, final String user,
+        final String password, final IpmiOptions options)
+    {
+        MachineIpmiStateDto dto =
+            context.getApi().getInfrastructureApi()
+                .checkMachineIpmiState(target, ip, user, password, options);
         return dto.getState();
     }
 
