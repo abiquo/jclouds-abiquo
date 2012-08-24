@@ -25,13 +25,14 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import org.jclouds.Context;
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoContext;
 import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.features.services.MonitoringService;
+import org.jclouds.abiquo.features.services.PricingService;
 import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.compute.ComputeService;
 import org.jclouds.compute.Utils;
@@ -60,6 +61,8 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
 
     private final EventService eventService;
 
+    private final PricingService pricingService;
+
     @Inject
     public AbiquoContextImpl(@Provider final Context wrapped,
         @Provider final TypeToken< ? extends Context> wrappedType,
@@ -67,7 +70,7 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
         final RestContext<AbiquoApi, AbiquoAsyncApi> providerSpecificContext,
         final AdministrationService administrationService, final CloudService cloudService,
         final SearchService searchService, final MonitoringService monitoringService,
-        final EventService eventService)
+        final EventService eventService, final PricingService pricingService)
     {
         super(wrapped, wrappedType, computeService, utils);
         this.administrationService = checkNotNull(administrationService, "administrationService");
@@ -75,6 +78,7 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
         this.searchService = checkNotNull(searchService, "searchService");
         this.monitoringService = checkNotNull(monitoringService, "monitoringService");
         this.eventService = checkNotNull(eventService, "eventService");
+        this.pricingService = checkNotNull(pricingService, "pricingService");
     }
 
     @Override
@@ -111,5 +115,11 @@ public class AbiquoContextImpl extends ComputeServiceContextImpl implements Abiq
     public EventService getEventService()
     {
         return eventService;
+    }
+
+    @Override
+    public PricingService getPricingService()
+    {
+        return pricingService;
     }
 }

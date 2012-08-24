@@ -25,6 +25,7 @@ import org.jclouds.abiquo.features.ConfigAsyncApi;
 import org.jclouds.abiquo.features.EnterpriseAsyncApi;
 import org.jclouds.abiquo.features.EventAsyncApi;
 import org.jclouds.abiquo.features.InfrastructureAsyncApi;
+import org.jclouds.abiquo.features.PricingAsyncApi;
 import org.jclouds.abiquo.features.TaskAsyncApi;
 import org.jclouds.abiquo.features.VirtualMachineTemplateAsyncApi;
 import org.jclouds.rest.annotations.Delegate;
@@ -98,4 +99,10 @@ public interface AbiquoAsyncApi
      */
     @Delegate
     EventAsyncApi getEventApi();
+
+    /**
+     * Provides asynchronous access to Pricing features.
+     */
+    @Delegate
+    PricingAsyncApi getPricingApi();
 }
