@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.jclouds.concurrent.Timeout;
 
+import com.abiquo.server.core.pricing.CostCodeDto;
+import com.abiquo.server.core.pricing.CostCodesDto;
 import com.abiquo.server.core.pricing.CurrenciesDto;
 import com.abiquo.server.core.pricing.CurrencyDto;
 
@@ -77,4 +79,44 @@ public interface PricingApi
      * @param currency The currency to delete
      */
     void deleteCurrency(final CurrencyDto currency);
+
+    /*********************** CostCode ********************** */
+
+    /**
+     * List all costcodes
+     * 
+     * @return The list of costcodes
+     */
+    CostCodesDto listCostCodes();
+
+    /**
+     * Get the given costcode
+     * 
+     * @param costcodeId The id of the costcode
+     * @return The costcode
+     */
+    CostCodeDto getCostCode(Integer costcodeId);
+
+    /**
+     * Create a new costcode
+     * 
+     * @param costcode The costcode to be created.
+     * @return The created costcode.
+     */
+    CostCodeDto createCostCode(CostCodeDto target);
+
+    /**
+     * Updates an existing costcode
+     * 
+     * @param costcode The new attributes for the costcode
+     * @return The updated costcode
+     */
+    CostCodeDto updateCostCode(CostCodeDto target);
+
+    /**
+     * Deletes an existing costcode
+     * 
+     * @param currency The costcode to delete
+     */
+    void deleteCostCode(CostCodeDto target);
 }

@@ -26,8 +26,10 @@ import javax.inject.Singleton;
 
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.AbiquoAsyncApi;
+import org.jclouds.abiquo.domain.config.CostCode;
 import org.jclouds.abiquo.domain.config.Currency;
 import org.jclouds.abiquo.features.services.PricingService;
+import org.jclouds.abiquo.strategy.config.ListCostCodes;
 import org.jclouds.abiquo.strategy.config.ListCurrencies;
 import org.jclouds.rest.RestContext;
 
@@ -50,12 +52,16 @@ public class BasePricingService implements PricingService
     @VisibleForTesting
     protected final ListCurrencies listCurrencies;
 
+    @VisibleForTesting
+    protected final ListCostCodes listCostCodes;
+
     @Inject
     protected BasePricingService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-        final ListCurrencies listCurrencies)
+        final ListCurrencies listCurrencies, final ListCostCodes listCostCodes)
     {
         this.context = checkNotNull(context, "context");
         this.listCurrencies = checkNotNull(listCurrencies, "listCurrencies");
+        this.listCostCodes = checkNotNull(listCostCodes, "listCostCodes");
     }
 
     /*********************** Currency ********************** */
@@ -76,5 +82,25 @@ public class BasePricingService implements PricingService
     public Currency findCurrency(final Predicate<Currency> filter)
     {
         return Iterables.getFirst(listCurrencies(filter), null);
+    }
+
+    /*********************** CostCode ********************** */
+
+    @Override
+    public Iterable<CostCode> listCostCodes()
+    {
+        return listCostCodes.execute();
+    }
+
+    @Override
+    public Iterable<CostCode> listCostCodes(final Predicate<CostCode> filter)
+    {
+        return listCostCodes.execute(filter);
+    }
+
+    @Override
+    public CostCode findCostCode(final Predicate<CostCode> filter)
+    {
+        return Iterables.getFirst(listCostCodes(filter), null);
     }
 }

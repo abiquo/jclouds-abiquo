@@ -22,6 +22,7 @@ package org.jclouds.abiquo.domain;
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
 import com.abiquo.model.rest.RESTLink;
+import com.abiquo.server.core.pricing.CostCodeDto;
 import com.abiquo.server.core.pricing.CurrencyDto;
 
 /**
@@ -74,6 +75,46 @@ public class PricingResources
         buffer.append("<id>1</id>");
         buffer.append("<name>yuan</name>");
         buffer.append("</currency>");
+        return buffer.toString();
+    }
+
+    public static Object costcodePost()
+    {
+        CostCodeDto costcode = new CostCodeDto();
+        costcode.setName("cost code");
+        costcode.setDescription("description");
+        return costcode;
+    }
+
+    public static Object costcodePut()
+    {
+        CostCodeDto costcode = new CostCodeDto();
+        costcode.setName("cost code");
+        costcode.setDescription("description");
+        costcode.setId(1);
+        costcode.addLink(new RESTLink("edit", "http://localhost/api/config/costcodes/1"));
+        return costcode;
+    }
+
+    public static String costcodePostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<costCode>");
+        buffer.append("<name>cost code</name>");
+        buffer.append("<description>description</description>");
+        buffer.append("</costCode>");
+        return buffer.toString();
+    }
+
+    public static String costcodePutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<costCode>");
+        buffer.append(link("/config/costcodes/1", "edit"));
+        buffer.append("<description>description</description>");
+        buffer.append("<id>1</id>");
+        buffer.append("<name>cost code</name>");
+        buffer.append("</costCode>");
         return buffer.toString();
     }
 

@@ -70,7 +70,5 @@ public class CurrencyLiveTest extends BaseAbiquoApiLiveTest
         assertNotNull(apiCurrency);
         assertEquals(PREFIX + "t-currency-upd", apiCurrency.getName());
 
-        currency.setName(name);
-        currency.update();
     }
 }

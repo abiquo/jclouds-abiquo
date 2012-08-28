@@ -32,6 +32,8 @@ import org.jclouds.rest.internal.GeneratedHttpRequest;
 import org.jclouds.rest.internal.RestAnnotationProcessor;
 import org.testng.annotations.Test;
 
+import com.abiquo.server.core.pricing.CostCodeDto;
+import com.abiquo.server.core.pricing.CostCodesDto;
 import com.abiquo.server.core.pricing.CurrenciesDto;
 import com.abiquo.server.core.pricing.CurrencyDto;
 import com.google.inject.TypeLiteral;
@@ -123,6 +125,93 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
             processor.createRequest(method, PricingResources.currencyPut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/currencies/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Cost Code ***********************/
+
+    public void testListCostCodes() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = PricingAsyncApi.class.getMethod("listCostCodes");
+        GeneratedHttpRequest request = processor.createRequest(method);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/costcodes HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + CostCodesDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetCostCode() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = PricingAsyncApi.class.getMethod("getCostCode", Integer.class);
+        GeneratedHttpRequest request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request, "GET http://localhost/api/config/costcodes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + CostCodeDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testCreateCostCode() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = PricingAsyncApi.class.getMethod("createCostCode", CostCodeDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, PricingResources.costcodePost());
+
+        assertRequestLineEquals(request, "POST http://localhost/api/config/costcodes HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + CostCodeDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, withHeader(PricingResources.costcodePostPayload()),
+            CostCodeDto.class, CostCodeDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateCostCode() throws SecurityException, NoSuchMethodException, IOException
+    {
+        Method method = PricingAsyncApi.class.getMethod("updateCostCode", CostCodeDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, PricingResources.costcodePut());
+
+        assertRequestLineEquals(request, "PUT http://localhost/api/config/costcodes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + CostCodeDto.BASE_MEDIA_TYPE + "\n");
+        assertPayloadEquals(request, withHeader(PricingResources.costcodePutPayload()),
+            CostCodeDto.class, CostCodeDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteCostCode() throws SecurityException, NoSuchMethodException
+    {
+        Method method = PricingAsyncApi.class.getMethod("deleteCostCode", CostCodeDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, PricingResources.costcodePut());
+
+        assertRequestLineEquals(request, "DELETE http://localhost/api/config/costcodes/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 

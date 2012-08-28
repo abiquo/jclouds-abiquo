@@ -39,6 +39,8 @@ import org.jclouds.rest.annotations.RequestFilters;
 import org.jclouds.rest.binders.BindToXMLPayload;
 import org.jclouds.rest.functions.ReturnNullOnNotFoundOr404;
 
+import com.abiquo.server.core.pricing.CostCodeDto;
+import com.abiquo.server.core.pricing.CostCodesDto;
 import com.abiquo.server.core.pricing.CurrenciesDto;
 import com.abiquo.server.core.pricing.CurrencyDto;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -59,7 +61,7 @@ public interface PricingAsyncApi
     /*********************** Currency ********************** */
 
     /**
-     * @see ConfigApi#listCurrencies()
+     * @see PricingApi#listCurrencies()
      */
     @GET
     @Path("/currencies")
@@ -68,7 +70,7 @@ public interface PricingAsyncApi
     ListenableFuture<CurrenciesDto> listCurrencies();
 
     /**
-     * @see ConfigApi#getCurrency(Integer)
+     * @see PricingApi#getCurrency(Integer)
      */
     @GET
     @Path("/currencies/{currency}")
@@ -78,7 +80,7 @@ public interface PricingAsyncApi
     ListenableFuture<CurrencyDto> getCurrency(@PathParam("currency") Integer currencyId);
 
     /**
-     * @see ConfigApi#createCurrency(CurrencyDto)
+     * @see PricingApi#createCurrency(CurrencyDto)
      */
     @POST
     @Path("/currencies")
@@ -89,7 +91,7 @@ public interface PricingAsyncApi
         @BinderParam(BindToXMLPayload.class) CurrencyDto currency);
 
     /**
-     * @see ConfigApi#updateCurrency(CurrencyDto)
+     * @see PricingApi#updateCurrency(CurrencyDto)
      */
     @PUT
     @Produces(CurrencyDto.BASE_MEDIA_TYPE)
@@ -99,10 +101,58 @@ public interface PricingAsyncApi
         @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) CurrencyDto currency);
 
     /**
-     * @see ConfigApi#deleteCurrency(CurrencyDto)
+     * @see PricingApi#deleteCurrency(CurrencyDto)
      */
     @DELETE
     ListenableFuture<Void> deleteCurrency(
         @EndpointLink("edit") @BinderParam(BindToPath.class) CurrencyDto currency);
 
+    /*********************** CostCode ********************** */
+
+    /**
+     * @see PricingApi#listCostCodes()
+     */
+    @GET
+    @Path("/costcodes")
+    @Consumes(CostCodesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<CostCodesDto> listCostCodes();
+
+    /**
+     * @see PricingApi#getCostCode(Integer)
+     */
+    @GET
+    @Path("/costcodes/{costcode}")
+    @Consumes(CostCodeDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<CostCodeDto> getCostCode(@PathParam("costcode") Integer costcodeId);
+
+    /**
+     * @see PricingApi#createCostCode(CostCodeDto)
+     */
+    @POST
+    @Path("/costcodes")
+    @Produces(CostCodeDto.BASE_MEDIA_TYPE)
+    @Consumes(CostCodeDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<CostCodeDto> createCostCode(
+        @BinderParam(BindToXMLPayload.class) CostCodeDto costcode);
+
+    /**
+     * @see PricingApi#updateCostCode(CostCodeDto)
+     */
+    @PUT
+    @Produces(CostCodeDto.BASE_MEDIA_TYPE)
+    @Consumes(CostCodeDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<CostCodeDto> updateCostCode(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) CostCodeDto costcode);
+
+    /**
+     * @see PricingApi#deleteCostCode(CostCodeDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deleteCostCode(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) CostCodeDto costcode);
 }

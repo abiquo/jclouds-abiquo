@@ -19,6 +19,7 @@
 
 package org.jclouds.abiquo.features.services;
 
+import org.jclouds.abiquo.domain.config.CostCode;
 import org.jclouds.abiquo.domain.config.Currency;
 import org.jclouds.abiquo.internal.BasePricingService;
 
@@ -51,4 +52,21 @@ public interface PricingService
      * Get the first currencies that matches the given filter or <code>null</code> if none is found.
      */
     Currency findCurrency(final Predicate<Currency> filter);
+
+    /*********************** CostCode ***********************/
+
+    /**
+     * Get the list of costcodes.
+     */
+    Iterable<CostCode> listCostCodes();
+
+    /**
+     * Get the list of costcodes matching the given filter.
+     */
+    Iterable<CostCode> listCostCodes(final Predicate<CostCode> filter);
+
+    /**
+     * Get the first costcodes that matches the given filter or <code>null</code> if none is found.
+     */
+    CostCode findCostCode(final Predicate<CostCode> filter);
 }
