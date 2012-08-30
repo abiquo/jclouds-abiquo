@@ -28,9 +28,11 @@ import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.config.CostCode;
 import org.jclouds.abiquo.domain.config.Currency;
+import org.jclouds.abiquo.domain.config.PricingTemplate;
 import org.jclouds.abiquo.features.services.PricingService;
 import org.jclouds.abiquo.strategy.config.ListCostCodes;
 import org.jclouds.abiquo.strategy.config.ListCurrencies;
+import org.jclouds.abiquo.strategy.config.ListPricingTemplates;
 import org.jclouds.rest.RestContext;
 
 import com.google.common.annotations.VisibleForTesting;
@@ -55,13 +57,18 @@ public class BasePricingService implements PricingService
     @VisibleForTesting
     protected final ListCostCodes listCostCodes;
 
+    @VisibleForTesting
+    protected final ListPricingTemplates listPricingTemplates;
+
     @Inject
     protected BasePricingService(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
-        final ListCurrencies listCurrencies, final ListCostCodes listCostCodes)
+        final ListCurrencies listCurrencies, final ListCostCodes listCostCodes,
+        final ListPricingTemplates listPricingTemplates)
     {
         this.context = checkNotNull(context, "context");
         this.listCurrencies = checkNotNull(listCurrencies, "listCurrencies");
         this.listCostCodes = checkNotNull(listCostCodes, "listCostCodes");
+        this.listPricingTemplates = checkNotNull(listPricingTemplates, "listPricingTemplates");
     }
 
     /*********************** Currency ********************** */
@@ -102,5 +109,25 @@ public class BasePricingService implements PricingService
     public CostCode findCostCode(final Predicate<CostCode> filter)
     {
         return Iterables.getFirst(listCostCodes(filter), null);
+    }
+
+    /*********************** PricingTemplate ********************** */
+
+    @Override
+    public Iterable<PricingTemplate> listPricingTemplates()
+    {
+        return listPricingTemplates.execute();
+    }
+
+    @Override
+    public Iterable<PricingTemplate> listPricingTemplates(final Predicate<PricingTemplate> filter)
+    {
+        return listPricingTemplates.execute(filter);
+    }
+
+    @Override
+    public PricingTemplate findPricingTemplate(final Predicate<PricingTemplate> filter)
+    {
+        return Iterables.getFirst(listPricingTemplates(filter), null);
     }
 }

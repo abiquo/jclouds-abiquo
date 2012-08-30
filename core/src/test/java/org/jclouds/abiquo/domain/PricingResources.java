@@ -21,9 +21,12 @@ package org.jclouds.abiquo.domain;
 
 import static org.jclouds.abiquo.domain.DomainUtils.link;
 
+import java.math.BigDecimal;
+
 import com.abiquo.model.rest.RESTLink;
 import com.abiquo.server.core.pricing.CostCodeDto;
 import com.abiquo.server.core.pricing.CurrencyDto;
+import com.abiquo.server.core.pricing.PricingTemplateDto;
 
 /**
  * Enterprise domain utilities.
@@ -115,6 +118,103 @@ public class PricingResources
         buffer.append("<id>1</id>");
         buffer.append("<name>cost code</name>");
         buffer.append("</costCode>");
+        return buffer.toString();
+    }
+
+    public static Object pricingtemplatePost()
+    {
+        PricingTemplateDto pricingtemplate = new PricingTemplateDto();
+        pricingtemplate.setName("pricing template");
+        pricingtemplate.setDescription("pt_description");
+        pricingtemplate.setHdGB(new BigDecimal(0));
+        pricingtemplate.setStandingChargePeriod(new BigDecimal(0));
+        pricingtemplate.setVlan(new BigDecimal(0));
+        pricingtemplate.setChargingPeriod(1);
+        pricingtemplate.setMinimumChargePeriod(new BigDecimal(0));
+        pricingtemplate.setShowChangesBefore(true);
+        pricingtemplate.setShowMinimumCharge(false);
+        pricingtemplate.setMinimumCharge(2);
+        pricingtemplate.setPublicIp(new BigDecimal(0));
+        pricingtemplate.setVcpu(new BigDecimal(0));
+        pricingtemplate.setMemoryGB(new BigDecimal(0));
+        pricingtemplate.setDefaultTemplate(true);
+        pricingtemplate
+            .addLink(new RESTLink("currency", "http://localhost/api/config/currencies/1"));
+        return pricingtemplate;
+    }
+
+    public static Object pricingtemplatePut()
+    {
+        PricingTemplateDto pricingtemplate = new PricingTemplateDto();
+        pricingtemplate.setName("pricing template");
+        pricingtemplate.setDescription("pt_description");
+        pricingtemplate.setHdGB(new BigDecimal(0));
+        pricingtemplate.setStandingChargePeriod(new BigDecimal(0));
+        pricingtemplate.setVlan(new BigDecimal(0));
+        pricingtemplate.setChargingPeriod(1);
+        pricingtemplate.setMinimumChargePeriod(new BigDecimal(0));
+        pricingtemplate.setShowChangesBefore(true);
+        pricingtemplate.setShowMinimumCharge(false);
+        pricingtemplate.setMinimumCharge(2);
+        pricingtemplate.setPublicIp(new BigDecimal(0));
+        pricingtemplate.setVcpu(new BigDecimal(0));
+        pricingtemplate.setMemoryGB(new BigDecimal(0));
+        pricingtemplate.setDefaultTemplate(true);
+        pricingtemplate
+            .addLink(new RESTLink("currency", "http://localhost/api/config/currencies/1"));
+        pricingtemplate.setId(1);
+        pricingtemplate.addLink(new RESTLink("edit",
+            "http://localhost/api/config/pricingtemplates/1"));
+        return pricingtemplate;
+    }
+
+    public static String pricingtemplatePostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<pricingTemplate>");
+        buffer.append("<name>pricing template</name>");
+        buffer.append("<description>pt_description</description>");
+        buffer.append("<hdGB>0</hdGB>");
+        buffer.append("<standingChargePeriod>0</standingChargePeriod>");
+        buffer.append("<vlan>0</vlan>");
+        buffer.append("<chargingPeriod>1</chargingPeriod>");
+        buffer.append("<minimumChargePeriod>0</minimumChargePeriod>");
+        buffer.append("<showChangesBefore>true</showChangesBefore>");
+        buffer.append("<showMinimumCharge>false</showMinimumCharge>");
+        buffer.append("<minimumCharge>2</minimumCharge>");
+        buffer.append("<memoryGB>0</memoryGB>");
+        buffer.append("<publicIp>0</publicIp>");
+        buffer.append("<vcpu>0</vcpu>");
+        buffer.append("<memoryMB>0</memoryMB>");
+        buffer.append("<defaultTemplate>true</defaultTemplate>");
+        buffer.append("<link href='http://localhost/api/config/currencies/1' rel='currency'/>");
+        buffer.append("</pricingTemplate>");
+        return buffer.toString();
+    }
+
+    public static String pricingtemplatePutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<pricingTemplate>");
+        buffer.append("<name>pricing template</name>");
+        buffer.append("<description>pt_description</description>");
+        buffer.append("<hdGB>0</hdGB>");
+        buffer.append("<standingChargePeriod>0</standingChargePeriod>");
+        buffer.append("<vlan>0</vlan>");
+        buffer.append("<chargingPeriod>1</chargingPeriod>");
+        buffer.append("<minimumChargePeriod>0</minimumChargePeriod>");
+        buffer.append("<showChangesBefore>true</showChangesBefore>");
+        buffer.append("<showMinimumCharge>false</showMinimumCharge>");
+        buffer.append("<minimumCharge>2</minimumCharge>");
+        buffer.append("<memoryGB>0</memoryGB>");
+        buffer.append("<publicIp>0</publicIp>");
+        buffer.append("<vcpu>0</vcpu>");
+        buffer.append("<memoryMB>0</memoryMB>");
+        buffer.append("<defaultTemplate>true</defaultTemplate>");
+        buffer.append("<link href='http://localhost/api/config/currencies/1' rel='currency'/>");
+        buffer.append("<id>1</id>");
+        buffer.append(link("/config/pricingtemplates/1", "edit"));
+        buffer.append("</pricingTemplate>");
         return buffer.toString();
     }
 

@@ -43,6 +43,8 @@ import com.abiquo.server.core.pricing.CostCodeDto;
 import com.abiquo.server.core.pricing.CostCodesDto;
 import com.abiquo.server.core.pricing.CurrenciesDto;
 import com.abiquo.server.core.pricing.CurrencyDto;
+import com.abiquo.server.core.pricing.PricingTemplateDto;
+import com.abiquo.server.core.pricing.PricingTemplatesDto;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
@@ -155,4 +157,55 @@ public interface PricingAsyncApi
     @DELETE
     ListenableFuture<Void> deleteCostCode(
         @EndpointLink("edit") @BinderParam(BindToPath.class) CostCodeDto costcode);
+
+    /*********************** PricingTemplate ********************** */
+
+    /**
+     * @see PricingApi#listPricingTemplates()
+     */
+    @GET
+    @Path("/pricingtemplates")
+    @Consumes(PricingTemplatesDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<PricingTemplatesDto> listPricingTemplates();
+
+    /**
+     * @see PricingApi#getPricingTemplate(Integer)
+     */
+    @GET
+    @Path("/pricingtemplates/{pricingtemplate}")
+    @Consumes(PricingTemplateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    @ExceptionParser(ReturnNullOnNotFoundOr404.class)
+    ListenableFuture<PricingTemplateDto> getPricingTemplate(
+        @PathParam("pricingtemplate") Integer pricingTemplateId);
+
+    /**
+     * @see PricingApi#createPricingTemplate(PricingTemplateDto)
+     */
+    @POST
+    @Path("/pricingtemplates")
+    @Produces(PricingTemplateDto.BASE_MEDIA_TYPE)
+    @Consumes(PricingTemplateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<PricingTemplateDto> createPricingTemplate(
+        @BinderParam(BindToXMLPayload.class) PricingTemplateDto pricingtemplate);
+
+    /**
+     * @see PricingApi#updatePricingTemplate(PricingTemplateDto)
+     */
+    @PUT
+    @Produces(PricingTemplateDto.BASE_MEDIA_TYPE)
+    @Consumes(PricingTemplateDto.BASE_MEDIA_TYPE)
+    @JAXBResponseParser
+    ListenableFuture<PricingTemplateDto> updatePricingTemplate(
+        @EndpointLink("edit") @BinderParam(BindToXMLPayloadAndPath.class) PricingTemplateDto pricingtemplate);
+
+    /**
+     * @see PricingApi#deletePricingTemplate(PricingTemplateDto)
+     */
+    @DELETE
+    ListenableFuture<Void> deletePricingTemplate(
+        @EndpointLink("edit") @BinderParam(BindToPath.class) PricingTemplateDto pricingtemplate);
+
 }

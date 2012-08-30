@@ -36,6 +36,8 @@ import com.abiquo.server.core.pricing.CostCodeDto;
 import com.abiquo.server.core.pricing.CostCodesDto;
 import com.abiquo.server.core.pricing.CurrenciesDto;
 import com.abiquo.server.core.pricing.CurrencyDto;
+import com.abiquo.server.core.pricing.PricingTemplateDto;
+import com.abiquo.server.core.pricing.PricingTemplatesDto;
 import com.google.inject.TypeLiteral;
 
 /**
@@ -212,6 +214,109 @@ public class PricingAsyncApiTest extends BaseAbiquoAsyncApiTest<PricingAsyncApi>
             processor.createRequest(method, PricingResources.costcodePut());
 
         assertRequestLineEquals(request, "DELETE http://localhost/api/config/costcodes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Pricing Template ***********************/
+
+    public void testListPricingTemplates() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method = PricingAsyncApi.class.getMethod("listPricingTemplates");
+        GeneratedHttpRequest request = processor.createRequest(method);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/config/pricingtemplates HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PricingTemplatesDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetPricingTemplate() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method = PricingAsyncApi.class.getMethod("getPricingTemplate", Integer.class);
+        GeneratedHttpRequest request = processor.createRequest(method, 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/config/pricingtemplates/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PricingTemplateDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testCreatePricingTemplate() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            PricingAsyncApi.class.getMethod("createPricingTemplate", PricingTemplateDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, PricingResources.pricingtemplatePost());
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/config/pricingtemplates HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PricingTemplateDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, withHeader(PricingResources.pricingtemplatePostPayload()),
+            PricingTemplateDto.class, PricingTemplateDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testUpdatePricingTemplate() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            PricingAsyncApi.class.getMethod("updatePricingTemplate", PricingTemplateDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, PricingResources.pricingtemplatePut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/config/pricingtemplates/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + PricingTemplateDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, withHeader(PricingResources.pricingtemplatePutPayload()),
+            PricingTemplateDto.class, PricingTemplateDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeletePricingTemplate() throws SecurityException, NoSuchMethodException
+    {
+        Method method =
+            PricingAsyncApi.class.getMethod("deletePricingTemplate", PricingTemplateDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, PricingResources.pricingtemplatePut());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/config/pricingtemplates/1 HTTP/1.1");
         assertNonPayloadHeadersEqual(request, "");
         assertPayloadEquals(request, null, null, false);
 
