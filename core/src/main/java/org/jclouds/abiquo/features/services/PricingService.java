@@ -21,6 +21,7 @@ package org.jclouds.abiquo.features.services;
 
 import org.jclouds.abiquo.domain.config.CostCode;
 import org.jclouds.abiquo.domain.config.Currency;
+import org.jclouds.abiquo.domain.config.PricingTemplate;
 import org.jclouds.abiquo.internal.BasePricingService;
 
 import com.google.common.base.Predicate;
@@ -69,4 +70,23 @@ public interface PricingService
      * Get the first costcodes that matches the given filter or <code>null</code> if none is found.
      */
     CostCode findCostCode(final Predicate<CostCode> filter);
+
+    /*********************** PricingTemplate ***********************/
+
+    /**
+     * Get the list of pricingtemplates.
+     */
+    public Iterable<PricingTemplate> listPricingTemplates();
+
+    /**
+     * Get the list of pricingtemplates matching the given filter.
+     */
+    public Iterable<PricingTemplate> listPricingTemplates(final Predicate<PricingTemplate> filter);
+
+    /**
+     * Get the first pricingtemplates that matches the given filter or <code>null</code> if none is
+     * found.
+     */
+    public PricingTemplate findPricingTemplate(final Predicate<PricingTemplate> filter);
+
 }

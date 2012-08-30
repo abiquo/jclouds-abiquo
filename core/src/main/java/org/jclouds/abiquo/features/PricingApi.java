@@ -26,6 +26,8 @@ import com.abiquo.server.core.pricing.CostCodeDto;
 import com.abiquo.server.core.pricing.CostCodesDto;
 import com.abiquo.server.core.pricing.CurrenciesDto;
 import com.abiquo.server.core.pricing.CurrencyDto;
+import com.abiquo.server.core.pricing.PricingTemplateDto;
+import com.abiquo.server.core.pricing.PricingTemplatesDto;
 
 /**
  * Provides synchronous access to Abiquo Pricing API.
@@ -103,7 +105,7 @@ public interface PricingApi
      * @param costcode The costcode to be created.
      * @return The created costcode.
      */
-    CostCodeDto createCostCode(CostCodeDto target);
+    CostCodeDto createCostCode(CostCodeDto costcode);
 
     /**
      * Updates an existing costcode
@@ -111,12 +113,53 @@ public interface PricingApi
      * @param costcode The new attributes for the costcode
      * @return The updated costcode
      */
-    CostCodeDto updateCostCode(CostCodeDto target);
+    CostCodeDto updateCostCode(CostCodeDto costcode);
 
     /**
      * Deletes an existing costcode
      * 
      * @param currency The costcode to delete
      */
-    void deleteCostCode(CostCodeDto target);
+    void deleteCostCode(CostCodeDto costcode);
+
+    /*********************** PricingTemplate ********************** */
+
+    /**
+     * List all pricingtemplates
+     * 
+     * @return The list of pricingtemplates
+     */
+    PricingTemplatesDto listPricingTemplates();
+
+    /**
+     * Get the given pricingtemplate
+     * 
+     * @param pricingTemplateId The id of the pricingtemplate
+     * @return The pricingtemplate
+     */
+    PricingTemplateDto getPricingTemplate(Integer pricingTemplateId);
+
+    /**
+     * Create a new pricing template
+     * 
+     * @param pricingtemplate The pricingtemplate to be created
+     * @return The created pricingtemplate
+     */
+    PricingTemplateDto createPricingTemplate(PricingTemplateDto pricingtemplate);
+
+    /**
+     * Updates an existing pricing template
+     * 
+     * @param pricingtemplate The new attributes for the pricingtemplate
+     * @return The updated pricingtemplate
+     */
+    PricingTemplateDto updatePricingTemplate(PricingTemplateDto pricingtemplate);
+
+    /**
+     * Deletes an existing pricingtemplate
+     * 
+     * @param pricingtemplate The pricingtemplate to delete
+     */
+    void deletePricingTemplate(PricingTemplateDto pricingtemplate);
+
 }

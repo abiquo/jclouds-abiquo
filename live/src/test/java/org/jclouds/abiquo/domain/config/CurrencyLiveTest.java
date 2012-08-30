@@ -58,8 +58,6 @@ public class CurrencyLiveTest extends BaseAbiquoApiLiveTest
         assertNotNull(currencies);
 
         Currency currency = currencies.iterator().next();
-        String name = currency.getName();
-
         currency.setName(PREFIX + "t-currency-upd");
         currency.update();
 
