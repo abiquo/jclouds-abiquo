@@ -28,6 +28,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.MediaType;
 
 import org.jclouds.abiquo.binders.AppendToPath;
 import org.jclouds.abiquo.binders.BindToPath;
@@ -55,6 +56,7 @@ import org.jclouds.abiquo.http.filters.AbiquoAuthentication;
 import org.jclouds.abiquo.http.filters.AppendApiVersionToMediaType;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.abiquo.rest.annotations.EndpointLink;
+import org.jclouds.http.functions.ReturnStringIf2xx;
 import org.jclouds.rest.annotations.BinderParam;
 import org.jclouds.rest.annotations.ExceptionParser;
 import org.jclouds.rest.annotations.JAXBResponseParser;
@@ -430,6 +432,18 @@ public interface CloudAsyncApi
     ListenableFuture<AcceptedRequestDto<String>> undeployVirtualAppliance(
         @EndpointLink("undeploy") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance,
         @BinderParam(BindToXMLPayload.class) VirtualMachineTaskDto task);
+
+    /**
+     * @see CloudApi#getPriceVirtualAppliance(VirtualApplianceDto)
+     * @param virtualdatacenterId
+     * @param virtualApplianceId
+     * @return
+     */
+    @GET
+    @Consumes(MediaType.TEXT_PLAIN)
+    @ResponseParser(ReturnStringIf2xx.class)
+    ListenableFuture<String> getPriceVirtualAppliance(
+        @EndpointLink("price") @BinderParam(BindToPath.class) VirtualApplianceDto virtualAppliance);
 
     /*********************** Virtual Machine ***********************/
 

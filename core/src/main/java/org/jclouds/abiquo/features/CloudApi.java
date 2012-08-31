@@ -352,6 +352,15 @@ public interface CloudApi
         VirtualMachineTaskDto options);
 
     /**
+     * Returns a message (String) with the price info of the virtual appliance
+     * 
+     * @param virtualdatacenterId
+     * @param virtualApplianceId
+     * @return
+     */
+    String getPriceVirtualAppliance(VirtualApplianceDto virtualAppliance);
+
+    /**
      * Get the state of the given virtual appliance.
      * 
      * @param virtualAppliance The given virtual appliance.
