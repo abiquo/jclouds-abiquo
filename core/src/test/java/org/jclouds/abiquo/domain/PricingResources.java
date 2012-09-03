@@ -41,7 +41,7 @@ public class PricingResources
     {
         CurrencyDto currency = new CurrencyDto();
         currency.setName("yuan");
-        currency.setSymbol("¥");
+        currency.setSymbol("dummy");
         currency.setDigits(3);
         return currency;
     }
@@ -50,7 +50,7 @@ public class PricingResources
     {
         CurrencyDto currency = new CurrencyDto();
         currency.setName("yuan");
-        currency.setSymbol("¥");
+        currency.setSymbol("dummy");
         currency.setDigits(3);
         currency.setId(1);
         currency.addLink(new RESTLink("edit", "http://localhost/api/config/currencies/1"));
@@ -61,7 +61,7 @@ public class PricingResources
     {
         StringBuffer buffer = new StringBuffer();
         buffer.append("<currency>");
-        buffer.append("<symbol>¥</symbol>");
+        buffer.append("<symbol>dummy</symbol>");
         buffer.append("<digits>3</digits>");
         buffer.append("<name>yuan</name>");
         buffer.append("</currency>");
@@ -73,7 +73,7 @@ public class PricingResources
         StringBuffer buffer = new StringBuffer();
         buffer.append("<currency>");
         buffer.append(link("/config/currencies/1", "edit"));
-        buffer.append("<symbol>¥</symbol>");
+        buffer.append("<symbol>dummy</symbol>");
         buffer.append("<digits>3</digits>");
         buffer.append("<id>1</id>");
         buffer.append("<name>yuan</name>");
