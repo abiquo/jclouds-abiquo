@@ -23,6 +23,7 @@ import static org.testng.Assert.assertEquals;
 
 import org.easymock.EasyMock;
 import org.jclouds.abiquo.domain.task.AsyncTask;
+import org.jclouds.abiquo.domain.task.VirtualMachineTask;
 import org.jclouds.abiquo.monitor.MonitorStatus;
 import org.jclouds.rest.RestContext;
 import org.testng.annotations.Test;
@@ -43,7 +44,7 @@ public class AsyncTaskStatusMonitorTest
     @Test(expectedExceptions = NullPointerException.class)
     public void testInvalidNullArgument()
     {
-        Function<AsyncTask, MonitorStatus> function = new AsyncTaskStatusMonitor();
+        Function<AsyncTask< ? , ? >, MonitorStatus> function = new AsyncTaskStatusMonitor();
         function.apply(null);
     }
 
@@ -75,7 +76,7 @@ public class AsyncTaskStatusMonitorTest
     }
 
     private void checkStatesReturn(final MockAsyncTask task,
-        final Function<AsyncTask, MonitorStatus> function, final TaskState[] states,
+        final Function<AsyncTask< ? , ? >, MonitorStatus> function, final TaskState[] states,
         final MonitorStatus expectedStatus)
     {
         for (TaskState state : states)
@@ -85,7 +86,7 @@ public class AsyncTaskStatusMonitorTest
         }
     }
 
-    private static class MockAsyncTask extends AsyncTask
+    private static class MockAsyncTask extends VirtualMachineTask
     {
         @SuppressWarnings("unchecked")
         public MockAsyncTask()

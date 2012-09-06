@@ -19,8 +19,6 @@
 
 package org.jclouds.abiquo.domain.exception;
 
-import org.jclouds.abiquo.domain.DomainWrapper;
-
 import com.abiquo.model.transport.SingleResourceTransportDto;
 
 /**
@@ -32,12 +30,12 @@ public class WrapperException extends RuntimeException
 {
     private static final long serialVersionUID = 1L;
 
-    private Class< ? extends DomainWrapper< ? >> wrapperClass;
+    private Class< ? > wrapperClass;
 
     private SingleResourceTransportDto target;
 
-    public WrapperException(final Class< ? extends DomainWrapper< ? >> wrapperClass,
-        final SingleResourceTransportDto target, Throwable cause)
+    public WrapperException(final Class< ? > wrapperClass, final SingleResourceTransportDto target,
+        final Throwable cause)
     {
         super(cause);
         this.wrapperClass = wrapperClass;
@@ -52,12 +50,12 @@ public class WrapperException extends RuntimeException
         return msg + super.getMessage();
     }
 
-    public Class< ? extends DomainWrapper< ? >> getWrapperClass()
+    public Class< ? > getWrapperClass()
     {
         return wrapperClass;
     }
 
-    public void setWrapperClass(Class< ? extends DomainWrapper< ? >> wrapperClass)
+    public void setWrapperClass(final Class< ? > wrapperClass)
     {
         this.wrapperClass = wrapperClass;
     }
@@ -67,7 +65,7 @@ public class WrapperException extends RuntimeException
         return target;
     }
 
-    public void setTarget(SingleResourceTransportDto target)
+    public void setTarget(final SingleResourceTransportDto target)
     {
         this.target = target;
     }
