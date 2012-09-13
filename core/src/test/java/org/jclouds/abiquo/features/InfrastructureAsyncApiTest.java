@@ -76,6 +76,8 @@ import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.UcsRacksDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpDto;
 import com.abiquo.server.core.infrastructure.network.ExternalIpsDto;
+import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
+import com.abiquo.server.core.infrastructure.network.NetworkServiceTypesDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpDto;
 import com.abiquo.server.core.infrastructure.network.PublicIpsDto;
 import com.abiquo.server.core.infrastructure.network.UnmanagedIpDto;
@@ -1427,6 +1429,119 @@ public class InfrastructureAsyncApiTest extends BaseAbiquoAsyncApiTest<Infrastru
         assertNonPayloadHeadersEqual(request, "Accept: " + BladeLocatorLedDto.BASE_MEDIA_TYPE
             + "\n");
         assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    /*********************** Network Service Type *****************/
+    public void testListNetworkServiceTypes() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("listNetworkServiceTypes", DatacenterDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut());
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/networkservicetypes HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + NetworkServiceTypesDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testCreateNetworkServiceType() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("createNetworkServiceType", DatacenterDto.class,
+                NetworkServiceTypeDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(),
+                InfrastructureResources.networkServiceTypePost());
+
+        assertRequestLineEquals(request,
+            "POST http://localhost/api/admin/datacenters/1/networkservicetypes HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + NetworkServiceTypeDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request,
+            withHeader(InfrastructureResources.networkServiceTypePostPayload()),
+            NetworkServiceTypeDto.class, NetworkServiceTypeDto.BASE_MEDIA_TYPE, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testDeleteNetworkServiceType() throws SecurityException, NoSuchMethodException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("deleteNetworkServiceType",
+                NetworkServiceTypeDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.networkServiceTypePut());
+
+        assertRequestLineEquals(request,
+            "DELETE http://localhost/api/admin/datacenters/1/networkservicetypes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ReleasePayloadAndReturn.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, null);
+
+        checkFilters(request);
+    }
+
+    public void testGetNetworkServiceType() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("getNetworkServiceType", DatacenterDto.class,
+                Integer.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.datacenterPut(), 1);
+
+        assertRequestLineEquals(request,
+            "GET http://localhost/api/admin/datacenters/1/networkservicetypes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + NetworkServiceTypeDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request, null, null, false);
+
+        assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
+        assertSaxResponseParserClassEquals(method, null);
+        assertExceptionParserClassEquals(method, ReturnNullOnNotFoundOr404.class);
+
+        checkFilters(request);
+    }
+
+    public void testUpdateNetworkServiceType() throws SecurityException, NoSuchMethodException,
+        IOException
+    {
+        Method method =
+            InfrastructureAsyncApi.class.getMethod("updateNetworkServiceType",
+                NetworkServiceTypeDto.class);
+        GeneratedHttpRequest request =
+            processor.createRequest(method, InfrastructureResources.networkServiceTypePut());
+
+        assertRequestLineEquals(request,
+            "PUT http://localhost/api/admin/datacenters/1/networkservicetypes/1 HTTP/1.1");
+        assertNonPayloadHeadersEqual(request, "Accept: " + NetworkServiceTypeDto.BASE_MEDIA_TYPE
+            + "\n");
+        assertPayloadEquals(request,
+            withHeader(InfrastructureResources.networkServiceTypePutPayload()),
+            NetworkServiceTypeDto.class, NetworkServiceTypeDto.BASE_MEDIA_TYPE, false);
 
         assertResponseParserClassEquals(method, request, ParseXMLWithJAXB.class);
         assertSaxResponseParserClassEquals(method, null);

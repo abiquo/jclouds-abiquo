@@ -24,6 +24,7 @@ import static org.testng.Assert.assertNotNull;
 import static org.testng.Assert.assertTrue;
 
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
+import org.jclouds.abiquo.util.Config;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -41,8 +42,8 @@ public class BladeLiveTest extends BaseAbiquoApiLiveTest
 
     public void testFindAvailableVirtualSwitch()
     {
-        String vswitch = blade.getAvailableVirtualSwitches().get(0);
-        String found = blade.findAvailableVirtualSwitch(vswitch);
+        String vswitch = Config.get("abiquo.hypervisor.vswitch");
+        NetworkInterface found = env.machine.findAvailableVirtualSwitch(vswitch);
         assertEquals(found, vswitch);
     }
 

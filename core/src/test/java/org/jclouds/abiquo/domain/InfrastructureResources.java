@@ -30,6 +30,7 @@ import com.abiquo.server.core.infrastructure.OrganizationDto;
 import com.abiquo.server.core.infrastructure.RackDto;
 import com.abiquo.server.core.infrastructure.RemoteServiceDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
+import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
 import com.abiquo.server.core.infrastructure.storage.StorageDeviceDto;
 import com.abiquo.server.core.infrastructure.storage.StoragePoolDto;
 import com.abiquo.server.core.infrastructure.storage.TierDto;
@@ -82,7 +83,6 @@ public class InfrastructureResources
         machine.setVirtualCpuCores(3);
         machine.setDescription("A hawaian machine");
         machine.setVirtualRamInMb(512);
-        machine.setVirtualSwitch("192.168.1.10");
         return machine;
     }
 
@@ -104,6 +104,13 @@ public class InfrastructureResources
         storage.setManagementPort(90);
 
         return storage;
+    }
+
+    public static NetworkServiceTypeDto networkServiceTypePost()
+    {
+        NetworkServiceTypeDto dto = new NetworkServiceTypeDto();
+        dto.setName("Storage Network");
+        return dto;
     }
 
     public static StoragePoolDto storagePoolPost()
@@ -139,6 +146,8 @@ public class InfrastructureResources
             "http://localhost/api/admin/datacenters/1/storage/tiers"));
         datacenter.addLink(new RESTLink("network",
             "http://localhost/api/admin/datacenters/1/network"));
+        datacenter.addLink(new RESTLink("networkservicetypes",
+            "http://localhost/api/admin/datacenters/1/networkservicetypes"));
         datacenter.addLink(new RESTLink("enterprises",
             "http://localhost/api/admin/datacenters/1/action/enterprises"));
         datacenter.addLink(new RESTLink("hypervisor",
@@ -356,6 +365,26 @@ public class InfrastructureResources
         return buffer.toString();
     }
 
+    public static String networkServiceTypePostPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<networkservicetype>");
+        buffer.append("<name>Storage Network</name>");
+        buffer.append("</networkservicetype>");
+        return buffer.toString();
+    }
+
+    public static String networkServiceTypePutPayload()
+    {
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("<networkservicetype>");
+        buffer
+            .append("<link href='http://localhost/api/admin/datacenters/1/networkservicetypes/1' rel='edit'/>");
+        buffer.append("<name>Storage Network Edited</name>");
+        buffer.append("</networkservicetype>");
+        return buffer.toString();
+    }
+
     public static String machinePostPayload()
     {
         StringBuffer buffer = new StringBuffer();
@@ -400,6 +429,7 @@ public class InfrastructureResources
         buffer.append(link("/admin/datacenters/1/remoteservices", "remoteservices"));
         buffer.append(link("/admin/datacenters/1/storage/tiers", "tiers"));
         buffer.append(link("/admin/datacenters/1/network", "network"));
+        buffer.append(link("/admin/datacenters/1/networkservicetypes", "networkservicetypes"));
         buffer.append(link("/admin/datacenters/1/action/enterprises", "enterprises"));
         buffer.append(link("/admin/datacenters/1/action/hypervisor", "hypervisor"));
         buffer.append(link("/admin/datacenters/1/hypervisors", "hypervisors"));
@@ -551,5 +581,14 @@ public class InfrastructureResources
         buffer.append("<virtualSwitch>192.168.1.10</virtualSwitch>");
         buffer.append("</machine>");
         return buffer.toString();
+    }
+
+    public static NetworkServiceTypeDto networkServiceTypePut()
+    {
+        NetworkServiceTypeDto dto = new NetworkServiceTypeDto();
+        dto.setName("Storage Network Edited");
+        dto.addLink(new RESTLink("edit",
+            "http://localhost/api/admin/datacenters/1/networkservicetypes/1"));
+        return dto;
     }
 }

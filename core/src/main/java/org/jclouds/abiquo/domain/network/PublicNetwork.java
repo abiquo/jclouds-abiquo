@@ -157,6 +157,8 @@ public class PublicNetwork extends Network<PublicIp>
     {
         private Datacenter datacenter;
 
+        private NetworkServiceType nst;
+
         public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter)
         {
@@ -170,6 +172,12 @@ public class PublicNetwork extends Network<PublicIp>
         public Builder datacenter(final Datacenter datacenter)
         {
             this.datacenter = datacenter;
+            return this;
+        }
+
+        public Builder networkServiceType(final NetworkServiceType nst)
+        {
+            this.nst = nst;
             return this;
         }
 
@@ -187,6 +195,13 @@ public class PublicNetwork extends Network<PublicIp>
             dto.setDefaultNetwork(defaultNetwork);
             dto.setUnmanaged(false);
             dto.setType(NetworkType.PUBLIC);
+
+            if (nst == null)
+            {
+                nst = datacenter.defaultNetworkServiceType();
+            }
+            dto.getLinks().add(
+                new RESTLink("networkservicetype", nst.unwrap().getEditLink().getHref()));
 
             PublicNetwork network = new PublicNetwork(context, dto);
             network.datacenter = datacenter;

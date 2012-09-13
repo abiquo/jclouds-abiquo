@@ -55,7 +55,7 @@ public class AbiquoVersionLiveTest extends BaseAbiquoLiveTest
         }
         catch (AbiquoException ex)
         {
-            assertHasError(ex, Status.NOT_ACCEPTABLE, "406-NOT ACCEPTABLE");
+            assertHasError(ex, Status.NOT_ACCEPTABLE, "406-NOT-ACCEPTABLE");
         }
     }
 }

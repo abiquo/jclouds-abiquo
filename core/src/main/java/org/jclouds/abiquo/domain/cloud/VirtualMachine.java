@@ -518,7 +518,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     }
 
     public AsyncTask setNics(final List<Ip< ? , ? >> ips,
-        final List<UnmanagedNetwork> unmanagetNetworks)
+        final List<UnmanagedNetwork> unmanagedNetworks)
     {
         // By default the network of the first ip will be used as a gateway
         Network< ? > gateway = null;
@@ -526,12 +526,12 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         {
             gateway = ips.get(0).getNetwork();
         }
-        else if (unmanagetNetworks != null && !unmanagetNetworks.isEmpty())
+        else if (unmanagedNetworks != null && !unmanagedNetworks.isEmpty())
         {
-            gateway = unmanagetNetworks.get(0);
+            gateway = unmanagedNetworks.get(0);
         }
 
-        return setNics(gateway, ips, unmanagetNetworks);
+        return setNics(gateway, ips, unmanagedNetworks);
     }
 
     public AsyncTask setNics(final Network< ? > gatewayNetwork, final List<Ip< ? , ? >> ips)
@@ -540,7 +540,7 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
     }
 
     public AsyncTask setNics(final Network< ? > gatewayNetwork, final List<Ip< ? , ? >> ips,
-        final List<UnmanagedNetwork> unmanagetNetworks)
+        final List<UnmanagedNetwork> unmanagedNetworks)
     {
         RESTLink configLink = requireLink(target, ParentLinkName.NETWORK_CONFIGURATIONS);
 
@@ -564,9 +564,9 @@ public class VirtualMachine extends DomainWithTasksWrapper<VirtualMachineWithNod
         }
 
         // Add unmanaged network references, if given
-        if (unmanagetNetworks != null)
+        if (unmanagedNetworks != null)
         {
-            for (UnmanagedNetwork unmanaged : unmanagetNetworks)
+            for (UnmanagedNetwork unmanaged : unmanagedNetworks)
             {
                 RESTLink source = requireLink(unmanaged.unwrap(), "ips");
 

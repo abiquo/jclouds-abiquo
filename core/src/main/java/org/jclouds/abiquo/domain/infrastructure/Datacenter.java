@@ -20,6 +20,7 @@
 package org.jclouds.abiquo.domain.infrastructure;
 
 import static com.google.common.collect.Iterables.filter;
+import static com.google.common.collect.Iterables.find;
 
 import java.util.List;
 
@@ -33,7 +34,10 @@ import org.jclouds.abiquo.domain.infrastructure.options.DatacenterOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.IpmiOptions;
 import org.jclouds.abiquo.domain.infrastructure.options.MachineOptions;
 import org.jclouds.abiquo.domain.network.Network;
+import org.jclouds.abiquo.domain.network.NetworkServiceType;
+import org.jclouds.abiquo.domain.network.PrivateNetwork;
 import org.jclouds.abiquo.domain.network.options.NetworkOptions;
+import org.jclouds.abiquo.predicates.infrastructure.NetworkServiceTypePredicates;
 import org.jclouds.abiquo.reference.AbiquoEdition;
 import org.jclouds.abiquo.reference.annotations.EnterpriseEdition;
 import org.jclouds.rest.RestContext;
@@ -59,6 +63,8 @@ import com.abiquo.server.core.infrastructure.RacksDto;
 import com.abiquo.server.core.infrastructure.RemoteServicesDto;
 import com.abiquo.server.core.infrastructure.UcsRackDto;
 import com.abiquo.server.core.infrastructure.UcsRacksDto;
+import com.abiquo.server.core.infrastructure.network.NetworkServiceTypeDto;
+import com.abiquo.server.core.infrastructure.network.NetworkServiceTypesDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworkDto;
 import com.abiquo.server.core.infrastructure.network.VLANNetworksDto;
 import com.abiquo.server.core.infrastructure.network.VlanTagAvailabilityDto;
@@ -384,6 +390,67 @@ public class Datacenter extends DomainWrapper<DatacenterDto>
     public List<StorageDevice> listStorageDevices(final Predicate<StorageDevice> filter)
     {
         return Lists.newLinkedList(filter(listStorageDevices(), filter));
+    }
+
+    /**
+     * Return the list of Network Service Types defined in a datacenter. By default, a Network
+     * Service Type called 'Service Network' will be created with the datacenter.
+     * 
+     * @return List of network services in this datacenter.
+     */
+    public List<NetworkServiceType> listNetworkServiceType()
+    {
+        NetworkServiceTypesDto dtos =
+            context.getApi().getInfrastructureApi().listNetworkServiceTypes(target);
+        return wrap(context, NetworkServiceType.class, dtos.getCollection());
+    }
+
+    /**
+     * Retrieve a filtered list of network service types in this datacenter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @return Filtered list of storage devices in this datacenter.
+     */
+    public List<NetworkServiceType> listNetworkServiceType(
+        final Predicate<NetworkServiceType> filter)
+    {
+        return Lists.newLinkedList(filter(listNetworkServiceType(), filter));
+    }
+
+    /**
+     * Retrieve the first network service type matching the filter within the list of nsts in this
+     * datacenter.
+     * 
+     * @param filter Filter to be applied to the list.
+     * @return First network service type matching the filter or <code>null</code> if there is none.
+     */
+    public NetworkServiceType findNetworkServiceType(final Predicate<NetworkServiceType> filter)
+    {
+        return Iterables.getFirst(filter(listNetworkServiceType(), filter), null);
+    }
+
+    /**
+     * Retrieve a single network service type.
+     * 
+     * @param id Unique ID of the network service type in this datacenter.
+     * @return Network Service Type with the given id or <code>null</code> if it does not exist.
+     */
+    public NetworkServiceType getNetworkServiceType(final Integer id)
+    {
+        NetworkServiceTypeDto nst =
+            context.getApi().getInfrastructureApi().getNetworkServiceType(target, id);
+        return wrap(context, NetworkServiceType.class, nst);
+    }
+
+    /**
+     * Return the default network service type used by the datacenter. This datacenter will be the
+     * one used by {@link PrivateNetwork} and, even it can not be deleted, it can be modified.
+     * 
+     * @return the default {@link NetworkServiceType}
+     */
+    public NetworkServiceType defaultNetworkServiceType()
+    {
+        return find(listNetworkServiceType(), NetworkServiceTypePredicates.theDefaultOne());
     }
 
     /**

@@ -190,6 +190,8 @@ public class ExternalNetwork extends Network<ExternalIp>
 
         private Enterprise enterprise;
 
+        private NetworkServiceType nst;
+
         public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter, final Enterprise enterprise)
         {
@@ -213,6 +215,12 @@ public class ExternalNetwork extends Network<ExternalIp>
             return this;
         }
 
+        public Builder networkServiceType(final NetworkServiceType nst)
+        {
+            this.nst = nst;
+            return this;
+        }
+
         public ExternalNetwork build()
         {
             VLANNetworkDto dto = new VLANNetworkDto();
@@ -227,6 +235,13 @@ public class ExternalNetwork extends Network<ExternalIp>
             dto.setDefaultNetwork(defaultNetwork == null ? Boolean.FALSE : defaultNetwork);
             dto.setUnmanaged(Boolean.FALSE);
             dto.setType(NetworkType.EXTERNAL);
+
+            if (nst == null)
+            {
+                nst = datacenter.defaultNetworkServiceType();
+            }
+            dto.getLinks().add(
+                new RESTLink("networkservicetype", nst.unwrap().getEditLink().getHref()));
 
             ExternalNetwork network = new ExternalNetwork(context, dto);
             network.datacenter = datacenter;

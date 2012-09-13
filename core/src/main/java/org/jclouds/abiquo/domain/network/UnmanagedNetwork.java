@@ -190,6 +190,8 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
 
         private Enterprise enterprise;
 
+        private NetworkServiceType nst;
+
         public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,
             final Datacenter datacenter, final Enterprise enterprise)
         {
@@ -213,6 +215,12 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
             return this;
         }
 
+        public Builder networkServiceType(final NetworkServiceType nst)
+        {
+            this.nst = nst;
+            return this;
+        }
+
         public UnmanagedNetwork build()
         {
             VLANNetworkDto dto = new VLANNetworkDto();
@@ -227,6 +235,13 @@ public class UnmanagedNetwork extends Network<UnmanagedIp>
             dto.setDefaultNetwork(defaultNetwork);
             dto.setUnmanaged(true);
             dto.setType(NetworkType.UNMANAGED);
+
+            if (nst == null)
+            {
+                nst = datacenter.defaultNetworkServiceType();
+            }
+            dto.getLinks().add(
+                new RESTLink("networkservicetype", nst.unwrap().getEditLink().getHref()));
 
             UnmanagedNetwork network = new UnmanagedNetwork(context, dto);
             network.datacenter = datacenter;
