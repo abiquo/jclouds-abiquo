@@ -20,6 +20,8 @@
 package org.jclouds.abiquo.domain.config;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import static org.jclouds.abiquo.domain.util.LinkUtils.requireLink;
+import static org.jclouds.abiquo.reference.ValidationErrors.nullResource;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -27,7 +29,6 @@ import java.util.Date;
 import org.jclouds.abiquo.AbiquoApi;
 import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.DomainWrapper;
-import org.jclouds.abiquo.reference.ValidationErrors;
 import org.jclouds.rest.RestContext;
 
 import com.abiquo.model.enumerator.PricingPeriod;
@@ -141,7 +142,7 @@ public class PricingTemplate extends DomainWrapper<PricingTemplateDto>
         public Builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context, final Currency currency)
         {
             super();
-            this.currency = checkNotNull(currency, ValidationErrors.NULL_RESOURCE + Currency.class);
+            this.currency = checkNotNull(currency, nullResource(Currency.class));
             this.context = context;
         }
 
@@ -237,7 +238,7 @@ public class PricingTemplate extends DomainWrapper<PricingTemplateDto>
 
         public Builder currency(final Currency currency)
         {
-            checkNotNull(currency, ValidationErrors.NULL_RESOURCE + Currency.class);
+            checkNotNull(currency, nullResource(Currency.class));
             this.currency = currency;
             return this;
         }
@@ -261,8 +262,7 @@ public class PricingTemplate extends DomainWrapper<PricingTemplateDto>
             dto.setDefaultTemplate(defaultTemplate);
             dto.setLastUpdate(lastUpdate);
 
-            RESTLink link = currency.unwrap().searchLink("edit");
-            checkNotNull(link, ValidationErrors.MISSING_REQUIRED_LINK);
+            RESTLink link = requireLink(currency.unwrap(), "edit");
             dto.addLink(new RESTLink("currency", link.getHref()));
 
             PricingTemplate pricingTemplate = new PricingTemplate(context, dto);
