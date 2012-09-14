@@ -435,7 +435,7 @@ public class VirtualDatacenter extends DomainWithLimitsWrapper<VirtualDatacenter
         return wrap(context, VirtualMachineTemplate.class, templates.getCollection());
     }
 
-    public List<VirtualMachineTemplate> listAvailableTempaltes(
+    public List<VirtualMachineTemplate> listAvailableTemplates(
         final Predicate<VirtualMachineTemplate> filter)
     {
         return Lists.newLinkedList(filter(listAvailableTemplates(), filter));
