@@ -63,6 +63,7 @@ public class AbiquoDelegateApiTest extends BaseAbiquoAsyncApiTest<AbiquoAsyncApi
         assertNotNull(syncApi.getCloudApi());
         assertNotNull(syncApi.getVirtualMachineTemplateApi());
         assertNotNull(syncApi.getTaskApi());
+        assertNotNull(syncApi.getPricingApi());
     }
 
     public void testAsync() throws SecurityException, NoSuchMethodException, InterruptedException,
@@ -75,6 +76,7 @@ public class AbiquoDelegateApiTest extends BaseAbiquoAsyncApiTest<AbiquoAsyncApi
         assertNotNull(asyncApi.getCloudApi());
         assertNotNull(asyncApi.getVirtualMachineTemplateApi());
         assertNotNull(asyncApi.getTaskApi());
+        assertNotNull(asyncApi.getPricingApi());
     }
 
     @Override

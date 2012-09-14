@@ -295,6 +295,19 @@ public class VirtualAppliance extends DomainWrapper<VirtualApplianceDto>
         return getTasks(response);
     }
 
+    /**
+     * Returns a message (String) with the price info of the virtual appliance
+     * 
+     * @param vdcId
+     * @param vappId
+     * @return
+     **/
+    public String getPriceVirtualAppliance()
+    {
+        return context.getApi().getCloudApi().getPriceVirtualAppliance(target);
+
+    }
+
     // Builder
 
     public static Builder builder(final RestContext<AbiquoApi, AbiquoAsyncApi> context,

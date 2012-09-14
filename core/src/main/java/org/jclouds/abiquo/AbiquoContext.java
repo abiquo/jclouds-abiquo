@@ -23,6 +23,7 @@ import org.jclouds.abiquo.features.services.AdministrationService;
 import org.jclouds.abiquo.features.services.CloudService;
 import org.jclouds.abiquo.features.services.EventService;
 import org.jclouds.abiquo.features.services.MonitoringService;
+import org.jclouds.abiquo.features.services.PricingService;
 import org.jclouds.abiquo.features.services.SearchService;
 import org.jclouds.abiquo.internal.AbiquoContextImpl;
 import org.jclouds.compute.ComputeServiceContext;
@@ -69,7 +70,7 @@ public interface AbiquoContext extends ComputeServiceContext
     /**
      * Returns the monitoring service.
      * <p>
-     * This service provides an entry point to asyncohonous task monitoring tasks.
+     * This service provides an entry point to asynchronous task monitoring tasks.
      */
     MonitoringService getMonitoringService();
 
@@ -79,4 +80,11 @@ public interface AbiquoContext extends ComputeServiceContext
      * This service provides an entry point to event management tasks.
      */
     EventService getEventService();
+
+    /**
+     * Returns the pricing service.
+     * <p>
+     * This service provides an entry point to pricing management tasks.
+     */
+    PricingService getPricingService();
 }
