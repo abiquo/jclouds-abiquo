@@ -30,7 +30,7 @@ import java.util.List;
 import org.jclouds.abiquo.domain.cloud.options.VolumeOptions;
 import org.jclouds.abiquo.domain.infrastructure.Tier;
 import org.jclouds.abiquo.domain.network.PrivateNetwork;
-import org.jclouds.abiquo.domain.task.AsyncTask;
+import org.jclouds.abiquo.domain.task.VirtualMachineTask;
 import org.jclouds.abiquo.internal.BaseAbiquoApiLiveTest;
 import org.jclouds.abiquo.predicates.cloud.VolumePredicates;
 import org.jclouds.abiquo.predicates.infrastructure.TierPredicates;
@@ -66,8 +66,7 @@ public class VolumeLiveTest extends BaseAbiquoApiLiveTest
         VolumeOptions invalidOptions = VolumeOptions.builder().has("cacatua").build();
 
         List<VolumeManagementDto> volumes =
-            env.cloudApi.listVolumes(env.virtualDatacenter.unwrap(), validOptions)
-                .getCollection();
+            env.cloudApi.listVolumes(env.virtualDatacenter.unwrap(), validOptions).getCollection();
 
         assertEquals(volumes.size(), 1);
 
@@ -86,7 +85,7 @@ public class VolumeLiveTest extends BaseAbiquoApiLiveTest
         assertNotNull(volume);
 
         volume.setName("Hawaian volume updated");
-        AsyncTask task = volume.update();
+        VirtualMachineTask task = volume.update();
         assertNull(task);
 
         // Reload the volume to check

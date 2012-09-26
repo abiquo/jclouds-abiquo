@@ -30,8 +30,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.AbiquoApi;
+import org.jclouds.abiquo.AbiquoAsyncApi;
 import org.jclouds.abiquo.domain.task.AsyncTask;
 import org.jclouds.abiquo.internal.BaseMonitoringService;
 import org.jclouds.abiquo.monitor.AsyncTaskMonitor;
@@ -64,26 +64,27 @@ public class BaseAsyncTaskMonitor extends BaseMonitoringService implements Async
     }
 
     @Override
-    public void awaitCompletion(final AsyncTask... tasks)
+    public void awaitCompletion(final AsyncTask< ? , ? >... tasks)
     {
         awaitCompletion(taskMonitor, tasks);
     }
 
     @Override
-    public void monitor(final AsyncTask... tasks)
+    public void monitor(final AsyncTask< ? , ? >... tasks)
     {
         monitor(taskMonitor, tasks);
     }
 
     @Override
     public void awaitCompletion(final Long maxWait, final TimeUnit timeUnit,
-        final AsyncTask... tasks)
+        final AsyncTask< ? , ? >... tasks)
     {
         awaitCompletion(maxWait, timeUnit, taskMonitor, tasks);
     }
 
     @Override
-    public void monitor(final Long maxWait, final TimeUnit timeUnit, final AsyncTask... tasks)
+    public void monitor(final Long maxWait, final TimeUnit timeUnit,
+        final AsyncTask< ? , ? >... tasks)
     {
         monitor(maxWait, timeUnit, taskMonitor, tasks);
     }
